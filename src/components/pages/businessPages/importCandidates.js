@@ -214,7 +214,6 @@ class ImportCandidates extends Component {
                 {/* this.createCSVModal() */}
                 { this.createCSVModal() }
                 <div>
-                    <div className="font26px primary-cyan">{"Import Candidates"}</div>
                     <div className="font18px">
                         {"Once your candidates have been uploaded, they will be invited to complete the application. Make sure their contact emails are included."}
                     </div>

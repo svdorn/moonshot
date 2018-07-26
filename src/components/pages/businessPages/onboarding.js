@@ -7,11 +7,12 @@ import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
 import ImportCandidates from "./importCandidates";
 import InviteAdmins from "./inviteAdmins";
+import YouTube from 'react-youtube';
 import OnboardingProgress from "../../miscComponents/onboardingProgress";
 import AddUserDialog from '../../childComponents/addUserDialog';
 
 
-class Dashboard extends Component {
+class Onboarding extends Component {
     constructor(props) {
         super(props);
 
@@ -33,7 +34,7 @@ class Dashboard extends Component {
 
     componentDidMount() {
         const user = this.props.currentUser;
-        console.log(user);
+
         if (!(user && user.userType === "accountAdmin" && user.onboarding)) {
             this.goTo("/");
         }
@@ -47,7 +48,7 @@ class Dashboard extends Component {
         if (onboarding.step >= onboarding.furthestStep) {
             onboarding.furthestStep = onboarding.step;
         }
-        console.log(onboarding.furthestStep)
+
         if (onboarding.step > 8 || onboarding.furthestStep > 8) {
             onboarding.complete = true;
         }
@@ -68,7 +69,7 @@ class Dashboard extends Component {
         const user = this.props.currentUser;
         let onboarding = user.onboarding;
         onboarding.step = step;
-        console.log(onboarding.step);
+
         if (onboarding.step >= onboarding.furthestStep) {
             onboarding.furthestStep = onboarding.step;
         }
@@ -80,11 +81,19 @@ class Dashboard extends Component {
 
 
     render() {
-        console.log(this.props.currentUser);
         const user = this.props.currentUser;
 
         // the tab to open to on Add User Modal
         let tab = "Candidate";
+
+        const opts = {
+            height: '183',
+            width: '300',
+            playerVars: { // https://developers.google.com/youtube/player_parameters
+                autoplay: 1,
+                iv_load_policy: 3
+            }
+        };
 
         const checklistItems = [
             {
@@ -113,12 +122,12 @@ class Dashboard extends Component {
                 step: 4
             },
             {
-                name: "Set Applicate Invite Cadance",
+                name: "Set Applicant Invite Cadence",
                 length: "1m",
                 step: 5
             },
             {
-                name: "Import CSV or Manually Invite Existing Candidates",
+                name: "Invite Existing Candidates",
                 length: "3m",
                 step: 6
             },
@@ -128,7 +137,7 @@ class Dashboard extends Component {
                 step: 7
             },
             {
-                name: "Invite Employees to Strengthen Baseline",
+                name: "Invite Employees",
                 length: "30s",
                 step: 8
             }
@@ -145,8 +154,9 @@ class Dashboard extends Component {
             const onboarding = user.onboarding;
             var key = 0;
             var checklist = checklistItems.map(item => {
+
                 let body = <div></div>;
-                console.log(key);
+
                 if (key < onboarding.furthestStep) {
                     body = (
                         <div className="marginTop20px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>
@@ -159,9 +169,9 @@ class Dashboard extends Component {
                         </div>
                     );
                 } else if (key > onboarding.furthestStep) {
-                    body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white opacity30Percent font16px">{item.name} <i className="secondary-red">{item.length}</i></div>;
+                    body = <div className="marginTop20px marginLeft25px marginBottom10px primary-white opacity30Percent font16px">{item.name} <i className="secondary-red">{item.length}</i></div>;
                 } else {
-                    body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>{item.name} <i className="primary-cyan">{item.length}</i></div>;
+                    body = <div className="marginTop20px marginLeft25px marginBottom10px primary-white font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>{item.name} <i className="primary-cyan">{item.length}</i></div>;
                 }
                 key++;
                 return (
@@ -171,29 +181,115 @@ class Dashboard extends Component {
                 );
             });
 
-            if (onboarding.step === 0) {
-                body = (
-                    <div className="marginTop30px">
-                        <div className="primary-cyan font32px font28pxUnder700 font24pxUnder500">
-                            ROI Driven Onboarding
+            var stepName = "Create Evaluation";
+
+            switch(onboarding.step) {
+                // Create Evaluation
+                case 0:
+                    stepName = "Create Evaluation";
+                    body = (
+                        <div>
+                            <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
+                                Your evaluation has been created!
+                            </div>
+                            <div className="previous-next-area font18px primary-white center marginTop20px">
+                                <div
+                                    className="button noselect round-4px background-primary-cyan inlineBlock"
+                                    onClick={this.handleNext.bind(this)}
+                                >
+                                    Next
+                                </div>
+                            </div>
                         </div>
-                        <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"20px auto", minWidth: "200px", textAlign: "left"}}>
-                            If you complete the onboarding checklist within 48 hours, you get 50% off the first three months of any subscription plan you select. Hundreds of dollars in savings and the full benefits of the product, faster.
+                    );
+                    break;
+                // Activate Admin Account
+                case 1:
+                    stepName = "Activate Admin Account";
+                    body = (
+                        <div>
+                            <p className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
+                                Thank you for signing up for Moonshot Insights, please take 30 seconds now to go to your email and verify your account.
+                            </p>
+                            <p className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
+                                Once you&#39;re done, continue with onboarding.
+                            </p>
+                            <div className="previous-next-area primary-white font18px center marginTop20px">
+                                <div
+                                    className="previous noselect clickable underline inlineBlock"
+                                    onClick={this.handlePrevious.bind(this)}
+                                >
+                                    Previous
+                                </div>
+                                <div
+                                    className="button noselect round-4px background-primary-cyan inlineBlock"
+                                    onClick={this.handleNext.bind(this)}
+                                >
+                                    Next
+                                </div>
+                            </div>
                         </div>
-                        <button className="button round-4px font20px font16pxUnder600 primary-white marginBottom30px" style={{backgroundColor: "#76defe"}} onClick={this.handleNext.bind(this)}>
-                            I&#39;m in
-                        </button>
-                    </div>
-                )
-            } else if (onboarding.step === 6) {
-                body = (
-                    <ImportCandidates {...childProps} />
-                )
-            } else if (onboarding.step === 7) {
-                tab = "Admin";
-                body = (
-                    <InviteAdmins {...childProps} />
-                )
+                    );
+                    break;
+                // Watch Tutorial
+                case 2:
+                    stepName = "Watch Tutorial";
+                    body = (
+                        <div>
+                            <YouTube
+                                videoId="m4_M9onXmpY"
+                                opts={opts}
+                                onReady={this._onReady}
+                                onEnd={this._onEnd}
+                            />
+                            <div className="previous-next-area primary-white font18px center marginTop20px">
+                                <div
+                                    className="previous noselect clickable underline inlineBlock"
+                                    onClick={this.handlePrevious.bind(this)}
+                                >
+                                    Previous
+                                </div>
+                                <div
+                                    className="button noselect round-4px background-primary-cyan inlineBlock"
+                                    onClick={this.handleNext.bind(this)}
+                                >
+                                    Next
+                                </div>
+                            </div>
+                        </div>
+                    );
+                    break;
+                // Google Jobs Posting
+                case 3:
+                    stepName = "Google Jobs Posting";
+                    break;
+                // Automate Applicant Invites
+                case 4:
+                    stepName = "Automate Applicant Invites";
+                    break;
+                // Set Applicant Invite Cadence
+                case 5:
+                    stepName = "Set Applicant Invite Cadence";
+                    break;
+                // Invite Existing Candidates
+                case 6:
+                    stepName = "Import Candidates";
+                    body = (
+                        <ImportCandidates {...childProps} />
+                    );
+                    break;
+                // Invite Other Admins
+                case 7:
+                    stepName = "Invite Admins"
+                    tab = "Admin";
+                    body = (
+                        <InviteAdmins {...childProps} />
+                    )
+                    break;
+                // Invite Employees
+                case 8:
+                    stepName = "Invite Employees";
+                    break;
             }
         }
 
@@ -216,7 +312,14 @@ class Dashboard extends Component {
                             </div>
                         </div>
                         <div className="content">
-                            {body}
+                            <div>
+                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginTop30px marginBottom10px">
+                                    {stepName}
+                                </div>
+                                <div>
+                                    {body}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -241,4 +344,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Onboarding);
