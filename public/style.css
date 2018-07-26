@@ -911,12 +911,12 @@ form > h1 {
 }
 
 /* make so that the Previous and Next buttons aren't right next to each other */
-.import-candidates .previous-next-area > div:first-child {
+.previous-next-area > div:first-child {
     margin-right: 80px;
 }
 
 /* so that Next button is v wide */
-.import-candidates .previous-next-area > .button {
+.previous-next-area > .button {
     padding: 3px 30px;
 }
 
@@ -3961,6 +3961,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginTop10px { margin-top: 10px; }
 .marginLeft40px { margin-left: 40px; }
 .marginLeft30px { margin-left: 30px; }
+.marginLeft25px { margin-left: 25px; }
 .marginLeft20px { margin-left: 20px; }
 .marginLeft10px { margin-left: 10px; }
 .paddingTop40px { padding-top: 40px; }

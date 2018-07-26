@@ -153,9 +153,9 @@ class Onboarding extends Component {
                         </div>
                     );
                 } else if (key > onboarding.furthestStep) {
-                    body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white opacity30Percent font16px">{item.name} <i className="secondary-red">{item.length}</i></div>;
+                    body = <div className="marginTop20px marginLeft25px marginBottom10px primary-white opacity30Percent font16px">{item.name} <i className="secondary-red">{item.length}</i></div>;
                 } else {
-                    body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>{item.name} <i className="primary-cyan">{item.length}</i></div>;
+                    body = <div className="marginTop20px marginLeft25px marginBottom10px primary-white font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>{item.name} <i className="primary-cyan">{item.length}</i></div>;
                 }
                 key++;
                 return (
@@ -174,21 +174,68 @@ class Onboarding extends Component {
                     body = (
                         <div>
                             <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
-                                If you complete the onboarding checklist within 48 hours, you get 50% off the first three months of any subscription plan you select. Hundreds of dollars in savings and the full benefits of the product, faster.
+                                Your evaluation has been created!
                             </div>
-                            <button className="button round-4px font20px font16pxUnder600 primary-white marginBottom30px" style={{backgroundColor: "#76defe"}} onClick={this.handleNext.bind(this)}>
-                                I&#39;m in
-                            </button>
+                            <div className="previous-next-area font18px primary-white center marginTop20px">
+                                <div
+                                    className="button noselect round-4px background-primary-cyan inlineBlock"
+                                    onClick={this.handleNext.bind(this)}
+                                >
+                                    Next
+                                </div>
+                            </div>
                         </div>
                     );
                     break;
                 // Activate Admin Account
                 case 1:
                     stepName = "Activate Admin Account";
+                    body = (
+                        <div>
+                            <p className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
+                                Thank you for signing up for Moonshot Insights, please take 30 seconds now to go to your email and verify your account.
+                            </p>
+                            <p className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
+                                Once you&#39;re done, continue with onboarding.
+                            </p>
+                            <div className="previous-next-area primary-white font18px center marginTop20px">
+                                <div
+                                    className="previous noselect clickable underline inlineBlock"
+                                    onClick={this.handlePrevious.bind(this)}
+                                >
+                                    Previous
+                                </div>
+                                <div
+                                    className="button noselect round-4px background-primary-cyan inlineBlock"
+                                    onClick={this.handleNext.bind(this)}
+                                >
+                                    Next
+                                </div>
+                            </div>
+                        </div>
+                    );
                     break;
                 // Watch Tutorial
                 case 2:
                     stepName = "Watch Tutorial";
+                    body = (
+                        <div>
+                            <div className="previous-next-area primary-white font18px center marginTop20px">
+                                <div
+                                    className="previous noselect clickable underline inlineBlock"
+                                    onClick={this.handlePrevious.bind(this)}
+                                >
+                                    Previous
+                                </div>
+                                <div
+                                    className="button noselect round-4px background-primary-cyan inlineBlock"
+                                    onClick={this.handleNext.bind(this)}
+                                >
+                                    Next
+                                </div>
+                            </div>
+                        </div>
+                    );
                     break;
                 // Google Jobs Posting
                 case 3:
