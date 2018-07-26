@@ -4060,6 +4060,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     -webkit-box-shadow: 0 0 10px 3px rgba(0,0,0,.5);
     -moz-box-shadow:    0 0 10px 3px rgba(0,0,0,.5);
     box-shadow:         0 0 10px 3px rgba(0,0,0,.5);
+    transition: box-shadow 0.2s ease;
+}
+
+.fixed-onboarding-progress:hover {
+    -webkit-box-shadow: 0 0 15px 6px rgba(0,0,0,.5);
+    -moz-box-shadow:    0 0 15px 6px rgba(0,0,0,.5);
+    box-shadow:         0 0 15px 6px rgba(0,0,0,.5);
+    transition: box-shadow 0.2s ease;
 }
 
 .fixed-onboarding-progress > div {
