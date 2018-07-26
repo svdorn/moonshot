@@ -11,6 +11,8 @@ import {
     FlatButton,
     CircularProgress
 } from 'material-ui';
+import Select from '@material-ui/core/Select';
+import SelectMenuItem from '@material-ui/core/MenuItem';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
@@ -148,8 +150,8 @@ class MyEmployees extends Component {
         });
     }
 
-    handleStatusChange = (event, index, status) => {
-        this.setState({status, employees: [], noEmployees: false}, this.search);
+    handleStatusChange = event => {
+        this.setState({status: event.target.value, employees: [], noEmployees: false}, this.search);
     };
 
     handlePositionChange = (event, index, position) => {
@@ -201,10 +203,9 @@ class MyEmployees extends Component {
 
         const statuses = ["Complete", "Incomplete"];
         const statusItems = statuses.map(function (status) {
-            return <MenuItem value={status} primaryText={status} key={status}/>
+            return <SelectMenuItem value={status} key={status}>{ status }</SelectMenuItem>
         })
 
-        // TODO get companies from DB
         const positions = this.state.positions;
         const positionItems = positions.map(function (position) {
             return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
@@ -237,26 +238,37 @@ class MyEmployees extends Component {
                     </ToolbarGroup>
 
                     <ToolbarGroup>
-                        <DropDownMenu value={this.state.status}
-                                      onChange={this.handleStatusChange}
-                                      labelStyle={style.menuLabelStyle}
-                                      anchorOrigin={style.anchorOrigin}
-                                      style={{fontSize: "20px", marginTop: "11px"}}
+                        <Select
+                            disableUnderline={true}
+                            classes={{
+                                root: "position-select-root selectRootWhite",
+                                icon: "selectIconWhiteImportant"
+                            }}
+                            value={this.state.status}
+                            onChange={this.handleStatusChange}
+                            key="status selector"
                         >
-                            <MenuItem value={""} primaryText="Status"/>
+                            <SelectMenuItem value={""}>{"Status"}</SelectMenuItem>
                             <Divider/>
                             {statusItems}
-                        </DropDownMenu>
-                        <DropDownMenu value={this.state.position}
-                                      onChange={this.handlePositionChange}
-                                      labelStyle={style.menuLabelStyle}
-                                      anchorOrigin={style.anchorOrigin}
-                                      style={{fontSize: "20px", marginTop: "11px"}}
+                        </Select>
+                        <Select
+                            disableUnderline={true}
+                            classes={{
+                                root: "position-select-root selectRootWhite",
+                                icon: "selectIconWhiteImportant"
+                            }}
+                            value={this.state.position}
+                            onChange={this.handlePositionChange}
+                            key="position selector"
                         >
-                            <MenuItem value="" primaryText="Position"/>
+                            <SelectMenuItem value="">{"Position"}</SelectMenuItem>
                             <Divider/>
                             {positionItems}
-                        </DropDownMenu>
+                        </Select>
+
+
+
                     </ToolbarGroup>
                 </Toolbar>
 
@@ -298,6 +310,13 @@ class MyEmployees extends Component {
                         <Divider/>
                         {positionItems}
                     </DropDownMenu>
+                </div>
+
+                <div
+                    className="add-employee primary-cyan pointer font16px font14pxUnder500 font12pxUnder400"
+                    onClick={this.props.openAddUserModal}
+                >
+                    + <span className="underline">Add Employee</span>
                 </div>
             </div>
         );
