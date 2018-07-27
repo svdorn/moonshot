@@ -12,15 +12,53 @@ class GoogleJobs extends Component {
         super(props);
 
         this.state = {
+            job: ""
         }
     }
 
+    handleNext() {
+        this.props.next();
+    }
+
+    onChange() {
+
+    }
 
     render() {
 
         return (
             <div className="primary-white center">
-
+                <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"0 auto 10px", minWidth: "200px", textAlign: "left"}}>
+                    We&#39;ve integrated with Google Jobs so you don&#39;t have to spend the development time.
+                </div>
+                <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
+                    Paste the URL of your job description for your selected position to generate exposure to applicants.
+                </div>
+                <div className="center marginTop20px">
+                    <div className="font16px font14pxUnder900">
+                        <input className="blackInput googleJobs getStarted" type="text" placeholder="Paste Job Description URL here (Optional)" name="job"
+                        value={this.state.job} onChange={this.onChange.bind(this)}/>
+                        <div
+                            className="button noselect round-4px background-primary-cyan inlineBlock marginLeft10px" style={{padding: "3px 7px"}}
+                        >
+                            + Add
+                        </div>
+                    </div>
+                </div>
+                <div className="previous-next-area primary-white font18px center marginTop20px">
+                    <div
+                        className="previous noselect clickable underline inlineBlock"
+                        onClick={this.props.previous}
+                    >
+                        Previous
+                    </div>
+                    <div
+                        className="button noselect round-4px background-primary-cyan inlineBlock"
+                        onClick={this.handleNext.bind(this)}
+                    >
+                        Next
+                    </div>
+                </div>
             </div>
         );
     }
