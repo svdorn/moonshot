@@ -35,7 +35,10 @@ function POST_candidate(req, res) {
     const email = sanitize(req.body.email);
     const password = sanitize(req.body.password);
 
-    let user = { name, email };
+    let user = {
+        name,
+        email: email.toLowerCase()
+    };
 
     // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
     // the db business document for the business offering the position the user signed up for

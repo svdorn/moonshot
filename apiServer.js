@@ -55,10 +55,11 @@ const helperFunctions = require("./apis/helperFunctions");
 // set up the session
 app.use(session({
     secret: credentials.secretString,
+    unset: "destroy", // delete the session when set to null or req.session.destroy() used
     saveUninitialized: false, // doesn't save a session if it is new but not modified
     rolling: true, // resets maxAge on session when user uses site again
     proxy: true, // must be true since we are using a reverse proxy
-    resave: false, // session only saved back to the session store if session was modified,
+    resave: true, // saves session even if un-modified
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
         // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)

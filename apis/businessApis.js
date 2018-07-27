@@ -711,7 +711,7 @@ async function POST_dialogEmailScreen2(req, res) {
 
     let user = {
         name: name,
-        email: email
+        email: email.toLowerCase()
     };
     let business = {
         name: company

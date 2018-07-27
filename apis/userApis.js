@@ -1402,12 +1402,20 @@ async function GET_session(req, res) {
         // user from the session and don't log in; do the same if the session
         // has the wrong verification token
         if (!user || user.verificationToken !== sanitize(req.session.verificationToken)) {
-            req.session.userId = undefined;
-            req.session.verificationToken = undefined;
-            req.session.save(function(saveSessionError) {
-                if (saveSessionError) { console.log("error saving session: ", saveSessionError); }
-                return res.json(undefined);
+            req.session.destroy(removeSessionError => {
+                if (removeSessionError) { console.log("Error removing session: ", removeSessionError); }
+                // create a new session
+                req.session.regenerate(regenerateSessionError => {
+                    if (regenerateSessionError) { console.log("Error regenerating session: ", regenerateSessionError); }
+                    return res.json(undefined);
+                })
             });
+            // req.session.userId = undefined;
+            // req.session.verificationToken = undefined;
+            // req.session.save(function(saveSessionError) {
+            //     if (saveSessionError) { console.log("error saving session: ", saveSessionError); }
+            //     return res.json(undefined);
+            // });
         }
 
         // otherwise return the user that is logged in
@@ -1490,20 +1498,32 @@ async function POST_updateOnboarding(req, res) {
 }
 
 
-// signs the user out by marking their session id and verification token as undefined
+// signs the user out by destroying the user session
 function POST_signOut(req, res) {
-    // remove the user id and verification token from the session
-    req.session.userId = undefined;
-    req.session.verificationToken = undefined;
-    // save the updated session
-    req.session.save(function (err) {
-        if (err) {
-            console.log("error removing user session: ", err);
-            return res.status(500).send("Error logging out.");
-        } else {
-            return res.json("success");
-        }
-    })
+    // destroy the session
+    req.session.destroy(removeSessionError => {
+        if (removeSessionError) { console.log("Error removing session: ", removeSessionError); }
+        // create a new session
+        req.session.regenerate(regenerateSessionError => {
+            if (regenerateSessionError) { console.log("Error regenerating session: ", regenerateSessionError); }
+            return res.status(200).send({});
+        })
+    });
+
+
+
+    // // remove the user id and verification token from the session
+    // req.session.userId = undefined;
+    // req.session.verificationToken = undefined;
+    // // save the updated session
+    // req.session.save(function (err) {
+    //     if (err) {
+    //         console.log("error removing user session: ", err);
+    //         return res.status(500).send("Error logging out.");
+    //     } else {
+    //         return res.json("success");
+    //     }
+    // })
 }
 
 
@@ -1914,12 +1934,10 @@ async function POST_login(req, res) {
 
     const INVALID_EMAIL = "No user with that email was found.";
 
-    // searches for user by case-insensitive email
-    const emailRegex = new RegExp(email, "i");
-    var query = {email: emailRegex};
-    let user;
+    // searches for user by lower-case email
+    var query = { email: email.toLowerCase() };
     // find the user by email
-    try { user = await Users.findOne(query); }
+    try { var user = await Users.findOne(query); }
     catch (findUserError) {
         console.log("Couldn't find user: ", findUserError);
         return res.status(404).send(INVALID_EMAIL);

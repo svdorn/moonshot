@@ -434,7 +434,10 @@ async function POST_saveBusiness(req, res) {
 
 async function createAdmin(name, email, password, title, businessId, businessName) {
     return new Promise(async function(resolve, reject) {
-        let user = {name, email, password};
+        let user = {
+            name, password,
+            email: email.toLowerCase()
+        };
 
         // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
         // if the user has an email address no one else has used before
