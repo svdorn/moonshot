@@ -88,8 +88,8 @@ class Onboarding extends Component {
         let tab = "Candidate";
 
         const opts = {
-            height: '183',
-            width: '300',
+            height: '244',
+            width: '400',
             playerVars: { // https://developers.google.com/youtube/player_parameters
                 autoplay: 1,
                 iv_load_policy: 3
@@ -243,7 +243,7 @@ class Onboarding extends Component {
                                 onReady={this._onReady}
                                 onEnd={this._onEnd}
                             />
-                            <div className="previous-next-area primary-white font18px center marginTop20px">
+                            <div className="previous-next-area primary-white font18px center marginTop20px marginBottom20px">
                                 <div
                                     className="previous noselect clickable underline inlineBlock"
                                     onClick={this.handlePrevious.bind(this)}
@@ -317,7 +317,7 @@ class Onboarding extends Component {
                         </div>
                         <div className="content">
                             <div>
-                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginTop15px marginBottom10px">
+                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginTop5px marginBottom10px">
                                     {stepName}
                                 </div>
                                 <div>
