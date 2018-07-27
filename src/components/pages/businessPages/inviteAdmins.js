@@ -13,7 +13,6 @@ class InviteAdmins extends Component {
         return (
             <div className="invite-admins primary-white center">
                 <div>
-                    <div className="font26px primary-cyan">{"Invite Other Admins"}</div>
                     <div className="font18px">
                         Admins are able to manage employee and candidate accounts
                         and can see candidate evaluation results. Invite any

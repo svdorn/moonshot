@@ -6,6 +6,7 @@ import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
 import ImportCandidates from "./importCandidates";
+import GoogleJobs from './googleJobs';
 import InviteAdmins from "./inviteAdmins";
 import YouTube from 'react-youtube';
 import OnboardingProgress from "../../miscComponents/onboardingProgress";
@@ -143,7 +144,7 @@ class Onboarding extends Component {
             }
         ];
 
-        let body = <div>Hey</div>;
+        let body = <div></div>;
 
         const childProps = {
             next: this.handleNext.bind(this),
@@ -192,7 +193,7 @@ class Onboarding extends Component {
                             <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
                                 Your evaluation has been created!
                             </div>
-                            <div className="previous-next-area font18px primary-white center marginTop20px">
+                            <div className="previous-next-area create-evaluation font18px primary-white center marginTop20px">
                                 <div
                                     className="button noselect round-4px background-primary-cyan inlineBlock"
                                     onClick={this.handleNext.bind(this)}
@@ -262,6 +263,9 @@ class Onboarding extends Component {
                 // Google Jobs Posting
                 case 3:
                     stepName = "Google Jobs Posting";
+                    body = (
+                        <GoogleJobs {...childProps} />
+                    );
                     break;
                 // Automate Applicant Invites
                 case 4:
@@ -313,7 +317,7 @@ class Onboarding extends Component {
                         </div>
                         <div className="content">
                             <div>
-                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginBottom10px" style={{marginTop:"3px"}}>
+                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginTop15px marginBottom10px">
                                     {stepName}
                                 </div>
                                 <div>

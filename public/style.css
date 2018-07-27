@@ -927,6 +927,11 @@ form > h1 {
     margin-right: 80px;
 }
 
+/* first and only button is Next on this page so shouldn't have space to the right */
+.previous-next-area.create-evaluation > div:first-child {
+    margin-right: 0px;
+}
+
 /* so that Next button is v wide */
 .previous-next-area > .button {
     padding: 3px 30px;
