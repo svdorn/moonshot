@@ -138,7 +138,7 @@ class Onboarding extends Component {
             }
         ];
 
-        let body = <div>Hey</div>;
+        let body = <div></div>;
 
         const childProps = {
             next: this.handleNext.bind(this),
