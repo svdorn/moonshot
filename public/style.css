@@ -938,11 +938,11 @@ form > h1 {
     padding: 3px 30px;
 }
 
-.invite-admins, .invite-employees {
+.invite-admins, .invite-employees, .congratulations {
     padding: 10px 5%;
 }
 
-.invite-admins > div, .invite-employees > div {
+.invite-admins > div, .invite-employees > div, .congratulations > div {
     display: flex;
     flex-direction: column;
     justify-content: space-around;

@@ -12,6 +12,7 @@ import InviteEmployees from "./inviteEmployees";
 import YouTube from 'react-youtube';
 import OnboardingProgress from "../../miscComponents/onboardingProgress";
 import AddUserDialog from '../../childComponents/addUserDialog';
+import { goTo } from "../../../miscFunctions";
 
 
 class Onboarding extends Component {
@@ -79,6 +80,52 @@ class Onboarding extends Component {
             onboarding.complete = true;
         }
         this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
+    }
+
+
+    // the final page, all it does is show the onboarding bar as complete and
+    // brings the user to the evals page
+    createCongratulations() {
+        return (
+            <div className="congratulations primary-white center">
+                <div>
+                    <div className="font18px text-left">
+                        You made it! You earned 50% off the first three months of
+                        any subscription plan you select. The launch date of your
+                        first evaluation takes a few days from the time you activate
+                        your account to go live. We{"'"}ll let you know the second
+                        it{"'"}s ready. In the meantime, you can see its status {"in "}
+                        <span
+                            onClick={() => this.goTo("/myEvaluations")}
+                            className="primary-cyan pointer"
+                        >
+                            evaluations
+                        </span>.
+                    </div>
+                    <div
+                        className="medium button round-4px background-primary-cyan"
+                        style={{padding: "3px 30px", margin: "0 auto"}}
+                        onClick={() => this.goTo("/myEvaluations")}
+                    >
+                        Evaluations
+                    </div>
+                    <div className="previous-next-area font18px center">
+                        <div
+                            className="previous noselect clickable underline inlineBlock"
+                            onClick={this.props.previous}
+                        >
+                            Previous
+                        </div>
+                        <div
+                            className="button noselect round-4px background-primary-cyan inlineBlock"
+                            onClick={() => this.goTo("/myEvaluations")}
+                        >
+                            Finish
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
 
@@ -298,6 +345,10 @@ class Onboarding extends Component {
                     body = (
                         <InviteEmployees {...childProps} />
                     );
+                    break;
+                case 9:
+                    stepName = "Congratulations!"
+                    body = this.createCongratulations();
                     break;
             }
         }
