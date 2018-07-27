@@ -112,7 +112,7 @@ class Onboarding extends Component {
                     <div className="previous-next-area font18px center">
                         <div
                             className="previous noselect clickable underline inlineBlock"
-                            onClick={this.props.previous}
+                            onClick={this.handlePrevious.bind(this)}
                         >
                             Previous
                         </div>
