@@ -5,9 +5,10 @@ import { bindActionCreators } from 'redux';
 import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
-import ImportCandidates from "./importCandidates";
 import GoogleJobs from './googleJobs';
+import ImportCandidates from "./importCandidates";
 import InviteAdmins from "./inviteAdmins";
+import InviteEmployees from "./inviteEmployees";
 import YouTube from 'react-youtube';
 import OnboardingProgress from "../../miscComponents/onboardingProgress";
 import AddUserDialog from '../../childComponents/addUserDialog';
@@ -293,6 +294,10 @@ class Onboarding extends Component {
                 // Invite Employees
                 case 8:
                     stepName = "Invite Employees";
+                    tab = "Employee";
+                    body = (
+                        <InviteEmployees {...childProps} />
+                    );
                     break;
             }
         }
@@ -312,7 +317,10 @@ class Onboarding extends Component {
                         <div className="center top-progress-bar primary-white">
                             <OnboardingProgress className="inlineBlock" />
                             <div className="font14px">
-                                {`Step: ${user.onboarding.step + 1} / ${NUM_ONBOARDING_STEPS}`}
+                                {user.onboarding.step < NUM_ONBOARDING_STEPS ?
+                                    `Step: ${user.onboarding.step + 1} / ${NUM_ONBOARDING_STEPS}`
+                                    : "Completed"
+                                }
                             </div>
                             <div
                                 className="primary-cyan font26px font24pxUnder700 font20pxUnder500"

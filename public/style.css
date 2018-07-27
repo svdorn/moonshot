@@ -938,11 +938,11 @@ form > h1 {
     padding: 3px 30px;
 }
 
-.invite-admins {
-    padding: 10px;
+.invite-admins, .invite-employees {
+    padding: 10px 5%;
 }
 
-.invite-admins > div {
+.invite-admins > div, .invite-employees > div {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -1995,6 +1995,8 @@ button.link {
 
 .noWrap { white-space: nowrap; }
 .center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
 .centerOfPage {
     position: fixed;
     top: 50%;
