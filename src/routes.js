@@ -25,7 +25,7 @@ import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
 import ContactUs from './components/pages/contactUs';
-import Error404 from './components/pages/error404';
+import Error404 from './components/pages/errors/error404';
 import Unsubscribe from './components/pages/unsubscribe';
 import Admin from './components/pages/admin';
 import PrivacyPolicy from './components/policies/privacyPolicy';
