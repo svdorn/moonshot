@@ -1911,8 +1911,6 @@ async function POST_login(req, res) {
         saveSession = false;
     }
 
-    console.log("saveSession: ", saveSession);
-
     const INVALID_EMAIL = "No user with that email was found.";
 
     // searches for user by lower-case email
