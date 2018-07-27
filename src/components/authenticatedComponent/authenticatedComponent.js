@@ -5,18 +5,23 @@ import {getUserFromSession} from '../../actions/usersActions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import AgreeToTerms from "./agreeToTerms";
+import { goTo } from "../../miscFunctions";
+import Error403 from "../pages/errors/error403";
 
 
 class AuthenticatedComponent extends Component {
     constructor(props) {
         super(props);
 
-        // if userChecked is true, render the child component
-        this.state = { userChecked: false };
+        // if userHasAccess is true, render the child component
+        this.state = {
+            userHasAccess: undefined,
+            agreedToTerms: undefined
+        };
     }
 
 
-    componentDidMount() {
+    componentWillMount() {
         this.reCheck();
     }
 
@@ -28,12 +33,17 @@ class AuthenticatedComponent extends Component {
 
     reCheck() {
         // check if the user is logged in
-        let userChecked = this.checkLoggedIn();
+        let userHasAccess = this.checkAccess();
+        // if the user does not have access, the previous function call will have redirected them
+        if (!userHasAccess) { return; }
+
         // check if the user has agreed to the necessary terms and conditions
         let agreedToTerms = this.checkAgreedToTerms();
 
-        if (this.state.userChecked !== userChecked || this.state.agreedToTerms !== agreedToTerms) {
-            this.setState({ userChecked, agreedToTerms });
+        // if we get here then we know the user has access
+        // set state determining if they have to agree to terms to see the page
+        if (!this.state.userHasAccess || this.state.agreedToTerms !== agreedToTerms) {
+            this.setState({ userHasAccess: true, agreedToTerms });
         }
     }
 
@@ -70,36 +80,78 @@ class AuthenticatedComponent extends Component {
     }
 
 
-    checkLoggedIn() {
+    checkAccess() {
         // if there is no user, redirect to login page
         const currentUser = this.props.currentUser;
         if (!currentUser) {
+            // login page needs to redirect back to this page after login, so
+            // get the current url
             const location = this.props.location;
             const redirect = location.pathname + location.search;
-
-            this.props.router.push('/login?redirect=' + redirect);
+            // go to the login page with this page as the redirect
+            goTo('/login?redirect=' + redirect);
+            // user does NOT have access
+            return false;
         }
         // if there is a user see if they are of the right type
         else {
-            const types = this.props.route.userType;
-            let authenticatedType = true;
-            if (types) {
-                authenticatedType = types.includes(currentUser.userType);
-            }
-
-            // if one of the authenticated types matches the current user's type, they are authenticated
-            if (authenticatedType) {
-                return true;
-                this.setState({ userChecked: true });
-            } else {
-                this.props.router.push('/');
+            // if one of the authenticated types matches the current user's type,
+            // let them see the page
+            if (this.hasAccess()) { return true; }
+            // user doesn't have access ...
+            else {
+                // ... so if the state doesn't know the user doesn't have access ...
+                if (this.state.userHasAccess !== false) {
+                    // ... tell state not to show the content, and show 403 instead
+                    this.setState({ userHasAccess: false });
+                }
+                // goTo('/');
+                // user does NOT have access
                 return false;
             }
         }
     }
 
 
+    hasAccess() {
+        // get the current user
+        const user = this.props.currentUser;
+        // the types of user that are allowed to see the page
+        const allowedTypes = this.props.route.userType;
+        // assume user can access the page
+        let userHasAccess = true;
+
+        // if the allowed type passed in is just a single string with a user type ...
+        if (typeof allowedTypes === "string") {
+            // ... check if the current user type matches it
+            userHasAccess = allowedTypes === user.userType;
+        }
+        // if the allowed types passed in are in array form ...
+        else if (Array.isArray(allowedTypes)) {
+            // ... check if the current user's type matches any of those
+            userHasAccess = allowedTypes.includes(user.userType);
+        }
+
+        return userHasAccess;
+    }
+
+
     render() {
+        // if user access has not yet been checked, show this while checking
+        if (this.state.userHasAccess === undefined) {
+            return <div className="blackBackground fillScreen"/>;
+        }
+
+        // if user does not have access display a 403 page
+        if (this.state.userHasAccess === false) {
+            return <Error403 />;
+        }
+
+        // if the user logged in has not agreed to the most updated terms,
+        // ask them to agree
+        if (!this.state.agreedToTerms) { return <AgreeToTerms />; }
+
+        // user has access to see this component;
         // clone the element so that we can put props into the element,
         // such as location, children, params that are passed through the url
         const childElement = React.cloneElement(this.props.route.page, {
@@ -108,21 +160,7 @@ class AuthenticatedComponent extends Component {
             params: this.props.params
         });
 
-        // if the user logged in has not agreed to the most updated terms,
-        // ask them to agree
-        if (this.state.userChecked && !this.state.agreedToTerms) {
-            return  (
-                <AgreeToTerms />
-            );
-        }
-
-        return (
-            <div>
-                { this.state.userChecked ?
-                    childElement : <div className="blackBackground fillScreen"/>
-                }
-            </div>
-        );
+        return childElement;
     }
 }
 
