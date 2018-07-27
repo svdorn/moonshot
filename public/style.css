@@ -732,7 +732,8 @@ form > h1 {
     text-align: center;
     vertical-align: top;
     display: table-cell;
-    height: 100%;
+    /* for some reason this makes it so the children can use percent heights of the td */
+    height: 0;
     -webkit-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
     -moz-box-shadow:    0 0 30px -3px rgba(0,0,0,.5);
     box-shadow:         0 0 30px -3px rgba(0,0,0,.5);
@@ -4159,18 +4160,19 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 .onboardingRight .onboarding-progress-container {
     width: 70%;
-    height: 8px;
-    margin-top: 35px;
+    height: 6px;
+    margin-top: 25px;
     margin-bottom: 10px;
 }
 
 .onboardingRight > .top-progress-bar {
     flex: 0 1 auto;
+    height: 115px;
 }
 
 .onboardingRight > .content {
     position: relative;
-    width: 100%;
+    height: calc(100% - 115px);
 }
 
 .onboardingRight > .content > div {

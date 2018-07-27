@@ -314,16 +314,15 @@ class Onboarding extends Component {
                             <div className="font14px">
                                 {`Step: ${user.onboarding.step + 1} / ${NUM_ONBOARDING_STEPS}`}
                             </div>
+                            <div
+                                className="primary-cyan font26px font24pxUnder700 font20pxUnder500"
+                                style={{margin: "5px auto 0"}}
+                            >
+                                {stepName}
+                            </div>
                         </div>
                         <div className="content">
-                            <div>
-                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginTop15px marginBottom10px">
-                                    {stepName}
-                                </div>
-                                <div>
-                                    {body}
-                                </div>
-                            </div>
+                            {body}
                         </div>
                     </div>
                 </div>
