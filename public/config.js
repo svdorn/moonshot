@@ -3,13 +3,7 @@ let head = document.getElementsByTagName("head")[0];
 
 // source urls for branch-specific
 const additionalTags = [
-    {
-        type: "meta",
-        properties: {
-            name: "google-site-verification",
-            content: "k5cnOMG7bXGU_1rYUcQ19zZ9vsyZtq2KfINSNPChCgE"
-        }
-    }
+
 ];
 
 // go through each tag we want to create
