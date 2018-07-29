@@ -117,7 +117,7 @@ class BillingForm extends Component {
                                 />
                             </div>
 
-                            I have read and accept the <a className="blueTextHome" target="_blank" href="https://view.publitas.com/moonshot-insights/moonshot-insights_terms-of-service/">Terms and Conditions</a>.
+                            I have read and accept the <a className="primary-cyan" target="_blank" href="https://view.publitas.com/moonshot-insights/moonshot-insights_terms-of-service/">Terms and Conditions</a>.
                         </div>
                         <RaisedButton
                             label="Submit"
