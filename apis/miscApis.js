@@ -136,7 +136,7 @@ function POST_unsubscribeEmail(req, res) {
     const optOutError = function(error) {
         console.log("ERROR ADDING EMAIL TO OPT OUT LIST: " + req.body.email);
         console.log("The error was: ", error);
-        let recipient = ["ameyer24@wisc.edu"];
+        let recipient = ["kyle@moonshotinsights.io"];
         let subject = "MOONSHOT - URGENT ACTION - User was not unsubscribed"
         let content = "<div>"
             + "<h3>This email could not be added to the optOut list:</h3>"

@@ -201,11 +201,12 @@ function POST_candidate(req, res) {
             return res.status(500).send(SERVER_ERROR);
         }
 
+        // THESE TWO WILL NOT RUN - there are guaranteed return statements beforehand
         // add the user to the referrer's list of referred users
-        creditReferrer().catch(referralError => { console.log(referralError); });
+        //creditReferrer().catch(referralError => { console.log(referralError); });
 
         // send the moonshot admins an email saying that a user signed up
-        alertFounders().catch(emailError => { console.log(emailError); });
+        //alertFounders().catch(emailError => { console.log(emailError); });
     }
     // <<-------------------------------------------------------->> //
 

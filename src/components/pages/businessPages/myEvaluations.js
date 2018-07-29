@@ -78,29 +78,38 @@ class MyEvaluations extends Component {
     }
 
     handleSubmit(e) {
-        e.preventDefault();
-        const vals = this.props.formData.addEval.values;
+        try {
+            e.preventDefault();
+            const vals = this.props.formData.addEval.values;
 
-        // Form validation before submit
-        let notValid = false;
-        const requiredFields = [
-            'position',
-        ];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return;
+            // Form validation before submit
+            let notValid = false;
+            const requiredFields = [
+                'position',
+            ];
+            requiredFields.forEach(field => {
+                if (!vals || !vals[field]) {
+                    this.props.touch(field);
+                    notValid = true;
+                }
+            });
+            if (notValid) return;
 
-        const user = {
-            position: vals.position,
-            business: this.props.currentUser.businessInfo.company.name
-        };
+            // get all necessary params
+            const user = this.props.currentUser;
+            const userId = user._id;
+            const verificationToken = user.verificationToken;
+            const positionName = vals.position;
 
-        this.props.addEvaluationEmail(user);
-        this.handleNextScreen();
+            this.props.addEvaluationEmail(userId, verificationToken, positionName);
+            this.handleNextScreen();
+        }
+
+        catch (error) {
+            console.log("Error getting params: ", error);
+            this.props.addNotification("Error submitting new position. Contact support to get your position set up!");
+            return;
+        }
     }
 
     componentDidMount() {
