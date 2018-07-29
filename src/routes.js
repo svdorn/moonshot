@@ -15,7 +15,7 @@ import MyEvaluations from './components/pages/businessPages/myEvaluations';
 import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import Billing from './components/pages/businessPages/billing';
-import Onboarding from './components/pages/businessPages/onboarding';
+import Onboarding from './components/pages/businessPages/onboarding/onboarding';
 import BusinessHome from './components/pages/businessHome';
 import Influencer from './components/pages/influencer';
 import Main from './main';

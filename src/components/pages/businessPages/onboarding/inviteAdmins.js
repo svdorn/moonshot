@@ -4,21 +4,25 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from "axios";
 import Dialog from '@material-ui/core/Dialog';
-import AddUserDialog from '../../childComponents/addUserDialog';
-import { openAddUserModal, addNotification } from '../../../actions/usersActions';
-import { secondaryGray } from "../../../colors";
+import AddUserDialog from '../../../childComponents/addUserDialog';
+import { openAddUserModal, addNotification } from '../../../../actions/usersActions';
+import { secondaryGray } from "../../../../colors";
 
-class InviteEmployees extends Component {
+class InviteAdmins extends Component {
     render() {
         return (
-            <div className="invite-employees primary-white center">
+            <div className="invite-admins primary-white center">
                 <div>
-                    <div className="font18px text-left">
-                        The more data we have on your company, the better our
-                        predictions become. Culture fit and longevity are far
-                        more difficult to predict without insight into your
-                        company, so those measures won{"'"}t start populating
-                        until employees complete an evaluation.
+                    <div className="font18px">
+                        Admins are able to manage employee and candidate accounts
+                        and can see candidate evaluation results. Invite any
+                        Hiring Managers, Recruiters, or Executives that are
+                        involved in your hiring process.
+                    </div>
+                    <div className="font18px primary-cyan position-titles">
+                        <div>Recruiters</div>
+                        <div>Hiring Managers</div>
+                        <div>Executives</div>
                     </div>
                     <div
                         className="medium button round-4px background-primary-cyan"
@@ -28,7 +32,7 @@ class InviteEmployees extends Component {
                         Invite
                     </div>
                     <div className="font14px">
-                        You can also invite employees by going to Account&nbsp;&nbsp;>&nbsp;&nbsp;Add User&nbsp;&nbsp;>&nbsp;&nbsp;Employee.
+                        You can also invite admins by going to Account&nbsp;&nbsp;>&nbsp;&nbsp;Add User&nbsp;&nbsp;>&nbsp;&nbsp;Admin.
                     </div>
                     <div className="previous-next-area font18px center">
                         <div
@@ -41,7 +45,7 @@ class InviteEmployees extends Component {
                             className="button noselect round-4px background-primary-cyan inlineBlock"
                             onClick={this.props.next}
                         >
-                            Continue
+                            Next
                         </div>
                     </div>
                 </div>
@@ -67,4 +71,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(InviteEmployees);
+export default connect(mapStateToProps, mapDispatchToProps)(InviteAdmins);

@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
-import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
+import { closeNotification, updateOnboarding } from '../../../../actions/usersActions';
 import GoogleJobs from './googleJobs';
 import ImportCandidates from "./importCandidates";
 import InviteAdmins from "./inviteAdmins";
 import InviteEmployees from "./inviteEmployees";
 import YouTube from 'react-youtube';
-import OnboardingProgress from "../../miscComponents/onboardingProgress";
-import AddUserDialog from '../../childComponents/addUserDialog';
-import { goTo } from "../../../miscFunctions";
+import OnboardingProgress from "../../../miscComponents/onboardingProgress";
+import AddUserDialog from '../../../childComponents/addUserDialog';
+import { goTo } from "../../../../miscFunctions";
 
 
 class Onboarding extends Component {

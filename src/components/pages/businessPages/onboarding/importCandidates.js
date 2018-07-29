@@ -5,9 +5,9 @@ import { bindActionCreators } from 'redux';
 import axios from "axios";
 import { CircularProgress } from "material-ui";
 import Dialog from '@material-ui/core/Dialog';
-import { openAddUserModal, addNotification } from '../../../actions/usersActions';
-import { isValidFileType } from "../../../miscFunctions";
-import { secondaryGray } from "../../../colors";
+import { openAddUserModal, addNotification } from '../../../../actions/usersActions';
+import { isValidFileType } from "../../../../miscFunctions";
+import { secondaryGray } from "../../../../colors";
 import DropZone from "react-dropzone";
 
 class ImportCandidates extends Component {

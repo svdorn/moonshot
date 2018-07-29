@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import axios from "axios";
 import { CircularProgress } from "material-ui";
 import Dialog from '@material-ui/core/Dialog';
-import {  } from '../../../actions/usersActions';
+import {  } from '../../../../actions/usersActions';
 
 class GoogleJobs extends Component {
     constructor(props) {
