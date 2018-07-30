@@ -67,7 +67,7 @@ class Landbot extends Component {
 
     render() {
         return (
-            <div>
+            <div className="landbot-container">
                 <iframe
                     width="100%"
                     height="100%"

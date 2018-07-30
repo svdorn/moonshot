@@ -15,7 +15,7 @@ class Footer extends Component {
 
     render() {
         // paths that require the footer to be hidden
-        const hideFooterLocations = ["/businesssignup"];
+        const hideFooterLocations = ["/businesssignup", "/chatbot"];
 
         // check if the current path is one of the above paths
         const hidden = hideFooterLocations.includes(this.props.location.pathname.toLowerCase());
