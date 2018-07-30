@@ -10,6 +10,7 @@ const crypto = require('crypto');
 // get helper functions
 const { sanitize,
         sendEmail,
+        sendEmailPromise,
         getAndVerifyUser,
         getUserAndBusiness,
         frontEndUser,
@@ -46,6 +47,7 @@ const businessApis = {
     GET_apiKey,
     POST_resetApiKey,
     POST_uploadCandidateCSV,
+    POST_chatbotData,
 
     generateApiKey,
     createEmailInfo,
@@ -1661,6 +1663,42 @@ async function POST_uploadCandidateCSV(req, res) {
         // on success
         return res.status(200).json({});
     })
+}
+
+
+// send Kyle the info for a new chatbot sign up
+async function POST_chatbotData(req, res) {
+    const name = sanitize(req.body.name);
+    const company = sanitize(req.body.company);
+    const positionType = sanitize(req.body.positionType);
+    const title = sanitize(req.body.title);
+    const email = sanitize(req.body.email);
+
+    const recipients = ["ameyer24@wisc.edu"];
+    const subject = "New Signup from Chatbot";
+    const content = (
+        "<div>"
+        +   "<h3>Name</h3>"
+        +   `<p>${name}</p>`
+        +   "<h3>Company</h3>"
+        +   `<p>${company}</p>`
+        +   "<h3>Position Type</h3>"
+        +   `<p>${positionType}</p>`
+        +   "<h3>Title</h3>"
+        +   `<p>${title}</p>`
+        +   "<h3>Email</h3>"
+        +   `<p>${email}</p>`
+        + "</div>"
+    );
+
+    // send Kyle the email
+    try { await sendEmailPromise({ recipients, subject, content }); }
+    catch (sendEmailError) {
+        console.log("Error sending email on chatbot signup: ", sendEmailError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    return res.status(200).send({success: true});
 }
 
 

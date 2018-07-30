@@ -280,6 +280,146 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
 }
 
 
+// send an email
+async function sendEmailPromise(args) {
+    return new Promise(async function(resolve, reject) {
+        // if arguments are not provided
+        if (!args || typeof args !== "object") {
+            return reject("Invalid arguments. Usage: sendEmail({recipients: ['austin@gmail.com'], subject: 'New Stuff', ...})");
+        }
+
+        // addresses that will receive the email
+        const recipients = args.recipients;
+        // subject of the email
+        const subject = args.subject;
+        // body of the email
+        const content = args.content;
+        // OPTIONAL: who the email is being sent from (the sender) - default is Moonshot
+        const sendFrom = args.sendFrom;
+        // OPTIONAL: attachments files
+        const attachments = args.attachments;
+
+        // make sure all the required fields are provided
+        if (!recipients || !subject || !content) {
+            return reject("recipients, subject, and content are all required arguments.");
+        }
+
+        // recipientArray is an array of strings while recipientList is one string with commas
+        let recipientArray = [];
+        // if only one recipient was given, in string form, and it is an actual email address
+        if (typeof recipients === "string" && isValidEmail(recipients)) {
+            // add it to the recipients list
+            recipientArray.push(recipients);
+        }
+        // if recipients is an array like it's supposed to be
+        else if (Array.isArray(recipients)) {
+            // set the recipient list to be everyone who was passed in
+            recipientArray = recipients;
+        }
+        // otherwise return unsuccessfully
+        else { return reject("Recipients should be a list of strings."); }
+
+        // if no recipients are given
+        if (recipientArray.length === 0) {
+            return reject("No email recipients provided.");
+        }
+
+        // find the object with all the people who have opted out
+        try { var optedOut = await Emailaddresses.findOne({name: "optedOut"}); }
+        catch (findOptOutError) {
+            console.log("Error finding email addresses of those who have opted out.");
+            return reject(findOptOutError);
+        }
+
+        // get a string of emails to send to that haven't opted out
+        const recipientList = createRecipientList(recipientArray, optedOut.emails);
+
+        // don't send an email if it's not going to be sent to anyone
+        if (recipientList === "") {
+            return reject("Couldn't send email. Recipients are on the opt-out list or no valid emails were given.");
+        }
+
+        // the default email account to send emails from
+        let from = '"Moonshot" <do-not-reply@moonshotinsights.io>';
+        let authUser = credentials.emailUsername;
+        let authPass = credentials.emailPassword;
+        if (sendFrom) {
+            if (sendFrom === "Kyle Treige") {
+                from = '"Kyle Treige" <kyle@moonshotinsights.io>';
+                authUser = credentials.kyleEmailUsername;
+                authPass = credentials.kyleEmailPassword;
+            } else {
+                from = '"' + sendFrom + '" <do-not-reply@moonshotinsights.io>';
+            }
+        }
+
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            // host: 'smtp.ethereal.email',
+            // port: 587,
+            // secure: false, // true for 465, false for other ports
+            // auth: {
+            //     user: 'snabxjzqe3nmg2p7@ethereal.email',
+            //     pass: '5cbJWjTh7YYmz7e2Ce'
+            // }
+            service: 'gmail',
+            auth: {
+                user: authUser,
+                pass: authPass
+            }
+        });
+
+        // setup email data with unicode symbols
+        let mailOptions = {
+            from: from, // sender address
+            to: recipientList, // list of receivers
+            subject: subject, // Subject line
+            html: content // html body
+        };
+
+        // attach attachments, if they exist
+        if (attachments && Array.isArray(attachments) && attachments.length > 0) {
+            mailOptions.attachments = attachments;
+        }
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) { return reject(error); }
+            return resolve();
+        });
+    });
+}
+
+
+// remove emails that have opted out, create a string like "ameyer24@wisc.edu, svdorn9@gmail.com"
+function createRecipientList(recipientArray, optedOutEmailsArray) {
+    // create a pseudo-hashtable object to keep track of emails that have opted out
+    let optedOutEmailsObject = {};
+    // go through each email that has opted out ...
+    optedOutEmailsArray.forEach(ooEmail => {
+        // ... and add it to the pseudo-hashtable
+        optedOutEmailsObject[ooEmail.toLowerCase()] = true;
+    });
+    // the string that will contain the final result
+    let recipientList = "";
+    // go through each email address given
+    recipientArray.forEach(recipient => {
+        // make sure the email is a legitimate address
+        if (isValidEmail(recipient)) {
+            // make sure the email isn't on the opted-out list
+            if (!optedOutEmailsObject[recipient.toLowerCase()]) {
+                // add the email to the list of recipients
+                if (recipientList === "") { recipientList = recipient; }
+                // if this isn't the first recipient, add a comma beforehand
+                else { recipientList = recipientList + ", " + recipient; }
+            }
+        }
+    });
+
+    return recipientList;
+}
+
+
 // remove html tags from a variable (any type) to prevent code injection
 function sanitize(something) {
     const somethingType = (typeof something);
@@ -689,6 +829,7 @@ const helperFunctions = {
     removeEmptyFields,
     verifyUser,
     sendEmail,
+    sendEmailPromise,
     getFirstName,
     removeDuplicates,
     randomInt,

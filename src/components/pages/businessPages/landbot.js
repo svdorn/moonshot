@@ -2,7 +2,9 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {  } from '../../../actions/usersActions';
+import { addNotification } from '../../../actions/usersActions';
+import { goTo } from "../../../miscFunctions";
+import axios from "axios";
 
 
 class Landbot extends Component {
@@ -54,16 +56,55 @@ class Landbot extends Component {
 
     // create the landbot access point so we can get info from the chatbot
     createLandbotAP() {
+        const self = this;
         // create the landbot AP
         const landbot = new LandbotAP("signup-bot");
+        // tell the landbot what to do when it gets all the data
+        landbot.on("all-data", self.saveData);
+        // save the landbot in state
+        this.setState({ landbot });
+    }
 
-        landbot.on("all-data", (data) => {
-            console.log("recieving data: ", data);
-            // TODO: wait a couple seconds, then redirect to sign up page
+
+    // save the data from the chatbot, redirect to finish signup
+    saveData(data) {
+        const self = this;
+        // millisecond current time value when starting to post the data
+        const startPosting = (new Date()).getTime();
+
+        // save the data
+        axios.post("/api/business/chatbotData", data)
+        .then(result => {
+            console.log("result: ", result);
+            // millisecond current time value when finishing posting the data
+            const finishedPosting = (new Date()).getTime();
+            // how long it took to post the data
+            const timeDifference = finishedPosting - startPosting;
+            // want to give the user 1.5 seconds to process the end of the chatbot
+            // before navigating away
+            const TOTAL_WAIT_TIME = 1500;
+            // if it took less than 1.5 seconds to save the data
+            if (timeDifference < 1500) {
+                // how much longer to wait before redirecting
+                const remainingWaitTime = TOTAL_WAIT_TIME - timeDifference;
+                // wait the remaining time, then redirect
+                setTimeout(() => { advance(); }, remainingWaitTime);
+            }
+            // if it took longer than 1.5 seconds to save the data, redirect immediately
+            else { advance(); }
+        })
+        .catch(error => {
+            console.log(error);
+            // tell the user something weird happened
+            self.props.addNotification("Something strange happened. You can still sign up, but we may need to contact you to get some extra setup info.", "error");
+            // redirect to finish signing up
+            advance();
         });
 
-        // save it in state
-        this.setState({ landbot }, () => { console.log(landbot); });
+        // redirect to the business sign up page
+        function advance() {
+            goTo(`/businessSignup?name=${data.name}&company=${data.company}&email=${data.email}`);
+        }
     }
 
 
@@ -91,7 +132,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        addNotification
     }, dispatch);
 }
 

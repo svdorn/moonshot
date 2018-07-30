@@ -109,7 +109,6 @@ app.use(session({
 
 // ----->> START APIS <<----- //
 
-
 app.post('/user/submitFreeResponse', userApis.POST_submitFreeResponse);
 app.post("/user/addPositionEval", userApis.POST_addPositionEval);
 app.post('/user/startPositionEval', userApis.POST_startPositionEval);
@@ -158,6 +157,7 @@ app.post("/business/moveCandidates", businessApis.POST_moveCandidates);
 app.post("/business/sawMyCandidatesInfoBox", businessApis.POST_sawMyCandidatesInfoBox);
 app.post("/business/resetApiKey", businessApis.POST_resetApiKey);
 app.post("/business/uploadCandidateCSV", businessApis.POST_uploadCandidateCSV);
+app.post("/business/chatbotData", businessApis.POST_chatbotData);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/business", businessApis.GET_business);
