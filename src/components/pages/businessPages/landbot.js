@@ -56,10 +56,12 @@ class Landbot extends Component {
     createLandbotAP() {
         // create the landbot AP
         const landbot = new LandbotAP("signup-bot");
-        //
-        landbot.on("say-hi", () => {
-            console.log("HYELLO");
+
+        landbot.on("all-data", (data) => {
+            console.log("recieving data: ", data);
+            // TODO: wait a couple seconds, then redirect to sign up page
         });
+
         // save it in state
         this.setState({ landbot }, () => { console.log(landbot); });
     }
