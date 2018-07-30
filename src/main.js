@@ -103,7 +103,6 @@ class Main extends Component {
             content = (
                 <div>
                     <Menu/>
-                    <div className="headerSpace" />
                     <Notification/>
                     { this.props.children }
                     <FixedOnboardingProgress />

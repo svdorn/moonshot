@@ -17,6 +17,7 @@ import EmployeeResults from './components/pages/businessPages/employeeResults';
 import Billing from './components/pages/businessPages/billing';
 import Onboarding from './components/pages/businessPages/onboarding/onboarding';
 import BusinessSignup from "./components/pages/businessPages/businessSignup";
+import Chatbot from "./components/pages/businessPages/landbot";
 import BusinessHome from './components/pages/businessHome';
 import Influencer from './components/pages/influencer';
 import Main from './main';
@@ -73,6 +74,7 @@ const routes = (
             <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
             <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={businessAdminUserTypes} />
             <Route path="businessSignup" component={BusinessSignup} />
+            <Route path="chatbot" component={Chatbot} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
             <Route path="listing" component={Listing} />
             <Route path="influencer" component={Influencer} />

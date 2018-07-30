@@ -172,19 +172,23 @@ class Menu extends Component {
         // get the current path from the url
         let pathname = undefined;
         // try to get the path; lowercased because capitalization will vary
-        try {
-            pathname = this.props.location.pathname.toLowerCase();
-        }
+        try { pathname = this.props.location.pathname.toLowerCase(); }
         // if the pathname is not yet defined, don't do anything, this will be executed again later
-        catch (e) {
-            pathname = "";
-        }
+        catch (e) { pathname = ""; }
+
+        // get the different parts of the pathname ([skillTest, front-end-developer, ...])
+        const pathnameParts = pathname.split("/").slice(1);
+        // get the first, most important part of the path first
+        const pathFirstPart = pathnameParts[0];
+
+        // pages that don't have a header at all
+        const noMenuPages = ["chatbot"];
+        // don't show the menu if this page requires no menu
+        if (noMenuPages.includes(pathFirstPart)) { return null; }
 
         // the url to be directed to by default
         let homeUrl = "/";
-        if (isEmployer) {
-            homeUrl = "/myEvaluations";
-        }
+        if (isEmployer) { homeUrl = "/myEvaluations"; }
 
         // color of the dropDown menu icon
         let iconMenuColor = "white";
@@ -199,14 +203,10 @@ class Menu extends Component {
 
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
-        let hoverWidth = "61px";
-        let hoverDisplay = "inline-block";
+        let underlineWidth = "61px";
+        // whether
+        let hideUnderline = {};
         let additionalHeaderClass = "";
-
-        // get the different parts of the pathname ([skillTest, 1234945543])
-        const pathnameParts = pathname.split("/").slice(1);
-        // get the first, most important part of the path first
-        const pathFirstPart = pathnameParts[0];
 
         if (pathname === "/") {
             // make sure there aren't already event listeners on scroll/resize ...
@@ -236,15 +236,15 @@ class Menu extends Component {
                 dropdownClass += " currentRoute";
                 // if settings is selected, the underline bar must be bigger
                 // because "settings" is a bigger word
-                hoverWidth = "60px";
+                underlineWidth = "60px";
             } else if (pathname === '/adduser') {
                 dropdownClass += " currentRoute";
                 // if settings is selected, the underline bar must be bigger
                 // because "Add User" is a bigger
-                hoverWidth = "69px";
+                underlineWidth = "69px";
             } else if (pathname === '/billing') {
                 dropdownClass += " currentRoute";
-                hoverWidth = "46px";
+                underlineWidth = "46px";
             } else if (["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "businesssignup"].includes(pathFirstPart)){
                 additionalHeaderClass = " notFixed";
             }
@@ -284,7 +284,7 @@ class Menu extends Component {
         // if on business signup page, menu is v sparse
         if (pathFirstPart === "businesssignup") {
             // don't show the underline thing
-            hoverDisplay = "none";
+            hideUnderline = { display: "none" };
             menuOptions = [
                 {optionType: "url", title: "x", url: "/"}
             ];
@@ -476,7 +476,7 @@ class Menu extends Component {
         // is logged in, show the line that shows up when a dropDown item is selected
         if (currentUser) {
             desktopMenu.push(
-                <div key={"underline"} className="menuUnderline" style={{width: hoverWidth, display: hoverDisplay}}/>
+                <div key={"underline"} className="menuUnderline" style={{width: underlineWidth, ...hideUnderline}}/>
             )
         }
 
@@ -502,7 +502,10 @@ class Menu extends Component {
         );
 
         let menu = (
-            <header className={this.state.headerClass + additionalHeaderClass} style={{zIndex: "100"}}>
+            <header
+                className={this.state.headerClass + additionalHeaderClass}
+                style={{zIndex: "100"}}
+            >
                 <div>
                     <Toolbar id="menu" style={{height: "35px"}}>
                         <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "39px"}}>
@@ -527,7 +530,12 @@ class Menu extends Component {
             </header>
         );
 
-        return menu;
+        return (
+            <div>
+                { menu }
+                <div className="headerSpace" />
+            </div>
+        );
     }
 }
 
