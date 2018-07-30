@@ -11,9 +11,17 @@ class Footer extends Component {
         window.scrollTo(0, 0);
     }
 
+
+
     render() {
+        // paths that require the footer to be hidden
+        const hideFooterLocations = ["/businesssignup"];
+
+        // check if the current path is one of the above paths
+        const hidden = hideFooterLocations.includes(this.props.location.pathname.toLowerCase());
+
         return (
-            <div className="jsxWrapper">
+            <div className="jsxWrapper" style={ hidden ? {display: "none"} : {} }>
                 <div className="tabsShadow" style={{position:"absolute", zIndex: "100"}}><div/></div>
                 <footer className={"footer"}>
                     <ul className="horizCenteredList">

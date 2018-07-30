@@ -200,7 +200,13 @@ class Menu extends Component {
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
         let hoverWidth = "61px";
+        let hoverDisplay = "inline-block";
         let additionalHeaderClass = "";
+
+        // get the different parts of the pathname ([skillTest, 1234945543])
+        const pathnameParts = pathname.split("/").slice(1);
+        // get the first, most important part of the path first
+        const pathFirstPart = pathnameParts[0];
 
         if (pathname === "/") {
             // make sure there aren't already event listeners on scroll/resize ...
@@ -226,25 +232,20 @@ class Menu extends Component {
                 this.setState({ headerClass: "" });
             }
 
-            // get the different parts of the pathname ([skillTest, 1234945543])
-            const pathnameParts = pathname.split("/").slice(1);
-            // get the first, most important part of the path first
-            const pathFirstPart = pathnameParts[0];
-
             if (pathname === '/settings') {
-                dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+                dropdownClass += " currentRoute";
                 // if settings is selected, the underline bar must be bigger
                 // because "settings" is a bigger word
                 hoverWidth = "60px";
             } else if (pathname === '/adduser') {
-                dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+                dropdownClass += " currentRoute";
                 // if settings is selected, the underline bar must be bigger
                 // because "Add User" is a bigger
                 hoverWidth = "69px";
             } else if (pathname === '/billing') {
-                dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+                dropdownClass += " currentRoute";
                 hoverWidth = "46px";
-            } else if (["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions"].includes(pathFirstPart)){
+            } else if (["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "businesssignup"].includes(pathFirstPart)){
                 additionalHeaderClass = " notFixed";
             }
         }
@@ -280,8 +281,16 @@ class Menu extends Component {
         // used for menu divider
         let loggedInClass = " loggedIn";
 
+        // if on business signup page, menu is v sparse
+        if (pathFirstPart === "businesssignup") {
+            // don't show the underline thing
+            hoverDisplay = "none";
+            menuOptions = [
+                {optionType: "url", title: "x", url: "/"}
+            ];
+        }
         // if there is no user logged in
-        if (!currentUser) {
+        else if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
                 {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
@@ -467,7 +476,7 @@ class Menu extends Component {
         // is logged in, show the line that shows up when a dropDown item is selected
         if (currentUser) {
             desktopMenu.push(
-                <div key={"underline"} className="menuUnderline" style={{width: hoverWidth}}/>
+                <div key={"underline"} className="menuUnderline" style={{width: hoverWidth, display: hoverDisplay}}/>
             )
         }
 
