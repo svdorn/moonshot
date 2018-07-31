@@ -1007,7 +1007,7 @@ form > h1 {
 }
 .processOutline > div > div:nth-child(2n + 1) > div {
     position: relative;
-    top: 50%;
+    top: 38%;
     transform: translateY(-50%);
 }
 /* the info part on the left */

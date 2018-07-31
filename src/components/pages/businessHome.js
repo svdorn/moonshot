@@ -271,136 +271,6 @@ class BusinessHome extends Component {
             />,
         ];
 
-        const processObjects = [
-            {
-                title: (<div>Evaluation<br/>Creation</div>),
-                info: "Evaluations consist of a psychometric analysis, position-based skill tests and qualitative questions typically asked in the first interview.",
-                list: [
-                    "Psychometric Analysis",
-                    "Skill IQ Quizzes",
-                    "Qualitative Questions"
-                ]
-            },
-            {
-                title: (<div>Employee<br/>Completion</div>),
-                info: "Employees complete the evaluation to create a baseline for candidates.",
-                belowInfo: "Not necessary to get started.",
-                list: [
-                    "Create Baseline",
-                    "Better Understand Employers",
-                    "psychometric Profiles",
-                    "Skill IQs"
-                ]
-            },
-            {
-                title: (<div>Manager<br/>Feedback</div>),
-                info: "Managers complete a ~2 minute assessment for each employee so Moonshot can create performance profiles to analyze candidates.",
-                belowInfo: "Not necessary to get started.",
-                list: [
-                    "Performance Profiles",
-                    "Performance Management"
-                ]
-            },
-            {
-                title: (<div>Candidate<br/>Completion</div>),
-                info: "All incoming candidates complete the evaluation so Moonshot can predict their performance.",
-                list: [
-                    "Psychometric Profiles",
-                    "Skill IQs",
-                    "Qualitative Responses",
-                    "Predicted Job Performance",
-                    "Predicted Culture Fit",
-                    "Predicted Longevity",
-                    "Predicted Growth"
-                ]
-            }
-        ]
-
-        let processButtons = [];
-        const colors = [
-            {r:177,g:125,b:254},
-            {r:167,g:143,b:254},
-            {r:166,g:144,b:254},
-            {r:147,g:174,b:254},
-            {r:147,g:174,b:254},
-            {r:131,g:201,b:254},
-            {r:129,g:203,b:254},
-            {r:121,g:218,b:254}
-        ]
-        const numProcesses = processObjects.length;
-        for (let processIndex = 0; processIndex < numProcesses; processIndex++) {
-            const selected = this.state.infoIndex === processIndex;
-            const leftRgb = colors[processIndex*2];
-            const rightRgb = colors[processIndex*2 + 1];
-            const opacity = selected ? .8 : .1;
-            let colorStyle = {
-                background: `linear-gradient(to right, rgba(${leftRgb.r},${leftRgb.g},${leftRgb.b},${opacity}), rgba(${rightRgb.r},${rightRgb.g},${rightRgb.b},${opacity}))`
-            }
-
-            processButtons.push(
-                <div key={"processButton" + processIndex}>
-                    <div className="shadowBox" />
-                    <div className="processHeaderContainer clickable font18px font14pxUnder700 font12pxUnder400"
-                         onClick={() => this.selectProcess(processIndex)}
-                    >
-                        <div style={colorStyle} />
-                        <div style={colorStyle} />
-                        {processObjects[processIndex].title}
-                    </div>
-                </div>
-            );
-
-            if (processIndex === 1) {
-                processButtons.push(<br key={`br${processIndex}`} className="under950only"/>)
-            }
-        };
-
-        const processList = processObjects[this.state.infoIndex].list.map(infoListText => {
-            return (
-                <div className="processListItem" key={infoListText}>
-                    <img src={"/icons/CheckMarkRoundedWhite" + this.props.png} />
-                    <div>{ infoListText }</div>
-                </div>
-            );
-        });
-
-        const processSection = (
-            <section id="moonshotProcess">
-                <a id="ourProcess" name="ourProcess" className="anchor" />
-                <h1 className="font34px font30pxUnder950 font26pxUnder500 font24pxUnder450 font20pxUnder400">{"Moonshot's Process to Predict Candidate Performance"}</h1>
-                <div className="processButtonsContainer">
-                    { processButtons }
-                </div>
-                <div className="processOutline font18px font16pxUnder850 font12pxUnder700 font10pxUnder400">
-                    <div>
-                        <div>
-                            <div>
-                                { processObjects[this.state.infoIndex].info }
-                                { processObjects[this.state.infoIndex].belowInfo ?
-                                <div className="font14px font12pxUnder850 font10pxUnder700 font8pxUnder400 marginTop10px">
-                                    <i>{ processObjects[this.state.infoIndex].belowInfo }</i>
-                                </div>
-                                : null }
-                            </div>
-                        </div>
-                        <div/>
-                        <div>
-                            <div>
-                                { processList }
-                            </div>
-                        </div>
-                    </div>
-                    { this.state.infoIndex > 0 ? <img src={"/icons/Arrow3" + this.props.png} className="leftArrow" onClick={() => this.selectProcess(this.state.infoIndex - 1)} /> : null }
-                    { this.state.infoIndex < 3 ? <img src={"/icons/Arrow2" + this.props.png} className="rightArrow" onClick={() => this.selectProcess(this.state.infoIndex + 1)} /> : null }
-                </div>
-                <div className="center" style={{marginTop: "20px"}}>
-                    <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.handleDemoOpen}>
-                        See Demo
-                    </button>
-                </div>
-            </section>
-        );
-
         let blurredClass = '';
         if (this.state.open || this.state.demoOpen) {
             blurredClass = 'dialogForBizOverlay';
@@ -734,7 +604,28 @@ class BusinessHome extends Component {
                         </div>
                     </section>
 
-                    { processSection }
+                    <section id="moonshotProcess">
+                        <div className="processOutline font18px font16pxUnder850 font12pxUnder700 font10pxUnder400">
+                            <div>
+                                <div>
+                                    <div>
+                                        We predict how successful your candidates will be before you hire them.
+                                    </div>
+                                    <div>
+                                        <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font12pxUnder700 primary-white" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                            See How &#8680;
+                                        </button>
+                                    </div>
+                                </div>
+                                <div/>
+                                <div>
+                                    <div>
+                                        Video
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
 
                     <section id="pricingSection">
                         <a id="pricing" name="pricing" className="anchor" />
