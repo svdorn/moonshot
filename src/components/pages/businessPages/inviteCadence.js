@@ -12,12 +12,20 @@ class InviteCadence extends Component {
         super(props);
 
         this.state = {
-            selected: undefined
+            selected: undefined,
+            click: false
         }
     }
 
     handleClick(selected) {
         this.setState({selected})
+    }
+
+    handleCheckMarkClick() {
+        this.setState({
+            ...this.state,
+            click: !this.state.click
+        })
     }
 
     render() {
@@ -54,6 +62,17 @@ class InviteCadence extends Component {
                             </div>
                         </Paper>
                     </div>
+                </div>
+                <div style={{margin: "0 20px 10px"}} className="secondary-gray">
+                    <div className="checkbox smallCheckbox whiteCheckbox"
+                         onClick={this.handleCheckMarkClick.bind(this)}>
+                        <img
+                            alt=""
+                            className={"checkMark" + this.state.click}
+                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                        />
+                    </div>
+                    Enable daily email report so you can cancel invites to specific applicants.
                 </div>
                 <div className="previous-next-area primary-white font18px center marginTop20px marginBottom30px">
                     <div
