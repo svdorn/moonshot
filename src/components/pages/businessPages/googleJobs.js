@@ -17,7 +17,19 @@ class GoogleJobs extends Component {
     }
 
     handleNext() {
-        this.props.next();
+        let self = this;
+        axios.post("/api/business/googleJobsLinks", {
+            params: {
+                jobs: self.state.jobs,
+                businessId: self.props.currentUser.businessInfo.businessId
+            }
+        })
+        .then(res => {
+            self.props.next();
+        })
+        .catch(error => {
+            console.log("error: ", error);
+        });
     }
 
     onChange(e, key) {

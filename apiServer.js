@@ -140,6 +140,7 @@ app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 
+app.post('/business/googleJobsLinks', businessApis.POST_googleJobsLinks);
 app.post('/business/demoEmail', businessApis.POST_demoEmail);
 app.post('/business/dialogEmail', businessApis.POST_dialogEmail);
 app.post('/business/addEvaluationEmail', businessApis.POST_addEvaluationEmail);
