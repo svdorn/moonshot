@@ -703,9 +703,9 @@ class BusinessHome extends Component {
                                              alt="Diamond Icon"
                                              className="forBusinessIcon"
                                              style={{marginLeft: '10px'}}/>
-                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
-                                            Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
-                                        </div>
+                                         <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
+                                             Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
+                                         </div>
                                     </div>
                                     <div style={bottomListItem}>
                                          <img src={"/images/businessHome/Hourglass" + this.props.png}
@@ -713,7 +713,7 @@ class BusinessHome extends Component {
                                               className="forBusinessIcon"
                                               style={{marginRight: '10px'}}/>
                                         <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
-                                            Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
+                                            Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
                                         </div>
                                     </div>
                                     <div style={bottomListItem}>
