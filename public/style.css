@@ -681,8 +681,8 @@ form > h1 {
 }
 .infoContainer > .content {
     -webkit-box-flex: 1;
-    -ms-flex: 1 0 50%;
-    flex: 1 0 50%;
+    -ms-flex: 1 0 55%;
+    flex: 1 0 55%;
     color: white;
 }
 .infoContainer > .productScreenshots {
@@ -695,7 +695,7 @@ form > h1 {
 .flex { display: flex; }
 .i { font-style: italic; }
 .infoText { margin: 0; }
-.infoText.notFull { max-width: calc(1040px/2 - 100px)}
+.infoText.notFull { max-width: calc(1040px/2 - 20px)}
 .infoText.flex {
     justify-content: space-between;
     flex-direction: row;
@@ -4977,6 +4977,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 57;
         grid-column-start: 26;
         grid-column-end: 32;
+    }
+
+    .forBusinessIcon {
+        height: 50px;
     }
 
 

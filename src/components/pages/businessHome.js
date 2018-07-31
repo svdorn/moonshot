@@ -67,7 +67,7 @@ class BusinessHome extends Component {
             demoOpen: false,
             demoScreen: 1,
             dialogScreen: 1,
-            email: '',
+            position: '',
             // initially don't show the rectangles in case the user's browser is old
             showRectangles: false,
             agreeingToTerms: false,
@@ -177,18 +177,18 @@ class BusinessHome extends Component {
 
     onChange(e) {
         this.setState({
-            email: e.target.value
+            position: e.target.value
         }, () => {
-            this.updateEmail()
+            this.updatePosition()
         });
     }
 
 
-    updateEmail() {
-        const email = {
-            email: this.state.email,
+    updatePosition() {
+        const position = {
+            position: this.state.position,
         }
-        this.props.initialize(email);
+        this.props.initialize(position);
     }
 
 
@@ -248,7 +248,7 @@ class BusinessHome extends Component {
         });
 
         const bottomListItem = {
-                width: '35%',
+                width: '20%',
                 margin: 'auto',
                 display: 'inline-block',
                 top: '0',
@@ -567,11 +567,11 @@ class BusinessHome extends Component {
                         }
                         <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
                             <div className="content">
-                                <h1 className="bigTitle font46px font38pxUnder900 font28pxUnder400" style={{color:"#72d6f5"}}>Know who to hire.</h1>
-                                <p className="infoText notFull">Predict candidate performance so that you can hire the best people for your team, faster.</p>
+                                <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
+                                <p className="infoText notFull font18px font16pxUnder900 font14Under400">Hire the best people for your team with hiring technology that constantly learns and improves as you scale.</p>
                                 <div className="buttonArea font18px font14pxUnder900">
-                                    <input className="blackInput getStarted" type="text" placeholder="Email Address" name="email"
-                                    value={this.state.email} onChange={this.onChange.bind(this)}/>
+                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="email"
+                                    value={this.state.position} onChange={this.onChange.bind(this)}/>
                                     <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={this.handleOpen}>
                                         Try for Free
                                     </div>
@@ -617,14 +617,10 @@ class BusinessHome extends Component {
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextLeft forBusiness">
                                 <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
-                                    <h2 className="secondary-red font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
-                                    Analyze candidates to see if they exhibit the profile of
-                                    proven high performers in that position.
+                                    <h2 className="secondary-red font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will perform the best... or the worst</h2>
+                                    Analyze candidates to see if they exhibit the qualities of
+                                    proven high achievers or low performers in that position.
                                 </div>
-                                <button className="button gradient-transition gradient-1-purple-dark gradient-2-red round-4px marginTop10px primary-white font22px font16pxUnder600"
-                                        onClick={this.handleOpen}>
-                                    Hire Faster
-                                </button>
                             </div>
                             <div className="businessHomeTrajectoryImageRightNoBorder forBusiness">
                                 <img
@@ -645,10 +641,6 @@ class BusinessHome extends Component {
                                     machine learning to reveal the empirical evidence
                                     instead of conjecture based on a resume.
                                 </div>
-                                <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px marginTop10px primary-white font22px font16pxUnder600"
-                                        onClick={this.handleOpen}>
-                                    Hire Smarter
-                                </button>
                             </div>
                             <div className="businessHomeTrajectoryImagesLeft businessHomeTrajectoryImagesShadow forBusiness">
                                 <img
@@ -662,15 +654,9 @@ class BusinessHome extends Component {
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextLeft forBusiness">
                                 <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
-                                    <h2 className="primary-orange font30px font24pxUnder800 font22pxUnder500">Improve your candidate <div className="above800only br"><br/></div>experience</h2>
-                                    83% of candidates rate their current experience as poor.
-                                    Engage your candidates better so they can understand
-                                    your company and how they fit.
+                                    <h2 className="primary-orange font30px font24pxUnder800 font22pxUnder500">Constantly improve with every <div className="above800only br"><br/></div>new candidate and hire</h2>
+                                    Your next hire should always be your best one yet. It&#39;s smart to learn from your successes and mistakes.
                                 </div>
-                                <button className="button gradient-transition gradient-1-red gradient-2-orange round-4px marginTop10px primary-white font22px font16pxUnder600"
-                                        onClick={this.handleOpen}>
-                                    Hire Better
-                                </button>
                             </div>
 
                             <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
@@ -709,43 +695,33 @@ class BusinessHome extends Component {
                         <div>
                             <div className="center">
                                 <div className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400 center primary-purple-light statisticsHeader">
-                                    Predictive Analytics Improve Hiring Results
+                                    Candidate Predictions
                                 </div>
                                 <div>
-                                    <div style={bottomListItem}>
-                                        <img src={"/images/businessHome/Hourglass" + this.props.png}
-                                             alt="Hourglass Icon"
-                                             className="forBusinessIcon"
-                                             style={{marginRight: '10px'}}/>
-                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
-                                            Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
-                                        </div>
-                                    </div>
                                     <div style={bottomListItem}>
                                         <img src={"/images/businessHome/Diamond" + this.props.png}
                                              alt="Diamond Icon"
                                              className="forBusinessIcon"
                                              style={{marginLeft: '10px'}}/>
                                         <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
+                                            Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
+                                        </div>
+                                    </div>
+                                    <div style={bottomListItem}>
+                                         <img src={"/images/businessHome/Hourglass" + this.props.png}
+                                              alt="Hourglass Icon"
+                                              className="forBusinessIcon"
+                                              style={{marginRight: '10px'}}/>
+                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
                                             Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
                                         </div>
                                     </div>
-                                </div>
-                                <div style={{marginTop: '40px'}}>
                                     <div style={bottomListItem}>
                                         <img src={"/images/businessHome/Turnover" + this.props.png}
                                              alt="Turnover Icon"
                                              className="forBusinessIcon"/>
                                         <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
                                             Up to 70% decrease<div className="above1000only noHeight"><br/></div> in employee turnover
-                                        </div>
-                                    </div>
-                                    <div style={bottomListItem}>
-                                        <img src={"/images/businessHome/Lightbulb" + this.props.png}
-                                             alt="Lightbulb Icon"
-                                             className="forBusinessIcon"/>
-                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
-                                            More than 85% of candidates<div className="above1000only noHeight"><br/></div> rate their experience as positive
                                         </div>
                                     </div>
                                 </div>
