@@ -24,12 +24,7 @@ class GoogleJobs extends Component {
                 businessId: self.props.currentUser.businessInfo.businessId
             }
         })
-        .then(res => {
-            self.props.next();
-        })
-        .catch(error => {
-            console.log("error: ", error);
-        });
+        self.props.next();
     }
 
     onChange(e, key) {
