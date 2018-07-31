@@ -7,6 +7,7 @@ import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
 import ImportCandidates from "./importCandidates";
 import GoogleJobs from './googleJobs';
+import InviteCadence from './InviteCadence';
 import InviteAdmins from "./inviteAdmins";
 import YouTube from 'react-youtube';
 import OnboardingProgress from "../../miscComponents/onboardingProgress";
@@ -273,7 +274,10 @@ class Onboarding extends Component {
                     break;
                 // Set Applicant Invite Cadence
                 case 5:
-                    stepName = "Set Applicant Invite Cadence";
+                    stepName = "Applicant Invitation Cadence";
+                    body = (
+                        <InviteCadence {...childProps} />
+                    );
                     break;
                 // Invite Existing Candidates
                 case 6:

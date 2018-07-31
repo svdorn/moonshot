@@ -2055,6 +2055,24 @@ button.link {
     vertical-align: top;
 }
 
+.paperBoxInviteCadence {
+    height: 170px;
+    width: 200px;
+    display: inline-block;
+    margin: 0 25px 40px;
+    vertical-align: top;
+}
+.inviteCadenceGradient {
+    padding: 2px;
+    background: linear-gradient(to top left, var(--primary-purple-light), var(--primary-cyan));
+}
+
+.inviteCadenceGradientBorder > div {
+    background: var(--primary-black-dark);
+    height: 100%;
+    width: 100%;
+}
+
 .gradientBorderPurple {
     background: linear-gradient(to right, #be6aff, #7f0eff);
     padding: 2px;
