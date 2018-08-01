@@ -17,7 +17,9 @@ const { sanitize,
         speedTest,
         lastPossibleSecond,
         isValidFileType,
-        validateArgs
+        isValidEmail,
+        isValidPassword,
+        validArgs
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -71,9 +73,20 @@ function POST_createBusinessAndUser(req, res) {
         return res.status(400).send("Bad Request.");
     }
 
-    console.log("name: ", name);
+    // validate email
+    if (!isValidEmail(email)) { return res.status(400).send("Invalid email format."); }
 
-    return res.status(200).send("You did it good job lol");
+    // validate password
+    if (!isValidPassword(password)) { return res.status(400).send("Password needs to be at least 8 characters long."); }
+
+    // TODO: create business
+
+
+    // TODO: create user
+
+
+    console.log("done!");
+    //return res.status(200).send("You did it good job lol");
 }
 
 

@@ -110,6 +110,15 @@ app.use(session({
 // ----->> START APIS <<----- //
 
 
+businessApis.POST_createBusinessAndUser({body: {
+    name: "Austin",
+    email: "jangus@gmail.com",
+    password: "floopdoop",
+    company: "Moonshot",
+    positionTitle: "Big Boi"
+}});
+
+
 app.post('/user/submitFreeResponse', userApis.POST_submitFreeResponse);
 app.post("/user/addPositionEval", userApis.POST_addPositionEval);
 app.post('/user/startPositionEval', userApis.POST_startPositionEval);
