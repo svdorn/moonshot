@@ -878,7 +878,7 @@ function validArgs(options) {
 // checks if a password is secure enough to be stored
 function isValidPassword(password) {
     const MIN_PASSWORD_LENGTH = 8;
-    return password.length >= MIN_PASSWORD_LENGTH;
+    return typeof password === "string" && password.length >= MIN_PASSWORD_LENGTH;
 }
 
 

@@ -125,6 +125,13 @@ function isValidFileType(fileName, allowedFileTypes) {
 }
 
 
+// checks if a password is secure enough
+function isValidPassword(password) {
+    const MIN_PASSWORD_LENGTH = 8;
+    return typeof password === "string" && password.length >= MIN_PASSWORD_LENGTH;
+}
+
+
 // goes to a different page within moonshot insights; passing "/onboarding" would go to moonshotinsights.io/onboarding
 function goTo(route) {
     // go to the wanted page
@@ -142,6 +149,7 @@ const miscFunctions = {
     isValidEmail,
     htmlDecode,
     isValidFileType,
+    isValidPassword,
     goTo
 }
 

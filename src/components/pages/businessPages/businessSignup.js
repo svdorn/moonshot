@@ -7,7 +7,7 @@ import { TextField, CircularProgress, FlatButton, Dialog, RaisedButton } from 'm
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
-import { renderTextField, renderPasswordField, isValidEmail, goTo } from "../../../miscFunctions";
+import { renderTextField, renderPasswordField, isValidEmail, goTo, isValidPassword } from "../../../miscFunctions";
 
 
 const validate = values => {
@@ -17,18 +17,22 @@ const validate = values => {
         'password',
         'password2'
     ];
+    if (values.email && !isValidEmail(values.email)) {
+        errors.email = 'Invalid email address';
+    }
+    if (!isValidPassword(values.password)) {
+        errors.password = 'Password must be at least 8 characters long';
+    }
+    if (values.password && values.password2 && (values.password != values.password2)) {
+        errors.password2 = 'Passwords must match';
+    }
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'This field is required'
         }
     });
-    if (values.email && !isValidEmail(values.email)) {
-        errors.email = 'Invalid email address';
-    }
-    if (values.password && values.password2 && (values.password != values.password2)) {
-        errors.password2 = 'Passwords must match';
-    }
-    return errors
+
+    return errors;
 };
 
 class BusinessSignup extends Component {
@@ -51,10 +55,7 @@ class BusinessSignup extends Component {
         try {
             // get the parameters from the url
             let urlQuery = this.props.location.query;
-            var email = urlQuery.email;
-            var name = urlQuery.name;
-            var company = urlQuery.company;
-            var positionTitle = urlQuery.positionTitle;
+            var { email, name, company, positionTitle } = urlQuery;
             // if the needed parameters don't exist, get the user to go through
             // the chatbot
             if (!email || !name || !company || !positionTitle) { return goTo("/chatbot"); }
@@ -65,7 +66,7 @@ class BusinessSignup extends Component {
         this.setState({ name, company, positionTitle });
 
         // set the email value in the form
-        const initialValues = { email };
+        const initialValues = { email, password: "", password2: "" };
         this.props.initialize(initialValues);
     }
 
@@ -93,7 +94,7 @@ class BusinessSignup extends Component {
             return;
         }
 
-        const vals = this.props.formData.signup.values;
+        const vals = this.props.formData.businessSignup.values;
 
         // Form validation before submit
         let notValid = false;
@@ -117,9 +118,8 @@ class BusinessSignup extends Component {
             return this.props.addNotification("Passwords must match.", "error");
         }
 
-        const values = this.props.formData.signup.values;
         // grab values we need from the form
-        const { password, email } = values;
+        const { password, email } = vals;
         // grab values we need from state (which got its values from the url)
         const { name, company, positionTitle } = this.state;
         // combine all those things to be sent to server
@@ -235,8 +235,7 @@ function mapStateToProps(state) {
 }
 
 BusinessSignup = reduxForm({
-    form: 'signup',
-    enableReinitialize: true,
+    form: 'businessSignup',
     validate
 })(BusinessSignup);
 
