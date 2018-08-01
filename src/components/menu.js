@@ -283,13 +283,24 @@ class Menu extends Component {
         // if there is no user logged in
         if (!currentUser) {
             loggedInClass = " loggedOut";
-            menuOptions = [
-                {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
-                {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
-                {optionType: "separator"},
-                {optionType: "url", title: "Log In", url: "/login"},
-            ];
+            if (pathname === "/") {
+                menuOptions = [
+                    {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
+                    {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
+                    {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                    {optionType: "separator"},
+                    {optionType: "url", title: "Log In", url: "/login"},
+                    {optionType: "button", title: "Enter a position"}
+                ];
+            } else {
+                menuOptions = [
+                    {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
+                    {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
+                    {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                    {optionType: "separator"},
+                    {optionType: "url", title: "Log In", url: "/login"},
+                ];
+            }
         }
         // if the current user is an account admin for a business
         else if (currentUser.userType === "accountAdmin") {
@@ -456,6 +467,19 @@ class Menu extends Component {
                     mobileMenu.push(
                         <MenuItem key={"signOut mobile"} primaryText="Sign out" onClick={() => self.signOut()}/>
                     );
+                    break;
+                case "button":
+                    // add the menu item to the dropDown
+                    desktopMenu.push(
+                        <MenuItem><div className={"buttonArea font14px primary-white font14pxUnder900 " + menuItemClass}>
+                            <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="email"
+                            />
+                            <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan">
+                                Try for Free
+                            </div>
+                        </div></MenuItem>
+                    );
+                    // no button on mobile menu
                     break;
                 default:
                     break;
