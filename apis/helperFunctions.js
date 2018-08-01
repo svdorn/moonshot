@@ -824,6 +824,57 @@ function isValidFileType(fileName, allowedFileTypes) {
 }
 
 
+// determine if arguments to a function are valid
+// options = {
+//     stringArgs: [ String ],
+//     allowEmptyStrings: Boolean, *optional*
+//     numberArgs: [ Number ],
+//     objectArgs: [ Object ],
+//     arrayArgs: [ [ Anything ] ]
+// }
+function validArgs(options) {
+    // all the types of arguments we have to check as well as what each of their
+    // checks for validity are
+    toCheck = [
+        { argType: "numberArgs", check: (n) => { return typeof n === "number"; } },
+        { argType: "objectArgs", check: (o) => { return o && typeof o === "object"; } },
+        { argType: "arrayArgs", check: (a) => { return Array.isArray(a); } }
+    ];
+
+    // by default, strings are not valid if they are empty
+    let stringCheck = (s) => { return s && typeof s === "string" };
+    // if option to allow empty strings is true ...
+    if (options.allowEmptyStrings) {
+        // ... change the string check to not check truthiness
+        stringCheck = (s) => { return typeof s === "string" };
+    }
+    // add strings to list of things to check
+    toCheck.push({ argType: "stringArgs", check: stringCheck });
+
+    // assume all arguments are valid
+    allValid = true;
+
+    // go through each type of argument
+    toCheck.forEach(argInfo => {
+        // the array of arguments to check (could be the string array or number or whatever)
+        const args = options[argInfo.argType];
+        // if that array of args was actually passed in as an array
+        if (Array.isArray(args)) {
+            // go through each provided argument ...
+            args.forEach(arg => {
+                // ... check if it's valid ...
+                if (!argInfo.check(arg)) {
+                    // ... if it's not valid, mark that an argument is invalid
+                    allValid = false;
+                }
+            });
+        }
+    });
+
+    return allValid;
+}
+
+
 const helperFunctions = {
     sanitize,
     removeEmptyFields,
@@ -841,6 +892,7 @@ const helperFunctions = {
     findNestedValue,
     isValidEmail,
     isValidFileType,
+    validArgs,
 
     FOR_USER
 }

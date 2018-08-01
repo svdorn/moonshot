@@ -164,6 +164,22 @@ export function onSignUpPage() {
 }
 
 
+export function createBusinessAndUser(userInfo) {
+    return function(dispatch) {
+        // start the loading bar
+        dispatch({type: "START_LOADING"});
+        axios.post("/api/business/createBusinessAndUser", userInfo)
+        .then(result => {
+            console.log('do something');
+            //TODO create the api endpoing as well as the process after the user is created
+        })
+        .catch(error => {
+            // TODO show error message
+        })
+    }
+}
+
+
 export function positionSignup(userId, verificationToken, positionId, businessId) {
     return function(dispatch) {
         axios.post("/api/user/startPositionEval", {userId, verificationToken, positionId, businessId})

@@ -16,7 +16,8 @@ const { sanitize,
         frontEndUser,
         speedTest,
         lastPossibleSecond,
-        isValidFileType
+        isValidFileType,
+        validateArgs
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -38,6 +39,10 @@ const businessApis = {
     POST_changeHiringStage,
     POST_moveCandidates,
     POST_sawMyCandidatesInfoBox,
+    POST_resetApiKey,
+    POST_uploadCandidateCSV,
+    POST_chatbotData,
+    POST_createBusinessAndUser,
     GET_candidateSearch,
     GET_business,
     GET_employeeSearch,
@@ -45,9 +50,6 @@ const businessApis = {
     GET_positions,
     GET_evaluationResults,
     GET_apiKey,
-    POST_resetApiKey,
-    POST_uploadCandidateCSV,
-    POST_chatbotData,
 
     generateApiKey,
     createEmailInfo,
@@ -56,6 +58,24 @@ const businessApis = {
 
 
 // ----->> START APIS <<----- //
+
+
+// create a business and the first account admin for that business
+function POST_createBusinessAndUser(req, res) {
+    // get necessary arguments
+    const { name, company, email, positionTitle, password } = sanitize(req.body);
+
+    // validate arguments
+    const stringArgs = [ name, company, email, positionTitle, password ];
+    if (!validArgs({ stringArgs })) {
+        return res.status(400).send("Bad Request.");
+    }
+
+    console.log("name: ", name);
+
+    return res.status(200).send("You did it good job lol");
+}
+
 
 // create a signup code for a user
 function createCode(businessId, positionId, userType, open) {

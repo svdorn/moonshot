@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { postUser, closeNotification, addNotification } from '../../../actions/usersActions';
+import { createBusinessAndUser, closeNotification, addNotification } from '../../../actions/usersActions';
 import { TextField, CircularProgress, FlatButton, Dialog, RaisedButton } from 'material-ui';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../../miscComponents/HomepageTriangles';
@@ -118,19 +118,15 @@ class BusinessSignup extends Component {
         }
 
         const values = this.props.formData.signup.values;
-        const password = values.password;
-        const email = values.email;
-        let user = {
-            password, email
-        };
+        // grab values we need from the form
+        const { password, email } = values;
+        // grab values we need from state (which got its values from the url)
+        const { name, company, positionTitle } = this.state;
+        // combine all those things to be sent to server
+        const args = { password, email, name, company, positionTitle };
 
-        // this.props.postUser(user);
-        console.log("POSTING");
-
-        this.setState({
-            ...this.state,
-            email
-        })
+        // create the user
+        this.props.createBusinessAndUser(args);
     }
 
     handleCheckMarkClick() {
@@ -222,7 +218,7 @@ class BusinessSignup extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        postUser,
+        createBusinessAndUser,
         addNotification,
         closeNotification
     }, dispatch);
