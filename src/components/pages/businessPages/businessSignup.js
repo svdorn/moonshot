@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { postUser, onSignUpPage, closeNotification, addNotification } from '../../../actions/usersActions';
+import { postUser, closeNotification, addNotification } from '../../../actions/usersActions';
 import { TextField, CircularProgress, FlatButton, Dialog, RaisedButton } from 'material-ui';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../../miscComponents/HomepageTriangles';
@@ -37,26 +37,33 @@ class BusinessSignup extends Component {
 
         this.state = {
             email: "",
-            agreeingToTerms: false,
-            openPP: false,
-            openTOU:false,
+            positionTitle: "",
+            agreeingToTerms: false
         }
     }
 
-    componentWillMount() {
-        // TODO: do some verification that the user can be on this page
-        // // shouldn't be able to be on sign up page if logged in
-        // if (this.props.currentUser) {
-        //     this.goTo("/myEvaluations");
-        // }
-    }
 
     componentDidMount() {
         // add listener for keyboard enter key
         const self = this;
         document.addEventListener('keypress', self.handleKeyPress.bind(self));
 
-        this.props.onSignUpPage();
+        try {
+            // get the parameters from the url
+            let urlQuery = this.props.location.query;
+            var email = urlQuery.email;
+            var name = urlQuery.name;
+            var company = urlQuery.company;
+            var positionTitle = urlQuery.positionTitle;
+            // if the needed parameters don't exist, get the user to go through
+            // the chatbot
+            if (!email || !name || !company || !positionTitle) { return goTo("/chatbot"); }
+        } catch (e) { return goTo("/chatbot"); } // go to chatbot on error
+
+        this.setState({ positionTitle });
+
+        // save the name and company and email in state
+        //this.props.initialize()
     }
 
 
@@ -133,11 +140,7 @@ class BusinessSignup extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
-        let urlQuery = {};
-        try {
-            urlQuery = this.props.location.query;
-        } catch (e) { /* no query */ }
-
+        console.log("rendering");
         return (
             <div className="fillScreen formContainer business-signup">
                 <MetaTags>
@@ -156,8 +159,12 @@ class BusinessSignup extends Component {
                             :
                             <div>
                                 <form onSubmit={this.handleSubmit.bind(this)}>
-                                    <h1 style={{marginTop: "15px"}}>{`Try us out for your ${"INSERT HERE"} position`}</h1>
-                                    <h6>{"Your first hire is free • No credit card required"}</h6>
+                                    <div style={{marginTop: "15px"}} className="font28px font24pxUnder500">
+                                        Try us out for your <br/>{`${this.state.positionTitle} position`}
+                                    </div>
+                                    <div className="font14px">
+                                        Your first hire is free&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;No credit card required
+                                    </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="email"
@@ -180,17 +187,18 @@ class BusinessSignup extends Component {
                                         /><br/>
                                     </div>
 
-                                    <div style={{margin: "20px 20px 10px"}}>
+                                    <div style={{margin: "20px 20px 10px"}} className="font12px">
                                         <div className="checkbox smallCheckbox whiteCheckbox"
                                              onClick={this.handleCheckMarkClick.bind(this)}>
                                             <img
                                                 alt=""
                                                 className={"checkMark" + this.state.agreeingToTerms}
                                                 src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                                                style={{marginTop:"-18px"}}
                                             />
                                         </div>
-
-                                        I have read and agree to the Moonshot Insights <a href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf" target="_blank" className="primary-cyan">Privacy Policy</a> and <a href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf" target="_blank" className="primary-cyan">Terms and Conditions</a>.
+                                        I have read and agree to the Moonshot Insights<br/>
+                                        <a href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf" target="_blank" className="primary-cyan">privacy policy</a> and <a href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf" target="_blank" className="primary-cyan">terms and conditions</a>.
                                     </div>
                                     <br/>
                                     <RaisedButton
@@ -213,7 +221,6 @@ class BusinessSignup extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         postUser,
-        onSignUpPage,
         addNotification,
         closeNotification
     }, dispatch);
@@ -231,7 +238,8 @@ function mapStateToProps(state) {
 
 BusinessSignup = reduxForm({
     form: 'signup',
-    validate,
+    enableReinitialize: true,
+    validate
 })(BusinessSignup);
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessSignup);

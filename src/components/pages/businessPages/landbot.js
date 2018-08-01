@@ -103,7 +103,7 @@ class Landbot extends Component {
 
         // redirect to the business sign up page
         function advance() {
-            goTo(`/businessSignup?name=${data.name}&company=${data.company}&email=${data.email}`);
+            goTo(`/businessSignup?name=${data.name}&company=${data.company}&email=${data.email}&positionTitle=${data.title}`);
         }
     }
 

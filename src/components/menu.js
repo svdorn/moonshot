@@ -285,9 +285,9 @@ class Menu extends Component {
         if (pathFirstPart === "businesssignup") {
             // don't show the underline thing
             hideUnderline = { display: "none" };
-            menuOptions = [
-                {optionType: "url", title: "x", url: "/"}
-            ];
+            // don't let the user click back to home via the logo
+            logoIsLink = false;
+            menuOptions = [ /* nothing in the menu */ ];
         }
         // if there is no user logged in
         else if (!currentUser) {
