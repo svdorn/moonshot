@@ -162,6 +162,13 @@ class Menu extends Component {
     render() {
         let self = this;
 
+        // pages that have a header but don't show the header shadow
+        const noShadowPages = ["businesssignup"];
+        // pages where the menu scrolls with the page
+        const fixedMenuPages = ["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "businesssignup"];
+        // pages that don't have a header at all
+        const noMenuPages = ["chatbot"];
+
         let isEmployer = false;
         let currentUser = this.props.currentUser;
 
@@ -181,8 +188,6 @@ class Menu extends Component {
         // get the first, most important part of the path first
         const pathFirstPart = pathnameParts[0];
 
-        // pages that don't have a header at all
-        const noMenuPages = ["chatbot"];
         // don't show the menu if this page requires no menu
         if (noMenuPages.includes(pathFirstPart)) { return null; }
 
@@ -207,6 +212,9 @@ class Menu extends Component {
         // whether
         let hideUnderline = {};
         let additionalHeaderClass = "";
+
+        // add the class to get rid of the shadow if the current path is one of those
+        if (noShadowPages.includes(pathFirstPart)) { additionalHeaderClass += " noShadow"; }
 
         if (pathname === "/") {
             // make sure there aren't already event listeners on scroll/resize ...
@@ -245,8 +253,8 @@ class Menu extends Component {
             } else if (pathname === '/billing') {
                 dropdownClass += " currentRoute";
                 underlineWidth = "46px";
-            } else if (["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "businesssignup"].includes(pathFirstPart)){
-                additionalHeaderClass = " notFixed";
+            } else if (fixedMenuPages.includes(pathFirstPart)){
+                additionalHeaderClass += " notFixed";
             }
         }
 

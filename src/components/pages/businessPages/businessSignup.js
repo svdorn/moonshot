@@ -159,7 +159,7 @@ class BusinessSignup extends Component {
                             :
                             <div>
                                 <form onSubmit={this.handleSubmit.bind(this)}>
-                                    <div style={{marginTop: "15px"}} className="font28px font24pxUnder500">
+                                    <div style={{marginTop: "15px"}} className="primary-cyan font28px font24pxUnder500">
                                         Try us out for your <br/>{`${this.state.positionTitle} position`}
                                     </div>
                                     <div className="font14px">
