@@ -858,6 +858,10 @@ form > h1 {
     height: 100%;
     width: auto;
 }
+.playButton {
+    height: 30px;
+    margin-right: 10px;
+}
 
 #threeScreenshots {
     margin: 135px auto 60px;
