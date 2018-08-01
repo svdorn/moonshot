@@ -62,8 +62,9 @@ class BusinessSignup extends Component {
 
         this.setState({ positionTitle });
 
-        // save the name and company and email in state
-        //this.props.initialize()
+        // set the email value in the form
+        const initialValues = { email };
+        this.props.initialize(initialValues);
     }
 
 
