@@ -60,7 +60,9 @@ class BusinessSignup extends Component {
             if (!email || !name || !company || !positionTitle) { return goTo("/chatbot"); }
         } catch (e) { return goTo("/chatbot"); } // go to chatbot on error
 
-        this.setState({ positionTitle });
+        // save the values receieved in the url into state - will be used during
+        // api call later
+        this.setState({ name, company, positionTitle });
 
         // set the email value in the form
         const initialValues = { email };
@@ -141,7 +143,6 @@ class BusinessSignup extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
-        console.log("rendering");
         return (
             <div className="fillScreen formContainer business-signup">
                 <MetaTags>
@@ -150,7 +151,7 @@ class BusinessSignup extends Component {
                 </MetaTags>
                 <div>
                     <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>
-                    <div className="form lightBlackForm">
+                    <div className="form lightBlackForm" style={{marginTop: "10px"}}>
                         {this.state.email != "" && this.props.userPosted ?
                             <div className="center">
                                 <h1>Verify your email address</h1>
