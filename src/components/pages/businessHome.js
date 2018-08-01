@@ -454,10 +454,10 @@ class BusinessHome extends Component {
                             </div>
                             <figure className="productScreenshots">
                                 <div id="myCandidatesScreenshot">
-                                    <img src={"images/businessHome/MyCandidatesScreenshot" + this.props.jpg} alt="My Candidates Page Screenshot"/>
+                                    <img src={"images/businessHome/CandidatesScreenshotTop" + this.props.jpg} alt="My Candidates Page Screenshot"/>
                                 </div>
                                 <div id="resultsScreenshot">
-                                    <img src={"images/businessHome/CandidateResultsScreenshot" + this.props.jpg} alt="Candidate Results Page Screenshot" />
+                                    <img src={"images/businessHome/ProfileScreenshot" + this.props.jpg} alt="Candidate Results Page Screenshot" />
                                 </div>
                             </figure>
                         </div>
@@ -492,12 +492,12 @@ class BusinessHome extends Component {
                                     proven high achievers or low performers in that position.
                                 </div>
                             </div>
-                            <div className="businessHomeTrajectoryImageRightNoBorder forBusiness">
+                            <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
                                 <img
-                                    alt="My Candidates Management"
-                                    src={"/images/businessHome/MyCandidatesMagnifyScreenshot" + this.props.png}
+                                    alt="Analysis Text"
+                                    src={"/images/businessHome/CandidatesScreenshot" + this.props.jpg}
                                 />
-                                </div>
+                            </div>
                         </div>
 
                         <br/>
@@ -515,7 +515,7 @@ class BusinessHome extends Component {
                             <div className="businessHomeTrajectoryImagesLeft businessHomeTrajectoryImagesShadow forBusiness">
                                 <img
                                     alt="Predictive Insights"
-                                    src={"/images/businessHome/PredictiveInsights" + this.props.jpg}
+                                    src={"/images/businessHome/ProdScreenshot" + this.props.jpg}
                                 />
                             </div>
                         </div>
@@ -532,7 +532,7 @@ class BusinessHome extends Component {
                             <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
                                 <img
                                     alt="Analysis Text"
-                                    src={"/images/businessHome/PsychTestScreenshot" + this.props.jpg}
+                                    src={"/images/businessHome/ProductScreenshot" + this.props.jpg}
                                 />
                             </div>
                         </div>
