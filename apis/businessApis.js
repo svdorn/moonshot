@@ -262,9 +262,16 @@ async function createBusiness(info) {
         const { name, positions } = info;
         // make sure the minimum necessary args are there
         if (!name) { return reject("No business name provided."); }
+        // create NOW variable for easy reference
+        const NOW = new Date();
 
         // initialize mostly empty business
-        let business = { name, positions: [], logo: "hr.png" };
+        let business = {
+            name,
+            positions: [],
+            logo: "hr.png",
+            dateCreated: NOW
+        };
 
         // check if positions should be added
         if (Array.isArray(positions)) {
@@ -274,6 +281,7 @@ async function createBusiness(info) {
                 let bizPos = {
                     name: position.name,
                     positionType: position.positionType,
+                    dateCreated: NOW,
                     // assuming it'll take some time to create the position, so it's not ready yet
                     finalized: false
                 }

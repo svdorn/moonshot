@@ -11,7 +11,7 @@ import {Field, reduxForm} from 'redux-form';
 import AddUserDialog from '../childComponents/addUserDialog';
 import YouTube from 'react-youtube';
 import ProgressBarDialog from '../miscComponents/progressBarDialog';
-import { isValidEmail } from "../../miscFunctions";
+import { isValidEmail, goTo } from "../../miscFunctions";
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
@@ -572,7 +572,7 @@ class BusinessHome extends Component {
                                 <div className="buttonArea font18px font14pxUnder900">
                                     <input className="blackInput getStarted" type="text" placeholder="Email Address" name="email"
                                     value={this.state.email} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={this.handleOpen}>
+                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot")}>
                                         Try for Free
                                     </div>
                                 </div>

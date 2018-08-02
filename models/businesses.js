@@ -6,6 +6,10 @@ const positionSchema = mongoose.Schema({
     name: String,
     // if the position evaluation is ready to be taken
     finalized: Boolean,
+    // the date the position was created (but not necessarily finalized)
+    dateCreated: Date,
+    // the date the position was finalized and opened up to be taken
+    dateFinalized: Date,
     // whether the position can be applied to by anyone or if they need a unique
     // one time code
     open: Boolean,
@@ -76,6 +80,8 @@ const businessesSchema = mongoose.Schema({
     name: String,
     // logo image name within /images/logos/
     logo: String,
+    // the exact time the business object was created
+    dateCreated: Date,
     // if they've set up their billing
     billingCustomerId: String,
     // number of positions to charge for billing
