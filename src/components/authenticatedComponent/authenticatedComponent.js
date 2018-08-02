@@ -57,11 +57,15 @@ class AuthenticatedComponent extends Component {
 
             // if the user has some terms they have agreed to
             if (Array.isArray(acceptedAgreements)) {
-                // everyone has to agree to the privacy policy and terms of use
-                let necessaryAgreements = ["Privacy Policy", "Terms of Use"];
-                if (this.props.currentUser.userType === "accountAdmin" && this.props.currentUser.firstBusinessUser === true) {
-                    necessaryAgreements.push("Service Level Agreement");
+                // everyone has to agree to the privacy policy
+                let necessaryAgreements = ["Privacy Policy"];
+                // candidates have to agree to to the terms of use
+                if (this.props.currentUser.userType === "candidate") {
+                    necessaryAgreements.push("Terms of Use");
                 }
+                // everyone else (employees, account admins, managers) has to agree to terms and conditions
+                else { necessaryAgreements.push("Terms and Conditions"); }
+                // assume the agreements have all been agreed to
                 agreedToTerms = true;
                 // go through each necessary agreement ...
                 necessaryAgreements.forEach(necessaryAgreement => {

@@ -13,14 +13,13 @@ class AgreeToTerms extends Component {
         let agreements = [
             {name: "Privacy Policy", link: "privacyPolicy", type: "local"}
         ];
-        // agreements to add for account admins
-        if (this.props.currentUser.userType === "accountAdmin" && this.props.currentUser.firstBusinessUser === true) {
-            agreements.push({name: "Service Level Agreement", link: "serviceLevelAgreement", type: "local"});
-            agreements.push({name: "Terms and Conditions", link: "https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf", type: "foreign"});
-        }
-        // agreements to add for everyone else
-        else {
+        // agreement to add for candidates
+        if (this.props.currentUser.userType === "candidate") {
             agreements.push({name: "Terms of Use", link: "termsOfUse", type: "local"});
+        }
+        // agreement to add for non-candidates (account admins, managers, employees)
+        else {
+            agreements.push({name: "Terms and Conditions", link: "https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf", type: "foreign"});
         }
 
         // if userChecked is true, render the child component
