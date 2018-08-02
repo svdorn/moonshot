@@ -1935,8 +1935,8 @@ async function POST_login(req, res) {
         if (passwordsMatch !== true) {
             return res.status(400).send("Password is incorrect.");
         }
-        // user has not yet verified email, don't log in
-        if (user.verified !== true) {
+        // user has not yet verified email and is not an account admin, don't log in
+        if (user.verified !== true && user.userType !== "accountAdmin") {
             return res.status(401).send("Email not yet verified");
         }
         // all login info is correct

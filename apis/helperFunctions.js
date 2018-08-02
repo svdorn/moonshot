@@ -280,7 +280,7 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
 }
 
 
-// send an email
+// send an email and return a promise - required arg fields are recipients, subject, and content
 async function sendEmailPromise(args) {
     return new Promise(async function(resolve, reject) {
         // if arguments are not provided
@@ -301,7 +301,7 @@ async function sendEmailPromise(args) {
 
         // make sure all the required fields are provided
         if (!recipients || !subject || !content) {
-            return reject("recipients, subject, and content are all required arguments.");
+            return reject("Recipients, subject, and content are all required arguments.");
         }
 
         // recipientArray is an array of strings while recipientList is one string with commas

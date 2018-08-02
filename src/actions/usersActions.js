@@ -66,7 +66,7 @@ export function login(user, saveSession, navigateBackUrl) {
         axios.post("/api/user/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
-                dispatch({type:"LOGIN", payload: returnedUser});
+                dispatch({type:"LOGIN", user: returnedUser});
                 let nextUrl = '/myEvaluations';
                 if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
@@ -169,9 +169,12 @@ export function createBusinessAndUser(userInfo) {
         // start the loading bar
         dispatch({type: "START_LOADING"});
         axios.post("/api/business/createBusinessAndUser", userInfo)
-        .then(result => { goTo("/onboarding"); })
+        .then(response => {
+            dispatch({ type: "LOGIN", user: response.data, notification: { message: "Your account has been activated! Thanks for signing up!", type: "infoHeader"} });
+            goTo("/onboarding");
+        })
         .catch(error => {
-            dispatch({type: "ADD_NOTIFICATION", notification: {message: error.response.data, type: "errorHeader"}});
+            dispatch({type: "NOTIFICATION_AND_STOP_LOADING", notification: {message: error.response.data, type: "errorHeader"}});
         })
     }
 }
@@ -483,7 +486,7 @@ export function verifyEmail(userType, token) {
                     browserHistory.push(nextLocation);
                 } else {
                     // don't show verification notification if going straight to onboarding because it's implied
-                    dispatch({type: "LOGIN", payload:response.data});
+                    dispatch({type: "LOGIN", user: response.data});
                     browserHistory.push('/myEvaluations');
                 }
             })
@@ -504,7 +507,7 @@ export function changePasswordForgot(user) {
                 axios.post("/api/user/session", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
                 .catch(function(err2) {});
 
-                dispatch({type:"LOGIN", payload:foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
+                dispatch({type:"LOGIN", user: foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
                 let nextUrl = "/";
                 let returnedUser = response.data;
                 browserHistory.push(nextUrl);

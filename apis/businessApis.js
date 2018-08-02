@@ -79,9 +79,14 @@ async function POST_createBusinessAndUser(req, res) {
 
     // create the user
     const userInfo = { name, email, password };
-    try { var user = await createUser(userInfo); }
+    try { var user = await createAccountAdmin(userInfo); }
     catch (createUserError) {
         console.log("Error creating user from business signup: ", createUserError);
+        // tell the user they need a different email if this address is taken already
+        if (createUserError === errors.EMAIL_TAKEN) {
+            return res.status(400).send(errors.EMAIL_TAKEN);
+        }
+        // otherwise return a standard server error message
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
@@ -110,12 +115,32 @@ async function POST_createBusinessAndUser(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    return res.status(200).send(frontEndUser(user));
+    // return successfully to user
+    res.status(200).send(frontEndUser(user));
+
+    // send email to everyone if there's a new sign up
+    // do this after sending success message to user just in case this fails
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+    if (process.env.NODE_ENV === "development") {
+        recipients = [ process.env.DEV_EMAIL ];
+    }
+    let subject = 'New Account Admin Sign Up';
+    let content =
+        '<div>'
+        +   '<p>New account admin signed up and created a business.</p>'
+        +   `<p>Name: ${user.name}</p>`
+        +   `<p>Email: ${user.email}</p>`
+        +   `<p>Business name: ${business.name}</p>`
+        + '</div>';
+    try { await sendEmailPromise({recipients, subject, content}); }
+    catch (alertEmailError) {
+        console.log("Error sending alert email about new user: ", alertEmailError);
+    }
 }
 
 
-// creates a new user
-async function createUser(info) {
+// creates a new ACCOUNT ADMIN user
+async function createAccountAdmin(info) {
     return new Promise(function(resolve, reject) {
         // get needed args
         const { name, password, email } = info;
@@ -136,8 +161,10 @@ async function createUser(info) {
 
         // --->>> THINGS WE CAN SET FOR USER WITHOUT ASYNC CALLS <<<--- //
         const NOW = new Date();
-        // admin status must be changed in the db directly
+        // moonshot admin status must be changed in the db directly
         user.admin = false;
+        // user is an account admin
+        user.userType = "accountAdmin";
         // user has not yet verified email
         user.verified = false;
         // had to select that they agreed to the terms to sign up so must be true
@@ -148,7 +175,7 @@ async function createUser(info) {
                 agreed: true
             },
             {
-                name: "Terms of Use",
+                name: "Terms and Conditions",
                 date: NOW,
                 agreed: true
             }
@@ -172,7 +199,7 @@ async function createUser(info) {
         Users.find({ email })
         .then(foundUsers => {
             if (foundUsers.length > 0) {
-                return reject("An account with that email address already exists.");
+                return reject(errors.EMAIL_TAKEN);
             } else {
                 // mark that we are good to make this user, then try to do it
                 verifiedUniqueEmail = true;
@@ -221,40 +248,10 @@ async function createUser(info) {
                 return reject(error.SERVER_ERROR);
             }
 
-            // send the moonshot admins an email saying that a user signed up
-            alertFounders()
-            .then(result => { return resolve(); })
-            .catch(emailError => { console.log(emailError); });
+            resolve(user);
         }
         // <<-------------------------------------------------------->> //
     });
-
-    function alertFounders() {
-        return new Promise(function(resolve, reject) {
-            // send email to everyone if there's a new sign up
-            let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-            if (process.env.NODE_ENV === "development") {
-                recipients = [ process.env.DEV_EMAIL ];
-            }
-
-            let subject = 'New Sign Up';
-            let content =
-            '<div>'
-            +   '<p>New user signed up.</p>'
-            +   '<p>Name: ' + user.name + '</p>'
-            +   '<p>email: ' + user.email + '</p>'
-            + '</div>';
-
-            const sendFrom = "Moonshot";
-            sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                if (!success) {
-                    return reject("Error sending sign up alert email");
-                } else {
-                    return resolve();
-                }
-            });
-        });
-    }
 }
 
 
@@ -267,7 +264,7 @@ async function createBusiness(info) {
         if (!name) { return reject("No business name provided."); }
 
         // initialize mostly empty business
-        let business = { name, positions: [] };
+        let business = { name, positions: [], logo: "hr.png" };
 
         // check if positions should be added
         if (Array.isArray(positions)) {

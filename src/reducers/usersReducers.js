@@ -59,7 +59,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 notification: action.notification,
-                currentUser: action.payload,
+                currentUser: action.user,
                 loadingSomething: false
             };
             break;
@@ -76,13 +76,14 @@ export function usersReducers(state = initialState, action) {
         case "ADD_NOTIFICATION":
             return {...state, notification: action.notification};
             break;
-        case "UPDATE_USER_REJECTED":
-        case "LOGIN_REJECTED":
-        case "UPDATE_ONBOARDING_REJECTED":
-        case "CHANGE_PASSWORD":
+        case "NOTIFICATION_AND_STOP_LOADING":
         case "CHANGE_PASSWORD_REJECTED":
+        case "LOGIN_REJECTED":
             return {...state, notification: action.notification, loadingSomething: false};
             break;
+        case "UPDATE_USER_REJECTED":
+        case "UPDATE_ONBOARDING_REJECTED":
+        case "CHANGE_PASSWORD":
         case "POST_EMAIL_INVITES_REJECTED":
             return {...state, loadingSomething:false, userPostedFailed: true}
             break;
@@ -101,6 +102,9 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 loadingSomething: true
             }
+            break;
+        case "STOP_LOADING":
+            return { ...state, loadingSomething: false };
             break;
         case "ON_SIGNUP_PAGE":
             return {
@@ -179,11 +183,6 @@ export function usersReducers(state = initialState, action) {
         case "FAILURE_BILLING_CUSTOMER":
             return {
                 ...state, notification: action.notification, loadingSomething: false
-            };
-            break;
-        case "STOP_LOADING":
-            return {
-                ...state, loadingSomething: false
             };
             break;
         case "CLOSE_NOTIFICATION":
