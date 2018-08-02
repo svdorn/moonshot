@@ -21,7 +21,9 @@ class SkillTest extends Component {
             finished: false,
             skillName: undefined,
             agreedToTerms: false,
-            canContinue: true
+            canContinue: true,
+            positionId: undefined,
+            businessId: undefined
         };
     }
 
@@ -76,7 +78,9 @@ class SkillTest extends Component {
                 },
                 skillName: result.data.skillName,
                 selectedId: undefined,
-                finished: false
+                finished: false,
+                positionId: result.data.positionId,
+                businessId: result.data.businessId,
             }, () => { console.log("state: ", self.state); });
         })
         .catch(error => {
@@ -212,7 +216,6 @@ class SkillTest extends Component {
         // if the user is taking a position evaluation, go to the next step of that
         const user = this.props.currentUser;
         const currentPosition = user.currentPosition;
-        console.log("currPos: ",currentPosition);
         if (currentPosition) {
             // if there are skill tests the user still has to take, go to that skill test
             if (currentPosition.skillTests && currentPosition.testIndex < currentPosition.skillTests.length) {
@@ -237,12 +240,12 @@ class SkillTest extends Component {
         }
         // otherwise the user took the exam as a one-off thing, so show them results
         else {
-            // if (currentPosition.positionId === "5b2952445635d4c1b9ed7b04" && currentPosition.businessId === "5b29597efb6fc033f887fda0") {
-            //     let url = "/influencer?user=" + currentUser._id + "&businessId=" + currentPosition.businessId + "&positionId=" + currentPosition.positionId;
-            //     this.goTo(url);
-            // } else {
+            if (this.state.positionId === "5b2952445635d4c1b9ed7b04" && this.state.businessId === "5b29597efb6fc033f887fda0") {
+                 let url = "/influencer?user=" + currentUser._id + "&businessId=" + this.state.businessId + "&positionId=" + this.state.positionId;
+                 this.goTo(url);
+            } else {
                 this.goTo("/myEvaluations");
-            //}
+            }
             window.scrollTo(0, 0);
             this.props.addNotification("Position evaluation complete!", "info");
         }
