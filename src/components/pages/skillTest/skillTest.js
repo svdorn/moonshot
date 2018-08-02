@@ -212,6 +212,7 @@ class SkillTest extends Component {
         // if the user is taking a position evaluation, go to the next step of that
         const user = this.props.currentUser;
         const currentPosition = user.currentPosition;
+        console.log("currPos: ",currentPosition);
         if (currentPosition) {
             // if there are skill tests the user still has to take, go to that skill test
             if (currentPosition.skillTests && currentPosition.testIndex < currentPosition.skillTests.length) {
@@ -224,14 +225,26 @@ class SkillTest extends Component {
             // otherwise, the user is done with the test; go home and give them
             // a notification saying they're done
             else {
-                this.props.addNotification("Finished application!", "info");
-                this.goTo("/");
+                if (currentPosition.positionId === "5b2952445635d4c1b9ed7b04" && currentPosition.businessId === "5b29597efb6fc033f887fda0") {
+                    let url = "/influencer?user=" + currentUser._id + "&businessId=" + currentPosition.businessId + "&positionId=" + currentPosition.positionId;
+                    this.goTo(url);
+                } else {
+                    this.goTo("/myEvaluations");
+                }
+                window.scrollTo(0, 0);
+                this.props.addNotification("Position evaluation complete!", "info");
             }
         }
         // otherwise the user took the exam as a one-off thing, so show them results
         else {
-            // TODO make it go to the actual results page
-            this.goTo("/");
+            // if (currentPosition.positionId === "5b2952445635d4c1b9ed7b04" && currentPosition.businessId === "5b29597efb6fc033f887fda0") {
+            //     let url = "/influencer?user=" + currentUser._id + "&businessId=" + currentPosition.businessId + "&positionId=" + currentPosition.positionId;
+            //     this.goTo(url);
+            // } else {
+                this.goTo("/myEvaluations");
+            //}
+            window.scrollTo(0, 0);
+            this.props.addNotification("Position evaluation complete!", "info");
         }
     }
 
@@ -272,13 +285,23 @@ class SkillTest extends Component {
         let content = <CircularProgress color="#FB553A" />;
 
         if (this.state.finished) {
-            content = (
-                <div>
-                    Skill test complete!
-                    <br/>
-                    <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finishTest.bind(this)}>Continue</div>
-                </div>
-            );
+            if (currentUser.currentPosition) {
+                content = (
+                    <div>
+                        Skill test complete!
+                        <br/>
+                        <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finishTest.bind(this)}>Continue</div>
+                    </div>
+                );
+            } else {
+                content = (
+                    <div>
+                        Evaluation complete!
+                        <br/>
+                        <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finishTest.bind(this)}>Finish</div>
+                    </div>
+                );
+            }
         }
         else if (currentUser.currentPosition && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
             content = (

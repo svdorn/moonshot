@@ -286,6 +286,7 @@ function POST_answerSkillQuestion(req, res) {
                                 // finish the eval
                                 console.log("finishing position eval");
                                 user = await finishPositionEvaluation(user, position.positionId, position.businessId);
+                                console.log("user: ",user);
                             } catch (finishError) {
                                 console.log("Error finishing eval: ", finishError);
                                 return res.status(500).send("Server error.");
