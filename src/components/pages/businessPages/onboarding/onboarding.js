@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../../actions/usersActions';
+import VerifyEmail from "./verifyEmail";
 import GoogleJobs from './googleJobs';
 import ImportCandidates from "./importCandidates";
 import InviteAdmins from "./inviteAdmins";
@@ -255,30 +256,7 @@ class Onboarding extends Component {
                 // Activate Admin Account
                 case 1:
                     stepName = "Activate Admin Account";
-                    body = (
-                        <div>
-                            <p className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
-                                Thank you for signing up for Moonshot Insights, please take 30 seconds now to go to your email and verify your account.
-                            </p>
-                            <p className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
-                                Once you&#39;re done, continue with onboarding.
-                            </p>
-                            <div className="previous-next-area primary-white font18px center marginTop20px">
-                                <div
-                                    className="previous noselect clickable underline inlineBlock"
-                                    onClick={this.handlePrevious.bind(this)}
-                                >
-                                    Previous
-                                </div>
-                                <div
-                                    className="button noselect round-4px background-primary-cyan inlineBlock"
-                                    onClick={this.handleNext.bind(this)}
-                                >
-                                    Next
-                                </div>
-                            </div>
-                        </div>
-                    );
+                    body = (<VerifyEmail {...childProps} />);
                     break;
                 // Watch Tutorial
                 case 2:

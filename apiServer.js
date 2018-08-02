@@ -41,6 +41,7 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 // import all the api functions
 const userApis = require("./apis/userApis");
 const candidateApis = require("./apis/candidateApis");
+const accountAdminApis = require("./apis/accountAdminApis");
 const businessApis = require("./apis/businessApis");
 const adminApis = require("./apis/adminApis");
 const miscApis = require("./apis/miscApis");
@@ -140,6 +141,8 @@ app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
+
+app.post("/accountAdmin/sendVerificationEmail", accountAdminApis.POST_sendVerificationEmail);
 
 app.post('/business/demoEmail', businessApis.POST_demoEmail);
 app.post('/business/dialogEmail', businessApis.POST_dialogEmail);
