@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router'
 import { reset } from 'redux-form';
+import { goTo } from "../miscFunctions";
 
 
 // GET USER FROM SESSION
@@ -141,7 +142,6 @@ export function setupBillingCustomer(source, email, userId, verificationToken) {
         .catch(error => {
             console.log(error);
             dispatch({type: "FAILURE_BILLING_CUSTOMER", notification: {message: error, type: "errorHeader"}});
-            // console.log("error answering admin question: ", error);
         })
     }
 }
@@ -169,12 +169,9 @@ export function createBusinessAndUser(userInfo) {
         // start the loading bar
         dispatch({type: "START_LOADING"});
         axios.post("/api/business/createBusinessAndUser", userInfo)
-        .then(result => {
-            console.log('do something');
-            //TODO create the api endpoing as well as the process after the user is created
-        })
+        .then(result => { goTo("/onboarding"); })
         .catch(error => {
-            // TODO show error message
+            dispatch({type: "ADD_NOTIFICATION", notification: {message: error.response.data, type: "errorHeader"}});
         })
     }
 }

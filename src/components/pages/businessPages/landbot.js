@@ -75,7 +75,6 @@ class Landbot extends Component {
         // save the data
         axios.post("/api/business/chatbotData", data)
         .then(result => {
-            console.log("result: ", result);
             // millisecond current time value when finishing posting the data
             const finishedPosting = (new Date()).getTime();
             // how long it took to post the data
@@ -88,7 +87,7 @@ class Landbot extends Component {
                 // how much longer to wait before redirecting
                 const remainingWaitTime = TOTAL_WAIT_TIME - timeDifference;
                 // wait the remaining time, then redirect
-                setTimeout(() => { advance(); }, remainingWaitTime);
+                setTimeout(advance, remainingWaitTime);
             }
             // if it took longer than 1.5 seconds to save the data, redirect immediately
             else { advance(); }
@@ -103,7 +102,7 @@ class Landbot extends Component {
 
         // redirect to the business sign up page
         function advance() {
-            goTo(`/businessSignup?name=${data.name}&company=${data.company}&email=${data.email}&positionTitle=${data.title}`);
+            goTo(`/businessSignup?name=${data.name}&company=${data.company}&email=${data.email}&positionTitle=${data.title}&positionType=${data.positionType}`);
         }
     }
 

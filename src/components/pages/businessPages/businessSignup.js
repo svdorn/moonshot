@@ -55,15 +55,15 @@ class BusinessSignup extends Component {
         try {
             // get the parameters from the url
             let urlQuery = this.props.location.query;
-            var { email, name, company, positionTitle } = urlQuery;
+            var { email, name, company, positionTitle, positionType } = urlQuery;
             // if the needed parameters don't exist, get the user to go through
             // the chatbot
-            if (!email || !name || !company || !positionTitle) { return goTo("/chatbot"); }
+            if (!email || !name || !company || !positionTitle || !positionType) { return goTo("/chatbot"); }
         } catch (e) { return goTo("/chatbot"); } // go to chatbot on error
 
         // save the values receieved in the url into state - will be used during
         // api call later
-        this.setState({ name, company, positionTitle });
+        this.setState({ name, company, positionTitle, positionType });
 
         // set the email value in the form
         const initialValues = { email, password: "", password2: "" };
@@ -90,8 +90,7 @@ class BusinessSignup extends Component {
         e.preventDefault();
 
         if (!this.state.agreeingToTerms) {
-            this.props.addNotification("Must agree to Terms and Conditions and Privacy Policy.", "error");
-            return;
+            return this.props.addNotification("Must agree to Terms and Conditions and Privacy Policy.", "error");
         }
 
         const vals = this.props.formData.businessSignup.values;
@@ -111,19 +110,23 @@ class BusinessSignup extends Component {
         });
         if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
 
-        if (!isValidEmail(vals.email)) {
+        // grab values we need from the form
+        const { password, email } = vals;
+
+        if (!isValidEmail(email)) {
             return this.props.addNotification("Invalid email.", "error");
         }
-        if (vals.password != vals.password2) {
+        if (!isValidPassword(password)) {
+            return this.props.addNotification("Password must be at least 8 characters long", "error");
+        }
+        if (password != vals.password2) {
             return this.props.addNotification("Passwords must match.", "error");
         }
 
-        // grab values we need from the form
-        const { password, email } = vals;
         // grab values we need from state (which got its values from the url)
-        const { name, company, positionTitle } = this.state;
+        const { name, company, positionTitle, positionType } = this.state;
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positionTitle };
+        const args = { password, email, name, company, positionTitle, positionType };
 
         // create the user
         this.props.createBusinessAndUser(args);
@@ -133,7 +136,7 @@ class BusinessSignup extends Component {
         this.setState({
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
-        })
+        });
     }
 
 

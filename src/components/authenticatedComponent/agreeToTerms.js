@@ -11,11 +11,16 @@ class AgreeToTerms extends Component {
 
         // figure out which agreements are necessary
         let agreements = [
-            {name: "Privacy Policy", link: "privacyPolicy"},
-            {name: "Terms of Use", link: "termsOfUse"}
+            {name: "Privacy Policy", link: "privacyPolicy", type: "local"}
         ];
+        // agreements to add for account admins
         if (this.props.currentUser.userType === "accountAdmin" && this.props.currentUser.firstBusinessUser === true) {
-            agreements.push({name: "Service Level Agreement", link: "serviceLevelAgreement"});
+            agreements.push({name: "Service Level Agreement", link: "serviceLevelAgreement", type: "local"});
+            agreements.push({name: "Terms and Conditions", link: "https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf", type: "foreign"});
+        }
+        // agreements to add for everyone else
+        else {
+            agreements.push({name: "Terms of Use", link: "termsOfUse", type: "local"});
         }
 
         // if userChecked is true, render the child component
@@ -50,7 +55,16 @@ class AgreeToTerms extends Component {
             // add 'and' right before the last element
             const and = i === agreements.length - 1 && i > 0 ? "and " : "";
             links.push(comma + and);
-            links.push(<a key={agreement.name} className="primary-cyan" href={`/${agreement.link}`} target="_blank">{agreement.name}</a>);
+            // if linking to local, push to /{link}, otherwise push to the entire link
+            links.push(
+                <a  key={agreement.name}
+                    className="primary-cyan"
+                    href={agreement.type === "local" ? `/${agreement.link}` : agreement.link}
+                    target="_blank"
+                >
+                    {agreement.name}
+                </a>
+            );
         }
 
         return links;

@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const positionSchema = mongoose.Schema({
     // name of the position (such as "Machine Learning Developer")
     name: String,
+    // if the position evaluation is ready to be taken
+    finalized: Boolean,
     // whether the position can be applied to by anyone or if they need a unique
     // one time code
     open: Boolean,

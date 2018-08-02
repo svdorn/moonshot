@@ -63,15 +63,13 @@ const businessApis = {
 
 
 // create a business and the first account admin for that business
-function POST_createBusinessAndUser(req, res) {
+async function POST_createBusinessAndUser(req, res) {
     // get necessary arguments
-    const { name, company, email, positionTitle, password } = sanitize(req.body);
+    const { name, company, email, positionTitle, password, positionType } = sanitize(req.body);
 
     // validate arguments
-    const stringArgs = [ name, company, email, positionTitle, password ];
-    if (!validArgs({ stringArgs })) {
-        return res.status(400).send("Bad Request.");
-    }
+    const stringArgs = [ name, company, email, positionTitle, password, positionType ];
+    if (!validArgs({ stringArgs })) { return res.status(400).send("Bad Request."); }
 
     // validate email
     if (!isValidEmail(email)) { return res.status(400).send("Invalid email format."); }
@@ -79,14 +77,317 @@ function POST_createBusinessAndUser(req, res) {
     // validate password
     if (!isValidPassword(password)) { return res.status(400).send("Password needs to be at least 8 characters long."); }
 
-    // TODO: create business
+    // create the user
+    const userInfo = { name, email, password };
+    try { var user = await createUser(userInfo); }
+    catch (createUserError) {
+        console.log("Error creating user from business signup: ", createUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // create business
+    const newBusinessInfo = {
+        name: company,
+        positions: [{ name: positionTitle, positionType }]
+    }
+    try { var business = await createBusiness(newBusinessInfo); }
+    catch (createBizError) {
+        console.log("Error creating business from business signup: ", createBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // add the business to the user
+    user.businessInfo = {
+        businessId: business._id,
+        title: "Account Admin"
+    }
+    // user is the first at their company (so they have to do onboarding)
+    user.firstBusinessUser = true;
+
+    try { user = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user with biz info while signing up from business signup: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    return res.status(200).send(frontEndUser(user));
+}
 
 
-    // TODO: create user
+// creates a new user
+async function createUser(info) {
+    return new Promise(function(resolve, reject) {
+        // get needed args
+        const { name, password, email } = info;
+
+        let user = {
+            name,
+            email: email.toLowerCase()
+        };
+
+        // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
+        // if the user has an email address no one else has used before
+        let verifiedUniqueEmail = false;
+        // if password was set up
+        let createdLoginInfo = false;
+        // whether we counted the users and created a profile url
+        let madeProfileUrl = false;
+        // <<-------------------------------------------------------->> //
+
+        // --->>> THINGS WE CAN SET FOR USER WITHOUT ASYNC CALLS <<<--- //
+        const NOW = new Date();
+        // admin status must be changed in the db directly
+        user.admin = false;
+        // user has not yet verified email
+        user.verified = false;
+        // had to select that they agreed to the terms to sign up so must be true
+        user.termsAndConditions = [
+            {
+                name: "Privacy Policy",
+                date: NOW,
+                agreed: true
+            },
+            {
+                name: "Terms of Use",
+                date: NOW,
+                agreed: true
+            }
+        ];
+        // user has just signed up
+        user.dateSignedUp = NOW;
+        // user will have to do business onboarding
+        user.hasFinishedOnboarding = false;
+        user.onboarding = {
+            step: 0,
+            complete: false,
+            furthestStep: 0
+        }
+        // infinite use, used to verify identify when making calls to backend
+        user.verificationToken = crypto.randomBytes(64).toString('hex');
+        // one-time use, used to verify email address before initial login
+        user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
+        // <<-------------------------------------------------------->> //
+
+        // --->>       VERIFY THAT USER HAS UNIQUE EMAIL          <<--- //
+        Users.find({ email })
+        .then(foundUsers => {
+            if (foundUsers.length > 0) {
+                return reject("An account with that email address already exists.");
+            } else {
+                // mark that we are good to make this user, then try to do it
+                verifiedUniqueEmail = true;
+                makeUser();
+            }
+        })
+        .catch(findUserError => { return reject(findUserError); });
+        // <<-------------------------------------------------------->> //
+
+        // --->> COUNT THE USERS WITH THIS NAME TO ALLOW PROFILE URL CREATION <<--- //
+        Users.count({name: user.name})
+        .then(count => {
+            // create the user's profile url with the count after their name
+            const randomNumber = crypto.randomBytes(8).toString('hex');
+            user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+            madeProfileUrl = true;
+            makeUser();
+        }).catch (countError => {
+            console.log("Couldn't count the number of users: ", countError);
+            return reject(errors.SERVER_ERROR);
+        })
+        // <<-------------------------------------------------------->> //
+
+        // --->>            HASH THE USER'S PASSWORD              <<--- //
+        const saltRounds = 10;
+        bcrypt.hash(password, saltRounds, function(hashError, hash) {
+            if (hashError) { console.log("hash error: ", hashError); return reject(errors.SERVER_ERROR); }
+
+            // change the stored password to be the hash
+            user.password = hash;
+            // mark that we have created verification token and password, then make the user
+            createdLoginInfo = true;
+            makeUser();
+        });
+        // <<-------------------------------------------------------->> //
+
+        // --->>           CREATE AND UPDATE THE USER             <<--- //
+        async function makeUser() {
+            // make sure all pre-reqs to creating user are met
+            if (!verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
+
+            // make the user db object
+            try { user = await Users.create(user); }
+            catch (createUserError) {
+                console.log("Error creating user: ", createUserError);
+                return reject(error.SERVER_ERROR);
+            }
+
+            // send the moonshot admins an email saying that a user signed up
+            alertFounders()
+            .then(result => { return resolve(); })
+            .catch(emailError => { console.log(emailError); });
+        }
+        // <<-------------------------------------------------------->> //
+    });
+
+    function alertFounders() {
+        return new Promise(function(resolve, reject) {
+            // send email to everyone if there's a new sign up
+            let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+            if (process.env.NODE_ENV === "development") {
+                recipients = [ process.env.DEV_EMAIL ];
+            }
+
+            let subject = 'New Sign Up';
+            let content =
+            '<div>'
+            +   '<p>New user signed up.</p>'
+            +   '<p>Name: ' + user.name + '</p>'
+            +   '<p>email: ' + user.email + '</p>'
+            + '</div>';
+
+            const sendFrom = "Moonshot";
+            sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+                if (!success) {
+                    return reject("Error sending sign up alert email");
+                } else {
+                    return resolve();
+                }
+            });
+        });
+    }
+}
 
 
-    console.log("done!");
-    //return res.status(200).send("You did it good job lol");
+// create a new business
+async function createBusiness(info) {
+    return new Promise(async function(resolve, reject) {
+        // get needed args
+        const { name, positions } = info;
+        // make sure the minimum necessary args are there
+        if (!name) { return reject("No business name provided."); }
+
+        // initialize mostly empty business
+        let business = { name, positions: [] };
+
+        // check if positions should be added
+        if (Array.isArray(positions)) {
+            // go through each position that should be created
+            positions.forEach(position => {
+                // create the position with basic fields
+                let bizPos = {
+                    name: position.name,
+                    positionType: position.positionType,
+                    // assuming it'll take some time to create the position, so it's not ready yet
+                    finalized: false
+                }
+                // add the position
+                business.positions.push(position);
+            });
+        };
+
+        // create an API_Key for the business
+        try { business.API_Key = await generateApiKey(); }
+        catch (getKeyError) { return reject(getKeyError); }
+
+        // add admin questions
+        business.employeeQuestions = [
+            {
+                questionBody: "How long have they been at the company? (in years)",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 7
+                }
+            },
+            {
+                questionBody: "How much longer do you expect them to remain at the company? (in years)",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 7
+                }
+            },
+            {
+                questionBody: "How often are they late for work per week? (in days)",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 5
+                }
+            },
+            {
+                questionBody: "How would you rate their job performance?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How efficient are they at getting tasks done?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How often do they take employee leave days for illness or holiday, per year?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How would you rate their quality of work?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How much have they improved or grown since your first day together?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How much more responsibility have they been given since your first day together?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How likely are you to recommend them for a promotion in the next year?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How would you rate their potential for improvement and growth?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            }
+        ];
+
+        // create the business in the db
+        try { business = await Businesses.create(business); }
+        catch (createBizError) { return reject(createBizError); }
+
+        // return the new business
+        return resolve(business);
+    });
 }
 
 
@@ -123,7 +424,6 @@ function createCode(businessId, positionId, userType, open) {
             expirationDate: lastPossibleSecond(NOW, TWO_WEEKS),
             businessId, positionId, userType, open
         }
-        console.log("code: ", code);
         // make the code in the db
         try { code = await Signupcodes.create(code) }
         catch (createCodeError) {
