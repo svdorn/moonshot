@@ -73,6 +73,18 @@ body {
 .background-secondary-gray-important { background-color: var(--secondary-gray) !important; }
 .background-secondary-red-important { background-color: var(--secondary-red) !important; }
 
+.hover-primary-orange:hover { color: var(--primary-orange); }
+.hover-primary-pink:hover { color: var(--primary-pink); }
+.hover-primary-cyan:hover { color: var(--primary-cyan); }
+.hover-primary-peach:hover { color: var(--primary-peach); }
+.hover-primary-white:hover { color: var(--primary-white); }
+.hover-primary-purple-light:hover { color: var(--primary-purple-light); }
+.hover-primary-purple-dark:hover { color: var(--primary-purple-dark); }
+.hover-primary-black-light:hover { color: var(--primary-black-light); }
+.hover-primary-black-dark:hover { color: var(--primary-black-dark); }
+.hover-secondary-gray:hover { color: var(--secondary-gray); }
+.hover-secondary-red:hover { color: var(--secondary-red); }
+
 .anchor {
     position: absolute;
     top: -30px;

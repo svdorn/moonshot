@@ -199,7 +199,15 @@ class BusinessSignup extends Component {
                                             />
                                         </div>
                                         I have read and agree to the Moonshot Insights<br/>
-                                        <a href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf" target="_blank" className="primary-cyan">privacy policy</a> and <a href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf" target="_blank" className="primary-cyan">terms and conditions</a>.
+                                        <a  href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
+                                            target="_blank"
+                                            className="primary-cyan hover-primary-cyan"
+                                        >privacy policy</a>
+                                        {" and "}
+                                        <a  href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf"
+                                            target="_blank"
+                                            className="primary-cyan hover-primary-cyan"
+                                        >terms of service</a>.
                                     </div>
                                     <br/>
                                     <RaisedButton
