@@ -282,12 +282,14 @@ async function createBusiness(info) {
                 let bizPos = {
                     name: position.name,
                     positionType: position.positionType,
+                    length: 30,
+                    timeAlloted: 30,
                     dateCreated: NOW,
                     // assuming it'll take some time to create the position, so it's not ready yet
                     finalized: false
                 }
                 // add the position
-                business.positions.push(position);
+                business.positions.push(bizPos);
             });
         };
 
