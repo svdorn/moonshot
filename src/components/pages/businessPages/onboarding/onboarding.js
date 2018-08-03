@@ -8,6 +8,7 @@ import { closeNotification, updateOnboarding } from '../../../../actions/usersAc
 import VerifyEmail from "./verifyEmail";
 import GoogleJobs from './googleJobs';
 import ImportCandidates from "./importCandidates";
+import AutomateInvites from "./automateInvites/automateInvites";
 import InviteCadence from './inviteCadence';
 import InviteAdmins from "./inviteAdmins";
 import InviteEmployees from "./inviteEmployees";
@@ -298,6 +299,7 @@ class Onboarding extends Component {
                 // Automate Applicant Invites
                 case 4:
                     stepName = "Automate Applicant Invites";
+                    body = (<AutomateInvites {...childProps} />);
                     break;
                 // Set Applicant Invite Cadence
                 case 5:
