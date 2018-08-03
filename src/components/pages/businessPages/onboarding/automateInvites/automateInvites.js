@@ -16,6 +16,36 @@ class AutomateInvites extends Component {
     }
 
 
+    handleNext = () => {
+        this.props.next();
+    }
+
+
+    handlePrevious = () => {
+        this.props.previous();
+    }
+
+
+    createPreviousNextArea() {
+        return (
+            <div className="previous-next-area primary-white font18px center marginTop20px">
+                <div
+                    className="previous noselect clickable underline inlineBlock"
+                    onClick={this.handlePrevious}
+                >
+                    Previous
+                </div>
+                <div
+                    className="button noselect round-4px background-primary-cyan inlineBlock"
+                    onClick={this.handleNext}
+                >
+                    Next
+                </div>
+            </div>
+        );
+    }
+
+
     render() {
         let body = null;
 
@@ -23,10 +53,16 @@ class AutomateInvites extends Component {
         // automate-candidate-invites path
         const sequence = this.props.sequence;
 
+        const childProps = {
+            previousNextArea: this.createPreviousNextArea()
+        }
+
         // if no initial method path is selected, show the screen that asks if you want
         // to integrate with an ATS, put a script on your own site, or suggest
         // some other integration
-        if (typeof sequence !== "object" || !sequence.method) { body = (<SelectMethod />); }
+        if (typeof sequence !== "object" || !sequence.method) {
+            body = (<SelectMethod {...childProps} />);
+        }
 
         return (
             <div className="automate-invites primary-white center">

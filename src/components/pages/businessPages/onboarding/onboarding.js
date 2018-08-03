@@ -365,7 +365,7 @@ class Onboarding extends Component {
                                 {stepName}
                             </div>
                         </div>
-                        <div className="content">
+                        <div className="content font16px font14pxUnder800 font12pxUnder600">
                             {body}
                         </div>
                     </div>

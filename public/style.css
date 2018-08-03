@@ -330,6 +330,19 @@ form > h1 {
 
 
 
+.automate-invites {
+    height: 100%;
+    position: relative;
+    padding: 10px;
+}
+
+.automate-invites > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+
 .automate-invites .method-boxes {
     display: flex;
     justify-content: space-evenly;
@@ -350,6 +363,8 @@ form > h1 {
 .automate-invites .method-box:hover {
     background-color: var(--primary-black-light);
 }
+
+
 
 
 .businessHome {

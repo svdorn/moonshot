@@ -211,7 +211,6 @@ class ImportCandidates extends Component {
 
         return (
             <div className="import-candidates primary-white center">
-                {/* this.createCSVModal() */}
                 { this.createCSVModal() }
                 <div>
                     <div className="font18px">

@@ -55,6 +55,7 @@ class SelectMethod extends Component {
                 <div className="method-boxes">
                     { integrationBoxes }
                 </div>
+                { this.props.previousNextArea }
             </div>
         );
     }
