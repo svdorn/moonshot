@@ -16,6 +16,7 @@ const { sanitize,
         sendEmail,
         getFirstName,
         getAndVerifyUser,
+        getUserFromReq,
         frontEndUser,
         getSkillNamesByIds,
         lastPossibleSecond,
@@ -44,6 +45,7 @@ const userApis = {
     POST_addPositionEval,
     POST_startPsychEval,
     GET_influencerResults,
+    GET_checkUserVerified,
     POST_answerPsychQuestion,
     POST_submitFreeResponse,
     GET_positions,
@@ -1539,15 +1541,13 @@ function GET_keepMeLoggedIn(req, res) {
 
 // verify user's email so they can log in
 async function POST_verifyEmail(req, res) {
-    const token = sanitize(req.body.token);
-    const userType = sanitize(req.body.userType);
+    const { token, userType } = sanitize(req.body);
 
     // if url doesn't provide token, can't verify
-    if (!token) { return res.status(400).send("Url not in the right format"); }
+    if (!token || typeof token !== "string") { return res.status(400).send("Url not in the right format"); }
 
-    var query = { emailVerificationToken: token };
-    let user;
-    try { user = await Users.findOne(query); }
+    let query = { emailVerificationToken: token };
+    try { var user = await Users.findOne(query); }
     catch (findUserError) {
         console.log("Error trying to find user from verification token: ", findUserError);
         return res.status(500).send(errors.SERVER_ERROR);
@@ -1567,12 +1567,17 @@ async function POST_verifyEmail(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // where the user should be redirected after verification
+    const redirect = user.userType === "accountAdmin" ? "onboarding" : "myEvaluations";
+
     // if the session has the user's id, can immediately log them in
     sessionUserId = sanitize(req.session.unverifiedUserId);
     // get rid of the unverified id as it won't be needed anymore
     req.session.unverifiedUserId = undefined;
     // if the session had the correct user id, log the user in
-    if (sessionUserId && sessionUserId.toString() === user._id.toString()) {
+    const sessionHadUnverifiedId = sessionUserId && sessionUserId.toString() === user._id.toString();
+    const loggedIn = req.session.userId && req.session.userId.toString() === user._id.toString();
+    if (sessionHadUnverifiedId || loggedIn) {
         req.session.userId = user._id.toString();
         req.session.verificationToken = user.verificationToken;
         req.session.save(function(saveSessionError) {
@@ -1580,12 +1585,12 @@ async function POST_verifyEmail(req, res) {
                 console.log("Error saving user session: ", saveSessionError);
             }
             // return the user object even if session saving didn't work
-            return res.json(frontEndUser(user));
+            return res.status(200).send({user: frontEndUser(user), redirect});
         });
     }
 
-    // otherwise bring the user to the login page
-    else { return res.json("go to login"); }
+    // otherwise bring the user to the default page (which could be preceeded by login page)
+    else { return res.json({ redirect }); }
 }
 
 
@@ -1896,6 +1901,23 @@ async function POST_agreeToTerms(req, res) {
         console.log("error agreeing to terms and conditions: ", getUserError);
         return res.status(500).send("Error agreeing to terms and conditions.");
     }
+}
+
+
+// check that a user has verified their email address
+async function GET_checkUserVerified(req, res) {
+    // get user that made this call
+    try { var user = await getUserFromReq(req, "GET"); }
+    catch (getUserError) {
+        console.log("Error getting user while trying to check verified status: ", getUserError);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
+    }
+
+    // if not verified, return unsuccessfully
+    if (!user.verified) { return res.status(403).send({verified: false}); }
+
+    // return user object if verified
+    return res.status(200).send(frontEndUser(user));
 }
 
 

@@ -7,6 +7,8 @@ const Emailaddresses = require('../models/emailaddresses.js');
 const Businesses = require('../models/businesses.js');
 const Skills = require('../models/skills.js');
 
+const errors = require("./errors");
+
 
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
@@ -682,6 +684,42 @@ async function getAndVerifyUser(userId, verificationToken) {
 }
 
 
+// get and verify user from express request
+async function getUserFromReq(req, requestType) {
+    return new Promise(async function(resolve, reject) {
+        // for GET requests, req.params will contain userId and verification token
+        if (requestType === "GET") { argContainer = "query"; }
+        // for POST requests, req.body will contain them
+        else { argContainer = "body"; }
+
+        // make sure req and req.body are objects
+        if (typeof req !== "object" || typeof req[argContainer] !== "object") {
+            return reject({status: 400, message: errors.BAD_REQUEST, error: `Req.${argContainer} must be an object.`});
+        }
+
+        // get and verify valitidy of necessary arguments
+        const { userId, verificationToken } = sanitize(req[argContainer]);
+        const stringArgs = [ userId, verificationToken ];
+        if (!validArgs({ stringArgs })) {
+            return reject({status: 400, message: errors.BAD_REQUEST, error: "userId and/or verificationToken not a string"});
+        }
+
+        // get user that made this call
+        try { var user = await getAndVerifyUser(userId, verificationToken); }
+        catch (getUserError) {
+            // if the error is nicely formatted, just return it as is
+            if (getUserError.message && getUserError.status && getUserError.error) {
+                return reject(getUserError);
+            } else { // otherwise return a nicely formatted error
+                return reject({status: 500, message: errors.SERVER_ERROR, error: getUserError});
+            }
+        }
+
+        return resolve(user);
+    });
+}
+
+
 // DANGEROUS, returns user with all fields
 async function getUserAndBusiness(userId, verificationToken) {
     return new Promise(async function(resolve, reject) {
@@ -715,7 +753,7 @@ async function getUserAndBusiness(userId, verificationToken) {
 function lastPossibleSecond(date, daysToAdd) {
     const year = date.getFullYear();
     const month = date.getMonth();
-    const day = date.getDate() + daysToAdd;
+    const day = date.getDate() + (typeof daysToAdd === "number" ? daysToAdd : 0);
     const hour = 23;
     const minute = 59;
     const second = 59;
@@ -799,7 +837,7 @@ function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
 
 // checks if an email is of the correct form (i.e. name@something.blah )
 function isValidEmail(email) {
-    return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+    return typeof email === "string" && /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 }
 
 
@@ -893,6 +931,7 @@ const helperFunctions = {
     randomInt,
     frontEndUser,
     getAndVerifyUser,
+    getUserFromReq,
     getUserAndBusiness,
     speedTest,
     lastPossibleSecond,

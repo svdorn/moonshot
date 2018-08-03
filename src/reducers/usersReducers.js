@@ -146,8 +146,11 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         case "UPDATE_USER":
+            return {...state, currentUser: action.user };
+            break;
+        case "UPDATE_USER_SETTINGS":
             return {
-                ...state, currentUser: action.payload, notification: action.notification, loadingSomething: false
+                ...state, currentUser: action.user, notification: action.notification, loadingSomething: false
             };
             break;
         case "UPDATE_ANSWER":
@@ -212,7 +215,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "UPDATE_USER_ONBOARDING":
             return {
-                ...state, currentUser: action.payload
+                ...state, currentUser: action.user
             };
             break;
         case "START_PSYCH_EVAL":

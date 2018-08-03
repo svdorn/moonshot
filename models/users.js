@@ -51,6 +51,8 @@ const usersSchema = mongoose.Schema({
     verificationToken: String,
     // sent to user's email address, used to verify user's account
     emailVerificationToken: String,
+    // time when the email verification token will expire
+    emailVerificationTokenExpires: Date,
     // the code that this user initially got to the site with (will usually be empty)
     referredByCode: String,
     // token used to reset password

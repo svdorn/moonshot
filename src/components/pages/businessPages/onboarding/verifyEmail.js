@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import axios from "axios";
 import { CircularProgress } from "material-ui";
 import Dialog from '@material-ui/core/Dialog';
-import { addNotification } from '../../../../actions/usersActions';
+import { addNotification, updateUser } from '../../../../actions/usersActions';
 import {  } from "../../../../miscFunctions";
 
 class VerifyEmail extends Component {
@@ -19,8 +19,33 @@ class VerifyEmail extends Component {
 
 
     // move on to the next step
-    next() {
-        //this.props.next();
+    next = () => {
+        const user = this.props.currentUser;
+
+        // if the user is already verified (and is marked as such in the redux store),
+        // go to the next page
+        if (user.verified) { this.props.next(); }
+        else {
+            // start loading spinner a-goin'
+            this.setState({ loading: true });
+            // check if the user is verified in the back end
+            axios.get("/api/user/checkEmailVerified", {
+                params: {
+                    userId: user._id,
+                    verificationToken: user.verificationToken
+                }
+            })
+            .then(response => {
+                this.setState({ loading: false });
+                this.props.updateUser(response.data);
+                this.props.next();
+            })
+            .catch(error => {
+                // assume account isn't verified if error on verification
+                this.setState({ loading: false });
+                this.props.addNotification("Your account is not yet verified.", "error");
+            });
+        }
     }
 
 
@@ -30,12 +55,19 @@ class VerifyEmail extends Component {
             userId: this.props.currentUser._id,
             verificationToken: this.props.currentUser.verificationToken
         }
-        axios.post("/accountAdmin/sendVerificationEmail", args)
+        axios.post("/api/accountAdmin/sendVerificationEmail", args)
         .then(response => {
-            console.log('do something');
+            if (response.data.alreadyVerified) { // user already verified account
+                this.props.addNotification("Your account is already verified!", "infoHeader");
+            } else { // verification email successfully sent
+                this.props.addNotification(`Verification email sent to ${this.props.currentUser.email}`);
+            }
+
+            // make loading symbol stop
+            this.setState({ loading: false });
         })
         .catch(error => {
-            console.log("UH OH", error);
+            this.props.addNotification("Server error, try again in a few seconds.", "errorHeader");
         });
     }
 
@@ -55,13 +87,10 @@ class VerifyEmail extends Component {
                             className="medium button noselect round-4px gradient-transition gradient-1-cyan gradient-2-purple-light"
                             onClick={this.sendVerificationEmail}
                         >
-                            Send Verifation Email
+                            Send Verification Email
                         </div>
                     </div>
-                    {this.state.loading ?
-                        <CircularProgress />
-                        : null
-                    }
+                    { this.state.loading ? <div className="center"><CircularProgress /></div> : null }
                     <div className="previous-next-area primary-white font18px center marginTop20px">
                         <div
                             className="previous noselect clickable underline inlineBlock"
@@ -71,7 +100,7 @@ class VerifyEmail extends Component {
                         </div>
                         <div
                             className="button noselect round-4px background-primary-cyan inlineBlock"
-                            onClick={() => this.handleNext.bind(this)}
+                            onClick={this.next.bind(this)}
                         >
                             Next
                         </div>
@@ -93,7 +122,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addNotification
+        addNotification,
+        updateUser
     }, dispatch);
 }
 

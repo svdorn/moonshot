@@ -81,6 +81,15 @@ export function login(user, saveSession, navigateBackUrl) {
     }
 }
 
+
+// update user object in redux store
+export function updateUser(user) {
+    return function(dispatch) {
+        dispatch({type: "UPDATE_USER", user});
+    }
+}
+
+
 export function updateOnboarding(onboarding, verificationToken, userId) {
     return function(dispatch) {
         axios.post("/api/user/updateOnboarding", {onboarding, verificationToken, userId})
@@ -441,14 +450,14 @@ export function newCurrentUser(currentUser) {
 
 
 // UPDATE A USER
-export function updateUser(user) {
+export function updateUserSettings(user) {
     return function(dispatch) {
         // make loading circle show up
         dispatch({type:"START_LOADING"});
         // update user on the database
         axios.post("/api/user/changeSettings", user)
         .then(function(response) {
-            dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}});
+            dispatch({type:"UPDATE_USER_SETTINGS", user: response.data, notification:{message: "Settings updated!", type: "infoHeader"}});
             window.scrollTo(0, 0);
         })
         .catch(function(err) {
@@ -475,26 +484,6 @@ export function changePassword(user) {
     }
 }
 
-// VERIFY EMAIL
-export function verifyEmail(userType, token) {
-    return function(dispatch) {
-        axios.post("/api/user/verifyEmail", {userType, token})
-            .then(function(response) {
-                if (!response.data || response.data === "go to login") {
-                    let nextLocation = "/login";
-                    dispatch({type: "NOTIFICATION", notification:{message: "Account verified!", type: "infoHeader"}});
-                    browserHistory.push(nextLocation);
-                } else {
-                    // don't show verification notification if going straight to onboarding because it's implied
-                    dispatch({type: "LOGIN", user: response.data});
-                    browserHistory.push('/myEvaluations');
-                }
-            })
-            .catch(function(err) {
-                dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
-            });
-    }
-}
 
 export function changePasswordForgot(user) {
     return function(dispatch) {
@@ -719,7 +708,7 @@ export function updateAllOnboarding(userId, verificationToken, interests, goals,
             params: { userId, verificationToken, interests, goals, info }
         })
         .then(function(response) {
-            dispatch({type: "UPDATE_USER_ONBOARDING", payload: response.data});
+            dispatch({type: "UPDATE_USER_ONBOARDING", user: response.data});
         })
         .catch(function(err) {
             // console.log("Error updating onboarding info: ", err);
