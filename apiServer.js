@@ -145,6 +145,7 @@ app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboardin
 
 app.post("/accountAdmin/sendVerificationEmail", accountAdminApis.POST_sendVerificationEmail);
 
+app.post('/business/googleJobsLinks', businessApis.POST_googleJobsLinks);
 app.post('/business/demoEmail', businessApis.POST_demoEmail);
 app.post('/business/dialogEmail', businessApis.POST_dialogEmail);
 app.post('/business/addEvaluationEmail', businessApis.POST_addEvaluationEmail);

@@ -814,6 +814,9 @@ form > h1 {
     color: rgba(255,255,255,.8);
 }
 .blackInput:focus { outline-width: 0 }
+.blackInput.googleJobs {
+    width: 330px;
+}
 
 
 .button {
@@ -2060,6 +2063,24 @@ button.link {
     display: inline-block;
     margin: 0 25px 40px;
     vertical-align: top;
+}
+
+.paperBoxInviteCadence {
+    height: 170px;
+    width: 200px;
+    display: inline-block;
+    margin: 0 25px 40px;
+    vertical-align: top;
+}
+.inviteCadenceGradient {
+    padding: 2px;
+    background: linear-gradient(to top left, var(--primary-purple-light), var(--primary-cyan));
+}
+
+.inviteCadenceGradientBorder > div {
+    background: var(--primary-black-dark);
+    height: 100%;
+    width: 100%;
 }
 
 .gradientBorderPurple {
@@ -4021,6 +4042,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginTop20px { margin-top: 20px; }
 .marginTop15px { margin-top: 15px; }
 .marginTop10px { margin-top: 10px; }
+.marginTop5px { margin-top: 5px; }
 .marginLeft40px { margin-left: 40px; }
 .marginLeft30px { margin-left: 30px; }
 .marginLeft25px { margin-left: 25px; }
@@ -4949,6 +4971,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-right: 0;
     }
 
+    .blackInput.googleJobs {
+        width: 250px;
+    }
+
 
     .font40pxUnder800 { font-size: 40px; }
     .font38pxUnder800 { font-size: 38px; }
@@ -5211,6 +5237,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: 5px;
     }
 
+    .blackInput.googleJobs {
+        width: 200px;
+    }
+
     /* hide all but the first two rectangles of the first container */
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(n+3) { display: none; }
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
@@ -5386,6 +5416,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .multipleChoiceCircle {
         margin-top: 2px;
+    }
+
+    .blackInput.googleJobs {
+        width: auto;
     }
 
 

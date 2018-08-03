@@ -1,4 +1,4 @@
-"use strict"
+ "use strict"
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,6 +8,7 @@ import { closeNotification, updateOnboarding } from '../../../../actions/usersAc
 import VerifyEmail from "./verifyEmail";
 import GoogleJobs from './googleJobs';
 import ImportCandidates from "./importCandidates";
+import InviteCadence from './inviteCadence';
 import InviteAdmins from "./inviteAdmins";
 import InviteEmployees from "./inviteEmployees";
 import YouTube from 'react-youtube';
@@ -137,8 +138,8 @@ class Onboarding extends Component {
         let tab = "Candidate";
 
         const opts = {
-            height: '183',
-            width: '300',
+            height: '244',
+            width: '400',
             playerVars: { // https://developers.google.com/youtube/player_parameters
                 autoplay: 1,
                 iv_load_policy: 3
@@ -269,7 +270,7 @@ class Onboarding extends Component {
                                 onReady={this._onReady}
                                 onEnd={this._onEnd}
                             />
-                            <div className="previous-next-area primary-white font18px center marginTop20px">
+                            <div className="previous-next-area primary-white font18px center marginTop20px marginBottom20px">
                                 <div
                                     className="previous noselect clickable underline inlineBlock"
                                     onClick={this.handlePrevious.bind(this)}
@@ -292,6 +293,7 @@ class Onboarding extends Component {
                     body = (
                         <GoogleJobs {...childProps} />
                     );
+                    console.log("body: ", body);
                     break;
                 // Automate Applicant Invites
                 case 4:
@@ -299,7 +301,10 @@ class Onboarding extends Component {
                     break;
                 // Set Applicant Invite Cadence
                 case 5:
-                    stepName = "Set Applicant Invite Cadence";
+                    stepName = "Applicant Invitation Cadence";
+                    body = (
+                        <InviteCadence {...childProps} />
+                    );
                     break;
                 // Invite Existing Candidates
                 case 6:
