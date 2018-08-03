@@ -298,12 +298,12 @@ class Onboarding extends Component {
                     break;
                 // Automate Applicant Invites
                 case 4:
-                    stepName = "Automate Applicant Invites";
+                    stepName = this.props.automateInvites && this.props.automateInvites.header ? this.props.automateInvites.header : "Automate Applicant Invites";
                     body = (<AutomateInvites {...childProps} />);
                     break;
                 // Set Applicant Invite Cadence
                 case 5:
-                    stepName = "Applicant Invitation Cadence";
+                    stepName =  "Applicant Invitation Cadence";
                     body = (
                         <InviteCadence {...childProps} />
                     );
@@ -379,6 +379,7 @@ class Onboarding extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        automateInvites: state.users.automateInvites,
         png: state.users.png
     };
 }
