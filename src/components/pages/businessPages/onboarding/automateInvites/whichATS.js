@@ -5,36 +5,67 @@ import { bindActionCreators } from 'redux';
 import axios from "axios";
 import Dialog from '@material-ui/core/Dialog';
 import AddUserDialog from '../../../../childComponents/addUserDialog';
-import { changeAutomateInvites } from '../../../../../actions/usersActions';
+import { changeAutomateInvites, addNotification, updateUser } from '../../../../../actions/usersActions';
 import { secondaryGray } from "../../../../../colors";
 
-class SelectMethod extends Component {
-    boxClick(method) {
-        //this.props.changeAutomateInvites({ method });
-        console.log("doing: ", method);
+class WhichATS extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            ats: ""
+        }
+    }
+
+
+    submitATS() {
+        const self = this;
+        axios.post("/api/accountAdmin/identifyATS", {
+            ats: this.state.ats,
+            userId: this.props.user._id,
+            verificationToken: this.props.user.verificationToken
+        })
+        .then(response => {
+            this.props.updateUser(response.data.user);
+        })
+        .catch(error => {
+            self.props.addNotification("Error, refresh and try again.", "error");
+        });
+    }
+
+
+    // when typing into the form asking which ats they use
+    onChange(e) {
+        this.setState({ ats: e.target.value });
     }
 
 
     render() {
-        return null;
-
         return (
             <div>
-                <div style={{textAlign: "left"}}>
+                <div>
                     Let us know and we{"'"}ll see if we can set up an integration.
                 </div>
-                <div className="buttonArea font18px font14pxUnder900">
+                <div className="buttonArea font18px font14pxUnder900" style={{justifyContent:"center"}}>
                     <input
                         type="text"
                         name="email"
-                        placeholder="Email Address"
+                        placeholder="What's your ATS?"
                         className="blackInput getStarted"
-                        value={this.state.email}
+                        value={this.state.ats}
                         onChange={this.onChange.bind(this)}
                     />
-                    <div className="getStarted button round-4px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={this.submitATS}>
-                        Enter
-                    </div>
+                    <div
+                        className="button round-10px gradient-transition gradient-1-purple-light gradient-2-cyan"
+                        onClick={this.submitATS.bind(this)}
+                        style={{
+                            marginLeft: "20px",
+                            padding: "0 14px",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center"
+                        }}
+                    >Enter</div>
                 </div>
                 { this.props.previousNextArea }
             </div>
@@ -45,16 +76,19 @@ class SelectMethod extends Component {
 
 function mapStateToProps(state) {
     return {
-        sequence: state.users.automateInvites
+        sequence: state.users.automateInvites,
+        user: state.users.currentUser
     };
 }
 
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        changeAutomateInvites
+        changeAutomateInvites,
+        updateUser,
+        addNotification
     }, dispatch);
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectMethod);
+export default connect(mapStateToProps, mapDispatchToProps)(WhichATS);

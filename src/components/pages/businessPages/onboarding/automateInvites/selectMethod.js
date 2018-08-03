@@ -9,9 +9,8 @@ import { changeAutomateInvites } from '../../../../../actions/usersActions';
 import { secondaryGray } from "../../../../../colors";
 
 class SelectMethod extends Component {
-    boxClick(method) {
-        //this.props.changeAutomateInvites({ method });
-        console.log("doing: ", method);
+    boxClick(option) {
+        this.props.changeAutomateInvites(option);
     }
 
 
@@ -20,14 +19,17 @@ class SelectMethod extends Component {
         const integrationOptions = [
             {
                 title: "Applicant Tracking System",
+                header: "What applicant tracking system do you use?",
                 method: "ats"
             },
             {
                 title: "Application Page Hosted on Your Site",
+                header: "Creating a Webhook for your Application Page",
                 method: "site"
             },
             {
                 title: "Suggest Another Integration or Method",
+                header: "Suggest Another Method",
                 method: "suggest"
             }
         ];
@@ -37,7 +39,7 @@ class SelectMethod extends Component {
             return (
                 <div
                     className="method-box transitionAll"
-                    onClick={() => this.boxClick(option.method)}
+                    onClick={() => this.boxClick(option)}
                     key={option.method}
                 >
                     { option.title }

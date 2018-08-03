@@ -45,7 +45,9 @@ const usersSchema = mongoose.Schema({
         // If the employer is done with onboarding
         complete: Boolean,
         // the furthest step the employer has gotten to
-        furthestStep: Number
+        furthestStep: Number,
+        // the ats the user said they use during onboarding
+        ats: String
     },
     // used to verify identity
     verificationToken: String,

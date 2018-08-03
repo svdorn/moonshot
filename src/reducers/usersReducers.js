@@ -252,6 +252,13 @@ export function usersReducers(state = initialState, action) {
                 ...state, webpSupportChecked: true, png, jpg
             }
             break;
+        case "CHANGE_AUTOMATE_INVITES":
+            const { method, header } = action.args;
+            let automateInvites = state.automateInvites ? state.automateInvites : {};
+            if (method) { automateInvites.method = method; }
+            if (header) { automateInvites.header = header; }
+            return { ...state, automateInvites }
+            break;
         case "ADD_PATHWAY":
             return {
                 ...state, currentUser: action.payload, notification: action.notification

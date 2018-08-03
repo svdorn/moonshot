@@ -7,6 +7,7 @@ import Dialog from '@material-ui/core/Dialog';
 import { } from '../../../../../actions/usersActions';
 
 import SelectMethod from "./selectMethod";
+import WhichATS from "./whichATS";
 
 class AutomateInvites extends Component {
     constructor(props) {
@@ -46,7 +47,7 @@ class AutomateInvites extends Component {
     }
 
 
-    render() {
+    createBody() {
         let body = null;
 
         // the sequence of choices that have been made so far while following the
@@ -61,12 +62,20 @@ class AutomateInvites extends Component {
         // to integrate with an ATS, put a script on your own site, or suggest
         // some other integration
         if (typeof sequence !== "object" || !sequence.method) {
-            body = (<SelectMethod {...childProps} />);
+            return( <SelectMethod {...childProps} /> );
         }
 
+        // if the user selected that they want to integrate with an ATS
+        if (sequence.method === "ats") {
+            return ( <WhichATS {...childProps} /> );
+        }
+    }
+
+
+    render() {
         return (
             <div className="automate-invites primary-white center">
-                { body }
+                { this.createBody() }
             </div>
         );
     }

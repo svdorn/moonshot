@@ -20,7 +20,8 @@ const { sanitize,
 
 
 const adminApis = {
-    POST_sendVerificationEmail
+    POST_sendVerificationEmail,
+    POST_identifyATS
 }
 
 
@@ -95,6 +96,65 @@ async function POST_sendVerificationEmail(req, res) {
 
     res.status(200).send({success: true});
 }
+
+
+// mark which ats your company uses during onboarding
+async function POST_identifyATS(req, res) {
+    const { userId, verificationToken, ats } = sanitize(req.body);
+    console.log("userId: ", userId, "verificationToken: ", verificationToken);
+    // query to find the user
+    const find = { _id: userId, verificationToken };
+    // query to update the preferred ats of the user
+    const update = { "$set": { "onboarding.ats": ats } }
+    // return the updated user
+    const options = { "new": true };
+    // find and update the user with new ats
+    try { var user = await Users.findOneAndUpdate(find, update, options); }
+    catch (updateError) {
+        console.log("Error updating user's preferred ats: ", updateError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if the user didn't provide the correct user id/verification token combo
+    if (!user) { return res.status(400).send("Invalid user credentials."); }
+    // return the updated user
+    res.status(200).send({ user });
+
+    // SEND AN EMAIL TO US TELLING US WHICH ATS THE BUSINESS USES
+    // get the business the user works for
+    let business;
+    try { business = await Businesses.findById(user.businessInfo.businessId).select("name"); }
+    catch (findBizError) {
+        console.log("Error finding business from user who marked their ats: ", findBizError);
+        // need a business with a name to send the email
+        business = { name: "unknown" };
+    }
+    // set up the email
+    const recipients = process.env.NODE_ENV === "development" ? process.env.DEV_EMAIL : ["kyle@moonshotinsights.io", "ameyer24@wisc.edu", "stevedorn9@gmail.com"];
+    const subject = "Account Admin Marked ATS System They Use";
+    const content = (
+        `<div>
+            <p>User: ${user.name}</p>
+            <p>Email: ${user.email}</p>
+            <p>Business: ${business.name}</p>
+            <p>ATS Used: ${ats}</p>
+        </div>`
+    )
+    // send the email
+    sendEmailPromise({ recipients, subject, content }).then().catch(error => {
+        console.log("Error sending email alerting founders of ats used by customer: ", error);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 // <<----------------------------------------------------------------------->> //
