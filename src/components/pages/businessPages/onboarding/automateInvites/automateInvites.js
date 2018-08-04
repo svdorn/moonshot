@@ -17,16 +17,6 @@ class AutomateInvites extends Component {
     }
 
 
-    handleNext = () => {
-        this.props.next();
-    }
-
-
-    handlePrevious = () => {
-        this.props.previous();
-    }
-
-
     nextButton() {
         // get the current user
         const user = this.props.currentUser;
@@ -53,10 +43,13 @@ class AutomateInvites extends Component {
 
 
     previousButton() {
+        // by default, previous button goes back to last step
+        let previous = this.props.previous;
+
         return (
             <div
                 className="previous noselect clickable underline inlineBlock"
-                onClick={this.handlePrevious}
+                onClick={previous}
             >
                 Previous
             </div>
