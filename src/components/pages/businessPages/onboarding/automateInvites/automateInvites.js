@@ -28,10 +28,13 @@ class AutomateInvites extends Component {
 
 
     nextButton() {
+        // by default, next button does nothing
+        let next = () => { console.log("not moving on"); };
+
         return (
             <div
                 className="button noselect round-4px background-primary-cyan inlineBlock"
-                onClick={this.handleNext}
+                onClick={next}
             >
                 Next
             </div>
