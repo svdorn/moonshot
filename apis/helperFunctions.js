@@ -26,6 +26,15 @@ Queue.prototype.last = function() { return this.data[this.data.length - 1]; }
 Queue.prototype.size = function() { return this.data.length; }
 
 
+// Stack implementation
+function Stack() { this.data = []; }
+Stack.prototype.push = function(record) { this.data.push(record); }
+Stack.prototype.pop = function() { return this.data.pop(); }
+Stack.prototype.bottom = function() { return this.data[0]; }
+Stack.prototype.top = function() { return this.data[this.data.length - 1]; }
+Stack.prototype.size = function() { return this.data.length; }
+
+
 const FOR_USER = [
     "_id",
     "verificationToken",
@@ -940,6 +949,9 @@ const helperFunctions = {
     isValidPassword,
     isValidFileType,
     validArgs,
+
+    Queue,
+    Stack,
 
     FOR_USER
 }

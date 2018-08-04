@@ -1936,7 +1936,7 @@ async function POST_login(req, res) {
     const INVALID_EMAIL = "No user with that email was found.";
 
     // searches for user by lower-case email
-    var query = { email: email.toLowerCase() };
+    var query = { "$or": [ { "email": email }, { "email": email.toLowerCase() } ] };
     // find the user by email
     try { var user = await Users.findOne(query); }
     catch (findUserError) {

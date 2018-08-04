@@ -764,7 +764,16 @@ export function answerPsychQuestion(userId, verificationToken, answer) {
 // change info during onboarding for automating candidate emails
 export function changeAutomateInvites(args) {
     return function (dispatch) {
+        console.log("here");
         dispatch({ type: "CHANGE_AUTOMATE_INVITES", args });
+    }
+}
+
+
+// remove the topmost option for going back within the automate invites part of onboarding
+export function goingBackAutomateInvites() {
+    return function(dispatch) {
+        dispatch({ type: "GOING_BACK_AUTOMATE_INVITES" });
     }
 }
 

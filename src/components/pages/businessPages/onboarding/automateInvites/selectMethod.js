@@ -9,8 +9,25 @@ import { changeAutomateInvites } from '../../../../../actions/usersActions';
 import { secondaryGray } from "../../../../../colors";
 
 class SelectMethod extends Component {
-    boxClick(option) {
-        this.props.changeAutomateInvites(option);
+    // set the header of the onboarding page
+    componentWillMount() {
+        this.props.changeAutomateInvites({ header: pageHeader });
+    }
+
+
+    // when the user clicks a box marking which type of integration they want to do
+    boxClick(method) {
+        // console.log("here");
+        // const self = this;
+        // // the action to come back to this page
+        // const backAction = () => {
+        //     self.props.changeAutomateInvites({ method: undefined, header: pageHeader });
+        // }
+        // // object to add the method of choice and back action to redux state
+        // const updates = { method, pushToGoBackStack: backAction };
+        // // switch to the page that contains the path of the selected option
+        // self.props.changeAutomateInvites(updates);
+        this.props.changeAutomateInvites({ method });
     }
 
 
@@ -19,7 +36,6 @@ class SelectMethod extends Component {
         const integrationOptions = [
             {
                 title: "Applicant Tracking System",
-                header: "What applicant tracking system do you use?",
                 method: "ats"
             },
             {
@@ -39,7 +55,7 @@ class SelectMethod extends Component {
             return (
                 <div
                     className="method-box transitionAll"
-                    onClick={() => this.boxClick(option)}
+                    onClick={() => this.boxClick(option.method)}
                     key={option.method}
                 >
                     { option.title }
@@ -64,9 +80,13 @@ class SelectMethod extends Component {
 }
 
 
+// the header for the current page
+const pageHeader = "Automate Applicant Invites";
+
+
 function mapStateToProps(state) {
     return {
-        sequence: state.users.automateInvites
+
     };
 }
 

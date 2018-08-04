@@ -1,4 +1,5 @@
 "use strict"
+import { Stack } from "../miscFunctions";
 
 // USERS REDUCERS
 const initialState = {
@@ -253,12 +254,37 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         case "CHANGE_AUTOMATE_INVITES":
-            const { method, header } = action.args;
+            console.log("reducer");
+            const { method, header, pushToGoBackStack } = action.args;
             let automateInvites = state.automateInvites ? state.automateInvites : {};
             if (method) { automateInvites.method = method; }
             if (header) { automateInvites.header = header; }
-            return { ...state, automateInvites }
+            // if we want to push an action to the stack of actions that will
+            // let us go back
+            // if (pushToGoBackStack) {
+            //     // make sure there is a stack of Go Back options
+            //     if (!automateInvites.goBackStack) {
+            //         // if not, create the goBackStack
+            //         automateInvites.goBackStack = new Stack();
+            //     }
+            //     // add the new stack item to the goBackStack
+            //     automateInvites.goBackStack.push(pushToGoBackStack);
+            // }
+            const s = { ...state, automateInvites };
+            return s;
             break;
+        // case "GOING_BACK_AUTOMATE_INVITES":
+        //     let automateInvite = state.automateInvites;
+        //     // if there is a custom back action to be taken
+        //     if (automateInvite && automateInvite.goBackStack && automateInvite.goBackStack.size() > 0) {
+        //         // take off the top action
+        //         automateInvite.goBackStack.pop();
+        //         // return the info object without that action
+        //         return { ...state, automateInvites: automateInvite };
+        //     }
+        //     // if no invite automation actions have been taken, do nothing
+        //     else { return state; }
+        //     break;
         case "ADD_PATHWAY":
             return {
                 ...state, currentUser: action.payload, notification: action.notification

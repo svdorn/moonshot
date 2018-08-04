@@ -4,6 +4,25 @@ import { TextField } from "material-ui";
 import colors from "./colors";
 import { browserHistory } from "react-router";
 
+
+// Queue implementation
+function Queue() { this.data = []; }
+Queue.prototype.enqueue = function(record) { this.data.unshift(record); }
+Queue.prototype.dequeue = function() { return this.data.pop(); }
+Queue.prototype.first = function() { return this.data[0]; }
+Queue.prototype.last = function() { return this.data[this.data.length - 1]; }
+Queue.prototype.size = function() { return this.data.length; }
+
+
+// Stack implementation
+function Stack() { this.data = []; }
+Stack.prototype.push = function(record) { this.data.push(record); }
+Stack.prototype.pop = function() { return this.data.pop(); }
+Stack.prototype.bottom = function() { return this.data[0]; }
+Stack.prototype.top = function() { return this.data[this.data.length - 1]; }
+Stack.prototype.size = function() { return this.data.length; }
+
+
 const style = {
     // the hint that shows up when search bar is in focus
     searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
@@ -12,6 +31,7 @@ const style = {
     searchFloatingLabelStyle: { color: colors.primaryCyan },
     searchUnderlineFocusStyle: { color: colors.primaryCyan }
 };
+
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
@@ -150,7 +170,10 @@ const miscFunctions = {
     htmlDecode,
     isValidFileType,
     isValidPassword,
-    goTo
+    goTo,
+
+    Queue,
+    Stack,
 }
 
 module.exports = miscFunctions;

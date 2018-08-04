@@ -18,6 +18,11 @@ class WhichATS extends Component {
     }
 
 
+    componentWillMount() {
+        this.props.changeAutomateInvites({ header: "What applicant tracking system do you use?" });
+    }
+
+
     submitATS() {
         const self = this;
         axios.post("/api/accountAdmin/identifyATS", {
@@ -76,7 +81,7 @@ class WhichATS extends Component {
 
 function mapStateToProps(state) {
     return {
-        sequence: state.users.automateInvites,
+        invitesInfo: state.users.automateInvites,
         user: state.users.currentUser
     };
 }
