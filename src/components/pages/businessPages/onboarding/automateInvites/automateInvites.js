@@ -28,11 +28,18 @@ class AutomateInvites extends Component {
 
 
     nextButton() {
+        // get the current user
+        const user = this.props.currentUser;
+
         // by default, next button does nothing and looks disabled
         let next = () => { console.log("not moving on"); };
         let disabled = true;
 
-        //
+        // if the user has already advanced past this step in the past, let them go on
+        if (user.onboarding.furthestStep > user.onboarding.step) {
+            next = this.props.next;
+            disabled = false;
+        }
 
         return (
             <div
@@ -104,7 +111,8 @@ class AutomateInvites extends Component {
 
 function mapStateToProps(state) {
     return {
-        automationStep: state.users.automateInvites
+        automationStep: state.users.automateInvites,
+        currentUser: state.users.currentUser
     };
 }
 
