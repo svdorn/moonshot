@@ -31,6 +31,7 @@ class AutomateInvites extends Component {
         // by default, next button does nothing and looks disabled
         let next = () => { console.log("not moving on"); };
         let disabled = true;
+
         //
 
         return (
@@ -71,7 +72,7 @@ class AutomateInvites extends Component {
 
         // the sequence of choices that have been made so far while following the
         // automate-candidate-invites path
-        const sequence = this.props.sequence;
+        const automationStep = this.props.automationStep;
 
         const childProps = {
             previousNextArea: this.createPreviousNextArea()
@@ -80,12 +81,12 @@ class AutomateInvites extends Component {
         // if no initial method path is selected, show the screen that asks if you want
         // to integrate with an ATS, put a script on your own site, or suggest
         // some other integration
-        if (typeof sequence !== "object" || !sequence.method) {
+        if (typeof automationStep !== "object" || !automationStep.method) {
             return( <SelectMethod {...childProps} /> );
         }
 
         // if the user selected that they want to integrate with an ATS
-        if (sequence.method === "ats") {
+        if (automationStep.method === "ats") {
             return ( <WhichATS {...childProps} /> );
         }
     }
@@ -103,7 +104,7 @@ class AutomateInvites extends Component {
 
 function mapStateToProps(state) {
     return {
-        sequence: state.users.automateInvites
+        automationStep: state.users.automateInvites
     };
 }
 

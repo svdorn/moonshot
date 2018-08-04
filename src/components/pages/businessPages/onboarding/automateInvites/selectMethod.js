@@ -66,7 +66,7 @@ class SelectMethod extends Component {
 
 function mapStateToProps(state) {
     return {
-        sequence: state.users.automateInvites
+        automationStep: state.users.automateInvites
     };
 }
 

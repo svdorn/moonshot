@@ -76,7 +76,7 @@ class WhichATS extends Component {
 
 function mapStateToProps(state) {
     return {
-        sequence: state.users.automateInvites,
+        automationStep: state.users.automateInvites,
         user: state.users.currentUser
     };
 }
