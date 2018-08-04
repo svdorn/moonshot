@@ -28,12 +28,14 @@ class AutomateInvites extends Component {
 
 
     nextButton() {
-        // by default, next button does nothing
+        // by default, next button does nothing and looks disabled
         let next = () => { console.log("not moving on"); };
+        let disabled = true;
+        //
 
         return (
             <div
-                className="button noselect round-4px background-primary-cyan inlineBlock"
+                className={`button noselect round-4px inlineBlock ${disabled ? "disabled background-primary-black-light" : "background-primary-cyan"}`}
                 onClick={next}
             >
                 Next
