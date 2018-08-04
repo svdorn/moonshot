@@ -27,21 +27,35 @@ class AutomateInvites extends Component {
     }
 
 
+    nextButton() {
+        return (
+            <div
+                className="button noselect round-4px background-primary-cyan inlineBlock"
+                onClick={this.handleNext}
+            >
+                Next
+            </div>
+        );
+    }
+
+
+    previousButton() {
+        return (
+            <div
+                className="previous noselect clickable underline inlineBlock"
+                onClick={this.handlePrevious}
+            >
+                Previous
+            </div>
+        );
+    }
+
+
     createPreviousNextArea() {
         return (
             <div className="previous-next-area primary-white font18px center marginTop20px">
-                <div
-                    className="previous noselect clickable underline inlineBlock"
-                    onClick={this.handlePrevious}
-                >
-                    Previous
-                </div>
-                <div
-                    className="button noselect round-4px background-primary-cyan inlineBlock"
-                    onClick={this.handleNext}
-                >
-                    Next
-                </div>
+                { this.previousButton() }
+                { this.nextButton() }
             </div>
         );
     }
