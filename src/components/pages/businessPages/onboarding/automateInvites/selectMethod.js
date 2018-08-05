@@ -10,17 +10,21 @@ import { secondaryGray } from "../../../../../colors";
 
 class SelectMethod extends Component {
     componentWillMount() {
-        this.componentDidUpdate();
-    }
-
-
-    componentDidUpdate() {
         const automationStep = this.props.automationStep;
         // if the header is wrong, change it to the right header
         if (!automationStep || automationStep.header !== "Automate Applicant Invites") {
             this.props.changeAutomateInvites({ header: "Automate Applicant Invites" });
         }
     }
+
+
+    // componentDidUpdate() {
+    //     const automationStep = this.props.automationStep;
+    //     // if the header is wrong, change it to the right header
+    //     if (!automationStep || automationStep.header !== "Automate Applicant Invites") {
+    //         this.props.changeAutomateInvites({ header: "Automate Applicant Invites" });
+    //     }
+    // }
 
 
     // when the user clicks the box identifying which integration type they want to do

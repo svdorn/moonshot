@@ -125,7 +125,6 @@ function mapStateToProps(state) {
     return {
         automationStep: state.users.automateInvites,
         method: state.users.automateInvites ? state.users.automateInvites.method : undefined,
-        header: state.users.automateInvites ? state.users.automateInvites.header : undefined,
         currentUser: state.users.currentUser
     };
 }
