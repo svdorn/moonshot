@@ -252,13 +252,24 @@ export function usersReducers(state = initialState, action) {
                 ...state, webpSupportChecked: true, png, jpg
             }
             break;
-        case "CHANGE_AUTOMATE_INVITES":
+        case "CHANGE_AUTOMATE_INVITES": {
             const { method, header } = action.args;
             let automateInvites = state.automateInvites ? state.automateInvites : {};
             if (method) { automateInvites.method = method; }
             if (header) { automateInvites.header = header; }
             return { ...state, automateInvites }
             break;
+        }
+        case "POP_GO_BACK_STACK": {
+            let automateInvites = state.automateInvites ? state.automateInites : {};
+            // if there is a stack of actions that allow you to go backwards
+            if (automatedInvites.goBackStack) {
+                // remove the top action from the stack
+                automatedInvites.goBackStack.pop();
+            }
+            // save the updated automateInvites object
+            return { ...state, automateInvites };
+        }
         case "ADD_PATHWAY":
             return {
                 ...state, currentUser: action.payload, notification: action.notification
