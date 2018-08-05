@@ -15,7 +15,8 @@ class SelectMethod extends Component {
         const self = this;
         // add function to get back to this page
         const goBackFunction = () => {
-            self.props.changeAutomateInvites({ method: undefined });
+            // mark method as -1 as that indicates that it should be marked as undefined
+            self.props.changeAutomateInvites({ method: -1 });
         }
         // update the redux state to go to the next step
         this.props.changeAutomateInvites({ method, goBackFunction });
@@ -23,6 +24,7 @@ class SelectMethod extends Component {
 
 
     componentDidUpdate() {
+        console.log("here");
         const automationStep = this.props.automationStep;
         // if the header is wrong, change it to the right header
         if (!automationStep || automationStep.header !== "Automate Applicant Invites") {

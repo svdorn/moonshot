@@ -53,10 +53,16 @@ class AutomateInvites extends Component {
         if (automationStep && automationStep.goBackStack && automationStep.goBackStack.size() > 0) {
             // make previous a function that ...
             previous = () => {
-                // ... does the action to go back to the previous step ...
-                automationStep.goBackStack.top();
-                // ... then removes that action from the stack
-                this.props.popGoBackStack();
+                console.log("doin stuff");
+                // ... gets the action to go back to the previous step ...
+                const goBackAction = automationStep.goBackStack.top();
+                // ... ensures the action is defined ...
+                if (typeof goBackAction === "function") {
+                    // ... performs that action ...
+                    goBackAction();
+                    // ... then removes that action from the stack
+                    this.props.popGoBackStack();
+                }
             }
         }
 

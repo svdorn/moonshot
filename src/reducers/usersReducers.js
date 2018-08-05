@@ -256,7 +256,8 @@ export function usersReducers(state = initialState, action) {
         case "CHANGE_AUTOMATE_INVITES": {
             const { method, header, goBackFunction } = action.args;
             let automateInvites = state.automateInvites ? state.automateInvites : {};
-            if (method) { automateInvites.method = method; }
+            // -1 means mark it as undefined
+            if (method) { automateInvites.method = method === -1 ? undefined : method; }
             if (header) { automateInvites.header = header; }
             // if there is a function to go back to be added
             if (typeof goBackFunction === "function") {
@@ -267,6 +268,7 @@ export function usersReducers(state = initialState, action) {
                 // add the go back function to the stack
                 automateInvites.goBackStack.push(goBackFunction);
             }
+            console.log("automateInvites: ", automateInvites);
             return { ...state, automateInvites };
             break;
         }
