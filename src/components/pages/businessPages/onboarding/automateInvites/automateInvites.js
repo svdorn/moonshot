@@ -125,6 +125,7 @@ class AutomateInvites extends Component {
 function mapStateToProps(state) {
     return {
         automationStep: state.users.automateInvites,
+        method: state.users.automateInvites ? state.users.automateInvites.method : undefined,
         currentUser: state.users.currentUser
     };
 }
