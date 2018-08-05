@@ -10,7 +10,7 @@ import { secondaryGray } from "../../../../../colors";
 
 class SelectMethod extends Component {
     // when the user clicks the box identifying which integration type they want to do
-    boxClick(option) {
+    boxClick(method) {
         // duplicate 'this' to maintain consistent 'this'
         const self = this;
         // add function to get back to this page
@@ -18,7 +18,7 @@ class SelectMethod extends Component {
             self.props.changeAutomateInvites({ method: undefined });
         }
         // update the redux state to go to the next step
-        this.props.changeAutomateInvites(option);
+        this.props.changeAutomateInvites({ method, goBackFunction });
     }
 
 
@@ -36,7 +36,6 @@ class SelectMethod extends Component {
         const integrationOptions = [
             {
                 title: "Applicant Tracking System",
-                header: "What applicant tracking system do you use?",
                 method: "ats"
             },
             {
@@ -56,7 +55,7 @@ class SelectMethod extends Component {
             return (
                 <div
                     className="method-box transitionAll"
-                    onClick={() => this.boxClick(option)}
+                    onClick={() => this.boxClick(option.method)}
                     key={option.method}
                 >
                     { option.title }

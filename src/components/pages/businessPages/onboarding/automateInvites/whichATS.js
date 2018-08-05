@@ -18,6 +18,15 @@ class WhichATS extends Component {
     }
 
 
+    componentDidUpdate() {
+        const automationStep = this.props.automationStep;
+        // if the header is wrong, change it to the right header
+        if (!automationStep || automationStep.header !== "What applicant tracking system do you use?") {
+            this.props.changeAutomateInvites({ header: "What applicant tracking system do you use?" });
+        }
+    }
+
+
     submitATS() {
         const self = this;
         axios.post("/api/accountAdmin/identifyATS", {
