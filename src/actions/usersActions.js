@@ -769,6 +769,14 @@ export function changeAutomateInvites(args) {
 }
 
 
+// removes the top step for going back from the stack of Back options
+export function popGoBackStack() {
+    return function(dispatch) {
+        dispatch({ type: "POP_GO_BACK_STACK" });
+    }
+}
+
+
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
     return function(dispatch) {
