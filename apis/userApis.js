@@ -797,36 +797,28 @@ async function sendNotificationEmails(businessId, user) {
                 recipient = users[i];
                 const notifications = users[i].notifications;
                 if (notifications) {
-                    let timeDiff = Math.abs(new Date() - notifications.lastSent);
+                    // If a delayed email has already been sent, don't send another
+                    if (notifications.waiting) {
+                        continue;
+                    }
+
+                    var timeDiff = Math.abs(new Date() - notifications.lastSent);
 
                     switch(notifications.time) {
                         case "Weekly":
                             //time = ONE_DAY * 7;
                             console.log("weekly");
-                            time = 100;
-                            if (timeDiff < time) {
-                                continue;
-                            }
+                            time = ONE_DAY * 7;
                             break;
                         case "Every 2 Days":
                             console.log('2 days');
-                            time = 10;
-                            //time = ONE_DAY * 2;
-                            if (timeDiff < time) {
-                                continue;
-                            }
+                            time = ONE_DAY * 2;
                             break;
                         case "Every 5 Days":
-                            //time = ONE_DAY * 5;
-                            if (timeDiff < time) {
-                                continue;
-                            }
+                            time = ONE_DAY * 5;
                             break;
                         case "Daily":
-                            //time = ONE_DAY;
-                            if (timeDiff < time) {
-                                continue;
-                            }
+                            time = ONE_DAY;
                             break;
                         case "never":
                             time = 0;
@@ -840,7 +832,15 @@ async function sendNotificationEmails(businessId, user) {
                     continue;
                 }
 
-                promises.push(sendDelayedEmail(recipient, time, notifications.lastSent, business.positions));
+                let timeDelay = 0;
+
+                if (timeDiff < time) {
+                    timeDelay = (notifications.lastSent + time) - (new Date());
+                } else {
+                    timeDelay = 0;
+                }
+
+                promises.push(sendDelayedEmail(recipient, timeDelay, notifications.lastSent, business.positions));
                 recipient = {};
                 time = 0;
             }
@@ -860,88 +860,12 @@ async function sendNotificationEmails(businessId, user) {
 async function sendDelayedEmail(recipient, time, lastSent, positions) {
     return new Promise(async function(resolve, reject) {
 
-    setTimeout(async function() {
-        let moonshotUrl = 'https://www.moonshotinsights.io/';
-        // if we are in development, links are to localhost
-        if (!process.env.NODE_ENV) {
-            moonshotUrl = 'http://localhost:8081/';
-        }
-
-        // Set the reciever of the email
-        let reciever = [];
-        reciever.push(recipient.email);
-
-        let positionCounts = [];
-
-        let promises = [];
-        let names = [];
-
-        // TODO: get the number of candidates for each position in the correct time
-        for (let i = 0; i < positions.length; i++) {
-            const completionsQuery = {
-               "userType": "candidate",
-               "positions": {
-                   "$elemMatch": {
-                       "$and": [
-                           { "positionId": mongoose.Types.ObjectId(positions[i]._id) },
-                           { "appliedEndDate": { "$gte" : lastSent  } }
-                       ]
-                   }
-               }
-            }
-            names.push(positions[i].name);
-            promises.push(Users.count(completionsQuery));
-        }
-
-        const counts = await Promise.all(promises);
-        // Number of overall candidates
-        let numCandidates = 0;
-        for (let i = 0; i < counts.length; i++) {
-            numCandidates += counts[i];
-        }
-        // If there are multiple position evaluations going on at once
-        const multipleEvals = counts.length > 1;
-
-        // Create the emails
-        let subject = numCandidates + ' Candidates Completed Your Evaluation';
-        if (numCandidates < 2) {
-            subject = numCandidates + ' Candidate Completed Your Evaluation';
-        }
-        if (multipleEvals) {
-            subject = subject.concat("s");
-        }
-        console.log("counts: ", counts);
-        console.log("names: ", names)
-        let content =
-            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                + '<p style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(recipient.name) + ',</p>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">It&#39;s Justin again with a quick update on your evaluations:</p>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">See their results.</p><br/>'
-                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'myCandidates'
-                + '">See Results</a>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go here.</p>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></p>'
-                + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                + '<div style="text-align:left;width:95%;display:inline-block;">'
-                    + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'settings>Change the frequency of your notifications.</a></i><br/>'
-                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe>Opt-out of future messages.</a></i>'                        + '</div>'
-                + '</div>'
-            + '</div>';
-
-            const sendFrom = "Moonshot";
-            sendEmail(reciever, subject, content, sendFrom, undefined, function (success, msg) {
-                console.log("success: ", success);
-                console.log("msg" ,msg);
-            })
-            // TODO: Update the lastSent day of the user to new Date()
+        if (time > 0) {
             const idQuery = {
                 "_id" : recipient._id
             }
             const updateQuery = {
-                "notifications.lastSent" : new Date()
+                "notifications.waiting" : true
             }
             try {
                 await Users.findOneAndUpdate(idQuery, updateQuery);
@@ -949,10 +873,102 @@ async function sendDelayedEmail(recipient, time, lastSent, positions) {
                 console.log("error updating lastSent date for user email notifications: ", err);
                 reject("Error updating lastSent date for user email notifications.")
             }
-            resolve(true);
         }
-    , time);
-});
+
+        setTimeout(async function() {
+            let moonshotUrl = 'https://www.moonshotinsights.io/';
+            // if we are in development, links are to localhost
+            if (!process.env.NODE_ENV) {
+                moonshotUrl = 'http://localhost:8081/';
+            }
+
+            // Set the reciever of the email
+            let reciever = [];
+            reciever.push(recipient.email);
+
+            let positionCounts = [];
+
+            let promises = [];
+            let names = [];
+
+            // TODO: get the number of candidates for each position in the correct time
+            for (let i = 0; i < positions.length; i++) {
+                const completionsQuery = {
+                   "userType": "candidate",
+                   "positions": {
+                       "$elemMatch": {
+                           "$and": [
+                               { "positionId": mongoose.Types.ObjectId(positions[i]._id) },
+                               { "appliedEndDate": { "$gte" : lastSent  } }
+                           ]
+                       }
+                   }
+                }
+                names.push(positions[i].name);
+                promises.push(Users.count(completionsQuery));
+            }
+
+            const counts = await Promise.all(promises);
+            // Number of overall candidates
+            let numCandidates = 0;
+            for (let i = 0; i < counts.length; i++) {
+                numCandidates += counts[i];
+            }
+            // If there are multiple position evaluations going on at once
+            const multipleEvals = counts.length > 1;
+
+            // Create the emails
+            let subject = numCandidates + ' Candidates Completed Your Evaluation';
+            if (numCandidates < 2) {
+                subject = numCandidates + ' Candidate Completed Your Evaluation';
+            }
+            if (multipleEvals) {
+                subject = subject.concat("s");
+            }
+            console.log("counts: ", counts);
+            console.log("names: ", names)
+            let content =
+                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                    + '<p style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(recipient.name) + ',</p>'
+                    + '<p style="width:95%; display:inline-block; text-align:left;">It&#39;s Justin again with a quick update on your evaluations:</p>'
+                    + '<p style="width:95%; display:inline-block; text-align:left;">See their results.</p><br/>'
+                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'myCandidates'
+                    + '">See Results</a>'
+                    + '<p style="width:95%; display:inline-block; text-align:left;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go here.</p>'
+                    + '<p style="width:95%; display:inline-block; text-align:left;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></p>'
+                    + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
+                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
+                    + '<div style="text-align:left;width:95%;display:inline-block;">'
+                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'settings>Change the frequency of your notifications.</a></i><br/>'
+                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe>Opt-out of future messages.</a></i>'                        + '</div>'
+                    + '</div>'
+                + '</div>';
+
+                const sendFrom = "Moonshot";
+                sendEmail(reciever, subject, content, sendFrom, undefined, function (success, msg) {
+                    console.log("success: ", success);
+                    console.log("msg" ,msg);
+                })
+                // Update the lastSent day of the user and the waiting to be false
+                const idQuery = {
+                    "_id" : recipient._id
+                }
+                const updateQuery = {
+                    "notifications.lastSent" : new Date(),
+                    "notifications.waiting" : false
+                }
+                try {
+                    await Users.findOneAndUpdate(idQuery, updateQuery);
+                } catch(err) {
+                    console.log("error updating lastSent date for user email notifications: ", err);
+                    reject("Error updating lastSent date for user email notifications.")
+                }
+                resolve(true);
+            }
+        , time);
+    });
 }
 
 

@@ -176,8 +176,12 @@ const usersSchema = mongoose.Schema({
     },
 
     notifications: {
+        // The time a notification email was last sent
         lastSent: Date,
-        time: String
+        // Their preference for how often to send a notification email
+        time: String,
+        // Whether an email is in waiting
+        waiting: Boolean
     },
 
     // questions the user has to answer - only once - before doing a position eval
