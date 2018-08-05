@@ -253,11 +253,20 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         case "CHANGE_AUTOMATE_INVITES": {
-            const { method, header } = action.args;
+            const { method, header, goBackFunction } = action.args;
             let automateInvites = state.automateInvites ? state.automateInvites : {};
             if (method) { automateInvites.method = method; }
             if (header) { automateInvites.header = header; }
-            return { ...state, automateInvites }
+            // if there is a function to go back to be added
+            if (typeof goBackFunction === "function") {
+                // if the go back stack hasn't been initialized, initialize it
+                if (!automateInvites.goBackStack) {
+                    automateInvites.goBackStack = new Stack();
+                }
+                // add the go back function to the stack
+                automateInvites.goBackStack.push(goBackFunction);
+            }
+            return { ...state, automateInvites };
             break;
         }
         case "POP_GO_BACK_STACK": {
