@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from "axios";
 import Dialog from '@material-ui/core/Dialog';
-import { } from '../../../../../actions/usersActions';
+import { popGoBackStack } from '../../../../../actions/usersActions';
 
 import SelectMethod from "./selectMethod";
 import WhichATS from "./whichATS";
@@ -45,6 +45,20 @@ class AutomateInvites extends Component {
     previousButton() {
         // by default, previous button goes back to last step
         let previous = this.props.previous;
+
+        // get info about the path that has been followed so far
+        const automationStep = this.props.automationStep;
+
+        // if there is a non-empty stack of actions for going back to previous steps
+        if (automationStep && automationStep.goBackStack && automationStep.goBackStack.size() > 0) {
+            // make previous a function that ...
+            previous = () => {
+                // ... does the action to go back to the previous step ...
+                automationStep.goBackStack.top();
+                // ... then removes that action from the stack
+                this.props.popGoBackStack();
+            }
+        }
 
         return (
             <div
@@ -112,7 +126,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        popGoBackStack
     }, dispatch);
 }
 
