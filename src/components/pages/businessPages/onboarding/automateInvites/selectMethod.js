@@ -9,6 +9,20 @@ import { changeAutomateInvites } from '../../../../../actions/usersActions';
 import { secondaryGray } from "../../../../../colors";
 
 class SelectMethod extends Component {
+    componentWillMount() {
+        this.componentDidUpdate();
+    }
+
+
+    componentDidUpdate() {
+        const automationStep = this.props.automationStep;
+        // if the header is wrong, change it to the right header
+        if (!automationStep || automationStep.header !== "Automate Applicant Invites") {
+            this.props.changeAutomateInvites({ header: "Automate Applicant Invites" });
+        }
+    }
+
+
     // when the user clicks the box identifying which integration type they want to do
     boxClick(method) {
         // duplicate 'this' to maintain consistent 'this'
@@ -20,16 +34,6 @@ class SelectMethod extends Component {
         }
         // update the redux state to go to the next step
         this.props.changeAutomateInvites({ method, goBackFunction });
-    }
-
-
-    componentDidUpdate() {
-        console.log("here");
-        const automationStep = this.props.automationStep;
-        // if the header is wrong, change it to the right header
-        if (!automationStep || automationStep.header !== "Automate Applicant Invites") {
-            this.props.changeAutomateInvites({ header: "Automate Applicant Invites" });
-        }
     }
 
 

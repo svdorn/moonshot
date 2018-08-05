@@ -53,7 +53,6 @@ class AutomateInvites extends Component {
         if (automationStep && automationStep.goBackStack && automationStep.goBackStack.size() > 0) {
             // make previous a function that ...
             previous = () => {
-                console.log("doin stuff");
                 // ... gets the action to go back to the previous step ...
                 const goBackAction = automationStep.goBackStack.top();
                 // ... ensures the action is defined ...
@@ -126,6 +125,7 @@ function mapStateToProps(state) {
     return {
         automationStep: state.users.automateInvites,
         method: state.users.automateInvites ? state.users.automateInvites.method : undefined,
+        header: state.users.automateInvites ? state.users.automateInvites.header : undefined,
         currentUser: state.users.currentUser
     };
 }
