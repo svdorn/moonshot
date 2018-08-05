@@ -104,6 +104,9 @@ class MyEvaluations extends Component {
     }
 
     componentDidMount() {
+        if (this.props.location.query && this.props.location.query.open) {
+            this.setState({open: true});
+        }
         let self = this;
         const currentUser = this.props.currentUser;
         // if the user is here to go through an evaluation, get the positions
