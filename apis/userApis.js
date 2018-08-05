@@ -747,7 +747,7 @@ async function sendNotificationEmails(businessId, user) {
 
         let moonshotUrl = 'https://www.moonshotinsights.io/';
         // if we are in development, links are to localhost
-        if (!process.env.NODE_ENV) {
+        if (process.env.NODE_ENV === "development") {
             moonshotUrl = 'http://localhost:8081/';
         }
 
@@ -966,7 +966,7 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval) 
                     + countsSection + '<br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'myCandidates'
                     + '">See Results</a>'
-                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go <a style="color:#C8C8C8;" href="' + moonshotUrl + 'myEvaluations?open=true">here</a>.</div>'
+                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go <b style="color:#C8C8C8;" ><a href="' + moonshotUrl + 'myEvaluations?open=true">here</a></b>.</div>'
                     + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></div>'
                     + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
                     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
