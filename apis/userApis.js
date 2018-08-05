@@ -796,6 +796,7 @@ async function sendNotificationEmails(businessId, user) {
             for (let i = 0; i < users.length; i++) {
                 recipient = users[i];
                 const notifications = users[i].notifications;
+                let interval = "day";
                 if (notifications) {
                     // If a delayed email has already been sent, don't send another
                     if (notifications.waiting) {
@@ -808,23 +809,29 @@ async function sendNotificationEmails(businessId, user) {
                         case "Weekly":
                             //time = ONE_DAY * 7;
                             console.log("weekly");
+                            interval = "week";
                             time = ONE_DAY * 7;
                             break;
                         case "Every 2 Days":
                             console.log('2 days');
+                            interval = "2 days";
                             time = ONE_DAY * 2;
                             break;
                         case "Every 5 Days":
+                            interval = "5 days";
                             time = ONE_DAY * 5;
                             break;
                         case "Daily":
-                            time = ONE_DAY;
+                            interval = "day";
+                            // TODO: change back
+                            time = 0;
                             break;
                         case "never":
                             time = 0;
                             continue;
                             break;
                         default:
+                            interval = "day";
                             time = 0;
                             break;
                     }
@@ -840,7 +847,7 @@ async function sendNotificationEmails(businessId, user) {
                     timeDelay = 0;
                 }
 
-                promises.push(sendDelayedEmail(recipient, timeDelay, notifications.lastSent, business.positions));
+                promises.push(sendDelayedEmail(recipient, timeDelay, notifications.lastSent, business.positions, interval));
                 recipient = {};
                 time = 0;
             }
@@ -857,10 +864,11 @@ async function sendNotificationEmails(businessId, user) {
     });
 }
 
-async function sendDelayedEmail(recipient, time, lastSent, positions) {
+async function sendDelayedEmail(recipient, time, lastSent, positions, interval) {
     return new Promise(async function(resolve, reject) {
 
         if (time > 0) {
+            console.log("time delay greater than zero");
             const idQuery = {
                 "_id" : recipient._id
             }
@@ -876,11 +884,12 @@ async function sendDelayedEmail(recipient, time, lastSent, positions) {
         }
 
         setTimeout(async function() {
-            let moonshotUrl = 'https://www.moonshotinsights.io/';
+            let moonshotUrl = 'https://moonshotinsights.io/';
             // if we are in development, links are to localhost
             if (!process.env.NODE_ENV) {
                 moonshotUrl = 'http://localhost:8081/';
             }
+            console.log("going to send email to employer.");
 
             // Set the reciever of the email
             let reciever = [];
@@ -911,9 +920,22 @@ async function sendDelayedEmail(recipient, time, lastSent, positions) {
             const counts = await Promise.all(promises);
             // Number of overall candidates
             let numCandidates = 0;
+
+            let countsSection = '<div>';
             for (let i = 0; i < counts.length; i++) {
                 numCandidates += counts[i];
+                if (counts[i] > 0) {
+                    countsSection += (
+                        '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d; width:75%; display:inline-block; text-align:left;">'
+                            +'<div style="color:#0c0c0c; display:inline-block">' + positions[i].name + '</div>'
+                            +'<div style="display:inline-block">' + counts[i] + ' candidate completions in the past ' + interval + '</div>'
+                        +'</div>'
+                    );
+                }
             }
+
+            // add closing div to counts section
+            countsSection += '</div>';
             // If there are multiple position evaluations going on at once
             const multipleEvals = counts.length > 1;
 
@@ -925,13 +947,14 @@ async function sendDelayedEmail(recipient, time, lastSent, positions) {
             if (multipleEvals) {
                 subject = subject.concat("s");
             }
+
             console.log("counts: ", counts);
             console.log("names: ", names)
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<p style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(recipient.name) + ',</p>'
                     + '<p style="width:95%; display:inline-block; text-align:left;">It&#39;s Justin again with a quick update on your evaluations:</p>'
-                    + '<p style="width:95%; display:inline-block; text-align:left;">See their results.</p><br/>'
+                    + countsSection + '<br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'myCandidates'
                     + '">See Results</a>'
                     + '<p style="width:95%; display:inline-block; text-align:left;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go here.</p>'
