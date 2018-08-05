@@ -807,13 +807,10 @@ async function sendNotificationEmails(businessId, user) {
 
                     switch(notifications.time) {
                         case "Weekly":
-                            //time = ONE_DAY * 7;
-                            console.log("weekly");
                             interval = "week";
                             time = ONE_DAY * 7;
                             break;
                         case "Every 2 Days":
-                            console.log('2 days');
                             interval = "2 days";
                             time = ONE_DAY * 2;
                             break;
@@ -823,8 +820,7 @@ async function sendNotificationEmails(businessId, user) {
                             break;
                         case "Daily":
                             interval = "day";
-                            // TODO: change back
-                            time = 0;
+                            time = ONE_DAY;
                             break;
                         case "never":
                             time = 0;
@@ -868,7 +864,6 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval) 
     return new Promise(async function(resolve, reject) {
 
         if (time > 0) {
-            console.log("time delay greater than zero");
             const idQuery = {
                 "_id" : recipient._id
             }
@@ -886,10 +881,9 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval) 
         setTimeout(async function() {
             let moonshotUrl = 'https://moonshotinsights.io/';
             // if we are in development, links are to localhost
-            if (!process.env.NODE_ENV) {
+            if (process.env.NODE_ENV === "development") {
                 moonshotUrl = 'http://localhost:8081/';
             }
-            console.log("going to send email to employer.");
 
             // Set the reciever of the email
             let reciever = [];
@@ -957,8 +951,6 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval) 
                 subject = subject.concat("s");
             }
 
-            console.log("counts: ", counts);
-            console.log("names: ", names)
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(recipient.name) + ',</div>'
@@ -980,8 +972,6 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval) 
 
                 const sendFrom = "Moonshot";
                 sendEmail(reciever, subject, content, sendFrom, undefined, function (success, msg) {
-                    console.log("success: ", success);
-                    console.log("msg" ,msg);
                 })
                 // Update the lastSent day of the user and the waiting to be false
                 const idQuery = {
