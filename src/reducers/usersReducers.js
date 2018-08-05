@@ -271,11 +271,11 @@ export function usersReducers(state = initialState, action) {
             break;
         }
         case "POP_GO_BACK_STACK": {
-            let automateInvites = state.automateInvites ? state.automateInites : {};
+            let automateInvites = state.automateInvites ? state.automateInvites : {};
             // if there is a stack of actions that allow you to go backwards
-            if (automatedInvites.goBackStack) {
+            if (automateInvites.goBackStack) {
                 // remove the top action from the stack
-                automatedInvites.goBackStack.pop();
+                automateInvites.goBackStack.pop();
             }
             // save the updated automateInvites object
             return { ...state, automateInvites };
