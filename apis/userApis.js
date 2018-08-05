@@ -921,16 +921,25 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval) 
             // Number of overall candidates
             let numCandidates = 0;
 
-            let countsSection = '<div>';
+            let countsSection = '<div style="margin-top: 20px">';
             for (let i = 0; i < counts.length; i++) {
                 numCandidates += counts[i];
                 if (counts[i] > 0) {
-                    countsSection += (
-                        '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d; width:75%; display:inline-block; text-align:left;">'
-                            +'<div style="color:#0c0c0c; display:inline-block">' + positions[i].name + '</div>'
-                            +'<div style="display:inline-block">' + counts[i] + ' candidate completions in the past ' + interval + '</div>'
-                        +'</div>'
-                    );
+                    if (counts[i] === 1) {
+                        countsSection += (
+                            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d; width:95%; display:inline-block; text-align:left;">'
+                                +'<b style="color:#0c0c0c; display:inline-block">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + positions[i].name + ':&nbsp;</b>'
+                                +'<div style="display:inline-block">' + counts[i] + ' candidate completion in the past ' + interval + '</div>'
+                            +'</div>'
+                        );
+                    } else {
+                        countsSection += (
+                            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d; width:95%; display:inline-block; text-align:left;">'
+                                +'<b style="color:#0c0c0c; display:inline-block">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + positions[i].name + ':&nbsp;</b>'
+                                +'<div style="display:inline-block">' + counts[i] + ' candidate completions in the past ' + interval + '</div>'
+                            +'</div>'
+                        );
+                    }
                 }
             }
 
@@ -952,13 +961,13 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval) 
             console.log("names: ", names)
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                    + '<p style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(recipient.name) + ',</p>'
-                    + '<p style="width:95%; display:inline-block; text-align:left;">It&#39;s Justin again with a quick update on your evaluations:</p>'
+                    + '<div style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(recipient.name) + ',</div>'
+                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">It&#39;s Justin again with a quick update on your evaluations:</div>'
                     + countsSection + '<br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'myCandidates'
                     + '">See Results</a>'
-                    + '<p style="width:95%; display:inline-block; text-align:left;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go here.</p>'
-                    + '<p style="width:95%; display:inline-block; text-align:left;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></p>'
+                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go here.</div>'
+                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></div>'
                     + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
                     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
                     + '<div style="text-align:left;width:95%;display:inline-block;">'
