@@ -12,18 +12,49 @@ class Carousel extends Component {
 
         this.state = {
             // index of the frame the user is currently on, start at first frame
-            frame: 0
+            frameIndex: 0
         };
+    }
+
+
+    previousFrame() {
+        // if not on the first frame, return the previous frame in the array
+        if (this.state.frameIndex > 0) {
+            return this.props.frames[this.state.frameIndex - 1];
+        }
+        // if on the first frame, return the last frame in the array
+        else { return this.props.frames[this.props.frames.length - 1]; }
+    }
+
+
+    nextFrame() {
+        // if on the last frame, return the first frame
+        if (this.state.frameIndex === this.props.frames.length - 1) {
+            return this.props.frames[0];
+        }
+        // otherwise return the next frame
+        else { return this.props.frames[this.state.frameIndex + 1]; }
+    }
+
+
+    content() {
+        return (
+            <div className="content">
+                <div>{ this.previousFrame() }</div>
+                <div>{ this.props.frames[this.state.frameIndex] }</div>
+                <div>{ this.nextFrame() }</div>
+            </div>
+        );
     }
 
 
     bottomCircles() {
         let circles = [];
         for (let frameIndex = 0; frameIndex < this.props.frames.length; frameIndex++) {
-            const selected = this.state.frame === frameIndex;
+            const selected = this.state.frameIndex === frameIndex;
             circles.push(
                 <div className={`frame-position-circle${selected ? " selected" : ""}`}/>
-            )
+            );
         }
         return (
             <div>
@@ -39,18 +70,12 @@ class Carousel extends Component {
             return null;
         }
 
-        const content = (
-            <div className="content">
-                { this.props.frames[this.state.frame] }
-            </div>
-        );
-
         const leftArrow = null;
         const rightArrow = null;
 
         return (
             <div className="carousel">
-                { content }
+                { this.content() }
                 { leftArrow }
                 { rightArrow }
                 { this.bottomCircles() }

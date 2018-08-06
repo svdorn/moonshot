@@ -383,6 +383,19 @@ form > h1 {
 .carousel .frame-position-circle.selected {
     background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
 }
+.carousel .content > div {
+    display: inline-block;
+}
+.carousel .content > div:first-child {
+    position: absolute;
+    left: 0;
+    transform: translateX(-100%);
+}
+.carousel .content > div:last-child {
+    position: absolute;
+    right: 0;
+    transform: translateX(100%);
+}
 
 
 
