@@ -258,7 +258,6 @@ export function usersReducers(state = initialState, action) {
             // let automateInvites = state.automateInvites ? state.automateInvites : {};
             // // -1 means mark it as undefined
             // if (method) { automateInvites.method = method === -1 ? undefined : method; }
-            // if (header) { automateInvites.header = header; }
             // // if there is a function to go back to be added
             // if (typeof goBackFunction === "function") {
             //     // if the go back stack hasn't been initialized, initialize it
@@ -271,7 +270,9 @@ export function usersReducers(state = initialState, action) {
             // get the automateInvites info up to this point
             let automateInvites = state.automateInvites ? state.automateInvites : {};
             // get the arguments we could receive
-            const { page, goBack } = action.args;
+            const { page, header, goBack } = action.args;
+            // if the header should be changed, do so
+            if (header) { automateInvites.header = header; }
             // if there is a page to be navigated to
             console.log("here");
             if (page) {

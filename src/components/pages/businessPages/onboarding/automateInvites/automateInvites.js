@@ -105,26 +105,8 @@ class AutomateInvites extends Component {
             previousNextArea: this.createPreviousNextArea()
         }
 
-        // // if no initial method path is selected, show the screen that asks if you want
-        // // to integrate with an ATS, put a script on your own site, or suggest
-        // // some other integration
-        // if (typeof automationStep !== "object" || !automationStep.method) {
-        //     return( <SelectMethod {...childProps} /> );
-        // }
-        //
-        // // if the user selected that they want to integrate with an ATS
-        // else if (automationStep.method === "ats") {
-        //     return ( <WhichATS {...childProps} /> );
-        // }
-        //
-        // // if the user is at the end of any path, show them how to invite manually
-        // else if (automationStep.finishedPath === true) {
-        //     return ( <ManualInvite {...childProps} /> );
-        // }
-
+        // the header of the page that should currently be shown
         const currentPage = this.props.currentPage;
-
-        console.log("checking current page");
 
         // show the page associated with the string of the current page
         switch (currentPage) {
