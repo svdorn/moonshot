@@ -49,9 +49,7 @@ class WhichATS extends Component {
 
 
     // when typing into the form asking which ats they use
-    onChange(e) {
-        this.setState({ ats: e.target.value });
-    }
+    onChange(e) { this.setState({ ats: e.target.value }); }
 
 
     render() {

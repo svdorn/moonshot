@@ -29,6 +29,7 @@ class AutomateInvites extends Component {
 
 
     nextButton() {
+        console.log("making next button");
         // get the current user
         const user = this.props.currentUser;
         // get the STEP information
@@ -55,7 +56,7 @@ class AutomateInvites extends Component {
                 if (automationStep.nextCallable !== false || stepFinishedInPast) {
                     // make next button move you to the next SUB-STEP page
                     next = () => {
-                        this.props.changeAutomateInvites({ page: nextPage });
+                        this.props.changeAutomateInvites({ page: automationStep.nextPage });
                     };
                     disabled = false;
                 }
@@ -168,6 +169,7 @@ function mapStateToProps(state) {
         automationStep: state.users.automateInvites,
         pageStack: typeof state.users.automateInvites === "object" ? state.users.automateInvites.pageStack : undefined,
         currentPage: typeof state.users.automateInvites === "object" ? state.users.automateInvites.currentPage : undefined,
+        nextCallable: typeof state.users.automateInvites === "object" ? state.users.automateInvites.nextCallable : undefined,
         currentUser: state.users.currentUser
     };
 }

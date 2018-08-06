@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {  } from "../../../../../actions/usersActions";
+import { changeAutomateInvites } from "../../../../../actions/usersActions";
 import {  } from "../../../../../miscFunctions";
 
 
@@ -40,7 +40,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        changeAutomateInvites
     }, dispatch);
 }
 
