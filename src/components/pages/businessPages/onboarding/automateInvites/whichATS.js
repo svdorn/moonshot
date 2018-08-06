@@ -18,23 +18,13 @@ class WhichATS extends Component {
     }
 
 
-    componentDidMount() {
-        //this.componentDidUpdate();
+    componentWillMount() {
         const automationStep = this.props.automationStep;
         // if the header is wrong, change it to the right header
-        //if (!automationStep || automationStep.header !== "What applicant tracking system do you use?") {
+        if (!automationStep || automationStep.header !== "What applicant tracking system do you use?") {
             this.props.changeAutomateInvites({ header: "What applicant tracking system do you use?" });
-        //}
+        }
     }
-
-
-    // componentDidUpdate() {
-    //     const automationStep = this.props.automationStep;
-    //     // if the header is wrong, change it to the right header
-    //     if (!automationStep || automationStep.header !== "What applicant tracking system do you use?") {
-    //         this.props.changeAutomateInvites({ header: "What applicant tracking system do you use?" });
-    //     }
-    // }
 
 
     submitATS() {

@@ -13,6 +13,16 @@ class ManualInvite extends Component {
         this.state = {};
     }
 
+
+    componentWillMount() {
+        const automationStep = this.props.automationStep;
+        // if the header is wrong, change it to the right header
+        if (!automationStep || automationStep.header !== "How to Invite Applicants") {
+            this.props.changeAutomateInvites({ header: "How to Invite Applicants" });
+        }
+    }
+
+
     render() {
         return (
             <div>
