@@ -31,15 +31,40 @@ class AutomateInvites extends Component {
     nextButton() {
         // get the current user
         const user = this.props.currentUser;
+        // get the STEP information
+        const automationStep = this.props.automationStep;
 
         // by default, next button does nothing and looks disabled
         let next = () => { console.log("not moving on"); };
         let disabled = true;
 
-        // if the user has already advanced past this step in the past, let them go on
-        if (user.onboarding.furthestStep > user.onboarding.step) {
+        // whether the user has finished the automation step at some point in the past
+        const stepFinishedInPast = user.onboarding.furthestStep > user.onboarding.step;
+
+        // if no information is available, Next will move on to the next STEP
+        if (typeof automationStep !== "object") {
             next = this.props.next;
             disabled = false;
+        }
+
+        // if there is a function for going on to the next SUB-STEP
+        if (typeof automationStep.next === "function") {
+            // if the user has finished all required actions to move on to the
+            // next SUB-STEP
+            if (automationStep.nextCallable !== false || stepFinishedInPast) {
+                // make next button move you to the next SUB-STEP
+                next = automationStep.next;
+                disabled = false;
+            }
+        }
+        // if there is no defined function for going on to the next SUB-STEP
+        else {
+            // default makes it so you just can't move on, but if you've finished
+            // this whole step in the past, allow the user to skip to the next STEP
+            if (stepFinishedInPast) {
+                next = this.props.next;
+                disabled = false;
+            }
         }
 
         return (
