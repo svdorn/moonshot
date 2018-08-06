@@ -19,16 +19,19 @@ class SelectMethod extends Component {
 
 
     // when the user clicks the box identifying which integration type they want to do
-    boxClick(method) {
+    boxClick(page) {
         // duplicate 'this' to maintain consistent 'this'
         const self = this;
-        // add function to get back to this page
-        const goBackFunction = () => {
-            // mark method as -1 as that indicates that it should be marked as undefined
-            self.props.changeAutomateInvites({ method: -1 });
-        }
-        // update the redux state to go to the next step
-        this.props.changeAutomateInvites({ method, goBackFunction });
+        // // add function to get back to this page
+        // const goBackFunction = () => {
+        //     // mark method as -1 as that indicates that it should be marked as undefined
+        //     self.props.changeAutomateInvites({ method: -1 });
+        // }
+        // // update the redux state to go to the next step
+        // this.props.changeAutomateInvites({ method, goBackFunction });
+
+        // add the page corresponding to the button pressed to the page stack
+        this.props.automateInvitesPageChange({ page });
     }
 
 
@@ -37,17 +40,17 @@ class SelectMethod extends Component {
         const integrationOptions = [
             {
                 title: "Applicant Tracking System",
-                method: "ats"
+                page: "Which ATS?"
             },
             {
                 title: "Application Page Hosted on Your Site",
                 header: "Creating a Webhook for your Application Page",
-                method: "site"
+                page: "Custom Site Webhook"
             },
             {
                 title: "Suggest Another Integration or Method",
                 header: "Suggest Another Method",
-                method: "suggest"
+                page: "Suggest Integration Method"
             }
         ];
 
