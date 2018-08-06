@@ -143,6 +143,9 @@ class AutomateInvites extends Component {
             case "Which ATS?":
                 return ( <WhichATS {...childProps} /> );
                 break;
+            case "Manual Invite":
+                return ( <ManualInvite {...childProps} /> );
+                break;
             default:
                 return ( <SelectMethod {...childProps} /> );
                 break;
