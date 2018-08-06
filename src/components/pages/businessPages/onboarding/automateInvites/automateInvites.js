@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from "axios";
 import Dialog from '@material-ui/core/Dialog';
-import { popGoBackStack } from '../../../../../actions/usersActions';
+import { popGoBackStack, changeAutomateInvites } from '../../../../../actions/usersActions';
 
 import SelectMethod from "./selectMethod";
 import WhichATS from "./whichATS";
@@ -15,6 +15,13 @@ class AutomateInvites extends Component {
         super(props);
 
         this.state = { }
+    }
+
+
+    componentDidMount() {
+        // when on this step for the first time in the current redux state, add
+        // the Select Method page to the page stack so it's the page we're on first
+        this.props.changeAutomateInvites({ page: "Select Method" });
     }
 
 
@@ -135,7 +142,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        popGoBackStack
+        popGoBackStack,
+        changeAutomateInvites
     }, dispatch);
 }
 
