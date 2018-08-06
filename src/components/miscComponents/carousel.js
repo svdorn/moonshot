@@ -64,6 +64,28 @@ class Carousel extends Component {
     }
 
 
+    move(direction) {
+        let newFrameIndex;
+        // if going to the next frame
+        if (direction === "next") {
+            if (this.state.frameIndex >= this.props.frames.length - 1) {
+                newFrameIndex = 0;
+            } else {
+                newFrameIndex = this.state.frameIndex + 1;
+            }
+        }
+        // if going to the previous frame
+        else {
+            if (this.state.frameIndex === 0) {
+                newFrameIndex = this.props.frames.length - 1;
+            } else {
+                newFrameIndex = this.state.frameIndex - 1;
+            }
+        }
+        this.setState({ frameIndex: newFrameIndex });
+    }
+
+
     render() {
         // if no content is given, can't show anything
         if (!Array.isArray(this.props.frames) || this.props.frames.length === 0) {
