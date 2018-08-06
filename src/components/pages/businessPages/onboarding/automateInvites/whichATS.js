@@ -22,23 +22,28 @@ class WhichATS extends Component {
         const automationStep = this.props.automationStep;
         // if the header is wrong, change it to the right header
         if (!automationStep || automationStep.header !== "What applicant tracking system do you use?") {
-            this.props.changeAutomateInvites({ header: "What applicant tracking system do you use?" });
+            this.props.changeAutomateInvites({
+                header: "What applicant tracking system do you use?",
+                nextPage: "Manual Invite",
+                // user can move on if they have said what their ats is
+                nextCallable: this.props.currentUser.onboarding && this.props.currentUser.onboarding.ats
+            });
         }
     }
 
 
     submitATS() {
-        const self = this;
         axios.post("/api/accountAdmin/identifyATS", {
             ats: this.state.ats,
-            userId: this.props.user._id,
-            verificationToken: this.props.user.verificationToken
+            userId: this.props.currentUser._id,
+            verificationToken: this.props.currentUser.verificationToken
         })
         .then(response => {
             this.props.updateUser(response.data.user);
+            this.props.changeAutomateInvites({ nextCallable: true });
         })
         .catch(error => {
-            self.props.addNotification("Error, refresh and try again.", "error");
+            this.props.addNotification("Error, refresh and try again.", "error");
         });
     }
 
@@ -86,7 +91,7 @@ class WhichATS extends Component {
 function mapStateToProps(state) {
     return {
         automationStep: state.users.automateInvites,
-        user: state.users.currentUser
+        currentUser: state.users.currentUser
     };
 }
 
