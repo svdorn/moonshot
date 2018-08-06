@@ -122,16 +122,18 @@ class AutomateInvites extends Component {
         //     return ( <ManualInvite {...childProps} /> );
         // }
 
-        const pageStack = this.props.pageStack;
+        const currentPage = this.props.currentPage;
 
-        // if there is no page stack or it's empty, show the first page of all paths
-        if (!pageStack || pageStack.size() === 0) {
-            return ( <SelectMethod {...childProps} /> );
-        }
-        // if there is a page stack, look at the top of it
-        switch (pageStack.top()) {
+        console.log("checking current page");
+
+        // show the page associated with the string of the current page
+        switch (currentPage) {
+            case undefined:
             case "Select Method":
                 return ( <SelectMethod {...childProps} /> );
+                break;
+            case "Which ATS?":
+                return ( <WhichATS {...childProps} /> );
                 break;
             default:
                 return ( <SelectMethod {...childProps} /> );
@@ -154,6 +156,7 @@ function mapStateToProps(state) {
     return {
         automationStep: state.users.automateInvites,
         pageStack: typeof state.users.automateInvites === "object" ? state.users.automateInvites.pageStack : undefined,
+        currentPage: typeof state.users.automateInvites === "object" ? state.users.automateInvites.currentPage : undefined,
         currentUser: state.users.currentUser
     };
 }

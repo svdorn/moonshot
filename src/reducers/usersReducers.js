@@ -273,6 +273,7 @@ export function usersReducers(state = initialState, action) {
             // get the arguments we could receive
             const { page, goBack } = action.args;
             // if there is a page to be navigated to
+            console.log("here");
             if (page) {
                 // make sure there is a page stack
                 if (!automateInvites.pageStack) {
@@ -284,6 +285,8 @@ export function usersReducers(state = initialState, action) {
                     // ... add the requested page to the stack
                     automateInvites.pageStack.push(page);
                 }
+                // add the page as the current page
+                automateInvites.currentPage = page;
             }
             // if we should be navigating back to a previous page
             else if (goBack) {

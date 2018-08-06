@@ -59,8 +59,8 @@ class SelectMethod extends Component {
             return (
                 <div
                     className="method-box transitionAll"
-                    onClick={() => this.boxClick(option.method)}
-                    key={option.method}
+                    onClick={() => this.boxClick(option.page)}
+                    key={option.page}
                 >
                     { option.title }
                 </div>
