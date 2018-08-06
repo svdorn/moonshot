@@ -50,19 +50,16 @@ class AutomateInvites extends Component {
         // get info about the path that has been followed so far
         const automationStep = this.props.automationStep;
 
-        // if there is a non-empty stack of actions for going back to previous steps
-        if (automationStep && automationStep.goBackStack && automationStep.goBackStack.size() > 0) {
-            // make previous a function that ...
+        // if there is a stack of pages we've been to that has more than the
+        // current page in it ...
+        if (automationStep && automationStep.pageStack && automationStep.pageStack.size() > 1) {
+            // ... make previous a function that ...
             previous = () => {
-                // ... gets the action to go back to the previous step ...
-                const goBackAction = automationStep.goBackStack.top();
-                // ... ensures the action is defined ...
-                if (typeof goBackAction === "function") {
-                    // ... performs that action ...
-                    goBackAction();
-                    // ... then removes that action from the stack
-                    this.props.popGoBackStack();
-                }
+                // TODO: ... removes the top of the stack ...
+
+                // TODO: ... then gets the new top ...
+
+                // TODO: ... and navigates there
             }
         }
 
