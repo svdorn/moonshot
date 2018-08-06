@@ -47,6 +47,13 @@ const usersSchema = mongoose.Schema({
         // the furthest step the employer has gotten to
         furthestStep: Number
     },
+    // info we need to keep to access users on Intercom
+    intercom: {
+        // The email that they are registered with on intercom
+        email: String,
+        // The id for accessing this user on intercom
+        id: String
+    },
     // used to verify identity
     verificationToken: String,
     // sent to user's email address, used to verify user's account
