@@ -254,20 +254,42 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         case "CHANGE_AUTOMATE_INVITES": {
-            const { method, header, goBackFunction } = action.args;
+            // const { method, header, goBackFunction } = action.args;
+            // let automateInvites = state.automateInvites ? state.automateInvites : {};
+            // // -1 means mark it as undefined
+            // if (method) { automateInvites.method = method === -1 ? undefined : method; }
+            // if (header) { automateInvites.header = header; }
+            // // if there is a function to go back to be added
+            // if (typeof goBackFunction === "function") {
+            //     // if the go back stack hasn't been initialized, initialize it
+            //     if (!automateInvites.goBackStack) {
+            //         automateInvites.goBackStack = new Stack();
+            //     }
+            //     // add the go back function to the stack
+            //     automateInvites.goBackStack.push(goBackFunction);
+            // }
+            // get the automateInvites info up to this point
             let automateInvites = state.automateInvites ? state.automateInvites : {};
-            // -1 means mark it as undefined
-            if (method) { automateInvites.method = method === -1 ? undefined : method; }
-            if (header) { automateInvites.header = header; }
-            // if there is a function to go back to be added
-            if (typeof goBackFunction === "function") {
-                // if the go back stack hasn't been initialized, initialize it
-                if (!automateInvites.goBackStack) {
-                    automateInvites.goBackStack = new Stack();
+            // get the arguments we could receive
+            const { page, goBack } = action.args;
+            // if there is a page to be navigated to
+            if (page) {
+                // make sure there is a page stack
+                if (!automateInvites.pageStack) {
+                    // if not, create one
+                    automateInvites.pageStack = new Stack();
                 }
-                // add the go back function to the stack
-                automateInvites.goBackStack.push(goBackFunction);
+                // if the requested page isn't the same as the one we're already on ...
+                if (automateInvites.pageStack.top() !== page) {
+                    // ... add the requested page to the stack
+                    automateInvites.pageStack.push(page);
+                }
             }
+            // if we should be navigating back to a previous page
+            else if (goBack) {
+
+            }
+
             console.log("automateInvites: ", automateInvites);
             return { ...state, automateInvites };
             break;
