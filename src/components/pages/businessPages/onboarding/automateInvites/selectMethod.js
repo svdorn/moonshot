@@ -31,7 +31,7 @@ class SelectMethod extends Component {
         // this.props.changeAutomateInvites({ method, goBackFunction });
 
         // add the page corresponding to the button pressed to the page stack
-        this.props.automateInvitesPageChange({ page });
+        this.props.changeAutomateInvites({ page });
     }
 
 

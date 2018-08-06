@@ -19,9 +19,12 @@ class AutomateInvites extends Component {
 
 
     componentDidMount() {
-        // when on this step for the first time in the current redux state, add
-        // the Select Method page to the page stack so it's the page we're on first
-        this.props.changeAutomateInvites({ page: "Select Method" });
+        // check if there is NOT a populated stack of pages already
+        if (!this.props.pageStack || this.props.pageStack.size() === 0) {
+            // when on this step for the first time in the current redux state, add
+            // the Select Method page to the page stack so it's the page we're on first
+            this.props.changeAutomateInvites({ page: "Select Method" });
+        }
     }
 
 
@@ -94,29 +97,45 @@ class AutomateInvites extends Component {
     createBody() {
         let body = null;
 
-        // the sequence of choices that have been made so far while following the
-        // automate-candidate-invites path
-        const automationStep = this.props.automationStep;
+        // // the sequence of choices that have been made so far while following the
+        // // automate-candidate-invites path
+        // const automationStep = this.props.automationStep;
 
         const childProps = {
             previousNextArea: this.createPreviousNextArea()
         }
 
-        // if no initial method path is selected, show the screen that asks if you want
-        // to integrate with an ATS, put a script on your own site, or suggest
-        // some other integration
-        if (typeof automationStep !== "object" || !automationStep.method) {
-            return( <SelectMethod {...childProps} /> );
-        }
+        // // if no initial method path is selected, show the screen that asks if you want
+        // // to integrate with an ATS, put a script on your own site, or suggest
+        // // some other integration
+        // if (typeof automationStep !== "object" || !automationStep.method) {
+        //     return( <SelectMethod {...childProps} /> );
+        // }
+        //
+        // // if the user selected that they want to integrate with an ATS
+        // else if (automationStep.method === "ats") {
+        //     return ( <WhichATS {...childProps} /> );
+        // }
+        //
+        // // if the user is at the end of any path, show them how to invite manually
+        // else if (automationStep.finishedPath === true) {
+        //     return ( <ManualInvite {...childProps} /> );
+        // }
 
-        // if the user selected that they want to integrate with an ATS
-        else if (automationStep.method === "ats") {
-            return ( <WhichATS {...childProps} /> );
-        }
+        const pageStack = this.props.pageStack;
 
-        // if the user is at the end of any path, show them how to invite manually
-        else if (automationStep.finishedPath === true) {
-            return ( <ManualInvite {...childProps} /> );
+        // if there is no page stack or it's empty, show the first page of all paths
+        if (!pageStack || pageStack.size() === 0) {
+            return ( <SelectMethod {...childProps} /> );
+        }
+        // if there is a page stack, look at the top of it
+        switch (pageStack.top()) {
+            case "Select Method":
+                return ( <SelectMethod {...childProps} /> );
+                break;
+            default:
+                return ( <SelectMethod {...childProps} /> );
+                break;
         }
     }
 
@@ -134,7 +153,7 @@ class AutomateInvites extends Component {
 function mapStateToProps(state) {
     return {
         automationStep: state.users.automateInvites,
-        method: state.users.automateInvites ? state.users.automateInvites.method : undefined,
+        pageStack: typeof state.users.automateInvites === "object" ? state.users.automateInvites.pageStack : undefined,
         currentUser: state.users.currentUser
     };
 }
