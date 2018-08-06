@@ -8,6 +8,7 @@ import { popGoBackStack } from '../../../../../actions/usersActions';
 
 import SelectMethod from "./selectMethod";
 import WhichATS from "./whichATS";
+import ManualInvite from "./manualInvite";
 
 class AutomateInvites extends Component {
     constructor(props) {
@@ -105,8 +106,13 @@ class AutomateInvites extends Component {
         }
 
         // if the user selected that they want to integrate with an ATS
-        if (automationStep.method === "ats") {
+        else if (automationStep.method === "ats") {
             return ( <WhichATS {...childProps} /> );
+        }
+
+        // if the user is at the end of any path, show them how to invite manually
+        else if (automationStep.finishedPath === true) {
+            return ( <ManualInvite {...childProps} /> );
         }
     }
 
