@@ -23,12 +23,11 @@ class WhichATS extends Component {
         const currentUser = this.props.currentUser;
         // if the header is wrong, change it to the right header
         if (!automationStep || automationStep.header !== "What applicant tracking system do you use?") {
+            // user can move on if they have said what their ats is
             const nextCallable = !!currentUser.onboarding && !!currentUser.onboarding.ats;
-            console.log("nextCallable: ", nextCallable);
             this.props.changeAutomateInvites({
                 header: "What applicant tracking system do you use?",
                 nextPage: "Manual Invite",
-                // user can move on if they have said what their ats is
                 nextCallable
             });
         }
