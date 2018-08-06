@@ -290,6 +290,7 @@ export function usersReducers(state = initialState, action) {
                     automateInvites.currentPage = automateInvites.pageStack.top();
                 }
             }
+            console.log("state will be: ", { ...state, automateInvites});
             return { ...state, automateInvites };
             break;
         }
