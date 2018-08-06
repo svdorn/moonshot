@@ -48,13 +48,15 @@ class AutomateInvites extends Component {
         }
         // if there IS information about the STEP available
         else {
-            // if there is a function for going on to the next SUB-STEP
-            if (typeof automationStep.next === "function") {
+            // if there is a page to go to for the next SUB-STEP
+            if (automationStep.nextPage) {
                 // if the user has finished all required actions to move on to the
                 // next SUB-STEP
                 if (automationStep.nextCallable !== false || stepFinishedInPast) {
-                    // make next button move you to the next SUB-STEP
-                    next = automationStep.next;
+                    // make next button move you to the next SUB-STEP page
+                    next = () => {
+                        this.props.changeAutomateInvites({ page: nextPage });
+                    };
                     disabled = false;
                 }
             }
