@@ -41,10 +41,10 @@ class Carousel extends Component {
 
     content() {
         return (
-            <div className="content">
-                <div className={this.state.animationClass}>{ this.previousFrame() }</div>
-                <div className={this.state.animationClass}>{ this.props.frames[this.state.frameIndex] }</div>
-                <div className={this.state.animationClass}>{ this.nextFrame() }</div>
+            <div className={`content${this.state.animationClass}`}>
+                <div>{ this.previousFrame() }</div>
+                <div>{ this.props.frames[this.state.frameIndex] }</div>
+                <div>{ this.nextFrame() }</div>
             </div>
         );
     }
@@ -85,14 +85,14 @@ class Carousel extends Component {
             }
         }
         // the class to add so that the objects inside the container slide around
-        const animationClass = `animate-${direction}`
+        const animationClass = ` animate-${direction}`
         // set the animation class
         this.setState({ animationClass }, () => {
             // then wait for the animation to be done (.5 secs)
             setTimeout(() => {
                 // then set the current frame and get rid of the animation
                 this.setState({ frameIndex: newFrameIndex, animationClass: "" });
-            }, 5000000);
+            }, 500);
         });
     }
 

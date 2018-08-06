@@ -398,9 +398,7 @@ form > h1 {
 .carousel .content > div:nth-child(2) {
     position: relative;
     right: 0;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+
 }
 .carousel .content > div:last-child {
     position: absolute;
@@ -413,13 +411,13 @@ form > h1 {
     left: 0;
     transform: translateX(-100%);
 } */
-.carousel .content > div.animation-back:nth-child(2) {
+.carousel .content.animate-back > div:nth-child(2) {
     right: 100%;
     -webkit-transition: all 0.5s ease;
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-.carousel .content > div.animation-back:last-child {
+.carousel .content.animate-back > div:last-child {
     position: absolute;
     right: 0;
     transform: translateX(0%);
