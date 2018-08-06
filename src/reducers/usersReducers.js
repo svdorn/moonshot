@@ -254,19 +254,6 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         case "CHANGE_AUTOMATE_INVITES": {
-            // const { method, header, goBackFunction } = action.args;
-            // let automateInvites = state.automateInvites ? state.automateInvites : {};
-            // // -1 means mark it as undefined
-            // if (method) { automateInvites.method = method === -1 ? undefined : method; }
-            // // if there is a function to go back to be added
-            // if (typeof goBackFunction === "function") {
-            //     // if the go back stack hasn't been initialized, initialize it
-            //     if (!automateInvites.goBackStack) {
-            //         automateInvites.goBackStack = new Stack();
-            //     }
-            //     // add the go back function to the stack
-            //     automateInvites.goBackStack.push(goBackFunction);
-            // }
             // get the automateInvites info up to this point
             let automateInvites = state.automateInvites ? state.automateInvites : {};
             // get the arguments we could receive
@@ -291,10 +278,14 @@ export function usersReducers(state = initialState, action) {
             }
             // if we should be navigating back to a previous page
             else if (goBack) {
-
+                // if the page stack exists ...
+                if (automateInvites.pageStack && automateInvites.pageStack.size() > 0) {
+                    // remove the top of the page stack
+                    automateInvites.pageStack.pop();
+                    // and set the current page to the one at the new top
+                    automateInvites.currentPage = automateInvites.pageStack.top();
+                }
             }
-
-            console.log("automateInvites: ", automateInvites);
             return { ...state, automateInvites };
             break;
         }

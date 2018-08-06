@@ -65,11 +65,8 @@ class AutomateInvites extends Component {
         if (automationStep && automationStep.pageStack && automationStep.pageStack.size() > 1) {
             // ... make previous a function that ...
             previous = () => {
-                // TODO: ... removes the top of the stack ...
-
-                // TODO: ... then gets the new top ...
-
-                // TODO: ... and navigates there
+                // ... removes the top of the stack
+                this.props.changeAutomateInvites({ goBack: true });
             }
         }
 
