@@ -76,8 +76,8 @@ class Carousel extends Component {
         return (
             <div className="carousel">
                 { this.content() }
-                { leftArrow }
-                { rightArrow }
+                <div className="left circleArrowIcon" onClick={() => this.move("back")}/>
+                <div className="right circleArrowIcon" onClick={() => this.move("next")}/>
                 { this.bottomCircles() }
             </div>
         );

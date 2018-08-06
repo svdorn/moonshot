@@ -383,6 +383,10 @@ form > h1 {
 .carousel .frame-position-circle.selected {
     background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
 }
+.carousel .content {
+    display: inline-block;
+    position: relative;
+}
 .carousel .content > div {
     display: inline-block;
 }
@@ -391,10 +395,34 @@ form > h1 {
     left: 0;
     transform: translateX(-100%);
 }
+.carousel .content > div:nth-child(2) {
+    position: relative;
+    right: 0;
+}
 .carousel .content > div:last-child {
     position: absolute;
     right: 0;
     transform: translateX(100%);
+}
+
+/* .carousel .content > div:first-child {
+    position: absolute;
+    left: 0;
+    transform: translateX(-100%);
+} */
+.carouself .content.transition-back > div:nth-child(2) {
+    right: 100%;
+    -webkit-transition: right 0.5s ease;
+    -ms-transition: right 0.5s ease;
+    transition: right 0.5s ease;
+}
+.carousel .content.transition-back > div:last-child {
+    position: absolute;
+    right: 0;
+    transform: translateX(0%);
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
 }
 
 
