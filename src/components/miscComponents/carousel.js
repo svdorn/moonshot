@@ -16,6 +16,23 @@ class Carousel extends Component {
         };
     }
 
+
+    bottomCircles() {
+        let circles = [];
+        for (let frameIndex = 0; frameIndex < this.props.frames.length; frameIndex++) {
+            const selected = this.state.frame === frameIndex;
+            circles.push(
+                <div className={`frame-position-circle${selected ? " selected" : ""}`}/>
+            )
+        }
+        return (
+            <div>
+                { circles }
+            </div>
+        )
+    }
+
+
     render() {
         // if no content is given, can't show anything
         if (!Array.isArray(this.props.frames) || this.props.frames.length === 0) {
@@ -30,13 +47,13 @@ class Carousel extends Component {
 
         const leftArrow = null;
         const rightArrow = null;
-        const bottomCircles = null;
+
         return (
             <div className="carousel">
                 { content }
                 { leftArrow }
                 { rightArrow }
-                { bottomCircles }
+                { this.bottomCircles() }
             </div>
         );
     }

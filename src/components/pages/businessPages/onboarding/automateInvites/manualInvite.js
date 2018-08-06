@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { changeAutomateInvites } from "../../../../../actions/usersActions";
 import {  } from "../../../../../miscFunctions";
+import Carousel from "../../../../miscComponents/carousel";
 
 
 class ManualInvite extends Component {
@@ -24,8 +25,24 @@ class ManualInvite extends Component {
 
 
     render() {
+        const frame1 = (
+            <img
+                src={`/images/AddCandidateCarousel1${this.props.png}`}
+                className="manual-add-example"
+            />
+        );
+        const frame2 = (
+            <img
+                src={`/images/AddCandidateCarousel2${this.props.png}`}
+                className="manual-add-example"
+            />
+        )
         return (
-            <div>
+            <div className="manual-invite">
+                <Carousel
+                    frames={[frame1, frame2]}
+                />
+                { this.props.previousNextArea }
             </div>
         );
     }
@@ -34,7 +51,8 @@ class ManualInvite extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 

@@ -365,6 +365,26 @@ form > h1 {
 }
 
 
+.automate-invites .manual-invite .manual-add-example {
+    --device-scale: .3;
+    width: calc(1706px * var(--device-scale));
+    height: calc(966px * var(--device-scale));
+}
+
+
+.carousel .frame-position-circle {
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(to bottom right, var(--secondary-gray), var(--primary-black-light));
+    border-radius: 4px;
+    display: inline-block;
+    margin: auto 10px;
+}
+.carousel .frame-position-circle.selected {
+    background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
+}
+
+
 
 
 .businessHome {
