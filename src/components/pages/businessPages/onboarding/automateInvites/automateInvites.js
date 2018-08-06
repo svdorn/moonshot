@@ -46,24 +46,26 @@ class AutomateInvites extends Component {
             next = this.props.next;
             disabled = false;
         }
-
-        // if there is a function for going on to the next SUB-STEP
-        if (typeof automationStep.next === "function") {
-            // if the user has finished all required actions to move on to the
-            // next SUB-STEP
-            if (automationStep.nextCallable !== false || stepFinishedInPast) {
-                // make next button move you to the next SUB-STEP
-                next = automationStep.next;
-                disabled = false;
-            }
-        }
-        // if there is no defined function for going on to the next SUB-STEP
+        // if there IS information about the STEP available
         else {
-            // default makes it so you just can't move on, but if you've finished
-            // this whole step in the past, allow the user to skip to the next STEP
-            if (stepFinishedInPast) {
-                next = this.props.next;
-                disabled = false;
+            // if there is a function for going on to the next SUB-STEP
+            if (typeof automationStep.next === "function") {
+                // if the user has finished all required actions to move on to the
+                // next SUB-STEP
+                if (automationStep.nextCallable !== false || stepFinishedInPast) {
+                    // make next button move you to the next SUB-STEP
+                    next = automationStep.next;
+                    disabled = false;
+                }
+            }
+            // if there is no defined function for going on to the next SUB-STEP
+            else {
+                // default makes it so you just can't move on, but if you've finished
+                // this whole step in the past, allow the user to skip to the next STEP
+                if (stepFinishedInPast) {
+                    next = this.props.next;
+                    disabled = false;
+                }
             }
         }
 
