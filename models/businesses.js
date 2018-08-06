@@ -13,8 +13,6 @@ const positionSchema = mongoose.Schema({
     // whether the position can be applied to by anyone or if they need a unique
     // one time code
     open: Boolean,
-    // the id on Intercom
-    intercomId: String,
     // if the position should be listed as one that candidates can apply for
     currentlyHiring: Boolean,
     // which of the 5 functions the position falls under
@@ -97,6 +95,8 @@ const businessesSchema = mongoose.Schema({
     // the key the business will use to post to moonshot webhooks - must be kept
     // a secret by the business
     API_Key: String,
+    // the id on Intercom
+    intercomId: String,
     // the positions that the company is (or was) hiring for
     positions: [ positionSchema ],
 

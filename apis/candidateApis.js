@@ -170,7 +170,7 @@ function POST_candidate(req, res) {
                 var intercomId = await Businesses.findById(businessId).select("intercomId");
             } catch (findBusinessError) { return reject(findBusinessError); }
             if (intercomId.intercomId) {
-                companies.push(intercomId.intercomId);
+                companies.push({id: intercomId.intercomId});
             }
         }
 

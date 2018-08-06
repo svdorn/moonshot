@@ -116,7 +116,7 @@ async function POST_createBusinessAndUser(req, res) {
     // add the company to the user on intercom
     try {
         var companies = [];
-        companies.push(business.intercomId);
+        companies.push({id: business.intercomId});
         var intercom = await client.users.update({id: user.intercom.id, companies})
     } catch (updateIntercomError) {
         console.log("error updating an intercom user: ", updateIntercomError);
