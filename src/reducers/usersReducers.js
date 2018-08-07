@@ -257,15 +257,17 @@ export function usersReducers(state = initialState, action) {
             // get the automateInvites info up to this point
             let automateInvites = state.automateInvites ? state.automateInvites : {};
             // get the arguments we could receive
-            const { page, header, goBack, nextPage, nextCallable } = action.args;
+            const { page, header, goBack, nextPage, nextCallable, lastStep } = action.args;
             // if the header should be changed, do so
             if (header) { automateInvites.header = header; }
             // if the next page to be navigated to should be changed, do so
             if (nextPage) { automateInvites.nextPage = nextPage; }
+            // if this should be marked as the last page in a sequence, mark it
+            // should always be able to move on to next STEP if on the last SUB STEP
+            if (typeof lastStep === "boolean") { automateInvites.lastSubStep = lastSubStep; }
             // if the ability to move to the next step should be changed, change it
             if (typeof nextCallable === "boolean") { automateInvites.nextCallable = nextCallable; }
             // if there is a page to be navigated to
-            console.log("here");
             if (page) {
                 // make sure there is a page stack
                 if (!automateInvites.pageStack) {
@@ -279,6 +281,12 @@ export function usersReducers(state = initialState, action) {
                 }
                 // add the page as the current page
                 automateInvites.currentPage = page;
+                // if the page currently being added is listed as the next page
+                // AND new next page isn't being added, get rid of the page that
+                // says it should be up next, because it's now the current page
+                if (!nextPage && page === automateInvites.nextPage) {
+                    automateInvites.nextPage = undefined;
+                }
             }
             // if we should be navigating back to a previous page
             else if (goBack) {

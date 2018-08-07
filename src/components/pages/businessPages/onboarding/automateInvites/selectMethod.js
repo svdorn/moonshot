@@ -10,11 +10,10 @@ import { secondaryGray } from "../../../../../colors";
 
 class SelectMethod extends Component {
     componentWillMount() {
-        const automationStep = this.props.automationStep;
-        // if the header is wrong, change it to the right header
-        if (!automationStep || automationStep.header !== "Automate Applicant Invites") {
-            this.props.changeAutomateInvites({ header: "Automate Applicant Invites" });
-        }
+        this.props.changeAutomateInvites({
+            header: "Automate Applicant Invites",
+            lastSubStep: false
+        });
     }
 
 
