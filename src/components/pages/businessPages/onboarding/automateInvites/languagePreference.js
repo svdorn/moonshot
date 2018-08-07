@@ -101,24 +101,12 @@ class LanguagePreference extends Component {
         // if this input box is currently selected
         if (this.state.selectedBox === `${type}Custom`) {
             // see if the input is non-empty
-            const nextCallable = truthy(value);
+            const nextCallable = truthy(value) || truthy(this.props.currentUser.onboarding.languagePreference);
             // if redux state doesn't agree with our nextCallable, change it to match
             if (this.props.automationStep.nextCallable !== nextCallable) {
                 this.props.changeAutomateInvites({ nextCallable });
             }
         }
-
-        // // if there is a non-empty value in the text box and the button is not clickable ...
-        // if (value && !this.props.automationStep.nextCallable) {
-        //     // make the Next button clickable
-        //     this.props.changeAutomateInvites({ nextCallable: true });
-        // }
-        // // if the text in the input box is deleted and the user has not completed
-        // // this step in the past ...
-        // if (!value && !this.state.stepFinishedInPast) {
-        //     // don't let the user click the Next button
-        //     this.props.changeAutomateInvites({ nextCallable: false });
-        // }
     }
 
 
@@ -136,7 +124,7 @@ class LanguagePreference extends Component {
             // get the custom response
             const response = selectedBox === "clientCustom" ? this.state.clientCustom : this.state.serverCustom;
             // whether there is a response
-            const nextCallable = truthy(response);
+            const nextCallable = truthy(response) || truthy(currentUser.onboarding.languagePreference);
             // if redux state doesn't agree with our nextCallable, change it to match
             if (this.props.automationStep.nextCallable !== nextCallable) {
                 this.props.changeAutomateInvites({ nextCallable });
