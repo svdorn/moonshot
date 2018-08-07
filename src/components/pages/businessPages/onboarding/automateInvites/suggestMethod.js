@@ -14,7 +14,8 @@ class SuggestMethod extends Component {
         super(props);
 
         this.state = {
-            suggestion: ""
+            suggestion: "",
+            stepFinishedInPast: false
         }
     }
 
@@ -24,6 +25,7 @@ class SuggestMethod extends Component {
         const currentUser = this.props.currentUser;
         // user can move on if they have given an integration suggestion
         const nextCallable = truthy(currentUser.onboarding) && truthy(currentUser.onboarding.suggestion);
+        this.setState({ stepFinishedInPast: nextCallable });
         self.props.changeAutomateInvites({
             header: "Suggest Another Method",
             nextPage: "Manual Invite",
@@ -57,7 +59,23 @@ class SuggestMethod extends Component {
 
 
     // when typing into the form asking for an integration suggestion
-    onChange(e) { this.setState({ suggestion: e.target.value }); }
+    onChange(e) {
+        // get value from input box
+        const value = e.target.value;
+        // set the text in the input box to be what the user typed
+        this.setState({ suggestion: e.target.value });
+        // if there is a non-empty value in the text box and the button is not clickable ...
+        if (value && !this.props.automationStep.nextCallable) {
+            // make the Next button clickable
+            this.props.changeAutomateInvites({ nextCallable: true });
+        }
+        // if the text in the input box is deleted and the user has not completed
+        // this step in the past ...
+        if (!value && !this.state.stepFinishedInPast) {
+            // don't let the user click the Next button
+            this.props.changeAutomateInvites({ nextCallable: false });
+        }
+    }
 
 
     render() {
