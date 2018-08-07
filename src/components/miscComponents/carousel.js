@@ -14,7 +14,9 @@ class Carousel extends Component {
             // index of the frame the user is currently on, start at first frame
             frameIndex: 0,
             // class that will animate the frames when they're sliding
-            animationClass: ""
+            animationClass: "",
+            // if transitions are over, meaning Next and Back are clickable
+            canNavigate: true
         };
     }
 
@@ -67,33 +69,37 @@ class Carousel extends Component {
 
 
     move(direction) {
-        let newFrameIndex;
-        // if going to the next frame
-        if (direction === "next") {
-            if (this.state.frameIndex >= this.props.frames.length - 1) {
-                newFrameIndex = 0;
-            } else {
-                newFrameIndex = this.state.frameIndex + 1;
+        // only allow the user to move around if no animations are in-progress
+        if (this.state.canNavigate) {
+            // the frame that will be shown after animation
+            let newFrameIndex;
+            // if going to the next frame
+            if (direction === "next") {
+                if (this.state.frameIndex >= this.props.frames.length - 1) {
+                    newFrameIndex = 0;
+                } else {
+                    newFrameIndex = this.state.frameIndex + 1;
+                }
             }
-        }
-        // if going to the previous frame
-        else {
-            if (this.state.frameIndex === 0) {
-                newFrameIndex = this.props.frames.length - 1;
-            } else {
-                newFrameIndex = this.state.frameIndex - 1;
+            // if going to the previous frame
+            else {
+                if (this.state.frameIndex === 0) {
+                    newFrameIndex = this.props.frames.length - 1;
+                } else {
+                    newFrameIndex = this.state.frameIndex - 1;
+                }
             }
+            // the class to add so that the objects inside the container slide around
+            const animationClass = ` animate-${direction}`
+            // set the animation class, don't let the user move around until animation is done
+            this.setState({ animationClass, canNavigate: false }, () => {
+                // then wait for the animation to be done (.5 secs)
+                setTimeout(() => {
+                    // then set the current frame and get rid of the animation
+                    this.setState({ frameIndex: newFrameIndex, animationClass: "", canNavigate: true });
+                }, 500);
+            });
         }
-        // the class to add so that the objects inside the container slide around
-        const animationClass = ` animate-${direction}`
-        // set the animation class
-        this.setState({ animationClass }, () => {
-            // then wait for the animation to be done (.5 secs)
-            setTimeout(() => {
-                // then set the current frame and get rid of the animation
-                this.setState({ frameIndex: newFrameIndex, animationClass: "" });
-            }, 500);
-        });
     }
 
 
@@ -108,9 +114,17 @@ class Carousel extends Component {
 
         return (
             <div className="carousel">
-                { this.content() }
-                <div className="left circleArrowIcon" onClick={() => this.move("back")}/>
-                <div className="right circleArrowIcon" onClick={() => this.move("next")}/>
+                <div style={{position: "relative", display: "inline-block"}}>
+                    { this.content() }
+                    <div
+                        className="left circleArrowIcon"
+                        onClick={() => this.move("back")}
+                    />
+                    <div
+                        className="right circleArrowIcon"
+                        onClick={() => this.move("next")}
+                    />
+                </div>
                 { this.bottomCircles() }
             </div>
         );

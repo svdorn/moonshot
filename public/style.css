@@ -435,6 +435,19 @@ form > h1 {
     transition: all 0.5s ease;
 }
 
+.carousel .circleArrowIcon {
+    position: absolute;
+    top: 50%;
+}
+.carousel .left.circleArrowIcon {
+    left: 0;
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+.carousel .right.circleArrowIcon {
+    right: 0;
+    transform: translate(50%, -50%) rotate(-90deg);
+}
+
 
 
 
