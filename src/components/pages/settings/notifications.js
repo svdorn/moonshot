@@ -74,7 +74,6 @@ class Notifications extends Component {
     }
 
     handleCheckMarkClick() {
-        console.log("here");
         this.setState({
             ...this.state,
             checkMark: !this.state.checkMark

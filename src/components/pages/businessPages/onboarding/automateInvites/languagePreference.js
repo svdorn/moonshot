@@ -48,7 +48,8 @@ class LanguagePreference extends Component {
         const isCustom = selectedBox && selectedBox.includes("Custom");
         // the response the user gave to a custom box - undefined if a normal box chosen
         const customLanguage = isCustom ? (selectedBox === "clientCustom" ? this.state.clientCustom : this.state.serverCustom) : undefined;
-        // have selected a box, and if a custom box, have entered text in the right box
+        // have selected a box, and if a custom box, have entered text in the right boxClick
+        console.log("hai");
         const optionSelected =
             truthy(selectedBox) &&
             (
@@ -134,8 +135,8 @@ class LanguagePreference extends Component {
         // add a box for input
         boxes.push(
             <div
-                className={`language-box${this.state.selectedBox === `Custom-${type}` ? " selected" : ""}`}
-                onClick={() => this.selectBox(`Custom-${type}`)}
+                className={`language-box${this.state.selectedBox === `${type}Custom` ? " selected" : ""}`}
+                onClick={() => this.selectBox(`${type}Custom`)}
                 key={`${type}Custom`}
             >
                 Don{"'"}t see yours?<br/>

@@ -66,7 +66,6 @@ class AutomateInvites extends Component {
                         // check that it is relevant to the current page, then
                         // perform the action (probably will save something to
                         // the back-end)
-                        console.log("here");
                         if (typeof automationStep.extraNextFunction === "function" && automationStep.extraNextFunctionPage === automationStep.currentPage) {
                             automationStep.extraNextFunction();
                         }
@@ -182,7 +181,6 @@ class AutomateInvites extends Component {
 
 
     render() {
-        console.log("rerender");
         return (
             <div className="automate-invites primary-white center">
                 { this.createBody() }
