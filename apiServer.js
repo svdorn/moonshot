@@ -133,6 +133,8 @@ app.get('/user/positions', userApis.GET_positions);
 app.get("/user/adminQuestions", userApis.GET_adminQuestions);
 app.get("/user/influencerResults", userApis.GET_influencerResults);
 app.get("/user/checkEmailVerified", userApis.GET_checkUserVerified);
+app.get("/user/notificationPreferences", userApis.GET_notificationPreferences);
+app.post("/user/postNotificationPreferences", userApis.POST_notificationPreferences);
 app.post("/user/answerAdminQuestion", userApis.POST_answerAdminQuestion);
 app.post("/user/sawEvaluationIntro", userApis.POST_sawEvaluationIntro);
 app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);

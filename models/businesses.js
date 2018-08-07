@@ -86,17 +86,20 @@ const businessesSchema = mongoose.Schema({
     dateCreated: Date,
     // if they've set up their billing
     billingCustomerId: String,
-    // number of positions to charge for billing
-    billing: {
-        positions: Number,
-        length: String,
-        amount: Number
+
+    emailNotifications: {
+        time: String,
+        numCandidates: Number,
+        lastSent: Date
     },
     // the key the business will use to post to moonshot webhooks - must be kept
     // a secret by the business
     API_Key: String,
+    // the id on Intercom
+    intercomId: String,
     // the positions that the company is (or was) hiring for
     positions: [ positionSchema ],
+
     // the questions that managers have to answer about each employee
     employeeQuestions: [{
         // the text of the question

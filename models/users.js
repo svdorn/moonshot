@@ -49,6 +49,13 @@ const usersSchema = mongoose.Schema({
         // the ats the user said they use during onboarding
         ats: String
     },
+    // info we need to keep to access users on Intercom
+    intercom: {
+        // The email that they are registered with on intercom
+        email: String,
+        // The id for accessing this user on intercom
+        id: String
+    },
     // used to verify identity
     verificationToken: String,
     // sent to user's email address, used to verify user's account
@@ -186,6 +193,15 @@ const usersSchema = mongoose.Schema({
         businessId: mongoose.Schema.Types.ObjectId,
         // their title at the company
         title: String
+    },
+
+    notifications: {
+        // The time a notification email was last sent
+        lastSent: Date,
+        // Their preference for how often to send a notification email
+        time: String,
+        // Whether an email is in waiting
+        waiting: Boolean
     },
 
     // questions the user has to answer - only once - before doing a position eval

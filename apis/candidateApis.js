@@ -2,6 +2,9 @@ const Users = require('../models/users.js');
 const Referrals = require('../models/referrals.js');
 const Businesses = require('../models/businesses.js');
 const Signupcodes = require('../models/signupcodes.js');
+const Intercom = require('intercom-client');
+
+const client = new Intercom.Client({ token: 'dG9rOjRhYTE3ZjgzX2IyYmRfNDQyY184YjUwX2JjMjk4OWU3MDhmYjoxOjA=' });
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -160,6 +163,42 @@ function POST_candidate(req, res) {
         // make sure all pre-reqs to creating user are met
         if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
 
+        // Add companies to user list for intercom
+        let companies = [];
+        if (user.userType === "accountAdmin") {
+            try {
+                var intercomId = await Businesses.findById(businessId).select("intercomId");
+            } catch (findBusinessError) { return reject(findBusinessError); }
+            if (intercomId.intercomId) {
+                companies.push({id: intercomId.intercomId});
+            }
+        }
+
+        // create a user on intercom and add intercom information to the user
+        try {
+            var intercom = await client.users.create({
+                email: email,
+                 name: name,
+                 companies,
+                 custom_attributes: {
+                     user_type: user.userType
+                 }
+             });
+        }
+        catch (createIntercomError) {
+            console.log("error creating an intercom user: ", createIntercomError);
+            return res.status(500).send("Server error.");
+        }
+
+        // Add the intercom info to the user
+        if (intercom.body) {
+            user.intercom = {};
+            user.intercom.email = intercom.body.email;
+            user.intercom.id = intercom.body.id;
+        } else {
+            console.log("error creating an intercom user: ", createIntercomError);
+            return res.status(500).send("Server error.");
+        }
         // make the user db object
         try {
             user = await Users.create(user);
@@ -285,6 +324,10 @@ function POST_candidate(req, res) {
             // if the user is an account admin, add business info
             if (user.userType === "accountAdmin") {
                 user.businessInfo = { businessId, title: "Account Admin" };
+                user.notifications = {};
+                user.notifications.lastSent = new Date();
+                user.notifications.time = "Daily";
+                user.notifications.waiting = false;
             }
             // otherwise the user is a candidate or employee and will have a
             // start date for their position eval, same as when code was created

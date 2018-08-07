@@ -44,6 +44,7 @@
         "express-seo": "0.0.1",
         "express-session": "^1.15.6",
         "http-proxy": "^1.17.0",
+        "intercom-client": "^2.10.1",
         "jade": "~1.11.0",
         "lodash": "^4.17.10",
         "material-ui": "^0.20.1",
