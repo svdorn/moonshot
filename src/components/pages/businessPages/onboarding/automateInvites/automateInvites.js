@@ -61,7 +61,21 @@ class AutomateInvites extends Component {
                 if (automationStep.nextCallable !== false || stepFinishedInPast) {
                     // make next button move you to the next SUB-STEP page
                     next = () => {
-                        this.props.changeAutomateInvites({ page: automationStep.nextPage });
+                        // if there is some extra function that needs to be done,
+                        // check that it is relevant to the current page, then
+                        // perform the action (probably will save something to
+                        // the back-end)
+                        if (typeof automationStep.extraNextFunction === "function" && automationStep.extraNextFunctionPage === automationStep.currentPage) {
+                            automationStep.extraNextFunction();
+                        }
+
+                        this.props.changeAutomateInvites({
+                            // navigate to the next page
+                            page: automationStep.nextPage,
+                            // get rid of any extra function that might exist
+                            extraNextFunction: null,
+                            extraNextFunctionPage: null
+                        });
                     };
                     disabled = false;
                 }

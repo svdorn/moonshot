@@ -58,6 +58,7 @@ class Onboarding extends Component {
         if (onboarding.step > 8 || onboarding.furthestStep > 8) {
             onboarding.complete = true;
         }
+
         this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
     }
 

@@ -14,7 +14,7 @@ class WhichATS extends Component {
         super(props);
 
         this.state = {
-            input: ""
+            suggestion: ""
         }
     }
 
@@ -32,9 +32,9 @@ class WhichATS extends Component {
     }
 
 
-    submitATS() {
-        axios.post("/api/accountAdmin/identifyATS", {
-            ats: this.state.ats,
+    submitSuggestion() {
+        axios.post("/api/accountAdmin/integrationSuggestion", {
+            suggestion: this.state.suggestion,
             userId: this.props.currentUser._id,
             verificationToken: this.props.currentUser.verificationToken
         })
@@ -49,7 +49,7 @@ class WhichATS extends Component {
 
 
     // when typing into the form asking which ats they use
-    onChange(e) { this.setState({ input: e.target.value }); }
+    onChange(e) { this.setState({ suggestion: e.target.value }); }
 
 
     render() {
@@ -64,7 +64,7 @@ class WhichATS extends Component {
                         name="suggestion"
                         placeholder="Type your suggestion here"
                         className="blackInput"
-                        value={this.state.input}
+                        value={this.state.suggestion}
                         onChange={this.onChange.bind(this)}
                     />
                     <div

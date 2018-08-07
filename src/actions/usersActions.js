@@ -763,9 +763,7 @@ export function answerPsychQuestion(userId, verificationToken, answer) {
 
 // change info during onboarding for automating candidate emails
 export function changeAutomateInvites(args) {
-    console.log("hai: ", args);
     return function (dispatch) {
-        console.log("here");
         dispatch({ type: "CHANGE_AUTOMATE_INVITES", args });
     }
 }
