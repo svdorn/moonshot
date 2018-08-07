@@ -15,7 +15,9 @@ class LanguagePreference extends Component {
             suggestion: props.currentUser.onboarding.integrationSuggestion ? props.currentUser.onboarding.integrationSuggestion : "",
             stepFinishedInPast: false,
             // the language that the user selected
-            selectedBox: undefined
+            selectedBox: undefined,
+            clientCustom: "",
+            serverCustom: ""
         }
     }
 
@@ -39,22 +41,50 @@ class LanguagePreference extends Component {
 
 
     submitLanguagePreference() {
+        const user = this.props.currentUser;
         // if there is a suggestion and it's different than what was suggested before
-        // TODO: if (this.state.suggestion && this.props.currentUser.onboarding.integrationSuggestion !== this.state.suggestion) {
+        const selectedBox = this.state.selectedBox;
+        // selected a custom input box
+        const isCustom = selectedBox && selectedBox.includes("Custom");
+        // the response the user gave to a custom box - undefined if a normal box chosen
+        const customResponse = isCustom ? (selectedBox === "clientCustom" ? this.state.clientCustom : this.state.serverCustom) : undefined;
+        // have selected a box, and if a custom box, have entered text in the right box
+        const optionSelected =
+            truthy(selectedBox) &&
+            (
+                !isCustom ||
+                (truthy(this.state.clientCustom) && selectedBox === "clientCustom") ||
+                (truthy(this.state.serverCustom) && selectedBox === "serverCustom")
+            );
+        // do nothing if no good input
+        if (!optionSelected) { return; }
+        // whether the user answered something different than what they did in the past
+        let isDifferentAnswer;
+        // if currently on a custom answer, check that the old custom answer is
+        // different than the new one and that they're not the same type (client vs server)
+        if (isCustom) {
+            if (user.onboarding.languagePreference !== selectedBox) { isDifferentAnswer = true; }
+            else { isDifferentAnswer = user.onboarding.customLanguage !== customResponse; }
+        }
+        // if not on a custom answer, check that the old answer text is different
+        // than the current answer text
+        else { isDifferentAnswer = user.onboarding.languagePreference !== selectedBox; }
+
+        // if what was selected is different than what was selected before, save it
+        if (isDifferentAnswer) {
             // save it
             axios.post("/api/accountAdmin/languagePreference", {
-                // TODO: suggestion: this.state.suggestion,
+                languagePreference: selectedBox,
+                customResponse,
                 userId: this.props.currentUser._id,
                 verificationToken: this.props.currentUser.verificationToken
             })
-            .then(response => {
-                this.props.updateUser(response.data.user);
-            })
+            .then(response => { this.props.updateUser(response.data.user); })
             .catch(error => {
                 console.log("error: ", error);
                 this.props.addNotification("Error, please refresh.", "error");
             });
-        // }
+        }
     }
 
 
