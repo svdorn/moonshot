@@ -375,6 +375,40 @@ form > h1 {
     width: 90%;
 }
 
+.automate-invites .language-preference .language-boxes {
+    display: flex;
+    flex-wrap: wrap;
+}
+.automate-invites .language-preference .language-box {
+    width: 120px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid white;
+    border-radius: 4px;
+    font-size: 14px;
+    position: relative;
+    cursor: pointer;
+    margin: 10px;
+}
+.automate-invites .language-preference .language-box.selected {
+    border: 1px solid var(--primary-cyan);
+    background-color: var(--primary-black-light);
+}
+
+.automate-invites .language-preference .language-box input {
+    border-radius: 4px;
+    border: 1px solid white;
+    padding: 3px 5px;
+    text-align: center;
+    background-color: #222222;
+    color: white;
+    width: 90%;
+    font-size: 12px;
+    margin: 0 auto;
+}
+
 
 .carousel .frame-position-circle {
     width: 8px;

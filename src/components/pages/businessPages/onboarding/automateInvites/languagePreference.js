@@ -13,7 +13,9 @@ class LanguagePreference extends Component {
 
         this.state = {
             suggestion: props.currentUser.onboarding.integrationSuggestion ? props.currentUser.onboarding.integrationSuggestion : "",
-            stepFinishedInPast: false
+            stepFinishedInPast: false,
+            // the language that the user selected
+            selectedBox: undefined
         }
     }
 
@@ -57,11 +59,13 @@ class LanguagePreference extends Component {
 
 
     // when typing into the custom client-side language input
-    clientChange(e) {
+    inputChange(e, type) {
         // get value from input box
         const value = e.target.value;
         // set the text in the input box to be what the user typed
-        this.setState({ customClientSide: e.target.value });
+        let newArgs = {};
+        newArgs[`${type}Custom`] = value;
+        this.setState(newArgs);
         // // if there is a non-empty value in the text box and the button is not clickable ...
         // if (value && !this.props.automationStep.nextCallable) {
         //     // make the Next button clickable
@@ -76,36 +80,74 @@ class LanguagePreference extends Component {
     }
 
 
-    // when typing into the custom server-side language input
-    serverChange(e) {
-        this.setState({ customServerSide: e.target.value });
+    // select a box with a language
+    selectBox(selectedBox) { this.setState({ selectedBox }); }
+
+
+    // create selectable boxes with language names
+    // type = "client" or "server"
+    createBoxes(languages, type) {
+        console.log("creating boxes");
+        // the language boxes
+        let boxes = languages.map(language => {
+            return (
+                <div
+                    className={`language-box${this.state.selectedBox === language ? " selected" : ""}`}
+                    onClick={() => this.selectBox(language)}
+                    key={language}
+                >
+                    {language}
+                </div>
+            );
+        });
+
+        // add a box for input
+        boxes.push(
+            <div
+                className={`language-box${this.state.selectedBox === `Custom-${type}` ? " selected" : ""}`}
+                onClick={() => this.selectBox(`Custom-${type}`)}
+                key={`${type}Custom`}
+            >
+                Don{"'"}t see yours?<br/>
+                <input
+                    type="text"
+                    name={`custom${type}Side`}
+                    placeholder="Enter language"
+                    className="blackInput"
+                    value={this.state[`${type}Custom`]}
+                    onChange={(e) => this.inputChange(e, type)}
+                />
+            </div>
+        );
+
+        return boxes;
     }
 
 
     render() {
+        // languages that can be selected
+        const clientSideLanguages = ["JavaScript"];
+        const serverSideLanguages = ["Node.js", "Java", "Python", "cURL", "PHP", "Ruby"];
+
+        // create array boxes for client- and server-side
+        const clientSideBoxes = this.createBoxes(clientSideLanguages, "client");
+        const serverSideBoxes = this.createBoxes(serverSideLanguages, "server");
+
         return (
-            <div className="site-install">
+            <div className="language-preference">
                 <div>
                     How would you prefer to integrate with your site?
                 </div>
                 <div>
                     <div>Client-Side</div>
                     <div className="language-boxes">
-                        <div className="language-box">JavaScript</div>
-                        <div className="language-box">
-                            Don{"'"}t see yours?
-                            <input
-                                type="text"
-                                name="customClientSide"
-                                placeholder="Enter language"
-                                className="blackInput"
-                                value={this.state.customClientSide}
-                                onChange={this.clientChange.bind(this)}
-                            />
-                        </div>
+                        { clientSideBoxes }
                     </div>
                 </div>
                     <div>Server-Side</div>
+                    <div className="language-boxes">
+                        { serverSideBoxes }
+                    </div>
                 <div>
                 </div>
                 { this.props.previousNextArea }
