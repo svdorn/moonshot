@@ -247,8 +247,8 @@ class BusinessHome extends Component {
             return (<img alt={`${img.partner} Logo`} key={img.partner+"logo"} className="partnerLogo" src={`/logos/${img.src}`} />);
         });
 
-        const bottomListItem = {
-                width: '20%',
+        const listItem = {
+                width: '33%',
                 margin: 'auto',
                 display: 'inline-block',
                 top: '0',
@@ -614,6 +614,39 @@ class BusinessHome extends Component {
                                     <div>
                                         Video
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="learnFromHires">
+                        <div className="center">
+                            <div>
+                                <div className="home-pink font30px" style={listItem}>
+                                    We learn from each hire so that we can make the next one even better.
+                                </div>
+                                <div style={listItem}>
+                                    <img
+                                        src={"/images/businessHome/CandidatesIcon" + this.props.png}
+                                        alt="Candidates Icon"
+                                        className="businessHomeBoxIcons"
+                                    />
+                                    <span className="">
+                                        <div className="primary-white">
+                                        </div>
+                                        <div className="secondary-gray">
+                                        </div>
+                                    </span>
+                                </div>
+                                <div style={listItem}>
+                                </div>
+                            </div>
+                            <div>
+                                <div style={listItem}>
+                                </div>
+                                <div style={listItem}>
+                                </div>
+                                <div style={listItem}>
                                 </div>
                             </div>
                         </div>
