@@ -41,6 +41,7 @@ class ManualInvite extends Component {
             <div className="manual-invite">
                 <Carousel
                     frames={[frame1, frame2]}
+                    transitionDuration={500}
                 />
                 { this.props.previousNextArea }
             </div>

@@ -42,11 +42,17 @@ class Carousel extends Component {
 
 
     content() {
-        const animationStyle = this.state.animationClass ? {
-            WebkitTransition: "all 0.5s ease",
-            MsTransition: "all 0.5s ease",
-            transition: "all 0.5s ease"
-        } : {};
+        let animationStyle = {};
+        if (this.state.animationClass) {
+            // default is .5 second animation
+            const millis = typeof this.props.transitionDuration === "number" ? this.props.transitionDuration : 500;
+            const transition = `all ${millis / 1000}s ease`;
+            animationStyle = {
+                WebkitTransition: transition,
+                MsTransition: transition,
+                transition: transition
+            }
+        }
         return (
             <div className={`content${this.state.animationClass}`}>
                 <div key="previous" style={animationStyle}>{ this.previousFrame() }</div>
@@ -94,13 +100,16 @@ class Carousel extends Component {
             }
             // the class to add so that the objects inside the container slide around
             const animationClass = ` animate-${direction}`
+            // how long the animation lasts
+            const transitionDuration = typeof this.props.transitionDuration === "number" ? this.props.transitionDuration : 500;
+            console.log("transitionDuration: ", transitionDuration);
             // set the animation class, don't let the user move around until animation is done
             this.setState({ animationClass, canNavigate: false }, () => {
                 // then wait for the animation to be done (.5 secs)
                 setTimeout(() => {
                     // then set the current frame and get rid of the animation
                     this.setState({ frameIndex: newFrameIndex, animationClass: "", canNavigate: true });
-                }, 500);
+                }, transitionDuration);
             });
         }
     }
