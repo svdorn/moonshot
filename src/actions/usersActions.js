@@ -90,7 +90,7 @@ export function updateUser(user) {
 }
 
 
-export function updateOnboarding(onboarding, verificationToken, userId) {
+export function updateOnboarding(onboarding, verificationToken, userId, extraArgs) {
     return function(dispatch) {
         axios.post("/api/user/updateOnboarding", {onboarding, verificationToken, userId})
             .then(function(response) {

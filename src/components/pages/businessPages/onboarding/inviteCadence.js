@@ -33,7 +33,9 @@ class InviteCadence extends Component {
 
     next = () => {
         if (this.state.selected) {
-            this.props.next();
+            // so that the info from this page gets saved
+            const extraArgs = { daysBeforeInvite: this.state.selected };
+            this.props.next(extraArgs);
         }
     }
 

@@ -46,9 +46,9 @@ class Onboarding extends Component {
         }
     }
 
-    handleNext() {
+    handleNext(extraOnboardingArgs) {
         const user = this.props.currentUser;
-        let onboarding = user.onboarding;
+        let onboarding = {...user.onboarding, ...extraOnboardingArgs};
         onboarding.step++;
 
         if (onboarding.step >= onboarding.furthestStep) {
