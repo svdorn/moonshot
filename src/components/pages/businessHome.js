@@ -727,20 +727,18 @@ class BusinessHome extends Component {
                         </div>
                     </section>
 
-                    <section id="crystalBall" className="marginBottom60px">
-                        <div className="center">
-                            <div className="primary-cyan font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
-                                {"Your crystal ball to identify"}<div className="above800only noHeight"><br/></div>{" good and bad hires before it's too late."}
+                    <section id="ATSIntegrations" className="marginBottom60px">
+                        <div className="center primary-white">
+                            <div className="marginBottom40px font30px font24pxUnder700 font20pxUnder500">
+                                Integrates with your ATS and favorite apps.
                             </div>
-                            <img
-                                src={"/images/businessHome/CrystalBall" + this.props.png}
-                                alt="CrystalBall"
-                                className="crystalBall"
-                            />
-                            <div className="center" style={{marginTop: "10px"}}>
-                                <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
-                                    Try for Free
-                                </button>
+                            <img src={"images/businessHome/BambooHr" + this.props.png} alt="BambooHr" className="bamboo-hr" />
+                            <img src={"images/businessHome/Trello" + this.props.png} alt="Trello" className="trello" />
+                            <img src={"images/businessHome/Workable" + this.props.png} alt="Workable" className="workable" />
+                            <img src={"images/businessHome/Slack" + this.props.png} alt="Slack" className="slack" />
+                            <img src={"images/businessHome/Recruitee" + this.props.png} alt="Recruitee" className="recruitee" />
+                            <div className="marginTop40px font20px font16pxUnder700 font12pxUnder500">
+                                and many more...
                             </div>
                         </div>
                     </section>

@@ -1090,18 +1090,35 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-#crystalBall {
+#ATSIntegrations {
     position: relative;
     margin-top: 200px;
     margin-bottom: 60px;
 }
-#crystalBall > div {
+#ATSIntegrations > div {
     position: relative;
 }
-
-
-
-
+#ATSIntegrations > div > img {
+    margin-left: 40px;
+}
+#ATSIntegrations > div > img:first-child {
+    margin-left: 0;
+}
+.trello {
+    height: 38px;
+}
+.bamboo-hr {
+    height: 28px;
+}
+.workable {
+    height: 60px;
+}
+.slack {
+    height: 40px;
+}
+.recruitee {
+    height: 30px;
+}
 
 
 
@@ -4224,6 +4241,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .processOutline > .leftArrow { left: -60px; }
     .processOutline > .rightArrow { right: -60px; }
 
+    #ATSIntegrations > div > img {
+        margin-left: 30px;
+    }
+
     .font40pxUnder950 { font-size: 40px; }
     .font38pxUnder950 { font-size: 38px; }
     .font36pxUnder950 { font-size: 36px; }
@@ -4262,6 +4283,25 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     #resultsScreenshot { --device-scale: .17; }
     #myCandidatesScreenshot { --device-scale: .25; }
+
+    #ATSIntegrations > div > img {
+        margin-left: 25px;
+    }
+    .trello {
+        height: 28.5px;
+    }
+    .bamboo-hr {
+        height: 21px;
+    }
+    .workable {
+        height: 45px;
+    }
+    .slack {
+        height: 30px;
+    }
+    .recruitee {
+        height: 22.5px;
+    }
 
     .font40pxUnder900 { font-size: 40px; }
     .font38pxUnder900 { font-size: 38px; }
@@ -4987,6 +5027,25 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 50px;
     }
 
+    #ATSIntegrations > div > img {
+        margin-left: 20px;
+    }
+    .trello {
+        height: 22.8px;
+    }
+    .bamboo-hr {
+        height: 16.8px;
+    }
+    .workable {
+        height: 36px;
+    }
+    .slack {
+        height: 24px;
+    }
+    .recruitee {
+        height: 18px;
+    }
+
 
     /* END FRONT PAGE */
 
@@ -5092,6 +5151,21 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: 2px;
     }
 
+    .trello {
+        height: 17.1px;
+    }
+    .bamboo-hr {
+        height: 12.6px;
+    }
+    .workable {
+        height: 27px;
+    }
+    .slack {
+        height: 18px;
+    }
+    .recruitee {
+        height: 13.5px;
+    }
 
 
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
@@ -5454,6 +5528,25 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         padding-left: 0;
     }
 
+    #ATSIntegrations > div > img {
+        margin-left: 15px;
+    }
+    .trello {
+        height: 13.68px;
+    }
+    .bamboo-hr {
+        height: 10.08px;
+    }
+    .workable {
+        height: 21.6px;
+    }
+    .slack {
+        height: 14.4px;
+    }
+    .recruitee {
+        height: 10.8px;
+    }
+
     .twoOptionsOr { margin: 55px 10px 0; }
 
     .font40pxUnder500 { font-size: 40px; }
@@ -5542,6 +5635,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .myCandidatesTabs {
         width: 280px;
         font-size: 12px;
+    }
+    #ATSIntegrations > div > img {
+        margin-left: 7.5px;
     }
 
     .myCandidates .mobileCandidate,
