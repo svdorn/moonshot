@@ -72,19 +72,18 @@ class LanguagePreference extends Component {
 
         // if what was selected is different than what was selected before, save it
         if (isDifferentAnswer) {
-            // // save it
-            // axios.post("/api/accountAdmin/languagePreference", {
-            //     languagePreference: selectedBox,
-            //     customLanguage,
-            //     userId: this.props.currentUser._id,
-            //     verificationToken: this.props.currentUser.verificationToken
-            // })
-            // .then(response => { this.props.updateUser(response.data.user); })
-            // .catch(error => {
-            //     console.log("error: ", error);
-            //     this.props.addNotification("Error, please refresh.", "error");
-            // });
-            console.log("was a different answer");
+            // save it
+            axios.post("/api/accountAdmin/languagePreference", {
+                languagePreference: selectedBox,
+                customLanguage,
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken
+            })
+            .then(response => { this.props.updateUser(response.data.user); })
+            .catch(error => {
+                console.log("error: ", error);
+                this.props.addNotification("Error, please refresh.", "error");
+            });
         }
     }
 
