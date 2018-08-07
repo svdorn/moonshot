@@ -44,13 +44,11 @@ class SelectMethod extends Component {
             },
             {
                 title: "Application Page Hosted on Your Site",
-                header: "Creating a Webhook for your Application Page",
                 page: "Custom Site Webhook"
             },
             {
                 title: "Suggest Another Integration or Method",
-                header: "Suggest Another Method",
-                page: "Suggest Integration Method"
+                page: "Suggest Method"
             }
         ];
 

@@ -21,7 +21,8 @@ const { sanitize,
 
 const adminApis = {
     POST_sendVerificationEmail,
-    POST_identifyATS
+    POST_identifyATS,
+    POST_integrationSuggestion
 }
 
 

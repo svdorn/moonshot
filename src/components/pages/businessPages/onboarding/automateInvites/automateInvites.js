@@ -8,6 +8,7 @@ import { popGoBackStack, changeAutomateInvites } from '../../../../../actions/us
 
 import SelectMethod from "./selectMethod";
 import WhichATS from "./whichATS";
+import SuggestMethod from "./suggestMethod";
 import ManualInvite from "./manualInvite";
 
 class AutomateInvites extends Component {
@@ -29,7 +30,6 @@ class AutomateInvites extends Component {
 
 
     nextButton() {
-        console.log("making next button");
         // get the current user
         const user = this.props.currentUser;
         // get the STEP information
@@ -165,6 +165,9 @@ class AutomateInvites extends Component {
                 break;
             case "Manual Invite":
                 return ( <ManualInvite {...childProps} /> );
+                break;
+            case "Suggest Method":
+                return ( <SuggestMethod {...childProps} /> );
                 break;
             default:
                 return ( <SelectMethod {...childProps} /> );

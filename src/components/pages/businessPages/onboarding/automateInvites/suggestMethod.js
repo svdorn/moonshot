@@ -9,7 +9,7 @@ import { changeAutomateInvites, addNotification, updateUser } from '../../../../
 import { secondaryGray } from "../../../../../colors";
 import { truthy } from "../../../../../miscFunctions";
 
-class WhichATS extends Component {
+class SuggestMethod extends Component {
     constructor(props) {
         super(props);
 
@@ -30,7 +30,7 @@ class WhichATS extends Component {
             nextCallable,
             lastSubStep: false,
             // add in extra function to submit the suggestion when Next clicked
-            extraNextFunction: submitSuggestion.bind(self),
+            extraNextFunction: this.submitSuggestion.bind(self),
             extraNextFunctionPage: "Suggest Method"
         });
     }
@@ -56,7 +56,7 @@ class WhichATS extends Component {
     }
 
 
-    // when typing into the form asking which ats they use
+    // when typing into the form asking for an integration suggestion
     onChange(e) { this.setState({ suggestion: e.target.value }); }
 
 
@@ -75,17 +75,6 @@ class WhichATS extends Component {
                         value={this.state.suggestion}
                         onChange={this.onChange.bind(this)}
                     />
-                    <div
-                        className="button round-10px gradient-transition gradient-1-purple-light gradient-2-cyan"
-                        onClick={this.submitATS.bind(this)}
-                        style={{
-                            marginLeft: "20px",
-                            padding: "0 14px",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center"
-                        }}
-                    >Enter</div>
                 </div>
                 { this.props.previousNextArea }
             </div>
@@ -111,4 +100,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(WhichATS);
+export default connect(mapStateToProps, mapDispatchToProps)(SuggestMethod);
