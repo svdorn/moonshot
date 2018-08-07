@@ -22,6 +22,8 @@ import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
 import AddUserDialog from '../../childComponents/addUserDialog';
+import CreatingEvalProgress from '../../miscComponents/creatingEvalProgress';
+
 
 const required = value => (value ? undefined : 'This field is required.');
 
@@ -49,6 +51,8 @@ class MyEvaluations extends Component {
             logo: undefined,
             // name of the business the user works for - doesn't apply for candidates
             businessName: undefined,
+            // the time estimated (in hours) for whether the evals are still being created
+            estimatedTime: undefined,
             open: false,
             screen: 1
         }
@@ -149,7 +153,18 @@ class MyEvaluations extends Component {
     // call this after positions are found from back end
     positionsFound(positions, logo, businessName) {
         if (Array.isArray(positions) && positions.length > 0) {
-            this.setState({ positions, logo, businessName });
+            // get the estimated time
+            let estimatedTime = undefined;
+            if (positions.length === 1 && !(positions[0].finalized)) {
+                let time = (new Date()) - new Date(positions[0].dateCreated);
+                let hours = 100 - parseInt((time / (1000 * 60 * 60)) % 24);
+                if (hours < 4) {
+                    estimatedTime = 4;
+                } else {
+                    estimatedTime = hours;
+                }
+            }
+            this.setState({ positions, logo, businessName, estimatedTime });
         } else {
             this.setState({ noPositions: true });
         }
@@ -227,6 +242,7 @@ class MyEvaluations extends Component {
                     if (["accountAdmin", "manager"].includes(currentUser.userType)) {
                         attributes.variation = "edit";
                         attributes.name = position.name;
+                        attributes.finalized = position.finalized;
                         attributes.logo = self.state.logo;
                         attributes.length = position.length;
                         attributes.skills = position.skillNames;
@@ -367,6 +383,20 @@ class MyEvaluations extends Component {
                         My Evaluations
                     </div>
                 </div>
+                {
+                    this.state.estimatedTime ?
+                    <div className="marginBottom40px center">
+                        <div className="marginBottom20px font18px font16pxUnder500 secondary-gray">
+                            Estimated time before your {this.state.positions[0].name} Evaluation goes live: {this.state.estimatedTime} hours
+                        </div>
+                        <div>
+                            <CreatingEvalProgress
+                                time={(100 - this.state.estimatedTime)}
+                                style={{margin:"auto"}}/>
+                        </div>
+                    </div>
+                    : null
+                }
                 <div className="marginBottom60px">
                     {evaluations}
                 </div>

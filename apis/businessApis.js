@@ -327,7 +327,7 @@ async function createBusiness(info) {
                     name: position.name,
                     positionType: position.positionType,
                     length: 30,
-                    timeAlloted: 30,
+                    timeAllotted: 30,
                     dateCreated: NOW,
                     // assuming it'll take some time to create the position, so it's not ready yet
                     finalized: false
@@ -1612,7 +1612,7 @@ async function GET_positions(req, res) {
     try {
         business = await Businesses
             .findById(businessId)
-            .select("logo name positions._id positions.name positions.skillNames positions.timeAllotted positions.length");
+            .select("logo name positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.finalized positions.dateCreated");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
         return res.status(500).send("Server error, couldn't get positions.");
