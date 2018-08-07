@@ -1075,8 +1075,7 @@ form > h1 {
 }
 .statisticsHeader {
     padding: 0 16px;
-    margin-bottom: 20px;
-    height: 80px;
+    margin-bottom: 40px;
 }
 
 #pricingSection {
@@ -1882,7 +1881,7 @@ button.link {
     height: 210px;
     width: 280px;
     display: inline-block;
-    margin: 0 40px 40px;
+    margin: 0 25px 40px;
     vertical-align: top;
 }
 .gradientBorderPredictiveStats {
@@ -4234,6 +4233,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         padding-top: 56.25%
     }
 
+    .paperBoxPredictiveStats {
+        height: 210px;
+        width: 250px;
+        margin: 0 20px 40px;
+    }
+
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
         grid-row-start: 40;
         grid-row-end: 44;
@@ -4339,6 +4344,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .recruitee {
         height: 22.5px;
+    }
+
+    .paperBoxPredictiveStats {
+        height: 210px;
+        width: 210px;
+        margin: 0 10px 40px;
     }
 
     .font40pxUnder900 { font-size: 40px; }
@@ -5097,6 +5108,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     /* END FRONT PAGE */
 
+    .paperBoxPredictiveStats {
+        height: 210px;
+        width: 180px;
+        margin: 0 8px 40px;
+    }
+
     .marginSides40pxUnder700 { margin-right: 40px; margin-left: 40px; }
 
     .font48pxUnder700 { font-size: 48px; }
@@ -5213,6 +5230,13 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .recruitee {
         height: 13.5px;
+    }
+
+    .paperBoxPredictiveStats {
+        height: 160px;
+        width: 280px;
+        display: block;
+        margin: 20px auto;
     }
 
 

@@ -563,32 +563,32 @@ class BusinessHome extends Component {
 
                         <div>
                             <div className="center">
-                                <div className="font30px font28pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400 center primary-cyan statisticsHeader">
+                                <div className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-cyan statisticsHeader">
                                     Predictive Analytics Improve Hiring Results
                                 </div>
                                 <div>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
-                                            <div className="primary-white font20px font18pxUnder700 font16pxUnder500">Improve Your Efficiency</div>
-                                            <div className="secondary-gray font16px font14pxUnder700 marginTop10px">Decrease your cost to hire. Spend less time sorting through resumes, and more time looking at the cadidates that matter.</div>
-                                            <div className="primary-cyan font18px font16pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
+                                            <div className="primary-white font20px font18pxUnder900 font16pxUnder700">Improve Your Efficiency</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost to hire. Spend less time sorting through resumes, and more time looking at the cadidates that matter.</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
                                         </div>
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
-                                            <div className="primary-white font20px font18pxUnder700 font16pxUnder500">Enhance Your Culture</div>
-                                            <div className="secondary-gray font16px font14pxUnder700 marginTop10px">Find candidates that not only fit your company, but bring something new and diverse to the table.</div>
-                                            <div className="primary-cyan font18px font16pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
+                                            <div className="primary-white font20px font18pxUnder900 font16pxUnder700">Enhance Your Culture</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Find candidates that not only fit your company, but bring something new and diverse to the table.</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
                                         </div>
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
-                                            <div className="primary-white font20px font18pxUnder700 font16pxUnder500">Hire Better Talent</div>
-                                            <div className="secondary-gray font16px font14pxUnder700 marginTop10px">Hire candidates that won&#39;t just be top performers, but will continue to improve and grow alongside your company.</div>
-                                            <div className="primary-cyan font18px font16pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
+                                            <div className="primary-white font20px font18pxUnder900 font16pxUnder700">Hire Better Talent</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">Hire candidates that won&#39;t just be top performers, but will continue to improve and grow alongside your company.</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
                                         </div>
                                     </Paper>
                                 </div>
