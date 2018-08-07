@@ -48,7 +48,7 @@ class AutomateInvites extends Component {
             disabled = false;
         }
         // should always be able to move on from the last SUB STEP
-        else if (this.props.lastSubStep === true) {
+        else if (automationStep.lastSubStep === true) {
             next = this.props.next;
             disabled = false;
         }
@@ -176,7 +176,6 @@ function mapStateToProps(state) {
         pageStack: typeof state.users.automateInvites === "object" ? state.users.automateInvites.pageStack : undefined,
         currentPage: typeof state.users.automateInvites === "object" ? state.users.automateInvites.currentPage : undefined,
         nextCallable: typeof state.users.automateInvites === "object" ? state.users.automateInvites.nextCallable : undefined,
-        lastSubStep: typeof state.users.automateInvites === "object" ? state.users.automateInvites.lastSubStep : undefined,
         currentUser: state.users.currentUser
     };
 }
