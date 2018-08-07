@@ -9,6 +9,7 @@ import { popGoBackStack, changeAutomateInvites } from '../../../../../actions/us
 import SelectMethod from "./selectMethod";
 import WhichATS from "./whichATS";
 import SuggestMethod from "./suggestMethod";
+import LanguagePreference from "./languagePreference";
 import ManualInvite from "./manualInvite";
 
 class AutomateInvites extends Component {
@@ -164,11 +165,14 @@ class AutomateInvites extends Component {
             case "Which ATS?":
                 return ( <WhichATS {...childProps} /> );
                 break;
-            case "Manual Invite":
-                return ( <ManualInvite {...childProps} /> );
-                break;
             case "Suggest Method":
                 return ( <SuggestMethod {...childProps} /> );
+                break;
+            case "Language Preference":
+                return ( <LanguagePreference {...childProps} /> );
+                break;
+            case "Manual Invite":
+                return ( <ManualInvite {...childProps} /> );
                 break;
             default:
                 return ( <SelectMethod {...childProps} /> );

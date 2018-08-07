@@ -3,8 +3,6 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from "axios";
-import Dialog from '@material-ui/core/Dialog';
-import AddUserDialog from '../../../../childComponents/addUserDialog';
 import { changeAutomateInvites } from '../../../../../actions/usersActions';
 import { secondaryGray } from "../../../../../colors";
 
@@ -44,7 +42,7 @@ class SelectMethod extends Component {
             },
             {
                 title: "Application Page Hosted on Your Site",
-                page: "Custom Site Webhook"
+                page: "Language Preference"
             },
             {
                 title: "Suggest Another Integration or Method",

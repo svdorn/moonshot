@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from "axios";
 import { changeAutomateInvites, addNotification, updateUser } from '../../../../../actions/usersActions';
+import { truthy } from "../../../../../miscFunctions";
+
 
 class LanguagePreference extends Component {
     constructor(props) {
