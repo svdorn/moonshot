@@ -26,7 +26,15 @@ class LanguagePreference extends Component {
         const currentUser = this.props.currentUser;
         // user can move on if they have given their preference for language
         const nextCallable = truthy(currentUser.onboarding) && truthy(currentUser.onboarding.languagePreference);
-        this.setState({ stepFinishedInPast: nextCallable });
+        let updatedState = { stepFinishedInPast: nextCallable };
+        // if the user has gone through this before, populate the box and inputs
+        if (currentUser.onboarding.languagePreference) {
+            updatedState.selectedBox = currentUser.onboarding.languagePreference;
+        }
+        if (currentUser.onboarding.customLanguage) {
+            updatedState[updatedState.selectedBox] = currentUser.onboarding.customLanguage;
+        }
+        this.setState(updatedState);
         self.props.changeAutomateInvites({
             header: "Integrating with Your Application Page",
             nextPage: "Manual Invite",
@@ -48,7 +56,6 @@ class LanguagePreference extends Component {
         // the response the user gave to a custom box - undefined if a normal box chosen
         const customLanguage = isCustom ? (selectedBox === "clientCustom" ? this.state.clientCustom : this.state.serverCustom) : undefined;
         // have selected a box, and if a custom box, have entered text in the right boxClick
-        console.log("hai");
         const optionSelected =
             truthy(selectedBox) &&
             (
@@ -123,7 +130,7 @@ class LanguagePreference extends Component {
             // get the custom response
             const response = selectedBox === "clientCustom" ? this.state.clientCustom : this.state.serverCustom;
             // whether there is a response
-            const nextCallable = truthy(response) || truthy(currentUser.onboarding.languagePreference);
+            const nextCallable = truthy(response) || truthy(this.props.currentUser.onboarding.languagePreference);
             // if redux state doesn't agree with our nextCallable, change it to match
             if (this.props.automationStep.nextCallable !== nextCallable) {
                 this.props.changeAutomateInvites({ nextCallable });
