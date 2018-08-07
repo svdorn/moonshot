@@ -4,124 +4,152 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from "axios";
 import Dialog from '@material-ui/core/Dialog';
-import { /* goingBackAutomateInvites */ } from '../../../../../actions/usersActions';
+import { popGoBackStack, changeAutomateInvites } from '../../../../../actions/usersActions';
 
 import SelectMethod from "./selectMethod";
 import WhichATS from "./whichATS";
+import ManualInvite from "./manualInvite";
 
 class AutomateInvites extends Component {
-    // constructor(props) {
-    //     super(props);
-    //
-    //     this.state = {}
-    // }
-    //
-    //
-    // createNextButton() {
-    //     // the function that will be executed when the user clicks "next"
-    //     let next = () => {};
-    //     // if the next button should look disabled
-    //     let disabled = true;
-    //
-    //     const invitesInfo = this.props.invitesInfo;
-    //     const user = this.props.currentUser;
-    //     // if there is nothing dealing with the automate invites step ...
-    //     if (typeof invitesInfo !== "object") {
-    //         // ... if the user has already completed this step in the past, move
-    //         // on to the next onboarding step - otherwise, don't let them move
-    //         // on until they complete the current frame's step
-    //         if (user.onboarding.furthestStep > user.onboarding.step) {
-    //             next = this.props.next;
-    //             disabled = false;
-    //         }
-    //     }
-    //     // if there is an action associated with the Next button, do that
-    //     else if (typeof invitesInfo.nextAction === "function") {
-    //         next = invitesInfo.nextAction;
-    //         disabled = false;
-    //     }
-    //
-    //     return (
-    //         <div
-    //             className={`button noselect round-4px inlineBlock ${disabled ? "disabled background-primary-black-light" : "background-primary-cyan"}`}
-    //             onClick={next}
-    //         >
-    //             Next
-    //         </div>
-    //     )
-    // }
-    //
-    //
-    // createPreviousButton() {
-    //     console.log("previous button");
-    //     const self = this;
-    //
-    //     // the function that will be executed when the user clicks Previous
-    //     let previous = this.props.previous;
-    //
-    //     const invitesInfo = this.props.invitesInfo;
-    //     // if there is nothing dealing with the automate invites step ...
-    //     if (typeof info === "object") {
-    //         // ... and if there is a stack of options for going back ...
-    //         if (invitesInfo.goBackStack && invitesInfo.goBackStack.size() > 0) {
-    //             // ... create a function that performs that Back action and
-    //             // removes that option from the stack
-    //             previous = () => {
-    //                 console.log("going back");
-    //                 // get the Go Back action
-    //                 const goBack = invitesInfo.goBackStack.top;
-    //                 // doing the Back action
-    //                 goBack();
-    //                 // removing the Back action from the stack
-    //                 self.props.goingBackAutomateInvites();
-    //             };
-    //         }
-    //     }
-    //
-    //     return (
-    //         <div
-    //             className={"button noselect round-4px inlineBlock background-primary-cyan"}
-    //             onClick={previous}
-    //         >
-    //             Previous
-    //         </div>
-    //     )
-    // }
-    //
-    //
-    // createPreviousNextArea() {
-    //     return (
-    //         <div className="previous-next-area primary-white font18px center marginTop20px">
-    //             { this.createPreviousButton() }
-    //             { this.createNextButton() }
-    //         </div>
-    //     );
-    // }
+    constructor(props) {
+        super(props);
+
+        this.state = { }
+    }
+
+
+    componentDidMount() {
+        // check if there is NOT a populated stack of pages already
+        if (!this.props.pageStack || this.props.pageStack.size() === 0) {
+            // when on this step for the first time in the current redux state, add
+            // the Select Method page to the page stack so it's the page we're on first
+            this.props.changeAutomateInvites({ page: "Select Method" });
+        }
+    }
+
+
+    nextButton() {
+        console.log("making next button");
+        // get the current user
+        const user = this.props.currentUser;
+        // get the STEP information
+        const automationStep = this.props.automationStep;
+
+        // by default, next button does nothing and looks disabled
+        let next = () => { console.log("not moving on"); };
+        let disabled = true;
+
+        // whether the user has finished the automation step at some point in the past
+        const stepFinishedInPast = user.onboarding.furthestStep > user.onboarding.step;
+
+        // if no information is available, Next will move on to the next STEP
+        if (typeof automationStep !== "object") {
+            next = this.props.next;
+            disabled = false;
+        }
+        // if there IS information about the STEP available
+        else {
+            // if there is a page to go to for the next SUB-STEP
+            if (automationStep.nextPage) {
+                // if the user has finished all required actions to move on to the
+                // next SUB-STEP
+                if (automationStep.nextCallable !== false || stepFinishedInPast) {
+                    // make next button move you to the next SUB-STEP page
+                    next = () => {
+                        this.props.changeAutomateInvites({ page: automationStep.nextPage });
+                    };
+                    disabled = false;
+                }
+            }
+            // if there is no defined function for going on to the next SUB-STEP
+            else {
+                // default makes it so you just can't move on, but if you've finished
+                // this whole step in the past, allow the user to skip to the next STEP
+                if (stepFinishedInPast) {
+                    next = this.props.next;
+                    disabled = false;
+                }
+            }
+        }
+
+        return (
+            <div
+                className={`button noselect round-4px inlineBlock ${disabled ? "disabled background-primary-black-light" : "background-primary-cyan"}`}
+                onClick={next}
+            >
+                Next
+            </div>
+        );
+    }
+
+
+    previousButton() {
+        // by default, previous button goes back to last step
+        let previous = this.props.previous;
+
+        // get info about the path that has been followed so far
+        const automationStep = this.props.automationStep;
+
+        // if there is a stack of pages we've been to that has more than the
+        // current page in it ...
+        if (automationStep && automationStep.pageStack && automationStep.pageStack.size() > 1) {
+            // ... make previous a function that ...
+            previous = () => {
+                // ... removes the top of the stack
+                this.props.changeAutomateInvites({ goBack: true });
+            }
+        }
+
+        return (
+            <div
+                className="previous noselect clickable underline inlineBlock"
+                onClick={previous}
+            >
+                Previous
+            </div>
+        );
+    }
+
+
+    createPreviousNextArea() {
+        return (
+            <div className="previous-next-area primary-white font18px center marginTop20px">
+                { this.previousButton() }
+                { this.nextButton() }
+            </div>
+        );
+    }
 
 
     createBody() {
         let body = null;
 
-        // the sequence of choices that have been made so far while following the
-        // automate-candidate-invites path
-        const invitesInfo = this.props.invitesInfo;
-
-        console.log(invitesInfo);
+        // // the sequence of choices that have been made so far while following the
+        // // automate-candidate-invites path
+        // const automationStep = this.props.automationStep;
 
         const childProps = {
-            previousNextArea: <div>HEY</div>/* this.createPreviousNextArea() */
+            previousNextArea: this.createPreviousNextArea()
         }
 
-        // if no initial method path is selected, show the screen that asks if you want
-        // to integrate with an ATS, put a script on your own site, or suggest
-        // some other integration
-        if (typeof invitesInfo !== "object" || !invitesInfo.method) {
-            return( <SelectMethod {...childProps} /> );
-        }
+        // the header of the page that should currently be shown
+        const currentPage = this.props.currentPage;
 
-        // if the user selected that they want to integrate with an ATS
-        if (invitesInfo.method === "ats") {
-            return ( <WhichATS {...childProps} /> );
+        // show the page associated with the string of the current page
+        switch (currentPage) {
+            case undefined:
+            case "Select Method":
+                return ( <SelectMethod {...childProps} /> );
+                break;
+            case "Which ATS?":
+                return ( <WhichATS {...childProps} /> );
+                break;
+            case "Manual Invite":
+                return ( <ManualInvite {...childProps} /> );
+                break;
+            default:
+                return ( <SelectMethod {...childProps} /> );
+                break;
         }
     }
 
@@ -139,7 +167,10 @@ class AutomateInvites extends Component {
 
 function mapStateToProps(state) {
     return {
-        invitesInfo: state.users.automateInvites,
+        automationStep: state.users.automateInvites,
+        pageStack: typeof state.users.automateInvites === "object" ? state.users.automateInvites.pageStack : undefined,
+        currentPage: typeof state.users.automateInvites === "object" ? state.users.automateInvites.currentPage : undefined,
+        nextCallable: typeof state.users.automateInvites === "object" ? state.users.automateInvites.nextCallable : undefined,
         currentUser: state.users.currentUser
     };
 }
@@ -147,7 +178,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        // goingBackAutomateInvites
+        popGoBackStack,
+        changeAutomateInvites
     }, dispatch);
 }
 

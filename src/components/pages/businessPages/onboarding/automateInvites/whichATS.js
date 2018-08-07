@@ -19,30 +19,39 @@ class WhichATS extends Component {
 
 
     componentWillMount() {
-        this.props.changeAutomateInvites({ header: "What applicant tracking system do you use?" });
+        const automationStep = this.props.automationStep;
+        const currentUser = this.props.currentUser;
+        // if the header is wrong, change it to the right header
+        if (!automationStep || automationStep.header !== "What applicant tracking system do you use?") {
+            // user can move on if they have said what their ats is
+            const nextCallable = !!currentUser.onboarding && !!currentUser.onboarding.ats;
+            this.props.changeAutomateInvites({
+                header: "What applicant tracking system do you use?",
+                nextPage: "Manual Invite",
+                nextCallable
+            });
+        }
     }
 
 
     submitATS() {
-        const self = this;
         axios.post("/api/accountAdmin/identifyATS", {
             ats: this.state.ats,
-            userId: this.props.user._id,
-            verificationToken: this.props.user.verificationToken
+            userId: this.props.currentUser._id,
+            verificationToken: this.props.currentUser.verificationToken
         })
         .then(response => {
             this.props.updateUser(response.data.user);
+            this.props.changeAutomateInvites({ nextCallable: true });
         })
         .catch(error => {
-            self.props.addNotification("Error, refresh and try again.", "error");
+            this.props.addNotification("Error, refresh and try again.", "error");
         });
     }
 
 
     // when typing into the form asking which ats they use
-    onChange(e) {
-        this.setState({ ats: e.target.value });
-    }
+    onChange(e) { this.setState({ ats: e.target.value }); }
 
 
     render() {
@@ -81,8 +90,8 @@ class WhichATS extends Component {
 
 function mapStateToProps(state) {
     return {
-        invitesInfo: state.users.automateInvites,
-        user: state.users.currentUser
+        automationStep: state.users.automateInvites,
+        currentUser: state.users.currentUser
     };
 }
 

@@ -253,38 +253,57 @@ export function usersReducers(state = initialState, action) {
                 ...state, webpSupportChecked: true, png, jpg
             }
             break;
-        case "CHANGE_AUTOMATE_INVITES":
-            console.log("reducer");
-            const { method, header, pushToGoBackStack } = action.args;
+        case "CHANGE_AUTOMATE_INVITES": {
+            // get the automateInvites info up to this point
             let automateInvites = state.automateInvites ? state.automateInvites : {};
-            if (method) { automateInvites.method = method; }
+            // get the arguments we could receive
+            const { page, header, goBack, nextPage, nextCallable } = action.args;
+            // if the header should be changed, do so
             if (header) { automateInvites.header = header; }
-            // if we want to push an action to the stack of actions that will
-            // let us go back
-            // if (pushToGoBackStack) {
-            //     // make sure there is a stack of Go Back options
-            //     if (!automateInvites.goBackStack) {
-            //         // if not, create the goBackStack
-            //         automateInvites.goBackStack = new Stack();
-            //     }
-            //     // add the new stack item to the goBackStack
-            //     automateInvites.goBackStack.push(pushToGoBackStack);
-            // }
-            const s = { ...state, automateInvites };
-            return s;
+            // if the next page to be navigated to should be changed, do so
+            if (nextPage) { automateInvites.nextPage = nextPage; }
+            // if the ability to move to the next step should be changed, change it
+            if (typeof nextCallable === "boolean") { automateInvites.nextCallable = nextCallable; }
+            // if there is a page to be navigated to
+            console.log("here");
+            if (page) {
+                // make sure there is a page stack
+                if (!automateInvites.pageStack) {
+                    // if not, create one
+                    automateInvites.pageStack = new Stack();
+                }
+                // if the requested page isn't the same as the one we're already on ...
+                if (automateInvites.pageStack.top() !== page) {
+                    // ... add the requested page to the stack
+                    automateInvites.pageStack.push(page);
+                }
+                // add the page as the current page
+                automateInvites.currentPage = page;
+            }
+            // if we should be navigating back to a previous page
+            else if (goBack) {
+                // if the page stack exists ...
+                if (automateInvites.pageStack && automateInvites.pageStack.size() > 0) {
+                    // remove the top of the page stack
+                    automateInvites.pageStack.pop();
+                    // and set the current page to the one at the new top
+                    automateInvites.currentPage = automateInvites.pageStack.top();
+                }
+            }
+            console.log("state will be: ", { ...state, automateInvites});
+            return { ...state, automateInvites };
             break;
-        // case "GOING_BACK_AUTOMATE_INVITES":
-        //     let automateInvite = state.automateInvites;
-        //     // if there is a custom back action to be taken
-        //     if (automateInvite && automateInvite.goBackStack && automateInvite.goBackStack.size() > 0) {
-        //         // take off the top action
-        //         automateInvite.goBackStack.pop();
-        //         // return the info object without that action
-        //         return { ...state, automateInvites: automateInvite };
-        //     }
-        //     // if no invite automation actions have been taken, do nothing
-        //     else { return state; }
-        //     break;
+        }
+        case "POP_GO_BACK_STACK": {
+            let automateInvites = state.automateInvites ? state.automateInvites : {};
+            // if there is a stack of actions that allow you to go backwards
+            if (automateInvites.goBackStack) {
+                // remove the top action from the stack
+                automateInvites.goBackStack.pop();
+            }
+            // save the updated automateInvites object
+            return { ...state, automateInvites };
+        }
         case "ADD_PATHWAY":
             return {
                 ...state, currentUser: action.payload, notification: action.notification

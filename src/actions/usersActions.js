@@ -763,6 +763,7 @@ export function answerPsychQuestion(userId, verificationToken, answer) {
 
 // change info during onboarding for automating candidate emails
 export function changeAutomateInvites(args) {
+    console.log("hai: ", args);
     return function (dispatch) {
         console.log("here");
         dispatch({ type: "CHANGE_AUTOMATE_INVITES", args });
@@ -770,10 +771,10 @@ export function changeAutomateInvites(args) {
 }
 
 
-// remove the topmost option for going back within the automate invites part of onboarding
-export function goingBackAutomateInvites() {
+// removes the top step for going back from the stack of Back options
+export function popGoBackStack() {
     return function(dispatch) {
-        dispatch({ type: "GOING_BACK_AUTOMATE_INVITES" });
+        dispatch({ type: "POP_GO_BACK_STACK" });
     }
 }
 

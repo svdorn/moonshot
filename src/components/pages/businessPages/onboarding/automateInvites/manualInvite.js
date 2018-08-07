@@ -1,28 +1,47 @@
 "use strict"
 import React, { Component } from "react";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import axios from "axios";
-import Dialog from '@material-ui/core/Dialog';
-import AddUserDialog from '../../../../childComponents/addUserDialog';
-import { changeAutomateInvites, addNotification, updateUser } from '../../../../../actions/usersActions';
-import { secondaryGray } from "../../../../../colors";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { changeAutomateInvites } from "../../../../../actions/usersActions";
+import {  } from "../../../../../miscFunctions";
+import Carousel from "../../../../miscComponents/carousel";
+
 
 class ManualInvite extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {};
+    }
+
+
     componentWillMount() {
-        // add the right header
-        this.props.changeAutomateInvites({ header: "How to Invite Applicants" });
+        const automationStep = this.props.automationStep;
+        // if the header is wrong, change it to the right header
+        if (!automationStep || automationStep.header !== "How to Invite Applicants") {
+            this.props.changeAutomateInvites({ header: "How to Invite Applicants" });
+        }
     }
 
 
     render() {
+        const frame1 = (
+            <img
+                src={`/images/AddCandidateCarousel1${this.props.png}`}
+                className="manual-add-example"
+            />
+        );
+        const frame2 = (
+            <img
+                src={`/images/AddCandidateCarousel2${this.props.png}`}
+                className="manual-add-example"
+            />
+        )
         return (
-            <div>
-                <div>
-                    We will update you with options for integrations. You can
-                    always manually invite candidates as seen below.
-                </div>
-
+            <div className="manual-invite">
+                <Carousel
+                    frames={[frame1, frame2]}
+                />
                 { this.props.previousNextArea }
             </div>
         );
@@ -32,17 +51,14 @@ class ManualInvite extends Component {
 
 function mapStateToProps(state) {
     return {
-        sequence: state.users.automateInvites,
-        user: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        changeAutomateInvites,
-        updateUser,
-        addNotification
+        changeAutomateInvites
     }, dispatch);
 }
 

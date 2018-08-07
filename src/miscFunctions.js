@@ -173,7 +173,7 @@ const miscFunctions = {
     goTo,
 
     Queue,
-    Stack,
+    Stack
 }
 
 module.exports = miscFunctions;

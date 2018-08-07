@@ -365,6 +365,90 @@ form > h1 {
 }
 
 
+.automate-invites .manual-invite .manual-add-example {
+    --device-scale: .3;
+    width: calc(1706px * var(--device-scale));
+    height: calc(966px * var(--device-scale));
+}
+
+
+.carousel .frame-position-circle {
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(to bottom right, var(--secondary-gray), var(--primary-black-light));
+    border-radius: 4px;
+    display: inline-block;
+    margin: auto 10px;
+}
+.carousel .frame-position-circle.selected {
+    background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
+}
+.carousel .content {
+    display: inline-block;
+    position: relative;
+    overflow-x: hidden;
+}
+.carousel .content > div {
+    display: inline-block;
+}
+.carousel .content > div:first-child {
+    position: absolute;
+    left: 0;
+    transform: translateX(-100%);
+}
+.carousel .content > div:nth-child(2) {
+    position: relative;
+    right: 0;
+}
+.carousel .content > div:last-child {
+    position: absolute;
+    right: 0;
+    transform: translateX(100%);
+}
+
+.carousel .content.animate-next > div:nth-child(2) {
+    right: 100%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.carousel .content.animate-next > div:last-child {
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%);
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.carousel .content.animate-back > div:nth-child(2) {
+    right: -100%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.carousel .content.animate-back > div:first-child {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.carousel .circleArrowIcon {
+    position: absolute;
+    top: 50%;
+}
+.carousel .left.circleArrowIcon {
+    left: 0;
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+.carousel .right.circleArrowIcon {
+    right: 0;
+    transform: translate(50%, -50%) rotate(-90deg);
+}
+
+
 
 
 .businessHome {
