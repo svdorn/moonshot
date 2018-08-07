@@ -49,7 +49,11 @@ const usersSchema = mongoose.Schema({
         // the ats the user said they use during onboarding
         ats: String,
         // suggestion for candidate application integration method
-        integrationSuggestion: String
+        integrationSuggestion: String,
+        // the language the user would like to use to integrate with Moonshot
+        languagePreference: String,
+        // if the user wants a language for site integration that wasn't included by default
+        customLanguage: String
     },
     // info we need to keep to access users on Intercom
     intercom: {

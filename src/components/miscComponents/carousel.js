@@ -44,9 +44,9 @@ class Carousel extends Component {
     content() {
         return (
             <div className={`content${this.state.animationClass}`}>
-                <div>{ this.previousFrame() }</div>
-                <div>{ this.props.frames[this.state.frameIndex] }</div>
-                <div>{ this.nextFrame() }</div>
+                <div key="previous">{ this.previousFrame() }</div>
+                <div key="current">{ this.props.frames[this.state.frameIndex] }</div>
+                <div key="next">{ this.nextFrame() }</div>
             </div>
         );
     }
@@ -57,13 +57,11 @@ class Carousel extends Component {
         for (let frameIndex = 0; frameIndex < this.props.frames.length; frameIndex++) {
             const selected = this.state.frameIndex === frameIndex;
             circles.push(
-                <div className={`frame-position-circle${selected ? " selected" : ""}`}/>
+                <div key={`circle${frameIndex}`} className={`frame-position-circle${selected ? " selected" : ""}`}/>
             );
         }
         return (
-            <div>
-                { circles }
-            </div>
+            <div key="bottomCircles">{ circles }</div>
         )
     }
 

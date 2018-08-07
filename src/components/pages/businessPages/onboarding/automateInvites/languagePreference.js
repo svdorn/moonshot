@@ -47,7 +47,7 @@ class LanguagePreference extends Component {
         // selected a custom input box
         const isCustom = selectedBox && selectedBox.includes("Custom");
         // the response the user gave to a custom box - undefined if a normal box chosen
-        const customResponse = isCustom ? (selectedBox === "clientCustom" ? this.state.clientCustom : this.state.serverCustom) : undefined;
+        const customLanguage = isCustom ? (selectedBox === "clientCustom" ? this.state.clientCustom : this.state.serverCustom) : undefined;
         // have selected a box, and if a custom box, have entered text in the right box
         const optionSelected =
             truthy(selectedBox) &&
@@ -64,7 +64,7 @@ class LanguagePreference extends Component {
         // different than the new one and that they're not the same type (client vs server)
         if (isCustom) {
             if (user.onboarding.languagePreference !== selectedBox) { isDifferentAnswer = true; }
-            else { isDifferentAnswer = user.onboarding.customLanguage !== customResponse; }
+            else { isDifferentAnswer = user.onboarding.customLanguage !== customLanguage; }
         }
         // if not on a custom answer, check that the old answer text is different
         // than the current answer text
@@ -72,18 +72,19 @@ class LanguagePreference extends Component {
 
         // if what was selected is different than what was selected before, save it
         if (isDifferentAnswer) {
-            // save it
-            axios.post("/api/accountAdmin/languagePreference", {
-                languagePreference: selectedBox,
-                customResponse,
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
-            })
-            .then(response => { this.props.updateUser(response.data.user); })
-            .catch(error => {
-                console.log("error: ", error);
-                this.props.addNotification("Error, please refresh.", "error");
-            });
+            // // save it
+            // axios.post("/api/accountAdmin/languagePreference", {
+            //     languagePreference: selectedBox,
+            //     customLanguage,
+            //     userId: this.props.currentUser._id,
+            //     verificationToken: this.props.currentUser.verificationToken
+            // })
+            // .then(response => { this.props.updateUser(response.data.user); })
+            // .catch(error => {
+            //     console.log("error: ", error);
+            //     this.props.addNotification("Error, please refresh.", "error");
+            // });
+            console.log("was a different answer");
         }
     }
 
@@ -117,7 +118,6 @@ class LanguagePreference extends Component {
     // create selectable boxes with language names
     // type = "client" or "server"
     createBoxes(languages, type) {
-        console.log("creating boxes");
         // the language boxes
         let boxes = languages.map(language => {
             return (
