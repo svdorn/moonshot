@@ -161,6 +161,12 @@ function goTo(route) {
 }
 
 
+// returns whether the thing has a truthy value (defined, not null, not empty string)
+function truthy(thing) {
+    return !!thing;
+}
+
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -171,6 +177,7 @@ const miscFunctions = {
     isValidFileType,
     isValidPassword,
     goTo,
+    truthy,
 
     Queue,
     Stack
