@@ -65,6 +65,7 @@ class AutomateInvites extends Component {
                         // check that it is relevant to the current page, then
                         // perform the action (probably will save something to
                         // the back-end)
+                        console.log("here");
                         if (typeof automationStep.extraNextFunction === "function" && automationStep.extraNextFunctionPage === automationStep.currentPage) {
                             automationStep.extraNextFunction();
                         }

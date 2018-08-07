@@ -257,7 +257,7 @@ export function usersReducers(state = initialState, action) {
             // get the automateInvites info up to this point
             let automateInvites = state.automateInvites ? state.automateInvites : {};
             // get the arguments we could receive
-            const { page, header, goBack, nextPage, nextCallable, lastSubStep } = action.args;
+            const { page, header, goBack, nextPage, nextCallable, lastSubStep, extraNextFunction, extraNextFunctionPage } = action.args;
             // if the header should be changed, do so
             if (header !== undefined) { automateInvites.header = header; }
             // if the next page to be navigated to should be changed, do so
@@ -267,6 +267,10 @@ export function usersReducers(state = initialState, action) {
             if (typeof lastSubStep === "boolean") { automateInvites.lastSubStep = lastSubStep; }
             // if the ability to move to the next step should be changed, change it
             if (typeof nextCallable === "boolean") { automateInvites.nextCallable = nextCallable; }
+            // if there is a function to call when Next button pressed, add it
+            if (extraNextFunction !== undefined) { automateInvites.extraNextFunction = extraNextFunction; }
+            // if there is a page going along with the above function, add it
+            if (extraNextFunctionPage !== undefined) { automateInvites.extraNextFunctionPage = extraNextFunctionPage; }
             // if there is a page to be navigated to
             if (page !== undefined) {
                 // make sure there is a page stack
