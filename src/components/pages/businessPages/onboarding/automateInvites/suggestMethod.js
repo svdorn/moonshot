@@ -14,7 +14,7 @@ class SuggestMethod extends Component {
         super(props);
 
         this.state = {
-            suggestion: "",
+            suggestion: props.currentUser.onboarding.integrationSuggestion ? props.currentUser.onboarding.integrationSuggestion : "",
             stepFinishedInPast: false
         }
     }
@@ -80,11 +80,11 @@ class SuggestMethod extends Component {
 
     render() {
         return (
-            <div>
+            <div className="suggest-integration">
                 <div>
                     Suggest another integration to automate applicant invites or a method for us to collect your applicants{"'"}s email addresses.
                 </div>
-                <div className="buttonArea font18px font14pxUnder900" style={{justifyContent:"center"}}>
+                <div className="buttonArea font16px" style={{justifyContent:"center"}}>
                     <textarea
                         name="suggestion"
                         placeholder="Type your suggestion here"

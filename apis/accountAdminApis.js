@@ -178,7 +178,7 @@ async function POST_integrationSuggestion(req, res) {
     }
     // set up the email
     const recipients = process.env.NODE_ENV === "development" ? process.env.DEV_EMAIL : ["kyle@moonshotinsights.io", "ameyer24@wisc.edu", "stevedorn9@gmail.com"];
-    const subject = "Account Admin Marked ATS System They Use";
+    const subject = "Account Admin Suggested an Integration Method";
     const content = (
         `<div>
             <p>User: ${user.name}</p>

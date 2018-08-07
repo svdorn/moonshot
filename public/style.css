@@ -371,6 +371,10 @@ form > h1 {
     height: calc(966px * var(--device-scale));
 }
 
+.automate-invites .suggest-integration textarea {
+    width: 90%;
+}
+
 
 .carousel .frame-position-circle {
     width: 8px;
