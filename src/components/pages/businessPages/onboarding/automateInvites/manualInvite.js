@@ -39,6 +39,10 @@ class ManualInvite extends Component {
         )
         return (
             <div className="manual-invite">
+                <div style={{textAlign: "left", marginBottom: "20px"}}>
+                    We will update you with options for integrations. You can
+                    always manually invite candidates as seen below.
+                </div>
                 <Carousel
                     frames={[frame1, frame2]}
                     transitionDuration={500}

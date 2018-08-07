@@ -333,7 +333,7 @@ form > h1 {
 .automate-invites {
     height: 100%;
     position: relative;
-    padding: 10px;
+    padding: 10px 20px;
 }
 
 .automate-invites > div {
@@ -4580,6 +4580,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         transition: visibility 0s .5s, opacity .5s linear;
     }
 
+    .automate-invites .manual-invite .manual-add-example {
+        --device-scale: .2;
+    }
+
     .myCandidates .candidatesAndOptions {
         width: calc(100% - 40px);
     }
@@ -5198,6 +5202,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 18px;
     }
     .messageHeader { margin-top: -70px; }
+
+    .automate-invites .manual-invite .manual-add-example {
+        --device-scale: .15;
+    }
 
     .analysis .candidateScore {
         margin-bottom: 15px;

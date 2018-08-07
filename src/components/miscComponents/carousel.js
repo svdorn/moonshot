@@ -102,7 +102,6 @@ class Carousel extends Component {
             const animationClass = ` animate-${direction}`
             // how long the animation lasts
             const transitionDuration = typeof this.props.transitionDuration === "number" ? this.props.transitionDuration : 500;
-            console.log("transitionDuration: ", transitionDuration);
             // set the animation class, don't let the user move around until animation is done
             this.setState({ animationClass, canNavigate: false }, () => {
                 // then wait for the animation to be done (.5 secs)
