@@ -170,12 +170,12 @@ class LanguagePreference extends Component {
                     How would you prefer to integrate with your site?
                 </div>
                 <div>
-                    <div>Client-Side</div>
+                    <div style={style.typeHeader}>Client-Side</div>
                     <div className="language-boxes">
                         { clientSideBoxes }
                     </div>
                 </div>
-                    <div>Server-Side</div>
+                    <div style={style.typeHeader}>Server-Side</div>
                     <div className="language-boxes">
                         { serverSideBoxes }
                     </div>
@@ -184,6 +184,15 @@ class LanguagePreference extends Component {
                 { this.props.previousNextArea }
             </div>
         );
+    }
+}
+
+
+const style = {
+    typeHeader: {
+        textAlign: "left",
+        paddingLeft: "10px",
+        marginTop: "15px"
     }
 }
 
