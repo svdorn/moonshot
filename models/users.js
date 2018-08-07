@@ -53,7 +53,9 @@ const usersSchema = mongoose.Schema({
         // the language the user would like to use to integrate with Moonshot
         languagePreference: String,
         // if the user wants a language for site integration that wasn't included by default
-        customLanguage: String
+        customLanguage: String,
+        // how many days to wait before inviting candidates to take evaluation
+        daysBeforeInvite: Number
     },
     // info we need to keep to access users on Intercom
     intercom: {
