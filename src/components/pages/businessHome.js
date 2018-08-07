@@ -486,7 +486,7 @@ class BusinessHome extends Component {
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextLeft forBusiness">
                                 <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
-                                    <h2 className="secondary-red font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will perform the best... or the worst</h2>
+                                    <h2 className="primary-purple-light font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will perform the best... or the worst</h2>
                                     Analyze candidates to see if they exhibit the qualities of
                                     proven high achievers or low performers in that position.
                                 </div>
@@ -657,68 +657,83 @@ class BusinessHome extends Component {
                         }
 
                         <div className="forBusinessBoxesContainer">
-                            <div className="font36px font32pxUnder700 font26pxUnder500 center primary-pink"
+                            <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
                                  style={{marginBottom: '50px'}}>
-                                The New Baseline Evaluation
-                                <div className="infoTextContainer">
-                                    <div className="infoText i flex font18px font16pxUnder700 font10pxUnder400 primary-white" style={{margin: 'auto'}}>
-                                        <div>Free for First Active Position</div>
-                                        <div>•</div>
-                                        <div>Unlimited Evaluations of your Applicants</div>
-                                    </div>
+                                Title Goes Here
+                                <div className="font18px font16pxUnder700 font10pxUnder400 primary-white">
+                                    Unlimited evaluations of all your applicants across <div style={{display:"inline-block"}} className="primary-cyan">five functions</div>.
                                 </div>
                             </div>
-                            <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
+                            <Paper className="businessHomeGradientBorder1 paperBoxBusinessHome"
                                 zDepth={2}>
                                 <div style={{textAlign: "center", position: "relative"}}>
+                                    <div className="home-peach paddingTop10px font20px font16pxUnder400">
+                                        Test It Out
+                                    </div>
                                     <img
-                                        src={"/images/businessHome/PaperAirplane" + this.props.png}
+                                        src={"/images/businessHome/PaperAirplane2" + this.props.png}
                                         alt="Paper Airplane Icon"
                                         className="businessHomeBoxIcons"
                                     />
-                                    <div className="primary-pink marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
-                                        STARTER
+                                    <div className="primary-white marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
+                                        First Hire
                                     </div>
-                                    <div style={{height: '80px', lineHeight: '20px'}}>
-                                        <span className="primary-white font30px font24pxUnder400">
-                                            <br/><span style={{display: "inline-block", marginTop:"3px"}}>FREE</span>
-                                            <br/>
-                                            <i className="font12px">for first active position</i>
-                                        </span>
+                                    <div className="home-peach font30px font24pxUnder400">
+                                        FREE
                                     </div>
-                                    <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
-                                    <div className="primary-white font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
-                                        {"Start with one position to see the results. No cost, no risk, no excuses not to kick this off."}
-                                    </div>
+                                    <ul className="primary-white font14px font12pxUnder400">
+                                        <li>
+                                            Select a position to evaluate
+                                        </li>
+                                        <li>
+                                            Invite applicants to the evaluation
+                                        </li>
+                                        <li>
+                                            Review the results
+                                        </li>
+                                        <li>
+                                            Hire the best candidate
+                                        </li>
+                                    </ul>
                                     <button className="button gradient-transition gradient-1-red gradient-2-orange pricingButton primary-white font18px font14pxUnder400" onClick={this.handleOpen}>
                                         Take Off
                                     </button>
                                 </div>
                             </Paper>
                             <div className="under800only" style={{height:"0px"}}><br/></div>
-                            <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
+                            <Paper className="businessHomeGradientBorder2 paperBoxBusinessHome"
                                    zDepth={2}>
                                 <div style={{textAlign: "center", position: "relative"}}>
+                                    <div className="home-blue paddingTop10px font20px font16pxUnder400">
+                                        4 Month Guarantee
+                                    </div>
                                     <img
-                                        src={"/images/businessHome/EnterpriseRocket" + this.props.png}
+                                        src={"/images/businessHome/EnterpriseRocket2" + this.props.png}
                                         alt="Enterprise Rocket Icon"
                                         className="businessHomeBoxIcons"
                                     />
-                                    <div className="primary-pink marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
-                                        PLUS
+                                    <div className="primary-white marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
+                                        Each Additional Hire
                                     </div>
-                                    <div style={{height: '80px', lineHeight: '20px'}}>
-                                        <span className="primary-white font30px font24pxUnder400">
-                                            <i className="font12px" style={{display: "inline-block", marginBottom:"9px"}}>Starting at</i>
-                                            <br/>$79
-                                            <br/>
-                                            <i className="font12px">per active position/month</i>
-                                        </span>
+                                    <div className="primary-white">
+                                        <span className="font30px font24pxUnder400 home-blue">$80</span>
+                                        <span className="font16px font14pxUnder400">&nbsp;/ month</span>
+                                        <div className="font16px font14pxUnder400">
+                                            <span>for up to</span>
+                                            <span className="home-blue">&nbsp;24 months</span>
+                                        </div>
                                     </div>
-                                    <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
-                                    <div className="primary-white font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
-                                        {"Easily scale the number of positions you are evaluating through Moonshot."}
-                                    </div>
+                                    <ul className="primary-white font14px font12pxUnder400" style={{textAlign: "left", width: "95%", margin:"auto"}}>
+                                        <li>
+                                            Monthly payments stop if hire is no longer employed
+                                        </li>
+                                        <li>
+                                            Full refund if hire is no longer employed within 4 months
+                                        </li>
+                                        <li>
+                                            Pay off your balance at any time
+                                        </li>
+                                    </ul>
                                     <button className="button gradient-transition gradient-1-red gradient-2-orange pricingButton primary-white font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                         Blast Off
                                     </button>

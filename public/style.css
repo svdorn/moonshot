@@ -1890,12 +1890,33 @@ button.link {
     padding: 2px 13px;
 }
 
-.businessHomeGradientBorder {
-    padding: 2px;
-    background: linear-gradient(to top left, #ff5d27, #fd0d8b);
+.home-blue {
+    color: #76defe;
 }
-.businessHomeGradientBorder > div {
-    background: var(--primary-black-dark);
+.home-green {
+    color: #7dfed2;
+}
+.home-pink {
+    color: #ff748c;
+}
+.home-peach {
+    color: #ffe09e;
+}
+.businessHomeGradientBorder1 {
+    padding: 2px;
+    background: linear-gradient(to top left, #ff748c, #ffe09e);
+}
+.businessHomeGradientBorder1 > div {
+    background: #262626;
+    height: 100%;
+    width: 100%;
+}
+.businessHomeGradientBorder2 {
+    padding: 2px;
+    background: linear-gradient(to top left, #76defe, #7dfed2);
+}
+.businessHomeGradientBorder2 > div {
+    background: #262626;
     height: 100%;
     width: 100%;
 }
@@ -4676,6 +4697,16 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 342;
         grid-column-start: 1;
         grid-column-end: 9;
+    }
+    #pricingSection > div > div > div > ul {
+        list-style: none;
+    }
+    #pricingSection > div > div > div > ul > li::before {
+        content: "•";
+        color: #7dfed2;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em
     }
     .paperBoxBusinessHome {
         margin-left: 0;
