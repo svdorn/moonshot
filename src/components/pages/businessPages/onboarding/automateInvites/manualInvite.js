@@ -37,10 +37,16 @@ class ManualInvite extends Component {
                 className="manual-add-example"
             />
         )
+        const frame3 = (
+            <img
+                src={`/images/404${this.props.png}`}
+                className="manual-add-example"
+            />
+        )
         return (
             <div className="manual-invite">
                 <Carousel
-                    frames={[frame1, frame2]}
+                    frames={[frame1, frame2, frame3]}
                 />
                 { this.props.previousNextArea }
             </div>
