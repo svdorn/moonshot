@@ -12,7 +12,6 @@ class LanguagePreference extends Component {
         super(props);
 
         this.state = {
-            suggestion: props.currentUser.onboarding.integrationSuggestion ? props.currentUser.onboarding.integrationSuggestion : "",
             stepFinishedInPast: false,
             // the language that the user selected
             selectedBox: undefined,
@@ -98,6 +97,7 @@ class LanguagePreference extends Component {
         let newArgs = {};
         newArgs[`${type}Custom`] = value;
         this.setState(newArgs);
+
         // // if there is a non-empty value in the text box and the button is not clickable ...
         // if (value && !this.props.automationStep.nextCallable) {
         //     // make the Next button clickable
@@ -113,7 +113,26 @@ class LanguagePreference extends Component {
 
 
     // select a box with a language
-    selectBox(selectedBox) { this.setState({ selectedBox }); }
+    selectBox(selectedBox) {
+        this.setState({ selectedBox });
+        // if not a custom box, mark the user as able to go to the next sub-step
+        if (!selectedBox.includes("Custom")) {
+            if (!this.props.automationStep.nextCallable) {
+                this.props.changeAutomateInvites({ nextCallable: true });
+            }
+        }
+        // if it is custom ...
+        else {
+            // get the custom response
+            const response = selectedBox === "clientCustom" ? this.state.clientCustom : this.state.serverCustom;
+            // whether there is a response
+            const nextCallable = truthy(response);
+            // if redux state doesn't agree with our nextCallable, change it to match
+            if (this.props.automationStep.nextCallable !== nextCallable) {
+                this.props.changeAutomateInvites({ nextCallable });
+            }
+        }
+    }
 
 
     // create selectable boxes with language names

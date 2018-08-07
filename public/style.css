@@ -393,7 +393,7 @@ form > h1 {
     margin: 10px;
 }
 .automate-invites .language-preference .language-box.selected {
-    border: 1px solid var(--primary-cyan);
+    border: 2px solid var(--primary-cyan);
     background-color: var(--primary-black-light);
 }
 
