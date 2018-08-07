@@ -20,31 +20,39 @@ class WhichATS extends Component {
 
 
     componentWillMount() {
+        const self = this;
         const currentUser = this.props.currentUser;
         // user can move on if they have given an integration suggestion
         const nextCallable = truthy(currentUser.onboarding) && truthy(currentUser.onboarding.suggestion);
-        this.props.changeAutomateInvites({
+        self.props.changeAutomateInvites({
             header: "Suggest Another Method",
             nextPage: "Manual Invite",
             nextCallable,
-            lastSubStep: false
+            lastSubStep: false,
+            // add in extra function to submit the suggestion when Next clicked
+            extraNextFunction: submitSuggestion.bind(self),
+            extraNextFunctionPage: "Suggest Method"
         });
     }
 
 
     submitSuggestion() {
-        axios.post("/api/accountAdmin/integrationSuggestion", {
-            suggestion: this.state.suggestion,
-            userId: this.props.currentUser._id,
-            verificationToken: this.props.currentUser.verificationToken
-        })
-        .then(response => {
-            this.props.updateUser(response.data.user);
-            this.props.changeAutomateInvites({ nextCallable: true });
-        })
-        .catch(error => {
-            this.props.addNotification("Error, refresh and try again.", "error");
-        });
+        // if there is a suggestion and it's different than what was suggested before
+        if (this.state.suggestion && this.props.currentUser.onboarding.integrationSuggestion !== this.state.suggestion) {
+            // save it
+            axios.post("/api/accountAdmin/integrationSuggestion", {
+                suggestion: this.state.suggestion,
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken
+            })
+            .then(response => {
+                this.props.updateUser(response.data.user);
+            })
+            .catch(error => {
+                console.log("error: ", error);
+                this.props.addNotification("Error, please refresh.", "error");
+            });
+        }
     }
 
 

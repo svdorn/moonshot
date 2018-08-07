@@ -47,7 +47,9 @@ const usersSchema = mongoose.Schema({
         // the furthest step the employer has gotten to
         furthestStep: Number,
         // the ats the user said they use during onboarding
-        ats: String
+        ats: String,
+        // suggestion for candidate application integration method
+        integrationSuggestion: String
     },
     // info we need to keep to access users on Intercom
     intercom: {
