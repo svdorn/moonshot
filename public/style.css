@@ -328,7 +328,9 @@ form > h1 {
     font-style: italic;
 }
 
-
+.blur3px {
+    filter: blur(3px);
+}
 
 .automate-invites {
     height: 100%;
@@ -4230,6 +4232,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .onboarding-progress-container.default {
     width: 100px;
     height: 10px;
+}
+
+.onboarding-progress-container.creatingEval {
+    width: 85%;
+    max-width: 800px;
+    height: 15px;
 }
 
 .onboarding-progress-container > div {
