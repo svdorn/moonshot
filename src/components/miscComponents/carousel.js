@@ -42,11 +42,16 @@ class Carousel extends Component {
 
 
     content() {
+        const animationStyle = this.state.animationClass ? {
+            WebkitTransition: "all 0.5s ease",
+            MsTransition: "all 0.5s ease",
+            transition: "all 0.5s ease"
+        } : {};
         return (
             <div className={`content${this.state.animationClass}`}>
-                <div key="previous">{ this.previousFrame() }</div>
-                <div key="current">{ this.props.frames[this.state.frameIndex] }</div>
-                <div key="next">{ this.nextFrame() }</div>
+                <div key="previous" style={animationStyle}>{ this.previousFrame() }</div>
+                <div key="current" style={animationStyle}>{ this.props.frames[this.state.frameIndex] }</div>
+                <div key="next" style={animationStyle}>{ this.nextFrame() }</div>
             </div>
         );
     }
