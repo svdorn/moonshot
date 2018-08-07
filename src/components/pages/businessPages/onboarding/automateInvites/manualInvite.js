@@ -18,7 +18,8 @@ class ManualInvite extends Component {
     componentWillMount() {
         this.props.changeAutomateInvites({
             header: "How to Invite Applicants",
-            lastSubStep: true
+            lastSubStep: true,
+            nextPage: null
         });
     }
 

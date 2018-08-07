@@ -12,7 +12,8 @@ class SelectMethod extends Component {
     componentWillMount() {
         this.props.changeAutomateInvites({
             header: "Automate Applicant Invites",
-            lastSubStep: false
+            lastSubStep: false,
+            nextPage: null
         });
     }
 

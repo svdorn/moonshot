@@ -259,16 +259,16 @@ export function usersReducers(state = initialState, action) {
             // get the arguments we could receive
             const { page, header, goBack, nextPage, nextCallable, lastSubStep } = action.args;
             // if the header should be changed, do so
-            if (header) { automateInvites.header = header; }
+            if (header !== undefined) { automateInvites.header = header; }
             // if the next page to be navigated to should be changed, do so
-            if (nextPage) { automateInvites.nextPage = nextPage; }
+            if (nextPage !== undefined) { automateInvites.nextPage = nextPage; }
             // if this should be marked as the last page in a sequence, mark it
             // should always be able to move on to next STEP if on the last SUB STEP
             if (typeof lastSubStep === "boolean") { automateInvites.lastSubStep = lastSubStep; }
             // if the ability to move to the next step should be changed, change it
             if (typeof nextCallable === "boolean") { automateInvites.nextCallable = nextCallable; }
             // if there is a page to be navigated to
-            if (page) {
+            if (page !== undefined) {
                 // make sure there is a page stack
                 if (!automateInvites.pageStack) {
                     // if not, create one
@@ -289,7 +289,7 @@ export function usersReducers(state = initialState, action) {
                 }
             }
             // if we should be navigating back to a previous page
-            else if (goBack) {
+            else if (goBack !== undefined) {
                 // if the page stack exists ...
                 if (automateInvites.pageStack && automateInvites.pageStack.size() > 0) {
                     // remove the top of the page stack
