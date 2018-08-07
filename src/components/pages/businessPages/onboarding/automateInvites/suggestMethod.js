@@ -67,8 +67,7 @@ class SuggestMethod extends Component {
                     Suggest another integration to automate applicant invites or a method for us to collect your applicants{"'"}s email addresses.
                 </div>
                 <div className="buttonArea font18px font14pxUnder900" style={{justifyContent:"center"}}>
-                    <input
-                        type="textarea"
+                    <textarea
                         name="suggestion"
                         placeholder="Type your suggestion here"
                         className="blackInput"

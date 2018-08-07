@@ -17,7 +17,7 @@ class Error403 extends Component {
             <div className="fillScreen formContainer" style={{textAlign:"center"}}>
                 <div className="form lightBlackForm noBlur">
                     <form>
-                        {"We're sure you're really great, but this page requires Supreme Overlord Status."}
+                        {"We're sure you're really great, but this page requires some extra permissions."}
                         <p  className="clickable primary-cyan underline"
                             onClick={() => goTo(route)}>
                             {"Bring me home!"}
