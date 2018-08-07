@@ -563,42 +563,35 @@ class BusinessHome extends Component {
 
                         <div>
                             <div className="center">
-                                <div className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400 center primary-purple-light statisticsHeader">
-                                    Candidate Predictions
+                                <div className="font30px font28pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400 center primary-cyan statisticsHeader">
+                                    Predictive Analytics Improve Hiring Results
                                 </div>
                                 <div>
-                                    <div style={bottomListItem}>
-                                        <img src={"/images/businessHome/Diamond" + this.props.png}
-                                             alt="Diamond Icon"
-                                             className="forBusinessIcon"
-                                             style={{marginLeft: '10px'}}/>
-                                         <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
-                                             Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
-                                         </div>
-                                    </div>
-                                    <div style={bottomListItem}>
-                                         <img src={"/images/businessHome/Hourglass" + this.props.png}
-                                              alt="Hourglass Icon"
-                                              className="forBusinessIcon"
-                                              style={{marginRight: '10px'}}/>
-                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
-                                            Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
+                                    <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
+                                        zDepth={2}>
+                                        <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
+                                            <div className="primary-white font20px font18pxUnder700 font16pxUnder500">Improve Your Efficiency</div>
+                                            <div className="secondary-gray font16px font14pxUnder700 marginTop10px">Decrease your cost to hire. Spend less time sorting through resumes, and more time looking at the cadidates that matter.</div>
+                                            <div className="primary-cyan font18px font16pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
                                         </div>
-                                    </div>
-                                    <div style={bottomListItem}>
-                                        <img src={"/images/businessHome/Turnover" + this.props.png}
-                                             alt="Turnover Icon"
-                                             className="forBusinessIcon"/>
-                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
-                                            Up to 70% decrease<div className="above1000only noHeight"><br/></div> in employee turnover
+                                    </Paper>
+                                    <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
+                                        zDepth={2}>
+                                        <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
+                                            <div className="primary-white font20px font18pxUnder700 font16pxUnder500">Enhance Your Culture</div>
+                                            <div className="secondary-gray font16px font14pxUnder700 marginTop10px">Find candidates that not only fit your company, but bring something new and diverse to the table.</div>
+                                            <div className="primary-cyan font18px font16pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
                                         </div>
-                                    </div>
+                                    </Paper>
+                                    <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
+                                        zDepth={2}>
+                                        <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
+                                            <div className="primary-white font20px font18pxUnder700 font16pxUnder500">Hire Better Talent</div>
+                                            <div className="secondary-gray font16px font14pxUnder700 marginTop10px">Hire candidates that won&#39;t just be top performers, but will continue to improve and grow alongside your company.</div>
+                                            <div className="primary-cyan font18px font16pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
+                                        </div>
+                                    </Paper>
                                 </div>
-                            </div>
-                            <div className="center" style={{marginTop: "35px"}}>
-                                <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
-                                    Try for Free
-                                </button>
                             </div>
                         </div>
                     </section>

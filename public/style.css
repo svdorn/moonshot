@@ -1075,7 +1075,7 @@ form > h1 {
 }
 .statisticsHeader {
     padding: 0 16px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     height: 80px;
 }
 
@@ -1876,6 +1876,23 @@ button.link {
     display: inline-block;
     margin: 0 25px 40px;
     vertical-align: top;
+}
+
+.paperBoxPredictiveStats {
+    height: 210px;
+    width: 280px;
+    display: inline-block;
+    margin: 0 40px 40px;
+    vertical-align: top;
+}
+.gradientBorderPredictiveStats {
+    padding: 2px;
+    background: linear-gradient(to top left, var(--primary-white) , var(--primary-cyan));
+}
+.gradientBorderPredictiveStats > div {
+    background: var(--primary-black-dark);
+    height: 100%;
+    width: 100%;
 }
 
 .gradientBorderPurple {
