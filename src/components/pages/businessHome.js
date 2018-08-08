@@ -281,8 +281,8 @@ class BusinessHome extends Component {
                         />
                     </div>
                     <div>
-                        <div className="bold">{ feature.title }</div>
-                        <div className="secondary-gray">{ feature.text1 }<br/>{ feature.text2 }</div>
+                        <div className="bold font16pxUnder800 font14pxUnder700">{ feature.title }</div>
+                        <div className="secondary-gray font14pxUnder800 font12pxUnder700">{ feature.text1 }<br/>{ feature.text2 }</div>
                     </div>
                 </div>
             )
@@ -292,12 +292,10 @@ class BusinessHome extends Component {
         featureBoxes.unshift(
             <div
                 key="featuresHeader"
-                className="primary-pink feature-box left-align font26px"
+                className="primary-peach feature-box left-align font26px font22pxUnder800 font18pxUnder700"
                 style={{lineHeight: "1.3"}}
             >
-                We learn from each hire<br/>
-                so that we can make the<br/>
-                next one even better.
+                We learn from each hire<br/> so that we can make the next one even better.
             </div>
         )
 

@@ -917,9 +917,6 @@ form > h1 {
     position: relative;
     z-index: 1;
 }
-.learnFromHiresIcons {
-    height: 60px;
-}
 
 #moonshotProcess {
     margin-top: 150px;
@@ -4786,6 +4783,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-right: 0;
     }
 
+    #learnFromHires .feature-box {
+        width: 300px;
+        margin: 10px 5px;
+    }
+    #learnFromHires .feature-box img {
+        height: 54px;
+    }
+
 
     .font40pxUnder800 { font-size: 40px; }
     .font38pxUnder800 { font-size: 38px; }
@@ -5049,6 +5054,20 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .partnerLogo {
         height: 30px;
         margin: 5px;
+    }
+
+    #learnFromHires .feature-box {
+        width: 200px;
+    }
+    #learnFromHires .feature-box > div:first-child {
+        width: 100px;
+        text-align: center;
+    }
+    #learnFromHires .feature-box > div:last-child {
+        width: 200px;
+    }
+    #learnFromHires .feature-box img {
+        height: 44px;
     }
 
     /* hide all but the first two rectangles of the first container */
