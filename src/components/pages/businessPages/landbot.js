@@ -20,8 +20,7 @@ class Landbot extends Component {
     // add the script to connect the landbot
     componentWillMount() {
         if (this.props.location.query && this.props.location.query.position) {
-            let position = this.props.location.query.position.replace(/%20/g, " ");
-            this.setState({position});
+            this.setState({position: this.props.location.query.position});
         }
         const self = this;
         // create a script
@@ -114,8 +113,9 @@ class Landbot extends Component {
     render() {
         let landbotUrl = "https://landbot.io/u/H-65209-HM84ZVFHD0CU5T9Z/index.html";
         if (this.state.position) {
-            landbotUrl += "?position=" + this.state.position;
+            landbotUrl += "?position=" + encodeURIComponent(this.state.position.trim());
         }
+        console.log("landbotUrl: ", landbotUrl);
         return (
             <div className="landbot-container">
                 <iframe
