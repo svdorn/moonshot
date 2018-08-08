@@ -91,7 +91,7 @@ class VerifyEmail extends Component {
                         </div>
                     </div>
                     { this.state.loading ? <div className="center"><CircularProgress /></div> : null }
-                    <div className="previous-next-area primary-white font18px center marginTop20px">
+                    <div className="previous-next-area primary-white font16px center marginTop20px">
                         <div
                             className="previous noselect clickable underline inlineBlock"
                             onClick={this.props.previous}

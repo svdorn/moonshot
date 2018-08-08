@@ -348,12 +348,15 @@ form > h1 {
 .automate-invites .method-boxes {
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .automate-invites .method-box {
     display: flex;
     max-width: 28%;
+    min-width: 100px;
     padding: 10px;
+    margin: 5px;
     border: 1px solid white;
     border-radius: 4px;
     justify-content: center;
@@ -1085,6 +1088,15 @@ form > h1 {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+
+#employerOnboarding > .onboardingRight > .content > div > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+
 
 /* make so that the Previous and Next buttons aren't right next to each other */
 .previous-next-area > div:first-child {

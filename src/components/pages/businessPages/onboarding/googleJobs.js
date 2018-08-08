@@ -44,7 +44,7 @@ class GoogleJobs extends Component {
         const jobs = this.state.jobs.map(job => {
             key++;
             return (
-                <div className="font16px font14pxUnder900 marginTop10px">
+                <div className="font16px font14pxUnder900 marginTop10px" key={key}>
                     <input className="blackInput googleJobs getStarted" type="text" placeholder="Paste Job Description URL here (Optional)" name="job"
                     value={job} onChange={(e) => this.onChange(e, key)}/>
                     {this.state.jobs.length === key ?
@@ -59,28 +59,30 @@ class GoogleJobs extends Component {
             )
         })
         return (
-            <div className="primary-white center">
-                <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"0 auto 10px", minWidth: "200px", textAlign: "left"}}>
-                    We&#39;ve integrated with Google Jobs so you don&#39;t have to spend the development time.
-                </div>
-                <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
-                    Paste the URL of your job description for your selected position to generate exposure to applicants.
-                </div>
-                <div className="center marginTop20px">
-                    {jobs}
-                </div>
-                <div className="previous-next-area primary-white font18px center marginTop20px marginBottom30px">
-                    <div
-                        className="previous noselect clickable underline inlineBlock"
-                        onClick={this.props.previous}
-                    >
-                        Previous
+            <div>
+                <div className="primary-white center">
+                    <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"0 auto 10px", minWidth: "200px", textAlign: "left"}}>
+                        We&#39;ve integrated with Google Jobs so you don&#39;t have to spend the development time.
                     </div>
-                    <div
-                        className="button noselect round-4px background-primary-cyan inlineBlock"
-                        onClick={this.handleNext.bind(this)}
-                    >
-                        Next
+                    <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
+                        Paste the URL of your job description for your selected position to generate exposure to applicants.
+                    </div>
+                    <div className="center marginTop20px">
+                        {jobs}
+                    </div>
+                    <div className="previous-next-area primary-white font16px center marginTop20px marginBottom30px">
+                        <div
+                            className="previous noselect clickable underline inlineBlock"
+                            onClick={this.props.previous}
+                        >
+                            Previous
+                        </div>
+                        <div
+                            className="button noselect round-4px background-primary-cyan inlineBlock"
+                            onClick={this.handleNext.bind(this)}
+                        >
+                            Next
+                        </div>
                     </div>
                 </div>
             </div>

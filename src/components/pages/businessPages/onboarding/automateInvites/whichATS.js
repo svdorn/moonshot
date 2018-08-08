@@ -57,7 +57,7 @@ class WhichATS extends Component {
                 <div>
                     Let us know and we{"'"}ll see if we can set up an integration.
                 </div>
-                <div className="buttonArea font18px font14pxUnder900" style={{justifyContent:"center"}}>
+                <div className="buttonArea font16px font14pxUnder900" style={{justifyContent:"center"}}>
                     <input
                         type="text"
                         name="email"

@@ -133,7 +133,7 @@ class AutomateInvites extends Component {
 
     createPreviousNextArea() {
         return (
-            <div className="previous-next-area primary-white font18px center marginTop20px">
+            <div className="previous-next-area primary-white font16px center marginTop20px">
                 { this.previousButton() }
                 { this.nextButton() }
             </div>

@@ -99,7 +99,7 @@ class Onboarding extends Component {
         return (
             <div className="congratulations primary-white center">
                 <div>
-                    <div className="font18px text-left">
+                    <div className="font16px text-left">
                         You made it! The launch date of your first evaluation
                         takes a few days from the time you activate your account
                         to go live. We{"'"}ll let you know the second it{"'"}s
@@ -118,7 +118,7 @@ class Onboarding extends Component {
                     >
                         Evaluations
                     </div>
-                    <div className="previous-next-area font18px center">
+                    <div className="previous-next-area font16px center">
                         <div
                             className="previous noselect clickable underline inlineBlock"
                             onClick={this.handlePrevious.bind(this)}
@@ -247,24 +247,26 @@ class Onboarding extends Component {
                     stepName = "Watch Tutorial";
                     body = (
                         <div>
-                            <YouTube
-                                videoId="m4_M9onXmpY"
-                                opts={opts}
-                                onReady={this._onReady}
-                                onEnd={this._onEnd}
-                            />
-                            <div className="previous-next-area primary-white font18px center marginTop20px marginBottom20px">
-                                <div
-                                    className="previous noselect clickable underline inlineBlock"
-                                    onClick={this.handlePrevious.bind(this)}
-                                >
-                                    Previous
-                                </div>
-                                <div
-                                    className="button noselect round-4px background-primary-cyan inlineBlock"
-                                    onClick={this.handleNext.bind(this)}
-                                >
-                                    Next
+                            <div>
+                                <YouTube
+                                    videoId="m4_M9onXmpY"
+                                    opts={opts}
+                                    onReady={this._onReady}
+                                    onEnd={this._onEnd}
+                                />
+                                <div className="previous-next-area primary-white font16px center marginTop20px marginBottom20px">
+                                    <div
+                                        className="previous noselect clickable underline inlineBlock"
+                                        onClick={this.handlePrevious.bind(this)}
+                                    >
+                                        Previous
+                                    </div>
+                                    <div
+                                        className="button noselect round-4px background-primary-cyan inlineBlock"
+                                        onClick={this.handleNext.bind(this)}
+                                    >
+                                        Next
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -341,7 +343,7 @@ class Onboarding extends Component {
                             </div>
                             <div
                                 className="primary-cyan font26px font24pxUnder700 font20pxUnder500"
-                                style={{margin: "5px auto 0"}}
+                                style={{margin: "5px auto 0", lineHeight: "1.2"}}
                             >
                                 {stepName}
                             </div>

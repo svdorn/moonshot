@@ -13,13 +13,13 @@ class InviteAdmins extends Component {
         return (
             <div className="invite-admins primary-white center">
                 <div>
-                    <div className="font18px">
+                    <div className="font16px">
                         Admins are able to manage employee and candidate accounts
                         and can see candidate evaluation results. Invite any
                         Hiring Managers, Recruiters, or Executives that are
                         involved in your hiring process.
                     </div>
-                    <div className="font18px primary-cyan position-titles">
+                    <div className="font16px primary-cyan position-titles">
                         <div>Recruiters</div>
                         <div>Hiring Managers</div>
                         <div>Executives</div>
@@ -34,7 +34,7 @@ class InviteAdmins extends Component {
                     <div className="font14px">
                         You can also invite admins by going to Account&nbsp;&nbsp;>&nbsp;&nbsp;Add User&nbsp;&nbsp;>&nbsp;&nbsp;Admin.
                     </div>
-                    <div className="previous-next-area font18px center">
+                    <div className="previous-next-area font16px center">
                         <div
                             className="previous noselect clickable underline inlineBlock"
                             onClick={this.props.previous}

@@ -51,44 +51,46 @@ class InviteCadence extends Component {
             additionalTwoClassName = "inviteCadenceGradient";
         }
         return (
-            <div className="primary-white center">
-                <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"0 auto 10px", minWidth: "200px", textAlign: "left"}}>
-                    In preparation for any integration you may create, select
-                    one of the options below to automate invites to applicants
-                    after they have completed your application.
-                </div>
-                <div className="marginTop30px">
-                    <div className="marginTop10px primary-cyan font20px inline">
-                        <Paper className={"inviteCadenceGradientBorder paperBoxInviteCadence clickableNoUnderline " + additionalOneClassName}
-                               zDepth={2}
-                               onClick={() => this.handleClick(1)}>
-                            <div style={{textAlign: "center", position: "relative", paddingTop: "25px"}} className="secondary-gray font16px">
-                                Invite applicants to complete the evaluation <div className="primary-cyan font20px">1 day</div> after they have applied.
-                            </div>
-                        </Paper>
+            <div>
+                <div className="primary-white center">
+                    <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"0 auto 10px", minWidth: "200px", textAlign: "left"}}>
+                        In preparation for any integration you may create, select
+                        one of the options below to automate invites to applicants
+                        after they have completed your application.
                     </div>
-                    <div className="marginTop20px inline">
-                        <Paper className={"inviteCadenceGradientBorder paperBoxInviteCadence clickableNoUnderline " + additionalTwoClassName}
-                               zDepth={2}
-                               onClick={() => this.handleClick(2)}>
-                            <div style={{textAlign: "center", position: "relative", paddingTop: "25px"}} className="secondary-gray font16px">
-                                Invite applicants to complete the evaluation <div className="primary-cyan font20px">2 days</div> after they have applied.
-                            </div>
-                        </Paper>
+                    <div className="marginTop30px">
+                        <div className="marginTop10px primary-cyan font20px inline">
+                            <Paper className={"inviteCadenceGradientBorder paperBoxInviteCadence clickableNoUnderline " + additionalOneClassName}
+                                   zDepth={2}
+                                   onClick={() => this.handleClick(1)}>
+                                <div style={{textAlign: "center", position: "relative", paddingTop: "25px"}} className="secondary-gray font16px">
+                                    Invite applicants to complete the evaluation <div className="primary-cyan font20px">1 day</div> after they have applied.
+                                </div>
+                            </Paper>
+                        </div>
+                        <div className="marginTop20px inline">
+                            <Paper className={"inviteCadenceGradientBorder paperBoxInviteCadence clickableNoUnderline " + additionalTwoClassName}
+                                   zDepth={2}
+                                   onClick={() => this.handleClick(2)}>
+                                <div style={{textAlign: "center", position: "relative", paddingTop: "25px"}} className="secondary-gray font16px">
+                                    Invite applicants to complete the evaluation <div className="primary-cyan font20px">2 days</div> after they have applied.
+                                </div>
+                            </Paper>
+                        </div>
                     </div>
-                </div>
-                <div className="previous-next-area primary-white font18px center marginTop20px marginBottom30px">
-                    <div
-                        className="previous noselect clickable underline inlineBlock"
-                        onClick={this.props.previous}
-                    >
-                        Previous
-                    </div>
-                    <div
-                        className={`button noselect round-4px inlineBlock ${this.state.selected ? "background-primary-cyan" : "disabled background-primary-black-light"}`}
-                        onClick={this.next}
-                    >
-                        Next
+                    <div className="previous-next-area primary-white font16px center marginTop20px marginBottom30px">
+                        <div
+                            className="previous noselect clickable underline inlineBlock"
+                            onClick={this.props.previous}
+                        >
+                            Previous
+                        </div>
+                        <div
+                            className={`button noselect round-4px inlineBlock ${this.state.selected ? "background-primary-cyan" : "disabled background-primary-black-light"}`}
+                            onClick={this.next}
+                        >
+                            Next
+                        </div>
                     </div>
                 </div>
             </div>
