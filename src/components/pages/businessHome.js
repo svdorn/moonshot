@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import { closeNotification, demoEmail, dialogEmail, dialogEmailScreen2, dialogEmailScreen3, dialogEmailScreen4 } from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
@@ -69,6 +71,8 @@ class BusinessHome extends Component {
             demoScreen: 1,
             dialogScreen: 1,
             position: '',
+            pricing: "24 Months",
+            price: 80,
             // initially don't show the rectangles in case the user's browser is old
             showRectangles: false,
             agreeingToTerms: false,
@@ -225,6 +229,61 @@ class BusinessHome extends Component {
         if (dialogScreen > 0 && dialogScreen < 3) {
             this.setState({dialogScreen})
         }
+    }
+
+    // create the dropdown for a candidate's hiring stage
+    makePricingDropdown(pricingStage) {
+        const stageNames = ["24 Months", "18 Months", "12 Months", "6 Months"];
+
+        // create the stage name menu items
+        const stages = stageNames.map(stage => {
+            return (
+                <MenuItem
+                    value={stage}
+                    key={`pricingStage${stage}`}
+                >
+                    { stage }
+                </MenuItem>
+            )
+        });
+
+        return (
+            <Select
+                disableUnderline={true}
+                classes={{
+                    root: "selectRootBlue myCandidatesSelect underline",
+                    icon: "selectIconWhiteImportant"
+                }}
+                value={pricingStage}
+                onChange={this.handleChangePricingStage(pricingStage)}
+                key={`pricingStage`}
+            >
+                { stages }
+            </Select>
+        );
+    }
+
+    // handle a click on a hiring stage
+    handleChangePricingStage = pricing => event => {
+        const pricingStage = event.target.value;
+        let price = 80;
+        switch (pricingStage) {
+            case "24 Months":
+                price = 80;
+                break;
+            case "18 Months":
+                price = 105;
+                break;
+            case "12 Months":
+                price = 150;
+                break;
+            case "6 Months":
+                price = 300;
+                break;
+            default:
+                break;
+        }
+        this.setState({pricing: pricingStage, price});
     }
 
 
@@ -753,6 +812,11 @@ class BusinessHome extends Component {
                             </div>
                             <div className="businessHomeGradientBorder1 paperBoxBusinessHome">
                                 <div style={{textAlign: "center", position: "relative"}}>
+                                    <img
+                                        src={"/images/businessHome/Flourish1" + this.props.png}
+                                        alt="Flourish Icon"
+                                        className="flourish-icon"
+                                    />
                                     <div className="home-peach paddingTop10px font20px font16pxUnder400">
                                         Test It Out
                                     </div>
@@ -781,16 +845,18 @@ class BusinessHome extends Component {
                                             Hire the best candidate
                                         </li>
                                     </ul>
-                                    <img
-                                        src={"/images/businessHome/Flourish1" + this.props.png}
-                                        alt="Flourish Icon"
-                                        className="flourish-icon"
-                                    />
+
                                 </div>
                             </div>
                             <div className="under800only" style={{height:"0px"}}><br/></div>
                             <div className="businessHomeGradientBorder2 paperBoxBusinessHome">
                                 <div style={{textAlign: "center", position: "relative"}}>
+                                    <img
+                                        src={"/images/businessHome/Flourish2" + this.props.png}
+                                        className="flourish-icon"
+                                        alt="Flourish Icon"
+                                    />
+
                                     <div className="home-blue paddingTop10px font20px font16pxUnder400">
                                         4 Month Guarantee
                                     </div>
@@ -803,11 +869,11 @@ class BusinessHome extends Component {
                                         Each Additional Hire
                                     </div>
                                     <div className="primary-white">
-                                        <span className="font30px font24pxUnder400 home-blue">$80</span>
+                                        <span className="font30px font24pxUnder400 home-blue">${this.state.price}</span>
                                         <span className="font16px font14pxUnder400">&nbsp;/ month</span>
                                         <div className="font16px font14pxUnder400">
-                                            <span>for up to</span>
-                                            <span className="home-blue">&nbsp;24 months</span>
+                                            <span>for up to&nbsp;</span>
+                                            {this.makePricingDropdown(this.state.pricing)}
                                         </div>
                                     </div>
                                     <ul className="primary-white font14px font12pxUnder400" style={{textAlign: "left", width: "95%", margin:"auto"}}>
@@ -822,11 +888,6 @@ class BusinessHome extends Component {
                                         </li>
                                     </ul>
 
-                                    <img
-                                        src={"/images/businessHome/Flourish2" + this.props.png}
-                                        className="flourish-icon"
-                                        alt="Flourish Icon"
-                                    />
 
                                 </div>
                             </div>

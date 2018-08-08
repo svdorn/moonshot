@@ -2734,6 +2734,7 @@ button.link {
 }
 
 .selectRootWhite { color: white; }
+.selectRootBlue { color: #76defe; }
 .myCandidates .position-select-root { max-width: 180px; }
 .selectIconWhiteImportant { color: white !important; }
 .selectIconGrayImportant { color: #5E5E5E !important; }
