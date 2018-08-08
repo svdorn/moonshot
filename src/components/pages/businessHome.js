@@ -442,7 +442,7 @@ class BusinessHome extends Component {
                                 <div className="buttonArea font18px font14pxUnder900">
                                     <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot")}>
+                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot?position=" + this.state.position)}>
                                         Try for Free
                                     </div>
                                 </div>
