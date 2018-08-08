@@ -302,7 +302,6 @@ class Menu extends Component {
             if (pathname === "/") {
                 menuOptions = [
                     {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                    {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
                     {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
                     {optionType: "separator"},
                     {optionType: "url", title: "Log In", url: "/login"},
@@ -311,7 +310,6 @@ class Menu extends Component {
             } else {
                 menuOptions = [
                     {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                    {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
                     {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
                     {optionType: "separator"},
                     {optionType: "url", title: "Log In", url: "/login"},
