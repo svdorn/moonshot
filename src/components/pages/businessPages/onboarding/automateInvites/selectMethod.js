@@ -18,16 +18,6 @@ class SelectMethod extends Component {
 
     // when the user clicks the box identifying which integration type they want to do
     boxClick(page) {
-        // duplicate 'this' to maintain consistent 'this'
-        const self = this;
-        // // add function to get back to this page
-        // const goBackFunction = () => {
-        //     // mark method as -1 as that indicates that it should be marked as undefined
-        //     self.props.changeAutomateInvites({ method: -1 });
-        // }
-        // // update the redux state to go to the next step
-        // this.props.changeAutomateInvites({ method, goBackFunction });
-
         // add the page corresponding to the button pressed to the page stack
         this.props.changeAutomateInvites({ page });
     }
@@ -65,7 +55,7 @@ class SelectMethod extends Component {
 
         return (
             <div>
-                <div style={{textAlign: "left", marginBottom: "10px"}}>
+                <div style={{textAlign: "left", width: "80%", minWidth: "200px", margin: "0 auto 10px"}}>
                     We are actively creating integrations to automate applicant
                     invites and save you hours of manual entry. Select what
                     integration would be most valuable to you.

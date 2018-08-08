@@ -39,7 +39,7 @@ class ManualInvite extends Component {
         )
         return (
             <div className="manual-invite">
-                <div style={{textAlign: "left", marginBottom: "20px"}}>
+                <div  style={{textAlign: "left", width: "80%", minWidth: "200px", margin: "0 auto 20px"}}>
                     We will update you with options for integrations. You can
                     always manually invite candidates as seen below.
                 </div>
