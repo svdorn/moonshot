@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
 import {signout, closeNotification, endOnboarding, openAddUserModal} from "../actions/usersActions";
+import { isValidEmail, goTo } from "../miscFunctions";
 import {axios} from 'axios';
 
 const styles = {
@@ -74,28 +75,28 @@ class Menu extends Component {
 
                 // always sign out when sign out clicked
                 this.props.signout();
-                this.goTo("/");
+                goTo("/");
                 break;
             case "Profile":
                 if (currentUser) {
                     // if user is employer, go to business profile
                     if (currentUser.userType === "manager" || currentUser.userType === "employee" || currentUser.userType === "accountAdmin") {
-                        this.goTo("/");
+                        goTo("/");
                     }
                     // otherwise go to normal profile
                     else {
-                        this.goTo("/profile");
+                        goTo("/profile");
                     }
                 }
                 break;
             case "Settings":
-                this.goTo("/settings");
+                goTo("/settings");
                 break;
             case "Add User":
                 this.props.openAddUserModal();
                 break;
             case "Billing":
-                this.goTo("/billing");
+                goTo("/billing");
                 break;
             default:
                 break;
@@ -110,7 +111,7 @@ class Menu extends Component {
 
     selectAndGoTo(route, value) {
         this.setState({dropDownSelected: value});
-        this.goTo(route);
+        goTo(route);
     }
 
     signOut() {
@@ -119,22 +120,12 @@ class Menu extends Component {
             this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
         }
         this.props.signout();
-        this.goTo('/');
+        goTo('/');
     }
-
-    goTo(route) {
-        // closes any notification
-        this.props.closeNotification();
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
 
     handleAnchorClick(anchor, wantedPath) {
         if (this.props.location.pathname != wantedPath) {
-            this.goTo(wantedPath);
+            goTo(wantedPath);
         }
         setTimeout(() => {
             const element = document.getElementById(anchor);
@@ -274,7 +265,7 @@ class Menu extends Component {
                                 className="clickable moonshotMenuLogo"
                                 id="moonshotLogo"
                                 src={moonshotLogo}
-                                onClick={() => this.goTo(homeUrl)}
+                                onClick={() => goTo(homeUrl)}
                             />
                         </ToolbarGroup>
                     </Toolbar>
@@ -397,10 +388,10 @@ class Menu extends Component {
                         optionClass = selectedMenuItemClass;
                     }
                     desktopMenu.push(
-                        <p key={option.title + " desktop"} className={optionClass} onClick={() => self.goTo(option.url)}>{option.title}</p>
+                        <p key={option.title + " desktop"} className={optionClass} onClick={() => goTo(option.url)}>{option.title}</p>
                     );
                     mobileMenu.push(
-                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.goTo(option.url)}/>
+                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => goTo(option.url)}/>
                     );
                     break;
                 case "anchor":
@@ -519,7 +510,7 @@ class Menu extends Component {
         // if the logo is a link, make clicking it go home and make it look clickable
         if (logoIsLink) {
             logoClassName = "clickable moonshotMenuLogo";
-            logoClickAction = () => this.goTo("/");
+            logoClickAction = () => goTo("/");
         }
         let moonshotLogoHtml = (
             <img

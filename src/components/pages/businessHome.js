@@ -389,20 +389,20 @@ class BusinessHome extends Component {
             </form>
         );
 
-        const dialog = (
-            <Dialog
-                actions={actions}
-                modal={false}
-                open={this.state.open}
-                onRequestClose={this.handleClose}
-                autoScrollBodyContent={true}
-                paperClassName={dialogDemoClass}
-                contentClassName="center"
-                overlayClassName="dialogOverlay"
-            >
-                {dialogBody}
-            </Dialog>
-        );
+        // const dialog = (
+        //     <Dialog
+        //         actions={actions}
+        //         modal={false}
+        //         open={this.state.open}
+        //         onRequestClose={this.handleClose}
+        //         autoScrollBodyContent={true}
+        //         paperClassName={dialogDemoClass}
+        //         contentClassName="center"
+        //         overlayClassName="dialogOverlay"
+        //     >
+        //         {dialogBody}
+        //     </Dialog>
+        // );
 
         return (
             <div className={blurredClass}>
@@ -411,7 +411,7 @@ class BusinessHome extends Component {
                     <title>Moonshot</title>
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
                 </MetaTags>
-                {dialog}
+                {/*{dialog}*/}
                 <div className="blackBackground businessHome">
                     <a id="homeTop" name="homeTop" className="anchor" />
                     <div className="businessHome frontPage">
@@ -797,11 +797,8 @@ class BusinessHome extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        demoEmail,
+        closeNotification,
         dialogEmail,
-        dialogEmailScreen2,
-        dialogEmailScreen3,
-        dialogEmailScreen4
     }, dispatch);
 }
 
