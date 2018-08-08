@@ -1808,9 +1808,11 @@ async function GET_candidateSearch(req, res) {
     //     positionRequirements.push({ "hiringStage": hiringStage });
     // }
 
-    // only get the position that was asked for
     let query = {
         "userType": "candidate",
+        // only get users who have verified their email address
+        "verified": "true",
+        // only get the position that was asked for
         "positions": {
             "$elemMatch": {
                 "$and": positionRequirements
