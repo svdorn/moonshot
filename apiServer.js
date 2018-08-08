@@ -151,12 +151,8 @@ app.post("/accountAdmin/integrationSuggestion", accountAdminApis.POST_integratio
 app.post("/accountAdmin/languagePreference", accountAdminApis.POST_languagePreference);
 
 app.post('/business/googleJobsLinks', businessApis.POST_googleJobsLinks);
-app.post('/business/demoEmail', businessApis.POST_demoEmail);
 app.post('/business/dialogEmail', businessApis.POST_dialogEmail);
 app.post('/business/addEvaluationEmail', businessApis.POST_addEvaluationEmail);
-app.post('/business/dialogEmailScreen2', businessApis.POST_dialogEmailScreen2);
-app.post('/business/dialogEmailScreen3', businessApis.POST_dialogEmailScreen3);
-app.post('/business/dialogEmailScreen4', businessApis.POST_dialogEmailScreen4);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);

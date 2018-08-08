@@ -507,19 +507,6 @@ export function changePasswordForgot(user) {
     }
 }
 
-
-// Send an email when form filled out on forBusiness page
-export function demoEmail(user){
-    return function(dispatch) {
-        axios.post("api/business/demoEmail", user)
-            .then(function(response) {
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
 // Send an email when form filled out on forBusiness page
 export function dialogEmail(user){
     return function(dispatch) {
@@ -536,42 +523,6 @@ export function dialogEmail(user){
 export function addEvaluationEmail(user){
     return function(dispatch) {
         axios.post("api/business/addEvaluationEmail", user)
-            .then(function(response) {
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
-// Send an email when form filled out on forBusiness page
-export function dialogEmailScreen2(user){
-    return function(dispatch) {
-        axios.post("api/business/dialogEmailScreen2", user)
-            .then(function(response) {
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
-// Send an email when form filled out on forBusiness page
-export function dialogEmailScreen3(user){
-    return function(dispatch) {
-        axios.post("api/business/dialogEmailScreen3", user)
-            .then(function(response) {
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
-// Send an email when form filled out on forBusiness page
-export function dialogEmailScreen4(user){
-    return function(dispatch) {
-        axios.post("api/business/dialogEmailScreen4", user)
             .then(function(response) {
             })
             .catch(function(err) {
