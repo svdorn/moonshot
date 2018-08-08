@@ -781,10 +781,11 @@ class BusinessHome extends Component {
                                             Hire the best candidate
                                         </li>
                                     </ul>
-                                    {/*<div>
-                                        <img src={"/images/businessHome/Flourish1" + this.props.png}
-                                        alt="Flourish Icon"/>
-                                    </div>*/}
+                                    <img
+                                        src={"/images/businessHome/Flourish1" + this.props.png}
+                                        alt="Flourish Icon"
+                                        className="flourish-icon"
+                                    />
                                 </div>
                             </div>
                             <div className="under800only" style={{height:"0px"}}><br/></div>
@@ -820,10 +821,13 @@ class BusinessHome extends Component {
                                             Pay off your balance at any time
                                         </li>
                                     </ul>
-                                    {/*<div>
-                                        <img src={"/images/businessHome/Flourish2" + this.props.png}
-                                        alt="Flourish Icon"/>
-                                    </div>*/}
+
+                                    <img
+                                        src={"/images/businessHome/Flourish2" + this.props.png}
+                                        className="flourish-icon"
+                                        alt="Flourish Icon"
+                                    />
+
                                 </div>
                             </div>
                             <div className="marginTop10px">

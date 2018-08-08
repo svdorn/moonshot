@@ -1955,6 +1955,13 @@ button.link {
     box-shadow:         0px 10px 30px 2px #000000;
 }
 
+#pricingSection .flourish-icon {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+}
+
 .paperBoxPredictiveStats {
     height: 210px;
     width: 280px;
