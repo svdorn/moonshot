@@ -86,7 +86,7 @@ class Onboarding extends Component {
         if (onboarding.step >= onboarding.furthestStep) {
             onboarding.furthestStep = onboarding.step;
         }
-        if (onboarding.step > 8 || onboarding.furthestStep > 8) {
+        if (onboarding.step > 7 || onboarding.furthestStep > 7) {
             onboarding.complete = true;
         }
         this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
@@ -234,7 +234,7 @@ class Onboarding extends Component {
                 );
             });
 
-            var stepName = "Create Evaluation";
+            var stepName = "Activate Admin Account";
 
             switch(onboarding.step) {
                 // Activate Admin Account
@@ -321,7 +321,7 @@ class Onboarding extends Component {
             }
         }
 
-        const NUM_ONBOARDING_STEPS = 9;
+        const NUM_ONBOARDING_STEPS = 8;
 
         return (
             <div className="fillScreen">
