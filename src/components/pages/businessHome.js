@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { closeNotification, demoEmail, dialogEmail, dialogEmailScreen2, dialogEmailScreen3, dialogEmailScreen4 } from '../../actions/usersActions';
+import { closeNotification, dialogEmail } from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
@@ -67,9 +67,6 @@ class BusinessHome extends Component {
         this.state = {
             infoIndex: 0,
             open: false,
-            demoOpen: false,
-            demoScreen: 1,
-            dialogScreen: 1,
             position: '',
             pricing: "24 Months",
             price: 80,
@@ -97,15 +94,6 @@ class BusinessHome extends Component {
         this.setState({ infoIndex });
     }
 
-
-    addCalendlyScript() {
-        const script = document.createElement("script");
-        script.src = "https://assets.calendly.com/assets/external/widget.js";
-        script.async = true;
-        document.body.appendChild(script);
-    }
-
-
     handleOpen = () => {
         this.setState({open: true});
     };
@@ -121,33 +109,6 @@ class BusinessHome extends Component {
             error: ''
         })
     };
-
-    handleEmailFormSubmit(e) {
-        e.preventDefault();
-        const vals = this.props.formData.forBusiness.values;
-
-        // Form validation before submit
-        let notValid = false;
-        const requiredFields = [
-            'email',
-        ];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return;
-
-        if (!isValidEmail(vals.email)) return;
-
-        const user = {
-            email: this.props.formData.forBusiness.values.email,
-        };
-
-        this.props.demoEmail(user);
-        this.handleDemoScreenChange();
-    }
 
     handleSubmitForm(e) {
         e.preventDefault();
@@ -195,22 +156,6 @@ class BusinessHome extends Component {
         }
         this.props.initialize(position);
     }
-
-
-    handleDemoOpen = () => {
-        this.setState({demoOpen: true});
-    }
-
-
-    handleDemoClose = () => {
-        this.setState({demoOpen: false, demoScreen: 1});
-    }
-
-
-    handleDemoScreenChange = () => {
-        this.setState({demoScreen: 2});
-    }
-
 
     handleNextScreen = () => {
         const dialogScreen = this.state.dialogScreen + 1;
@@ -375,14 +320,6 @@ class BusinessHome extends Component {
 
 
     render() {
-        const opts = {
-            height: '320',
-            width: '525',
-            playerVars: { // https://developers.google.com/youtube/player_parameters
-                autoplay: 1,
-                iv_load_policy: 3
-            }
-        };
 
         const logoImages = [
             {src: "NWMLogoWhite" + this.props.png, partner: "Northwestern Mutual"},
@@ -411,130 +348,47 @@ class BusinessHome extends Component {
             />,
         ];
 
-        const demoActions = [
-            <FlatButton
-                label="Close"
-                onClick={this.handleDemoClose}
-                className="primary-white-important"
-            />,
-        ];
-
         let blurredClass = '';
         if (this.state.open || this.state.demoOpen) {
             blurredClass = 'dialogForBizOverlay';
         }
 
-
-        let dialogDemoClass = "dialogForBiz";
-        if (this.state.demoScreen === 2 || this.state.dialogScreen === 2) {
-            dialogDemoClass = "dialogForVideo";
-        }
-
-        const demoDialog = (
-            <Dialog
-                actions={demoActions}
-                modal={false}
-                open={this.state.demoOpen}
-                onRequestClose={this.handleDemoClose}
-                autoScrollBodyContent={true}
-                paperClassName={dialogDemoClass}
-                contentClassName="center"
-                overlayClassName="dialogOverlay"
-            >
-                {this.state.demoScreen === 1
-                ?
-                <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
-                        <div
-                            className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop30px">
-                            See Demo
-                        </div>
-                        <div className="primary-white font16px font14pxUnder500" style={{width: "85%", margin: "10px auto"}}>
-                            A walkthrough of the employer and candidate experience in Moonshot Insights.
-                        </div>
-                        <Field
-                            name="email"
-                            component={renderTextField}
-                            label="Work Email"
-                            className="marginTop10px"
-                            validate={[required]}
-                        /><br/>
-                        <RaisedButton
-                            label="Watch Demo"
-                            type="submit"
-                            className="raisedButtonBusinessHome marginTop30px"
-                        />
-                    </form>
-                :
-                    <YouTube
-                        videoId="m4_M9onXmpY"
-                        opts={opts}
-                        onReady={this._onReady}
-                        onEnd={this._onEnd}
+        let dialogBody = (
+            <form onSubmit={this.handleSubmitForm.bind(this)} className="center">
+                <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
+                    Try Moonshot Insights for Free
+                </div>
+                <div className="primary-white font16px font14pxUnder700 font12pxUnder400 marginTop10px">
+                    Book a demo to activate your first free evaluation.
+                </div>
+                <Field
+                    name="name"
+                    component={renderTextField}
+                    label="Full Name"
+                    validate={[required]}
+                    className="marginTop10px"
+                /><br/>
+                <Field
+                    name="email"
+                    component={renderTextField}
+                    label="Work Email"
+                    validate={[required, emailValidate]}
+                    className="marginTop10px"
+                /><br/>
+                <Field
+                    name="company"
+                    component={renderTextField}
+                    label="Company"
+                    validate={[required]}
+                    className="marginTop10px"
+                /><br/>
+                <RaisedButton
+                    label="Continue"
+                    type="submit"
+                    className="raisedButtonBusinessHome marginTop20px"
                     />
-            }
-            </Dialog>
+            </form>
         );
-
-        const screen = this.state.dialogScreen;
-        let dialogBody = <div></div>;
-        if (screen === 1) {
-                    dialogBody = (
-                        <form onSubmit={this.handleSubmitForm.bind(this)} className="center">
-                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
-                                Try Moonshot Insights for Free
-                            </div>
-                            <div className="primary-white font16px font14pxUnder700 font12pxUnder400 marginTop10px">
-                                Book a demo to activate your first free evaluation.
-                            </div>
-                            <Field
-                                name="name"
-                                component={renderTextField}
-                                label="Full Name"
-                                validate={[required]}
-                                className="marginTop10px"
-                            /><br/>
-                            <Field
-                                name="email"
-                                component={renderTextField}
-                                label="Work Email"
-                                validate={[required, emailValidate]}
-                                className="marginTop10px"
-                            /><br/>
-                            <Field
-                                name="company"
-                                component={renderTextField}
-                                label="Company"
-                                validate={[required]}
-                                className="marginTop10px"
-                            /><br/>
-                            <RaisedButton
-                                label="Continue"
-                                type="submit"
-                                className="raisedButtonBusinessHome marginTop20px"
-                                />
-                        </form>
-                    );
-        } else if (screen === 2) {
-                    const calendly = <div className="calendly-inline-widget" data-url="https://calendly.com/kyle-treige-moonshot/30min" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
-                    dialogBody = (
-                        <div>
-                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
-                                Activate your Evaluation
-                            </div>
-                            <div className="primary-white-important font14px font12pxUnder500" style={{width:"97%", margin:"10px auto 0"}}>
-                                Schedule a demo with our team to select a position, define the evaluation
-                                and walk through the employer interface.
-                            </div>
-                            <div className="primary-white-important font14px font12pxUnder500" style={{width:"97%", margin:"auto"}}>
-                                If you can give us 30 minutes, we can create your first free predictive evaluation.
-                            </div>
-                            <div className="primary-white-important font14px font12pxUnder500" style={{width:"90%", margin:"10px auto 3px"}}>
-                                Find a time below.
-                            </div>
-                            {calendly}
-                        </div>
-                    );
-        }
 
         const dialog = (
             <Dialog
@@ -558,7 +412,6 @@ class BusinessHome extends Component {
                     <title>Moonshot</title>
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
                 </MetaTags>
-                {demoDialog}
                 {dialog}
                 <div className="blackBackground businessHome">
                     <a id="homeTop" name="homeTop" className="anchor" />
