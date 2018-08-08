@@ -818,7 +818,7 @@ class BusinessHome extends Component {
                                         className="flourish-icon"
                                     />
                                     <div className="pricing-container">
-                                        <div className="home-peach paddingTop10px font20px font16pxUnder400">
+                                        <div className="home-peach paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
                                             Test It Out
                                         </div>
                                         <img
@@ -829,7 +829,7 @@ class BusinessHome extends Component {
                                         <div className="primary-white marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
                                             First Hire
                                         </div>
-                                        <div className="home-peach font30px font24pxUnder400">
+                                        <div className="home-peach font30px font24pxUnder400" style={{fontWeight: "bold"}}>
                                             FREE
                                         </div>
                                         <ul className="primary-white font14px font12pxUnder400">
@@ -861,7 +861,7 @@ class BusinessHome extends Component {
                                         alt="Flourish Icon"
                                     />
                                     <div className="pricing-container">
-                                        <div className="home-blue paddingTop10px font20px font16pxUnder400">
+                                        <div className="home-blue paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
                                             4 Month Guarantee
                                         </div>
                                         <img
@@ -873,7 +873,7 @@ class BusinessHome extends Component {
                                             Each Additional Hire
                                         </div>
                                         <div className="primary-white">
-                                            <span className="font30px font24pxUnder400 home-blue">${this.state.price}</span>
+                                            <span className="font30px font24pxUnder400 home-blue" style={{fontWeight:"bold"}}>${this.state.price}</span>
                                             <span className="font16px font14pxUnder400">&nbsp;/ month</span>
                                             <div className="font16px font14pxUnder400" style={{marginTop:"-10px"}}>
                                                 <span>for up to&nbsp;</span>
