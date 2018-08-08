@@ -671,7 +671,7 @@ class BusinessHome extends Component {
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextLeft forBusiness">
                                 <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
-                                    <h2 className="primary-orange font30px font24pxUnder800 font22pxUnder500">Constantly improve with every <div className="above800only br"><br/></div>new candidate and hire</h2>
+                                    <h2 className="font30px font24pxUnder800 font22pxUnder500" style={{color: "#ff748c"}}>Constantly improve with every <div className="above800only br"><br/></div>new candidate and hire</h2>
                                     Your next hire should always be your best one yet. It&#39;s smart to learn from your successes and mistakes.
                                 </div>
                             </div>
@@ -720,7 +720,7 @@ class BusinessHome extends Component {
                                     </div>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
-                                        <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
+                                        <div style={{position: "relative", textAlign:"left", padding: "20px 10px 0"}}>
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Improve Your Efficiency</div>
                                             <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost and time per hire by spending 50%<div className="above600only br"><br/></div> less time screening candidates.</div>
                                             <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text"><span>Learn More</span> &#8594;</div>
@@ -728,7 +728,7 @@ class BusinessHome extends Component {
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
-                                        <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
+                                        <div style={{position: "relative", textAlign:"left", padding: "20px 10px 0"}}>
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
                                             <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also<div className="above1000only br"><br/></div> offer new and diverse perspectives.</div>
                                             <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text"><span>Learn More</span> &#8594;</div>
@@ -736,7 +736,7 @@ class BusinessHome extends Component {
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
-                                        <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
+                                        <div style={{position: "relative", textAlign:"left", padding: "20px 10px 0"}}>
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Hire Top Performers</div>
                                             <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">A repeatable, everlearning process that consistently identifies top performers and bad hires.</div>
                                             <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text"><span>Learn More</span> &#8594;</div>
