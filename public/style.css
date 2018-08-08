@@ -881,6 +881,15 @@ form > h1 {
 #businessHomeStatistics .horizListText {
     height: 60px;
 }
+#learnFromHires {
+    margin-top: 150px;
+    margin-bottom: 180px;
+    position: relative;
+    z-index: 1;
+}
+.learnFromHiresIcons {
+    height: 60px;
+}
 
 #moonshotProcess {
     margin-top: 150px;

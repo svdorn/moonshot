@@ -248,11 +248,12 @@ class BusinessHome extends Component {
         });
 
         const listItem = {
-                width: '33%',
+                width: '30%',
                 margin: 'auto',
                 display: 'inline-block',
                 top: '0',
                 verticalAlign: 'top',
+                textAlign: 'left'
         };
 
         const actions = [
@@ -605,7 +606,7 @@ class BusinessHome extends Component {
                                     </div>
                                     <div>
                                         <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font12pxUnder700 primary-white" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
-                                            See How &#8680;
+                                            See How &#8594;
                                         </button>
                                     </div>
                                 </div>
@@ -625,20 +626,37 @@ class BusinessHome extends Component {
                                 <div className="home-pink font30px" style={listItem}>
                                     We learn from each hire so that we can make the next one even better.
                                 </div>
-                                <div style={listItem}>
-                                    <img
-                                        src={"/images/businessHome/CandidatesIcon" + this.props.png}
-                                        alt="Candidates Icon"
-                                        className="businessHomeBoxIcons"
-                                    />
-                                    <span className="">
+                                <div className="marginLeft20px" style={listItem}>
+                                        <img
+                                            src={"/images/businessHome/CandidatesIcon" + this.props.png}
+                                            alt="Candidates Icon"
+                                            className="learnFromHiresIcons inlineBlock"
+                                        />
+                                    <div className="inlineBlock" style={{float:"right"}}>
+                                        <span className="primary-white">
+                                            Unlimited Applicants
+                                        </span>
+                                        <span className="secondary-gray">
+                                            Evaluations for any positions across 5 funcitons
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="marginLeft20px" style={listItem}>
+                                    <div className="inlineBlock" style={{float:"left"}}>
+                                        <img
+                                            src={"/images/businessHome/5Icon" + this.props.png}
+                                            alt="5 Icon"
+                                            className="learnFromHiresIcons"
+                                        />
+                                    </div>
+                                    <div className="inlineBlock" style={{float:"right"}}>
                                         <div className="primary-white">
+                                            Any Position
                                         </div>
                                         <div className="secondary-gray">
+                                            Evaluations for any positions across 5 funcitons
                                         </div>
-                                    </span>
-                                </div>
-                                <div style={listItem}>
+                                    </div>
                                 </div>
                             </div>
                             <div>
