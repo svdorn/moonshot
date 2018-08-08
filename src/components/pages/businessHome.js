@@ -227,6 +227,92 @@ class BusinessHome extends Component {
     }
 
 
+    learnFromHiresSection() {
+        const features = [
+            {
+                title: "Unlimited Applicants",
+                text1: "Evaluate and receive insights",
+                text2: "for any number of applicants",
+                icon: "CandidatesIcon",
+                alt: "Candidates Icon",
+                iconStyle: {}
+            },
+            {
+                title: "Any Position",
+                text1: "Evaluations for any position",
+                text2: "across 5 functions",
+                icon: "5Icon",
+                alt: "5 Icon",
+                iconStyle: {}
+            },
+            {
+                title: "Unlimited Employees",
+                text1: "Evaluate employees to strenthen",
+                text2: "your company's predictive baseline",
+                icon: "EmployeeIcon",
+                alt: "Employee Icon",
+                iconStyle: {}
+            },
+            {
+                title: "Quarterly Reviews",
+                text1: "Hires can retake evaluations",
+                text2: "every quarter for updated insights",
+                icon: "FlameIcon",
+                alt: "Flame Icon",
+                iconStyle: {}
+            },
+            {
+                title: "Analytics and Reporting",
+                text1: "Get in-depth breakdowns on",
+                text2: "all of your candidates and hires",
+                icon: "GraphIcon",
+                alt: "Graph Icon",
+                iconStyle: {}
+            },
+        ]
+
+        // create a box for each feature
+        let featureBoxes = features.map(feature => {
+            return (
+                <div className="feature-box" key={feature.title}>
+                    <div>
+                        <img
+                            src={`/images/businessHome/${feature.icon}${this.props.png}`}
+                        />
+                    </div>
+                    <div>
+                        <div className="bold">{ feature.title }</div>
+                        <div className="secondary-gray">{ feature.text1 }<br/>{ feature.text2 }</div>
+                    </div>
+                </div>
+            )
+        });
+
+        // add the box at the top left with the title for the whole area
+        featureBoxes.unshift(
+            <div
+                key="featuresHeader"
+                className="primary-pink feature-box left-align font26px"
+                style={{lineHeight: "1.3"}}
+            >
+                We learn from each hire<br/>
+                so that we can make the<br/>
+                next one even better.
+            </div>
+        )
+
+        return (
+            <section id="learnFromHires">
+                <div className="center">
+                    <div className="primary-white">
+                        { featureBoxes }
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+
     render() {
         const opts = {
             height: '320',
@@ -620,55 +706,7 @@ class BusinessHome extends Component {
                         </div>
                     </section>
 
-                    <section id="learnFromHires">
-                        <div className="center">
-                            <div>
-                                <div className="home-pink font30px" style={listItem}>
-                                    We learn from each hire so that we can make the next one even better.
-                                </div>
-                                <div className="marginLeft20px" style={listItem}>
-                                        <img
-                                            src={"/images/businessHome/CandidatesIcon" + this.props.png}
-                                            alt="Candidates Icon"
-                                            className="learnFromHiresIcons inlineBlock"
-                                        />
-                                    <div className="inlineBlock" style={{float:"right"}}>
-                                        <span className="primary-white">
-                                            Unlimited Applicants
-                                        </span>
-                                        <span className="secondary-gray">
-                                            Evaluations for any positions across 5 funcitons
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="marginLeft20px" style={listItem}>
-                                    <div className="inlineBlock" style={{float:"left"}}>
-                                        <img
-                                            src={"/images/businessHome/5Icon" + this.props.png}
-                                            alt="5 Icon"
-                                            className="learnFromHiresIcons"
-                                        />
-                                    </div>
-                                    <div className="inlineBlock" style={{float:"right"}}>
-                                        <div className="primary-white">
-                                            Any Position
-                                        </div>
-                                        <div className="secondary-gray">
-                                            Evaluations for any positions across 5 funcitons
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div style={listItem}>
-                                </div>
-                                <div style={listItem}>
-                                </div>
-                                <div style={listItem}>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                    { this.learnFromHiresSection() }
 
                     <section id="pricingSection">
                         <a id="pricing" name="pricing" className="anchor" />
