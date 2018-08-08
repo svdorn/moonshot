@@ -251,7 +251,7 @@ class BusinessHome extends Component {
             <Select
                 disableUnderline={true}
                 classes={{
-                    root: "selectRootBlue myCandidatesSelect underline",
+                    root: "selectRootBlue home-pricing-select underline",
                     icon: "selectIconWhiteImportant"
                 }}
                 value={pricingStage}
@@ -871,7 +871,7 @@ class BusinessHome extends Component {
                                     <div className="primary-white">
                                         <span className="font30px font24pxUnder400 home-blue">${this.state.price}</span>
                                         <span className="font16px font14pxUnder400">&nbsp;/ month</span>
-                                        <div className="font16px font14pxUnder400">
+                                        <div className="font16px font14pxUnder400" style={{marginTop:"-10px"}}>
                                             <span>for up to&nbsp;</span>
                                             {this.makePricingDropdown(this.state.pricing)}
                                         </div>

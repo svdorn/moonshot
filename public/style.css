@@ -2743,7 +2743,12 @@ button.link {
 .mobile .myCandidatesSelect > div { margin-bottom: 0; }
 .myCandidatesSelect > div { margin-bottom: -4px; }
 
-
+.home-pricing-select {
+    margin: 0 -10px -4px 0;
+}
+#pricingSection div {
+    text-overflow: unset;
+}
 
 
 .semiOpaqueHoverable {
@@ -3480,6 +3485,10 @@ button.link {
 #picturesToPathwaysHomepageSpacer {
     margin-top: 60px;
     margin-bottom: 40px;
+}
+
+.homepage-pricing-dropdown-icon {
+    margin-left: -10px;
 }
 
 .noselect {
