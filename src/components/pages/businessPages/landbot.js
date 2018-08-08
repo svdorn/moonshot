@@ -115,7 +115,7 @@ class Landbot extends Component {
         if (this.state.position) {
             landbotUrl += "?position=" + encodeURIComponent(this.state.position.trim());
         }
-        console.log("landbotUrl: ", landbotUrl);
+        
         return (
             <div className="landbot-container">
                 <iframe

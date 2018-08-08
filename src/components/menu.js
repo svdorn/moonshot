@@ -35,8 +35,10 @@ class Menu extends Component {
         }
         // class for the header, only needed for pages with unusual menus
         const headerClass = props.location.pathname === "/" && window.scrollY === 0 ? "noShadow" : "";
+        const position = '';
+
         // set the initial state
-        this.state = {dropDownSelected, headerClass};
+        this.state = {dropDownSelected, headerClass, position};
     }
 
     componentDidUpdate() {
@@ -107,6 +109,12 @@ class Menu extends Component {
             this.setState({dropDownSelected: value});
         }
     };
+
+    onChange(e) {
+        this.setState({
+            position: e.target.value
+        });
+    }
 
 
     selectAndGoTo(route, value) {
@@ -478,11 +486,15 @@ class Menu extends Component {
                     break;
                 case "button":
                     // add the menu item to the dropDown
+                    let positionUrl = "";
+                    if (self.state.position) {
+                        positionUrl = "?position=" + self.state.position;
+                    }
                     desktopMenu.push(
                         <MenuItem><div className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
-                            <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position"
+                            <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position" value={self.state.position} onChange={self.onChange.bind(self)}
                             />
-                            <div className="menuButton button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}} onClick={() => goTo("/chatbot")}>
+                            <div className="menuButton button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}} onClick={() => goTo("/chatbot" + positionUrl)}>
                                 Try for Free
                             </div>
                         </div></MenuItem>
