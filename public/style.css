@@ -1940,6 +1940,10 @@ button.link {
     margin: 0 25px 40px;
     vertical-align: top;
 }
+.flourishes3 {
+    position: absolute;
+    transform: translateY(-25%);
+}
 .gradientBorderPredictiveStats {
     padding: 2px;
     background: linear-gradient(to top left, var(--primary-white) , var(--primary-cyan));
@@ -5320,6 +5324,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 280px;
         display: block;
         margin: 20px auto;
+    }
+    .flourishes3 {
+        display: none;
     }
 
 

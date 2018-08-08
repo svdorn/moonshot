@@ -653,7 +653,7 @@ class BusinessHome extends Component {
                                     Predictive Analytics Improve Hiring Results
                                 </div>
                                 <div style={{position:"relative"}}>
-                                    <div style={{position:"absolute", transform: "translateY(-25%)"}}>
+                                    <div className="flourishes3">
                                         <embed src="/images/businessHome/Flourishes3.svg"/>
                                     </div>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
