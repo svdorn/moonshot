@@ -930,8 +930,8 @@ form > h1 {
 }
 .infoContainer > .content {
     -webkit-box-flex: 1;
-    -ms-flex: 1 0 50%;
-    flex: 1 0 50%;
+    -ms-flex: 1 0 55%;
+    flex: 1 0 55%;
     color: white;
 }
 .infoContainer > .productScreenshots {
@@ -944,7 +944,7 @@ form > h1 {
 .flex { display: flex; }
 .i { font-style: italic; }
 .infoText { margin: 0; }
-.infoText.notFull { max-width: calc(1040px/2 - 100px)}
+.infoText.notFull { max-width: calc(1040px/2 - 20px)}
 .infoText.flex {
     justify-content: space-between;
     flex-direction: row;
@@ -962,10 +962,53 @@ form > h1 {
     max-width: 600px;
 }
 
+
+
+#learnFromHires .feature-box {
+    width: 350px;
+    height: 120px;
+    display: inline-flex;
+    vertical-align: top;
+    position: relative;
+    margin: 15px 10px;
+}
+#learnFromHires .feature-box > div:first-child {
+    width: 100px;
+    text-align: center;
+}
+#learnFromHires .feature-box > div:last-child {
+    width: 300px;
+    text-align: left;
+}
+#learnFromHires .feature-box img {
+    height: 64px;
+}
+
+
+
+
+
+.menuButtonArea {
+    display: flex;
+    margin: 5px 0;
+}
+
+
+
 .buttonArea {
     display: flex;
     margin: 20px 0;
 }
+.menuButtonArea .blackInput {
+    line-height: 30px;
+}
+.menuButtonArea .menuButton {
+    line-height: 30px;
+}
+.pricingInput .blackInput {
+    min-width: 300px;
+}
+
 .blackInput {
     border-radius: 10px;
     border: 1px solid white;
@@ -994,6 +1037,7 @@ form > h1 {
     color: inherit;
 }
 .button.medium { padding: 3px 10px; }
+.button.large { padding: 5px 18px; }
 
 .button.round-2px { border-radius: 2px; }
 .button.round-4px { border-radius: 4px; }
@@ -1229,6 +1273,10 @@ form > h1 {
     height: 100%;
     width: auto;
 }
+.playButton {
+    height: 30px;
+    margin-right: 10px;
+}
 
 #threeScreenshots {
     margin: 135px auto 60px;
@@ -1247,6 +1295,12 @@ form > h1 {
 }
 #businessHomeStatistics .horizListText {
     height: 60px;
+}
+#learnFromHires {
+    margin-top: 150px;
+    margin-bottom: 180px;
+    position: relative;
+    z-index: 1;
 }
 
 #moonshotProcess {
@@ -1272,6 +1326,35 @@ form > h1 {
 #moonshotProcess > div > button {
     padding: 6px 20px;
 }
+
+#moonshotProcess .processOutline .screenshot {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+#moonshotProcess .processOutline .screenshot > .dark-opacity {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.4);
+    z-index: 20;
+}
+#moonshotProcess .processOutline .screenshot > img {
+    height: 100%;
+    position: absolute;
+    right: 0;
+}
+#moonshotProcess .processOutline .skew-image-cover {
+    height: 100%;
+    width: 19%;
+    background-color: var(--primary-black-light);
+    position: absolute;
+    top: 0;
+    transform: skewX(-20deg) translateX(calc(360px - 50%));
+    z-index: 25;
+}
+
+
 .processButtonsContainer {
     position: relative;
     display: inline-block;
@@ -1334,6 +1417,7 @@ form > h1 {
     left: 50%;
     margin-top: 20px;
     transform: translateX(-50%);
+
     -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
     -moz-box-shadow:    0 0 80px 1px rgba(0,0,0,.5);
     box-shadow:         0 0 80px 1px rgba(0,0,0,.5);
@@ -1365,11 +1449,10 @@ form > h1 {
     color: white;
     width: calc(100% - 4px);
     height: calc(100% - 4px);
-    position: absolute;
+    position: relative;
     left: 2px;
     top: 2px;
-    display: flex;
-    flex-direction: row;
+    display: inline-block;
 }
 /* first and third children - the ones with text */
 .processOutline > div > div:nth-child(2n + 1) {
@@ -1377,44 +1460,34 @@ form > h1 {
     position: relative;
 }
 .processOutline > div > div:nth-child(2n + 1) > div {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+    /* position: relative;
+    top: 38%;
+    transform: translateY(-50%); */
 }
-/* the info part on the left */
-.processOutline > div > div:first-child > div {
-    text-align: center;
-    padding: 0 25px;
+
+
+#moonshotProcess .processOutline .left-area {
+    z-index: 30;
+    background-color: var(--primary-black-light);
+    height: 100%;
+    width: 375px;
 }
-/* the centerline */
-.processOutline > div > div:nth-child(2) {
-    width: 2px;
-    height: 140px;
-    background: linear-gradient(to top, #a88cfe, #7ed2fe);
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-/* the list */
-.processOutline > div > div:nth-child(3) > div {
-    padding: 0 20px;
-}
-.processListItem {
-    position: relative;
-}
-/* check mark icon */
-.processListItem > img {
-    display: inline-block;
-    height: 13px;
+#moonshotProcess .processOutline .text-part {
+    width: 275px;
     position: absolute;
-    top: calc(50% - 3px);
-    transform: translateY(-50%);
+    top: 25px;
+    right: 0;
 }
-.processListItem > div {
-    display: inline-block;
-    width: calc(100% - 28px);
-    margin-left: 24px;
+#moonshotProcess .processOutline .text-part .text {
+    text-align: left;
+    line-height: 1.7;
 }
+#moonshotProcess .processOutline .text-part .button {
+    margin-left: 18%;
+    margin-top: 13px;
+}
+
+
 .shadowBox {
     -webkit-box-shadow: 0 0 80px 20px rgba(0,0,0,.5);
     -moz-box-shadow:    0 0 80px 20px rgba(0,0,0,.5);
@@ -1443,7 +1516,6 @@ form > h1 {
 .statisticsHeader {
     padding: 0 16px;
     margin-bottom: 40px;
-    height: 80px;
 }
 
 #pricingSection {
@@ -1457,18 +1529,35 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-#crystalBall {
+#ATSIntegrations {
     position: relative;
     margin-top: 200px;
     margin-bottom: 60px;
 }
-#crystalBall > div {
+#ATSIntegrations > div {
     position: relative;
 }
-
-
-
-
+#ATSIntegrations > div > img {
+    margin-left: 40px;
+}
+#ATSIntegrations > div > img:first-child {
+    margin-left: 0;
+}
+.trello {
+    height: 38px;
+}
+.bamboo-hr {
+    height: 28px;
+}
+.workable {
+    height: 60px;
+}
+.slack {
+    height: 40px;
+}
+.recruitee {
+    height: 30px;
+}
 
 
 
@@ -1840,6 +1929,13 @@ form > h1 {
     display: inline-block;
     margin-left: 100px;
     position: absolute;
+}
+
+.easeDivider {
+    width: 2px;
+    height: 30px;
+    background-color: var(--secondary-gray);
+    margin: 12px 20px 0px 15px;
 }
 
 .menuDivider {
@@ -2235,6 +2331,50 @@ button.link {
     display: inline-block;
     margin: 0 25px 40px;
     vertical-align: top;
+    -moz-box-shadow:    0px 10px 30px 2px #000000;
+    -webkit-box-shadow: 0px 10px 30px 2px #000000;
+    box-shadow:         0px 10px 30px 2px #000000;
+}
+
+#pricingSection .flourish-icon {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    z-index: 1;
+}
+#pricingSection .pricing-container {
+    z-index: 10;
+    position: relative;
+    height: 100%;
+}
+
+#pricingSection .button.large {
+    position: absolute;
+    bottom: 20px;
+    right: 50%;
+    transform: translateX(50%);
+}
+
+.paperBoxPredictiveStats {
+    height: 210px;
+    width: 280px;
+    display: inline-block;
+    margin: 0 25px 40px;
+    vertical-align: top;
+}
+.flourishes3 {
+    position: absolute;
+    transform: translateY(-25%);
+}
+.gradientBorderPredictiveStats {
+    padding: 2px;
+    background: linear-gradient(to top left, var(--primary-white) , var(--primary-cyan));
+}
+.gradientBorderPredictiveStats > div {
+    background: var(--primary-black-dark);
+    height: 100%;
+    width: 100%;
 }
 
 .paperBoxInviteCadence {
@@ -2267,12 +2407,39 @@ button.link {
     padding: 2px 13px;
 }
 
-.businessHomeGradientBorder {
-    padding: 2px;
-    background: linear-gradient(to top left, #ff5d27, #fd0d8b);
+.home-blue {
+    color: #76defe;
 }
-.businessHomeGradientBorder > div {
-    background: var(--primary-black-dark);
+.home-green {
+    color: #7dfed2;
+}
+.home-pink {
+    color: #ff748c;
+}
+.home-peach {
+    color: #ffe09e;
+}
+.gradient-1-home-peach { --gradient-color-1: #ffe09e; }
+.gradient-2-home-pink { --gradient-color-2: #ff748c; }
+.gradient-1-home-pricing-peach { --gradient-color-1: #ffd79c; }
+.gradient-2-home-pricing-pink { --gradient-color-2: #ff7d8e; }
+.gradient-1-home-pricing-green { --gradient-color-1: #2ef3ca; }
+.gradient-2-home-pricing-blue { --gradient-color-2: #2ad8ee; }
+.businessHomeGradientBorder1 {
+    padding: 3px;
+    background: linear-gradient(to top left, #ff748c, #ffe09e);
+}
+.businessHomeGradientBorder1 > div {
+    background: #262626;
+    height: 100%;
+    width: 100%;
+}
+.businessHomeGradientBorder2 {
+    padding: 3px;
+    background: linear-gradient(to top left, #76defe, #7dfed2);
+}
+.businessHomeGradientBorder2 > div {
+    background: #262626;
     height: 100%;
     width: 100%;
 }
@@ -2992,6 +3159,7 @@ button.link {
 }
 
 .selectRootWhite { color: white; }
+.selectRootBlue { color: #76defe; }
 .myCandidates .position-select-root { max-width: 180px; }
 .selectIconWhiteImportant { color: white !important; }
 .selectIconGrayImportant { color: #5E5E5E !important; }
@@ -3000,6 +3168,34 @@ button.link {
 .mobile .myCandidatesSelect > div { margin-bottom: 0; }
 .myCandidatesSelect > div { margin-bottom: -4px; }
 
+.home-pricing-select {
+    margin: 0 -10px -4px 0;
+}
+#pricingSection div {
+    text-overflow: unset;
+}
+#pricingSection ul {
+    list-style: none;
+    padding: 0;
+}
+#pricingSection .businessHomeGradientBorder1 li::before {
+    content: "•";
+    color: #ff748c;
+    display: inline-block;
+    width: 20px;
+}
+#pricingSection .businessHomeGradientBorder2 li::before {
+    content: "•";
+    color: #7dfed2;
+    display: inline-block;
+    width: 20px;
+    margin-left: -20px;
+}
+#pricingSection .businessHomeGradientBorder2 li {
+    max-width: 250px;
+    text-align: center;
+    margin: auto;
+}
 
 .my-employees .search-fields .add-employee {
     margin: -10px 0 5px;
@@ -3747,6 +3943,10 @@ button.link {
     margin-bottom: 40px;
 }
 
+.homepage-pricing-dropdown-icon {
+    margin-left: -10px;
+}
+
 .noselect {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -4423,6 +4623,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 .leftAlign { text-align: left; }
 .rightAlign { text-align: right; }
+.left-align { text-align: left; }
+.right-align { text-align: right; }
 
 .font60px { font-size: 60px; }
 .font48px { font-size: 48px; }
@@ -4681,6 +4883,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         padding-top: 56.25%
     }
 
+    .paperBoxPredictiveStats {
+        height: 210px;
+        width: 240px;
+        margin: 0 20px 40px;
+    }
+
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
         grid-row-start: 40;
         grid-row-end: 44;
@@ -4725,6 +4933,22 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .processOutline > img { width: 50px; }
     .processOutline > .leftArrow { left: -60px; }
     .processOutline > .rightArrow { right: -60px; }
+    #moonshotProcess .processOutline .skew-image-cover {
+        transform: skewX(-20deg) translateX(230px);
+    }
+    #moonshotProcess .processOutline .left-area {
+        width: 300px;
+    }
+    #moonshotProcess .processOutline .text-part {
+        width: 235px;
+    }
+    #moonshotProcess .processOutline .text-part .button {
+        margin-top: 18px;
+    }
+
+    #ATSIntegrations > div > img {
+        margin-left: 30px;
+    }
 
     .font40pxUnder950 { font-size: 40px; }
     .font38pxUnder950 { font-size: 38px; }
@@ -4765,6 +4989,31 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #resultsScreenshot { --device-scale: .17; }
     #myCandidatesScreenshot { --device-scale: .25; }
 
+    #ATSIntegrations > div > img {
+        margin-left: 25px;
+    }
+    .trello {
+        height: 28.5px;
+    }
+    .bamboo-hr {
+        height: 21px;
+    }
+    .workable {
+        height: 45px;
+    }
+    .slack {
+        height: 30px;
+    }
+    .recruitee {
+        height: 22.5px;
+    }
+
+    .paperBoxPredictiveStats {
+        height: 210px;
+        width: 210px;
+        margin: 0 10px 40px;
+    }
+
     .font40pxUnder900 { font-size: 40px; }
     .font38pxUnder900 { font-size: 38px; }
     .font36pxUnder900 { font-size: 36px; }
@@ -4801,6 +5050,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .under850only { display: none; }
 }
 @media only screen and (max-width: 850px) {
+    .above850OnlyImportant { display: none !important; }
     .font50pxUnder850 { font-size: 50px; }
     .font48pxUnder850 { font-size: 48px; }
     .font46pxUnder850 { font-size: 46px; }
@@ -5143,6 +5393,16 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-start: 1;
         grid-column-end: 9;
     }
+    #pricingSection > div > div > div > ul {
+        list-style: none;
+    }
+    #pricingSection > div > div > div > ul > li::before {
+        content: "•";
+        color: #7dfed2;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em
+    }
     .paperBoxBusinessHome {
         margin-left: 0;
         margin-right: 0;
@@ -5152,10 +5412,17 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-right: 0;
     }
 
+    #learnFromHires .feature-box {
+        width: 300px;
+        margin: 10px 5px;
+    }
+    #learnFromHires .feature-box img {
+        height: 54px;
+    }
+
     .blackInput.googleJobs {
         width: 250px;
     }
-
 
     .font40pxUnder800 { font-size: 40px; }
     .font38pxUnder800 { font-size: 38px; }
@@ -5223,9 +5490,30 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .messageHeader { margin-top: -70px; }
 
+    #moonshotProcess .processOutline { height: 190px; }
+    #moonshotProcess .processOutline .screenshot,
+    #moonshotProcess .processOutline .skew-image-cover {
+        display: none;
+    }
+    #moonshotProcess .processOutline .left-area {
+        width: 100%;
+    }
+    #moonshotProcess .processOutline .text-part {
+        width: 75%;
+        left: 13%;
+    }
+    #moonshotProcess .processOutline .text-part .text {
+        text-align: center;
+    }
+    #moonshotProcess .processOutline .text-part .button {
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+
     .automate-invites .manual-invite .manual-add-example {
         --device-scale: .15;
     }
+
 
     .analysis .candidateScore {
         margin-bottom: 15px;
@@ -5290,15 +5578,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .processOutline > div > div:first-child > div {
         padding: 0 10px;
-    }
-    .processOutline > div > div:nth-child(3) > div { padding: 0 10px; }
-    .processListItem > img { margin-right: 8px; }
-    .processListItem > div {
-        width: calc(100% - 30px);
-        margin-left: 20px;
-    }
-    #moonshotProcess > div:nth-child(4) {
-        margin-top: 30px;
     }
 
 
@@ -5422,6 +5701,20 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: 5px;
     }
 
+    #learnFromHires .feature-box {
+        width: 200px;
+    }
+    #learnFromHires .feature-box > div:first-child {
+        width: 100px;
+        text-align: center;
+    }
+    #learnFromHires .feature-box > div:last-child {
+        width: 200px;
+    }
+    #learnFromHires .feature-box img {
+        height: 44px;
+    }
+
     .blackInput.googleJobs {
         width: 200px;
     }
@@ -5498,8 +5791,37 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-end: 32;
     }
 
+    .forBusinessIcon {
+        height: 50px;
+    }
+
+    #ATSIntegrations > div > img {
+        margin-left: 20px;
+    }
+    .trello {
+        height: 22.8px;
+    }
+    .bamboo-hr {
+        height: 16.8px;
+    }
+    .workable {
+        height: 36px;
+    }
+    .slack {
+        height: 24px;
+    }
+    .recruitee {
+        height: 18px;
+    }
+
 
     /* END FRONT PAGE */
+
+    .paperBoxPredictiveStats {
+        height: 190px;
+        width: 180px;
+        margin: 0 8px 40px;
+    }
 
     .marginSides40pxUnder700 { margin-right: 40px; margin-left: 40px; }
 
@@ -5607,6 +5929,31 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: auto;
     }
 
+    .trello {
+        height: 17.1px;
+    }
+    .bamboo-hr {
+        height: 12.6px;
+    }
+    .workable {
+        height: 27px;
+    }
+    .slack {
+        height: 18px;
+    }
+    .recruitee {
+        height: 13.5px;
+    }
+
+    .paperBoxPredictiveStats {
+        height: 160px;
+        width: 280px;
+        display: block;
+        margin: 20px auto;
+    }
+    .flourishes3 {
+        display: none;
+    }
 
 
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
@@ -5720,6 +6067,13 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .myCandidatesTabs {
         width: 350px;
         font-size: 14px;
+    }
+
+    .easeDivider {
+        margin: 12px 10px 0px 5px;
+    }
+    .moonshotMenuLogo {
+        margin-left: 10px;
     }
 
     .leftYAxisLabelContainer {
@@ -5972,7 +6326,30 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         padding-left: 0;
     }
 
+    #ATSIntegrations > div > img {
+        margin-left: 15px;
+    }
+    .trello {
+        height: 13.68px;
+    }
+    .bamboo-hr {
+        height: 10.08px;
+    }
+    .workable {
+        height: 21.6px;
+    }
+    .slack {
+        height: 14.4px;
+    }
+    .recruitee {
+        height: 10.8px;
+    }
+
     .twoOptionsOr { margin: 55px 10px 0; }
+
+    .pricingInput .blackInput {
+        min-width: 0;
+    }
 
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }
@@ -6060,6 +6437,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .myCandidatesTabs {
         width: 280px;
         font-size: 12px;
+    }
+    #ATSIntegrations > div > img {
+        margin-left: 7.5px;
     }
 
     .myCandidates .mobileCandidate,
@@ -6180,10 +6560,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: 12px;
     }
     .processHeaderContainer { width: 108px; }
-    .processListItem > img {
-        height: 10px;
-        top: calc(50% - 2px);
-    }
 
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
         grid-column-start: 26;
@@ -6245,6 +6621,11 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .moonshotMenuLogo {
         margin-left: 0px;
+    }
+    .easeLogo {
+        width: 50px;
+        height: 20px;
+        line-height: 30px;
     }
 }
 

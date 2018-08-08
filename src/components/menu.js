@@ -300,13 +300,24 @@ class Menu extends Component {
         // if there is no user logged in
         else if (!currentUser) {
             loggedInClass = " loggedOut";
-            menuOptions = [
-                {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
-                {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
-                {optionType: "separator"},
-                {optionType: "url", title: "Log In", url: "/login"},
-            ];
+            if (pathname === "/") {
+                menuOptions = [
+                    {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
+                    {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
+                    {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                    {optionType: "separator"},
+                    {optionType: "url", title: "Log In", url: "/login"},
+                    {optionType: "button", title: "Enter a position"}
+                ];
+            } else {
+                menuOptions = [
+                    {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
+                    {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
+                    {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                    {optionType: "separator"},
+                    {optionType: "url", title: "Log In", url: "/login"},
+                ];
+            }
         }
         // if the current user is an account admin for a business
         else if (currentUser.userType === "accountAdmin") {
@@ -474,6 +485,19 @@ class Menu extends Component {
                         <MenuItem key={"signOut mobile"} primaryText="Sign out" onClick={() => self.signOut()}/>
                     );
                     break;
+                case "button":
+                    // add the menu item to the dropDown
+                    desktopMenu.push(
+                        <MenuItem><div className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
+                            <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position"
+                            />
+                            <div className="menuButton button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}}>
+                                Try for Free
+                            </div>
+                        </div></MenuItem>
+                    );
+                    // no button on mobile menu
+                    break;
                 default:
                     break;
 
@@ -508,6 +532,16 @@ class Menu extends Component {
                 onClick={logoClickAction}
             />
         );
+        let easeLogoHtml =
+        <img
+            width={100}
+            height={30}
+            alt="Moonshot"
+            style={{verticalAlign: "baseline"}}
+            className="easeLogo"
+            id="easeLogo"
+            src={"/logos/EaseLogo" + this.props.png}
+        />
 
         let menu = (
             <header
@@ -518,6 +552,15 @@ class Menu extends Component {
                     <Toolbar id="menu" style={{height: "35px"}}>
                         <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "39px"}}>
                             {moonshotLogoHtml}
+                            {this.props.location.pathname === '/influencer' ?
+                                <div>
+                                    <div className="easeDivider inlineBlock" />
+                                    <div className="inlineBlock">
+                                        {easeLogoHtml}
+                                    </div>
+                                </div>
+                                : null
+                            }
                         </ToolbarGroup>
                         <ToolbarGroup className="marginTop10px">
                             {desktopMenu}
