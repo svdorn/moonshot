@@ -885,10 +885,10 @@ class BusinessHome extends Component {
                                         </div>
                                         <ul className="primary-white font14px font12pxUnder400" style={{textAlign: "left", width: "95%", margin:"auto"}}>
                                             <li>
-                                                Monthly payments stop if hire is no longer employed
+                                                Monthly payments stop if a<br/>hire is no longer employed
                                             </li>
                                             <li>
-                                                Full refund if hire is no longer employed within 4 months
+                                                Full refund if a hire is no longer<br/>employed within four months
                                             </li>
                                             <li>
                                                 Pay off your balance at any time
