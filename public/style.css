@@ -739,13 +739,22 @@ form > h1 {
 
 
 
-
+.menuButtonArea {
+    display: flex;
+    margin: 5px 0;
+}
 
 
 
 .buttonArea {
     display: flex;
     margin: 20px 0;
+}
+.menuButtonArea .blackInput {
+    line-height: 30px;
+}
+.menuButtonArea .menuButton {
+    line-height: 30px;
 }
 .blackInput {
     border-radius: 10px;
@@ -4426,6 +4435,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .under850only { display: none; }
 }
 @media only screen and (max-width: 850px) {
+    .above850OnlyImportant { display: none !important; }
     .font50pxUnder850 { font-size: 50px; }
     .font48pxUnder850 { font-size: 48px; }
     .font46pxUnder850 { font-size: 46px; }
