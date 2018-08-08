@@ -2344,10 +2344,14 @@ button.link {
 
 #pricingSection .flourish-icon {
     position: absolute;
-    left: 0;
-    width: 100%;
-    bottom: 0;
+    right: -0.3%;
+    width: 100.5%;
+    bottom: -0.5%;
     z-index: 1;
+}
+#pricingSection .businessHomeGradientBorder2 .flourish-icon {
+    width: 101%;
+    right: 0;
 }
 #pricingSection .pricing-container {
     z-index: 10;
