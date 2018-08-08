@@ -11,6 +11,7 @@ import {Field, reduxForm} from 'redux-form';
 import AddUserDialog from '../childComponents/addUserDialog';
 import YouTube from 'react-youtube';
 import ProgressBarDialog from '../miscComponents/progressBarDialog';
+import HoverTip from '../miscComponents/hoverTip';
 import { isValidEmail } from "../../miscFunctions";
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -739,9 +740,9 @@ class BusinessHome extends Component {
                         <div className="forBusinessBoxesContainer">
                             <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
                                  style={{marginBottom: '50px'}}>
-                                Title Goes Here
-                                <div className="font18px font16pxUnder700 font10pxUnder400 primary-white">
-                                    Unlimited evaluations of all your applicants across <div style={{display:"inline-block"}} className="primary-cyan">five functions</div>.
+                                Pay Only When You Hire
+                                <div className="font18px font16pxUnder700 font12pxUnder400 primary-white">
+                                    The checkbook only comes out when we help you hire<div className="above700only br"><br/></div> the best people for your company.
                                 </div>
                             </div>
                             <Paper className="businessHomeGradientBorder1 paperBoxBusinessHome"
@@ -775,10 +776,10 @@ class BusinessHome extends Component {
                                             Hire the best candidate
                                         </li>
                                     </ul>
-                                    <div>
+                                    {/*<div>
                                         <img src={"/images/businessHome/Flourish1" + this.props.png}
                                         alt="Flourish Icon"/>
-                                    </div>
+                                    </div>*/}
                                 </div>
                             </Paper>
                             <div className="under800only" style={{height:"0px"}}><br/></div>
@@ -815,12 +816,30 @@ class BusinessHome extends Component {
                                             Pay off your balance at any time
                                         </li>
                                     </ul>
-                                    <div>
+                                    {/*<div>
                                         <img src={"/images/businessHome/Flourish2" + this.props.png}
                                         alt="Flourish Icon"/>
-                                    </div>
+                                    </div>*/}
                                 </div>
                             </Paper>
+                            <div className="marginTop10px">
+                                <div className="primary-white font18px font16pxUnder700 font12pxUnder450">
+                                    Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five functions</div><HoverTip
+                                        style={{marginTop: "26px", marginLeft: "-70px"}}
+                                        text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
+                                    />.
+                                </div>
+                                <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
+                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="email"
+                                    value={this.state.position} onChange={this.onChange.bind(this)}/>
+                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={this.handleOpen}>
+                                        Try for Free
+                                    </div>
+                                </div>
+                                <div className="font16px font14pxUnder800 font12pxUnder500 marginTop10px secondary-gray">
+                                    <i>No credit card required.</i>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
