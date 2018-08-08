@@ -65,7 +65,7 @@ class SelectMethod extends Component {
 
         return (
             <div>
-                <div style={{textAlign: "left"}}>
+                <div style={{textAlign: "left", marginBottom: "10px"}}>
                     We are actively creating integrations to automate applicant
                     invites and save you hours of manual entry. Select what
                     integration would be most valuable to you.

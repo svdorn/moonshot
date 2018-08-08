@@ -54,7 +54,7 @@ class Onboarding extends Component {
         if (typeof extraOnboardingArgs === "object" && !extraOnboardingArgs.target) {
             onboarding = {...onboarding, ...extraOnboardingArgs};
         }
-        
+
         onboarding.step++;
 
         if (onboarding.step >= onboarding.furthestStep) {
@@ -100,11 +100,10 @@ class Onboarding extends Component {
             <div className="congratulations primary-white center">
                 <div>
                     <div className="font18px text-left">
-                        You made it! You earned 50% off the first three months of
-                        any subscription plan you select. The launch date of your
-                        first evaluation takes a few days from the time you activate
-                        your account to go live. We{"'"}ll let you know the second
-                        it{"'"}s ready. In the meantime, you can see its status {"in "}
+                        You made it! The launch date of your first evaluation
+                        takes a few days from the time you activate your account
+                        to go live. We{"'"}ll let you know the second it{"'"}s
+                        ready. In the meantime, you can see its status {"in "}
                         <span
                             onClick={() => this.goTo("/myEvaluations")}
                             className="primary-cyan pointer"
