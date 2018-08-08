@@ -47,15 +47,21 @@ class Onboarding extends Component {
     }
 
     handleNext(extraOnboardingArgs) {
+        console.log("handling Next");
         const user = this.props.currentUser;
-        let onboarding = {...user.onboarding, ...extraOnboardingArgs};
+        let onboarding = user.onboarding;
+        // if we got extra args AND they aren't a click event, add them
+        if (typeof extraOnboardingArgs === "object" && !extraOnboardingArgs.target) {
+            onboarding = {...onboarding, ...extraOnboardingArgs};
+        }
+        
         onboarding.step++;
 
         if (onboarding.step >= onboarding.furthestStep) {
             onboarding.furthestStep = onboarding.step;
         }
 
-        if (onboarding.step > 8 || onboarding.furthestStep > 8) {
+        if (onboarding.step > 7 || onboarding.furthestStep > 7) {
             onboarding.complete = true;
         }
 
@@ -150,49 +156,44 @@ class Onboarding extends Component {
 
         const checklistItems = [
             {
-                name: "Create Evaluation",
-                length: "20s",
-                step: 0
-            },
-            {
                 name: "Activate Admin Account",
                 length: "30s",
-                step: 1
+                step: 0
             },
             {
                 name: "Watch Tutorial",
                 length: "3m",
-                step: 2
+                step: 1
             },
             {
                 name: "Google Jobs Posting",
                 length: "30s",
-                step: 3
+                step: 2
             },
             {
                 name: "Automate Applicant Invites",
                 length: "7m",
-                step: 4
+                step: 3
             },
             {
                 name: "Set Applicant Invite Cadence",
                 length: "1m",
-                step: 5
+                step: 4
             },
             {
                 name: "Invite Existing Candidates",
                 length: "3m",
-                step: 6
+                step: 5
             },
             {
                 name: "Invite Other Admins",
                 length: "30s",
-                step: 7
+                step: 6
             },
             {
                 name: "Invite Employees",
                 length: "30s",
-                step: 8
+                step: 7
             }
         ];
 
@@ -237,32 +238,13 @@ class Onboarding extends Component {
             var stepName = "Create Evaluation";
 
             switch(onboarding.step) {
-                // Create Evaluation
-                case 0:
-                    stepName = "Create Evaluation";
-                    body = (
-                        <div>
-                            <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
-                                Your evaluation has been created!
-                            </div>
-                            <div className="previous-next-area create-evaluation font18px primary-white center marginTop20px">
-                                <div
-                                    className="button noselect round-4px background-primary-cyan inlineBlock"
-                                    onClick={this.handleNext.bind(this)}
-                                >
-                                    Next
-                                </div>
-                            </div>
-                        </div>
-                    );
-                    break;
                 // Activate Admin Account
-                case 1:
+                case 0:
                     stepName = "Activate Admin Account";
                     body = (<VerifyEmail {...childProps} />);
                     break;
                 // Watch Tutorial
-                case 2:
+                case 1:
                     stepName = "Watch Tutorial";
                     body = (
                         <div>
@@ -290,34 +272,33 @@ class Onboarding extends Component {
                     );
                     break;
                 // Google Jobs Posting
-                case 3:
+                case 2:
                     stepName = "Google Jobs Posting";
                     body = (
                         <GoogleJobs {...childProps} />
                     );
-                    console.log("body: ", body);
                     break;
                 // Automate Applicant Invites
-                case 4:
+                case 3:
                     stepName = this.props.automateApplicantsHeader;
                     body = (<AutomateInvites {...childProps} />);
                     break;
                 // Set Applicant Invite Cadence
-                case 5:
+                case 4:
                     stepName =  "Applicant Invitation Cadence";
                     body = (
                         <InviteCadence {...childProps} />
                     );
                     break;
                 // Invite Existing Candidates
-                case 6:
+                case 5:
                     stepName = "Import Candidates";
                     body = (
                         <ImportCandidates {...childProps} />
                     );
                     break;
                 // Invite Other Admins
-                case 7:
+                case 6:
                     stepName = "Invite Admins"
                     tab = "Admin";
                     body = (
@@ -325,14 +306,14 @@ class Onboarding extends Component {
                     );
                     break;
                 // Invite Employees
-                case 8:
+                case 7:
                     stepName = "Invite Employees";
                     tab = "Employee";
                     body = (
                         <InviteEmployees {...childProps} />
                     );
                     break;
-                case 9:
+                case 8:
                     stepName = "Congratulations!"
                     body = this.createCongratulations();
                     break;

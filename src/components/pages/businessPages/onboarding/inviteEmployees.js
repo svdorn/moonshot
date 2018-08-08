@@ -39,7 +39,7 @@ class InviteEmployees extends Component {
                         </div>
                         <div
                             className="button noselect round-4px background-primary-cyan inlineBlock"
-                            onClick={this.props.next}
+                            onClick={() => this.props.next()}
                         >
                             Continue
                         </div>
