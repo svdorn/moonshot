@@ -300,7 +300,10 @@ class BusinessHome extends Component {
             {
                 title: "Any Position",
                 text1: "Evaluations for any position",
-                text2: "across 5 functions",
+                text2: <div>across <div className="home-pink inlineBlock">five position types</div><HoverTip
+                    style={{marginTop: "26px", marginLeft: "-70px"}}
+                    text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
+                /></div>,
                 icon: "5Icon",
                 alt: "5 Icon",
                 iconStyle: {}
@@ -315,8 +318,8 @@ class BusinessHome extends Component {
             },
             {
                 title: "Quarterly Reviews",
-                text1: "Hires can retake evaluations",
-                text2: "every quarter for updated insights",
+                text1: "Hires are reviewed to update",
+                text2: "and improve your predictive model",
                 icon: "FlameIcon",
                 alt: "Flame Icon",
                 iconStyle: {}
@@ -805,9 +808,9 @@ class BusinessHome extends Component {
                         <div className="forBusinessBoxesContainer">
                             <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
                                  style={{marginBottom: '50px'}}>
-                                Pay Only When You Hire
+                                Pay Only When You Make A Great Hire
                                 <div className="font18px font16pxUnder700 font12pxUnder400 primary-white">
-                                    The checkbook only comes out when we help you hire<div className="above700only br"><br/></div> the best people for your company.
+                                    Our incentives are aligned. You only pay when you hire<div className="above700only br"><br/></div> a top performer who stays at your company.
                                 </div>
                             </div>
                             <div className="businessHomeGradientBorder1 paperBoxBusinessHome">
@@ -899,7 +902,7 @@ class BusinessHome extends Component {
                             </div>
                             <div className="marginTop10px">
                                 <div className="primary-white font18px font16pxUnder700 font12pxUnder450">
-                                    Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five functions</div><HoverTip
+                                    Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five position types</div><HoverTip
                                         style={{marginTop: "26px", marginLeft: "-70px"}}
                                         text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
                                     />.
