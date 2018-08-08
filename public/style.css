@@ -2760,6 +2760,29 @@ button.link {
     text-overflow: unset;
 }
 
+#pricingSection ul {
+    list-style: none;
+    padding: 0;
+}
+#pricingSection .businessHomeGradientBorder1 li::before {
+    content: "•";
+    color: #ff748c;
+    display: inline-block;
+    width: 20px;
+}
+#pricingSection .businessHomeGradientBorder2 li::before {
+    content: "•";
+    color: #7dfed2;
+    display: inline-block;
+    width: 20px;
+    margin-left: -20px;
+}
+#pricingSection .businessHomeGradientBorder2 li {
+    max-width: 250px;
+    text-align: center;
+    margin: auto;
+}
+
 
 .semiOpaqueHoverable {
     opacity: 0.5;
