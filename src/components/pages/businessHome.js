@@ -720,7 +720,7 @@ class BusinessHome extends Component {
                                     </div>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
-                                        <div style={{position: "relative", textAlign:"left", padding: "20px 0 0 10px"}}>
+                                        <div style={{position: "relative", textAlign:"left"}}>
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Improve Your Efficiency</div>
                                             <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost and time per hire by spending 50%<div className="above600only br"><br/></div> less time screening candidates.</div>
                                             <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text"><span>Learn More</span> &#8594;</div>
@@ -728,7 +728,7 @@ class BusinessHome extends Component {
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
-                                        <div style={{position: "relative", textAlign:"left", padding: "20px 0 0 10px"}}>
+                                        <div style={{position: "relative", textAlign:"left"}}>
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
                                             <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also<div className="above1000only br"><br/></div> offer new and diverse perspectives.</div>
                                             <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text"><span>Learn More</span> &#8594;</div>
@@ -736,7 +736,7 @@ class BusinessHome extends Component {
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
-                                        <div style={{position: "relative", textAlign:"left", padding: "20px 0 0 10px"}}>
+                                        <div style={{position: "relative", textAlign:"left"}}>
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Hire Top Performers</div>
                                             <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">A repeatable, everlearning process that consistently identifies top performers and bad hires.</div>
                                             <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text"><span>Learn More</span> &#8594;</div>

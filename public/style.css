@@ -2223,6 +2223,10 @@ form > h1 {
     margin-right: 10px;
 }
 
+#businessHomeStatistics .paperBoxPredictiveStats > div {
+    padding: 20px 20px 0;
+}
+
 
 button.link {
   background: none;
@@ -4835,6 +4839,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .automate-invites .manual-invite .manual-add-example {
         --device-scale: .2;
+    }
+
+    #businessHomeStatistics .paperBoxPredictiveStats > div {
+        padding: 20px 0 0 10px;
     }
 
     .myCandidates .candidatesAndOptions {
