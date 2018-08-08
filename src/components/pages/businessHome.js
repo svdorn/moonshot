@@ -664,7 +664,7 @@ class BusinessHome extends Component {
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
                                             <div className="primary-white font20px font18pxUnder900 font16pxUnder700">Enhance Your Culture</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Find candidates that not only fit your company, but bring something new and diverse to the table.</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Find candidates that not only fit your company, but bring <div className="above600only br"><br/></div>something new and diverse to the table.</div>
                                             <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
                                         </div>
                                     </Paper>
@@ -694,11 +694,12 @@ class BusinessHome extends Component {
                                         </button>
                                     </div>
                                 </div>
-                                <div/>
-                                <div>
-                                    <div>
-                                        Video
-                                    </div>
+                                <div className="screenshot">
+                                    <div className="dark-opacity"></div>
+                                    <img
+                                        src={"/images/businessHome/ListViewScreenshot" + this.props.png}
+                                    />
+                                    <div className="skew-image-cover"></div>
                                 </div>
                             </div>
                         </div>

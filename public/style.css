@@ -950,6 +950,29 @@ form > h1 {
 #moonshotProcess > div > button {
     padding: 6px 20px;
 }
+
+#moonshotProcess .processOutline .screenshot {
+    position: relative;
+}
+#moonshotProcess .processOutline .screenshot > .dark-opacity {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.4);
+}
+#moonshotProcess .processOutline .screenshot > img {
+    height: 100%;
+}
+#moonshotProcess .processOutline .screenshot > .skew-image-cover {
+    height: 100%;
+    width: 19%;
+    background-color: var(--primary-black-dark);
+    position: absolute;
+    top: 0;
+    transform: skewX(-20deg) translateX(-50%);
+}
+
+
 .processButtonsContainer {
     position: relative;
     display: inline-block;
@@ -1064,34 +1087,9 @@ form > h1 {
     text-align: center;
     padding: 0 25px;
 }
-/* the centerline */
-.processOutline > div > div:nth-child(2) {
-    width: 2px;
-    height: 140px;
-    background: linear-gradient(to top, #a88cfe, #7ed2fe);
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
 /* the list */
 .processOutline > div > div:nth-child(3) > div {
     padding: 0 20px;
-}
-.processListItem {
-    position: relative;
-}
-/* check mark icon */
-.processListItem > img {
-    display: inline-block;
-    height: 13px;
-    position: absolute;
-    top: calc(50% - 3px);
-    transform: translateY(-50%);
-}
-.processListItem > div {
-    display: inline-block;
-    width: calc(100% - 28px);
-    margin-left: 24px;
 }
 .shadowBox {
     -webkit-box-shadow: 0 0 80px 20px rgba(0,0,0,.5);
@@ -4942,15 +4940,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .processOutline > div > div:first-child > div {
         padding: 0 10px;
     }
-    .processOutline > div > div:nth-child(3) > div { padding: 0 10px; }
-    .processListItem > img { margin-right: 8px; }
-    .processListItem > div {
-        width: calc(100% - 30px);
-        margin-left: 20px;
-    }
-    #moonshotProcess > div:nth-child(4) {
-        margin-top: 30px;
-    }
 
 
     .homePathwaysDesc {
@@ -5914,10 +5903,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: 12px;
     }
     .processHeaderContainer { width: 108px; }
-    .processListItem > img {
-        height: 10px;
-        top: calc(50% - 2px);
-    }
 
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
         grid-column-start: 26;
