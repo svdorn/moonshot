@@ -751,8 +751,7 @@ class BusinessHome extends Component {
                                     The checkbook only comes out when we help you hire<div className="above700only br"><br/></div> the best people for your company.
                                 </div>
                             </div>
-                            <Paper className="businessHomeGradientBorder1 paperBoxBusinessHome"
-                                zDepth={2}>
+                            <div className="businessHomeGradientBorder1 paperBoxBusinessHome">
                                 <div style={{textAlign: "center", position: "relative"}}>
                                     <div className="home-peach paddingTop10px font20px font16pxUnder400">
                                         Test It Out
@@ -787,10 +786,9 @@ class BusinessHome extends Component {
                                         alt="Flourish Icon"/>
                                     </div>*/}
                                 </div>
-                            </Paper>
+                            </div>
                             <div className="under800only" style={{height:"0px"}}><br/></div>
-                            <Paper className="businessHomeGradientBorder2 paperBoxBusinessHome"
-                                   zDepth={2}>
+                            <div className="businessHomeGradientBorder2 paperBoxBusinessHome">
                                 <div style={{textAlign: "center", position: "relative"}}>
                                     <div className="home-blue paddingTop10px font20px font16pxUnder400">
                                         4 Month Guarantee
@@ -827,7 +825,7 @@ class BusinessHome extends Component {
                                         alt="Flourish Icon"/>
                                     </div>*/}
                                 </div>
-                            </Paper>
+                            </div>
                             <div className="marginTop10px">
                                 <div className="primary-white font18px font16pxUnder700 font12pxUnder450">
                                     Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five functions</div><HoverTip

@@ -1950,6 +1950,9 @@ button.link {
     display: inline-block;
     margin: 0 25px 40px;
     vertical-align: top;
+    -moz-box-shadow:    0px 10px 30px 2px #000000;
+    -webkit-box-shadow: 0px 10px 30px 2px #000000;
+    box-shadow:         0px 10px 30px 2px #000000;
 }
 
 .paperBoxPredictiveStats {
@@ -2000,7 +2003,7 @@ button.link {
 .gradient-1-home-peach { --gradient-color-1: #ffe09e; }
 .gradient-2-home-pink { --gradient-color-2: #ff748c; }
 .businessHomeGradientBorder1 {
-    padding: 2px;
+    padding: 3px;
     background: linear-gradient(to top left, #ff748c, #ffe09e);
 }
 .businessHomeGradientBorder1 > div {
@@ -2009,7 +2012,7 @@ button.link {
     width: 100%;
 }
 .businessHomeGradientBorder2 {
-    padding: 2px;
+    padding: 3px;
     background: linear-gradient(to top left, #76defe, #7dfed2);
 }
 .businessHomeGradientBorder2 > div {
