@@ -444,7 +444,7 @@ class BusinessHome extends Component {
                                 <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
                                 <p className="infoText notFull font18px font16pxUnder900 font14Under400">Hire the best people for your team with hiring technology that constantly learns and improves as you scale.</p>
                                 <div className="buttonArea font18px font14pxUnder900">
-                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position"
+                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
                                     <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot" + positionUrl)}>
                                         Try for Free

@@ -1008,6 +1008,9 @@ form > h1 {
 .pricingInput .blackInput {
     min-width: 300px;
 }
+.buttonArea .blackInput {
+    min-width: 310px;
+}
 
 .blackInput {
     border-radius: 10px;
@@ -1222,7 +1225,7 @@ form > h1 {
 
 
 .frontPage .infoContainer .content .buttonArea .button.getStarted {
-    margin-left: 10%;
+    margin-left: 5%;
 }
 
 #myCandidatesScreenshot {
@@ -5014,6 +5017,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: 0 10px 40px;
     }
 
+    .buttonArea .blackInput {
+        min-width: 250px;
+    }
+
     .font40pxUnder900 { font-size: 40px; }
     .font38pxUnder900 { font-size: 38px; }
     .font36pxUnder900 { font-size: 36px; }
@@ -6399,6 +6406,11 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 250px;
     }
 
+    .buttonArea .blackInput {
+        max-width: 125px;
+        min-width: 0;
+    }
+
     .font40pxUnder450 { font-size: 40px; }
     .font38pxUnder450 { font-size: 38px; }
     .font36pxUnder450 { font-size: 36px; }
@@ -6491,14 +6503,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .marginSides40pxUnder700 { margin-right: 20px; margin-left: 20px; }
 
-    .buttonArea { flex-direction: column; }
     .frontPage .infoContainer .content .buttonArea .blackInput.getStarted {
-        margin-bottom: 12px;
+        margin-left: 10px;
         width: 70%;
     }
     .frontPage .infoContainer .content .buttonArea .button.getStarted {
-        margin-left: 0;
-        width: 98px;
+        width: 94px;
     }
     .frontPage .infoText.flex {
         margin-right: calc((100% - 250px) / 1.2);
