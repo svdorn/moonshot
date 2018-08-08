@@ -515,6 +515,16 @@ class Menu extends Component {
                 onClick={logoClickAction}
             />
         );
+        let easeLogoHtml =
+        <img
+            width={100}
+            height={30}
+            alt="Moonshot"
+            style={{verticalAlign: "baseline"}}
+            className="easeLogo"
+            id="easeLogo"
+            src={"/logos/EaseLogo" + this.props.png}
+        />
 
         let menu = (
             <header className={this.state.headerClass + additionalHeaderClass} style={{zIndex: "100"}}>
@@ -522,6 +532,15 @@ class Menu extends Component {
                     <Toolbar id="menu" style={{height: "35px"}}>
                         <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "39px"}}>
                             {moonshotLogoHtml}
+                            {this.props.location.pathname === '/influencer' ?
+                                <div>
+                                    <div className="easeDivider inlineBlock" />
+                                    <div className="inlineBlock">
+                                        {easeLogoHtml}
+                                    </div>
+                                </div>
+                                : null
+                            }
                         </ToolbarGroup>
                         <ToolbarGroup className="marginTop10px">
                             {desktopMenu}

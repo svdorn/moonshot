@@ -1529,6 +1529,13 @@ form > h1 {
     position: absolute;
 }
 
+.easeDivider {
+    width: 2px;
+    height: 30px;
+    background-color: var(--secondary-gray);
+    margin: 12px 20px 0px 15px;
+}
+
 .menuDivider {
     width: 2px;
     height: 21px;
@@ -5423,6 +5430,13 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         font-size: 14px;
     }
 
+    .easeDivider {
+        margin: 12px 10px 0px 5px;
+    }
+    .moonshotMenuLogo {
+        margin-left: 10px;
+    }
+
     .leftYAxisLabelContainer {
         left: -35px;
     }
@@ -5965,6 +5979,11 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .moonshotMenuLogo {
         margin-left: 0px;
+    }
+    .easeLogo {
+        width: 50px;
+        height: 20px;
+        line-height: 30px;
     }
 }
 
