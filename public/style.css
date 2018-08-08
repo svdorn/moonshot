@@ -785,6 +785,7 @@ form > h1 {
     color: inherit;
 }
 .button.medium { padding: 3px 10px; }
+.button.large { padding: 5px 18px; }
 
 .button.round-2px { border-radius: 2px; }
 .button.round-4px { border-radius: 4px; }
@@ -1960,6 +1961,11 @@ button.link {
     left: 0;
     width: 100%;
     bottom: 0;
+    z-index: 1;
+}
+#pricingSection .pricing-container {
+    z-index: 10;
+    position: relative;
 }
 
 .paperBoxPredictiveStats {
@@ -2009,6 +2015,10 @@ button.link {
 }
 .gradient-1-home-peach { --gradient-color-1: #ffe09e; }
 .gradient-2-home-pink { --gradient-color-2: #ff748c; }
+.gradient-1-home-pricing-peach { --gradient-color-1: #ffd79c; }
+.gradient-2-home-pricing-pink { --gradient-color-2: #ff7d8e; }
+.gradient-1-home-pricing-green { --gradient-color-1: #2ef3ca; }
+.gradient-2-home-pricing-blue { --gradient-color-2: #2ad8ee; }
 .businessHomeGradientBorder1 {
     padding: 3px;
     background: linear-gradient(to top left, #ff748c, #ffe09e);

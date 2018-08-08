@@ -817,35 +817,39 @@ class BusinessHome extends Component {
                                         alt="Flourish Icon"
                                         className="flourish-icon"
                                     />
-                                    <div className="home-peach paddingTop10px font20px font16pxUnder400">
-                                        Test It Out
+                                    <div className="pricing-container">
+                                        <div className="home-peach paddingTop10px font20px font16pxUnder400">
+                                            Test It Out
+                                        </div>
+                                        <img
+                                            src={"/images/businessHome/PaperAirplane2" + this.props.png}
+                                            alt="Paper Airplane Icon"
+                                            className="businessHomeBoxIcons"
+                                        />
+                                        <div className="primary-white marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
+                                            First Hire
+                                        </div>
+                                        <div className="home-peach font30px font24pxUnder400">
+                                            FREE
+                                        </div>
+                                        <ul className="primary-white font14px font12pxUnder400">
+                                            <li>
+                                                Select a position to evaluate
+                                            </li>
+                                            <li>
+                                                Invite applicants to the evaluation
+                                            </li>
+                                            <li>
+                                                Review the results
+                                            </li>
+                                            <li>
+                                                Hire the best candidate
+                                            </li>
+                                        </ul>
+                                        <div className="button large round-4px gradient-transition gradient-1-home-pricing-peach gradient-2-home-pricing-pink primary-white font18px" onClick={this.handleOpen}>
+                                            Try for Free
+                                        </div>
                                     </div>
-                                    <img
-                                        src={"/images/businessHome/PaperAirplane2" + this.props.png}
-                                        alt="Paper Airplane Icon"
-                                        className="businessHomeBoxIcons"
-                                    />
-                                    <div className="primary-white marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
-                                        First Hire
-                                    </div>
-                                    <div className="home-peach font30px font24pxUnder400">
-                                        FREE
-                                    </div>
-                                    <ul className="primary-white font14px font12pxUnder400">
-                                        <li>
-                                            Select a position to evaluate
-                                        </li>
-                                        <li>
-                                            Invite applicants to the evaluation
-                                        </li>
-                                        <li>
-                                            Review the results
-                                        </li>
-                                        <li>
-                                            Hire the best candidate
-                                        </li>
-                                    </ul>
-
                                 </div>
                             </div>
                             <div className="under800only" style={{height:"0px"}}><br/></div>
@@ -856,39 +860,41 @@ class BusinessHome extends Component {
                                         className="flourish-icon"
                                         alt="Flourish Icon"
                                     />
-
-                                    <div className="home-blue paddingTop10px font20px font16pxUnder400">
-                                        4 Month Guarantee
-                                    </div>
-                                    <img
-                                        src={"/images/businessHome/EnterpriseRocket2" + this.props.png}
-                                        alt="Enterprise Rocket Icon"
-                                        className="businessHomeBoxIcons"
-                                    />
-                                    <div className="primary-white marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
-                                        Each Additional Hire
-                                    </div>
-                                    <div className="primary-white">
-                                        <span className="font30px font24pxUnder400 home-blue">${this.state.price}</span>
-                                        <span className="font16px font14pxUnder400">&nbsp;/ month</span>
-                                        <div className="font16px font14pxUnder400" style={{marginTop:"-10px"}}>
-                                            <span>for up to&nbsp;</span>
-                                            {this.makePricingDropdown(this.state.pricing)}
+                                    <div className="pricing-container">
+                                        <div className="home-blue paddingTop10px font20px font16pxUnder400">
+                                            4 Month Guarantee
+                                        </div>
+                                        <img
+                                            src={"/images/businessHome/EnterpriseRocket2" + this.props.png}
+                                            alt="Enterprise Rocket Icon"
+                                            className="businessHomeBoxIcons"
+                                        />
+                                        <div className="primary-white marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
+                                            Each Additional Hire
+                                        </div>
+                                        <div className="primary-white">
+                                            <span className="font30px font24pxUnder400 home-blue">${this.state.price}</span>
+                                            <span className="font16px font14pxUnder400">&nbsp;/ month</span>
+                                            <div className="font16px font14pxUnder400" style={{marginTop:"-10px"}}>
+                                                <span>for up to&nbsp;</span>
+                                                {this.makePricingDropdown(this.state.pricing)}
+                                            </div>
+                                        </div>
+                                        <ul className="primary-white font14px font12pxUnder400" style={{textAlign: "left", width: "95%", margin:"auto"}}>
+                                            <li>
+                                                Monthly payments stop if hire is no longer employed
+                                            </li>
+                                            <li>
+                                                Full refund if hire is no longer employed within 4 months
+                                            </li>
+                                            <li>
+                                                Pay off your balance at any time
+                                            </li>
+                                        </ul>
+                                        <div className="button large round-4px gradient-transition gradient-1-home-pricing-green gradient-2-home-pricing-blue primary-white font18px" onClick={this.handleOpen}>
+                                            Try for Free
                                         </div>
                                     </div>
-                                    <ul className="primary-white font14px font12pxUnder400" style={{textAlign: "left", width: "95%", margin:"auto"}}>
-                                        <li>
-                                            Monthly payments stop if hire is no longer employed
-                                        </li>
-                                        <li>
-                                            Full refund if hire is no longer employed within 4 months
-                                        </li>
-                                        <li>
-                                            Pay off your balance at any time
-                                        </li>
-                                    </ul>
-
-
                                 </div>
                             </div>
                             <div className="marginTop10px">
