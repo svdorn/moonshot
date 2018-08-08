@@ -775,9 +775,10 @@ class BusinessHome extends Component {
                                             Hire the best candidate
                                         </li>
                                     </ul>
-                                    <button className="button gradient-transition gradient-1-red gradient-2-orange pricingButton primary-white font18px font14pxUnder400" onClick={this.handleOpen}>
-                                        Take Off
-                                    </button>
+                                    <div>
+                                        <img src={"/images/businessHome/Flourish1" + this.props.png}
+                                        alt="Flourish Icon"/>
+                                    </div>
                                 </div>
                             </Paper>
                             <div className="under800only" style={{height:"0px"}}><br/></div>
@@ -814,9 +815,10 @@ class BusinessHome extends Component {
                                             Pay off your balance at any time
                                         </li>
                                     </ul>
-                                    <button className="button gradient-transition gradient-1-red gradient-2-orange pricingButton primary-white font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
-                                        Blast Off
-                                    </button>
+                                    <div>
+                                        <img src={"/images/businessHome/Flourish2" + this.props.png}
+                                        alt="Flourish Icon"/>
+                                    </div>
                                 </div>
                             </Paper>
                         </div>
