@@ -718,25 +718,25 @@ class BusinessHome extends Component {
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
-                                            <div className="primary-white font20px font18pxUnder900 font16pxUnder700">Improve Your Efficiency</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost to hire. Spend less time sorting through resumes, and more time looking at the cadidates that matter.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
+                                            <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Improve Your Efficiency</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost and time per hire by spending 50%<div className="above600only br"><br/></div> less time screening candidates.</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Learn More &#8594;</div>
                                         </div>
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
-                                            <div className="primary-white font20px font18pxUnder900 font16pxUnder700">Enhance Your Culture</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Find candidates that not only fit your company, but bring <div className="above600only br"><br/></div>something new and diverse to the table.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
+                                            <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also<div className="above1000only br"><br/></div> offer new and diverse perspectives.</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Learn More &#8594;</div>
                                         </div>
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
-                                            <div className="primary-white font20px font18pxUnder900 font16pxUnder700">Hire Better Talent</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">Hire candidates that won&#39;t just be top performers, but will continue to improve and grow alongside your company.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
+                                            <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Hire Top Performers</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">A repeatable, everlearning process that consistently identifies top performers and bad hires.</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Learn More &#8594;</div>
                                         </div>
                                     </Paper>
                                 </div>
