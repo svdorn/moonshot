@@ -13,25 +13,25 @@ class InviteAdmins extends Component {
         return (
             <div className="invite-admins primary-white center">
                 <div>
-                    <div className="font16px">
+                    <div className="font16px" style={{textAlign: "left", width: "80%", minWidth: "200px", margin: "0 auto 10px"}}>
                         Admins are able to manage employee and candidate accounts
                         and can see candidate evaluation results. Invite any
                         Hiring Managers, Recruiters, or Executives that are
                         involved in your hiring process.
                     </div>
-                    <div className="font16px primary-cyan position-titles">
+                    <div className="font16px primary-cyan position-titles" style={{margin: "10px auto"}}>
                         <div>Recruiters</div>
                         <div>Hiring Managers</div>
                         <div>Executives</div>
                     </div>
                     <div
                         className="medium button round-4px background-primary-cyan"
-                        style={{padding: "3px 30px", margin: "0 auto"}}
+                        style={{padding: "3px 30px", margin: "10px auto"}}
                         onClick={this.props.openAddUserModal}
                     >
                         Invite
                     </div>
-                    <div className="font14px">
+                    <div className="font14px" style={{margin: "10px auto"}}>
                         You can also invite admins by going to Account&nbsp;&nbsp;>&nbsp;&nbsp;Add User&nbsp;&nbsp;>&nbsp;&nbsp;Admin.
                     </div>
                     <div className="previous-next-area font16px center">

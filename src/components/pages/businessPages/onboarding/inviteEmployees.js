@@ -13,7 +13,7 @@ class InviteEmployees extends Component {
         return (
             <div className="invite-employees primary-white center">
                 <div>
-                    <div className="font16px text-left">
+                    <div className="font16px text-left" style={{margin: "10px auto"}}>
                         The more data we have on your company, the better our
                         predictions become. Culture fit and longevity are far
                         more difficult to predict without insight into your
@@ -22,12 +22,12 @@ class InviteEmployees extends Component {
                     </div>
                     <div
                         className="medium button round-4px background-primary-cyan"
-                        style={{padding: "3px 30px", margin: "0 auto"}}
+                        style={{padding: "3px 30px", margin: "10px auto"}}
                         onClick={this.props.openAddUserModal}
                     >
                         Invite
                     </div>
-                    <div className="font14px">
+                    <div className="font14px" style={{margin: "10px auto"}}>
                         You can also invite employees by going to Account&nbsp;&nbsp;>&nbsp;&nbsp;Add User&nbsp;&nbsp;>&nbsp;&nbsp;Employee.
                     </div>
                     <div className="previous-next-area font16px center">

@@ -213,10 +213,10 @@ class ImportCandidates extends Component {
             <div className="import-candidates primary-white center">
                 { this.createCSVModal() }
                 <div>
-                    <div className="font16px">
+                    <div className="font16px" style={{margin: "10px auto"}}>
                         {"Once your candidates have been uploaded, they will be invited to complete the application. Make sure their contact emails are included."}
                     </div>
-                    <div className="font16px invite-options">
+                    <div className="font16px invite-options" style={{margin: "10px auto"}}>
                         { fileUploadArea }
                         <span>{"or"}</span>
                         <div
@@ -226,7 +226,7 @@ class ImportCandidates extends Component {
                             {"Manually Invite"}
                         </div>
                     </div>
-                    <div className="font14px">
+                    <div className="font14px" style={{margin: "10px auto"}}>
                         You can manually invite candidates at any time by going to Account&nbsp;&nbsp;>&nbsp;&nbsp;Add User&nbsp;&nbsp;>&nbsp;&nbsp;Candidate.
                     </div>
                     <div className="previous-next-area font16px center">
