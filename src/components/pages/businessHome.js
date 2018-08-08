@@ -11,7 +11,6 @@ import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import AddUserDialog from '../childComponents/addUserDialog';
-import YouTube from 'react-youtube';
 import ProgressBarDialog from '../miscComponents/progressBarDialog';
 import { isValidEmail, goTo } from "../../miscFunctions";
 import HoverTip from '../miscComponents/hoverTip';
