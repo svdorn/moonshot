@@ -684,22 +684,24 @@ class BusinessHome extends Component {
                     <section id="moonshotProcess">
                         <div className="processOutline font22px font18pxUnder850 font14pxUnder700 font10pxUnder400">
                             <div>
-                                <div>
-                                    <div style={{width: "90%", margin:"auto"}}>
-                                        We predict how successful your candidates will be before you hire them.
-                                    </div>
-                                    <div>
-                                        <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font12pxUnder700 primary-white" onClick={this.handleOpen} style={{padding: "4.5px 15px"}}>
-                                            See How &#8594;
-                                        </button>
-                                    </div>
-                                </div>
                                 <div className="screenshot">
                                     <div className="dark-opacity"></div>
                                     <img
                                         src={"/images/businessHome/ListViewScreenshot" + this.props.png}
                                     />
-                                    <div className="skew-image-cover"></div>
+                                </div>
+                                <div className="skew-image-cover"></div>
+                                <div className="left-area">
+                                    <div className="text-part">
+                                        <div className="text">
+                                            We predict how successful your candidates will be before you hire them.
+                                        </div>
+                                        <div className="button-part">
+                                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font12pxUnder700 primary-white" onClick={this.handleOpen} style={{padding: "4.5px 15px"}}>
+                                                Try for Free
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
