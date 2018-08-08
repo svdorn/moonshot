@@ -304,7 +304,7 @@ class BusinessHome extends Component {
         return (
             <section id="learnFromHires">
                 <div className="center">
-                    <div className="primary-white">
+                    <div className="primary-white inline-block" style={{maxWidth: "1200px"}}>
                         { featureBoxes }
                     </div>
                 </div>
