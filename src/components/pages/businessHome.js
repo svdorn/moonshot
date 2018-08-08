@@ -526,16 +526,16 @@ class BusinessHome extends Component {
                                 <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
                                 <p className="infoText notFull font18px font16pxUnder900 font14Under400">Hire the best people for your team with hiring technology that constantly learns and improves as you scale.</p>
                                 <div className="buttonArea font18px font14pxUnder900">
-                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="email"
+                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
                                     <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={this.handleOpen}>
                                         Try for Free
                                     </div>
                                 </div>
-                                <div className="infoText clickableNoUnderline font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600" onClick={this.handleOpen}>
+                                {/*<div className="infoText clickableNoUnderline font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600" onClick={this.handleOpen}>
                                     <img src={"images/businessHome/PlayButton" + this.props.png} alt="Play Button" className="playButton"/>
                                     <div>See how it works in 2 minutes</div>
-                                </div>
+                                </div>*/}
                             </div>
                             <figure className="productScreenshots">
                                 <div id="myCandidatesScreenshot">
@@ -830,7 +830,7 @@ class BusinessHome extends Component {
                                     />.
                                 </div>
                                 <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
-                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="email"
+                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
                                     <div className="getStarted button medium round-10px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={this.handleOpen}>
                                         Try for Free

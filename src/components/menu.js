@@ -472,7 +472,7 @@ class Menu extends Component {
                     // add the menu item to the dropDown
                     desktopMenu.push(
                         <MenuItem><div className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
-                            <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="email"
+                            <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position"
                             />
                             <div className="menuButton button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}}>
                                 Try for Free
