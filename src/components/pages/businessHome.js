@@ -832,7 +832,7 @@ class BusinessHome extends Component {
                                         <div className="hire-number primary-white font22px font18pxUnder400">
                                             First Hire
                                         </div>
-                                        <div className="home-peach font30px font24pxUnder400" style={{fontWeight: "bold"}}>
+                                        <div className="home-peach price-free font30px font24pxUnder400">
                                             FREE
                                         </div>
                                         <ul className="primary-white font14px font12pxUnder400">

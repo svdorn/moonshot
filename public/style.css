@@ -3211,6 +3211,10 @@ button.link {
     line-height: 1.2;
     margin: 10px auto;
 }
+#pricingSection .price-free {
+    font-weight: bold;
+    margin: 15px
+}
 
 .my-employees .search-fields .add-employee {
     margin: -10px 0 5px;
@@ -6600,6 +6604,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .pricingButton { bottom: 32px; }
+
+    #pricingSection .price-free {
+        margin: 10px;
+    }
 
     #crystalBall { margin-top: 110px; }
 
