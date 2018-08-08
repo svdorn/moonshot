@@ -756,6 +756,10 @@ form > h1 {
 .menuButtonArea .menuButton {
     line-height: 30px;
 }
+.pricingInput .blackInput {
+    min-width: 300px;
+}
+
 .blackInput {
     border-radius: 10px;
     border: 1px solid white;
@@ -1955,6 +1959,10 @@ button.link {
     margin: 0 25px 40px;
     vertical-align: top;
 }
+.flourishes3 {
+    position: absolute;
+    transform: translateY(-25%);
+}
 .gradientBorderPredictiveStats {
     padding: 2px;
     background: linear-gradient(to top left, var(--primary-white) , var(--primary-cyan));
@@ -1989,6 +1997,8 @@ button.link {
 .home-peach {
     color: #ffe09e;
 }
+.gradient-1-home-peach { --gradient-color-1: #ffe09e; }
+.gradient-2-home-pink { --gradient-color-2: #ff748c; }
 .businessHomeGradientBorder1 {
     padding: 2px;
     background: linear-gradient(to top left, #ff748c, #ffe09e);
@@ -5358,6 +5368,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: block;
         margin: 20px auto;
     }
+    .flourishes3 {
+        display: none;
+    }
 
 
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
@@ -5747,6 +5760,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .twoOptionsOr { margin: 55px 10px 0; }
+
+    .pricingInput .blackInput {
+        min-width: 0;
+    }
 
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }

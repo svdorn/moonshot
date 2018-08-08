@@ -11,6 +11,7 @@ import {Field, reduxForm} from 'redux-form';
 import AddUserDialog from '../childComponents/addUserDialog';
 import YouTube from 'react-youtube';
 import ProgressBarDialog from '../miscComponents/progressBarDialog';
+import HoverTip from '../miscComponents/hoverTip';
 import { isValidEmail } from "../../miscFunctions";
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -525,16 +526,16 @@ class BusinessHome extends Component {
                                 <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
                                 <p className="infoText notFull font18px font16pxUnder900 font14Under400">Hire the best people for your team with hiring technology that constantly learns and improves as you scale.</p>
                                 <div className="buttonArea font18px font14pxUnder900">
-                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="email"
+                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
                                     <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={this.handleOpen}>
                                         Try for Free
                                     </div>
                                 </div>
-                                <div className="infoText clickableNoUnderline font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600" onClick={this.handleOpen}>
+                                {/*<div className="infoText clickableNoUnderline font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600" onClick={this.handleOpen}>
                                     <img src={"images/businessHome/PlayButton" + this.props.png} alt="Play Button" className="playButton"/>
                                     <div>See how it works in 2 minutes</div>
-                                </div>
+                                </div>*/}
                             </div>
                             <figure className="productScreenshots">
                                 <div id="myCandidatesScreenshot">
@@ -651,7 +652,10 @@ class BusinessHome extends Component {
                                 <div className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-cyan statisticsHeader">
                                     Predictive Analytics Improve Hiring Results
                                 </div>
-                                <div>
+                                <div style={{position:"relative"}}>
+                                    <div className="flourishes3">
+                                        <embed src="/images/businessHome/Flourishes3.svg"/>
+                                    </div>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
@@ -742,9 +746,9 @@ class BusinessHome extends Component {
                         <div className="forBusinessBoxesContainer">
                             <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
                                  style={{marginBottom: '50px'}}>
-                                Title Goes Here
-                                <div className="font18px font16pxUnder700 font10pxUnder400 primary-white">
-                                    Unlimited evaluations of all your applicants across <div style={{display:"inline-block"}} className="primary-cyan">five functions</div>.
+                                Pay Only When You Hire
+                                <div className="font18px font16pxUnder700 font12pxUnder400 primary-white">
+                                    The checkbook only comes out when we help you hire<div className="above700only br"><br/></div> the best people for your company.
                                 </div>
                             </div>
                             <Paper className="businessHomeGradientBorder1 paperBoxBusinessHome"
@@ -778,10 +782,10 @@ class BusinessHome extends Component {
                                             Hire the best candidate
                                         </li>
                                     </ul>
-                                    <div>
+                                    {/*<div>
                                         <img src={"/images/businessHome/Flourish1" + this.props.png}
                                         alt="Flourish Icon"/>
-                                    </div>
+                                    </div>*/}
                                 </div>
                             </Paper>
                             <div className="under800only" style={{height:"0px"}}><br/></div>
@@ -818,12 +822,30 @@ class BusinessHome extends Component {
                                             Pay off your balance at any time
                                         </li>
                                     </ul>
-                                    <div>
+                                    {/*<div>
                                         <img src={"/images/businessHome/Flourish2" + this.props.png}
                                         alt="Flourish Icon"/>
-                                    </div>
+                                    </div>*/}
                                 </div>
                             </Paper>
+                            <div className="marginTop10px">
+                                <div className="primary-white font18px font16pxUnder700 font12pxUnder450">
+                                    Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five functions</div><HoverTip
+                                        style={{marginTop: "26px", marginLeft: "-70px"}}
+                                        text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
+                                    />.
+                                </div>
+                                <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
+                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="position"
+                                    value={this.state.position} onChange={this.onChange.bind(this)}/>
+                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={this.handleOpen}>
+                                        Try for Free
+                                    </div>
+                                </div>
+                                <div className="font16px font14pxUnder800 font12pxUnder500 marginTop10px secondary-gray">
+                                    <i>No credit card required.</i>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
