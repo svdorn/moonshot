@@ -829,7 +829,7 @@ class BusinessHome extends Component {
                                             alt="Paper Airplane Icon"
                                             className="businessHomeBoxIcons"
                                         />
-                                        <div className="primary-white marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
+                                        <div className="hire-number primary-white font22px font18pxUnder400">
                                             First Hire
                                         </div>
                                         <div className="home-peach font30px font24pxUnder400" style={{fontWeight: "bold"}}>
@@ -872,7 +872,7 @@ class BusinessHome extends Component {
                                             alt="Enterprise Rocket Icon"
                                             className="businessHomeBoxIcons"
                                         />
-                                        <div className="primary-white marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
+                                        <div className="primary-white hire-number font22px font18pxUnder400">
                                             Each Additional Hire
                                         </div>
                                         <div className="primary-white">

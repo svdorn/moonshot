@@ -2342,6 +2342,10 @@ button.link {
     box-shadow:         0px 10px 30px 2px #000000;
 }
 
+#pricingSection .hire-number {
+    margin-top: 10px;
+}
+
 #pricingSection .flourish-icon {
     position: absolute;
     right: -0.3%;
@@ -3201,10 +3205,11 @@ button.link {
     width: 20px;
     margin-left: -20px;
 }
-#pricingSection .businessHomeGradientBorder2 li {
+#pricingSection .paperBoxBusinessHome li {
     max-width: 250px;
     text-align: center;
-    margin: auto;
+    line-height: 1.2;
+    margin: 10px auto;
 }
 
 .my-employees .search-fields .add-employee {
