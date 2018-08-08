@@ -4379,7 +4379,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .paperBoxPredictiveStats {
         height: 210px;
-        width: 250px;
+        width: 240px;
         margin: 0 20px 40px;
     }
 
@@ -5300,7 +5300,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     /* END FRONT PAGE */
 
     .paperBoxPredictiveStats {
-        height: 210px;
+        height: 190px;
         width: 180px;
         margin: 0 8px 40px;
     }

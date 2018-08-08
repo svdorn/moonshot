@@ -300,7 +300,10 @@ class BusinessHome extends Component {
             {
                 title: "Any Position",
                 text1: "Evaluations for any position",
-                text2: "across 5 functions",
+                text2: <div>across <div className="home-pink inlineBlock">five position types</div><HoverTip
+                    style={{marginTop: "26px", marginLeft: "-70px"}}
+                    text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
+                /></div>,
                 icon: "5Icon",
                 alt: "5 Icon",
                 iconStyle: {}
@@ -315,8 +318,8 @@ class BusinessHome extends Component {
             },
             {
                 title: "Quarterly Reviews",
-                text1: "Hires can retake evaluations",
-                text2: "every quarter for updated insights",
+                text1: "Hires are reviewed to update",
+                text2: "and improve your predictive model",
                 icon: "FlameIcon",
                 alt: "Flame Icon",
                 iconStyle: {}
@@ -718,25 +721,25 @@ class BusinessHome extends Component {
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
-                                            <div className="primary-white font20px font18pxUnder900 font16pxUnder700">Improve Your Efficiency</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost to hire. Spend less time sorting through resumes, and more time looking at the cadidates that matter.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
+                                            <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Improve Your Efficiency</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost and time per hire by spending 50%<div className="above600only br"><br/></div> less time screening candidates.</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Learn More &#8594;</div>
                                         </div>
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
-                                            <div className="primary-white font20px font18pxUnder900 font16pxUnder700">Enhance Your Culture</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Find candidates that not only fit your company, but bring <div className="above600only br"><br/></div>something new and diverse to the table.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
+                                            <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also<div className="above1000only br"><br/></div> offer new and diverse perspectives.</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Learn More &#8594;</div>
                                         </div>
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
-                                            <div className="primary-white font20px font18pxUnder900 font16pxUnder700">Hire Better Talent</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">Hire candidates that won&#39;t just be top performers, but will continue to improve and grow alongside your company.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Try for free &#8594;</div>
+                                            <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Hire Top Performers</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">A repeatable, everlearning process that consistently identifies top performers and bad hires.</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Learn More &#8594;</div>
                                         </div>
                                     </Paper>
                                 </div>
@@ -805,9 +808,9 @@ class BusinessHome extends Component {
                         <div className="forBusinessBoxesContainer">
                             <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
                                  style={{marginBottom: '50px'}}>
-                                Pay Only When You Hire
+                                Pay Only When You Make A Great Hire
                                 <div className="font18px font16pxUnder700 font12pxUnder400 primary-white">
-                                    The checkbook only comes out when we help you hire<div className="above700only br"><br/></div> the best people for your company.
+                                    Our incentives are aligned. You only pay when you hire<div className="above700only br"><br/></div> a top performer who stays at your company.
                                 </div>
                             </div>
                             <div className="businessHomeGradientBorder1 paperBoxBusinessHome">
@@ -899,7 +902,7 @@ class BusinessHome extends Component {
                             </div>
                             <div className="marginTop10px">
                                 <div className="primary-white font18px font16pxUnder700 font12pxUnder450">
-                                    Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five functions</div><HoverTip
+                                    Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five position types</div><HoverTip
                                         style={{marginTop: "26px", marginLeft: "-70px"}}
                                         text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
                                     />.
