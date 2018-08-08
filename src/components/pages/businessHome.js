@@ -723,7 +723,7 @@ class BusinessHome extends Component {
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Improve Your Efficiency</div>
                                             <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost and time per hire by spending 50%<div className="above600only br"><br/></div> less time screening candidates.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Learn More &#8594;</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline" onClick={() => goTo("/chatbot")}>Learn More &#8594;</div>
                                         </div>
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
@@ -731,7 +731,7 @@ class BusinessHome extends Component {
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
                                             <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also<div className="above1000only br"><br/></div> offer new and diverse perspectives.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Learn More &#8594;</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline" onClick={() => goTo("/chatbot")}>Learn More &#8594;</div>
                                         </div>
                                     </Paper>
                                     <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
@@ -739,7 +739,7 @@ class BusinessHome extends Component {
                                         <div style={{position: "relative", textAlign:"left", paddingLeft: "10px"}} className="paddingTop20px">
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Hire Top Performers</div>
                                             <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">A repeatable, everlearning process that consistently identifies top performers and bad hires.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline">Learn More &#8594;</div>
+                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline" onClick={() => goTo("/chatbot")}>Learn More &#8594;</div>
                                         </div>
                                     </Paper>
                                 </div>
@@ -763,7 +763,7 @@ class BusinessHome extends Component {
                                             We predict how successful your candidates will be before you hire them.
                                         </div>
                                         <div className="button-part">
-                                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font16pxUnder950 font14pxUnder400 primary-white" onClick={this.handleOpen} style={{padding: "4.5px 15px"}}>
+                                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font16pxUnder950 font14pxUnder400 primary-white" onClick={() => goTo("/chatbot")} style={{padding: "4.5px 15px"}}>
                                                 Try for Free
                                             </button>
                                         </div>
@@ -849,7 +849,7 @@ class BusinessHome extends Component {
                                                 Hire the best candidate
                                             </li>
                                         </ul>
-                                        <div className="button large round-4px gradient-transition gradient-1-home-pricing-peach gradient-2-home-pricing-pink primary-white font18px" onClick={this.handleOpen}>
+                                        <div className="button large round-4px gradient-transition gradient-1-home-pricing-peach gradient-2-home-pricing-pink primary-white font18px" onClick={() => goTo("/chatbot")}>
                                             Try for Free
                                         </div>
                                     </div>
@@ -894,7 +894,7 @@ class BusinessHome extends Component {
                                                 Pay off your balance at any time
                                             </li>
                                         </ul>
-                                        <div className="button large round-4px gradient-transition gradient-1-home-pricing-green gradient-2-home-pricing-blue primary-white font18px" onClick={this.handleOpen}>
+                                        <div className="button large round-4px gradient-transition gradient-1-home-pricing-green gradient-2-home-pricing-blue primary-white font18px" onClick={() => goTo("/chatbot")}>
                                             Try for Free
                                         </div>
                                     </div>
@@ -910,7 +910,7 @@ class BusinessHome extends Component {
                                 <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
                                     <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={this.handleOpen}>
+                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot")}>
                                         Try for Free
                                     </div>
                                 </div>
