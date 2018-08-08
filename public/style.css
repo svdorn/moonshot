@@ -4356,6 +4356,18 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .processOutline > img { width: 50px; }
     .processOutline > .leftArrow { left: -60px; }
     .processOutline > .rightArrow { right: -60px; }
+    #moonshotProcess .processOutline .skew-image-cover {
+        transform: skewX(-20deg) translateX(230px);
+    }
+    #moonshotProcess .processOutline .left-area {
+        width: 300px;
+    }
+    #moonshotProcess .processOutline .text-part {
+        width: 235px;
+    }
+    #moonshotProcess .processOutline .text-part .button {
+        margin-top: 18px;
+    }
 
     #ATSIntegrations > div > img {
         margin-left: 30px;
@@ -4893,6 +4905,27 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 18px;
     }
     .messageHeader { margin-top: -70px; }
+
+    #moonshotProcess .processOutline { height: 190px; }
+    #moonshotProcess .processOutline .screenshot,
+    #moonshotProcess .processOutline .skew-image-cover {
+        display: none;
+    }
+    #moonshotProcess .processOutline .left-area {
+        width: 100%;
+    }
+    #moonshotProcess .processOutline .text-part {
+        width: 75%;
+        left: 13%;
+    }
+    #moonshotProcess .processOutline .text-part .text {
+        text-align: center;
+    }
+    #moonshotProcess .processOutline .text-part .button {
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+
 
     .analysis .candidateScore {
         margin-bottom: 15px;
