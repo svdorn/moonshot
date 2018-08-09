@@ -64,7 +64,7 @@ class GoogleJobs extends Component {
                     <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"0 auto 10px", minWidth: "200px", textAlign: "left"}}>
                         We&#39;ve integrated with Google Jobs so you don&#39;t have to spend the development time.
                     </div>
-                    <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
+                    <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"10px auto", minWidth: "200px", textAlign: "left"}}>
                         Paste the URL of your job description for your selected position to generate exposure to applicants.
                     </div>
                     <div className="center marginTop20px">

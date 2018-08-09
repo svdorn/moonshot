@@ -79,7 +79,7 @@ class SuggestMethod extends Component {
         return (
             <div className="suggest-integration">
                 <div style={{textAlign: "left", width: "80%", minWidth: "200px", margin: "0 auto 10px"}}>
-                    Suggest another integration to automate applicant invites or a method for us to collect your applicants{"'"}s email addresses.
+                    Suggest another integration to automate applicant invites or a method for us to collect your applicants{"'"} email addresses.
                 </div>
                 <div className="buttonArea font16px" style={{justifyContent:"center"}}>
                     <textarea

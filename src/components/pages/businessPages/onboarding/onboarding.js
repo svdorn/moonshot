@@ -47,7 +47,6 @@ class Onboarding extends Component {
     }
 
     handleNext(extraOnboardingArgs) {
-        console.log("handling Next");
         const user = this.props.currentUser;
         let onboarding = user.onboarding;
         // if we got extra args AND they aren't a click event, add them
