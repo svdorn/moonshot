@@ -286,6 +286,7 @@ function POST_answerSkillQuestion(req, res) {
                                 // finish the eval
                                 console.log("finishing position eval");
                                 user = await finishPositionEvaluation(user, position.positionId, position.businessId);
+                                console.log("user: ",user);
                             } catch (finishError) {
                                 console.log("Error finishing eval: ", finishError);
                                 return res.status(500).send("Server error.");
@@ -378,6 +379,21 @@ function POST_startOrContinueTest(req, res) {
                 return skillTest.skillId.toString() === skill._id.toString();
             });
 
+            // get the index of the position for which the user agreed to skill test terms
+            const positionIndex = user.positions.findIndex(pos => {
+                return pos.positionId.toString() === user.positionInProgress.toString();
+            });
+            if (typeof positionIndex !== "number" || positionIndex < 0) {
+                return res.status(500).send("User is not taking a position evaluation.");
+            }
+
+            let positionId;
+            let businessId;
+            if (positionIndex !== -1 ) {
+                positionId = user.positions[positionIndex].positionId;
+                businessId = user.positions[positionIndex].businessId;
+            }
+
             const hasEverTakenTest = typeof testIndex === "number" && testIndex >= 0;
 
             // if the user has never taken this test before, start it for them
@@ -393,7 +409,7 @@ function POST_startOrContinueTest(req, res) {
                 // we know this is testIndex because it was just pushed
                 testIndex = user.skillTests.length - 1;
                 // get a start date and a question and errthang
-                startNewAttempt(testIndex);
+                startNewAttempt(testIndex, positionId, businessId);
             }
 
             // if the user has taken this test in the past or is currently taking this test
@@ -402,15 +418,15 @@ function POST_startOrContinueTest(req, res) {
                 let mostRecentAttempt = attempts[attempts.length - 1];
                 // if the user is coming back after already having started the test
                 if (mostRecentAttempt.inProgress === true) {
-                    getCurrentQuestion(testIndex);
+                    getCurrentQuestion(testIndex, positionId, businessId);
                 }
                 // if the user is starting a new attempt
                 else {
-                    startNewAttempt(testIndex);
+                    startNewAttempt(testIndex,positionId, businessId);
                 }
             }
 
-            function startNewAttempt(testIndex) {
+            function startNewAttempt(testIndex, positionId, businessId) {
                 let attemptLevels = skill.levels.map(skillLevel => {
                     return {
                         levelNumber: skillLevel.levelNumber,
@@ -430,7 +446,7 @@ function POST_startOrContinueTest(req, res) {
                 user.skillTests[testIndex].attempts.push(newAttempt);
                 const currentAttemptIndex = user.skillTests[testIndex].attempts.length - 1;
 
-                getNewQuestion(testIndex, currentAttemptIndex);
+                getNewQuestion(testIndex, currentAttemptIndex, positionId, businessId);
             }
 
             // get a new question - for skill tests that hadn't been started before
@@ -471,17 +487,17 @@ function POST_startOrContinueTest(req, res) {
                 }
 
                 // save the user
-                try { const updatedUser = await user.save(); }
+                try { var updatedUser = await user.save(); }
                 catch(saveErr) {
                     console.log("Error saving user when starting skill test: ", saveErr);
                     return res.status(500).send(errors.SERVER_ERROR);
                 }
 
-                return res.json({question: questionToReturn, skillName: skill.name, finished: false});
+                return res.json({question: questionToReturn, skillName: skill.name, finished: false, positionId, businessId});
             }
 
             // get the question the user left off on
-            function getCurrentQuestion(testIndex) {
+            function getCurrentQuestion(testIndex, positionId, businessId) {
                 // the current question info the user has stored
                 const userCurrentQuestion = user.skillTests[testIndex].currentQuestion;
                 // the levels with all the question info
@@ -536,7 +552,11 @@ function POST_startOrContinueTest(req, res) {
                     options,
                     multiSelect: currentTestQuestion.multiSelect
                 }
-                return res.json({question: currentQuestionToReturn, skillName: skill.name, finished: false});
+
+                console.log("positionId: ", positionId);
+                console.log("businessId: ", businessId);
+
+                return res.json({question: currentQuestionToReturn, skillName: skill.name, finished: false, positionId, businessId});
             }
         }
     } catch(miscError) {
