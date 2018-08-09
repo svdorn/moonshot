@@ -36,8 +36,10 @@ class FixedOnboardingProgress extends Component {
             typeof user.onboarding === "object" &&
             // only show the progress bar if the user isn't done
             !user.onboarding.complete &&
-            // don't show the fixed progress bar while going through onboarding
-            pathname !== "/onboarding"
+            // don't show the fixed progress bar while going through onboarding ...
+            pathname !== "/onboarding" &&
+            // ... or while on verify email page
+            pathname !== "/verifyemail"
         ) {
             // ... show the onboarding progress bar in the lower right corner
             return (
