@@ -26,6 +26,18 @@ export function usersReducers(state = initialState, action) {
                 userPostedFailed: false
             };
             break;
+        case "OPEN_CONTACT_US_MODAL":
+            return {
+                ...state,
+                contactUsModal: true
+            };
+            break;
+        case "CLOSE_CONTACT_US_MODAL":
+            return {
+                ...state,
+                contactUsModal: false
+            };
+            break;
         case "POST_LINK_SUCCESS":
             console.log(action.payload);
             return {

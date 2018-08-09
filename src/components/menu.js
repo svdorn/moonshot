@@ -5,7 +5,7 @@ import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import {connect} from 'react-redux';
 import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
-import {signout, closeNotification, endOnboarding, openAddUserModal} from "../actions/usersActions";
+import {signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal} from "../actions/usersActions";
 import { isValidEmail, goTo } from "../miscFunctions";
 import {axios} from 'axios';
 
@@ -303,6 +303,7 @@ class Menu extends Component {
                 menuOptions = [
                     {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
                     {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                    {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
                     {optionType: "separator"},
                     {optionType: "url", title: "Log In", url: "/login"},
                     {optionType: "button", title: "Enter a position"}
@@ -311,6 +312,7 @@ class Menu extends Component {
                 menuOptions = [
                     {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
                     {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                    {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
                     {optionType: "separator"},
                     {optionType: "url", title: "Log In", url: "/login"},
                 ];
@@ -412,6 +414,14 @@ class Menu extends Component {
                     // push a line, only visible on desktop
                     desktopMenu.push(
                         <div key={"separator"} className={"menuDivider wideScreenMenuItem" + loggedInClass} />
+                    );
+                    break;
+                case "modal":
+                    desktopMenu.push(
+                        <p key={option.title + " desktop"} className={menuItemClass} onClick={() => self.props.openContactUsModal()}>{option.title}</p>
+                    );
+                    mobileMenu.push(
+                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.props.openContactUsModal()}/>
                     );
                     break;
                 case "dropDown":
@@ -596,7 +606,8 @@ function mapDispatchToProps(dispatch) {
         signout,
         closeNotification,
         endOnboarding,
-        openAddUserModal
+        openAddUserModal,
+        openContactUsModal
     }, dispatch);
 }
 
