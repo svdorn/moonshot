@@ -506,7 +506,7 @@ form > h1 {
     align-items: center;
     position: absolute;
     width: 100%;
-    height: 122%;
+    height: 100%;
     -webkit-transform: skewY(-12deg);
     transform: skewY(-12deg);
     overflow: hidden;
@@ -610,6 +610,13 @@ form > h1 {
     grid-column-end: 43;
 }
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(6) {
+    background: linear-gradient(to right, #86c5fe, #ad84fe);
+    grid-row-start: 20;
+    grid-row-end: 24;
+    grid-column-start: 28;
+    grid-column-end: 32;
+}
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(7) {
     background: linear-gradient(to right, #86c5fe, #ad84fe);
     grid-row-start: 20;
     grid-row-end: 24;
@@ -731,141 +738,64 @@ form > h1 {
     grid-column-end: 43;
 }
 /* END STATS PAGE GRID */
-/* GRID FOR BASELINE EVAL PAGE */
-#pricingSection > .skewedContainer > .skewedRectanglesContainer {
-    margin-top: -500px;
+/* GRID FOR LEARN FROM HIRES PAGE */
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer {
+    margin-top: -250px;
     height: 1800px;
 }
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
     height: calc(var(--rowWidth) * 400);
 }
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 29;
-    grid-row-end: 33;
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+    background: var(--primary-black-light);
+    grid-row-start: 14;
+    grid-row-end: 35;
+    grid-column-start: 1;
+    grid-column-end: 14;
+}
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+    background: var(--primary-black-light);
+    grid-row-start: 35;
+    grid-row-end: 115;
+    grid-column-start: 1;
+    grid-column-end: 43;
+}
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+    background: var(--primary-black-light);
+    grid-row-start: 115;
+    grid-row-end: 135;
     grid-column-start: 26;
-    grid-column-end: 33;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-    background: #323232;
-    grid-row-start: 100;
-    grid-row-end: 234;
-    grid-column-start: 1;
     grid-column-end: 43;
 }
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-    background: #323232;
-    grid-row-start: 71;
-    grid-row-end: 103;
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+    background: linear-gradient(to right, #ff748c, #ffe09e);
+    grid-row-start: 10;
+    grid-row-end: 14;
     grid-column-start: 1;
-    grid-column-end: 26;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 103;
-    grid-row-end: 107;
-    grid-column-start: 32;
-    grid-column-end: 43;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 160;
-    grid-row-end: 164;
-    grid-column-start: 27;
-    grid-column-end: 33;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 67;
-    grid-row-end: 71;
-    grid-column-start: 1;
-    grid-column-end: 8;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 67;
-    grid-row-end: 71;
-    grid-column-start: 8;
     grid-column-end: 11;
 }
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 71;
-    grid-row-end: 75;
-    grid-column-start: 7;
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
+    grid-row-start: 14;
+    grid-row-end: 18;
+    grid-column-start: 1;
     grid-column-end: 12;
 }
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(9) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 71;
-    grid-row-end: 75;
-    grid-column-start: 1;
-    grid-column-end: 7;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 156;
-    grid-row-end: 160;
-    grid-column-start: 26;
-    grid-column-end: 32;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 226;
-    grid-row-end: 230;
-    grid-column-start: 32;
-    grid-column-end: 34;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 226;
-    grid-row-end: 230;
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
+    grid-row-start: 31;
+    grid-row-end: 35;
     grid-column-start: 34;
     grid-column-end: 43;
 }
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 230;
-    grid-row-end: 234;
-    grid-column-start: 31;
-    grid-column-end: 35;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(14) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 207;
-    grid-row-end: 211;
-    grid-column-start: 13;
-    grid-column-end: 18;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(15) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 194;
-    grid-row-end: 198;
-    grid-column-start: 12;
-    grid-column-end: 17;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 234;
-    grid-row-end: 238;
-    grid-column-start: 9;
-    grid-column-end: 14;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 234;
-    grid-row-end: 238;
-    grid-column-start: 1;
-    grid-column-end: 9;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(18) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 230;
-    grid-row-end: 234;
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+    background: linear-gradient(to right, #ff748c, #ffe09e 35%, #ff748c);
+    grid-row-start: 35;
+    grid-row-end: 39;
     grid-column-start: 35;
     grid-column-end: 43;
 }
-/* END BASELINE EVAL PAGE GRID */
+/* END LEARN FROM HIRES PAGE GRID */
 
 #employerOnboarding {
     position: relative;
