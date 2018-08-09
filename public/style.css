@@ -1235,7 +1235,7 @@ form > h1 {
 
 
 .frontPage .infoContainer .content .buttonArea .button.getStarted {
-    margin-left: 7%;
+    margin-left: 10%;
 }
 
 #myCandidatesScreenshot {
@@ -6544,7 +6544,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 70%;
     }
     .frontPage .infoContainer .content .buttonArea .button.getStarted {
-        margin-left: 0;
+        margin-left: 10px;
         width: 98px;
     }
     .frontPage .infoText.flex {
