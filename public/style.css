@@ -763,7 +763,7 @@ form > h1 {
 #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
     background: var(--primary-black-light);
     grid-row-start: 115;
-    grid-row-end: 135;
+    grid-row-end: 136;
     grid-column-start: 26;
     grid-column-end: 43;
 }
@@ -792,6 +792,34 @@ form > h1 {
     background: linear-gradient(to right, #ff748c, #ffe09e 35%, #ff748c);
     grid-row-start: 35;
     grid-row-end: 39;
+    grid-column-start: 35;
+    grid-column-end: 43;
+}
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
+    background: linear-gradient(to right, #ff748c, #ffe09e);
+    grid-row-start: 111;
+    grid-row-end: 115;
+    grid-column-start: 1;
+    grid-column-end: 11;
+}
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(9) {
+    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
+    grid-row-start: 115;
+    grid-row-end: 119;
+    grid-column-start: 1;
+    grid-column-end: 12;
+}
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
+    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
+    grid-row-start: 132;
+    grid-row-end: 136;
+    grid-column-start: 34;
+    grid-column-end: 43;
+}
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
+    background: linear-gradient(to right, #ff748c, #ffe09e 35%, #ff748c);
+    grid-row-start: 136;
+    grid-row-end: 140;
     grid-column-start: 35;
     grid-column-end: 43;
 }
