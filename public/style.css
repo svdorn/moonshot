@@ -1250,12 +1250,12 @@ form > h1 {
 }
 
 #myCandidatesScreenshot {
-    --device-scale: 0.32;
+    --device-scale: 0.46;
     position: absolute;
-    left: 104%;
-    top: 92%;
+    left: 115%;
+    top: 103%;
     width: calc(1350px * var(--device-scale));
-    height: calc(1280px * var(--device-scale));
+    height: calc(846px * var(--device-scale));
     -webkit-transform: translate(-50%,-50%) rotate3d(.342,-.94,0,25deg) rotate(9deg);
     transform: translate(-50%,-50%) rotate3d(.342,-.94,0,25deg) rotate(9deg);
     -webkit-box-shadow: 7px 10px 22px -3px rgba(10,10,10,.8);
@@ -5043,7 +5043,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     #resultsScreenshot { --device-scale: .17; }
-    #myCandidatesScreenshot { --device-scale: .25; }
+    #myCandidatesScreenshot {
+        --device-scale: .39;
+        top: 95%;
+    }
 
     #ATSIntegrations > div > img {
         margin-left: 25px;
@@ -5740,8 +5743,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 250px;
     }
     #myCandidatesScreenshot {
-        top: 230px;
-        left: 79%;
+        top: 262px;
+        left: 80%;
     }
     #resultsScreenshot {
         top: 200px;
@@ -6591,9 +6594,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         left: 42%;
     }
     #myCandidatesScreenshot {
-        --device-scale: 0.21;
-        top: 194px;
-        left: 89%;
+        --device-scale: 0.31;
+        top: 215px;
+        left: 104%;
     }
 
     .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
