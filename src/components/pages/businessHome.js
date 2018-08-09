@@ -568,7 +568,7 @@ class BusinessHome extends Component {
                         <div>
                             <div className="center">
                                 <div className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-cyan statisticsHeader">
-                                    Predictive Analytics Improve Hiring Results
+                                    Candidate Predictions Improve Hiring Results
                                 </div>
                                 <div style={{position:"relative"}}>
                                     <div className="flourishes3">
