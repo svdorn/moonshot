@@ -506,7 +506,7 @@ class BusinessHome extends Component {
                         <div className="forBusinessBoxesContainer">
                             <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
                                  style={{marginBottom: '50px'}}>
-                                Pay Only When You Make A Great Hire
+                                Pay Only When You Hire
                                 <div className="font18px font16pxUnder700 font12pxUnder400 primary-white">
                                     Our incentives are aligned. You only pay when you hire<div className="above700only br"><br/></div> a top performer who stays at your company.
                                 </div>
@@ -563,7 +563,7 @@ class BusinessHome extends Component {
                                     />
                                     <div className="pricing-container">
                                         <div className="home-blue paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
-                                            4 Month Guarantee
+                                            Scale It Up
                                         </div>
                                         <img
                                             src={"/images/businessHome/EnterpriseRocket2" + this.props.png}
@@ -586,9 +586,6 @@ class BusinessHome extends Component {
                                                 Monthly payments stop if a<br/>hire is no longer employed
                                             </li>
                                             <li>
-                                                Full refund if a hire is no longer<br/>employed within four months
-                                            </li>
-                                            <li>
                                                 Pay off your balance at any time
                                             </li>
                                         </ul>
@@ -606,10 +603,12 @@ class BusinessHome extends Component {
                                     />.
                                 </div>
                                 <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
-                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="position"
-                                    value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-8px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
-                                        Try for Free
+                                    <div className="enterPosition">
+                                        <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="position"
+                                        value={this.state.position} onChange={this.onChange.bind(this)}/>
+                                        <div className="getStarted button medium round-8px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
+                                            Try for Free
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="font16px font14pxUnder800 font12pxUnder500 marginTop10px secondary-gray">
