@@ -5901,6 +5901,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
         grid-column-start: 27;
     }
+    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        grid-column-end: 17;
+    }
+    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+        grid-column-start: 27;
+    }
 
     .forBusinessIcon {
         height: 50px;
@@ -6112,6 +6118,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
         grid-column-start: 26;
+    }
+    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        grid-column-end: 19;
+    }
+    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+        grid-column-start: 25;
     }
 
     .crystalBall {
