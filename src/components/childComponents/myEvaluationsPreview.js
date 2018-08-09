@@ -61,17 +61,12 @@ class MyEvaluationsPreview extends Component {
 
         if (skills && skills.length > 0) {
             positionSkills = skills.map(function (skill, index) {
-                let margin = "marginLeft10px";
-                if (index === 0) {
-                    margin = "";
-                }
-
                 if (index >= 3) {
                     return null;
                 }
 
                 return (
-                    <div key={skill + "Surrounder"} style={{display: 'inline-block'}} className={margin}>
+                    <div key={skill + "Surrounder"} style={{display: 'inline-block'}} className="marginRight10px">
                         <div key={skill}
                              className="myEvalsSkillChip font14px font12pxUnder500"
                         >
@@ -98,11 +93,17 @@ class MyEvaluationsPreview extends Component {
 
         if (editing) {
             clickableArea = (
-                <div className="secondary-gray font16px font14pxUnder800 marginTop10px">
-                    <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className="clickable underline" style={{display: "inline-block"}}>
+                <div className="secondary-gray font16px font14pxUnder900" style={{margin:"5px 0"}}>
+                    <div
+                        onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)}
+                        className="clickable underline inlineBlock marginRight20px"
+                    >
                         Candidate Results
                     </div>
-                    <div onClick={() => this.goTo(`/myEmployees?position=${this.props.name}`)} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
+                    <div
+                        onClick={() => this.goTo(`/myEmployees?position=${this.props.name}`)}
+                        className="clickable underline inlineBlock"
+                    >
                         Grade Employees
                     </div>
                 </div>
@@ -120,7 +121,7 @@ class MyEvaluationsPreview extends Component {
             );
 
             estimatedLength = (
-                <div className="primary-white font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom20px">Estimated Length:
+                <div className="primary-white font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom10px">Estimated Length:
                     <div className="primary-cyan" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
                 </div>
             );
@@ -153,6 +154,15 @@ class MyEvaluationsPreview extends Component {
             );
         }
 
+        let positionKeyArea = null;
+        if (editing && this.props.positionKey) {
+            positionKeyArea = (
+                <div className="primary-cyan font12px position-key">
+                    Position Key: { this.props.positionKey }
+                </div>
+            );
+        }
+
         return(
             <div>
                 <div className="myEvalsBox aboutMeLi">
@@ -163,12 +173,13 @@ class MyEvaluationsPreview extends Component {
                     <div className="verticalDivider"/>
 
                     <div className="myEvalsInfo" style={{display: 'inline-block'}}>
-                        {infoArea}
+                        { infoArea }
                         <div className="font18px font16pxUnder800 primary-cyan">{this.props.name}</div>
                         <div className="secondary-gray">{this.props.company} Evaluation</div>
-                        {editing ? estimatedLength : null}
-                        {editing ? positionSkills : <div className="marginTop20px">{positionSkills}</div>}
-                        {clickableArea}
+                        { editing ? estimatedLength : null }
+                        { editing ? positionSkills : <div className="marginTop20px">{positionSkills}</div> }
+                        { clickableArea }
+                        { positionKeyArea }
                     </div>
                 </div>
             </div>
