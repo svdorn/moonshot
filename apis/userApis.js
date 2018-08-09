@@ -880,6 +880,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         }
 
         if (user.userType === "candidate") {
+            console.log("sending emails");
             sendNotificationEmails(businessId, user);
         }
 
@@ -985,7 +986,7 @@ async function sendNotificationEmails(businessId, user) {
                 let timeDelay = 0;
 
                 if (timeDiff < time) {
-                    timeDelay = (notifications.lastSent + time) - (new Date());
+                    timeDelay = new Date((notifications.lastSent.getTime() + time)) - (new Date());
                 } else {
                     timeDelay = 0;
                 }
@@ -1431,11 +1432,6 @@ async function POST_answerPsychQuestion(req, res) {
                 (!userPosition.freeResponseQuestions ||
                  userPosition.freeResponseQuestions.length === 0);
 
-            console.log("userPosition: ", userPosition);
-            console.log("userPosition.skillTests: ", userPosition.skillTests);
-
-            console.log("user: ", user);
-            console.log("applicationComplete: ", applicationComplete);
             // if the application is complete, mark it as such
             if (applicationComplete) {
                 let business;
