@@ -428,7 +428,7 @@ class BusinessHome extends Component {
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left"}}>
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also<div className="above1000only br"><br/></div> offer new and diverse perspectives.</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also offer new and diverse perspectives.</div>
                                             <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
                                         </div>
                                     </Paper>
