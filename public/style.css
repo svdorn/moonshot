@@ -5388,58 +5388,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-end: 43;
     }
 
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-        grid-row-end: 338;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-start: 27;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
-        grid-column-end: 18;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
-        grid-column-end: 19;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
-        grid-column-start: 25;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
-        background: linear-gradient(to right, #80cffe, #a196fe);
-        grid-row-start: 198;
-        grid-row-end: 202;
-        grid-column-start: 16;
-        grid-column-end: 22;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
-        grid-row-start: 204;
-        grid-row-end: 208;
-        grid-column-start: 15;
-        grid-column-end: 21;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(14) {
-        grid-row-start: 254;
-        grid-row-end: 258;
-        grid-column-start: 24;
-        grid-column-end: 29;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(15) {
-        grid-row-start: 248;
-        grid-row-end: 252;
-        grid-column-start: 23;
-        grid-column-end: 28;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
-        grid-row-start: 338;
-        grid-row-end: 342;
-        grid-column-start: 9;
-        grid-column-end: 17;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
-        grid-row-start: 338;
-        grid-row-end: 342;
-        grid-column-start: 1;
-        grid-column-end: 9;
-    }
     #pricingSection > div > div > div > ul {
         list-style: none;
     }
@@ -6171,6 +6119,59 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: -14px;
     }
 
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+        background: var(--primary-black-light);
+        grid-row-start: 35;
+        grid-row-end: 138;
+        grid-column-start: 1;
+        grid-column-end: 43;
+    }
+    #pricingSection > .skewedContainer > .skewedRectanglesContainer {
+        margin-top: -600px;
+    }
+    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+        background: var(--primary-black-light);
+        grid-row-start: 1;
+        grid-row-end: 95;
+        grid-column-start: 1;
+        grid-column-end: 43;
+    }
+    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+        background: var(--primary-black-light);
+        grid-row-start: 95;
+        grid-row-end: 116;
+        grid-column-start: 26;
+        grid-column-end: 43;
+    }
+    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+        background: linear-gradient(to right, #ff748c, #ffe09e);
+        grid-row-start: 91;
+        grid-row-end: 95;
+        grid-column-start: 1;
+        grid-column-end: 11;
+    }
+    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
+        grid-row-start: 95;
+        grid-row-end: 99;
+        grid-column-start: 1;
+        grid-column-end: 12;
+    }
+    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+        background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
+        grid-row-start: 112;
+        grid-row-end: 116;
+        grid-column-start: 34;
+        grid-column-end: 43;
+    }
+    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+        background: linear-gradient(to right, #ff748c, #ffe09e 35%, #ff748c);
+        grid-row-start: 116;
+        grid-row-end: 120;
+        grid-column-start: 35;
+        grid-column-end: 43;
+    }
+
     .homepageTrajectory { margin-bottom: -20px; }
     /* .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
         transform: scale(.7);
@@ -6629,24 +6630,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-start: 26;
     }
 
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-        grid-row-end: 298;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
-        grid-row-start: 178;
-        grid-row-end: 182;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
-        grid-row-start: 184;
-        grid-row-end: 188;
-    }
-
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
-        grid-row-start: 298;
-        grid-row-end: 302;
-        grid-column-start: 9;
-        grid-column-end: 20;
-    }
 
     .pricingButton { bottom: 32px; }
 
