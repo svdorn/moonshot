@@ -861,21 +861,21 @@ form > h1 {
 
 #employerOnboarding {
     position: relative;
-    display: table;
+    display: flex;
     max-width: 1300px;
     width: 90%;
     margin: 30px auto;
     min-width: 300px;
     -webkit-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
-    -moz-box-shadow:    0 0 30px -3px rgba(0,0,0,.5);
-    box-shadow:         0 0 30px -3px rgba(0,0,0,.5);
+    -moz-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
+    box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
 }
 
 #employerOnboarding > .onboardingLeft {
     background: #2a2a2a;
-    width: 275px;
-    height: 100%;
-    display: table-cell;
+    width: 255px;
+    display: flex;
+    flex: 0 0 auto;
 }
 
 /* .onboardingLeft:after {
@@ -894,12 +894,10 @@ form > h1 {
 #employerOnboarding > .onboardingRight {
     text-align: center;
     vertical-align: top;
-    display: table-cell;
-    /* for some reason this makes it so the children can use percent heights of the td */
-    height: 0;
+    display: flex;
     -webkit-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
-    -moz-box-shadow:    0 0 30px -3px rgba(0,0,0,.5);
-    box-shadow:         0 0 30px -3px rgba(0,0,0,.5);
+    -moz-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
+    box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
 }
 
 .opacity30Percent {
@@ -2226,7 +2224,6 @@ form > h1 {
 #businessHomeStatistics .paperBoxPredictiveStats > div {
     padding: 20px 20px 0;
 }
-
 
 button.link {
   background: none;
