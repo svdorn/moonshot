@@ -318,7 +318,7 @@ class BusinessHome extends Component {
                                 <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
                                 <p className="infoText notFull font18px font16pxUnder900 font14Under400">Hire the best people for your team with hiring technology that constantly learns and improves as you scale.</p>
                                 <div className="buttonArea font18px font14pxUnder900">
-                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position"
+                                    <input className="blackInput getStarted secondary-gray-important" type="text" placeholder="Enter a position" name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
                                     <div className="getStarted button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot" + positionUrl)}>
                                         Try for Free
@@ -423,7 +423,7 @@ class BusinessHome extends Component {
                                         zDepth={2}>
                                         <div style={{position: "relative", textAlign:"left"}}>
                                             <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also<div className="above1000only br"><br/></div> offer new and diverse perspectives.</div>
+                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also offer new and diverse perspectives.</div>
                                             <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
                                         </div>
                                     </Paper>
@@ -475,7 +475,7 @@ class BusinessHome extends Component {
                         <div className="forBusinessBoxesContainer">
                             <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
                                  style={{marginBottom: '50px'}}>
-                                Pay Only When You Make A Great Hire
+                                Pay Only When You Hire
                                 <div className="font18px font16pxUnder700 font12pxUnder400 primary-white">
                                     Our incentives are aligned. You only pay when you hire<div className="above700only br"><br/></div> a top performer who stays at your company.
                                 </div>
@@ -532,7 +532,7 @@ class BusinessHome extends Component {
                                     />
                                     <div className="pricing-container">
                                         <div className="home-blue paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
-                                            4 Month Guarantee
+                                            Scale It Up
                                         </div>
                                         <img
                                             src={"/images/businessHome/EnterpriseRocket2" + this.props.png}
@@ -555,9 +555,6 @@ class BusinessHome extends Component {
                                                 Monthly payments stop if a<br/>hire is no longer employed
                                             </li>
                                             <li>
-                                                Full refund if a hire is no longer<br/>employed within four months
-                                            </li>
-                                            <li>
                                                 Pay off your balance at any time
                                             </li>
                                         </ul>
@@ -575,10 +572,12 @@ class BusinessHome extends Component {
                                     />.
                                 </div>
                                 <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
-                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="position"
-                                    value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-8px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
-                                        Try for Free
+                                    <div className="enterPosition">
+                                        <input className="blackInput getStarted secondary-gray-important" type="text" placeholder="Enter a position you're hiring for..." name="position"
+                                        value={this.state.position} onChange={this.onChange.bind(this)}/>
+                                        <div className="getStarted button medium round-8px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
+                                            Try for Free
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="font16px font14pxUnder800 font12pxUnder500 marginTop10px secondary-gray">

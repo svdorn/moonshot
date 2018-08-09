@@ -1025,6 +1025,15 @@ form > h1 {
 }
 .pricingInput .blackInput {
     min-width: 300px;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+}
+.pricingInput .enterPosition {
+    display: inline-block;
+}
+.pricingInput .button {
+    margin-left: 140px;
 }
 
 .blackInput {
@@ -2244,7 +2253,7 @@ form > h1 {
 }
 
 #businessHomeStatistics .paperBoxPredictiveStats > div {
-    padding: 20px 20px 0;
+    padding: 20px 24px 0;
 }
 
 button.link {
@@ -5886,6 +5895,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .marginSides40pxUnder700 { margin-right: 40px; margin-left: 40px; }
 
+    .pricingInput .button {
+        margin-left: 110px;
+    }
+
     .font48pxUnder700 { font-size: 48px; }
     .font40pxUnder700 { font-size: 40px; }
     .font38pxUnder700 { font-size: 38px; }
@@ -6076,6 +6089,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .horizListMargin2 {
         margin-left: 0;
+    }
+    .pricingInput .blackInput {
+        min-width: 0;
     }
 }
 
@@ -6408,10 +6424,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .twoOptionsOr { margin: 55px 10px 0; }
 
-    .pricingInput .blackInput {
-        min-width: 0;
-    }
-
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }
     .font36pxUnder500 { font-size: 36px; }
@@ -6489,6 +6501,18 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .above400only { display: none; }
     .form {
         max-width: 300px;
+    }
+    .pricingInput .blackInput {
+        left: 0;
+        position: relative;
+        transform: none;
+    }
+    .pricingInput .enterPosition {
+        display: block;
+    }
+    .pricingInput .button {
+        margin-left: 1px;
+        margin-top:10px;
     }
 
     .myCandidates.mobile .candidateTable {
