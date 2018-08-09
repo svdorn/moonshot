@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { Dialog, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import { closeContactUsModal, contactUsEmail } from "../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
-import {  } from "../../miscFunctions";
+import { isValidEmail } from "../../miscFunctions";
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
@@ -62,8 +62,6 @@ class ContactUsDialog extends Component {
             'name',
             'email',
             'company',
-            'phoneNumber',
-            'message'
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -93,7 +91,7 @@ class ContactUsDialog extends Component {
     render() {
         let dialogBody = (
             <form onSubmit={this.handleSubmitForm.bind(this)} className="center">
-                <div className="primary-white font16px font14pxUnder700 marginTop10px">
+                <div className="primary-white font18px font16pxUnder700 marginTop10px">
                     Our friendly team will be in touch shortly
                 </div>
                 <Field
@@ -101,39 +99,54 @@ class ContactUsDialog extends Component {
                     component={renderTextField}
                     label="Full Name*"
                     validate={[required]}
-                    className="marginTop10px"
+                    style={{marginTop: "5px"}}
                 /><br/>
                 <Field
                     name="email"
                     component={renderTextField}
                     label="Email*"
                     validate={[required, emailValidate]}
-                    className="marginTop10px"
+                    style={{marginTop: "5px"}}
                 /><br/>
                 <Field
                     name="company"
                     component={renderTextField}
                     label="Company*"
                     validate={[required]}
-                    className="marginTop10px"
+                    style={{marginTop: "5px"}}
                 /><br/>
                 <Field
                     name="phoneNumber"
                     component={renderTextField}
                     label="Phone Number"
-                    className="marginTop10px"
+                    style={{marginTop: "5px"}}
                 /><br/>
                 <Field
                     name="message"
                     component={renderTextField}
                     label="Message"
-                    className="marginTop10px"
+                    style={{marginTop: "5px"}}
                 /><br/>
                 <RaisedButton
                     label="Submit"
                     type="submit"
-                    className="raisedButtonBusinessHome marginTop20px"
+                    className="raisedButtonBusinessHome marginTop15px"
                     />
+                <div>
+                    {this.props.loading ?
+                        <div className="marginTop10px">
+                            <CircularProgress color="white"/>
+                        </div>
+                        : null}
+                </div>
+                <div>
+                    {this.props.message ?
+                        <div className="marginTop10px primary-white font16px font14pxUnder700">
+                            {this.props.message}
+                        </div>
+                        : null}
+                </div>
+
             </form>
         );
 
@@ -169,8 +182,11 @@ class ContactUsDialog extends Component {
 
 function mapStateToProps(state) {
     return {
+        formData: state.form,
         currentUser: state.users.currentUser,
-        open: state.users.contactUsModal
+        open: state.users.contactUsModal,
+        loading: state.users.loadingSomething,
+        message: state.users.message
     };
 }
 

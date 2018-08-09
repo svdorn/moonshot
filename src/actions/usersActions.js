@@ -68,11 +68,14 @@ export function closeContactUsModal() {
 // Send an email when form filled out on forBusiness page
 export function contactUsEmail(user){
     return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
         axios.post("api/business/contactUsEmailNotLoggedIn", user)
             .then(function(response) {
+                dispatch({type:"CONTACT_US_EMAIL_SUCCESS", payload: response.data})
             })
             .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+                dispatch({type:"CONTACT_US_EMAIL_FAILURE", payload: "Error sending email."})
             })
     }
 }

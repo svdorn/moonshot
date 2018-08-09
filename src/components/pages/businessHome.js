@@ -224,7 +224,7 @@ class BusinessHome extends Component {
 
 
     render() {
-        
+
         const logoImages = [
             {src: "NWMLogoWhite" + this.props.png, partner: "Northwestern Mutual"},
             {src: "DreamHomeLogoWhite" + this.props.png, partner: "Dream Home"},
@@ -650,7 +650,6 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        formData: state.form,
         loadingEmailSend: state.users.loadingSomething,
         notification: state.users.notification,
         currentUser: state.users.currentUser,

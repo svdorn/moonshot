@@ -1073,10 +1073,16 @@ function POST_addEvaluationEmail(req, res) {
 
 function POST_contactUsEmailNotLoggedIn(req, res) {
     let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'ACTION REQUIRED - Somebody filled out form on homepage';
+    let subject = 'ACTION REQUIRED - Contact Us Form Filled Out';
+    if (req.body.phoneNumber) {
+        var phoneNumber = sanitize(req.body.phoneNumber);
+    }
+    if (req.body.message) {
+        var message = sanitize(req.body.message);
+    }
 
     let content = "<div>"
-        + "<h2>Lead from Moonshot Insights homepage</h2>"
+        + "<h2>Contact Us Form Filled Out:</h2>"
         + "<h3>Name</h3>"
         + "<p>"
         + sanitize(req.body.name)
@@ -1088,6 +1094,14 @@ function POST_contactUsEmailNotLoggedIn(req, res) {
         + "<h3>Company</h3>"
         + "<p>"
         + sanitize(req.body.company)
+        + "</p>"
+        + "<h3>Phone Number</h3>"
+        + "<p>"
+        + phoneNumber
+        + "</p>"
+        + "<h3>Message</h3>"
+        + "<p>"
+        + message
         + "</p>"
         + "</div>";
 
