@@ -15,6 +15,10 @@ Tell Node that you are going to be working on a development server by exporting 
 ```
 export NODE_ENV=development
 ```
+Add the following to the same place so that you can locally test any emails that get sent: (replace the example with your email)
+```
+export DEV_EMAIL=example@gmail.com
+```
 Have the prerequisites installed and do the steps under installing, after completing that, do these steps:
 ```
 cd /moonshot
