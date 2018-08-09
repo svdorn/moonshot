@@ -97,7 +97,7 @@ class Onboarding extends Component {
     // brings the user to the evals page
     createCongratulations() {
         return (
-            <div className="congratulations primary-white center">
+            <div className="congratulations primary-white center" style={{height: "100%"}}>
                 <div>
                     <div className="font16px text-left">
                         You made it! The launch date of your first evaluation
@@ -333,23 +333,25 @@ class Onboarding extends Component {
                         </div>
                     </div>
                     <div className="onboardingRight">
-                        <div className="center top-progress-bar primary-white">
-                            <OnboardingProgress className="inlineBlock" />
-                            <div className="font14px">
-                                {user.onboarding.step < NUM_ONBOARDING_STEPS ?
-                                    `Step: ${user.onboarding.step + 1} / ${NUM_ONBOARDING_STEPS}`
-                                    : "Completed"
-                                }
+                        <div style={{display:"flex",flexDirection:"column", width: "100%"}}>
+                            <div className="center top-progress-bar primary-white" style={{flex:"0 1 auto"}}>
+                                <OnboardingProgress className="inlineBlock" />
+                                <div className="font14px">
+                                    {user.onboarding.step < NUM_ONBOARDING_STEPS ?
+                                        `Step: ${user.onboarding.step + 1} / ${NUM_ONBOARDING_STEPS}`
+                                        : "Completed"
+                                    }
+                                </div>
+                                <div
+                                    className="primary-cyan font26px font24pxUnder700 font20pxUnder500"
+                                    style={{margin: "5px auto 0", lineHeight: "1.2"}}
+                                >
+                                    {stepName}
+                                </div>
                             </div>
-                            <div
-                                className="primary-cyan font26px font24pxUnder700 font20pxUnder500"
-                                style={{margin: "5px auto 0", lineHeight: "1.2"}}
-                            >
-                                {stepName}
+                            <div className="content font16px font14pxUnder800 font12pxUnder600" style={{flex: "1 1 auto"}}>
+                                {body}
                             </div>
-                        </div>
-                        <div className="content font16px font14pxUnder800 font12pxUnder600">
-                            {body}
                         </div>
                     </div>
                 </div>
