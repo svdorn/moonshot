@@ -5,7 +5,7 @@ import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import {connect} from 'react-redux';
 import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
-import {signout, closeNotification, endOnboarding, openAddUserModal} from "../actions/usersActions";
+import {signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal} from "../actions/usersActions";
 import { isValidEmail, goTo } from "../miscFunctions";
 import {axios} from 'axios';
 
@@ -303,6 +303,7 @@ class Menu extends Component {
                 menuOptions = [
                     {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
                     {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                    {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
                     {optionType: "separator"},
                     {optionType: "url", title: "Log In", url: "/login"},
                     {optionType: "button", title: "Enter a position"}
@@ -311,6 +312,7 @@ class Menu extends Component {
                 menuOptions = [
                     {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
                     {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                    {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
                     {optionType: "separator"},
                     {optionType: "url", title: "Log In", url: "/login"},
                 ];
@@ -414,6 +416,14 @@ class Menu extends Component {
                         <div key={"separator"} className={"menuDivider wideScreenMenuItem" + loggedInClass} />
                     );
                     break;
+                case "modal":
+                    desktopMenu.push(
+                        <p key={option.title + " desktop"} className={menuItemClass} onClick={() => self.props.openContactUsModal()}>{option.title}</p>
+                    );
+                    mobileMenu.push(
+                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.props.openContactUsModal()}/>
+                    );
+                    break;
                 case "dropDown":
                     // the options that will be shown in the dropDown menu
                     let dropDownItems = [];
@@ -490,9 +500,9 @@ class Menu extends Component {
                     }
                     desktopMenu.push(
                         <div className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
-                            <input className="blackInput getStarted" type="text" placeholder="Enter a position..." name="position" value={self.state.position} onChange={self.onChange.bind(self)}
+                            <input className="blackInput getStarted secondary-gray" type="text" placeholder="Enter a position..." name="position" value={self.state.position} onChange={self.onChange.bind(self)}
                             />
-                            <div className="menuButton button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}} onClick={() => goTo("/chatbot" + positionUrl)}>
+                            <div className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}} onClick={() => goTo("/chatbot" + positionUrl)}>
                                 Try for Free
                             </div>
                         </div>
@@ -596,7 +606,8 @@ function mapDispatchToProps(dispatch) {
         signout,
         closeNotification,
         endOnboarding,
-        openAddUserModal
+        openAddUserModal,
+        openContactUsModal
     }, dispatch);
 }
 

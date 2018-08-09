@@ -53,6 +53,33 @@ export function closeAddUserModal() {
     }
 }
 
+export function openContactUsModal() {
+    return function(dispatch) {
+        dispatch({type: "OPEN_CONTACT_US_MODAL"});
+    }
+}
+
+export function closeContactUsModal() {
+    return function(dispatch) {
+        dispatch({type: "CLOSE_CONTACT_US_MODAL"});
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function contactUsEmail(user){
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        axios.post("api/business/contactUsEmailNotLoggedIn", user)
+            .then(function(response) {
+                dispatch({type:"CONTACT_US_EMAIL_SUCCESS", payload: response.data})
+            })
+            .catch(function(err) {
+                dispatch({type:"CONTACT_US_EMAIL_FAILURE", payload: "Error sending email."})
+            })
+    }
+}
+
 export function emailFailureExitPage() {
     return function(dispatch) {
         dispatch({type: "EMAIL_FAILURE_EXIT_PAGE"});
@@ -503,18 +530,6 @@ export function changePasswordForgot(user) {
             })
             .catch(function(err) {
                 dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
-            })
-    }
-}
-
-// Send an email when form filled out on forBusiness page
-export function dialogEmail(user){
-    return function(dispatch) {
-        axios.post("api/business/dialogEmail", user)
-            .then(function(response) {
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
             })
     }
 }

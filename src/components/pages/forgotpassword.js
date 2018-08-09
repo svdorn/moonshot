@@ -7,6 +7,7 @@ import {bindActionCreators} from 'redux';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
+import ContactUsDialog from '../childComponents/contactUsDialog';
 import { renderTextField, isValidEmail } from  "../../miscFunctions";
 
 
@@ -59,6 +60,7 @@ class ForgotPassword extends Component {
                     <title>Forgot Password | Moonshot</title>
                     <meta name="description" content="Reset your Moonshot password. It's okay - we all forget things sometimes." />
                 </MetaTags>
+                <ContactUsDialog />
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>

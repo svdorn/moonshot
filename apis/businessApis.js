@@ -30,7 +30,7 @@ const errors = require('./errors.js');
 
 const businessApis = {
     POST_addEvaluationEmail,
-    POST_dialogEmail,
+    POST_contactUsEmailNotLoggedIn,
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
@@ -1071,12 +1071,18 @@ function POST_addEvaluationEmail(req, res) {
     })
 }
 
-function POST_dialogEmail(req, res) {
+function POST_contactUsEmailNotLoggedIn(req, res) {
     let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'ACTION REQUIRED - Somebody filled out form on homepage';
+    let subject = 'ACTION REQUIRED - Contact Us Form Filled Out';
+    if (req.body.phoneNumber) {
+        var phoneNumber = sanitize(req.body.phoneNumber);
+    }
+    if (req.body.message) {
+        var message = sanitize(req.body.message);
+    }
 
     let content = "<div>"
-        + "<h2>Lead from Moonshot Insights homepage</h2>"
+        + "<h2>Contact Us Form Filled Out:</h2>"
         + "<h3>Name</h3>"
         + "<p>"
         + sanitize(req.body.name)
@@ -1089,12 +1095,20 @@ function POST_dialogEmail(req, res) {
         + "<p>"
         + sanitize(req.body.company)
         + "</p>"
+        + "<h3>Phone Number</h3>"
+        + "<p>"
+        + phoneNumber
+        + "</p>"
+        + "<h3>Message</h3>"
+        + "<p>"
+        + message
+        + "</p>"
         + "</div>";
 
     const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
         if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
+            res.json("Thank you! We will be in touch shortly.");
         } else {
             res.status(500).send(msg);
         }

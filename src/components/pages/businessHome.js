@@ -9,57 +9,15 @@ import { closeNotification, dialogEmail } from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
-import {Field, reduxForm} from 'redux-form';
 import AddUserDialog from '../childComponents/addUserDialog';
+import ContactUsDialog from '../childComponents/contactUsDialog';
 import ProgressBarDialog from '../miscComponents/progressBarDialog';
 import { isValidEmail, goTo } from "../../miscFunctions";
 import HoverTip from '../miscComponents/hoverTip';
 
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        hintStyle={{color: 'white'}}
-        inputStyle={{color: '#72d6f5'}}
-        underlineStyle={{color: '#72d6f5'}}
-        errorText={touched && error}
-        {...input}
-        {...custom}
-    />
-);
-
-const renderBlueTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        hintStyle={{color: '#72d6f5'}}
-        inputStyle={{color: '#72d6f5'}}
-        underlineStyle={{color: '#72d6f5'}}
-        errorText={touched && error}
-        {...input}
-        {...custom}
-    />
-);
-
-const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        errorText={touched && error}
-        inputStyle={{color: '#72d6f5'}}
-        hintStyle={{color: 'white'}}
-        underlineStyle={{color: '#72d6f5'}}
-        {...input}
-        {...custom}
-        type="password"
-    />
-);
-
-const emailValidate = value => value && !isValidEmail(value) ? 'Invalid email address' : undefined;
-
-const required = value => (value ? undefined : 'This field is required.');
-
-const passwordsMatch = (value, allValues) => (
-  value !== allValues.password ? "Passwords don't match" : undefined);
 
 let rectangleKeyIndex = 0;
+
 
 class BusinessHome extends Component {
     constructor(props) {
@@ -67,7 +25,6 @@ class BusinessHome extends Component {
 
         this.state = {
             infoIndex: 0,
-            open: false,
             position: '',
             pricing: "24 Months",
             price: 80,
@@ -111,37 +68,6 @@ class BusinessHome extends Component {
         })
     };
 
-    handleSubmitForm(e) {
-        e.preventDefault();
-        const vals = this.props.formData.forBusiness.values;
-
-        // Form validation before submit
-        let notValid = false;
-        const requiredFields = [
-            'name',
-            'email',
-            'company'
-        ];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return;
-
-        if (!isValidEmail(vals.email)) return;
-
-        const user = {
-            name: this.props.formData.forBusiness.values.name,
-            email: this.props.formData.forBusiness.values.email,
-            company: this.props.formData.forBusiness.values.company,
-        };
-
-        this.props.dialogEmail(user);
-        this.handleNextScreen();
-    }
-
     onChange(e) {
         this.setState({
             position: e.target.value
@@ -156,25 +82,6 @@ class BusinessHome extends Component {
             position: this.state.position,
         }
         this.props.initialize(position);
-    }
-
-    handleNextScreen = () => {
-        const dialogScreen = this.state.dialogScreen + 1;
-        if (dialogScreen > 0 && dialogScreen < 3) {
-            // do nothing if on any screen but the 5th
-            let nextAction = () => {};
-            // if opening to the fifth screen, run calendly script
-            if (dialogScreen === 2) { nextAction = this.addCalendlyScript; }
-            this.setState({dialogScreen}, nextAction)
-        }
-    }
-
-
-    handlePreviousScreen = () => {
-        const dialogScreen = this.state.dialogScreen - 1;
-        if (dialogScreen > 0 && dialogScreen < 3) {
-            this.setState({dialogScreen})
-        }
     }
 
     // create the dropdown for a candidate's hiring stage
@@ -378,78 +285,15 @@ class BusinessHome extends Component {
                 textAlign: 'left'
         };
 
-        const actions = [
-            <FlatButton
-                label="Close"
-                onClick={this.handleClose}
-                className="primary-white-important"
-            />,
-        ];
-
-        let blurredClass = '';
-        if (this.state.open || this.state.demoOpen) {
-            blurredClass = 'dialogForBizOverlay';
-        }
-
-        let dialogBody = (
-            <form onSubmit={this.handleSubmitForm.bind(this)} className="center">
-                <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
-                    Try Moonshot Insights for Free
-                </div>
-                <div className="primary-white font16px font14pxUnder700 font12pxUnder400 marginTop10px">
-                    Book a demo to activate your first free evaluation.
-                </div>
-                <Field
-                    name="name"
-                    component={renderTextField}
-                    label="Full Name"
-                    validate={[required]}
-                    className="marginTop10px"
-                /><br/>
-                <Field
-                    name="email"
-                    component={renderTextField}
-                    label="Work Email"
-                    validate={[required, emailValidate]}
-                    className="marginTop10px"
-                /><br/>
-                <Field
-                    name="company"
-                    component={renderTextField}
-                    label="Company"
-                    validate={[required]}
-                    className="marginTop10px"
-                /><br/>
-                <RaisedButton
-                    label="Continue"
-                    type="submit"
-                    className="raisedButtonBusinessHome marginTop20px"
-                    />
-            </form>
-        );
-
-        // const dialog = (
-        //     <Dialog
-        //         actions={actions}
-        //         modal={false}
-        //         open={this.state.open}
-        //         onRequestClose={this.handleClose}
-        //         autoScrollBodyContent={true}
-        //         paperClassName={dialogDemoClass}
-        //         contentClassName="center"
-        //         overlayClassName="dialogOverlay"
-        //     >
-        //         {dialogBody}
-        //     </Dialog>
-        // );
         let positionUrl = "";
         if (this.state.position) {
             positionUrl = "?position=" + this.state.position;
         }
 
         return (
-            <div className={blurredClass}>
+            <div>
                 {(this.props.currentUser && this.props.currentUser.userType == "accountAdmin") ? <AddUserDialog /> : null}
+                <ContactUsDialog />
                 <MetaTags>
                     <title>Moonshot</title>
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
@@ -474,9 +318,9 @@ class BusinessHome extends Component {
                                 <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
                                 <p className="infoText notFull font18px font16pxUnder900 font14Under400">Hire the best people for your team with hiring technology that constantly learns and improves as you scale.</p>
                                 <div className="buttonArea font18px font14pxUnder900">
-                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="position"
+                                    <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot" + positionUrl)}>
+                                    <div className="getStarted button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot" + positionUrl)}>
                                         Try for Free
                                     </div>
                                 </div>
@@ -733,7 +577,7 @@ class BusinessHome extends Component {
                                 <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
                                     <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
+                                    <div className="getStarted button medium round-8px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
                                         Try for Free
                                     </div>
                                 </div>
@@ -774,7 +618,6 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        formData: state.form,
         loadingEmailSend: state.users.loadingSomething,
         notification: state.users.notification,
         currentUser: state.users.currentUser,
@@ -782,10 +625,5 @@ function mapStateToProps(state) {
         jpg: state.users.jpg
     };
 }
-
-BusinessHome = reduxForm({
-    form: 'forBusiness',
-    enableReinitialize: true,
-})(BusinessHome);
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessHome);
