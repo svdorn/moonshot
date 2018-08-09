@@ -36,6 +36,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 contactUsModal: false,
+                message: undefined
             };
             break;
         case "CONTACT_US_EMAIL_SUCCESS":
