@@ -2583,7 +2583,6 @@ button.link {
     position: relative;
     width: 70%;
     max-width: 1000px;
-    height: 210px;
     margin: auto;
     padding: 20px;
     background-color: #333333 !important;
@@ -2610,6 +2609,12 @@ button.link {
     -moz-transition: -moz-box-shadow .2s;
     -webkit-transition: -webkit-transition .2s;
     transition: box-shadow .2s;
+}
+
+.myEvalsBox .position-key {
+    position: absolute;
+    bottom: 4px;
+    right: 37px;
 }
 
 .width80percentImportant {
@@ -4531,6 +4536,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginLeft30px { margin-left: 30px; }
 .marginLeft25px { margin-left: 25px; }
 .marginLeft20px { margin-left: 20px; }
+.marginRight10px { margin-right: 10px; }
+.marginRight40px { margin-right: 40px; }
+.marginRight30px { margin-right: 30px; }
+.marginRight20px { margin-right: 20px; }
 .marginLeft10px { margin-left: 10px; }
 .paddingTop40px { padding-top: 40px; }
 .paddingTop20px { padding-top: 20px; }
@@ -5606,6 +5615,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         --device-scale: .15;
     }
 
+    .myEvalsBox .position-key {
+        position: relative;
+        float: right;
+        right: inherit;
+        bottom: inherit;
+    }
 
     .analysis .candidateScore {
         margin-bottom: 15px;
