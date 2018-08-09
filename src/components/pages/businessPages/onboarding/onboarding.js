@@ -333,7 +333,7 @@ class Onboarding extends Component {
                         </div>
                     </div>
                     <div className="onboardingRight">
-                        <div style={{display:"flex",flexDirection:"column"}}>
+                        <div style={{display:"flex",flexDirection:"column", width: "100%"}}>
                             <div className="center top-progress-bar primary-white" style={{flex:"0 1 auto"}}>
                                 <OnboardingProgress className="inlineBlock" />
                                 <div className="font14px">

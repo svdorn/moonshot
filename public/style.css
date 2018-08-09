@@ -891,10 +891,11 @@ form > h1 {
     box-shadow:         0 0 30px -3px rgba(0,0,0,.5);
 } */
 
-#employerOnboarding > .onboardingRight {
+#employerOnboarding .onboardingRight {
     text-align: center;
     vertical-align: top;
     display: flex;
+    width: 100%;
     -webkit-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
     -moz-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
     box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
@@ -1138,11 +1139,16 @@ form > h1 {
 }
 
 
-#employerOnboarding > .onboardingRight > .content > div > div {
+#employerOnboarding .onboardingRight > div > .content > div > div {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     height: 100%;
+}
+#employerOnboarding .onboardingRight > div > .content > div {
+    height: 100%;
+    position: relative;
+    padding: 10px 5%
 }
 
 
@@ -1161,11 +1167,14 @@ form > h1 {
     padding: 3px 30px;
 }
 
-.invite-admins, .invite-employees, .congratulations {
+.invite-admins, .invite-employees, .congratulations, .google-jobs {
     padding: 10px 5%;
 }
 
-.invite-admins > div, .invite-employees > div, .congratulations > div {
+.invite-admins > div,
+.invite-employees > div,
+.congratulations > div,
+.google-jobs > div {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -4610,12 +4619,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     height: 115px;
 }
 
-.onboardingRight > .content {
+.onboardingRight > div > .content {
     position: relative;
     height: calc(100% - 115px);
 }
 
-.onboardingRight > .content > div {
+.onboardingRight > div > .content > div {
     width: 100%;
     height: 100%;
 }

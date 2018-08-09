@@ -59,7 +59,7 @@ class GoogleJobs extends Component {
             )
         })
         return (
-            <div>
+            <div className="google-jobs">
                 <div className="primary-white center">
                     <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"0 auto 10px", minWidth: "200px", textAlign: "left"}}>
                         We&#39;ve integrated with Google Jobs so you don&#39;t have to spend the development time.
@@ -70,7 +70,7 @@ class GoogleJobs extends Component {
                     <div className="center marginTop20px">
                         {jobs}
                     </div>
-                    <div className="previous-next-area primary-white font16px center marginTop20px marginBottom30px">
+                    <div className="previous-next-area primary-white font16px center marginTop20px">
                         <div
                             className="previous noselect clickable underline inlineBlock"
                             onClick={this.props.previous}

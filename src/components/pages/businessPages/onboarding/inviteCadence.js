@@ -53,7 +53,7 @@ class InviteCadence extends Component {
         return (
             <div>
                 <div className="primary-white center">
-                    <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"0 auto 10px", minWidth: "200px", textAlign: "left"}}>
+                    <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"10px auto", minWidth: "200px", textAlign: "left"}}>
                         In preparation for any integration you may create, select
                         one of the options below to automate invites to applicants
                         after they have completed your application.
