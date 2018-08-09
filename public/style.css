@@ -634,7 +634,7 @@ form > h1 {
 #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
     background: #323232;
     grid-row-start: 103;
-    grid-row-end: 206;
+    grid-row-end: 185;
     grid-column-start: 1;
     grid-column-end: 43;
 }
@@ -720,6 +720,14 @@ form > h1 {
     grid-row-start: 206;
     grid-row-end: 210;
     grid-column-start: 38;
+    grid-column-end: 43;
+}
+
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(15) {
+    background: #323232;
+    grid-row-start: 185;
+    grid-row-end: 206;
+    grid-column-start: 20;
     grid-column-end: 43;
 }
 /* END STATS PAGE GRID */
@@ -1320,7 +1328,7 @@ form > h1 {
 }
 
 #moonshotProcess {
-    margin-top: 150px;
+    margin-top: 280px;
     margin-bottom: 180px;
     position: relative;
     z-index: 1;

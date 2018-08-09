@@ -59,6 +59,8 @@ const required = value => (value ? undefined : 'This field is required.');
 const passwordsMatch = (value, allValues) => (
   value !== allValues.password ? "Passwords don't match" : undefined);
 
+let rectangleKeyIndex = 0;
+
 class BusinessHome extends Component {
     constructor(props) {
         super(props);
@@ -320,6 +322,25 @@ class BusinessHome extends Component {
     }
 
 
+    // create a bunch of empty skewed rectangles that should be modified with css
+    skewedRectangles(numRects) {
+        let rectangles = [];
+        for (let i = 0; i < numRects; i++) {
+            rectangles.push(<div className="skewedRectangle" key={`rectangle${rectangleKeyIndex}`} />);
+            rectangleKeyIndex++;
+        }
+        return (
+            <div className="skewedContainer">
+                <div className="skewedRectanglesContainer">
+                    <div className="skewedRectangles">
+                        { rectangles }
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+
     render() {
 
         const logoImages = [
@@ -544,29 +565,7 @@ class BusinessHome extends Component {
                     </section>
 
                     <section id="businessHomeStatistics">
-                        {this.state.showRectangles ?
-                            <div className="skewedContainer">
-                                <div className="skewedRectanglesContainer">
-                                    <div className="skewedRectangles">
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                        <div className="skewedRectangle" />
-                                    </div>
-                                </div>
-                            </div>
-                            : null
-                        }
-
+                        { this.state.showRectangles ? this.skewedRectangles(20) : null }
                         <div>
                             <div className="center">
                                 <div className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-cyan statisticsHeader">
@@ -798,7 +797,6 @@ class BusinessHome extends Component {
             </div>
         );
     }
-
 }
 
 function mapDispatchToProps(dispatch) {
