@@ -471,6 +471,7 @@ class BusinessHome extends Component {
 
                     <section id="pricingSection">
                         <a id="pricing" name="pricing" className="anchor" />
+                        { this.skewedRectangles(10) }
                         <div className="forBusinessBoxesContainer">
                             <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
                                  style={{marginBottom: '50px'}}>

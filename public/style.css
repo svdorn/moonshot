@@ -760,70 +760,89 @@ form > h1 {
     grid-column-start: 1;
     grid-column-end: 43;
 }
+
 #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-    background: var(--primary-black-light);
-    grid-row-start: 115;
-    grid-row-end: 136;
-    grid-column-start: 26;
-    grid-column-end: 43;
-}
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
     background: linear-gradient(to right, #ff748c, #ffe09e);
     grid-row-start: 10;
     grid-row-end: 14;
     grid-column-start: 1;
     grid-column-end: 11;
 }
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
     background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
     grid-row-start: 14;
     grid-row-end: 18;
     grid-column-start: 1;
     grid-column-end: 12;
 }
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
     background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
     grid-row-start: 31;
     grid-row-end: 35;
     grid-column-start: 34;
     grid-column-end: 43;
 }
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
     background: linear-gradient(to right, #ff748c, #ffe09e 35%, #ff748c);
     grid-row-start: 35;
     grid-row-end: 39;
     grid-column-start: 35;
     grid-column-end: 43;
 }
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
+/* END LEARN FROM HIRES PAGE GRID */
+/* START PRICING PAGE GRID */
+#pricingSection > .skewedContainer > .skewedRectanglesContainer {
+    margin-top: -535px;
+    height: 1800px;
+}
+#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
+    height: calc(var(--rowWidth) * 400);
+}
+#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+    background: var(--primary-black-light);
+    grid-row-start: 1;
+    grid-row-end: 80;
+    grid-column-start: 1;
+    grid-column-end: 43;
+}
+#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+    background: var(--primary-black-light);
+    grid-row-start: 80;
+    grid-row-end: 101;
+    grid-column-start: 26;
+    grid-column-end: 43;
+}
+#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
     background: linear-gradient(to right, #ff748c, #ffe09e);
-    grid-row-start: 111;
-    grid-row-end: 115;
+    grid-row-start: 76;
+    grid-row-end: 80;
     grid-column-start: 1;
     grid-column-end: 11;
 }
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(9) {
+#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
     background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
-    grid-row-start: 115;
-    grid-row-end: 119;
+    grid-row-start: 80;
+    grid-row-end: 84;
     grid-column-start: 1;
     grid-column-end: 12;
 }
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
+#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
     background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
-    grid-row-start: 132;
-    grid-row-end: 136;
+    grid-row-start: 97;
+    grid-row-end: 101;
     grid-column-start: 34;
     grid-column-end: 43;
 }
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
+#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
     background: linear-gradient(to right, #ff748c, #ffe09e 35%, #ff748c);
-    grid-row-start: 136;
-    grid-row-end: 140;
+    grid-row-start: 101;
+    grid-row-end: 105;
     grid-column-start: 35;
     grid-column-end: 43;
 }
-/* END LEARN FROM HIRES PAGE GRID */
+
+/* END PRICING PAGE GRID */
+
 
 #employerOnboarding {
     position: relative;
