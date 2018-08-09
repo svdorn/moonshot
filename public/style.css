@@ -827,14 +827,14 @@ form > h1 {
     grid-column-end: 12;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
+    background: linear-gradient(to right, #76defe, #7dfed2 65%, #76defe);
     grid-row-start: 97;
     grid-row-end: 101;
     grid-column-start: 34;
     grid-column-end: 43;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-    background: linear-gradient(to right, #ff748c, #ffe09e 35%, #ff748c);
+    background: linear-gradient(to right, #76defe, #7dfed2 35%, #76defe);
     grid-row-start: 101;
     grid-row-end: 105;
     grid-column-start: 35;
