@@ -790,14 +790,14 @@ form > h1 {
     grid-column-end: 12;
 }
 #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
+    background: linear-gradient(to right, #80cffe, #a196fe 65%, #80cffe);
     grid-row-start: 31;
     grid-row-end: 35;
     grid-column-start: 32;
     grid-column-end: 43;
 }
 #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-    background: linear-gradient(to right, #ff748c, #ffe09e 35%, #ff748c);
+    background: linear-gradient(to right, #80cffe, #a196fe 35%, #80cffe);
     grid-row-start: 35;
     grid-row-end: 39;
     grid-column-start: 33;
@@ -5135,6 +5135,19 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         transition: all 0.5s ease;
     }
 
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+        grid-column-end: 13;
+    }
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        grid-column-end: 14;
+    }
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+        grid-column-start: 30;
+    }
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+        grid-column-start: 31;
+    }
+
     #resultsScreenshot { --device-scale: .17; }
     #myCandidatesScreenshot {
         --device-scale: .39;
@@ -5793,14 +5806,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     /* hide all but the first two rectangles of the first container */
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(n+3) { display: none; }
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-        grid-row-start: 48;
-        grid-row-end: 52;
+        grid-row-start: 59;
+        grid-row-end: 63;
         grid-column-start: 28;
         grid-column-end: 40;
     }
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-        grid-row-start: 42;
-        grid-row-end: 46;
+        grid-row-start: 53;
+        grid-row-end: 57;
         grid-column-start: 27;
         grid-column-end: 35;
     }
@@ -5860,6 +5873,24 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 57;
         grid-column-start: 26;
         grid-column-end: 32;
+    }
+
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+        display: none;
+    }
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+        display: none;
+    }
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        grid-column-end: 17;
+        grid-row-start: 31;
+        grid-row-end: 35;
+    }
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+        display: none;
+    }
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+        grid-column-start: 27;
     }
 
     .forBusinessIcon {
@@ -6046,8 +6077,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-end: 19;
     }
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
-        grid-column-start: 25;
-        grid-column-end: 29;
+        display: none;
     }
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
         grid-column-start: 29;
@@ -6055,6 +6085,13 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
         grid-column-start: 27;
+    }
+
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        grid-column-end: 19;
+    }
+    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+        grid-column-start: 25;
     }
 
     .crystalBall {
@@ -6246,6 +6283,22 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 120;
         grid-column-start: 35;
         grid-column-end: 43;
+    }
+
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child {
+        height: calc(var(--rowWidth) * 80);
+    }
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+        grid-row-start: 72;
+        grid-row-end: 76;
+        grid-column-start: 26;
+        grid-column-end: 40;
+    }
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+        grid-row-start: 66;
+        grid-row-end: 70;
+        grid-column-start: 27;
+        grid-column-end: 35;
     }
 
     .homepageTrajectory { margin-bottom: -20px; }
@@ -6657,10 +6710,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-        display: none;
+        grid-column-start: 24;
+        grid-row-start: 77;
+        grid-row-end: 81;
     }
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-        display: none;
+        grid-column-start: 25;
+        grid-row-start: 71;
+        grid-row-end: 75;
     }
 
     #resultsScreenshot {
