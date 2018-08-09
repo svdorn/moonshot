@@ -729,7 +729,6 @@ form > h1 {
     grid-column-start: 38;
     grid-column-end: 43;
 }
-
 #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(15) {
     background: #323232;
     grid-row-start: 185;
@@ -737,6 +736,21 @@ form > h1 {
     grid-column-start: 20;
     grid-column-end: 43;
 }
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 181;
+    grid-row-end: 185;
+    grid-column-start: 1;
+    grid-column-end: 11;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
+    background: linear-gradient(to right, #80cffe, #a196fe 65%, #80cffe);
+    grid-row-start: 185;
+    grid-row-end: 189;
+    grid-column-start: 1;
+    grid-column-end: 10;
+}
+
 /* END STATS PAGE GRID */
 /* GRID FOR LEARN FROM HIRES PAGE */
 #learnFromHires > .skewedContainer > .skewedRectanglesContainer {
@@ -4992,6 +5006,20 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
         grid-column-start: 30;
     }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
+        background: linear-gradient(to right, #80cffe, #a196fe);
+        grid-row-start: 181;
+        grid-row-end: 185;
+        grid-column-start: 1;
+        grid-column-end: 13;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
+        background: linear-gradient(to right, #80cffe, #a196fe 65%, #80cffe);
+        grid-row-start: 185;
+        grid-row-end: 189;
+        grid-column-start: 1;
+        grid-column-end: 12;
+    }
 
 
     #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
@@ -5406,8 +5434,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
         grid-row-start: 67;
         grid-row-end: 71;
-        grid-column-start: 15;
-        grid-column-end: 20;
+        grid-column-start: 1;
+        grid-column-end: 17;
     }
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
         background: linear-gradient(to right, #80cffe, #a196fe);
@@ -5417,45 +5445,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-end: 38;
     }
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-        grid-row-start: 71;
-        grid-row-end: 75;
-        grid-column-start: 24;
-        grid-column-end: 26;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
-        background: linear-gradient(to right, #80cffe, #a196fe);
-        grid-row-start: 202;
-        grid-row-end: 206;
-        grid-column-start: 1;
-        grid-column-end: 12;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
-        background: linear-gradient(to right, #a196fe, #80cffe);
-        grid-row-start: 202;
-        grid-row-end: 206;
-        grid-column-start: 12;
-        grid-column-end: 16;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(9) {
-        background: linear-gradient(to right, #a196fe, #80cffe);
-        grid-row-start: 206;
-        grid-row-end: 210;
-        grid-column-start: 1;
-        grid-column-end: 12;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
-        background: linear-gradient(to right, #80cffe, #a196fe);
-        grid-row-start: 206;
-        grid-row-end: 210;
-        grid-column-start: 12;
-        grid-column-end: 17;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
-        background: linear-gradient(to right, #80cffe, #a196fe);
-        grid-row-start: 202;
-        grid-row-end: 206;
-        grid-column-start: 29;
-        grid-column-end: 33;
+        display: none;
     }
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
         background: linear-gradient(to right, #a196fe, #80cffe);
@@ -5463,6 +5453,15 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 206;
         grid-column-start: 33;
         grid-column-end: 43;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
+        grid-column-start: 28;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
+        grid-column-end: 16;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
+        grid-column-end: 15;
     }
 
     #pricingSection > div > div > div > ul {
