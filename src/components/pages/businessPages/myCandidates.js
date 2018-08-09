@@ -1074,9 +1074,17 @@ class MyCandidates extends Component {
 
     mobileTopOptions() {
         return (
-            <div className="mobileTopOptions">
-                { this.positionSelector() }
-                { this.mobileSortByDropdown() }
+            <div>
+                <div className="mobile-top-options">
+                    { this.positionSelector() }
+                    { this.mobileSortByDropdown() }
+                </div>
+                <div
+                    className="add-candidate primary-cyan pointer font16px font14pxUnder500 font12pxUnder400"
+                    onClick={this.props.openAddUserModal}
+                >
+                    + <span className="underline">Add Candidate</span>
+                </div>
             </div>
         );
     }
@@ -1236,8 +1244,15 @@ class MyCandidates extends Component {
                 <div className="center">
                     <div className="candidatesAndOptions">
                         {this.state.mobile ? null :
-                            <div className="myCandidatesPositionSelector">
+                            <div className="my-candidates-position-selector">
                                 { this.positionSelector() }
+                                <br/>
+                                <div
+                                    className="add-candidate primary-cyan pointer"
+                                    onClick={this.props.openAddUserModal}
+                                >
+                                    + <span className="underline">Add Candidate</span>
+                                </div>
                             </div>
                         }
                         { this.state.mobile ? this.mobileTopOptions() : this.topOptions() }

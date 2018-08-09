@@ -16,6 +16,7 @@ const { sanitize,
         sendEmail,
         getFirstName,
         getAndVerifyUser,
+        getUserFromReq,
         frontEndUser,
         getSkillNamesByIds,
         lastPossibleSecond,
@@ -32,6 +33,7 @@ const userApis = {
     GET_keepMeLoggedIn,
     GET_session,
     POST_session,
+    POST_updateOnboarding,
     POST_verifyEmail,
     POST_changePasswordForgot,
     POST_forgotPassword,
@@ -43,10 +45,13 @@ const userApis = {
     POST_addPositionEval,
     POST_startPsychEval,
     GET_influencerResults,
+    GET_checkUserVerified,
     POST_answerPsychQuestion,
     POST_submitFreeResponse,
     GET_positions,
     GET_adminQuestions,
+    GET_notificationPreferences,
+    POST_notificationPreferences,
     POST_answerAdminQuestion,
     POST_sawEvaluationIntro,
     POST_agreeToTerms,
@@ -232,6 +237,51 @@ async function POST_answerAdminQuestion(req, res) {
     }
 
     return res.json(frontEndUser(user));
+}
+
+async function GET_notificationPreferences(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user while trying to get admin questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    return res.json(user.notifications);
+}
+
+async function POST_notificationPreferences(req, res) {
+    console.log("body: ",req.body);
+    console.log("query: ",req.query);
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const preference = sanitize(req.body.preference);
+
+    console.log(userId);
+    console.log(verificationToken);
+    console.log(preference);
+
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user while trying to get admin questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    user.notifications.time = preference;
+
+    try {
+        user = await user.save();
+        return res.json({updatedUser: frontEndUser(user)})
+    } catch (saveError) {
+        console.log("error saving user or business after submitting frq: ", saveError);
+        return res.status(500).send("Server error.");
+    }
 }
 
 
@@ -829,9 +879,265 @@ async function finishPositionEvaluation(user, positionId, businessId) {
             overall
         }
 
-        // <<---------------------->> //
+        if (user.userType === "candidate") {
+            console.log("sending emails");
+            sendNotificationEmails(businessId, user);
+        }
 
         resolve(user);
+    });
+}
+
+async function sendNotificationEmails(businessId, user) {
+    return new Promise(async function(resolve, reject) {
+        const ONE_DAY = 1000 * 60 * 60 * 24;
+        let time = ONE_DAY;
+
+        let moonshotUrl = 'https://www.moonshotinsights.io/';
+        // if we are in development, links are to localhost
+        if (process.env.NODE_ENV === "development") {
+            moonshotUrl = 'http://localhost:8081/';
+        }
+
+        const findById = { _id: businessId };
+
+        const business = await Businesses.findOne(findById).select("name positions");
+
+        // send email to candidate
+        let recipient = [user.email];
+        let subject = "You've Finished Your Evaluation!";
+        let content =
+            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                + '<p style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(user.name) + ',</p>'
+                + '<p style="width:95%; display:inline-block; text-align:left;">My name is Justin and I am the Chief Product Officer at Moonshot Insights. I saw that you finished your evaluation for ' + business.name
+                + '. I just wanted to let you know your results have been sent to the employer. Sit tight and we will keep you posted. I wish you the best of luck!</p><br/>'
+                + '<p style="width:95%; display:inline-block; text-align:left;">If you have any questions at all, please feel free to shoot me an email at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. I&#39;m always on call and look forward to hearing from you.</p>'
+                + '<p style="width:95%; display:inline-block; text-align:left;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></p>'
+                + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
+                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
+                + '<div style="text-align:left;width:95%;display:inline-block;">'
+                    + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
+                    + '</div>'
+                + '</div>'
+            + '</div>';
+
+        const sendFrom = "Moonshot";
+        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+
+        })
+
+        const businessUserQuery = {
+            "$and": [
+                { "businessInfo.businessId": businessId },
+                { "userType": "accountAdmin" }
+            ]
+        }
+        try {
+            let users  = await Users.find(businessUserQuery).select("name email notifications")
+            if (!users) {
+                resolve("No users found.");
+            }
+            let recipient = {};
+            let promises = [];
+            for (let i = 0; i < users.length; i++) {
+                recipient = users[i];
+                const notifications = users[i].notifications;
+                let interval = "day";
+                if (notifications) {
+                    // If a delayed email has already been sent, don't send another
+                    if (notifications.waiting) {
+                        continue;
+                    }
+
+                    var timeDiff = Math.abs(new Date() - notifications.lastSent);
+
+                    switch(notifications.time) {
+                        case "Weekly":
+                            interval = "week";
+                            time = ONE_DAY * 7;
+                            break;
+                        case "Every 2 Days":
+                            interval = "2 days";
+                            time = ONE_DAY * 2;
+                            break;
+                        case "Every 5 Days":
+                            interval = "5 days";
+                            time = ONE_DAY * 5;
+                            break;
+                        case "Daily":
+                            interval = "day";
+                            time = ONE_DAY;
+                            break;
+                        case "never":
+                            time = 0;
+                            continue;
+                            break;
+                        default:
+                            interval = "day";
+                            time = 0;
+                            break;
+                    }
+                } else {
+                    continue;
+                }
+
+                let timeDelay = 0;
+
+                if (timeDiff < time) {
+                    timeDelay = new Date((notifications.lastSent.getTime() + time)) - (new Date());
+                } else {
+                    timeDelay = 0;
+                }
+
+                promises.push(sendDelayedEmail(recipient, timeDelay, notifications.lastSent, business.positions, interval));
+                recipient = {};
+                time = 0;
+            }
+            try {
+                const sendingEmails = await Promise.all(promises);
+            } catch (err) {
+                console.log("error sending emails to businesses after date: ", err);
+                reject("Error sending emails to businesses after date.")
+            }
+        } catch (getUserError) {
+            console.log("error getting user when sending emails: ", getUserError);
+            return reject("Error getting user.");
+        }
+    });
+}
+
+async function sendDelayedEmail(recipient, time, lastSent, positions, interval) {
+    return new Promise(async function(resolve, reject) {
+
+        if (time > 0) {
+            const idQuery = {
+                "_id" : recipient._id
+            }
+            const updateQuery = {
+                "notifications.waiting" : true
+            }
+            try {
+                await Users.findOneAndUpdate(idQuery, updateQuery);
+            } catch(err) {
+                console.log("error updating lastSent date for user email notifications: ", err);
+                reject("Error updating lastSent date for user email notifications.")
+            }
+        }
+
+        setTimeout(async function() {
+            let moonshotUrl = 'https://moonshotinsights.io/';
+            // if we are in development, links are to localhost
+            if (process.env.NODE_ENV === "development") {
+                moonshotUrl = 'http://localhost:8081/';
+            }
+
+            // Set the reciever of the email
+            let reciever = [];
+            reciever.push(recipient.email);
+
+            let positionCounts = [];
+
+            let promises = [];
+            let names = [];
+
+            // TODO: get the number of candidates for each position in the correct time
+            for (let i = 0; i < positions.length; i++) {
+                const completionsQuery = {
+                   "userType": "candidate",
+                   "positions": {
+                       "$elemMatch": {
+                           "$and": [
+                               { "positionId": mongoose.Types.ObjectId(positions[i]._id) },
+                               { "appliedEndDate": { "$gte" : lastSent  } }
+                           ]
+                       }
+                   }
+                }
+                names.push(positions[i].name);
+                promises.push(Users.count(completionsQuery));
+            }
+
+            const counts = await Promise.all(promises);
+            // Number of overall candidates
+            let numCandidates = 0;
+
+            let countsSection = '<div style="margin-top: 20px">';
+            for (let i = 0; i < counts.length; i++) {
+                numCandidates += counts[i];
+                if (counts[i] > 0) {
+                    if (counts[i] === 1) {
+                        countsSection += (
+                            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d; width:95%; display:inline-block; text-align:left;">'
+                                +'<b style="color:#0c0c0c; display:inline-block">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + positions[i].name + ':&nbsp;</b>'
+                                +'<div style="display:inline-block">' + counts[i] + ' candidate completion in the past ' + interval + '</div>'
+                            +'</div>'
+                        );
+                    } else {
+                        countsSection += (
+                            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d; width:95%; display:inline-block; text-align:left;">'
+                                +'<b style="color:#0c0c0c; display:inline-block">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + positions[i].name + ':&nbsp;</b>'
+                                +'<div style="display:inline-block">' + counts[i] + ' candidate completions in the past ' + interval + '</div>'
+                            +'</div>'
+                        );
+                    }
+                }
+            }
+
+            // add closing div to counts section
+            countsSection += '</div>';
+            // If there are multiple position evaluations going on at once
+            const multipleEvals = counts.length > 1;
+
+            // Create the emails
+            let subject = numCandidates + ' Candidates Completed Your Evaluation';
+            if (numCandidates < 2) {
+                subject = numCandidates + ' Candidate Completed Your Evaluation';
+            }
+            if (multipleEvals) {
+                subject = subject.concat("s");
+            }
+
+            let content =
+                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                    + '<div style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(recipient.name) + ',</div>'
+                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">It&#39;s Justin again with a quick update on your evaluations:</div>'
+                    + countsSection + '<br/>'
+                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'myCandidates'
+                    + '">See Results</a>'
+                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go <b style="color:#C8C8C8;" ><a href="' + moonshotUrl + 'myEvaluations?open=true">here</a></b>.</div>'
+                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></div>'
+                    + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
+                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
+                    + '<div style="text-align:left;width:95%;display:inline-block;">'
+                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'settings">Change the frequency of your notifications.</a></i><br/>'
+                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe">Opt-out of future messages.</a></i>'+ '</div>'
+                    + '</div>'
+                + '</div>';
+
+                const sendFrom = "Moonshot";
+                sendEmail(reciever, subject, content, sendFrom, undefined, function (success, msg) {
+                })
+                // Update the lastSent day of the user and the waiting to be false
+                const idQuery = {
+                    "_id" : recipient._id
+                }
+                const updateQuery = {
+                    "notifications.lastSent" : new Date(),
+                    "notifications.waiting" : false
+                }
+                try {
+                    await Users.findOneAndUpdate(idQuery, updateQuery);
+                } catch(err) {
+                    console.log("error updating lastSent date for user email notifications: ", err);
+                    reject("Error updating lastSent date for user email notifications.")
+                }
+                resolve(true);
+            }
+        , time);
     });
 }
 
@@ -1126,11 +1432,6 @@ async function POST_answerPsychQuestion(req, res) {
                 (!userPosition.freeResponseQuestions ||
                  userPosition.freeResponseQuestions.length === 0);
 
-            console.log("userPosition: ", userPosition);
-            console.log("userPosition.skillTests: ", userPosition.skillTests);
-
-            console.log("user: ", user);
-            console.log("applicationComplete: ", applicationComplete);
             // if the application is complete, mark it as such
             if (applicationComplete) {
                 let business;
@@ -1401,8 +1702,8 @@ async function GET_session(req, res) {
         // user from the session and don't log in; do the same if the session
         // has the wrong verification token
         if (!user || user.verificationToken !== sanitize(req.session.verificationToken)) {
-            req.session.userId = undefined;
-            req.session.verificationToken = undefined;
+            req.session.userId = null;
+            req.session.verificationToken = null;
             req.session.save(function(saveSessionError) {
                 if (saveSessionError) { console.log("error saving session: ", saveSessionError); }
                 return res.json(undefined);
@@ -1457,19 +1758,50 @@ async function POST_session(req, res) {
     });
 }
 
+async function POST_updateOnboarding(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const onboarding = sanitize(req.body.onboarding);
 
-// signs the user out by marking their session id and verification token as undefined
+    // get the user who is asking for their evaluations page
+    try {
+        var user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user when trying update onboarding info: ", getUserError);
+        const status = getUserError.status ? getUserError.status : 500;
+        const message = getUserError.message ? getUserError.message : "Server error.";
+        return res.status(status).send(message);
+    }
+
+    // if no user found from token, can't verify
+    if (!user) { return res.status(404).send("User not found"); }
+
+    // if a user was found from the token, verify them and get rid of the token
+    user.onboarding = onboarding;
+
+    // save the verified user
+    try { var returnedUser = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user when updating onboarding info: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    res.json(frontEndUser(returnedUser));
+}
+
+
+// signs the user out by destroying the user session
 function POST_signOut(req, res) {
     // remove the user id and verification token from the session
-    req.session.userId = undefined;
-    req.session.verificationToken = undefined;
+    req.session.userId = null;
+    req.session.verificationToken = null;
     // save the updated session
     req.session.save(function (err) {
         if (err) {
             console.log("error removing user session: ", err);
             return res.status(500).send("Error logging out.");
         } else {
-            return res.json("success");
+            return res.json({ success: true });
         }
     })
 }
@@ -1507,15 +1839,13 @@ function GET_keepMeLoggedIn(req, res) {
 
 // verify user's email so they can log in
 async function POST_verifyEmail(req, res) {
-    const token = sanitize(req.body.token);
-    const userType = sanitize(req.body.userType);
+    const { token, userType } = sanitize(req.body);
 
     // if url doesn't provide token, can't verify
-    if (!token) { return res.status(400).send("Url not in the right format"); }
+    if (!token || typeof token !== "string") { return res.status(400).send("Url not in the right format"); }
 
-    var query = { emailVerificationToken: token };
-    let user;
-    try { user = await Users.findOne(query); }
+    let query = { emailVerificationToken: token };
+    try { var user = await Users.findOne(query); }
     catch (findUserError) {
         console.log("Error trying to find user from verification token: ", findUserError);
         return res.status(500).send(errors.SERVER_ERROR);
@@ -1535,12 +1865,17 @@ async function POST_verifyEmail(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // where the user should be redirected after verification
+    const redirect = user.userType === "accountAdmin" ? "onboarding" : "myEvaluations";
+
     // if the session has the user's id, can immediately log them in
     sessionUserId = sanitize(req.session.unverifiedUserId);
     // get rid of the unverified id as it won't be needed anymore
     req.session.unverifiedUserId = undefined;
     // if the session had the correct user id, log the user in
-    if (sessionUserId && sessionUserId.toString() === user._id.toString()) {
+    const sessionHadUnverifiedId = sessionUserId && sessionUserId.toString() === user._id.toString();
+    const loggedIn = req.session.userId && req.session.userId.toString() === user._id.toString();
+    if (sessionHadUnverifiedId || loggedIn) {
         req.session.userId = user._id.toString();
         req.session.verificationToken = user.verificationToken;
         req.session.save(function(saveSessionError) {
@@ -1548,12 +1883,12 @@ async function POST_verifyEmail(req, res) {
                 console.log("Error saving user session: ", saveSessionError);
             }
             // return the user object even if session saving didn't work
-            return res.json(frontEndUser(user));
+            return res.status(200).send({user: frontEndUser(user), redirect});
         });
     }
 
-    // otherwise bring the user to the login page
-    else { return res.json("go to login"); }
+    // otherwise bring the user to the default page (which could be preceeded by login page)
+    else { return res.json({ redirect }); }
 }
 
 
@@ -1829,7 +2164,7 @@ async function POST_agreeToTerms(req, res) {
         user = await getAndVerifyUser(userId, verificationToken);
 
         // make sure the terms and conditions being agreed to are valid
-        const validAgreements = ["Privacy Policy", "Terms of Use", "Affiliate Agreement", "Service Level Agreement"];
+        const validAgreements = ["Privacy Policy", "Terms of Use", "Affiliate Agreement", "Service Level Agreement", "Terms and Conditions"];
         const agreeingTo = termsAndConditions.filter(agreement => {
             return validAgreements.includes(agreement.name);
         });
@@ -1867,10 +2202,26 @@ async function POST_agreeToTerms(req, res) {
 }
 
 
+// check that a user has verified their email address
+async function GET_checkUserVerified(req, res) {
+    // get user that made this call
+    try { var user = await getUserFromReq(req, "GET"); }
+    catch (getUserError) {
+        console.log("Error getting user while trying to check verified status: ", getUserError);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
+    }
+
+    // if not verified, return unsuccessfully
+    if (!user.verified) { return res.status(403).send({verified: false}); }
+
+    // return user object if verified
+    return res.status(200).send(frontEndUser(user));
+}
+
+
 async function POST_login(req, res) {
-    const reqUser = sanitize(req.body.user);
-    const email = reqUser.email;
-    const password = reqUser.password;
+    const email = sanitize(req.body.user.email);
+    const password = sanitize(req.body.user.password);
     // the setting for whether the user wants to stay logged in
     let saveSession = sanitize(req.body.saveSession);
 
@@ -1882,12 +2233,10 @@ async function POST_login(req, res) {
 
     const INVALID_EMAIL = "No user with that email was found.";
 
-    // searches for user by case-insensitive email
-    const emailRegex = new RegExp(email, "i");
-    var query = {email: emailRegex};
-    let user;
+    // searches for user by lower-case email
+    var query = { "$or": [ { "email": email }, { "email": email.toLowerCase() } ] };
     // find the user by email
-    try { user = await Users.findOne(query); }
+    try { var user = await Users.findOne(query); }
     catch (findUserError) {
         console.log("Couldn't find user: ", findUserError);
         return res.status(404).send(INVALID_EMAIL);
@@ -1906,8 +2255,8 @@ async function POST_login(req, res) {
         if (passwordsMatch !== true) {
             return res.status(400).send("Password is incorrect.");
         }
-        // user has not yet verified email, don't log in
-        if (user.verified !== true) {
+        // user has not yet verified email and is not an account admin, don't log in
+        if (user.verified !== true && user.userType !== "accountAdmin") {
             return res.status(401).send("Email not yet verified");
         }
         // all login info is correct

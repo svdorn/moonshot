@@ -2,6 +2,26 @@
 import React from "react";
 import { TextField } from "material-ui";
 import colors from "./colors";
+import { browserHistory } from "react-router";
+
+
+// Queue implementation
+function Queue() { this.data = []; }
+Queue.prototype.enqueue = function(record) { this.data.unshift(record); }
+Queue.prototype.dequeue = function() { return this.data.pop(); }
+Queue.prototype.first = function() { return this.data[0]; }
+Queue.prototype.last = function() { return this.data[this.data.length - 1]; }
+Queue.prototype.size = function() { return this.data.length; }
+
+
+// Stack implementation
+function Stack() { this.data = []; }
+Stack.prototype.push = function(record) { this.data.push(record); }
+Stack.prototype.pop = function() { return this.data.pop(); }
+Stack.prototype.bottom = function() { return this.data[0]; }
+Stack.prototype.top = function() { return this.data[this.data.length - 1]; }
+Stack.prototype.size = function() { return this.data.length; }
+
 
 const style = {
     // the hint that shows up when search bar is in focus
@@ -11,6 +31,7 @@ const style = {
     searchFloatingLabelStyle: { color: colors.primaryCyan },
     searchUnderlineFocusStyle: { color: colors.primaryCyan }
 };
+
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
@@ -89,7 +110,7 @@ function getFirstName(name) {
 
 // checks if an email is of the correct form (i.e. name@something.blah)
 function isValidEmail(email) {
-    return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+    return typeof email === "string" && /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 }
 
 
@@ -103,13 +124,63 @@ function htmlDecode(text) {
 }
 
 
+// checks if a file has the correct type based on the extension
+function isValidFileType(fileName, allowedFileTypes) {
+    // make sure arguments are valid
+    if (typeof fileName !== "string") {
+        console.log("Invalid usage of isValidFileType()! First argument must be the name of the file (e.g. 'dingus.png')");
+        return false;
+    }
+    if (!Array.isArray(allowedFileTypes)) {
+        console.log("Invalid usage of isValidFileType()! Second argument must be an array of extensions (e.g. ['csv', 'pdf'])");
+        return false;
+    }
+
+    // get the file extension from the end of the file name
+    let extension = fileName.split('.').pop().toLowerCase();
+    // look through the list of allowed file types, if any matches, success
+    const isValid = allowedFileTypes.includes(extension);
+
+    return isValid;
+}
+
+
+// checks if a password is secure enough
+function isValidPassword(password) {
+    const MIN_PASSWORD_LENGTH = 8;
+    return typeof password === "string" && password.length >= MIN_PASSWORD_LENGTH;
+}
+
+
+// goes to a different page within moonshot insights; passing "/onboarding" would go to moonshotinsights.io/onboarding
+function goTo(route) {
+    // go to the wanted page
+    browserHistory.push(route);
+    // scroll to the top of the new page
+    window.scrollTo(0, 0);
+}
+
+
+// returns whether the thing has a truthy value (defined, not null, not empty string)
+function truthy(thing) {
+    return !!thing;
+}
+
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
     renderPasswordField,
     getFirstName,
     isValidEmail,
-    htmlDecode
+    htmlDecode,
+    isValidFileType,
+    isValidPassword,
+    goTo,
+    truthy,
+
+    Queue,
+    Stack
 }
 
 module.exports = miscFunctions;

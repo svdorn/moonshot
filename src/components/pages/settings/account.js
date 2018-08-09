@@ -1,10 +1,10 @@
 "use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {updateUser} from '../../../actions/usersActions';
-import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
-import {Field, reduxForm, change} from 'redux-form';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateUserSettings } from '../../../actions/usersActions';
+import { TextField, RaisedButton, Paper, CircularProgress } from 'material-ui';
+import { Field, reduxForm, change } from 'redux-form';
 import axios from 'axios';
 import { renderTextField, renderPasswordField, isValidEmail } from "../../../miscFunctions";
 
@@ -71,7 +71,7 @@ class Account extends Component {
             hideProfile: this.state.hideProfile
         };
 
-        this.props.updateUser(user);
+        this.props.updateUserSettings(user);
 
         // reset password field
         this.props.change("password", "");
@@ -141,7 +141,7 @@ class Account extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateUser,
+        updateUserSettings,
         change
     }, dispatch);
 }

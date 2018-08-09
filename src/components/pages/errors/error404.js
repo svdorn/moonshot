@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 import {connect} from 'react-redux';
 import MetaTags from 'react-meta-tags';
 
-class error404 extends Component {
+class Error404 extends Component {
     goTo (route)  {
         // goes to the wanted page
         browserHistory.push(route);
@@ -50,4 +50,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(error404);
+export default connect(mapStateToProps)(Error404);

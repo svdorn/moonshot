@@ -75,6 +75,16 @@ class MyEvaluationsPreview extends Component {
                     </div>
                 );
             });
+        } else if (!this.props.finished) {
+            positionSkills = (
+                <div key={"no skills Surrounder"} style={{display: 'inline-block', top: "-5px"}}>
+                    <div key={"No Skills"}
+                         className="myEvalsSkillChip font18px font16pxUnder500"
+                    >
+                        Not live yet
+                    </div>
+                </div>
+            )
         } else {
             positionSkills = (
                 <div key={"no skills Surrounder"} style={{display: 'inline-block'}}>
@@ -90,20 +100,18 @@ class MyEvaluationsPreview extends Component {
         let infoArea = null;
         let clickableArea = null;
         let estimatedLength = null;
+        let notFinished = "clickable";
+        if (!this.props.finalized) {
+            notFinished = "blur3px";
+        }
 
         if (editing) {
             clickableArea = (
-                <div className="secondary-gray font16px font14pxUnder900" style={{margin:"5px 0"}}>
-                    <div
-                        onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)}
-                        className="clickable underline inlineBlock marginRight20px"
-                    >
+                <div className="secondary-gray font16px font14pxUnder800 marginTop10px">
+                    <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className={"underline " + notFinished }style={{display: "inline-block"}}>
                         Candidate Results
                     </div>
-                    <div
-                        onClick={() => this.goTo(`/myEmployees?position=${this.props.name}`)}
-                        className="clickable underline inlineBlock"
-                    >
+                    <div onClick={() => this.goTo(`/myEmployees?position=${this.props.name}`)} className={"underline marginLeft20px " + notFinished} style={{display: "inline-block"}}>
                         Grade Employees
                     </div>
                 </div>

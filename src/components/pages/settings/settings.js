@@ -5,6 +5,7 @@ import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownM
 import PasswordChange from "./passwordchange";
 import Account from "./account";
 import ApiKey from "./apiKey";
+import Notifications from './notifications';
 import HomepageTriangles from "../../miscComponents/HomepageTriangles";
 import MetaTags from "react-meta-tags";
 import AddUserDialog from "../../childComponents/addUserDialog";
@@ -75,6 +76,13 @@ class Settings extends Component {
                             </Tab>
                         :
                             null
+                        }
+                        {this.props.currentUser.userType === "accountAdmin"
+                            ?
+                            <Tab label="Notifications" value="Notifications" style={style.tab}>
+                                <Notifications />
+                            </Tab>
+                            : null
                         }
                     </Tabs>
                     </div>
