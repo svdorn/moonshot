@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
 import {signout, closeNotification, endOnboarding, openAddUserModal} from "../actions/usersActions";
+import { isValidEmail, goTo } from "../miscFunctions";
 import {axios} from 'axios';
 
 const styles = {
@@ -34,8 +35,10 @@ class Menu extends Component {
         }
         // class for the header, only needed for pages with unusual menus
         const headerClass = props.location.pathname === "/" && window.scrollY === 0 ? "noShadow" : "";
+        const position = '';
+
         // set the initial state
-        this.state = {dropDownSelected, headerClass};
+        this.state = {dropDownSelected, headerClass, position};
     }
 
     componentDidUpdate() {
@@ -74,28 +77,28 @@ class Menu extends Component {
 
                 // always sign out when sign out clicked
                 this.props.signout();
-                this.goTo("/");
+                goTo("/");
                 break;
             case "Profile":
                 if (currentUser) {
                     // if user is employer, go to business profile
                     if (currentUser.userType === "manager" || currentUser.userType === "employee" || currentUser.userType === "accountAdmin") {
-                        this.goTo("/");
+                        goTo("/");
                     }
                     // otherwise go to normal profile
                     else {
-                        this.goTo("/profile");
+                        goTo("/profile");
                     }
                 }
                 break;
             case "Settings":
-                this.goTo("/settings");
+                goTo("/settings");
                 break;
             case "Add User":
                 this.props.openAddUserModal();
                 break;
             case "Billing":
-                this.goTo("/billing");
+                goTo("/billing");
                 break;
             default:
                 break;
@@ -107,10 +110,16 @@ class Menu extends Component {
         }
     };
 
+    onChange(e) {
+        this.setState({
+            position: e.target.value
+        });
+    }
+
 
     selectAndGoTo(route, value) {
         this.setState({dropDownSelected: value});
-        this.goTo(route);
+        goTo(route);
     }
 
     signOut() {
@@ -119,22 +128,12 @@ class Menu extends Component {
             this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
         }
         this.props.signout();
-        this.goTo('/');
+        goTo('/');
     }
-
-    goTo(route) {
-        // closes any notification
-        this.props.closeNotification();
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
 
     handleAnchorClick(anchor, wantedPath) {
         if (this.props.location.pathname != wantedPath) {
-            this.goTo(wantedPath);
+            goTo(wantedPath);
         }
         setTimeout(() => {
             const element = document.getElementById(anchor);
@@ -274,7 +273,7 @@ class Menu extends Component {
                                 className="clickable moonshotMenuLogo"
                                 id="moonshotLogo"
                                 src={moonshotLogo}
-                                onClick={() => this.goTo(homeUrl)}
+                                onClick={() => goTo(homeUrl)}
                             />
                         </ToolbarGroup>
                     </Toolbar>
@@ -303,7 +302,6 @@ class Menu extends Component {
             if (pathname === "/") {
                 menuOptions = [
                     {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                    {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
                     {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
                     {optionType: "separator"},
                     {optionType: "url", title: "Log In", url: "/login"},
@@ -312,7 +310,6 @@ class Menu extends Component {
             } else {
                 menuOptions = [
                     {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                    {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
                     {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
                     {optionType: "separator"},
                     {optionType: "url", title: "Log In", url: "/login"},
@@ -397,10 +394,10 @@ class Menu extends Component {
                         optionClass = selectedMenuItemClass;
                     }
                     desktopMenu.push(
-                        <p key={option.title + " desktop"} className={optionClass} onClick={() => self.goTo(option.url)}>{option.title}</p>
+                        <p key={option.title + " desktop"} className={optionClass} onClick={() => goTo(option.url)}>{option.title}</p>
                     );
                     mobileMenu.push(
-                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.goTo(option.url)}/>
+                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => goTo(option.url)}/>
                     );
                     break;
                 case "anchor":
@@ -487,14 +484,18 @@ class Menu extends Component {
                     break;
                 case "button":
                     // add the menu item to the dropDown
+                    let positionUrl = "";
+                    if (self.state.position) {
+                        positionUrl = "?position=" + self.state.position;
+                    }
                     desktopMenu.push(
-                        <MenuItem><div id="try-for-free-menu-item" className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
-                            <input className="blackInput getStarted" type="text" placeholder="Enter a position..." name="position"
+                        <div className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
+                            <input className="blackInput getStarted" type="text" placeholder="Enter a position..." name="position" value={self.state.position} onChange={self.onChange.bind(self)}
                             />
-                            <div className="menuButton button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}}>
+                            <div className="menuButton button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}} onClick={() => goTo("/chatbot" + positionUrl)}>
                                 Try for Free
                             </div>
-                        </div></MenuItem>
+                        </div>
                     );
                     // no button on mobile menu
                     break;
@@ -519,7 +520,7 @@ class Menu extends Component {
         // if the logo is a link, make clicking it go home and make it look clickable
         if (logoIsLink) {
             logoClassName = "clickable moonshotMenuLogo";
-            logoClickAction = () => this.goTo("/");
+            logoClickAction = () => goTo("/");
         }
         let moonshotLogoHtml = (
             <img

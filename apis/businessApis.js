@@ -29,12 +29,8 @@ const errors = require('./errors.js');
 
 
 const businessApis = {
-    POST_demoEmail,
     POST_addEvaluationEmail,
     POST_dialogEmail,
-    POST_dialogEmailScreen2,
-    POST_dialogEmailScreen3,
-    POST_dialogEmailScreen4,
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
@@ -1022,28 +1018,6 @@ async function POST_moveCandidates(req, res) {
     res.json(true);
 }
 
-
-function POST_demoEmail(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'Moonshot - Somebody watched the Demo';
-
-    let content = "<div>"
-        + "<h3>Email of someone who watched demo: </h3>"
-        + "<p>Email: "
-        + sanitize(req.body.email)
-        + "</p>"
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
-}
-
 function POST_googleJobsLinks(req, res) {
     // let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
     let recipients = ["stevedorn9@gmail.com"];
@@ -1114,169 +1088,6 @@ function POST_dialogEmail(req, res) {
         + "<h3>Company</h3>"
         + "<p>"
         + sanitize(req.body.company)
-        + "</p>"
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
-}
-
-async function POST_dialogEmailScreen2(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'Moonshot - Somebody filled out second pg on Homepage';
-    const name = sanitize(req.body.name);
-    const company = sanitize(req.body.company);
-    const password = sanitize(req.body.password);
-    const email = sanitize(req.body.email);
-
-    let user = {
-        name: name,
-        email: email.toLowerCase()
-    };
-    let business = {
-        name: company
-    };
-
-    // create an API_Key for the business - first get a list of all current API_Keys
-    try {
-        const otherBusinesses = await Businesses.find({}).select("API_Key");
-        var existingKeys = otherBusinesses.map(biz => { return biz.API_Key; });
-    } catch (getKeysError) {
-        console.log("Error getting all keys of other businesses: ", getKeysError);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    // generate random keys until one of them is unique across all businesses
-    let API_Key = "";
-    do { API_Key = crypto.randomBytes(12).toString("hex"); }
-    while (existingKeys.includes(API_Key));
-    // give the business its api key
-    business.API_Key = API_Key;
-
-    // hash the user's password
-    const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(password, salt, async function (err, hash) {
-            // change the stored password to be the hash
-            user.password = hash;
-            user.verified = true;
-            const query = {email: user.email};
-
-            // see if there are any users who already have that email address
-            try {
-                const foundUser = await Users.findOne(query);
-                if (foundUser) {
-                    return res.status(401).send("An account with that email address already exists.");
-                }
-            } catch (findUserError) {
-                console.log("error finding user with same email: ", findUserError);
-                return res.status(500).send("Error creating account, try with a different email or try again later.");
-            }
-
-            // get count of users with that name to get the profile url
-            Users.count({name: user.name}, function (err, count) {
-                const randomNumber = crypto.randomBytes(8).toString('hex');
-                user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
-                user.admin = false;
-                const NOW = new Date();
-                user.termsAndConditions = [
-                    {
-                        name: "Privacy Policy",
-                        date: NOW,
-                        agreed: true
-                    },
-                    {
-                        name: "Terms of Use",
-                        date: NOW,
-                        agreed: true
-                    },
-                    {
-                        name: "Service Level Agreement",
-                        date: NOW,
-                        agreed: true
-                    }
-                ];
-                user.dateSignedUp = NOW;
-
-                // store the user in the db
-                Users.create(user, function (err, newUser) {
-                    if (err) {
-                        console.log(err);
-                    }
-
-                    // Create business
-                    Businesses.create(business, function(err, newBusiness) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            // Send email with info to us
-                            let content = "<div>"
-                                + "<h3>Info of someone who filled out second page on homepage: </h3>"
-                                + "<p>Name: "
-                                + sanitize(req.body.name)
-                                + "</p>"
-                                + "<p>Company: "
-                                + sanitize(req.body.company)
-                                + "</p>"
-                                + "</div>";
-
-                            const sendFrom = "Moonshot";
-                            sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                                if (success) {
-                                    res.json("Thank you for contacting us, our team will get back to you shortly.");
-                                } else {
-                                    res.status(500).send(msg);
-                                }
-                            })
-                        }
-                    });
-                });
-            })
-        });
-    });
-}
-
-function POST_dialogEmailScreen3(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'Moonshot - Somebody filled out third pg on Homepage';
-
-    let content = "<div>"
-        + "<h3>Info of someone who filled out third page on homepage: </h3>"
-        + "<p>Positions: "
-        + sanitize(req.body.positions)
-        + "</p>"
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
-}
-
-function POST_dialogEmailScreen4(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'Moonshot - Somebody filled out fourth pg on Homepage';
-
-    let content = "<div>"
-        + "<h3>Info of someone who filled out fourth page on homepage: </h3>"
-        + "<p>Skill 1: "
-        + sanitize(req.body.skill1)
-        + "</p>"
-        + "<p>Skill 2: "
-        + sanitize(req.body.skill2)
-        + "</p>"
-        + "<p>Skill 3: "
-        + sanitize(req.body.skill3)
         + "</p>"
         + "</div>";
 
