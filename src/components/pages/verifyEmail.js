@@ -66,7 +66,7 @@ class VerifyEmail extends Component {
     render() {
         const user = this.props.user;
 
-        let status = <CircularProgress />;
+        let status = <CircularProgress color="#76defe" />;
 
         if (user.verified || this.state.verified) {
             status = (
