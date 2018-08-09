@@ -154,7 +154,7 @@ class Onboarding extends Component {
 
         const checklistItems = [
             {
-                name: "Activate Admin Account",
+                name: "Activate Account",
                 length: "30s",
                 step: 0
             },
@@ -233,12 +233,12 @@ class Onboarding extends Component {
                 );
             });
 
-            var stepName = "Activate Admin Account";
+            var stepName = "Activate Account";
 
             switch(onboarding.step) {
-                // Activate Admin Account
+                // Activate Account
                 case 0:
-                    stepName = "Activate Admin Account";
+                    stepName = "Activate Account";
                     body = (<VerifyEmail {...childProps} />);
                     break;
                 // Watch Tutorial
