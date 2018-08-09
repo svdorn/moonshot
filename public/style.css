@@ -1,4 +1,4 @@
-html {
+ html {
   position: relative;
     height: 100%;
 }
@@ -998,24 +998,22 @@ form > h1 {
     margin: 5px 0;
 }
 
-
-
 .buttonArea {
     display: flex;
     margin: 20px 0;
 }
 .menuButtonArea .blackInput {
-    line-height: 30px;
+    line-height: 22px;
 }
 .menuButtonArea .menuButton {
-    line-height: 30px;
+    line-height: 22px;
 }
 .pricingInput .blackInput {
     min-width: 300px;
 }
 
 .blackInput {
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid white;
     padding: 3px 10px;
     background-color: #222222;
@@ -1235,7 +1233,7 @@ form > h1 {
 
 
 .frontPage .infoContainer .content .buttonArea .button.getStarted {
-    margin-left: 10%;
+    margin-left: 4%;
 }
 
 #myCandidatesScreenshot {

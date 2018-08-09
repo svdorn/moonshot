@@ -288,7 +288,7 @@ class BusinessHome extends Component {
                                 <div className="buttonArea font18px font14pxUnder900">
                                     <input className="blackInput getStarted" type="text" placeholder="Enter a position" name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot" + positionUrl)}>
+                                    <div className="getStarted button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot" + positionUrl)}>
                                         Try for Free
                                     </div>
                                 </div>
@@ -608,7 +608,7 @@ class BusinessHome extends Component {
                                 <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
                                     <input className="blackInput getStarted" type="text" placeholder="Enter a position you're hiring for..." name="position"
                                     value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
+                                    <div className="getStarted button medium round-8px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
                                         Try for Free
                                     </div>
                                 </div>
