@@ -258,7 +258,7 @@ class BusinessHome extends Component {
                 text2: "your company's predictive baseline",
                 icon: "EmployeeIcon",
                 alt: "Employee Icon",
-                iconStyle: {}
+                iconStyle: { height: "85px" }
             },
             {
                 title: "Quarterly Reviews",
@@ -266,7 +266,7 @@ class BusinessHome extends Component {
                 text2: "and improve your predictive model",
                 icon: "FlameIcon",
                 alt: "Flame Icon",
-                iconStyle: {}
+                iconStyle: { height: "84px", marginTop: "-2px" }
             },
             {
                 title: "Analytics and Reporting",
@@ -285,6 +285,8 @@ class BusinessHome extends Component {
                     <div>
                         <img
                             src={`/images/businessHome/${feature.icon}${this.props.png}`}
+                            style={feature.iconStyle}
+                            alt={feature.alt}
                         />
                     </div>
                     <div>
