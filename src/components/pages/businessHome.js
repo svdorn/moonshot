@@ -219,7 +219,7 @@ class BusinessHome extends Component {
 
         return (
             <section id="learnFromHires">
-                { this.state.showRectangles ? this.skewedRectangles(18) : null }
+                { this.state.showRectangles ? this.skewedRectangles(6) : null }
                 <div className="center">
                     <div className="primary-white inline-block" style={{maxWidth: "1200px"}}>
                         { featureBoxes }
@@ -471,7 +471,7 @@ class BusinessHome extends Component {
 
                     <section id="pricingSection">
                         <a id="pricing" name="pricing" className="anchor" />
-                        { this.skewedRectangles(10) }
+                        { this.state.showRectangles ? this.skewedRectangles(6) : null }
                         <div className="forBusinessBoxesContainer">
                             <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
                                  style={{marginBottom: '50px'}}>
@@ -588,6 +588,7 @@ class BusinessHome extends Component {
                     </section>
 
                     <section id="ATSIntegrations" className="marginBottom60px">
+                        { this.state.showRectangles ? this.skewedRectangles(6) : null }
                         <div className="center primary-white">
                             <div className="marginBottom40px font30px font24pxUnder700 font20pxUnder500">
                                 Integrates with your ATS and favorite apps.

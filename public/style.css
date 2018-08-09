@@ -779,14 +779,14 @@ form > h1 {
     background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
     grid-row-start: 31;
     grid-row-end: 35;
-    grid-column-start: 34;
+    grid-column-start: 32;
     grid-column-end: 43;
 }
 #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
     background: linear-gradient(to right, #ff748c, #ffe09e 35%, #ff748c);
     grid-row-start: 35;
     grid-row-end: 39;
-    grid-column-start: 35;
+    grid-column-start: 33;
     grid-column-end: 43;
 }
 /* END LEARN FROM HIRES PAGE GRID */
@@ -830,18 +830,69 @@ form > h1 {
     background: linear-gradient(to right, #76defe, #7dfed2 65%, #76defe);
     grid-row-start: 97;
     grid-row-end: 101;
-    grid-column-start: 34;
+    grid-column-start: 32;
     grid-column-end: 43;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
     background: linear-gradient(to right, #76defe, #7dfed2 35%, #76defe);
     grid-row-start: 101;
     grid-row-end: 105;
-    grid-column-start: 35;
+    grid-column-start: 33;
     grid-column-end: 43;
 }
-
 /* END PRICING PAGE GRID */
+/* START ATS INTEGRATIONS PAGE GRID */
+#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer {
+    margin-top: -200px;
+    height: 1800px;
+}
+#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
+    height: calc(var(--rowWidth) * 400);
+}
+#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+    background: var(--primary-black-light);
+    grid-row-start: 26;
+    grid-row-end: 150;
+    grid-column-start: 1;
+    grid-column-end: 43;
+}
+#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+    background: var(--primary-black-light);
+    grid-row-start: 5;
+    grid-row-end: 26;
+    grid-column-start: 1;
+    grid-column-end: 19;
+}
+
+#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+    background: linear-gradient(to right, #ff748c, #ffe09e);
+    grid-row-start: 1;
+    grid-row-end: 5;
+    grid-column-start: 1;
+    grid-column-end: 11;
+}
+#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
+    grid-row-start: 5;
+    grid-row-end: 9;
+    grid-column-start: 1;
+    grid-column-end: 12;
+}
+#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+    background: linear-gradient(to right, #76defe, #7dfed2 65%, #76defe);
+    grid-row-start: 22;
+    grid-row-end: 26;
+    grid-column-start: 32;
+    grid-column-end: 43;
+}
+#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+    background: linear-gradient(to right, #76defe, #7dfed2 35%, #76defe);
+    grid-row-start: 26;
+    grid-row-end: 30;
+    grid-column-start: 33;
+    grid-column-end: 43;
+}
+/* END ATS INTEGRATIONS PAGE GRID */
 
 
 #employerOnboarding {
