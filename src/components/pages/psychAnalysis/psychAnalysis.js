@@ -272,7 +272,11 @@ class PsychAnalysis extends Component {
                     />
                 </div>
                 <br/>
-                <div className={"psychAnalysisButton marginBottom50px" + nextButtonClass} onClick={this.nextQuestion.bind(this)}>
+                <div
+                    className={"psychAnalysisButton marginBottom50px" + nextButtonClass}
+                    onClick={this.nextQuestion.bind(this)}
+                    style={{marginTop: "20px"}}
+                >
                     Next
                 </div>
             </div>

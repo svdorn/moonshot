@@ -454,7 +454,7 @@ async function createBusiness(info) {
 
 
 // create a signup code for a user
-function createCode(businessId, positionId, userType, open) {
+function createCode(businessId, positionId, userType, email, open) {
     return new Promise(async function(resolve, reject) {
         // initialize random characters string
         let randomChars;
@@ -484,7 +484,7 @@ function createCode(businessId, positionId, userType, open) {
             code: randomChars,
             created: NOW,
             expirationDate: lastPossibleSecond(NOW, TWO_WEEKS),
-            businessId, positionId, userType, open
+            email, businessId, positionId, userType, open
         }
         // make the code in the db
         try { code = await Signupcodes.create(code) }
@@ -499,7 +499,7 @@ function createCode(businessId, positionId, userType, open) {
 function createLink(businessId, positionId, userType) {
     return new Promise(async function(resolve, reject) {
         try {
-            const codeObj = await createCode(businessId, positionId, userType, true);
+            const codeObj = await createCode(businessId, positionId, userType, null, true);
             resolve({
                 code: codeObj.code, userType
             });
@@ -515,7 +515,7 @@ function createLink(businessId, positionId, userType) {
 function createEmailInfo(businessId, positionId, userType, email) {
     return new Promise(async function(resolve, reject) {
         try {
-            const codeObj = await createCode(businessId, positionId, userType, false);
+            const codeObj = await createCode(businessId, positionId, userType, email, false);
             resolve({
                 code: codeObj.code,
                 email, userType
@@ -1043,22 +1043,38 @@ function POST_googleJobsLinks(req, res) {
     })
 }
 
-function POST_addEvaluationEmail(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    const business = sanitize(req.body.business);
-    const position = sanitize(req.body.position);
-    let subject = 'ACTION REQUIRED - ' + business + ' requested new position';
 
-    let content = "<div>"
-        + "<h2>" + business + " requested new position</h2>"
-        + "<h3>Business</h3>"
-        + "<p>"
-        + business
-        + "</p>"
-        + "<h3>Position</h3>"
-        + "<p>"
-        + position
-        + "</p>"
+// account admin wants to create a new business, so send an email saying to
+// contact them about it
+async function POST_addEvaluationEmail(req, res) {
+    // get all the params
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const positionName = sanitize(req.body.positionName);
+
+    // get the user and the business (to verify and get info)
+    try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
+    catch (error) {
+        console.log("Error finding user/business trying to add an evaluation: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    const bizName = business.name;
+    const userName = user.name;
+
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+
+    let subject = `ACTION REQUIRED - ${bizName} requested new position`;
+
+    let content =
+          "<div>"
+        +   `<h2>${userName} at ${bizName} requested a new position</h2>`
+        +   "<h3>Business</h3>"
+        +   `<p>${bizName}</p>`
+        +   "<h3>Position Name</h3>"
+        +   `<p>${positionName}</p>`
+        +   `<h3>${userName}'s Email</h3>`
+        +   `<p>${user.email}</p>`
         + "</div>";
 
     const sendFrom = "Moonshot";
