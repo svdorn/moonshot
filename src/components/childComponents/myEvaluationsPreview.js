@@ -135,8 +135,8 @@ class MyEvaluationsPreview extends Component {
             } else {
                 clickableArea = (
                     <div style={{marginTop: "20px"}}>
-                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.continueEval} style={{padding: "5px 17px"}}>
-                                Start/Continue
+                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={this.continueEval} style={{padding: "5px 17px"}}>
+                                {"Start | Continue"}
                             </button>
                     </div>
                 );

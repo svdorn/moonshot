@@ -26,7 +26,7 @@ class VerifyEmail extends Component {
                 <div className="form lightBlackForm">
                     <h1 className="primary-white marginTop20px">Verify Email</h1>
                     <div className="marginTop20px marginBottom20px">
-                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.onVerifyClick.bind(this)} style={{padding: "6px 20px"}}>
+                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={this.onVerifyClick.bind(this)} style={{padding: "6px 20px"}}>
                                 Verify my Account
                             </button>
                     </div>

@@ -351,8 +351,11 @@ class AdminQuestions extends Component {
             content = (
                 <div>
                     Finished with the admin questions!<br/>
-                    <button className="button gradient-transition gradient-1-red gradient-2-orange round-4px marginTop10px primary-white font22px font16pxUnder600"
-                            onClick={this.finish.bind(this)}>
+                    <button
+                        className="button gradient-transition gradient-1-red gradient-2-orange round-4px marginTop10px primary-white font16px"
+                        style={{marginTop: "20px"}}
+                        onClick={this.finish.bind(this)}
+                    >
                         Advance
                     </button>
                 </div>

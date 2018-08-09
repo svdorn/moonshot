@@ -2,12 +2,12 @@ import React, { Component } from "react";
 
 class HoverTip extends Component {
     render() {
-        const defaultBlack = "#252525";
+        const defaultBlack = "#2e2e2e";
 
-        let style = { padding: "5px" };
+        let style = { padding: "8px" };
         if (this.props.style) { style = {...style, ...this.props.style} };
         let className = "hoverTip noselect";
-        if (this.props.className) { className = className + this.props.className; }
+        if (this.props.className) { className = className + " " + this.props.className; }
 
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : defaultBlack;
         const color = this.props.color ? this.props.color : "white";

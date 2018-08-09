@@ -515,11 +515,10 @@ export function dialogEmail(user){
 }
 
 // Send an email when admin tries to add another evaluation
-export function addEvaluationEmail(user){
+export function addEvaluationEmail(userId, verificationToken, positionName){
     return function(dispatch) {
-        axios.post("api/business/addEvaluationEmail", user)
-            .then(function(response) {
-            })
+        axios.post("api/business/addEvaluationEmail", {userId, verificationToken, positionName})
+            .then(function(response) { } )
             .catch(function(err) {
                 dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
             })

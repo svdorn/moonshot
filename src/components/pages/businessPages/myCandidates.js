@@ -731,7 +731,13 @@ class MyCandidates extends Component {
         else if (this.state.candidates.length === 0) {
             return (
                 <div style={style.noCandidatesMessage} key="no candidates started">
+                    <div className="marginBottom15px font32px font28pxUnder500 clickable primary-cyan" onClick={this.openAddUserModal.bind(this)}>
+                        + <span className="underline">Add Candidates</span>
+                    </div>
                     No candidates have started this evaluation.
+                    <div className="marginTop15px" style={{color: "rgba(255,255,255,.8)"}}>
+                        Add them <span className="clickable underline primary-cyan" onClick={this.openAddUserModal.bind(this)}>here</span> so they can get started.
+                    </div>
                 </div>
             )
         }
