@@ -153,6 +153,7 @@ class AuthenticatedComponent extends Component {
 
     // if the user doesn't have access to the page and we're not showing a 403 page
     redirect() {
+        console.log("redirecting");
         // go to the homepage if no user is logged in
         if (typeof this.props.currentUser !== "object") { goTo("/"); }
         switch (this.props.currentUser.userType) {
@@ -163,6 +164,7 @@ class AuthenticatedComponent extends Component {
             case "candidate":
             case "employee": {
                 goTo("/myEvaluations")
+                break;
             }
             default: {
                 goTo("/");
