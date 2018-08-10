@@ -87,8 +87,11 @@ class Menu extends Component {
             if (pathname === wfs.page.toLowerCase()) {
                 // ... set the state so we aren't waiting anymore ...
                 this.setState({ waitingForScroll: {} });
-                // ... and scroll to the wanted anchor
-                this.scrollToAnchor(wfs.anchor);
+                // ... wait a moment for the user to get used to the page ...
+                setTimeout(() => {
+                    // ... and scroll to the wanted anchor
+                    this.scrollToAnchor(wfs.anchor);
+                }, 50);
             }
         }
     }
@@ -99,13 +102,6 @@ class Menu extends Component {
         let currentUser = this.props.currentUser;
         switch (value) {
             case "Sign Out":
-                //special case, user is signing out while on onboarding,
-                // don't mark onboarding complete yet
-                // if (this.props.location.pathname === '/onboarding') {
-                //     const markOnboardingComplete = false;
-                //     this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
-                // }
-
                 // always sign out when sign out clicked
                 this.props.signout();
                 goTo("/");
@@ -173,12 +169,6 @@ class Menu extends Component {
         }
         // if we are already on the wanted path, scroll to the wanted anchor
         else { this.scrollToAnchor(anchor); }
-        // setTimeout(() => {
-        //     const element = document.getElementById(anchor);
-        //     if (element) {
-        //         element.scrollIntoView({behavior: "smooth", block:"start"});
-        //     }
-        // }, 20);
     }
 
 
