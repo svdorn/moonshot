@@ -880,7 +880,6 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         }
 
         if (user.userType === "candidate") {
-            console.log("sending emails");
             sendNotificationEmails(businessId, user);
         }
 
@@ -968,8 +967,7 @@ async function sendNotificationEmails(businessId, user) {
                             break;
                         case "Daily":
                             interval = "day";
-                            //time = ONE_DAY;
-                            time = 10;
+                            time = ONE_DAY;
                             break;
                         case "never":
                             time = 0;
