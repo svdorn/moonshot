@@ -536,6 +536,9 @@ form > h1 {
     position: relative;
 }
 /* FIRST GRID OF SKEWED RECTANGLES */
+.frontPage > .skewedRectanglesContainer {
+    height: 150%;
+}
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child {
     height: calc(var(--rowWidth) * 62);
 }
@@ -571,7 +574,7 @@ form > h1 {
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) {
     /* account for the first skewed rectangles grid */
     margin-top: calc(var(--rowWidth) * 62);
-    height: calc(var(--rowWidth) * 66);
+    height: calc(var(--rowWidth) * 23);
     background-color: #323232;
 }
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) {
@@ -5840,63 +5843,78 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-start: 27;
         grid-column-end: 35;
     }
-    .frontPage .skewedRectangles:nth-child(2) { display: none; }
-    .logoContainer.skewedContainer { position: relative; }
+    /* TODO: REMOVE .frontPage .skewedRectangles:nth-child(2) { display: none; } */
+
+
+    /* .logoContainer.skewedContainer { position: relative; }
     .logoContainer .skewedRectanglesContainer { overflow: visible; }
     .logoContainer .skewedRectanglesContainer .skewedRectangles:first-child {
         height: calc(var(--rowWidth) * 56);
         background-color: #323232;
         top: -145px;
+    } */
+
+    .frontPage > .skewedRectanglesContainer { height: 150%; }
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) {
+        height: calc(var(--rowWidth) * 56);
+        background-color: #323232;
+        top: 130px;
     }
-    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+
+    /* TODO REPLACE ALL OF EM WITH THIS .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) */
+
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) {
         background: var(--primary-black-dark);
         grid-row-start: 1;
         grid-row-end: 5;
         grid-column-start: 1;
         grid-column-end: 15;
     }
-    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(2) {
         background: linear-gradient(to right, #a196fe, #80cffe);
         grid-row-start: 1;
         grid-row-end: 5;
         grid-column-start: 15;
         grid-column-end: 19;
     }
-    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(3) {
         background: var(--primary-black-dark);
         grid-row-start: 1;
         grid-row-end: 5;
         grid-column-start: 19;
         grid-column-end: 30;
     }
-    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(4) {
         background: linear-gradient(to right, #9c9ffe, #aa89fe);
         grid-row-start: 5;
         grid-row-end: 9;
         grid-column-start: 12;
         grid-column-end: 18;
     }
-    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(5) {
         background: var(--primary-black-dark);
         grid-row-start: 44;
         grid-row-end: 53;
         grid-column-start: 1;
         grid-column-end: 20;
     }
-    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(6) {
         background: var(--primary-black-dark);
         grid-row-start: 53;
         grid-row-end: 57;
         grid-column-start: 1;
         grid-column-end: 26;
     }
-    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(7) {
         background: linear-gradient(to right, #ad84fe, #86c5fe);
         grid-row-start: 53;
         grid-row-end: 57;
         grid-column-start: 26;
         grid-column-end: 32;
     }
+
+    /* END WHERE LOGO CONTAINER USED TO BE */
+
 
     #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
         display: none;
@@ -6757,6 +6775,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 75;
     }
 
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) {
+        top: 180px;
+    }
+
     #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
         grid-column-start: 25;
     }
@@ -6772,7 +6794,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         left: 104%;
     }
 
-    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+    /* TODO MAKE SURE THIS ONE IS STILL GOOD, USED TO BE A .logoContainer DUDE */
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(7) {
         background: linear-gradient(to right, #ad84fe, #86c5fe);
         grid-row-start: 53;
         grid-row-end: 57;

@@ -138,6 +138,88 @@ class BusinessHome extends Component {
     }
 
 
+    // create a bunch of empty skewed rectangles that should be modified with css
+    skewedRectangles(numRects, options) {
+        // will contain a bunch of un-styled skewed rectangles
+        let rectangles = [];
+        // add the requested number of rectangles
+        for (let i = 0; i < numRects; i++) {
+            rectangles.push(<div className="skewedRectangle" key={`rectangle${rectangleKeyIndex}`} />);
+            rectangleKeyIndex++;
+        }
+
+        // the css class of the overall container
+        let skewedContainerClass = "skewedContainer";
+
+        // if extra options were passed in
+        if (typeof options === "object") {
+            // if only the array of rectangles should be returned
+            if (options.rectanglesOnly === true) { return rectangles; }
+            // if there should be an extra class on the container
+            if (typeof options.skewedContainerClass === "string") {
+                skewedContainerClass += " " + options.skewedContainerClass;
+            }
+        }
+
+        return (
+            <div className={skewedContainerClass}>
+                <div className="skewedRectanglesContainer">
+                    <div className="skewedRectangles">
+                        { rectangles }
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+
+    introductionSection() {
+        return (
+            <section id="introduction">
+                <a id="homeTop" name="homeTop" className="anchor" />
+                <div className="businessHome frontPage">
+                    {this.state.showRectangles ?
+                        <div className="skewedRectanglesContainer">
+                            <div className="skewedRectangles">
+                                { this.skewedRectangles(11, { rectanglesOnly: true })}
+                            </div>
+                            <div className="skewedRectangles">
+                                { this.skewedRectangles(7, { rectanglesOnly: true })}
+                            </div>
+                        </div>
+                        : null
+                    }
+                    <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
+                        <div className="content">
+                            <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
+                            <p className="infoText notFull font18px font16pxUnder900 font14Under400">Hire the best people for your team with hiring technology that constantly learns and improves as you scale.</p>
+                            <div className="buttonArea font18px font14pxUnder900">
+                                <input className="blackInput getStarted secondary-gray-important" type="text" placeholder="Enter a position" name="position"
+                                value={this.state.position} onChange={this.onChange.bind(this)}/>
+                                <div className="getStarted button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot" + positionUrl)}>
+                                    Try for Free
+                                </div>
+                            </div>
+                            {/*<div className="infoText clickableNoUnderline font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600" onClick={this.handleOpen}>
+                                <img src={"images/businessHome/PlayButton" + this.props.png} alt="Play Button" className="playButton"/>
+                                <div>See how it works in 2 minutes</div>
+                            </div>*/}
+                        </div>
+                        <figure className="productScreenshots">
+                            <div id="myCandidatesScreenshot">
+                                <img src={"images/businessHome/CandidatesScreenshotTop" + this.props.jpg} alt="My Candidates Page Screenshot"/>
+                            </div>
+                            <div id="resultsScreenshot">
+                                <img src={"images/businessHome/ProfileScreenshot" + this.props.jpg} alt="Candidate Results Page Screenshot" />
+                            </div>
+                        </figure>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+
     learnFromHiresSection() {
         const features = [
             {
@@ -228,41 +310,6 @@ class BusinessHome extends Component {
     }
 
 
-    // create a bunch of empty skewed rectangles that should be modified with css
-    skewedRectangles(numRects, options) {
-        // will contain a bunch of un-styled skewed rectangles
-        let rectangles = [];
-        // add the requested number of rectangles
-        for (let i = 0; i < numRects; i++) {
-            rectangles.push(<div className="skewedRectangle" key={`rectangle${rectangleKeyIndex}`} />);
-            rectangleKeyIndex++;
-        }
-
-        // the css class of the overall container
-        let skewedContainerClass = "skewedContainer";
-
-        // if extra options were passed in
-        if (typeof options === "object") {
-            // if only the array of rectangles should be returned
-            if (options.rectanglesOnly === true) { return rectangles; }
-            // if there should be an extra class on the container
-            if (typeof options.skewedContainerClass === "string") {
-                skewedContainerClass += " " + options.skewedContainerClass;
-            }
-        }
-
-        return (
-            <div className={skewedContainerClass}>
-                <div className="skewedRectanglesContainer">
-                    <div className="skewedRectangles">
-                        { rectangles }
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-
     render() {
 
         const logoImages = [
@@ -297,47 +344,8 @@ class BusinessHome extends Component {
                     <title>Moonshot</title>
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
                 </MetaTags>
-                {/*{dialog}*/}
                 <div className="blackBackground businessHome">
-                    <a id="homeTop" name="homeTop" className="anchor" />
-                    <div className="businessHome frontPage">
-                        {this.state.showRectangles ?
-                            <div className="skewedRectanglesContainer">
-                                <div className="skewedRectangles">
-                                    { this.skewedRectangles(4, { rectanglesOnly: true })}
-                                </div>
-                                <div className="skewedRectangles">
-                                    { this.skewedRectangles(7, { rectanglesOnly: true })}
-                                </div>
-                            </div>
-                            : null
-                        }
-                        <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
-                            <div className="content">
-                                <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
-                                <p className="infoText notFull font18px font16pxUnder900 font14Under400">Hire the best people for your team with hiring technology that constantly learns and improves as you scale.</p>
-                                <div className="buttonArea font18px font14pxUnder900">
-                                    <input className="blackInput getStarted secondary-gray-important" type="text" placeholder="Enter a position" name="position"
-                                    value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot" + positionUrl)}>
-                                        Try for Free
-                                    </div>
-                                </div>
-                                {/*<div className="infoText clickableNoUnderline font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600" onClick={this.handleOpen}>
-                                    <img src={"images/businessHome/PlayButton" + this.props.png} alt="Play Button" className="playButton"/>
-                                    <div>See how it works in 2 minutes</div>
-                                </div>*/}
-                            </div>
-                            <figure className="productScreenshots">
-                                <div id="myCandidatesScreenshot">
-                                    <img src={"images/businessHome/CandidatesScreenshotTop" + this.props.jpg} alt="My Candidates Page Screenshot"/>
-                                </div>
-                                <div id="resultsScreenshot">
-                                    <img src={"images/businessHome/ProfileScreenshot" + this.props.jpg} alt="Candidate Results Page Screenshot" />
-                                </div>
-                            </figure>
-                        </div>
-                    </div>
+                    { this.introductionSection() }
 
                     {/* <!-- The skewed rectangles that only come up on small screen --> */}
                     { this.state.showRectangles ? this.skewedRectangles(7, { skewedContainerClass: "logoContainer"}) : null }
