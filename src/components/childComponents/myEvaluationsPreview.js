@@ -100,20 +100,29 @@ class MyEvaluationsPreview extends Component {
         let infoArea = null;
         let clickableArea = null;
         let estimatedLength = null;
-        let notFinished = "clickable";
-        if (!this.props.finalized) {
-            notFinished = "blur3px";
-        }
 
         if (editing) {
             clickableArea = (
                 <div className="secondary-gray font16px font14pxUnder800 marginTop10px">
-                    <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className={"underline " + notFinished }style={{display: "inline-block"}}>
-                        Candidate Results
-                    </div>
-                    <div onClick={() => this.goTo(`/myEmployees?position=${this.props.name}`)} className={"underline marginLeft20px " + notFinished} style={{display: "inline-block"}}>
-                        Grade Employees
-                    </div>
+                    {this.props.finalized ?
+                        <div>
+                            <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className="underline clickable" style={{display: "inline-block"}}>
+                                Candidate Results
+                            </div>
+                            <div onClick={() => this.goTo(`/myEmployees?position=${this.props.name}`)} className="underline marginLeft20px clickable" style={{display: "inline-block"}}>
+                                Grade Employees
+                            </div>
+                        </div>
+                        :
+                        <div>
+                            <div className="underline blur3px"style={{display: "inline-block"}}>
+                                Candidate Results
+                            </div>
+                            <div className="underline marginLeft20px blur3px" style={{display: "inline-block"}}>
+                                Grade Employees
+                            </div>
+                        </div>
+                    }
                 </div>
             );
 
