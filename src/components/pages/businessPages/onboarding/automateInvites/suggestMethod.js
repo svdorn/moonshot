@@ -20,8 +20,8 @@ class SuggestMethod extends Component {
     componentWillMount() {
         const self = this;
         const currentUser = this.props.currentUser;
-        // user can move on if they have given an integration suggestion
-        const nextCallable = truthy(currentUser.onboarding) && truthy(currentUser.onboarding.suggestion);
+        // user can move on if they have given an integration suggestion in the past
+        const nextCallable = truthy(currentUser.onboarding) && truthy(currentUser.onboarding.integrationSuggestion);
         this.setState({ stepFinishedInPast: nextCallable });
         self.props.changeAutomateInvites({
             header: "Suggest Another Method",
