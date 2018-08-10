@@ -148,21 +148,14 @@ class BusinessHome extends Component {
             rectangleKeyIndex++;
         }
 
-        // the css class of the overall container
-        let skewedContainerClass = "skewedContainer";
-
         // if extra options were passed in
         if (typeof options === "object") {
             // if only the array of rectangles should be returned
             if (options.rectanglesOnly === true) { return rectangles; }
-            // if there should be an extra class on the container
-            if (typeof options.skewedContainerClass === "string") {
-                skewedContainerClass += " " + options.skewedContainerClass;
-            }
         }
 
         return (
-            <div className={skewedContainerClass}>
+            <div className="skewedContainer">
                 <div className="skewedRectanglesContainer">
                     <div className="skewedRectangles">
                         { rectangles }
@@ -346,9 +339,6 @@ class BusinessHome extends Component {
                 </MetaTags>
                 <div className="blackBackground businessHome">
                     { this.introductionSection() }
-
-                    {/* <!-- The skewed rectangles that only come up on small screen --> */}
-                    { this.state.showRectangles ? this.skewedRectangles(7, { skewedContainerClass: "logoContainer"}) : null }
 
                     {/*<div className="partnerLogos"><div>{logos}</div></div>*/}
 
