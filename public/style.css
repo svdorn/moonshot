@@ -1335,24 +1335,6 @@ form > h1 {
     box-shadow: -7px 2px 29px 1px rgba(10,0,10,.7);
 }
 
-.partnerLogos {
-    height: 40px;
-    position: relative;
-}
-.partnerLogos > div {
-    justify-content: space-around;
-    display: flex;
-    max-width: 940px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    height: 100%;
-    position: absolute;
-}
-.partnerLogo {
-    height: 100%;
-    width: auto;
-}
 .playButton {
     height: 30px;
     margin-right: 10px;
@@ -5796,19 +5778,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #resultsScreenshot {
         top: 200px;
         left: 50%;
-    }
-    .partnerLogos {
-        height: auto;
-        /* overflow: auto; */
-    }
-    .partnerLogos > div {
-        flex-wrap: wrap;
-        height: fit-content;
-        transform: translateY(-50%);
-    }
-    .partnerLogo {
-        height: 30px;
-        margin: 5px;
     }
 
     #learnFromHires .feature-box {

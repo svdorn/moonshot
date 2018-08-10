@@ -304,17 +304,6 @@ class BusinessHome extends Component {
 
 
     render() {
-
-        const logoImages = [
-            {src: "NWMLogoWhite" + this.props.png, partner: "Northwestern Mutual"},
-            {src: "DreamHomeLogoWhite" + this.props.png, partner: "Dream Home"},
-            {src: "SinglewireLogoWhite" + this.props.png, partner: "Singlewire Software"},
-            {src: "CurateLogoWhite" + this.props.png, partner: "Curate Solutions"}
-        ];
-        const logos = logoImages.map(img => {
-            return (<img alt={`${img.partner} Logo`} key={img.partner+"logo"} className="partnerLogo" src={`/logos/${img.src}`} />);
-        });
-
         const listItem = {
                 width: '30%',
                 margin: 'auto',
@@ -339,8 +328,6 @@ class BusinessHome extends Component {
                 </MetaTags>
                 <div className="blackBackground businessHome">
                     { this.introductionSection() }
-
-                    {/*<div className="partnerLogos"><div>{logos}</div></div>*/}
 
                     <section id="threeScreenshots">
                         <div className="homepageTrajectory forBusiness">
