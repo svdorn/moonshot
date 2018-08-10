@@ -731,7 +731,13 @@ class MyCandidates extends Component {
         else if (this.state.candidates.length === 0) {
             return (
                 <div style={style.noCandidatesMessage} key="no candidates started">
+                    <div className="marginBottom15px font32px font28pxUnder500 clickable primary-cyan" onClick={this.openAddUserModal.bind(this)}>
+                        + <span className="underline">Add Candidates</span>
+                    </div>
                     No candidates have started this evaluation.
+                    <div className="marginTop15px" style={{color: "rgba(255,255,255,.8)"}}>
+                        Add them <span className="clickable underline primary-cyan" onClick={this.openAddUserModal.bind(this)}>here</span> so they can get started.
+                    </div>
                 </div>
             )
         }
@@ -1068,9 +1074,17 @@ class MyCandidates extends Component {
 
     mobileTopOptions() {
         return (
-            <div className="mobileTopOptions">
-                { this.positionSelector() }
-                { this.mobileSortByDropdown() }
+            <div>
+                <div className="mobile-top-options">
+                    { this.positionSelector() }
+                    { this.mobileSortByDropdown() }
+                </div>
+                <div
+                    className="add-candidate primary-cyan pointer font16px font14pxUnder500 font12pxUnder400"
+                    onClick={this.props.openAddUserModal}
+                >
+                    + <span className="underline">Add Candidate</span>
+                </div>
             </div>
         );
     }
@@ -1230,8 +1244,15 @@ class MyCandidates extends Component {
                 <div className="center">
                     <div className="candidatesAndOptions">
                         {this.state.mobile ? null :
-                            <div className="myCandidatesPositionSelector">
+                            <div className="my-candidates-position-selector">
                                 { this.positionSelector() }
+                                <br/>
+                                <div
+                                    className="add-candidate primary-cyan pointer"
+                                    onClick={this.props.openAddUserModal}
+                                >
+                                    + <span className="underline">Add Candidate</span>
+                                </div>
                             </div>
                         }
                         { this.state.mobile ? this.mobileTopOptions() : this.topOptions() }

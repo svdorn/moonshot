@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router'
 import { reset } from 'redux-form';
+import { goTo } from "../miscFunctions";
 
 
 // GET USER FROM SESSION
@@ -52,6 +53,33 @@ export function closeAddUserModal() {
     }
 }
 
+export function openContactUsModal() {
+    return function(dispatch) {
+        dispatch({type: "OPEN_CONTACT_US_MODAL"});
+    }
+}
+
+export function closeContactUsModal() {
+    return function(dispatch) {
+        dispatch({type: "CLOSE_CONTACT_US_MODAL"});
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function contactUsEmail(user){
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        axios.post("api/business/contactUsEmailNotLoggedIn", user)
+            .then(function(response) {
+                dispatch({type:"CONTACT_US_EMAIL_SUCCESS", payload: response.data})
+            })
+            .catch(function(err) {
+                dispatch({type:"CONTACT_US_EMAIL_FAILURE", payload: "Error sending email."})
+            })
+    }
+}
+
 export function emailFailureExitPage() {
     return function(dispatch) {
         dispatch({type: "EMAIL_FAILURE_EXIT_PAGE"});
@@ -65,7 +93,7 @@ export function login(user, saveSession, navigateBackUrl) {
         axios.post("/api/user/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
-                dispatch({type:"LOGIN", payload: returnedUser});
+                dispatch({type:"LOGIN", user: returnedUser});
                 let nextUrl = '/myEvaluations';
                 if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
@@ -76,6 +104,28 @@ export function login(user, saveSession, navigateBackUrl) {
             })
             .catch(function(err) {
                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
+            });
+    }
+}
+
+
+// update user object in redux store
+export function updateUser(user) {
+    return function(dispatch) {
+        dispatch({type: "UPDATE_USER", user});
+    }
+}
+
+
+export function updateOnboarding(onboarding, verificationToken, userId, extraArgs) {
+    return function(dispatch) {
+        axios.post("/api/user/updateOnboarding", {onboarding, verificationToken, userId})
+            .then(function(response) {
+                const returnedUser = response.data;
+                dispatch({type:"UPDATE_ONBOARDING", payload: returnedUser});
+            })
+            .catch(function(err) {
+                dispatch({type: "UPDATE_ONBOARDING_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
     }
 }
@@ -118,6 +168,7 @@ export function stopLoading() {
     }
 }
 
+
 export function setupBillingCustomer(source, email, userId, verificationToken) {
     return function(dispatch) {
         axios.post("/api/billing/customer", {source, email, userId, verificationToken})
@@ -127,7 +178,6 @@ export function setupBillingCustomer(source, email, userId, verificationToken) {
         .catch(error => {
             console.log(error);
             dispatch({type: "FAILURE_BILLING_CUSTOMER", notification: {message: error, type: "errorHeader"}});
-            // console.log("error answering admin question: ", error);
         })
     }
 }
@@ -146,6 +196,22 @@ export function signout() {
 export function onSignUpPage() {
     return function(dispatch) {
         dispatch({type: "ON_SIGNUP_PAGE"});
+    }
+}
+
+
+export function createBusinessAndUser(userInfo) {
+    return function(dispatch) {
+        // start the loading bar
+        dispatch({type: "START_LOADING"});
+        axios.post("/api/business/createBusinessAndUser", userInfo)
+        .then(response => {
+            dispatch({ type: "LOGIN", user: response.data, notification: { message: "Your account has been activated! Thanks for signing up!", type: "infoHeader"} });
+            goTo("/onboarding");
+        })
+        .catch(error => {
+            dispatch({type: "NOTIFICATION_AND_STOP_LOADING", notification: {message: error.response.data, type: "errorHeader"}});
+        })
     }
 }
 
@@ -343,7 +409,8 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
         axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, adminEmails, currentUserInfo})
             // email invites success
             .then(function(res) {
-                dispatch({type: "POST_EMAIL_INVITES_SUCCESS"});
+                const waitingForFinalization = !!res && !!res.data && res.data.waitingForFinalization === true;
+                dispatch({type: "POST_EMAIL_INVITES_SUCCESS", waitingForFinalization});
             })
             // error posting email invites
             .catch(function(err) {
@@ -411,14 +478,14 @@ export function newCurrentUser(currentUser) {
 
 
 // UPDATE A USER
-export function updateUser(user) {
+export function updateUserSettings(user) {
     return function(dispatch) {
         // make loading circle show up
         dispatch({type:"START_LOADING"});
         // update user on the database
         axios.post("/api/user/changeSettings", user)
         .then(function(response) {
-            dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}});
+            dispatch({type:"UPDATE_USER_SETTINGS", user: response.data, notification:{message: "Settings updated!", type: "infoHeader"}});
             window.scrollTo(0, 0);
         })
         .catch(function(err) {
@@ -445,26 +512,6 @@ export function changePassword(user) {
     }
 }
 
-// VERIFY EMAIL
-export function verifyEmail(userType, token) {
-    return function(dispatch) {
-        axios.post("/api/user/verifyEmail", {userType, token})
-            .then(function(response) {
-                if (!response.data || response.data === "go to login") {
-                    let nextLocation = "/login";
-                    dispatch({type: "NOTIFICATION", notification:{message: "Account verified!", type: "infoHeader"}});
-                    browserHistory.push(nextLocation);
-                } else {
-                    // don't show verification notification if going straight to onboarding because it's implied
-                    dispatch({type: "LOGIN", payload:response.data});
-                    browserHistory.push('/myEvaluations');
-                }
-            })
-            .catch(function(err) {
-                dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
-            });
-    }
-}
 
 export function changePasswordForgot(user) {
     return function(dispatch) {
@@ -477,7 +524,7 @@ export function changePasswordForgot(user) {
                 axios.post("/api/user/session", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
                 .catch(function(err2) {});
 
-                dispatch({type:"LOGIN", payload:foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
+                dispatch({type:"LOGIN", user: foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
                 let nextUrl = "/";
                 let returnedUser = response.data;
                 browserHistory.push(nextUrl);
@@ -488,73 +535,11 @@ export function changePasswordForgot(user) {
     }
 }
 
-
-// Send an email when form filled out on forBusiness page
-export function demoEmail(user){
-    return function(dispatch) {
-        axios.post("api/business/demoEmail", user)
-            .then(function(response) {
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
-// Send an email when form filled out on forBusiness page
-export function dialogEmail(user){
-    return function(dispatch) {
-        axios.post("api/business/dialogEmail", user)
-            .then(function(response) {
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
 // Send an email when admin tries to add another evaluation
-export function addEvaluationEmail(user){
+export function addEvaluationEmail(userId, verificationToken, positionName){
     return function(dispatch) {
-        axios.post("api/business/addEvaluationEmail", user)
-            .then(function(response) {
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
-// Send an email when form filled out on forBusiness page
-export function dialogEmailScreen2(user){
-    return function(dispatch) {
-        axios.post("api/business/dialogEmailScreen2", user)
-            .then(function(response) {
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
-// Send an email when form filled out on forBusiness page
-export function dialogEmailScreen3(user){
-    return function(dispatch) {
-        axios.post("api/business/dialogEmailScreen3", user)
-            .then(function(response) {
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
-// Send an email when form filled out on forBusiness page
-export function dialogEmailScreen4(user){
-    return function(dispatch) {
-        axios.post("api/business/dialogEmailScreen4", user)
-            .then(function(response) {
-            })
+        axios.post("api/business/addEvaluationEmail", {userId, verificationToken, positionName})
+            .then(function(response) { } )
             .catch(function(err) {
                 dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
             })
@@ -689,7 +674,7 @@ export function updateAllOnboarding(userId, verificationToken, interests, goals,
             params: { userId, verificationToken, interests, goals, info }
         })
         .then(function(response) {
-            dispatch({type: "UPDATE_USER_ONBOARDING", payload: response.data});
+            dispatch({type: "UPDATE_USER_ONBOARDING", user: response.data});
         })
         .catch(function(err) {
             // console.log("Error updating onboarding info: ", err);
@@ -738,6 +723,22 @@ export function answerPsychQuestion(userId, verificationToken, answer) {
             // console.log("Error answering psych question: ", err);
             dispatch({type: "ANSWER_PSYCH_QUESTION_ERROR", notification: { message: err.response.data, type: "errorHeader" } });
         });
+    }
+}
+
+
+// change info during onboarding for automating candidate emails
+export function changeAutomateInvites(args) {
+    return function (dispatch) {
+        dispatch({ type: "CHANGE_AUTOMATE_INVITES", args });
+    }
+}
+
+
+// removes the top step for going back from the stack of Back options
+export function popGoBackStack() {
+    return function(dispatch) {
+        dispatch({ type: "POP_GO_BACK_STACK" });
     }
 }
 

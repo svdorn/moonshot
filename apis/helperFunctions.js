@@ -7,6 +7,8 @@ const Emailaddresses = require('../models/emailaddresses.js');
 const Businesses = require('../models/businesses.js');
 const Skills = require('../models/skills.js');
 
+const errors = require("./errors");
+
 
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
@@ -22,6 +24,15 @@ Queue.prototype.dequeue = function() { return this.data.pop(); }
 Queue.prototype.first = function() { return this.data[0]; }
 Queue.prototype.last = function() { return this.data[this.data.length - 1]; }
 Queue.prototype.size = function() { return this.data.length; }
+
+
+// Stack implementation
+function Stack() { this.data = []; }
+Stack.prototype.push = function(record) { this.data.push(record); }
+Stack.prototype.pop = function() { return this.data.pop(); }
+Stack.prototype.bottom = function() { return this.data[0]; }
+Stack.prototype.top = function() { return this.data[this.data.length - 1]; }
+Stack.prototype.size = function() { return this.data.length; }
 
 
 const FOR_USER = [
@@ -41,6 +52,7 @@ const FOR_USER = [
     "hasFinishedOnboarding",
     "positions",
     "referredByCode",
+    "onboarding",
     "verified",
     "skills",
     "skillTests",
@@ -276,6 +288,146 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
             return callback(true, "Email sent! Check your email.");
         });
     })
+}
+
+
+// send an email and return a promise - required arg fields are recipients, subject, and content
+async function sendEmailPromise(args) {
+    return new Promise(async function(resolve, reject) {
+        // if arguments are not provided
+        if (!args || typeof args !== "object") {
+            return reject("Invalid arguments. Usage: sendEmail({recipients: ['austin@gmail.com'], subject: 'New Stuff', ...})");
+        }
+
+        // addresses that will receive the email
+        const recipients = args.recipients;
+        // subject of the email
+        const subject = args.subject;
+        // body of the email
+        const content = args.content;
+        // OPTIONAL: who the email is being sent from (the sender) - default is Moonshot
+        const sendFrom = args.sendFrom;
+        // OPTIONAL: attachments files
+        const attachments = args.attachments;
+
+        // make sure all the required fields are provided
+        if (!recipients || !subject || !content) {
+            return reject("Recipients, subject, and content are all required arguments.");
+        }
+
+        // recipientArray is an array of strings while recipientList is one string with commas
+        let recipientArray = [];
+        // if only one recipient was given, in string form, and it is an actual email address
+        if (typeof recipients === "string" && isValidEmail(recipients)) {
+            // add it to the recipients list
+            recipientArray.push(recipients);
+        }
+        // if recipients is an array like it's supposed to be
+        else if (Array.isArray(recipients)) {
+            // set the recipient list to be everyone who was passed in
+            recipientArray = recipients;
+        }
+        // otherwise return unsuccessfully
+        else { return reject("Recipients should be a list of strings."); }
+
+        // if no recipients are given
+        if (recipientArray.length === 0) {
+            return reject("No email recipients provided.");
+        }
+
+        // find the object with all the people who have opted out
+        try { var optedOut = await Emailaddresses.findOne({name: "optedOut"}); }
+        catch (findOptOutError) {
+            console.log("Error finding email addresses of those who have opted out.");
+            return reject(findOptOutError);
+        }
+
+        // get a string of emails to send to that haven't opted out
+        const recipientList = createRecipientList(recipientArray, optedOut.emails);
+
+        // don't send an email if it's not going to be sent to anyone
+        if (recipientList === "") {
+            return reject("Couldn't send email. Recipients are on the opt-out list or no valid emails were given.");
+        }
+
+        // the default email account to send emails from
+        let from = '"Moonshot" <do-not-reply@moonshotinsights.io>';
+        let authUser = credentials.emailUsername;
+        let authPass = credentials.emailPassword;
+        if (sendFrom) {
+            if (sendFrom === "Kyle Treige") {
+                from = '"Kyle Treige" <kyle@moonshotinsights.io>';
+                authUser = credentials.kyleEmailUsername;
+                authPass = credentials.kyleEmailPassword;
+            } else {
+                from = '"' + sendFrom + '" <do-not-reply@moonshotinsights.io>';
+            }
+        }
+
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            // host: 'smtp.ethereal.email',
+            // port: 587,
+            // secure: false, // true for 465, false for other ports
+            // auth: {
+            //     user: 'snabxjzqe3nmg2p7@ethereal.email',
+            //     pass: '5cbJWjTh7YYmz7e2Ce'
+            // }
+            service: 'gmail',
+            auth: {
+                user: authUser,
+                pass: authPass
+            }
+        });
+
+        // setup email data with unicode symbols
+        let mailOptions = {
+            from: from, // sender address
+            to: recipientList, // list of receivers
+            subject: subject, // Subject line
+            html: content // html body
+        };
+
+        // attach attachments, if they exist
+        if (attachments && Array.isArray(attachments) && attachments.length > 0) {
+            mailOptions.attachments = attachments;
+        }
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) { return reject(error); }
+            return resolve();
+        });
+    });
+}
+
+
+// remove emails that have opted out, create a string like "ameyer24@wisc.edu, svdorn9@gmail.com"
+function createRecipientList(recipientArray, optedOutEmailsArray) {
+    // create a pseudo-hashtable object to keep track of emails that have opted out
+    let optedOutEmailsObject = {};
+    // go through each email that has opted out ...
+    optedOutEmailsArray.forEach(ooEmail => {
+        // ... and add it to the pseudo-hashtable
+        optedOutEmailsObject[ooEmail.toLowerCase()] = true;
+    });
+    // the string that will contain the final result
+    let recipientList = "";
+    // go through each email address given
+    recipientArray.forEach(recipient => {
+        // make sure the email is a legitimate address
+        if (isValidEmail(recipient)) {
+            // make sure the email isn't on the opted-out list
+            if (!optedOutEmailsObject[recipient.toLowerCase()]) {
+                // add the email to the list of recipients
+                if (recipientList === "") { recipientList = recipient; }
+                // if this isn't the first recipient, add a comma beforehand
+                else { recipientList = recipientList + ", " + recipient; }
+            }
+        }
+    });
+
+    return recipientList;
 }
 
 
@@ -522,21 +674,86 @@ async function getAndVerifyUser(userId, verificationToken) {
             user = await Users.findById(userId);
         } catch (getUserError) {
             console.log("Error getting user from the database: ", getUserError);
-            reject({status: 500, message: "Server error, try again later", error: getUserError});
+            return reject({status: 500, message: "Server error, try again later", error: getUserError});
         }
 
         if (!user) {
             console.log("User not found from id: ", userId);
-            reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
+            return reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
         }
 
         // verify user's identity
         if (!verificationToken && user.verificationToken !== verificationToken) {
             console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
-            reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
+            return reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
         }
 
-        resolve(user);
+        return resolve(user);
+    })
+}
+
+
+// get and verify user from express request
+async function getUserFromReq(req, requestType) {
+    return new Promise(async function(resolve, reject) {
+        // for GET requests, req.params will contain userId and verification token
+        if (requestType === "GET") { argContainer = "query"; }
+        // for POST requests, req.body will contain them
+        else { argContainer = "body"; }
+
+        // make sure req and req.body are objects
+        if (typeof req !== "object" || typeof req[argContainer] !== "object") {
+            return reject({status: 400, message: errors.BAD_REQUEST, error: `Req.${argContainer} must be an object.`});
+        }
+
+        // get and verify valitidy of necessary arguments
+        const { userId, verificationToken } = sanitize(req[argContainer]);
+        const stringArgs = [ userId, verificationToken ];
+        if (!validArgs({ stringArgs })) {
+            return reject({status: 400, message: errors.BAD_REQUEST, error: "userId and/or verificationToken not a string"});
+        }
+
+        // get user that made this call
+        try { var user = await getAndVerifyUser(userId, verificationToken); }
+        catch (getUserError) {
+            // if the error is nicely formatted, just return it as is
+            if (getUserError.message && getUserError.status && getUserError.error) {
+                return reject(getUserError);
+            } else { // otherwise return a nicely formatted error
+                return reject({status: 500, message: errors.SERVER_ERROR, error: getUserError});
+            }
+        }
+
+        return resolve(user);
+    });
+}
+
+
+// DANGEROUS, returns user with all fields
+async function getUserAndBusiness(userId, verificationToken) {
+    return new Promise(async function(resolve, reject) {
+        // get the user
+        try { var user = await getAndVerifyUser(userId, verificationToken); }
+        // just throw any caught error for the caller to deal with
+        catch (error) { return reject(error); }
+
+        // have to work for a company
+        if (!user.businessInfo || !user.businessInfo.businessId) {
+            return reject({status: 403, message: errors.PERMISSIONS_ERROR, error: "Business id not provided within user object."});
+        }
+
+        // get the business the user works for
+        try { var business = await Businesses.findById(user.businessInfo.businessId); }
+        catch (getBusinessError) {
+            return reject({status: 500, message: errors.SERVER_ERROR, error: getBusinessError})
+        }
+
+        // if no business was found, return unsuccessfully
+        if (!business) {
+            return reject({status: 500, message: errors.SERVER_ERROR, error: "No business found from business id."});
+        }
+
+        return resolve({user, business});
     })
 }
 
@@ -545,7 +762,7 @@ async function getAndVerifyUser(userId, verificationToken) {
 function lastPossibleSecond(date, daysToAdd) {
     const year = date.getFullYear();
     const month = date.getMonth();
-    const day = date.getDate() + daysToAdd;
+    const day = date.getDate() + (typeof daysToAdd === "number" ? daysToAdd : 0);
     const hour = 23;
     const minute = 59;
     const second = 59;
@@ -629,7 +846,86 @@ function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
 
 // checks if an email is of the correct form (i.e. name@something.blah )
 function isValidEmail(email) {
-    return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+    return typeof email === "string" && /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+}
+
+
+// checks if a file has the correct type based on the extension
+function isValidFileType(fileName, allowedFileTypes) {
+    // make sure arguments are valid
+    if (typeof fileName !== "string") {
+        console.log("Invalid usage of isValidFileType()! First argument must be the name of the file (e.g. 'dingus.png')");
+        return false;
+    }
+    if (!Array.isArray(allowedFileTypes)) {
+        console.log("Invalid usage of isValidFileType()! Second argument must be an array of extensions (e.g. ['csv', 'pdf'])");
+        return false;
+    }
+
+    // get the file extension from the end of the file name
+    let extension = fileName.split('.').pop().toLowerCase();
+    // look through the list of allowed file types, if any matches, success
+    const isValid = allowedFileTypes.includes(extension);
+
+    return isValid;
+}
+
+
+// determine if arguments to a function are valid
+// options = {
+//     stringArgs: [ String ],
+//     allowEmptyStrings: Boolean, *optional*
+//     numberArgs: [ Number ],
+//     objectArgs: [ Object ],
+//     arrayArgs: [ [ Anything ] ]
+// }
+function validArgs(options) {
+    // all the types of arguments we have to check as well as what each of their
+    // checks for validity are
+    toCheck = [
+        { argType: "numberArgs", check: (n) => { return typeof n === "number"; } },
+        { argType: "objectArgs", check: (o) => { return o && typeof o === "object"; } },
+        { argType: "arrayArgs", check: (a) => { return Array.isArray(a); } }
+    ];
+
+    // by default, strings are not valid if they are empty
+    let stringCheck = (s) => { return s && typeof s === "string" };
+    // if option to allow empty strings is true ...
+    if (options.allowEmptyStrings) {
+        // ... change the string check to not check truthiness
+        stringCheck = (s) => { return typeof s === "string" };
+    }
+    // add strings to list of things to check
+    toCheck.push({ argType: "stringArgs", check: stringCheck });
+
+    // assume all arguments are valid
+    allValid = true;
+
+    // go through each type of argument
+    toCheck.forEach(argInfo => {
+        // the array of arguments to check (could be the string array or number or whatever)
+        const args = options[argInfo.argType];
+        // if that array of args was actually passed in as an array
+        if (Array.isArray(args)) {
+            // go through each provided argument ...
+            args.forEach(arg => {
+                // ... check if it's valid ...
+                if (!argInfo.check(arg)) {
+                    // ... if it's not valid, mark that an argument is invalid
+                    allValid = false;
+                }
+            });
+        }
+    });
+
+    return allValid;
+}
+
+
+// checks if a password is secure enough to be stored
+function isValidPassword(password) {
+    const MIN_PASSWORD_LENGTH = 8;
+    return typeof password === "string" && password.length >= MIN_PASSWORD_LENGTH;
 }
 
 
@@ -638,15 +934,24 @@ const helperFunctions = {
     removeEmptyFields,
     verifyUser,
     sendEmail,
+    sendEmailPromise,
     getFirstName,
     removeDuplicates,
     randomInt,
     frontEndUser,
     getAndVerifyUser,
+    getUserFromReq,
+    getUserAndBusiness,
     speedTest,
     lastPossibleSecond,
     findNestedValue,
     isValidEmail,
+    isValidPassword,
+    isValidFileType,
+    validArgs,
+
+    Queue,
+    Stack,
 
     FOR_USER
 }

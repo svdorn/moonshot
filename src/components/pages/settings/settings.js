@@ -1,13 +1,15 @@
 "use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
-import PasswordChange from './passwordchange';
-import Account from './account';
-import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import MetaTags from 'react-meta-tags';
-import AddUserDialog from '../childComponents/addUserDialog';
-import { addNotification } from "../../actions/usersActions"
+import React, {Component} from "react";
+import {connect} from "react-redux";
+import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from "material-ui";
+import PasswordChange from "./passwordchange";
+import Account from "./account";
+import ApiKey from "./apiKey";
+import Notifications from './notifications';
+import HomepageTriangles from "../../miscComponents/HomepageTriangles";
+import MetaTags from "react-meta-tags";
+import AddUserDialog from "../../childComponents/addUserDialog";
+import { addNotification } from "../../../actions/usersActions"
 import axios from "axios";
 import { bindActionCreators } from "redux";
 
@@ -16,7 +18,7 @@ class Settings extends Component {
         super(props);
 
         this.state = {
-            tab: "Settings"
+            tab: "Account"
         }
     }
 
@@ -62,12 +64,26 @@ class Settings extends Component {
                         value={this.state.tab}
                         onChange={this.handleTabChange}
                     >
-                        <Tab label="Change Settings" value="Settings" style={style.tab}>
+                        <Tab label="Account" value="Account" style={style.tab}>
                             <Account />
                         </Tab>
-                        <Tab label="Change Password" value="Change Password" style={style.tab}>
+                        <Tab label="Password" value="Password" style={style.tab}>
                             <PasswordChange />
                         </Tab>
+                        {this.props.currentUser.userType === "accountAdmin" ?
+                            <Tab label="API Key" value="API Key" style={style.tab}>
+                                <ApiKey />
+                            </Tab>
+                        :
+                            null
+                        }
+                        {this.props.currentUser.userType === "accountAdmin"
+                            ?
+                            <Tab label="Notifications" value="Notifications" style={style.tab}>
+                                <Notifications />
+                            </Tab>
+                            : null
+                        }
                     </Tabs>
                     </div>
                 </div>

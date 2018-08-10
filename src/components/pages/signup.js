@@ -9,6 +9,7 @@ import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {browserHistory} from 'react-router';
 import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
+import ContactUsDialog from '../childComponents/contactUsDialog';
 import MetaTags from 'react-meta-tags';
 import { renderTextField, renderPasswordField, isValidEmail } from "../../miscFunctions";
 
@@ -237,6 +238,7 @@ class Signup extends Component {
                     >
                         <TermsOfUse/>
                     </Dialog>
+                    <ContactUsDialog />
                     <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>
                     <div className="form lightBlackForm">
                         {this.state.email != "" && this.props.userPosted ?
@@ -253,28 +255,28 @@ class Signup extends Component {
                                         <Field
                                             name="name"
                                             component={renderTextField}
-                                            label="Full Name*"
+                                            label="Full Name"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="email"
                                             component={renderTextField}
-                                            label="Email*"
+                                            label="Email"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="password"
                                             component={renderPasswordField}
-                                            label="Password*"
+                                            label="Password"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="password2"
                                             component={renderPasswordField}
-                                            label="Confirm Password*"
+                                            label="Confirm Password"
                                         /><br/>
                                     </div>
 

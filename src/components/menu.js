@@ -5,7 +5,8 @@ import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import {connect} from 'react-redux';
 import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
-import {signout, closeNotification, endOnboarding, openAddUserModal} from "../actions/usersActions";
+import {signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal} from "../actions/usersActions";
+import { isValidEmail, goTo } from "../miscFunctions";
 import {axios} from 'axios';
 
 const styles = {
@@ -34,8 +35,10 @@ class Menu extends Component {
         }
         // class for the header, only needed for pages with unusual menus
         const headerClass = props.location.pathname === "/" && window.scrollY === 0 ? "noShadow" : "";
+        const position = '';
+
         // set the initial state
-        this.state = {dropDownSelected, headerClass};
+        this.state = {dropDownSelected, headerClass, position};
     }
 
     componentDidUpdate() {
@@ -74,28 +77,28 @@ class Menu extends Component {
 
                 // always sign out when sign out clicked
                 this.props.signout();
-                this.goTo("/");
+                goTo("/");
                 break;
             case "Profile":
                 if (currentUser) {
                     // if user is employer, go to business profile
                     if (currentUser.userType === "manager" || currentUser.userType === "employee" || currentUser.userType === "accountAdmin") {
-                        this.goTo("/");
+                        goTo("/");
                     }
                     // otherwise go to normal profile
                     else {
-                        this.goTo("/profile");
+                        goTo("/profile");
                     }
                 }
                 break;
             case "Settings":
-                this.goTo("/settings");
+                goTo("/settings");
                 break;
             case "Add User":
                 this.props.openAddUserModal();
                 break;
             case "Billing":
-                this.goTo("/billing");
+                goTo("/billing");
                 break;
             default:
                 break;
@@ -107,10 +110,16 @@ class Menu extends Component {
         }
     };
 
+    onChange(e) {
+        this.setState({
+            position: e.target.value
+        });
+    }
+
 
     selectAndGoTo(route, value) {
         this.setState({dropDownSelected: value});
-        this.goTo(route);
+        goTo(route);
     }
 
     signOut() {
@@ -119,22 +128,12 @@ class Menu extends Component {
             this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
         }
         this.props.signout();
-        this.goTo('/');
+        goTo('/');
     }
-
-    goTo(route) {
-        // closes any notification
-        this.props.closeNotification();
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
 
     handleAnchorClick(anchor, wantedPath) {
         if (this.props.location.pathname != wantedPath) {
-            this.goTo(wantedPath);
+            goTo(wantedPath);
         }
         setTimeout(() => {
             const element = document.getElementById(anchor);
@@ -162,6 +161,13 @@ class Menu extends Component {
     render() {
         let self = this;
 
+        // pages that have a header but don't show the header shadow
+        const noShadowPages = ["businesssignup"];
+        // pages where the menu scrolls with the page
+        const fixedMenuPages = ["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "businesssignup"];
+        // pages that don't have a header at all
+        const noMenuPages = ["chatbot"];
+
         let isEmployer = false;
         let currentUser = this.props.currentUser;
 
@@ -172,19 +178,21 @@ class Menu extends Component {
         // get the current path from the url
         let pathname = undefined;
         // try to get the path; lowercased because capitalization will vary
-        try {
-            pathname = this.props.location.pathname.toLowerCase();
-        }
+        try { pathname = this.props.location.pathname.toLowerCase(); }
         // if the pathname is not yet defined, don't do anything, this will be executed again later
-        catch (e) {
-            pathname = "";
-        }
+        catch (e) { pathname = ""; }
+
+        // get the different parts of the pathname ([skillTest, front-end-developer, ...])
+        const pathnameParts = pathname.split("/").slice(1);
+        // get the first, most important part of the path first
+        const pathFirstPart = pathnameParts[0];
+
+        // don't show the menu if this page requires no menu
+        if (noMenuPages.includes(pathFirstPart)) { return null; }
 
         // the url to be directed to by default
         let homeUrl = "/";
-        if (isEmployer) {
-            homeUrl = "/myEvaluations";
-        }
+        if (isEmployer) { homeUrl = "/myEvaluations"; }
 
         // color of the dropDown menu icon
         let iconMenuColor = "white";
@@ -199,8 +207,13 @@ class Menu extends Component {
 
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
-        let hoverWidth = "61px";
+        let underlineWidth = "61px";
+        // whether
+        let hideUnderline = {};
         let additionalHeaderClass = "";
+
+        // add the class to get rid of the shadow if the current path is one of those
+        if (noShadowPages.includes(pathFirstPart)) { additionalHeaderClass += " noShadow"; }
 
         if (pathname === "/") {
             // make sure there aren't already event listeners on scroll/resize ...
@@ -226,26 +239,21 @@ class Menu extends Component {
                 this.setState({ headerClass: "" });
             }
 
-            // get the different parts of the pathname ([skillTest, 1234945543])
-            const pathnameParts = pathname.split("/").slice(1);
-            // get the first, most important part of the path first
-            const pathFirstPart = pathnameParts[0];
-
             if (pathname === '/settings') {
-                dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+                dropdownClass += " currentRoute";
                 // if settings is selected, the underline bar must be bigger
                 // because "settings" is a bigger word
-                hoverWidth = "60px";
+                underlineWidth = "60px";
             } else if (pathname === '/adduser') {
-                dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+                dropdownClass += " currentRoute";
                 // if settings is selected, the underline bar must be bigger
                 // because "Add User" is a bigger
-                hoverWidth = "69px";
+                underlineWidth = "69px";
             } else if (pathname === '/billing') {
-                dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-                hoverWidth = "46px";
-            } else if (["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions"].includes(pathFirstPart)){
-                additionalHeaderClass = " notFixed";
+                dropdownClass += " currentRoute";
+                underlineWidth = "46px";
+            } else if (fixedMenuPages.includes(pathFirstPart)){
+                additionalHeaderClass += " notFixed";
             }
         }
 
@@ -265,7 +273,7 @@ class Menu extends Component {
                                 className="clickable moonshotMenuLogo"
                                 id="moonshotLogo"
                                 src={moonshotLogo}
-                                onClick={() => this.goTo(homeUrl)}
+                                onClick={() => goTo(homeUrl)}
                             />
                         </ToolbarGroup>
                     </Toolbar>
@@ -280,16 +288,35 @@ class Menu extends Component {
         // used for menu divider
         let loggedInClass = " loggedIn";
 
+        // if on business signup page, menu is v sparse
+        if (pathFirstPart === "businesssignup") {
+            // don't show the underline thing
+            hideUnderline = { display: "none" };
+            // don't let the user click back to home via the logo
+            logoIsLink = false;
+            menuOptions = [ /* nothing in the menu */ ];
+        }
         // if there is no user logged in
-        if (!currentUser) {
+        else if (!currentUser) {
             loggedInClass = " loggedOut";
-            menuOptions = [
-                {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
-                {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
-                {optionType: "separator"},
-                {optionType: "url", title: "Log In", url: "/login"},
-            ];
+            if (pathname === "/") {
+                menuOptions = [
+                    {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
+                    {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                    {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
+                    {optionType: "separator"},
+                    {optionType: "url", title: "Log In", url: "/login"},
+                    {optionType: "button", title: "Enter a position"}
+                ];
+            } else {
+                menuOptions = [
+                    {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
+                    {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                    {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
+                    {optionType: "separator"},
+                    {optionType: "url", title: "Log In", url: "/login"},
+                ];
+            }
         }
         // if the current user is an account admin for a business
         else if (currentUser.userType === "accountAdmin") {
@@ -369,10 +396,10 @@ class Menu extends Component {
                         optionClass = selectedMenuItemClass;
                     }
                     desktopMenu.push(
-                        <p key={option.title + " desktop"} className={optionClass} onClick={() => self.goTo(option.url)}>{option.title}</p>
+                        <p key={option.title + " desktop"} className={optionClass} onClick={() => goTo(option.url)}>{option.title}</p>
                     );
                     mobileMenu.push(
-                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.goTo(option.url)}/>
+                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => goTo(option.url)}/>
                     );
                     break;
                 case "anchor":
@@ -387,6 +414,14 @@ class Menu extends Component {
                     // push a line, only visible on desktop
                     desktopMenu.push(
                         <div key={"separator"} className={"menuDivider wideScreenMenuItem" + loggedInClass} />
+                    );
+                    break;
+                case "modal":
+                    desktopMenu.push(
+                        <p key={option.title + " desktop"} className={menuItemClass} onClick={() => self.props.openContactUsModal()}>{option.title}</p>
+                    );
+                    mobileMenu.push(
+                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.props.openContactUsModal()}/>
                     );
                     break;
                 case "dropDown":
@@ -457,6 +492,23 @@ class Menu extends Component {
                         <MenuItem key={"signOut mobile"} primaryText="Sign out" onClick={() => self.signOut()}/>
                     );
                     break;
+                case "button":
+                    // add the menu item to the dropDown
+                    let positionUrl = "";
+                    if (self.state.position) {
+                        positionUrl = "?position=" + self.state.position;
+                    }
+                    desktopMenu.push(
+                        <div className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
+                            <input className="blackInput getStarted secondary-gray-important" type="text" placeholder="Enter a position..." name="position" value={self.state.position} onChange={self.onChange.bind(self)}
+                            />
+                            <div className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}} onClick={() => goTo("/chatbot" + positionUrl)}>
+                                Try for Free
+                            </div>
+                        </div>
+                    );
+                    // no button on mobile menu
+                    break;
                 default:
                     break;
 
@@ -467,7 +519,7 @@ class Menu extends Component {
         // is logged in, show the line that shows up when a dropDown item is selected
         if (currentUser) {
             desktopMenu.push(
-                <div key={"underline"} className="menuUnderline" style={{width: hoverWidth}}/>
+                <div key={"underline"} className="menuUnderline" style={{width: underlineWidth, ...hideUnderline}}/>
             )
         }
 
@@ -478,7 +530,7 @@ class Menu extends Component {
         // if the logo is a link, make clicking it go home and make it look clickable
         if (logoIsLink) {
             logoClassName = "clickable moonshotMenuLogo";
-            logoClickAction = () => this.goTo("/");
+            logoClickAction = () => goTo("/");
         }
         let moonshotLogoHtml = (
             <img
@@ -491,13 +543,35 @@ class Menu extends Component {
                 onClick={logoClickAction}
             />
         );
+        let easeLogoHtml =
+        <img
+            width={100}
+            height={30}
+            alt="Moonshot"
+            style={{verticalAlign: "baseline"}}
+            className="easeLogo"
+            id="easeLogo"
+            src={"/logos/EaseLogo" + this.props.png}
+        />
 
         let menu = (
-            <header className={this.state.headerClass + additionalHeaderClass} style={{zIndex: "100"}}>
+            <header
+                className={this.state.headerClass + additionalHeaderClass}
+                style={{zIndex: "100"}}
+            >
                 <div>
                     <Toolbar id="menu" style={{height: "35px"}}>
                         <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "39px"}}>
                             {moonshotLogoHtml}
+                            {this.props.location.pathname === '/influencer' ?
+                                <div>
+                                    <div className="easeDivider inlineBlock" />
+                                    <div className="inlineBlock">
+                                        {easeLogoHtml}
+                                    </div>
+                                </div>
+                                : null
+                            }
                         </ToolbarGroup>
                         <ToolbarGroup className="marginTop10px">
                             {desktopMenu}
@@ -518,7 +592,12 @@ class Menu extends Component {
             </header>
         );
 
-        return menu;
+        return (
+            <div>
+                { menu }
+                <div className="headerSpace" />
+            </div>
+        );
     }
 }
 
@@ -527,7 +606,8 @@ function mapDispatchToProps(dispatch) {
         signout,
         closeNotification,
         endOnboarding,
-        openAddUserModal
+        openAddUserModal,
+        openContactUsModal
     }, dispatch);
 }
 

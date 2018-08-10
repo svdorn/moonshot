@@ -1,4 +1,5 @@
 "use strict"
+import { Stack } from "../miscFunctions";
 
 // USERS REDUCERS
 const initialState = {
@@ -25,8 +26,28 @@ export function usersReducers(state = initialState, action) {
                 userPostedFailed: false
             };
             break;
+        case "OPEN_CONTACT_US_MODAL":
+            return {
+                ...state,
+                contactUsModal: true,
+            };
+            break;
+        case "CLOSE_CONTACT_US_MODAL":
+            return {
+                ...state,
+                contactUsModal: false,
+                message: undefined
+            };
+            break;
+        case "CONTACT_US_EMAIL_SUCCESS":
+        case "CONTACT_US_EMAIL_FAILURE":
+            return {
+                ...state,
+                message: action.payload,
+                loadingSomething: false
+            };
+            break;
         case "POST_LINK_SUCCESS":
-            console.log(action.payload);
             return {
                 ...state,
                 link: action.payload,
@@ -59,23 +80,41 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 notification: action.notification,
-                currentUser: action.payload,
+                notificationDate: new Date(),
+                currentUser: action.user,
                 loadingSomething: false
             };
+            break;
+        case "UPDATE_ONBOARDING":
+            return {
+                ...state,
+                currentUser: action.payload
+            }
             break;
         case "NOTIFICATION":
         case "VERIFY_EMAIL_REJECTED":
         case "CHANGE_TEMP_PASS_REJECTED":
         case "ADD_PATHWAY_REJECTED":
         case "ADD_NOTIFICATION":
-            return {...state, notification: action.notification};
+            return {
+                ...state,
+                notification: action.notification,
+                notificationDate: new Date()
+            };
+            break;
+        case "NOTIFICATION_AND_STOP_LOADING":
+        case "CHANGE_PASSWORD_REJECTED":
+        case "LOGIN_REJECTED":
+            return {
+                ...state,
+                notification: action.notification,
+                notificationDate: new Date(),
+                loadingSomething: false
+            };
             break;
         case "UPDATE_USER_REJECTED":
-        case "LOGIN_REJECTED":
+        case "UPDATE_ONBOARDING_REJECTED":
         case "CHANGE_PASSWORD":
-        case "CHANGE_PASSWORD_REJECTED":
-            return {...state, notification: action.notification, loadingSomething: false};
-            break;
         case "POST_EMAIL_INVITES_REJECTED":
             return {...state, loadingSomething:false, userPostedFailed: true}
             break;
@@ -95,6 +134,9 @@ export function usersReducers(state = initialState, action) {
                 loadingSomething: true
             }
             break;
+        case "STOP_LOADING":
+            return { ...state, loadingSomething: false };
+            break;
         case "ON_SIGNUP_PAGE":
             return {
                 ...state,
@@ -106,20 +148,23 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 userPosted: true,
-                loadingSomething: false
+                loadingSomething: false,
+                waitingForFinalization: action.waitingForFinalization
             };
             break;
         case "POST_USER_SUCCESS_EMAIL_FAIL":
             return {
                 ...state,
                 loadingSomething: false,
-                notification: action.notification
+                notification: action.notification,
+                notificationDate: new Date()
             };
             break;
         case "POST_USER_REJECTED":
             return {
                 ...state,
                 notification: action.notification,
+                notificationDate: new Date(),
                 loadingSomething: false
             };
             break;
@@ -131,12 +176,20 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 currentUser: action.currentUser,
                 notification: action.notification,
+                notificationDate: new Date(),
                 loadingSomething: false
             }
             break;
         case "UPDATE_USER":
+            return {...state, currentUser: action.user };
+            break;
+        case "UPDATE_USER_SETTINGS":
             return {
-                ...state, currentUser: action.payload, notification: action.notification, loadingSomething: false
+                ...state,
+                currentUser: action.user,
+                notification: action.notification,
+                notificationDate: new Date(),
+                loadingSomething: false
             };
             break;
         case "UPDATE_ANSWER":
@@ -171,17 +224,15 @@ export function usersReducers(state = initialState, action) {
         case "SUCCESS_BILLING_CUSTOMER":
         case "FAILURE_BILLING_CUSTOMER":
             return {
-                ...state, notification: action.notification, loadingSomething: false
-            };
-            break;
-        case "STOP_LOADING":
-            return {
-                ...state, loadingSomething: false
+                ...state,
+                notification: action.notification,
+                notificationDate: new Date(),
+                loadingSomething: false
             };
             break;
         case "CLOSE_NOTIFICATION":
             return {
-                ...state, notification: undefined
+                ...state, notification: undefined, notificationDate: new Date()
             }
             break;
         case "START_ONBOARDING":
@@ -206,7 +257,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "UPDATE_USER_ONBOARDING":
             return {
-                ...state, currentUser: action.payload
+                ...state, currentUser: action.user
             };
             break;
         case "START_PSYCH_EVAL":
@@ -222,7 +273,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "ANSWER_PSYCH_QUESTION_ERROR":
             return {
-                ...state, notification: action.notification
+                ...state, notification: action.notification, notificationDate: new Date()
             }
             break;
         case "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS":
@@ -243,9 +294,74 @@ export function usersReducers(state = initialState, action) {
                 ...state, webpSupportChecked: true, png, jpg
             }
             break;
+        case "CHANGE_AUTOMATE_INVITES": {
+            // get the automateInvites info up to this point
+            let automateInvites = state.automateInvites ? state.automateInvites : {};
+            // get the arguments we could receive
+            const { page, header, goBack, nextPage, nextCallable, lastSubStep, extraNextFunction, extraNextFunctionPage } = action.args;
+            // if the header should be changed, do so
+            if (header !== undefined) { automateInvites.header = header; }
+            // if the next page to be navigated to should be changed, do so
+            if (nextPage !== undefined) { automateInvites.nextPage = nextPage; }
+            // if this should be marked as the last page in a sequence, mark it
+            // should always be able to move on to next STEP if on the last SUB STEP
+            if (typeof lastSubStep === "boolean") { automateInvites.lastSubStep = lastSubStep; }
+            // if the ability to move to the next step should be changed, change it
+            if (typeof nextCallable === "boolean") { automateInvites.nextCallable = nextCallable; }
+            // if there is a function to call when Next button pressed, add it
+            if (extraNextFunction !== undefined) { automateInvites.extraNextFunction = extraNextFunction; }
+            // if there is a page going along with the above function, add it
+            if (extraNextFunctionPage !== undefined) { automateInvites.extraNextFunctionPage = extraNextFunctionPage; }
+            // if there is a page to be navigated to
+            if (page !== undefined) {
+                // make sure there is a page stack
+                if (!automateInvites.pageStack) {
+                    // if not, create one
+                    automateInvites.pageStack = new Stack();
+                }
+                // if the requested page isn't the same as the one we're already on ...
+                if (automateInvites.pageStack.top() !== page) {
+                    // ... add the requested page to the stack
+                    automateInvites.pageStack.push(page);
+                }
+                // add the page as the current page
+                automateInvites.currentPage = page;
+                // if the page currently being added is listed as the next page
+                // AND new next page isn't being added, get rid of the page that
+                // says it should be up next, because it's now the current page
+                if (!nextPage && page === automateInvites.nextPage) {
+                    automateInvites.nextPage = undefined;
+                }
+            }
+            // if we should be navigating back to a previous page
+            else if (goBack !== undefined) {
+                // if the page stack exists ...
+                if (automateInvites.pageStack && automateInvites.pageStack.size() > 0) {
+                    // remove the top of the page stack
+                    automateInvites.pageStack.pop();
+                    // and set the current page to the one at the new top
+                    automateInvites.currentPage = automateInvites.pageStack.top();
+                }
+            }
+            return { ...state, automateInvites };
+            break;
+        }
+        case "POP_GO_BACK_STACK": {
+            let automateInvites = state.automateInvites ? state.automateInvites : {};
+            // if there is a stack of actions that allow you to go backwards
+            if (automateInvites.goBackStack) {
+                // remove the top action from the stack
+                automateInvites.goBackStack.pop();
+            }
+            // save the updated automateInvites object
+            return { ...state, automateInvites };
+        }
         case "ADD_PATHWAY":
             return {
-                ...state, currentUser: action.payload, notification: action.notification
+                ...state,
+                currentUser: action.payload,
+                notification: action.notification,
+                notificationDate: new Date()
             };
             break;
         default:

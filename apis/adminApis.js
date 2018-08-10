@@ -18,6 +18,11 @@ const { sanitize,
         getAndVerifyUser
 } = require('./helperFunctions.js');
 
+// import random functions from other apis
+const {
+    generateApiKey
+} = require("./businessApis");
+
 
 const adminApis = {
     GET_allSkills,
@@ -335,19 +340,13 @@ async function POST_saveBusiness(req, res) {
                 }
             ];
 
-            // create an API_Key for the business - first get a list of all current API_Keys
-            try {
-                const otherBusinesses = await Businesses.find({}).select("API_Key");
-                var existingKeys = otherBusinesses.map(biz => { return biz.API_Key; });
-            } catch (getKeysError) {
-                console.log("Error getting all keys of other businesses: ", getKeysError);
-                return res.status(500).send(errors.SERVER_ERROR);
+            // create an API_Key for the business
+            try { var API_Key = await generateApiKey(); }
+            catch (getKeyError) {
+                console.log("Error generating api key:", (getKeyError.error ? getKeyError.error : getKeyError));
+                return res.status(getKeyError.status ? getKeyError.status : 500).send(getKeyError.message ? getKeyError.message : errors.SERVER_ERROR);
             }
 
-            // generate random keys until one of them is unique across all businesses
-            let API_Key = "";
-            do { API_Key = crypto.randomBytes(12).toString("hex"); }
-            while (existingKeys.includes(API_Key));
             // give the business its api key
             newBusiness.API_Key = API_Key;
 
@@ -435,7 +434,10 @@ async function POST_saveBusiness(req, res) {
 
 async function createAdmin(name, email, password, title, businessId, businessName) {
     return new Promise(async function(resolve, reject) {
-        let user = {name, email, password};
+        let user = {
+            name, password,
+            email: email.toLowerCase()
+        };
 
         // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
         // if the user has an email address no one else has used before

@@ -38,10 +38,38 @@ const usersSchema = mongoose.Schema({
     signUpReferralCode: String,
     // if false, should route user to onboarding on login
     hasFinishedOnboarding: Boolean,
+    // Employer onboarding
+    onboarding: {
+        // The current step the employer is on in onboarding
+        step: Number,
+        // If the employer is done with onboarding
+        complete: Boolean,
+        // the furthest step the employer has gotten to
+        furthestStep: Number,
+        // the ats the user said they use during onboarding
+        ats: String,
+        // suggestion for candidate application integration method
+        integrationSuggestion: String,
+        // the language the user would like to use to integrate with Moonshot
+        languagePreference: String,
+        // if the user wants a language for site integration that wasn't included by default
+        customLanguage: String,
+        // how many days to wait before inviting candidates to take evaluation
+        daysBeforeInvite: Number
+    },
+    // info we need to keep to access users on Intercom
+    intercom: {
+        // The email that they are registered with on intercom
+        email: String,
+        // The id for accessing this user on intercom
+        id: String
+    },
     // used to verify identity
     verificationToken: String,
     // sent to user's email address, used to verify user's account
     emailVerificationToken: String,
+    // time when the email verification token will expire
+    emailVerificationTokenExpires: Date,
     // the code that this user initially got to the site with (will usually be empty)
     referredByCode: String,
     // token used to reset password
@@ -173,6 +201,17 @@ const usersSchema = mongoose.Schema({
         businessId: mongoose.Schema.Types.ObjectId,
         // their title at the company
         title: String
+    },
+
+    notifications: {
+        // The time a notification email was last sent
+        lastSent: Date,
+        // Their preference for how often to send a notification email
+        time: String,
+        // Whether an email is in waiting
+        waiting: Boolean,
+        // Whether it is their first time receiving a notification
+        firstTime: Boolean
     },
 
     // questions the user has to answer - only once - before doing a position eval

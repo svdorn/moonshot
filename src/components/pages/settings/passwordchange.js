@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {changePassword} from '../../actions/usersActions';
+import {changePassword} from '../../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 

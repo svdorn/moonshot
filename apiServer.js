@@ -41,6 +41,7 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 // import all the api functions
 const userApis = require("./apis/userApis");
 const candidateApis = require("./apis/candidateApis");
+const accountAdminApis = require("./apis/accountAdminApis");
 const businessApis = require("./apis/businessApis");
 const adminApis = require("./apis/adminApis");
 const miscApis = require("./apis/miscApis");
@@ -55,10 +56,11 @@ const helperFunctions = require("./apis/helperFunctions");
 // set up the session
 app.use(session({
     secret: credentials.secretString,
+    unset: "destroy", // delete the session when set to null or req.session.destroy() used
     saveUninitialized: false, // doesn't save a session if it is new but not modified
     rolling: true, // resets maxAge on session when user uses site again
     proxy: true, // must be true since we are using a reverse proxy
-    resave: false, // session only saved back to the session store if session was modified,
+    resave: true, // saves session even if un-modified
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
         // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
@@ -120,6 +122,7 @@ app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
 app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
+app.post('/user/updateOnboarding', userApis.POST_updateOnboarding);
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
 app.post('/user/login', userApis.POST_login);
@@ -129,6 +132,9 @@ app.post('/user/changeSettings', userApis.POST_changeSettings);
 app.get('/user/positions', userApis.GET_positions);
 app.get("/user/adminQuestions", userApis.GET_adminQuestions);
 app.get("/user/influencerResults", userApis.GET_influencerResults);
+app.get("/user/checkEmailVerified", userApis.GET_checkUserVerified);
+app.get("/user/notificationPreferences", userApis.GET_notificationPreferences);
+app.post("/user/postNotificationPreferences", userApis.POST_notificationPreferences);
 app.post("/user/answerAdminQuestion", userApis.POST_answerAdminQuestion);
 app.post("/user/sawEvaluationIntro", userApis.POST_sawEvaluationIntro);
 app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
@@ -139,12 +145,14 @@ app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 
-app.post('/business/demoEmail', businessApis.POST_demoEmail);
-app.post('/business/dialogEmail', businessApis.POST_dialogEmail);
+app.post("/accountAdmin/sendVerificationEmail", accountAdminApis.POST_sendVerificationEmail);
+app.post("/accountAdmin/identifyATS", accountAdminApis.POST_identifyATS);
+app.post("/accountAdmin/integrationSuggestion", accountAdminApis.POST_integrationSuggestion);
+app.post("/accountAdmin/languagePreference", accountAdminApis.POST_languagePreference);
+
+app.post('/business/googleJobsLinks', businessApis.POST_googleJobsLinks);
+app.post('/business/contactUsEmailNotLoggedIn', businessApis.POST_contactUsEmailNotLoggedIn);
 app.post('/business/addEvaluationEmail', businessApis.POST_addEvaluationEmail);
-app.post('/business/dialogEmailScreen2', businessApis.POST_dialogEmailScreen2);
-app.post('/business/dialogEmailScreen3', businessApis.POST_dialogEmailScreen3);
-app.post('/business/dialogEmailScreen4', businessApis.POST_dialogEmailScreen4);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
@@ -154,12 +162,17 @@ app.post("/business/rateInterest", businessApis.POST_rateInterest);
 app.post("/business/changeHiringStage", businessApis.POST_changeHiringStage);
 app.post("/business/moveCandidates", businessApis.POST_moveCandidates);
 app.post("/business/sawMyCandidatesInfoBox", businessApis.POST_sawMyCandidatesInfoBox);
+app.post("/business/resetApiKey", businessApis.POST_resetApiKey);
+app.post("/business/uploadCandidateCSV", businessApis.POST_uploadCandidateCSV);
+app.post("/business/chatbotData", businessApis.POST_chatbotData);
+app.post("/business/createBusinessAndUser", businessApis.POST_createBusinessAndUser);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/business", businessApis.GET_business);
 app.get("/business/employeeQuestions", businessApis.GET_employeeQuestions);
 app.get("/business/positions", businessApis.GET_positions);
 app.get("/business/evaluationResults", businessApis.GET_evaluationResults);
+app.get("/business/apiKey", businessApis.GET_apiKey);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);

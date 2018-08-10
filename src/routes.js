@@ -15,16 +15,19 @@ import MyEvaluations from './components/pages/businessPages/myEvaluations';
 import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import Billing from './components/pages/businessPages/billing';
+import Onboarding from './components/pages/businessPages/onboarding/onboarding';
+import BusinessSignup from "./components/pages/businessPages/businessSignup";
+import Chatbot from "./components/pages/businessPages/landbot";
 import BusinessHome from './components/pages/businessHome';
 import Influencer from './components/pages/influencer';
 import Main from './main';
 import AuthenticatedComponent from './components/authenticatedComponent/authenticatedComponent';
-import Settings from './components/pages/settings';
+import Settings from './components/pages/settings/settings';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
 import ContactUs from './components/pages/contactUs';
-import Error404 from './components/pages/error404';
+import Error404 from './components/pages/errors/error404';
 import Unsubscribe from './components/pages/unsubscribe';
 import Admin from './components/pages/admin';
 import PrivacyPolicy from './components/policies/privacyPolicy';
@@ -69,6 +72,9 @@ const routes = (
             <Route path="results/:profileUrl/:positionId" component={AuthenticatedComponent} page={<Results />} userType={businessAdminUserTypes} />
             <Route path="employeeResults/:employeeId/:positionId" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
             <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
+            <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={businessAdminUserTypes} firstBusinessUser={true} />
+            <Route path="businessSignup" component={BusinessSignup} />
+            <Route path="chatbot" component={Chatbot} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
             <Route path="listing" component={Listing} />
             <Route path="influencer" component={Influencer} />

@@ -3,6 +3,9 @@ const Users = require("../models/users.js");
 const Psychtests = require("../models/psychtests.js");
 const Signupcodes = require("../models/signupcodes.js");
 const mongoose = require("mongoose");
+const Intercom = require('intercom-client');
+
+const client = new Intercom.Client({ token: 'dG9rOjRhYTE3ZjgzX2IyYmRfNDQyY184YjUwX2JjMjk4OWU3MDhmYjoxOjA=' });
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -10,38 +13,47 @@ const crypto = require('crypto');
 // get helper functions
 const { sanitize,
         sendEmail,
+        sendEmailPromise,
         getAndVerifyUser,
+        getUserAndBusiness,
         frontEndUser,
         speedTest,
-        lastPossibleSecond
+        lastPossibleSecond,
+        isValidFileType,
+        isValidEmail,
+        isValidPassword,
+        validArgs
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
 
 
 const businessApis = {
-    POST_demoEmail,
     POST_addEvaluationEmail,
-    POST_dialogEmail,
-    POST_dialogEmailScreen2,
-    POST_dialogEmailScreen3,
-    POST_dialogEmailScreen4,
+    POST_contactUsEmailNotLoggedIn,
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
+    POST_googleJobsLinks,
     POST_emailInvites,
     POST_createLink,
     POST_rateInterest,
     POST_changeHiringStage,
     POST_moveCandidates,
     POST_sawMyCandidatesInfoBox,
+    POST_resetApiKey,
+    POST_uploadCandidateCSV,
+    POST_chatbotData,
+    POST_createBusinessAndUser,
     GET_candidateSearch,
     GET_business,
     GET_employeeSearch,
     GET_employeeQuestions,
     GET_positions,
     GET_evaluationResults,
+    GET_apiKey,
 
+    generateApiKey,
     createEmailInfo,
     sendEmailInvite
 }
@@ -49,8 +61,401 @@ const businessApis = {
 
 // ----->> START APIS <<----- //
 
+
+// create a business and the first account admin for that business
+async function POST_createBusinessAndUser(req, res) {
+    // get necessary arguments
+    const { name, company, email, positionTitle, password, positionType } = sanitize(req.body);
+
+    // validate arguments
+    const stringArgs = [ name, company, email, positionTitle, password, positionType ];
+    if (!validArgs({ stringArgs })) { return res.status(400).send("Bad Request."); }
+
+    // validate email
+    if (!isValidEmail(email)) { return res.status(400).send("Invalid email format."); }
+
+    // validate password
+    if (!isValidPassword(password)) { return res.status(400).send("Password needs to be at least 8 characters long."); }
+
+    // create the user
+    const userInfo = { name, email, password };
+    try { var user = await createAccountAdmin(userInfo); }
+    catch (createUserError) {
+        console.log("Error creating user from business signup: ", createUserError);
+        // tell the user they need a different email if this address is taken already
+        if (createUserError === errors.EMAIL_TAKEN) {
+            return res.status(400).send(errors.EMAIL_TAKEN);
+        }
+        // otherwise return a standard server error message
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // create business
+    const newBusinessInfo = {
+        name: company,
+        positions: [{ name: positionTitle, positionType }]
+    }
+    try { var business = await createBusiness(newBusinessInfo); }
+    catch (createBizError) {
+        console.log("Error creating business from business signup: ", createBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // add the business to the user
+    user.businessInfo = {
+        businessId: business._id,
+        title: "Account Admin"
+    }
+    // user is the first at their company (so they have to do onboarding)
+    user.firstBusinessUser = true;
+
+    // add the company to the user on intercom
+    try {
+        var companies = [];
+        companies.push({id: business.intercomId});
+        var intercom = await client.users.update({id: user.intercom.id, companies})
+    } catch (updateIntercomError) {
+        console.log("error updating an intercom user: ", updateIntercomError);
+        return res.status(500).send("Server error.");
+    }
+
+
+    try { user = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user with biz info while signing up from business signup: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // return successfully to user
+    res.status(200).send(frontEndUser(user));
+
+    // send email to everyone if there's a new sign up
+    // do this after sending success message to user just in case this fails
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+    if (process.env.NODE_ENV === "development") {
+        recipients = [ process.env.DEV_EMAIL ];
+    }
+    let subject = 'New Account Admin Sign Up';
+    let content =
+        '<div>'
+        +   '<p>New account admin signed up and created a business.</p>'
+        +   `<p>Name: ${user.name}</p>`
+        +   `<p>Email: ${user.email}</p>`
+        +   `<p>Business name: ${business.name}</p>`
+        + '</div>';
+    try { await sendEmailPromise({recipients, subject, content}); }
+    catch (alertEmailError) {
+        console.log("Error sending alert email about new user: ", alertEmailError);
+    }
+}
+
+
+// creates a new ACCOUNT ADMIN user
+async function createAccountAdmin(info) {
+    return new Promise(function(resolve, reject) {
+        // get needed args
+        const { name, password, email } = info;
+
+        let user = {
+            name,
+            email: email.toLowerCase()
+        };
+
+        // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
+        // if the user has an email address no one else has used before
+        let verifiedUniqueEmail = false;
+        // if password was set up
+        let createdLoginInfo = false;
+        // whether we counted the users and created a profile url
+        let madeProfileUrl = false;
+        // <<-------------------------------------------------------->> //
+
+        // --->>> THINGS WE CAN SET FOR USER WITHOUT ASYNC CALLS <<<--- //
+        const NOW = new Date();
+        // moonshot admin status must be changed in the db directly
+        user.admin = false;
+        // user is an account admin
+        user.userType = "accountAdmin";
+        // user has not yet verified email
+        user.verified = false;
+        // had to select that they agreed to the terms to sign up so must be true
+        user.termsAndConditions = [
+            {
+                name: "Privacy Policy",
+                date: NOW,
+                agreed: true
+            },
+            {
+                name: "Terms and Conditions",
+                date: NOW,
+                agreed: true
+            }
+        ];
+        // user has just signed up
+        user.dateSignedUp = NOW;
+        // user notification preferences set to default
+        user.notifications = {};
+        user.notifications.lastSent = NOW;
+        user.notifications.time = "Daily";
+        user.notifications.waiting = false;
+        user.notifications.firstTime = true;
+        // user will have to do business onboarding
+        user.hasFinishedOnboarding = false;
+        user.onboarding = {
+            step: 0,
+            complete: false,
+            furthestStep: 0
+        }
+        // infinite use, used to verify identify when making calls to backend
+        user.verificationToken = crypto.randomBytes(64).toString('hex');
+        // one-time use, used to verify email address before initial login
+        user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
+        // <<-------------------------------------------------------->> //
+
+        // --->>       VERIFY THAT USER HAS UNIQUE EMAIL          <<--- //
+        Users.find({ email })
+        .then(foundUsers => {
+            if (foundUsers.length > 0) {
+                return reject(errors.EMAIL_TAKEN);
+            } else {
+                // mark that we are good to make this user, then try to do it
+                verifiedUniqueEmail = true;
+                makeUser();
+            }
+        })
+        .catch(findUserError => { return reject(findUserError); });
+        // <<-------------------------------------------------------->> //
+
+        // --->> COUNT THE USERS WITH THIS NAME TO ALLOW PROFILE URL CREATION <<--- //
+        Users.count({name: user.name})
+        .then(count => {
+            // create the user's profile url with the count after their name
+            const randomNumber = crypto.randomBytes(8).toString('hex');
+            user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+            madeProfileUrl = true;
+            makeUser();
+        }).catch (countError => {
+            console.log("Couldn't count the number of users: ", countError);
+            return reject(errors.SERVER_ERROR);
+        })
+        // <<-------------------------------------------------------->> //
+
+        // --->>            HASH THE USER'S PASSWORD              <<--- //
+        const saltRounds = 10;
+        bcrypt.hash(password, saltRounds, function(hashError, hash) {
+            if (hashError) { console.log("hash error: ", hashError); return reject(errors.SERVER_ERROR); }
+
+            // change the stored password to be the hash
+            user.password = hash;
+            // mark that we have created verification token and password, then make the user
+            createdLoginInfo = true;
+            makeUser();
+        });
+        // <<-------------------------------------------------------->> //
+
+        // --->>           CREATE AND UPDATE THE USER             <<--- //
+        async function makeUser() {
+            // make sure all pre-reqs to creating user are met
+            if (!verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
+
+            // create a user on intercom and add intercom information to the user
+            try {
+                var intercom = await client.users.create({
+                    email: email,
+                     name: name,
+                     custom_attributes: {
+                         user_type: user.userType
+                     }
+                 });
+            }
+            catch (createIntercomError) {
+                console.log("error creating an intercom user: ", createIntercomError);
+                return res.status(500).send("Server error.");
+            }
+
+            // Add the intercom info to the user
+            if (intercom.body) {
+                user.intercom = {};
+                user.intercom.email = intercom.body.email;
+                user.intercom.id = intercom.body.id;
+            } else {
+                console.log("error creating an intercom user: ", createIntercomError);
+                return res.status(500).send("Server error.");
+            }
+
+            // make the user db object
+            try { user = await Users.create(user); }
+            catch (createUserError) {
+                console.log("Error creating user: ", createUserError);
+                return reject(error.SERVER_ERROR);
+            }
+
+            resolve(user);
+        }
+        // <<-------------------------------------------------------->> //
+    });
+}
+
+
+// create a new business
+async function createBusiness(info) {
+    return new Promise(async function(resolve, reject) {
+        // get needed args
+        const { name, positions } = info;
+        // make sure the minimum necessary args are there
+        if (!name) { return reject("No business name provided."); }
+        // create NOW variable for easy reference
+        const NOW = new Date();
+
+        // initialize mostly empty business
+        let business = {
+            name,
+            positions: [],
+            logo: "hr.png",
+            dateCreated: NOW
+        };
+
+        // check if positions should be added
+        if (Array.isArray(positions)) {
+            // go through each position that should be created
+            positions.forEach(position => {
+                // create the position with basic fields
+                let bizPos = {
+                    name: position.name,
+                    positionType: position.positionType,
+                    length: 30,
+                    timeAllotted: 30,
+                    dateCreated: NOW,
+                    // assuming it'll take some time to create the position, so it's not ready yet
+                    finalized: false
+                }
+                // add the position
+                business.positions.push(bizPos);
+            });
+        };
+
+        // create an API_Key for the business
+        try { business.API_Key = await generateApiKey(); }
+        catch (getKeyError) { return reject(getKeyError); }
+
+        // add admin questions
+        business.employeeQuestions = [
+            {
+                questionBody: "How long have they been at the company? (in years)",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 7
+                }
+            },
+            {
+                questionBody: "How much longer do you expect them to remain at the company? (in years)",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 7
+                }
+            },
+            {
+                questionBody: "How often are they late for work per week? (in days)",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 5
+                }
+            },
+            {
+                questionBody: "How would you rate their job performance?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How efficient are they at getting tasks done?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How often do they take employee leave days for illness or holiday, per year?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How would you rate their quality of work?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How much have they improved or grown since your first day together?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How much more responsibility have they been given since your first day together?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How likely are you to recommend them for a promotion in the next year?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            },
+            {
+                questionBody: "How would you rate their potential for improvement and growth?",
+                questionType: "range",
+                range: {
+                    lowRange: 0,
+                    highRange: 10
+                }
+            }
+        ];
+
+        business.intercomId = crypto.randomBytes(16).toString('hex');
+
+        // create a user on intercom and add intercom information to the user
+        try {
+            var intercom = await client.companies.create({
+                 name: name,
+                 company_id: business.intercomId
+             });
+        }
+        catch (createIntercomError) {
+            console.log("error creating an intercom company: ", createIntercomError);
+            return res.status(500).send("Server error.");
+        }
+
+        // create the business in the db
+        try { business = await Businesses.create(business); }
+        catch (createBizError) { return reject(createBizError); }
+
+        // return the new business
+        return resolve(business);
+    });
+}
+
+
 // create a signup code for a user
-function createCode(businessId, positionId, userType, open) {
+function createCode(businessId, positionId, userType, email, open) {
     return new Promise(async function(resolve, reject) {
         // initialize random characters string
         let randomChars;
@@ -80,9 +485,8 @@ function createCode(businessId, positionId, userType, open) {
             code: randomChars,
             created: NOW,
             expirationDate: lastPossibleSecond(NOW, TWO_WEEKS),
-            businessId, positionId, userType, open
+            email, businessId, positionId, userType, open
         }
-        console.log("code: ", code);
         // make the code in the db
         try { code = await Signupcodes.create(code) }
         catch (createCodeError) {
@@ -96,7 +500,7 @@ function createCode(businessId, positionId, userType, open) {
 function createLink(businessId, positionId, userType) {
     return new Promise(async function(resolve, reject) {
         try {
-            const codeObj = await createCode(businessId, positionId, userType, true);
+            const codeObj = await createCode(businessId, positionId, userType, null, true);
             resolve({
                 code: codeObj.code, userType
             });
@@ -112,7 +516,7 @@ function createLink(businessId, positionId, userType) {
 function createEmailInfo(businessId, positionId, userType, email) {
     return new Promise(async function(resolve, reject) {
         try {
-            const codeObj = await createCode(businessId, positionId, userType, false);
+            const codeObj = await createCode(businessId, positionId, userType, email, false);
             resolve({
                 code: codeObj.code,
                 email, userType
@@ -234,7 +638,7 @@ async function POST_emailInvites(req, res) {
     const positionName = sanitize(body.currentUserInfo.positionName);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!candidateEmails || !employeeEmails || !adminEmails || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
+    if (!Array.isArray(candidateEmails) || !Array.isArray(employeeEmails) || !Array.isArray(adminEmails) || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
         return res.status(400).send("Bad request.");
     }
 
@@ -263,19 +667,24 @@ async function POST_emailInvites(req, res) {
     const position = business.positions[positionIndex];
     if (!position) { return res.status(403).send("Not a valid position."); }
     const businessName = business.name;
+    // whether the position is ready for candidates and employees to go through
+    const positionFinalized = position.finalized;
 
     // a list of promises that will resolve to objects containing new codes
     // as well as all user-specific info needed to send the invite email
     let emailPromises = [];
-    candidateEmails.forEach(email => {
-        emailPromises.push(createEmailInfo(businessId, positionId, "candidate", email));
-    });
-    employeeEmails.forEach(email => {
-        emailPromises.push(createEmailInfo(businessId, positionId, "employee", email));
-    });
     adminEmails.forEach(email => {
         emailPromises.push(createEmailInfo(businessId, positionId, "accountAdmin", email));
     });
+    // only add employee and candidate emails if the eval is ready to be taken
+    if (positionFinalized) {
+        candidateEmails.forEach(email => {
+            emailPromises.push(createEmailInfo(businessId, positionId, "candidate", email));
+        });
+        employeeEmails.forEach(email => {
+            emailPromises.push(createEmailInfo(businessId, positionId, "employee", email));
+        });
+    }
 
     // wait for all the email object promises to resolve
     let emailInfoObjects;
@@ -298,8 +707,35 @@ async function POST_emailInvites(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    // successfully sent all the emails
-    return res.json(true);
+    // if the position has already been finalized OR there are no candidates or
+    // employees to add, business does not need to be saved
+    if (positionFinalized || (candidateEmails.length === 0 && employeeEmails.length === 0)) {
+        // successfully sent all the emails
+        return res.json({success: true, waitingForFinalization: false});
+    }
+    // if the position is not finalized, have to save the emails of the users
+    // who will have to be emailed once the position is live
+    else {
+        try {
+            if (candidateEmails.length > 0) {
+                let oldCandidateEmails = business.positions[positionIndex].preFinalizedCandidates;
+                if (!oldCandidateEmails) { oldCandidateEmails = []; }
+                business.positions[positionIndex].preFinalizedCandidates = oldCandidateEmails.concat(candidateEmails);
+            }
+            if (employeeEmails.length > 0) {
+                let oldEmployeeEmails = business.positions[positionIndex].preFinalizedEmployees;
+                if (!oldEmployeeEmails) { oldEmployeeEmails = []; }
+                business.positions[positionIndex].preFinalizedEmployees = oldEmployeeEmails.concat(employeeEmails);
+            }
+            await business.save();
+            res.status(200).send({success: true, waitingForFinalization: true});
+        }
+        catch (saveBizError) {
+            console.log("Error saving business with a non-finalized position when adding users: ", saveBizError);
+            console.log("Arrays that were not saved into business: ", candidateEmails, employeeEmails);
+            return res.status(500).send("Error adding users. Contact support or try again.");
+        }
+    }
 }
 
 // create link that people can sign up as
@@ -615,15 +1051,18 @@ async function POST_moveCandidates(req, res) {
     res.json(true);
 }
 
-
-function POST_demoEmail(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'Moonshot - Somebody watched the Demo';
+function POST_googleJobsLinks(req, res) {
+    // let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Google Jobs Form';
 
     let content = "<div>"
-        + "<h3>Email of someone who watched demo: </h3>"
-        + "<p>Email: "
-        + sanitize(req.body.email)
+        + "<h3>Someone filled out google jobs links:</h3>"
+        + "<p>Business Id: "
+        + sanitize(req.body.params.businessId)
+        + "</p>"
+        + "<p>Jobs: "
+        + sanitize(req.body.params.jobs)
         + "</p>"
         + "</div>";
 
@@ -637,22 +1076,38 @@ function POST_demoEmail(req, res) {
     })
 }
 
-function POST_addEvaluationEmail(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    const business = sanitize(req.body.business);
-    const position = sanitize(req.body.position);
-    let subject = 'ACTION REQUIRED - ' + business + ' requested new position';
 
-    let content = "<div>"
-        + "<h2>" + business + " requested new position</h2>"
-        + "<h3>Business</h3>"
-        + "<p>"
-        + business
-        + "</p>"
-        + "<h3>Position</h3>"
-        + "<p>"
-        + position
-        + "</p>"
+// account admin wants to create a new business, so send an email saying to
+// contact them about it
+async function POST_addEvaluationEmail(req, res) {
+    // get all the params
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const positionName = sanitize(req.body.positionName);
+
+    // get the user and the business (to verify and get info)
+    try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
+    catch (error) {
+        console.log("Error finding user/business trying to add an evaluation: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    const bizName = business.name;
+    const userName = user.name;
+
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+
+    let subject = `ACTION REQUIRED - ${bizName} requested new position`;
+
+    let content =
+          "<div>"
+        +   `<h2>${userName} at ${bizName} requested a new position</h2>`
+        +   "<h3>Business</h3>"
+        +   `<p>${bizName}</p>`
+        +   "<h3>Position Name</h3>"
+        +   `<p>${positionName}</p>`
+        +   `<h3>${userName}'s Email</h3>`
+        +   `<p>${user.email}</p>`
         + "</div>";
 
     const sendFrom = "Moonshot";
@@ -665,12 +1120,18 @@ function POST_addEvaluationEmail(req, res) {
     })
 }
 
-function POST_dialogEmail(req, res) {
+function POST_contactUsEmailNotLoggedIn(req, res) {
     let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'ACTION REQUIRED - Somebody filled out form on homepage';
+    let subject = 'ACTION REQUIRED - Contact Us Form Filled Out';
+    if (req.body.phoneNumber) {
+        var phoneNumber = sanitize(req.body.phoneNumber);
+    }
+    if (req.body.message) {
+        var message = sanitize(req.body.message);
+    }
 
     let content = "<div>"
-        + "<h2>Lead from Moonshot Insights homepage</h2>"
+        + "<h2>Contact Us Form Filled Out:</h2>"
         + "<h3>Name</h3>"
         + "<p>"
         + sanitize(req.body.name)
@@ -683,175 +1144,20 @@ function POST_dialogEmail(req, res) {
         + "<p>"
         + sanitize(req.body.company)
         + "</p>"
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
-}
-
-async function POST_dialogEmailScreen2(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'Moonshot - Somebody filled out second pg on Homepage';
-    const name = sanitize(req.body.name);
-    const company = sanitize(req.body.company);
-    const password = sanitize(req.body.password);
-    const email = sanitize(req.body.email);
-
-    let user = {
-        name: name,
-        email: email
-    };
-    let business = {
-        name: company
-    };
-
-    // create an API_Key for the business - first get a list of all current API_Keys
-    try {
-        const otherBusinesses = await Businesses.find({}).select("API_Key");
-        var existingKeys = otherBusinesses.map(biz => { return biz.API_Key; });
-    } catch (getKeysError) {
-        console.log("Error getting all keys of other businesses: ", getKeysError);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    // generate random keys until one of them is unique across all businesses
-    let API_Key = "";
-    do { API_Key = crypto.randomBytes(12).toString("hex"); }
-    while (existingKeys.includes(API_Key));
-    // give the business its api key
-    business.API_Key = API_Key;
-
-    // hash the user's password
-    const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(password, salt, async function (err, hash) {
-            // change the stored password to be the hash
-            user.password = hash;
-            user.verified = true;
-            const query = {email: user.email};
-
-            // see if there are any users who already have that email address
-            try {
-                const foundUser = await Users.findOne(query);
-                if (foundUser) {
-                    return res.status(401).send("An account with that email address already exists.");
-                }
-            } catch (findUserError) {
-                console.log("error finding user with same email: ", findUserError);
-                return res.status(500).send("Error creating account, try with a different email or try again later.");
-            }
-
-            // get count of users with that name to get the profile url
-            Users.count({name: user.name}, function (err, count) {
-                const randomNumber = crypto.randomBytes(8).toString('hex');
-                user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
-                user.admin = false;
-                const NOW = new Date();
-                user.termsAndConditions = [
-                    {
-                        name: "Privacy Policy",
-                        date: NOW,
-                        agreed: true
-                    },
-                    {
-                        name: "Terms of Use",
-                        date: NOW,
-                        agreed: true
-                    },
-                    {
-                        name: "Service Level Agreement",
-                        date: NOW,
-                        agreed: true
-                    }
-                ];
-                user.dateSignedUp = NOW;
-
-                // store the user in the db
-                Users.create(user, function (err, newUser) {
-                    if (err) {
-                        console.log(err);
-                    }
-
-                    // Create business
-                    Businesses.create(business, function(err, newBusiness) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            // Send email with info to us
-                            let content = "<div>"
-                                + "<h3>Info of someone who filled out second page on homepage: </h3>"
-                                + "<p>Name: "
-                                + sanitize(req.body.name)
-                                + "</p>"
-                                + "<p>Company: "
-                                + sanitize(req.body.company)
-                                + "</p>"
-                                + "</div>";
-
-                            const sendFrom = "Moonshot";
-                            sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                                if (success) {
-                                    res.json("Thank you for contacting us, our team will get back to you shortly.");
-                                } else {
-                                    res.status(500).send(msg);
-                                }
-                            })
-                        }
-                    });
-                });
-            })
-        });
-    });
-}
-
-function POST_dialogEmailScreen3(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'Moonshot - Somebody filled out third pg on Homepage';
-
-    let content = "<div>"
-        + "<h3>Info of someone who filled out third page on homepage: </h3>"
-        + "<p>Positions: "
-        + sanitize(req.body.positions)
+        + "<h3>Phone Number</h3>"
+        + "<p>"
+        + phoneNumber
+        + "</p>"
+        + "<h3>Message</h3>"
+        + "<p>"
+        + message
         + "</p>"
         + "</div>";
 
     const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
         if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
-}
-
-function POST_dialogEmailScreen4(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'Moonshot - Somebody filled out fourth pg on Homepage';
-
-    let content = "<div>"
-        + "<h3>Info of someone who filled out fourth page on homepage: </h3>"
-        + "<p>Skill 1: "
-        + sanitize(req.body.skill1)
-        + "</p>"
-        + "<p>Skill 2: "
-        + sanitize(req.body.skill2)
-        + "</p>"
-        + "<p>Skill 3: "
-        + sanitize(req.body.skill3)
-        + "</p>"
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
+            res.json("Thank you! We will be in touch shortly.");
         } else {
             res.status(500).send(msg);
         }
@@ -1180,7 +1486,7 @@ async function GET_positions(req, res) {
     try {
         business = await Businesses
             .findById(businessId)
-            .select("logo name positions._id positions.name positions.skillNames positions.timeAllotted positions.length");
+            .select("logo name positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.finalized positions.dateCreated");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
         return res.status(500).send("Server error, couldn't get positions.");
@@ -1376,9 +1682,11 @@ async function GET_candidateSearch(req, res) {
     //     positionRequirements.push({ "hiringStage": hiringStage });
     // }
 
-    // only get the position that was asked for
     let query = {
         "userType": "candidate",
+        // only get users who have verified their email address
+        "verified": "true",
+        // only get the position that was asked for
         "positions": {
             "$elemMatch": {
                 "$and": positionRequirements
@@ -1529,9 +1837,197 @@ async function POST_sawMyCandidatesInfoBox(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    console.log("new user: ", user);
-
     return res.json(frontEndUser(user));
+}
+
+
+// get the api key for the api key settings page
+async function GET_apiKey(req, res) {
+    // get user credentials
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    // get the user and business
+    try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
+    catch (error) {
+        console.log("Error finding user/business trying to see their api key: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    // user has to be an account admin to see the api key
+    if (user.userType !== "accountAdmin") {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    return res.status(200).json(business.API_Key);
+}
+
+
+// reset a company's api key
+async function POST_resetApiKey(req, res) {
+    // get user credentials
+    const userId = sanitize(req.body.userId);
+    const password = sanitize(req.body.password)
+    const verificationToken = sanitize(req.body.verificationToken);
+
+    // get the user and business
+    try { var [user, newApiKey] = await Promise.all([
+        getAndVerifyUser(userId, verificationToken),
+        generateApiKey()
+    ]); }
+    catch (error) {
+        console.log("Error finding user who was trying to change their api key OR error generating new api key: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    // make sure the user has the right password
+    if (!(await bcrypt.compare(password, user.password))) {
+        return res.status(403).send("Wrong password.");
+    }
+
+    // make sure the generated api key is relevant
+    if (typeof newApiKey !== "string" || newApiKey.length !== 24) {
+        console.log("New Api Key was either not a string or had the wrong length.");
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // user has to be an account admin to change the api key
+    if (user.userType !== "accountAdmin") {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // get the id of the business the user works for
+    try { var businessId = user.businessInfo.businessId; }
+    catch (getBizIdError) {
+        console.log("User trying to update api key did not have an associated business.");
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+    // query to get the business the user works for
+    const find = { "_id": user.businessInfo.businessId };
+    // query to update the business api key
+    const update = { "API_Key": newApiKey }
+
+    try { await Businesses.findOneAndUpdate(find, update); }
+    catch (updateBizError) {
+        console.log("Error updating business to have a new api key: ", updateBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    return res.status(200).send(newApiKey);
+}
+
+
+// upload a csv containing candidate emails during business onboarding
+async function POST_uploadCandidateCSV(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    //const file = sanitize(req.files.file);
+    const candidateFile = sanitize(req.body.candidateFile);
+    const candidateFileName = sanitize(req.body.candidateFileName);
+
+    // make sure the candidates file exists
+    if (!candidateFile) { return res.status(400).send("No candidates file provided!"); }
+
+    // ensure file is correct type
+    if (!isValidFileType(candidateFileName, ["csv", "xls", "xlsx"])) {
+        return res.status(400).send("Invalid file type!");
+    }
+
+    // get the user and the business from the given credentials
+    try { var { user, business } = await getUserAndBusiness(userId, verificationToken); }
+    catch (getUserAndBizError) {
+        console.log("Error getting user and/or business while trying to upload candidate file: ", getUserAndBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // set up the email to send
+    let recipients = ["ameyer24@wisc.edu"];
+    let subject = `ACTION NEEDED: Candidates File Uploaded By ${business.name}`;
+    let content =
+        "<div>"
+        +   "<p>File is attached.</p>"
+        + "</div>";
+    // attach the candidates file to the email
+    const fileString = candidateFile.substring(candidateFile.indexOf(",") + 1);
+    let attachments = [{
+        filename: candidateFileName,
+        content: new Buffer(fileString, "base64")
+    }];
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {
+        // on failure
+        if (!success) {
+            console.log("Error sending email with candidates file: ", msg);
+            return res.status(500).send("Error uploading candidates file.");
+        }
+        // on success
+        return res.status(200).json({});
+    })
+}
+
+
+// send Kyle the info for a new chatbot sign up
+async function POST_chatbotData(req, res) {
+    const name = sanitize(req.body.name);
+    const company = sanitize(req.body.company);
+    const positionType = sanitize(req.body.positionType);
+    const title = sanitize(req.body.title);
+    const email = sanitize(req.body.email);
+
+    const recipients = ["ameyer24@wisc.edu"];
+    const subject = "New Signup from Chatbot";
+    const content = (
+        "<div>"
+        +   "<h3>Name</h3>"
+        +   `<p>${name}</p>`
+        +   "<h3>Company</h3>"
+        +   `<p>${company}</p>`
+        +   "<h3>Position Type</h3>"
+        +   `<p>${positionType}</p>`
+        +   "<h3>Title</h3>"
+        +   `<p>${title}</p>`
+        +   "<h3>Email</h3>"
+        +   `<p>${email}</p>`
+        + "</div>"
+    );
+
+    // send Kyle the email
+    try { await sendEmailPromise({ recipients, subject, content }); }
+    catch (sendEmailError) {
+        console.log("Error sending email on chatbot signup: ", sendEmailError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    return res.status(200).send({success: true});
+}
+
+
+// creates a unique api key for a business
+async function generateApiKey() {
+    return new Promise(async function(resolve, reject) {
+        // get a list of all current API_Keys
+        try {
+            // find all other businesses
+            const otherBusinesses = await Businesses.find({}).select("API_Key");
+            // an array of the api keys of every other business
+            var existingKeys = otherBusinesses.map(biz => { return biz.API_Key; });
+        } catch (getKeysError) {
+            console.log("Error getting all keys of other businesses.");
+            return reject({status: 500, message: errors.SERVER_ERROR, error: getKeysError})
+        }
+
+        // placeholder for api key
+        let API_Key = "";
+        // continue to generate random api keys ...
+        do { API_Key = crypto.randomBytes(12).toString("hex"); }
+        // ... until the key does not exist in the array of every other key
+        while (existingKeys.includes(API_Key));
+
+        console.log("new api key:", API_Key);
+
+        // return the new api key
+        return resolve(API_Key);
+    });
 }
 
 

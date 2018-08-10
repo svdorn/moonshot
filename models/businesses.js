@@ -4,11 +4,24 @@ const mongoose = require('mongoose');
 const positionSchema = mongoose.Schema({
     // name of the position (such as "Machine Learning Developer")
     name: String,
+    // if the position evaluation is ready to be taken
+    finalized: Boolean,
+    // a list of emails of candidates who need to be sent an invite email once
+    // position is finalized
+    preFinalizedCandidates: [ String ],
+    // same deal for employees
+    preFinalizedEmployees: [ String ],
+    // the date the position was created (but not necessarily finalized)
+    dateCreated: Date,
+    // the date the position was finalized and opened up to be taken
+    dateFinalized: Date,
     // whether the position can be applied to by anyone or if they need a unique
     // one time code
     open: Boolean,
     // if the position should be listed as one that candidates can apply for
     currentlyHiring: Boolean,
+    // which of the 5 functions the position falls under
+    positionType: String,
     // the skill tests a candidate must complete in order to apply
     skills: [ mongoose.Schema.Types.ObjectId ],
     // the names of the skills the candidates must complete in order to apply
@@ -74,19 +87,24 @@ const businessesSchema = mongoose.Schema({
     name: String,
     // logo image name within /images/logos/
     logo: String,
+    // the exact time the business object was created
+    dateCreated: Date,
     // if they've set up their billing
     billingCustomerId: String,
-    // number of positions to charge for billing
-    billing: {
-        positions: Number,
-        length: String,
-        amount: Number
+
+    emailNotifications: {
+        time: String,
+        numCandidates: Number,
+        lastSent: Date
     },
     // the key the business will use to post to moonshot webhooks - must be kept
     // a secret by the business
     API_Key: String,
+    // the id on Intercom
+    intercomId: String,
     // the positions that the company is (or was) hiring for
     positions: [ positionSchema ],
+
     // the questions that managers have to answer about each employee
     employeeQuestions: [{
         // the text of the question

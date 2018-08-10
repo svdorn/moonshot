@@ -1,5 +1,5 @@
 "use strict"
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Menu from './components/menu';
 import Footer from './components/footer';
 import Notification from './components/notification'
@@ -10,12 +10,13 @@ import {
     grey300, grey400, grey500,
     white, darkBlack, fullBlack,
 } from 'material-ui/styles/colors';
-import {fade} from 'material-ui/utils/colorManipulator';
+import { fade } from 'material-ui/utils/colorManipulator';
 import spacing from 'material-ui/styles/spacing';
-import {Paper, CircularProgress} from 'material-ui';
-import {getUserFromSession, setWebpSupport} from './actions/usersActions';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { Paper, CircularProgress } from 'material-ui';
+import { getUserFromSession, setWebpSupport } from './actions/usersActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import FixedOnboardingProgress from "./components/miscComponents/fixedOnboardingProgress";
 // so that axios works in IE < 11
 require('es6-promise').polyfill();
 
@@ -102,9 +103,9 @@ class Main extends Component {
             content = (
                 <div>
                     <Menu/>
-                    <div className="headerSpace" />
                     <Notification/>
-                    {this.props.children}
+                    { this.props.children }
+                    <FixedOnboardingProgress />
                     <Footer/>
                 </div>
             );
