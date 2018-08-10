@@ -78,10 +78,8 @@ class BusinessHome extends Component {
 
 
     updatePosition() {
-        const position = {
-            position: this.state.position,
-        }
-        this.props.initialize(position);
+        const position =  this.state.position;
+        this.setState({position});
     }
 
     // create the dropdown for a candidate's hiring stage
