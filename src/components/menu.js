@@ -38,19 +38,28 @@ class Menu extends Component {
         const position = '';
 
         // set the initial state
-        this.state = {dropDownSelected, headerClass, position};
+        this.state = {
+            dropDownSelected,
+            headerClass,
+            position,
+            waitingForScroll: {
+                page: undefined,
+                anchor: undefined
+            }
+        };
     }
 
     componentDidUpdate() {
-        if (this.props.location.pathname === '/settings') {
+        const pathname = this.props.location.pathname.toLowerCase();
+        if (pathname === '/settings') {
             if (this.state.dropDownSelected !== "Settings") {
                 this.setState({dropDownSelected: "Settings"});
             }
-        } else if (this.props.location.pathname.toLowerCase() === '/adduser') {
+        } else if (pathname === '/adduser') {
             if (this.state.dropDownSelected !== "Add User") {
                 this.setState({dropDownSelected: "Add User"});
             }
-        } else if (this.props.location.pathname === '/billing') {
+        } else if (pathname === '/billing') {
             if (this.state.dropDownSelected !== "Billing") {
                 this.setState({dropDownSelected: "Billing"})
             }
@@ -58,6 +67,18 @@ class Menu extends Component {
             // set dropdown to be on Profile if not on settings or onboarding pages
             if (this.state.dropDownSelected !== "Account") {
                 this.setState({dropDownSelected: "Account"});
+            }
+        }
+
+        const wfs = this.state.waitingForScroll;
+        // if we were waiting for a redirect to scroll
+        if (wfs && wfs.page && wfs.anchor) {
+            // if we are on the page that wants to be scrolled through ...
+            if (pathname === wfs.page.toLowerCase()) {
+                // ... set the state so we aren't waiting anymore ...
+                this.setState({ waitingForScroll: {} });
+                // ... and scroll to the wanted anchor
+                this.scrollToAnchor(wfs.anchor);
             }
         }
     }
@@ -133,15 +154,33 @@ class Menu extends Component {
 
     handleAnchorClick(anchor, wantedPath) {
         console.log("anchor clicked");
-        if (this.props.location.pathname != wantedPath) {
+        // if we aren't on the wanted path ...
+        if (this.props.location.pathname.toLowerCase() != wantedPath.toLowerCase()) {
+            // ... mark that we are waiting until we're on a new page to scroll ...
+            this.setState({ waitingForScroll: { page: wantedPath, anchor } });
+            // ... and redirect to that page
             goTo(wantedPath);
         }
-        setTimeout(() => {
-            const element = document.getElementById(anchor);
-            if (element) {
-                element.scrollIntoView({behavior: "smooth", block:"start"});
-            }
-        }, 20);
+        // if we are already on the wanted path, scroll to the wanted anchor
+        else { this.scrollToAnchor(anchor); }
+        // setTimeout(() => {
+        //     const element = document.getElementById(anchor);
+        //     if (element) {
+        //         element.scrollIntoView({behavior: "smooth", block:"start"});
+        //     }
+        // }, 20);
+    }
+
+
+    // scroll to an anchor on the current page, if it exists
+    scrollToAnchor(anchor) {
+        // get the element we want to scroll to
+        const element = document.getElementById(anchor);
+        // if the element exists ...
+        if (element) {
+            // ... scroll to it
+            element.scrollIntoView({behavior: "smooth", block:"start"});
+        }
     }
 
 
