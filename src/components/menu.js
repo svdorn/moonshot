@@ -132,6 +132,7 @@ class Menu extends Component {
     }
 
     handleAnchorClick(anchor, wantedPath) {
+        console.log("anchor clicked");
         if (this.props.location.pathname != wantedPath) {
             goTo(wantedPath);
         }
@@ -299,23 +300,15 @@ class Menu extends Component {
         // if there is no user logged in
         else if (!currentUser) {
             loggedInClass = " loggedOut";
+            menuOptions = [
+                {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
+                {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
+                {optionType: "separator"},
+                {optionType: "url", title: "Log In", url: "/login"},
+            ];
             if (pathname === "/") {
-                menuOptions = [
-                    {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                    {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
-                    {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
-                    {optionType: "separator"},
-                    {optionType: "url", title: "Log In", url: "/login"},
-                    {optionType: "button", title: "Enter a position"}
-                ];
-            } else {
-                menuOptions = [
-                    {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                    {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
-                    {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
-                    {optionType: "separator"},
-                    {optionType: "url", title: "Log In", url: "/login"},
-                ];
+                menuOptions.push({optionType: "button", title: "Enter a position"});
             }
         }
         // if the current user is an account admin for a business
@@ -499,7 +492,7 @@ class Menu extends Component {
                         positionUrl = "?position=" + self.state.position;
                     }
                     desktopMenu.push(
-                        <div className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
+                        <div key="tryForFreeButton" className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
                             <input className="blackInput getStarted secondary-gray-important" type="text" placeholder="Enter a position..." name="position" value={self.state.position} onChange={self.onChange.bind(self)}
                             />
                             <div className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}} onClick={() => goTo("/chatbot" + positionUrl)}>
