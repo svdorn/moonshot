@@ -167,6 +167,8 @@ class BusinessHome extends Component {
 
 
     introductionSection() {
+        const positionUrl = this.state.position ? ("?position=" + this.state.position) : "";
+
         return (
             <section id="introduction">
                 <a id="homeTop" name="homeTop" className="anchor" />
@@ -206,6 +208,141 @@ class BusinessHome extends Component {
                                 <img src={"images/businessHome/ProfileScreenshot" + this.props.jpg} alt="Candidate Results Page Screenshot" />
                             </div>
                         </figure>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+
+    // second section of the page, gives three screenshots as well as corresponding information
+    screenshotsSection() {
+        return (
+            <section id="threeScreenshots">
+                <div className="homepageTrajectory forBusiness">
+                    <div className="homepageTrajectoryTextLeft forBusiness">
+                        <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
+                            <h2 className="primary-purple-light font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will perform the best... or the worst</h2>
+                            Analyze candidates to see if they exhibit the qualities of
+                            proven high achievers or low performers in that position.
+                        </div>
+                    </div>
+                    <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
+                        <img
+                            alt="Analysis Text"
+                            src={"/images/businessHome/CandidatesScreenshot" + this.props.jpg}
+                        />
+                    </div>
+                </div>
+
+                <br/>
+
+                <div className="homepageTrajectory forBusiness">
+                    <div className="homepageTrajectoryTextRight forBusiness">
+                        <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forHome primary-white">
+                            <h2 className="primary-cyan font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
+                            </h2>
+                            Why read hundreds of resumes? Moonshot uses
+                            machine learning to reveal the empirical evidence
+                            instead of conjecture based on a resume.
+                        </div>
+                    </div>
+                    <div className="businessHomeTrajectoryImagesLeft businessHomeTrajectoryImagesShadow forBusiness">
+                        <img
+                            alt="Predictive Insights"
+                            src={"/images/businessHome/ProdScreenshot" + this.props.jpg}
+                        />
+                    </div>
+                </div>
+                <br />
+
+                <div className="homepageTrajectory forBusiness">
+                    <div className="homepageTrajectoryTextLeft forBusiness">
+                        <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
+                            <h2 className="font30px font24pxUnder800 font22pxUnder500" style={{color: "#ff748c"}}>Constantly improve with every <div className="above800only br"><br/></div>new candidate and hire</h2>
+                            Your next hire should always be your best one yet. It&#39;s smart to learn from your successes and mistakes.
+                        </div>
+                    </div>
+
+                    <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
+                        <img
+                            alt="Analysis Text"
+                            src={"/images/businessHome/ProductScreenshot" + this.props.jpg}
+                        />
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+
+    statisticsSection() {
+        return (
+            <section id="businessHomeStatistics">
+                { this.state.showRectangles ? this.skewedRectangles(20) : null }
+                <div>
+                    <div className="center">
+                        <div className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-cyan statisticsHeader">
+                            Candidate Predictions Improve Hiring Results
+                        </div>
+                        <div style={{position:"relative"}}>
+                            <div className="flourishes3">
+                                <embed src="/images/businessHome/Flourishes3.svg"/>
+                            </div>
+                            <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
+                                zDepth={2}>
+                                <div style={{position: "relative", textAlign:"left"}}>
+                                    <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Improve Your Efficiency</div>
+                                    <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost and time per hire by spending 50%<div className="above600only br"><br/></div> less time screening candidates.</div>
+                                    <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
+                                </div>
+                            </Paper>
+                            <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
+                                zDepth={2}>
+                                <div style={{position: "relative", textAlign:"left"}}>
+                                    <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
+                                    <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also offer new and diverse perspectives.</div>
+                                    <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
+                                </div>
+                            </Paper>
+                            <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
+                                zDepth={2}>
+                                <div style={{position: "relative", textAlign:"left"}}>
+                                    <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Hire Top Performers</div>
+                                    <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">A repeatable, everlearning process that consistently identifies top performers and bad hires.</div>
+                                    <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
+                                </div>
+                            </Paper>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        )
+    }
+
+
+    videoSection() {
+        return (
+            <section id="moonshotProcess">
+                <div className="processOutline font22px font18pxUnder950 font16pxUnder400">
+                    <div>
+                        <div className="screenshot">
+                            <div className="dark-opacity"></div>
+                            <img src={"/images/businessHome/ListViewScreenshot" + this.props.png} />
+                        </div>
+                        <div className="skew-image-cover"></div>
+                        <div className="left-area">
+                            <div className="text-part">
+                                <div className="text">
+                                    We predict how successful your candidates will be before you hire them.
+                                </div>
+                                <div className="button-part">
+                                    <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font16pxUnder950 font14pxUnder400 primary-white" onClick={() => goTo("/chatbot")} style={{padding: "4.5px 15px"}}>
+                                        Try for Free
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -303,21 +440,154 @@ class BusinessHome extends Component {
     }
 
 
+    pricingSection() {
+        const positionUrl = this.state.position ? ("?position=" + this.state.position) : "";
+
+        return (
+            <section id="pricingSection">
+                <a id="pricing" name="pricing" className="anchor" />
+                { this.state.showRectangles ? this.skewedRectangles(6) : null }
+                <div className="forBusinessBoxesContainer">
+                    <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
+                         style={{marginBottom: '50px'}}>
+                        Pay Only When You Hire
+                        <div className="font18px font16pxUnder700 font12pxUnder400 primary-white">
+                            Our incentives are aligned. You only pay when you hire<div className="above700only br"><br/></div> a top performer who stays at your company.
+                        </div>
+                    </div>
+                    <div className="businessHomeGradientBorder1 paperBoxBusinessHome">
+                        <div style={{textAlign: "center", position: "relative"}}>
+                            <img
+                                src={"/images/businessHome/Flourish1" + this.props.png}
+                                alt="Flourish Icon"
+                                className="flourish-icon"
+                            />
+                            <div className="pricing-container">
+                                <div className="home-peach paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
+                                    Test It Out
+                                </div>
+                                <img
+                                    src={"/images/businessHome/PaperAirplane2" + this.props.png}
+                                    alt="Paper Airplane Icon"
+                                    className="businessHomeBoxIcons"
+                                />
+                                <div className="hire-number primary-white font22px font18pxUnder400">
+                                    First Hire
+                                </div>
+                                <div className="home-peach price-free font30px font24pxUnder400">
+                                    FREE
+                                </div>
+                                <ul className="primary-white font14px font12pxUnder400">
+                                    <li>
+                                        Select a position to evaluate
+                                    </li>
+                                    <li>
+                                        Invite applicants to the evaluation
+                                    </li>
+                                    <li>
+                                        Review the results
+                                    </li>
+                                    <li>
+                                        Hire the best candidate
+                                    </li>
+                                </ul>
+                                <div className="button large round-4px gradient-transition gradient-1-home-pricing-peach gradient-2-home-pricing-pink primary-white font18px" onClick={() => goTo("/chatbot")}>
+                                    Try for Free
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="under800only" style={{height:"0px"}}><br/></div>
+                    <div className="businessHomeGradientBorder2 paperBoxBusinessHome">
+                        <div style={{textAlign: "center", position: "relative"}}>
+                            <img
+                                src={"/images/businessHome/Flourish2" + this.props.png}
+                                className="flourish-icon"
+                                alt="Flourish Icon"
+                            />
+                            <div className="pricing-container">
+                                <div className="home-blue paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
+                                    Scale It Up
+                                </div>
+                                <img
+                                    src={"/images/businessHome/EnterpriseRocket2" + this.props.png}
+                                    alt="Enterprise Rocket Icon"
+                                    className="businessHomeBoxIcons"
+                                />
+                                <div className="primary-white hire-number font22px font18pxUnder400">
+                                    Each Additional Hire
+                                </div>
+                                <div className="primary-white">
+                                    <span className="font30px font24pxUnder400 home-blue" style={{fontWeight:"bold"}}>${this.state.price}</span>
+                                    <span className="font16px font14pxUnder400">&nbsp;/ month</span>
+                                    <div className="font16px font14pxUnder400" style={{marginTop:"-10px"}}>
+                                        <span>for up to&nbsp;</span>
+                                        {this.makePricingDropdown(this.state.pricing)}
+                                    </div>
+                                </div>
+                                <ul className="primary-white font14px font12pxUnder400" style={{textAlign: "left", width: "95%", margin:"auto"}}>
+                                    <li>
+                                        Monthly payments stop if a<br/>hire is no longer employed
+                                    </li>
+                                    <li>
+                                        Pay off your balance at any time
+                                    </li>
+                                </ul>
+                                <div className="button large round-4px gradient-transition gradient-1-home-pricing-green gradient-2-home-pricing-blue primary-white font18px" onClick={() => goTo("/chatbot")}>
+                                    Try for Free
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="marginTop10px">
+                        <div className="primary-white font18px font16pxUnder700 font12pxUnder450">
+                            Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five position types</div><HoverTip
+                                style={{marginTop: "26px", marginLeft: "-70px"}}
+                                text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
+                            />.
+                        </div>
+                        <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
+                            <div className="enterPosition">
+                                <input className="blackInput getStarted secondary-gray-important" type="text" placeholder="Enter a position you're hiring for..." name="position"
+                                value={this.state.position} onChange={this.onChange.bind(this)}/>
+                                <div className="getStarted button medium round-8px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
+                                    Try for Free
+                                </div>
+                            </div>
+                        </div>
+                        <div className="font16px font14pxUnder800 font12pxUnder500 marginTop10px secondary-gray">
+                            <i>No credit card required.</i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+
+    integrationsSection() {
+        return (
+            <section id="ATSIntegrations" className="marginBottom60px">
+                { this.state.showRectangles ? this.skewedRectangles(6) : null }
+                <div className="center primary-white">
+                    <div className="marginBottom40px font30px font24pxUnder700 font20pxUnder500">
+                        Integrates with your ATS and favorite apps.
+                    </div>
+                    <img src={"images/businessHome/BambooHr" + this.props.png} alt="BambooHr" className="bamboo-hr" />
+                    <img src={"images/businessHome/Trello" + this.props.png} alt="Trello" className="trello" />
+                    <img src={"images/businessHome/Workable" + this.props.png} alt="Workable" className="workable" />
+                    <img src={"images/businessHome/Slack" + this.props.png} alt="Slack" className="slack" />
+                    <img src={"images/businessHome/Recruitee" + this.props.png} alt="Recruitee" className="recruitee" />
+                    <div className="marginTop40px font20px font16pxUnder700 font12pxUnder500">
+                        and many more...
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+
     render() {
-        const listItem = {
-                width: '30%',
-                margin: 'auto',
-                display: 'inline-block',
-                top: '0',
-                verticalAlign: 'top',
-                textAlign: 'left'
-        };
-
-        let positionUrl = "";
-        if (this.state.position) {
-            positionUrl = "?position=" + this.state.position;
-        }
-
         return (
             <div>
                 {(this.props.currentUser && this.props.currentUser.userType == "accountAdmin") ? <AddUserDialog /> : null}
@@ -329,263 +599,17 @@ class BusinessHome extends Component {
                 <div className="blackBackground businessHome">
                     { this.introductionSection() }
 
-                    <section id="threeScreenshots">
-                        <div className="homepageTrajectory forBusiness">
-                            <div className="homepageTrajectoryTextLeft forBusiness">
-                                <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
-                                    <h2 className="primary-purple-light font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will perform the best... or the worst</h2>
-                                    Analyze candidates to see if they exhibit the qualities of
-                                    proven high achievers or low performers in that position.
-                                </div>
-                            </div>
-                            <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
-                                <img
-                                    alt="Analysis Text"
-                                    src={"/images/businessHome/CandidatesScreenshot" + this.props.jpg}
-                                />
-                            </div>
-                        </div>
+                    { this.screenshotsSection() }
 
-                        <br/>
+                    { this.statisticsSection() }
 
-                        <div className="homepageTrajectory forBusiness">
-                            <div className="homepageTrajectoryTextRight forBusiness">
-                                <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forHome primary-white">
-                                    <h2 className="primary-cyan font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
-                                    </h2>
-                                    Why read hundreds of resumes? Moonshot uses
-                                    machine learning to reveal the empirical evidence
-                                    instead of conjecture based on a resume.
-                                </div>
-                            </div>
-                            <div className="businessHomeTrajectoryImagesLeft businessHomeTrajectoryImagesShadow forBusiness">
-                                <img
-                                    alt="Predictive Insights"
-                                    src={"/images/businessHome/ProdScreenshot" + this.props.jpg}
-                                />
-                            </div>
-                        </div>
-                        <br />
-
-                        <div className="homepageTrajectory forBusiness">
-                            <div className="homepageTrajectoryTextLeft forBusiness">
-                                <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
-                                    <h2 className="font30px font24pxUnder800 font22pxUnder500" style={{color: "#ff748c"}}>Constantly improve with every <div className="above800only br"><br/></div>new candidate and hire</h2>
-                                    Your next hire should always be your best one yet. It&#39;s smart to learn from your successes and mistakes.
-                                </div>
-                            </div>
-
-                            <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
-                                <img
-                                    alt="Analysis Text"
-                                    src={"/images/businessHome/ProductScreenshot" + this.props.jpg}
-                                />
-                            </div>
-                        </div>
-                    </section>
-
-                    <section id="businessHomeStatistics">
-                        { this.state.showRectangles ? this.skewedRectangles(20) : null }
-                        <div>
-                            <div className="center">
-                                <div className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-cyan statisticsHeader">
-                                    Candidate Predictions Improve Hiring Results
-                                </div>
-                                <div style={{position:"relative"}}>
-                                    <div className="flourishes3">
-                                        <embed src="/images/businessHome/Flourishes3.svg"/>
-                                    </div>
-                                    <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
-                                        zDepth={2}>
-                                        <div style={{position: "relative", textAlign:"left"}}>
-                                            <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Improve Your Efficiency</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost and time per hire by spending 50%<div className="above600only br"><br/></div> less time screening candidates.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
-                                        </div>
-                                    </Paper>
-                                    <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
-                                        zDepth={2}>
-                                        <div style={{position: "relative", textAlign:"left"}}>
-                                            <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also offer new and diverse perspectives.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
-                                        </div>
-                                    </Paper>
-                                    <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
-                                        zDepth={2}>
-                                        <div style={{position: "relative", textAlign:"left"}}>
-                                            <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Hire Top Performers</div>
-                                            <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">A repeatable, everlearning process that consistently identifies top performers and bad hires.</div>
-                                            <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
-                                        </div>
-                                    </Paper>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section id="moonshotProcess">
-                        <div className="processOutline font22px font18pxUnder950 font16pxUnder400">
-                            <div>
-                                <div className="screenshot">
-                                    <div className="dark-opacity"></div>
-                                    <img
-                                        src={"/images/businessHome/ListViewScreenshot" + this.props.png}
-                                    />
-                                </div>
-                                <div className="skew-image-cover"></div>
-                                <div className="left-area">
-                                    <div className="text-part">
-                                        <div className="text">
-                                            We predict how successful your candidates will be before you hire them.
-                                        </div>
-                                        <div className="button-part">
-                                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font16pxUnder950 font14pxUnder400 primary-white" onClick={() => goTo("/chatbot")} style={{padding: "4.5px 15px"}}>
-                                                Try for Free
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                    { this.videoSection() }
 
                     { this.learnFromHiresSection() }
 
-                    <section id="pricingSection">
-                        <a id="pricing" name="pricing" className="anchor" />
-                        { this.state.showRectangles ? this.skewedRectangles(6) : null }
-                        <div className="forBusinessBoxesContainer">
-                            <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
-                                 style={{marginBottom: '50px'}}>
-                                Pay Only When You Hire
-                                <div className="font18px font16pxUnder700 font12pxUnder400 primary-white">
-                                    Our incentives are aligned. You only pay when you hire<div className="above700only br"><br/></div> a top performer who stays at your company.
-                                </div>
-                            </div>
-                            <div className="businessHomeGradientBorder1 paperBoxBusinessHome">
-                                <div style={{textAlign: "center", position: "relative"}}>
-                                    <img
-                                        src={"/images/businessHome/Flourish1" + this.props.png}
-                                        alt="Flourish Icon"
-                                        className="flourish-icon"
-                                    />
-                                    <div className="pricing-container">
-                                        <div className="home-peach paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
-                                            Test It Out
-                                        </div>
-                                        <img
-                                            src={"/images/businessHome/PaperAirplane2" + this.props.png}
-                                            alt="Paper Airplane Icon"
-                                            className="businessHomeBoxIcons"
-                                        />
-                                        <div className="hire-number primary-white font22px font18pxUnder400">
-                                            First Hire
-                                        </div>
-                                        <div className="home-peach price-free font30px font24pxUnder400">
-                                            FREE
-                                        </div>
-                                        <ul className="primary-white font14px font12pxUnder400">
-                                            <li>
-                                                Select a position to evaluate
-                                            </li>
-                                            <li>
-                                                Invite applicants to the evaluation
-                                            </li>
-                                            <li>
-                                                Review the results
-                                            </li>
-                                            <li>
-                                                Hire the best candidate
-                                            </li>
-                                        </ul>
-                                        <div className="button large round-4px gradient-transition gradient-1-home-pricing-peach gradient-2-home-pricing-pink primary-white font18px" onClick={() => goTo("/chatbot")}>
-                                            Try for Free
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="under800only" style={{height:"0px"}}><br/></div>
-                            <div className="businessHomeGradientBorder2 paperBoxBusinessHome">
-                                <div style={{textAlign: "center", position: "relative"}}>
-                                    <img
-                                        src={"/images/businessHome/Flourish2" + this.props.png}
-                                        className="flourish-icon"
-                                        alt="Flourish Icon"
-                                    />
-                                    <div className="pricing-container">
-                                        <div className="home-blue paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
-                                            Scale It Up
-                                        </div>
-                                        <img
-                                            src={"/images/businessHome/EnterpriseRocket2" + this.props.png}
-                                            alt="Enterprise Rocket Icon"
-                                            className="businessHomeBoxIcons"
-                                        />
-                                        <div className="primary-white hire-number font22px font18pxUnder400">
-                                            Each Additional Hire
-                                        </div>
-                                        <div className="primary-white">
-                                            <span className="font30px font24pxUnder400 home-blue" style={{fontWeight:"bold"}}>${this.state.price}</span>
-                                            <span className="font16px font14pxUnder400">&nbsp;/ month</span>
-                                            <div className="font16px font14pxUnder400" style={{marginTop:"-10px"}}>
-                                                <span>for up to&nbsp;</span>
-                                                {this.makePricingDropdown(this.state.pricing)}
-                                            </div>
-                                        </div>
-                                        <ul className="primary-white font14px font12pxUnder400" style={{textAlign: "left", width: "95%", margin:"auto"}}>
-                                            <li>
-                                                Monthly payments stop if a<br/>hire is no longer employed
-                                            </li>
-                                            <li>
-                                                Pay off your balance at any time
-                                            </li>
-                                        </ul>
-                                        <div className="button large round-4px gradient-transition gradient-1-home-pricing-green gradient-2-home-pricing-blue primary-white font18px" onClick={() => goTo("/chatbot")}>
-                                            Try for Free
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="marginTop10px">
-                                <div className="primary-white font18px font16pxUnder700 font12pxUnder450">
-                                    Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five position types</div><HoverTip
-                                        style={{marginTop: "26px", marginLeft: "-70px"}}
-                                        text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
-                                    />.
-                                </div>
-                                <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
-                                    <div className="enterPosition">
-                                        <input className="blackInput getStarted secondary-gray-important" type="text" placeholder="Enter a position you're hiring for..." name="position"
-                                        value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                        <div className="getStarted button medium round-8px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
-                                            Try for Free
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="font16px font14pxUnder800 font12pxUnder500 marginTop10px secondary-gray">
-                                    <i>No credit card required.</i>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                    { this.pricingSection() }
 
-                    <section id="ATSIntegrations" className="marginBottom60px">
-                        { this.state.showRectangles ? this.skewedRectangles(6) : null }
-                        <div className="center primary-white">
-                            <div className="marginBottom40px font30px font24pxUnder700 font20pxUnder500">
-                                Integrates with your ATS and favorite apps.
-                            </div>
-                            <img src={"images/businessHome/BambooHr" + this.props.png} alt="BambooHr" className="bamboo-hr" />
-                            <img src={"images/businessHome/Trello" + this.props.png} alt="Trello" className="trello" />
-                            <img src={"images/businessHome/Workable" + this.props.png} alt="Workable" className="workable" />
-                            <img src={"images/businessHome/Slack" + this.props.png} alt="Slack" className="slack" />
-                            <img src={"images/businessHome/Recruitee" + this.props.png} alt="Recruitee" className="recruitee" />
-                            <div className="marginTop40px font20px font16pxUnder700 font12pxUnder500">
-                                and many more...
-                            </div>
-                        </div>
-                    </section>
+                    { this.integrationsSection() }
                 </div>
             </div>
         );
