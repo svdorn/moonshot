@@ -7,7 +7,8 @@ import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
 import {signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal} from "../actions/usersActions";
 import { isValidEmail, goTo } from "../miscFunctions";
-import {axios} from 'axios';
+import { axios } from 'axios';
+import { animateScroll } from "react-scroll";
 
 const styles = {
     title: {
@@ -21,6 +22,15 @@ const styles = {
         horizontal: 'left'
     }
 };
+
+
+// pages that have a header but don't show the header shadow
+const noShadowPages = ["businesssignup"];
+// pages where the menu scrolls with the page
+const nonFixedMenuPages = ["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "businesssignup"];
+// pages that don't have a header at all
+const noMenuPages = ["chatbot"];
+
 
 class Menu extends Component {
     constructor(props) {
@@ -176,10 +186,19 @@ class Menu extends Component {
     scrollToAnchor(anchor) {
         // get the element we want to scroll to
         const element = document.getElementById(anchor);
-        // if the element exists ...
+        // if the element exists
         if (element) {
-            // ... scroll to it
-            element.scrollIntoView({behavior: "smooth", block:"start"});
+            // get its y value
+            let yPosition = element.getBoundingClientRect().y;
+            // if the menu is fixed ...
+            if (!nonFixedMenuPages.includes(this.props.location.pathname.toLowerCase())) {
+                // ... scroll down a bit less so that the menu isn't in the way
+                yPosition -= 50;
+                // make sure we're scrolling to to a valid position
+                if (yPosition < 0) { yPosition = 0; }
+            }
+            // scroll to the element
+            animateScroll.scrollTo(yPosition);
         }
     }
 
@@ -200,13 +219,6 @@ class Menu extends Component {
 
     render() {
         let self = this;
-
-        // pages that have a header but don't show the header shadow
-        const noShadowPages = ["businesssignup"];
-        // pages where the menu scrolls with the page
-        const fixedMenuPages = ["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "businesssignup"];
-        // pages that don't have a header at all
-        const noMenuPages = ["chatbot"];
 
         let isEmployer = false;
         let currentUser = this.props.currentUser;
@@ -292,7 +304,7 @@ class Menu extends Component {
             } else if (pathname === '/billing') {
                 dropdownClass += " currentRoute";
                 underlineWidth = "46px";
-            } else if (fixedMenuPages.includes(pathFirstPart)){
+            } else if (nonFixedMenuPages.includes(pathFirstPart)){
                 additionalHeaderClass += " notFixed";
             }
         }
@@ -632,6 +644,7 @@ class Menu extends Component {
         );
     }
 }
+
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
