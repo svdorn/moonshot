@@ -72,7 +72,7 @@ const routes = (
             <Route path="results/:profileUrl/:positionId" component={AuthenticatedComponent} page={<Results />} userType={businessAdminUserTypes} />
             <Route path="employeeResults/:employeeId/:positionId" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
             <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
-            <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={businessAdminUserTypes} />
+            <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={businessAdminUserTypes} firstBusinessUser={true} />
             <Route path="businessSignup" component={BusinessSignup} />
             <Route path="chatbot" component={Chatbot} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
