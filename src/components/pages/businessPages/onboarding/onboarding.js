@@ -144,8 +144,8 @@ class Onboarding extends Component {
         let tab = "Candidate";
 
         const opts = {
-            height: '274.5',
-            width: '450',
+            height: '300',
+            width: '492',
             playerVars: { // https://developers.google.com/youtube/player_parameters
                 autoplay: 1,
                 iv_load_policy: 3
