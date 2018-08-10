@@ -329,6 +329,7 @@ function POST_candidate(req, res) {
                 user.notifications.lastSent = new Date();
                 user.notifications.time = "Daily";
                 user.notifications.waiting = false;
+                user.notifications.firstTime = true;
             }
             // otherwise the user is a candidate or employee and will have a
             // start date for their position eval, same as when code was created

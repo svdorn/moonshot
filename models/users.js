@@ -209,7 +209,9 @@ const usersSchema = mongoose.Schema({
         // Their preference for how often to send a notification email
         time: String,
         // Whether an email is in waiting
-        waiting: Boolean
+        waiting: Boolean,
+        // Whether it is their first time receiving a notification
+        firstTime: Boolean
     },
 
     // questions the user has to answer - only once - before doing a position eval

@@ -968,7 +968,8 @@ async function sendNotificationEmails(businessId, user) {
                             break;
                         case "Daily":
                             interval = "day";
-                            time = ONE_DAY;
+                            //time = ONE_DAY;
+                            time = 10;
                             break;
                         case "never":
                             time = 0;
@@ -991,7 +992,7 @@ async function sendNotificationEmails(businessId, user) {
                     timeDelay = 0;
                 }
 
-                promises.push(sendDelayedEmail(recipient, timeDelay, notifications.lastSent, business.positions, interval));
+                promises.push(sendDelayedEmail(recipient, timeDelay, notifications.lastSent, business.positions, interval, notifications.firstTime));
                 recipient = {};
                 time = 0;
             }
@@ -1008,7 +1009,7 @@ async function sendNotificationEmails(businessId, user) {
     });
 }
 
-async function sendDelayedEmail(recipient, time, lastSent, positions, interval) {
+async function sendDelayedEmail(recipient, time, lastSent, positions, interval, firstTime) {
     return new Promise(async function(resolve, reject) {
 
         if (time > 0) {
@@ -1087,6 +1088,18 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval) 
 
             // add closing div to counts section
             countsSection += '</div>';
+
+            // Section that introduces purpose of email, is different if it is first time sending notificaiton email
+            let introSection = '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">';
+            if (firstTime) {
+                introSection += (
+                    'My name is Justin and I&#39;m the Chief Product Officer at Moonshot Insights. I&#39;ll be sending you emails updating you when candidates complete your evaluations so that you can view their results and move the hiring process along quickly. Here&#39;s your first update:</div>'
+                )
+            } else {
+                introSection += (
+                    'It&#39;s Justin again with a quick update on your evaluations:</div>'
+                )
+            }
             // If there are multiple position evaluations going on at once
             const multipleEvals = counts.length > 1;
 
@@ -1102,7 +1115,7 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval) 
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(recipient.name) + ',</div>'
-                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">It&#39;s Justin again with a quick update on your evaluations:</div>'
+                    + introSection
                     + countsSection + '<br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'myCandidates'
                     + '">See Results</a>'
@@ -1127,7 +1140,8 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval) 
                 }
                 const updateQuery = {
                     "notifications.lastSent" : new Date(),
-                    "notifications.waiting" : false
+                    "notifications.waiting" : false,
+                    "notifications.firstTime" : false
                 }
                 try {
                     await Users.findOneAndUpdate(idQuery, updateQuery);
