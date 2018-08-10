@@ -211,7 +211,7 @@ class Onboarding extends Component {
 
                 if (key < onboarding.furthestStep) {
                     body = (
-                        <div className="marginTop20px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>
+                        <div className="marginTop10px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>
                             <img
                                 alt=""
                                 src={"/icons/CheckMarkBlue" + this.props.png}
@@ -332,6 +332,9 @@ class Onboarding extends Component {
                 <div id="employerOnboarding">
                     <div className="onboardingLeft">
                         <div>
+                            <div className="primary-white font22px font18pxUnder700 marginTop20px" style={{marginLeft: "15px"}}>
+                                Onboarding Checklist
+                            </div>
                             {checklist}
                         </div>
                     </div>
