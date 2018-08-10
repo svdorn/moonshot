@@ -12,43 +12,68 @@ class WhichATS extends Component {
     constructor(props) {
         super(props);
 
+        const user = this.props.currentUser;
+
         this.state = {
-            ats: ""
+            ats: user.onboarding && user.onboarding.ats ? user.onboarding.ats :  ""
         }
     }
 
 
     componentWillMount() {
         const currentUser = this.props.currentUser;
+        const self = this;
         // user can move on if they have said what their ats is
         const nextCallable = !!currentUser.onboarding && !!currentUser.onboarding.ats;
         this.props.changeAutomateInvites({
             header: "What applicant tracking system do you use?",
             nextPage: "Manual Invite",
             nextCallable,
-            lastSubStep: false
+            lastSubStep: false,
+            // add in extra function to submit the suggestion when Next clicked
+            extraNextFunction: this.submitATS.bind(self),
+            extraNextFunctionPage: "Which ATS?"
         });
     }
 
 
     submitATS() {
-        axios.post("/api/accountAdmin/identifyATS", {
-            ats: this.state.ats,
-            userId: this.props.currentUser._id,
-            verificationToken: this.props.currentUser.verificationToken
-        })
-        .then(response => {
-            this.props.updateUser(response.data.user);
-            this.props.changeAutomateInvites({ nextCallable: true });
-        })
-        .catch(error => {
-            this.props.addNotification("Error, refresh and try again.", "error");
-        });
+        // if there is a suggestion and it's different than what was suggested before
+        if (this.state.ats && this.props.currentUser.onboarding.ats !== this.state.ats) {
+            // save it
+            axios.post("/api/accountAdmin/identifyATS", {
+                ats: this.state.ats,
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken
+            })
+            .then(response => {
+                this.props.updateUser(response.data.user);
+            })
+            .catch(error => {
+                this.props.addNotification("Error, please refresh.", "error");
+            });
+        }
     }
 
 
     // when typing into the form asking which ats they use
-    onChange(e) { this.setState({ ats: e.target.value }); }
+    onChange(e) {
+        // get value from input box
+        const value = e.target.value;
+        // set the text in the input box to be what the user typed
+        this.setState({ ats: e.target.value });
+        // if there is a non-empty value in the text box and the button is not clickable ...
+        if (value && !this.props.automationStep.nextCallable) {
+            // make the Next button clickable
+            this.props.changeAutomateInvites({ nextCallable: true });
+        }
+        // if the text in the input box is deleted and the user has not completed
+        // this step in the past ...
+        if (!value && !this.props.currentUser.onboarding.ats) {
+            // don't let the user click the Next button
+            this.props.changeAutomateInvites({ nextCallable: false });
+        }
+    }
 
 
     render() {
@@ -66,17 +91,6 @@ class WhichATS extends Component {
                         value={this.state.ats}
                         onChange={this.onChange.bind(this)}
                     />
-                    <div
-                        className="button round-10px gradient-transition gradient-1-purple-light gradient-2-cyan"
-                        onClick={this.submitATS.bind(this)}
-                        style={{
-                            marginLeft: "20px",
-                            padding: "0 14px",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center"
-                        }}
-                    >Enter</div>
                 </div>
                 { this.props.previousNextArea }
             </div>
