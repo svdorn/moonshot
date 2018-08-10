@@ -214,7 +214,7 @@ class ImportCandidates extends Component {
                 { this.createCSVModal() }
                 <div>
                     <div className="font16px" style={{margin: "10px auto"}}>
-                        {"Once your candidates have been uploaded, they will be invited to complete the application. Make sure their contact emails are included."}
+                        {"Once your candidates have been uploaded and your position evaluation is ready, they will be invited to complete the application. Make sure their contact emails are included."}
                     </div>
                     <div className="font16px invite-options" style={{margin: "10px auto"}}>
                         { fileUploadArea }
