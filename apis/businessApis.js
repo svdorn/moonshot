@@ -198,6 +198,7 @@ async function createAccountAdmin(info) {
         user.notifications.lastSent = NOW;
         user.notifications.time = "Daily";
         user.notifications.waiting = false;
+        user.notifications.firstTime = true;
         // user will have to do business onboarding
         user.hasFinishedOnboarding = false;
         user.onboarding = {
@@ -637,7 +638,7 @@ async function POST_emailInvites(req, res) {
     const positionName = sanitize(body.currentUserInfo.positionName);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!candidateEmails || !employeeEmails || !adminEmails || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
+    if (!Array.isArray(candidateEmails) || !Array.isArray(employeeEmails) || !Array.isArray(adminEmails) || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
         return res.status(400).send("Bad request.");
     }
 
@@ -666,19 +667,24 @@ async function POST_emailInvites(req, res) {
     const position = business.positions[positionIndex];
     if (!position) { return res.status(403).send("Not a valid position."); }
     const businessName = business.name;
+    // whether the position is ready for candidates and employees to go through
+    const positionFinalized = position.finalized;
 
     // a list of promises that will resolve to objects containing new codes
     // as well as all user-specific info needed to send the invite email
     let emailPromises = [];
-    candidateEmails.forEach(email => {
-        emailPromises.push(createEmailInfo(businessId, positionId, "candidate", email));
-    });
-    employeeEmails.forEach(email => {
-        emailPromises.push(createEmailInfo(businessId, positionId, "employee", email));
-    });
     adminEmails.forEach(email => {
         emailPromises.push(createEmailInfo(businessId, positionId, "accountAdmin", email));
     });
+    // only add employee and candidate emails if the eval is ready to be taken
+    if (positionFinalized) {
+        candidateEmails.forEach(email => {
+            emailPromises.push(createEmailInfo(businessId, positionId, "candidate", email));
+        });
+        employeeEmails.forEach(email => {
+            emailPromises.push(createEmailInfo(businessId, positionId, "employee", email));
+        });
+    }
 
     // wait for all the email object promises to resolve
     let emailInfoObjects;
@@ -701,8 +707,35 @@ async function POST_emailInvites(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    // successfully sent all the emails
-    return res.json(true);
+    // if the position has already been finalized OR there are no candidates or
+    // employees to add, business does not need to be saved
+    if (positionFinalized || (candidateEmails.length === 0 && employeeEmails.length === 0)) {
+        // successfully sent all the emails
+        return res.json({success: true, waitingForFinalization: false});
+    }
+    // if the position is not finalized, have to save the emails of the users
+    // who will have to be emailed once the position is live
+    else {
+        try {
+            if (candidateEmails.length > 0) {
+                let oldCandidateEmails = business.positions[positionIndex].preFinalizedCandidates;
+                if (!oldCandidateEmails) { oldCandidateEmails = []; }
+                business.positions[positionIndex].preFinalizedCandidates = oldCandidateEmails.concat(candidateEmails);
+            }
+            if (employeeEmails.length > 0) {
+                let oldEmployeeEmails = business.positions[positionIndex].preFinalizedEmployees;
+                if (!oldEmployeeEmails) { oldEmployeeEmails = []; }
+                business.positions[positionIndex].preFinalizedEmployees = oldEmployeeEmails.concat(employeeEmails);
+            }
+            await business.save();
+            res.status(200).send({success: true, waitingForFinalization: true});
+        }
+        catch (saveBizError) {
+            console.log("Error saving business with a non-finalized position when adding users: ", saveBizError);
+            console.log("Arrays that were not saved into business: ", candidateEmails, employeeEmails);
+            return res.status(500).send("Error adding users. Contact support or try again.");
+        }
+    }
 }
 
 // create link that people can sign up as

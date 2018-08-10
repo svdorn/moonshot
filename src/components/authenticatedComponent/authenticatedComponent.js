@@ -125,8 +125,14 @@ class AuthenticatedComponent extends Component {
         // assume user can access the page
         let userHasAccess = true;
 
+        // if the user must be the first business user to see this page but isn't ...
+        if (this.props.route.firstBusinessUser === true && !user.firstBusinessUser) {
+            // ... don't give access
+            userHasAccess = false;
+        }
+
         // if the allowed type passed in is just a single string with a user type ...
-        if (typeof allowedTypes === "string") {
+        else if (typeof allowedTypes === "string") {
             // ... check if the current user type matches it
             userHasAccess = allowedTypes === user.userType;
         }
@@ -136,7 +142,35 @@ class AuthenticatedComponent extends Component {
             userHasAccess = allowedTypes.includes(user.userType);
         }
 
+        // if the user doesn't have access and should be rerouted, do so
+        if (!userHasAccess && !this.props.route.show403) {
+            this.redirect();
+        }
+
         return userHasAccess;
+    }
+
+
+    // if the user doesn't have access to the page and we're not showing a 403 page
+    redirect() {
+        console.log("redirecting");
+        // go to the homepage if no user is logged in
+        if (typeof this.props.currentUser !== "object") { goTo("/"); }
+        switch (this.props.currentUser.userType) {
+            case "accountAdmin": {
+                goTo("/myCandidates");
+                break;
+            }
+            case "candidate":
+            case "employee": {
+                goTo("/myEvaluations")
+                break;
+            }
+            default: {
+                goTo("/");
+                break;
+            }
+        }
     }
 
 

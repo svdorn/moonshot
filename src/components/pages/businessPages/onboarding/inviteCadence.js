@@ -60,22 +60,20 @@ class InviteCadence extends Component {
                     </div>
                     <div className="marginTop30px">
                         <div className="marginTop10px primary-cyan font20px inline">
-                            <Paper className={"inviteCadenceGradientBorder paperBoxInviteCadence clickableNoUnderline " + additionalOneClassName}
-                                   zDepth={2}
+                            <div className={"inviteCadenceGradientBorder paperBoxInviteCadence clickableNoUnderline " + additionalOneClassName}
                                    onClick={() => this.handleClick(1)}>
                                 <div style={{textAlign: "center", position: "relative", paddingTop: "25px"}} className="secondary-gray font16px">
                                     Invite applicants to complete the evaluation <div className="primary-cyan font20px">1 day</div> after they have applied.
                                 </div>
-                            </Paper>
+                            </div>
                         </div>
                         <div className="marginTop20px inline">
-                            <Paper className={"inviteCadenceGradientBorder paperBoxInviteCadence clickableNoUnderline " + additionalTwoClassName}
-                                   zDepth={2}
+                            <div className={"inviteCadenceGradientBorder paperBoxInviteCadence clickableNoUnderline " + additionalTwoClassName}
                                    onClick={() => this.handleClick(2)}>
                                 <div style={{textAlign: "center", position: "relative", paddingTop: "25px"}} className="secondary-gray font16px">
                                     Invite applicants to complete the evaluation <div className="primary-cyan font20px">2 days</div> after they have applied.
                                 </div>
-                            </Paper>
+                            </div>
                         </div>
                     </div>
                     <div className="previous-next-area primary-white font16px center marginTop20px marginBottom30px">

@@ -560,7 +560,10 @@ class AddUserDialog extends Component {
                             Success
                         </div>
                         <div className="primary-white font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
-                            Success! Your invites have been sent to the users emails with sign up instructions for the {this.state.position} position
+                            {this.props.waitingForFinalization ?
+                                `Success! As soon as your evaluation is ready, your invites will be sent to the users' emails with sign-up instructions for the ${this.state.position} position.`
+                                : `Success! Your invites have been sent to the users' emails with sign-up instructions for the ${this.state.position} position.`
+                            }
                         </div>
                         <RaisedButton
                             label="Done"
@@ -763,6 +766,7 @@ function mapStateToProps(state) {
         loading: state.users.loadingSomething,
         userPosted: state.users.userPosted,
         userPostedFailed: state.users.userPostedFailed,
+        waitingForFinalization: state.users.waitingForFinalization,
         currentUser: state.users.currentUser,
         link: state.users.link,
         modalOpen: state.users.userModalOpen

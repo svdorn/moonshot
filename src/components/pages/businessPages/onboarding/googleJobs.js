@@ -39,6 +39,13 @@ class GoogleJobs extends Component {
         this.setState({jobs});
     }
 
+    handleRemove(job) {
+        let jobs = this.state.jobs;
+        var index = jobs.indexOf(job);
+        jobs.splice(index, 1);
+        this.setState({jobs});
+    }
+
     render() {
         var key = 0;
         const jobs = this.state.jobs.map(job => {
@@ -54,7 +61,11 @@ class GoogleJobs extends Component {
                         >
                             + Add
                         </div>
-                    : null}
+                        :
+                        <div className="inlineBlock font24px secondary-red marginLeft20px clickableNoUnderline" style={{marginRight: "35px"}} onClick={() => this.handleRemove(job)}>
+                            x
+                        </div>
+                    }
                 </div>
             )
         })

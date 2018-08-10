@@ -80,6 +80,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 notification: action.notification,
+                notificationDate: new Date(),
                 currentUser: action.user,
                 loadingSomething: false
             };
@@ -95,12 +96,21 @@ export function usersReducers(state = initialState, action) {
         case "CHANGE_TEMP_PASS_REJECTED":
         case "ADD_PATHWAY_REJECTED":
         case "ADD_NOTIFICATION":
-            return {...state, notification: action.notification};
+            return {
+                ...state,
+                notification: action.notification,
+                notificationDate: new Date()
+            };
             break;
         case "NOTIFICATION_AND_STOP_LOADING":
         case "CHANGE_PASSWORD_REJECTED":
         case "LOGIN_REJECTED":
-            return {...state, notification: action.notification, loadingSomething: false};
+            return {
+                ...state,
+                notification: action.notification,
+                notificationDate: new Date(),
+                loadingSomething: false
+            };
             break;
         case "UPDATE_USER_REJECTED":
         case "UPDATE_ONBOARDING_REJECTED":
@@ -138,20 +148,23 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 userPosted: true,
-                loadingSomething: false
+                loadingSomething: false,
+                waitingForFinalization: action.waitingForFinalization
             };
             break;
         case "POST_USER_SUCCESS_EMAIL_FAIL":
             return {
                 ...state,
                 loadingSomething: false,
-                notification: action.notification
+                notification: action.notification,
+                notificationDate: new Date()
             };
             break;
         case "POST_USER_REJECTED":
             return {
                 ...state,
                 notification: action.notification,
+                notificationDate: new Date(),
                 loadingSomething: false
             };
             break;
@@ -163,6 +176,7 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 currentUser: action.currentUser,
                 notification: action.notification,
+                notificationDate: new Date(),
                 loadingSomething: false
             }
             break;
@@ -171,7 +185,11 @@ export function usersReducers(state = initialState, action) {
             break;
         case "UPDATE_USER_SETTINGS":
             return {
-                ...state, currentUser: action.user, notification: action.notification, loadingSomething: false
+                ...state,
+                currentUser: action.user,
+                notification: action.notification,
+                notificationDate: new Date(),
+                loadingSomething: false
             };
             break;
         case "UPDATE_ANSWER":
@@ -206,12 +224,15 @@ export function usersReducers(state = initialState, action) {
         case "SUCCESS_BILLING_CUSTOMER":
         case "FAILURE_BILLING_CUSTOMER":
             return {
-                ...state, notification: action.notification, loadingSomething: false
+                ...state,
+                notification: action.notification,
+                notificationDate: new Date(),
+                loadingSomething: false
             };
             break;
         case "CLOSE_NOTIFICATION":
             return {
-                ...state, notification: undefined
+                ...state, notification: undefined, notificationDate: new Date()
             }
             break;
         case "START_ONBOARDING":
@@ -252,7 +273,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "ANSWER_PSYCH_QUESTION_ERROR":
             return {
-                ...state, notification: action.notification
+                ...state, notification: action.notification, notificationDate: new Date()
             }
             break;
         case "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS":
@@ -337,7 +358,10 @@ export function usersReducers(state = initialState, action) {
         }
         case "ADD_PATHWAY":
             return {
-                ...state, currentUser: action.payload, notification: action.notification
+                ...state,
+                currentUser: action.payload,
+                notification: action.notification,
+                notificationDate: new Date()
             };
             break;
         default:

@@ -144,8 +144,8 @@ class Onboarding extends Component {
         let tab = "Candidate";
 
         const opts = {
-            height: '244',
-            width: '400',
+            height: '300',
+            width: '492',
             playerVars: { // https://developers.google.com/youtube/player_parameters
                 autoplay: 1,
                 iv_load_policy: 3
@@ -211,7 +211,7 @@ class Onboarding extends Component {
 
                 if (key < onboarding.furthestStep) {
                     body = (
-                        <div className="marginTop20px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>
+                        <div className="marginTop10px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>
                             <img
                                 alt=""
                                 src={"/icons/CheckMarkBlue" + this.props.png}
@@ -324,10 +324,17 @@ class Onboarding extends Component {
 
         return (
             <div className="fillScreen">
+                <MetaTags>
+                    <title>Onboarding | Moonshot</title>
+                    <meta name="description" content="Get your account activated and ready to start inviting candidates." />
+                </MetaTags>
                 <AddUserDialog tab={tab} />
                 <div id="employerOnboarding">
                     <div className="onboardingLeft">
                         <div>
+                            <div className="primary-white font22px font18pxUnder700 marginTop20px" style={{marginLeft: "15px"}}>
+                                Onboarding Checklist
+                            </div>
                             {checklist}
                         </div>
                     </div>
