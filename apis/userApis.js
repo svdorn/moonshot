@@ -1852,7 +1852,7 @@ async function POST_verifyEmail(req, res) {
     }
 
     // if no user found from token, can't verify
-    if (!user) { return res.status(404).send("User not found from url"); }
+    if (!user) { return res.status(404).send("Invalid url."); }
 
     // if a user was found from the token, verify them and get rid of the token
     user.verified = true;
