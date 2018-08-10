@@ -7,9 +7,21 @@ import { Paper, SvgIcon } from 'material-ui';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 
 class Notification extends Component {
-    componentDidUpdate() {
+    close() {
+        // only close the notification if the most recent notification popped up
+        // more than 4 seconds ago - this prevents the situation where a notification
+        // is x'ed out, another notification comes up within 5 seconds of the first
+        // one coming up, and then the new one immediately closing itself
+        if (this.props.notificationDate && (new Date()).getTime() - this.props.notificationDate.getTime() > 4000) {
+            this.props.closeNotification();
+        }
+    }
+
+
+    componentDidUpdate(prevProps, prevState) {
         // close after 5 seconds
-        setTimeout(function() {this.props.closeNotification()}.bind(this), 5000)
+        const self = this;
+        setTimeout(() => self.close(), 5000);
     }
 
     onCloseClick() {
@@ -54,7 +66,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        notification: state.users.notification
+        notification: state.users.notification,
+        notificationDate: state.users.notificationDate
     };
 }
 
