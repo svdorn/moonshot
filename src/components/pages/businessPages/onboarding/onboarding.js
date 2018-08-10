@@ -144,8 +144,8 @@ class Onboarding extends Component {
         let tab = "Candidate";
 
         const opts = {
-            height: '244',
-            width: '400',
+            height: '274.5',
+            width: '450',
             playerVars: { // https://developers.google.com/youtube/player_parameters
                 autoplay: 1,
                 iv_load_policy: 3
@@ -324,6 +324,10 @@ class Onboarding extends Component {
 
         return (
             <div className="fillScreen">
+                <MetaTags>
+                    <title>Onboarding | Moonshot</title>
+                    <meta name="description" content="Get your account activated and ready to start inviting candidates." />
+                </MetaTags>
                 <AddUserDialog tab={tab} />
                 <div id="employerOnboarding">
                     <div className="onboardingLeft">
