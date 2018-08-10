@@ -189,7 +189,7 @@ class Menu extends Component {
         // if the element exists
         if (element) {
             // get its y value
-            let yPosition = element.getBoundingClientRect().y;
+            let yPosition = this.distanceFromTop(element);
             // if the menu is fixed ...
             if (!nonFixedMenuPages.includes(this.props.location.pathname.toLowerCase())) {
                 // ... scroll down a bit less so that the menu isn't in the way
@@ -199,6 +199,34 @@ class Menu extends Component {
             }
             // scroll to the element
             animateScroll.scrollTo(yPosition);
+        }
+    }
+
+
+    // get the distance from an element to the top of the page
+    distanceFromTop(element) {
+        try {
+            // set initial distance to top to 0
+            let distance = 0;
+            // if the element has a parent (everything except the top element,
+            // whose offset must be 0) ...
+            if (element.offsetParent) {
+                // go up through every layer in the hierarchy
+                do {
+                    // get the distance from the current element to its parent
+                    distance += element.offsetTop;
+                    // set the current element to its parent
+                    element = element.offsetParent;
+                }
+                // continue to do this until the top element has been reached
+                while (element);
+            }
+            // return the distance - return 0 if the distance is < 0 due to rounding
+            return distance < 0 ? 0 : distance;
+        }
+        catch (e) {
+            console.log("Error getting distance from top of page: ", e);
+            return 0;
         }
     }
 
