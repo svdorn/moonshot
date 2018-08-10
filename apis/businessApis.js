@@ -198,6 +198,7 @@ async function createAccountAdmin(info) {
         user.notifications.lastSent = NOW;
         user.notifications.time = "Daily";
         user.notifications.waiting = false;
+        user.notifications.firstTime = true;
         // user will have to do business onboarding
         user.hasFinishedOnboarding = false;
         user.onboarding = {
