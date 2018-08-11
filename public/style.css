@@ -4335,6 +4335,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .blurred {
     filter: blur(10px);
 }
+.slightly-blurred {
+    filter: blur(5px);
+}
 .noBlur {
     filter: none;
 }
