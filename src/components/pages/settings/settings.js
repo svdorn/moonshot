@@ -6,7 +6,6 @@ import PasswordChange from "./passwordchange";
 import Account from "./account";
 import ApiKey from "./apiKey";
 import Notifications from './notifications';
-import HomepageTriangles from "../../miscComponents/HomepageTriangles";
 import MetaTags from "react-meta-tags";
 import AddUserDialog from "../../childComponents/addUserDialog";
 import { addNotification } from "../../../actions/usersActions"
@@ -54,7 +53,6 @@ class Settings extends Component {
                     <title>Settings | Moonshot</title>
                     <meta name="description" content="Change your Moonshot account settings." />
                 </MetaTags>
-                <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>
                 <div className="formContainer center">
                     <div className="form lightBlackForm noBlur">
                     <div className="font32px font28pxUnder700 primary-cyan marginTop10px">Settings</div>

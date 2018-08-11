@@ -7,7 +7,8 @@ import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
 import {signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal} from "../actions/usersActions";
 import { isValidEmail, goTo } from "../miscFunctions";
-import {axios} from 'axios';
+import { axios } from 'axios';
+import { animateScroll } from "react-scroll";
 
 const styles = {
     title: {
@@ -21,6 +22,15 @@ const styles = {
         horizontal: 'left'
     }
 };
+
+
+// pages that have a header but don't show the header shadow
+const noShadowPages = ["businesssignup"];
+// pages where the menu scrolls with the page
+const nonFixedMenuPages = ["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "businesssignup"];
+// pages that don't have a header at all
+const noMenuPages = ["chatbot"];
+
 
 class Menu extends Component {
     constructor(props) {
@@ -38,19 +48,28 @@ class Menu extends Component {
         const position = '';
 
         // set the initial state
-        this.state = {dropDownSelected, headerClass, position};
+        this.state = {
+            dropDownSelected,
+            headerClass,
+            position,
+            waitingForScroll: {
+                page: undefined,
+                anchor: undefined
+            }
+        };
     }
 
     componentDidUpdate() {
-        if (this.props.location.pathname === '/settings') {
+        const pathname = this.props.location.pathname.toLowerCase();
+        if (pathname === '/settings') {
             if (this.state.dropDownSelected !== "Settings") {
                 this.setState({dropDownSelected: "Settings"});
             }
-        } else if (this.props.location.pathname.toLowerCase() === '/adduser') {
+        } else if (pathname === '/adduser') {
             if (this.state.dropDownSelected !== "Add User") {
                 this.setState({dropDownSelected: "Add User"});
             }
-        } else if (this.props.location.pathname === '/billing') {
+        } else if (pathname === '/billing') {
             if (this.state.dropDownSelected !== "Billing") {
                 this.setState({dropDownSelected: "Billing"})
             }
@@ -58,6 +77,21 @@ class Menu extends Component {
             // set dropdown to be on Profile if not on settings or onboarding pages
             if (this.state.dropDownSelected !== "Account") {
                 this.setState({dropDownSelected: "Account"});
+            }
+        }
+
+        const wfs = this.state.waitingForScroll;
+        // if we were waiting for a redirect to scroll
+        if (wfs && wfs.page && wfs.anchor) {
+            // if we are on the page that wants to be scrolled through ...
+            if (pathname === wfs.page.toLowerCase()) {
+                // ... set the state so we aren't waiting anymore ...
+                this.setState({ waitingForScroll: {} });
+                // ... wait a moment for the user to get used to the page ...
+                setTimeout(() => {
+                    // ... and scroll to the wanted anchor
+                    this.scrollToAnchor(wfs.anchor);
+                }, 50);
             }
         }
     }
@@ -68,13 +102,6 @@ class Menu extends Component {
         let currentUser = this.props.currentUser;
         switch (value) {
             case "Sign Out":
-                //special case, user is signing out while on onboarding,
-                // don't mark onboarding complete yet
-                // if (this.props.location.pathname === '/onboarding') {
-                //     const markOnboardingComplete = false;
-                //     this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
-                // }
-
                 // always sign out when sign out clicked
                 this.props.signout();
                 goTo("/");
@@ -132,15 +159,64 @@ class Menu extends Component {
     }
 
     handleAnchorClick(anchor, wantedPath) {
-        if (this.props.location.pathname != wantedPath) {
+        // if we aren't on the wanted path ...
+        if (this.props.location.pathname.toLowerCase() != wantedPath.toLowerCase()) {
+            // ... mark that we are waiting until we're on a new page to scroll ...
+            this.setState({ waitingForScroll: { page: wantedPath, anchor } });
+            // ... and redirect to that page
             goTo(wantedPath);
         }
-        setTimeout(() => {
-            const element = document.getElementById(anchor);
-            if (element) {
-                element.scrollIntoView({behavior: "smooth", block:"start"});
+        // if we are already on the wanted path, scroll to the wanted anchor
+        else { this.scrollToAnchor(anchor); }
+    }
+
+
+    // scroll to an anchor on the current page, if it exists
+    scrollToAnchor(anchor) {
+        // get the element we want to scroll to
+        const element = document.getElementById(anchor);
+        // if the element exists
+        if (element) {
+            // get its y value
+            let yPosition = this.distanceFromTop(element);
+            // if the menu is fixed ...
+            if (!nonFixedMenuPages.includes(this.props.location.pathname.toLowerCase())) {
+                // ... scroll down a bit less so that the menu isn't in the way
+                yPosition -= 50;
+                // make sure we're scrolling to to a valid position
+                if (yPosition < 0) { yPosition = 0; }
             }
-        }, 20);
+            // scroll to the element
+            animateScroll.scrollTo(yPosition);
+        }
+    }
+
+
+    // get the distance from an element to the top of the page
+    distanceFromTop(element) {
+        try {
+            // set initial distance to top to 0
+            let distance = 0;
+            // if the element has a parent (everything except the top element,
+            // whose offset must be 0) ...
+            if (element.offsetParent) {
+                // go up through every layer in the hierarchy
+                do {
+                    // get the distance from the current element to its parent
+                    distance += element.offsetTop;
+                    // set the current element to its parent
+                    element = element.offsetParent;
+                }
+                // continue to do this until the top element has been reached
+                while (element);
+            }
+            // return the distance - return 0 if the distance is < 0 due to rounding
+            return distance < 0 ? 0 : distance;
+        }
+        catch (e) {
+            console.log("Error getting distance from top of page: ", e);
+            return 0;
+        }
     }
 
 
@@ -160,13 +236,6 @@ class Menu extends Component {
 
     render() {
         let self = this;
-
-        // pages that have a header but don't show the header shadow
-        const noShadowPages = ["businesssignup"];
-        // pages where the menu scrolls with the page
-        const fixedMenuPages = ["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "businesssignup"];
-        // pages that don't have a header at all
-        const noMenuPages = ["chatbot"];
 
         let isEmployer = false;
         let currentUser = this.props.currentUser;
@@ -252,7 +321,7 @@ class Menu extends Component {
             } else if (pathname === '/billing') {
                 dropdownClass += " currentRoute";
                 underlineWidth = "46px";
-            } else if (fixedMenuPages.includes(pathFirstPart)){
+            } else if (nonFixedMenuPages.includes(pathFirstPart)){
                 additionalHeaderClass += " notFixed";
             }
         }
@@ -299,23 +368,15 @@ class Menu extends Component {
         // if there is no user logged in
         else if (!currentUser) {
             loggedInClass = " loggedOut";
+            menuOptions = [
+                {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
+                {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
+                {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
+                {optionType: "separator"},
+                {optionType: "url", title: "Log In", url: "/login"},
+            ];
             if (pathname === "/") {
-                menuOptions = [
-                    {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                    {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
-                    {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
-                    {optionType: "separator"},
-                    {optionType: "url", title: "Log In", url: "/login"},
-                    {optionType: "button", title: "Enter a position"}
-                ];
-            } else {
-                menuOptions = [
-                    {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
-                    {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
-                    {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
-                    {optionType: "separator"},
-                    {optionType: "url", title: "Log In", url: "/login"},
-                ];
+                menuOptions.push({optionType: "button", title: "Enter a position"});
             }
         }
         // if the current user is an account admin for a business
@@ -499,7 +560,7 @@ class Menu extends Component {
                         positionUrl = "?position=" + self.state.position;
                     }
                     desktopMenu.push(
-                        <div className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
+                        <div key="tryForFreeButton" className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
                             <input className="blackInput getStarted secondary-gray-important" type="text" placeholder="Enter a position..." name="position" value={self.state.position} onChange={self.onChange.bind(self)}
                             />
                             <div className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}} onClick={() => goTo("/chatbot" + positionUrl)}>
@@ -600,6 +661,7 @@ class Menu extends Component {
         );
     }
 }
+
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
