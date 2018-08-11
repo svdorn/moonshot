@@ -72,6 +72,16 @@ class InfluencerPredictiveGraph extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.bound_updateWindowDimensions);
+
+        // get the container element
+        let container = document.getElementById(this.props.containerName);
+        // if the element is found
+        if (container) {
+            // get the event that fires on transition end
+            const transitionEnd = this.whichTransitionEvent();
+            // remove the listener on it
+            container.removeEventListener(transitionEnd, this.bound_updateWindowDimensions)
+        }
     }
 
 
