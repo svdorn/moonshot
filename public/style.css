@@ -3919,6 +3919,10 @@ button.link {
     background-color: #3c3c3c;
     padding-top: 20px;
 }
+.footer-container {
+    z-index: 1000;
+    position: relative;
+}
 
 .resultsHiringStage {
     padding-left: 32px;
