@@ -5807,7 +5807,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 131px;
     }
     .candidateResults .resultsContent {
-        height: calc(100vh - 325px);
+        height: calc(100vh - 349px);
     }
 
     .psychAnalysisQuestion {
@@ -6372,7 +6372,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: inline-block;
     }
     .candidateResults .resultsContent {
-        height: calc(100vh - 362px);
+        height: calc(100vh - 386px);
     }
     .mobile.candidateResults .resultsHeader {
         height: 168px;
