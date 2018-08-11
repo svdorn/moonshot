@@ -18,6 +18,8 @@ class CandidateResults extends Component {
     constructor(props) {
         super(props);
 
+        this.bound_updateGraphHeight = this.updateGraphHeight.bind(this);
+
         this.state = {
             candidate: {},
             overallScore: undefined,
@@ -51,7 +53,7 @@ class CandidateResults extends Component {
         // set the height of the graphs
         this.setState({ graphHeight: this.getGraphHeight() });
         // set resize listener
-        window.addEventListener('resize', this.updateGraphHeight.bind(this));
+        window.addEventListener('resize', this.bound_updateGraphHeight);
         // get the candidate's results
         this.reset();
     }
@@ -153,7 +155,7 @@ class CandidateResults extends Component {
 
 
     componentWillUnmount() {
-        window.addEventListener('resize', this.updateGraphHeight.bind(this));
+        window.removeEventListener('resize', this.bound_updateGraphHeight);
     }
 
 

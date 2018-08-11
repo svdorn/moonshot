@@ -18,6 +18,8 @@ class EmployeeResults extends Component {
     constructor(props) {
         super(props);
 
+        this.bound_updateWindowDimensions = this.updateWindowDimensions.bind(this);
+
         this.state = {
             candidate: {},
             overallScore: undefined,
@@ -34,7 +36,7 @@ class EmployeeResults extends Component {
 
     componentDidMount() {
         // set resize listener
-        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+        window.addEventListener('resize', this.bound_updateWindowDimensions);
 
         let candidateId = "";
         let businessId = "";
@@ -124,7 +126,7 @@ class EmployeeResults extends Component {
 
 
     componentWillUnmount() {
-        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+        window.addEventListener('resize', this.bound_updateWindowDimensions);
     }
 
 
