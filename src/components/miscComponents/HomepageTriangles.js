@@ -99,9 +99,9 @@ class HomepageTriangles extends Component {
             counter++;
             return (
                 <div className={"triangle" + t.className} key={"triangle" + counter} style={{
-                    top: t.top,
-                    right: t.right,
-                    left: t.left,
+                    //top: t.top,
+                    //right: t.right,
+                    //left: t.left,
                     zIndex: "-10",
                     transform: "rotate("+t.rotate+"deg) scale("+t.scale+", "+(t.scale*.6)+")"
                 }}/>
@@ -112,7 +112,7 @@ class HomepageTriangles extends Component {
             <div className={"jsxWrapper " + this.props.className} style={{position:"relative", width:"100%", zIndex:zIndex, pointerEvents:"none"}}>
                 <div style={{position:"absolute", width:"100%", pointerEvents:"none"}}>
                     <div className="fullHeight" style={{position:"relative", pointerEvents:"none"}}>
-                        <div className="above800fade">
+                        <div className="above800fade homepage-triangles">
                             {triangles}
                             {whiteSpace}
                         </div>

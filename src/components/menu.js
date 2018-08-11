@@ -159,7 +159,6 @@ class Menu extends Component {
     }
 
     handleAnchorClick(anchor, wantedPath) {
-        console.log("anchor clicked");
         // if we aren't on the wanted path ...
         if (this.props.location.pathname.toLowerCase() != wantedPath.toLowerCase()) {
             // ... mark that we are waiting until we're on a new page to scroll ...

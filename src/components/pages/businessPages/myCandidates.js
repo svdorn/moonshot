@@ -43,6 +43,10 @@ class MyCandidates extends Component {
         // if a url query is telling us which position should be selected first
         let positionNameFromUrl = props.location.query && props.location.query.position ? props.location.query.position : undefined;
 
+        // bind 'this' to the resize and keyup functions
+        this.bound_handleResize = this.handleResize.bind(this);
+        this.bound_handleKeyPress = this.handleKeyPress.bind(this);
+
         this.state = {
             // what is entered in the name search bar
             searchTerm: "",
@@ -91,10 +95,10 @@ class MyCandidates extends Component {
     componentDidMount() {
         let self = this;
         // set an event listener for key presses
-        document.addEventListener('keyup', this.handleKeyPress.bind(this));
+        document.addEventListener('keyup', this.bound_handleKeyPress);
         // set an event listener for window resizing to see if mobile or desktop
         // view should be shown
-        window.addEventListener("resize", this.handleResize.bind(this));
+        window.addEventListener("resize", this.bound_handleResize);
         // get the open positions that this business has
         axios.get("/api/business/positions", {
             params: {
@@ -151,8 +155,8 @@ class MyCandidates extends Component {
 
     // remove all event listeners
     componentWillUnmount() {
-        document.removeEventListener('keyup', this.handleKeyPress.bind(this));
-        window.removeEventListener("resize", this.handleResize.bind(this));
+        document.removeEventListener('keyup', this.bound_handleKeyPress);
+        window.removeEventListener("resize", this.bound_handleResize);
     }
 
 
