@@ -239,7 +239,7 @@ class Signup extends Component {
                         <TermsOfUse/>
                     </Dialog>
                     <ContactUsDialog />
-                    <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>
+                    <HomepageTriangles className="slightly-blurred" style={{pointerEvents: "none"}} variation="5"/>
                     <div className="form lightBlackForm">
                         {this.state.email != "" && this.props.userPosted ?
                             <div className="center">

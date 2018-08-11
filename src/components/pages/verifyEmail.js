@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { addNotification, updateUser } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { goTo } from "../../miscFunctions";
@@ -85,7 +84,6 @@ class VerifyEmail extends Component {
                     <title>Verify Email | Moonshot</title>
                     <meta name="description" content="Verify your email to get started on your path to finding the perfect job." />
                 </MetaTags>
-                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="5" />
                 <div className="form lightBlackForm">
                     <h1 className="primary-white marginTop20px">Verify Email</h1>
                     { status }

@@ -6,7 +6,6 @@ import {  } from '../../../actions/usersActions';
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
 import AddUserDialog from '../../childComponents/addUserDialog';
-import HomepageTriangles from '../../miscComponents/HomepageTriangles';
 import BillingForm from '../../childComponents/billingForm';
 
 class Billing extends Component {
@@ -24,7 +23,6 @@ class Billing extends Component {
                     <meta name="description" content="Manage your current bills and enter credit card information to pay bills." />
                 </MetaTags>
                 <AddUserDialog />
-                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="5" />
                 <Elements>
                     <BillingForm />
                 </Elements>
