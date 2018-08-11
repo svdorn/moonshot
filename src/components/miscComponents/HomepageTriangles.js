@@ -103,7 +103,7 @@ class HomepageTriangles extends Component {
                     //right: t.right,
                     //left: t.left,
                     zIndex: "-10",
-                    transform: "rotate("+t.rotate+"deg) scale("+t.scale+", "+(t.scale*.6)+")"
+                    //transform: "rotate("+t.rotate+"deg) scale("+t.scale+", "+(t.scale*.6)+")"
                 }}/>
             )
         })

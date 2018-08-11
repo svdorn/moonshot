@@ -4563,6 +4563,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -20%;
     --triangle-right-start: -20%;
     --triangle-right-end: 90%;
+    --triangle-scale: 1;
     animation: triangle-animation ease-in 10s backwards infinite;
 }
 
@@ -4571,6 +4572,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -20%;
     --triangle-right-start: -20%;
     --triangle-right-end: 90%;
+    --triangle-scale: .4;
     animation-duration: 8s;
     animation-delay: 1s;
 }
@@ -4579,6 +4581,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -50%;
     --triangle-right-start: -25%;
     --triangle-right-end: 75%;
+    --triangle-scale: .8;
     animation-delay: 2s;
 }
 .homepage-triangles .triangle:nth-child(3) {
@@ -4586,6 +4589,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -10%;
     --triangle-right-start: -15%;
     --triangle-right-end: 105%;
+    --triangle-scale: .6;
     animation-duration: 12s;
     animation-delay: 2.4s;
 }
@@ -4594,6 +4598,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -20%;
     --triangle-right-start: -30%;
     --triangle-right-end: 60%;
+    --triangle-scale: .4;
     animation-duration: 7s;
     animation-delay: 4s;
 }
@@ -4602,6 +4607,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -20%;
     --triangle-right-start: -30%;
     --triangle-right-end: 110%;
+    --triangle-scale: 1.2;
     animation-delay: 4.8s;
 }
 .homepage-triangles .triangle:nth-child(6) {
@@ -4609,6 +4615,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -20%;
     --triangle-right-start: -30%;
     --triangle-right-end: 90%;
+    --triangle-scale: .6;
     animation-delay: 6s;
 }
 .homepage-triangles .triangle:nth-child(7) {
@@ -4616,6 +4623,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -10%;
     --triangle-right-start: -10%;
     --triangle-right-end: 130%;
+    --triangle-scale: .8;
     animation-duration: 6s;
     animation-delay: 7.2s;
 }
@@ -4624,6 +4632,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -20%;
     --triangle-right-start: -20%;
     --triangle-right-end: 90%;
+    --triangle-scale: .2;
     animation-delay: 8s;
 }
 .homepage-triangles .triangle:nth-child(9) {
@@ -4631,6 +4640,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -20%;
     --triangle-right-start: -30%;
     --triangle-right-end: 60%;
+    --triangle-scale: .9;
     animation-duration: 12s;
     animation-delay: 9s;
 }
@@ -4639,6 +4649,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-top-end: -10%;
     --triangle-right-start: -10%;
     --triangle-right-end: 120%;
+    --triangle-scale: .7;
     animation-delay: 9.8s;
 }
 
@@ -4646,10 +4657,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     0% {
         top: var(--triangle-top-start);
         right: var(--triangle-right-start);
+        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * .6));
     }
     100% {
         top: var(--triangle-top-end);
         right: var(--triangle-right-end);
+        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * .6));
     }
 }
 
