@@ -1211,7 +1211,7 @@ class MyCandidates extends Component {
         let positionId = this.state.positionId;
 
         const tabs = (
-            <div className="center" style={{position:"relative", marginTop:"10px"}}>
+            <div className="center" style={{position:"relative", marginTop:"28px"}}>
                 <div className="myCandidatesTabs">
                     { this.tabParts() }
                 </div>

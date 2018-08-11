@@ -112,7 +112,7 @@ header {
 header.noShadow { box-shadow: none; }
 header + div.headerSpace {
     width: 100%;
-    height: 90px;
+    height: 72px;
 }
 header.notFixed { position: relative; }
 header.notFixed + div.headerSpace { height: 18px; }
@@ -968,7 +968,7 @@ form > h1 {
 
 .businessHome.frontPage {
     position: relative;
-    padding-top: 120px;
+    padding-top: 138px;
     /* padding-bottom: 200px; */
     padding-bottom: 75px;
 }
@@ -5683,7 +5683,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     header { position: relative; }
     header + div.headerSpace {
         width: 100%;
-        height: 18px;
+        height: 0px;
     }
     .messageHeader { margin-top: -70px; }
 
