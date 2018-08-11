@@ -26,6 +26,10 @@ class PsychSlider extends Component {
         if (typeof width === "string") { width = parseInt(width, 10) };
         if (typeof height === "string") { height = parseInt(height, 10) };
 
+        this.bound_onMouseUp = this.onMouseUp.bind(this);
+        this.bound_onMouseMove = this.onMouseMove.bind(this);
+        this.bound_onTouchMove = this.onTouchMove.bind(this);
+
         this.state = {
             // the id of the question currently being answered; need this because
             // when it changes we will reset the score to 0
@@ -42,16 +46,16 @@ class PsychSlider extends Component {
 
     // user has to be able to unclick while outside the slider's div
     componentDidMount() {
-        window.addEventListener("mouseup", this.onMouseUp.bind(this));
-        window.addEventListener("mousemove", this.onMouseMove.bind(this));
-        window.addEventListener("touchend", this.onMouseUp.bind(this));
-        window.addEventListener("touchmove", this.onTouchMove.bind(this));
+        window.addEventListener("mouseup", this.bound_onMouseUp);
+        window.addEventListener("mousemove", this.bound_onMouseMove);
+        window.addEventListener("touchend", this.bound_onMouseUp);
+        window.addEventListener("touchmove", this.bound_onTouchMove);
     }
     componentWillUnmount() {
-        window.removeEventListener("mouseup", this.onMouseUp.bind(this));
-        window.removeEventListener("mousemove", this.onMouseMove.bind(this));
-        window.removeEventListener("touchend", this.onMouseUp.bind(this));
-        window.removeEventListener("touchmove", this.onTouchMove.bind(this));
+        window.removeEventListener("mouseup", this.bound_onMouseUp);
+        window.removeEventListener("mousemove", this.bound_onMouseMove);
+        window.removeEventListener("touchend", this.bound_onMouseUp);
+        window.removeEventListener("touchmove", this.bound_onTouchMove);
     }
 
 

@@ -14,6 +14,8 @@ class PsychAnalysis extends Component {
     constructor(props) {
         super(props);
 
+        this.bound_resized = this.resized.bind(this);
+
         // start out with the slider in the middle
         this.state = {
             answer: 0,
@@ -30,12 +32,12 @@ class PsychAnalysis extends Component {
             this.goTo("/login");
         }
 
-        window.addEventListener("resize", this.resized.bind(this));
+        window.addEventListener("resize", this.bound_resized);
     }
 
 
     componentWillUnmount() {
-        window.removeEventListener("resize", this.resized.bind(this));
+        window.removeEventListener("resize", this.bound_resized);
     }
 
 

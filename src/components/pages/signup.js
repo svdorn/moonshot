@@ -40,6 +40,8 @@ class Signup extends Component {
     constructor(props) {
         super(props);
 
+        this.bound_handleKeyPress = this.handleKeyPress.bind(this);
+
         this.state = {
             email: "",
             agreeingToTerms: false,
@@ -57,8 +59,7 @@ class Signup extends Component {
 
     componentDidMount() {
         // add listener for keyboard enter key
-        const self = this;
-        document.addEventListener('keypress', self.handleKeyPress.bind(self));
+        document.addEventListener('keypress', this.bound_handleKeyPress);
 
         this.props.onSignUpPage();
     }
@@ -66,8 +67,7 @@ class Signup extends Component {
 
     componentWillUnmount() {
         // remove listener for keyboard enter key
-        const self = this;
-        document.removeEventListener('keypress', self.handleKeyPress.bind(self));
+        document.removeEventListener('keypress', this.bound_handleKeyPress);
     }
 
 
@@ -80,7 +80,7 @@ class Signup extends Component {
 
 
     handleSubmit(e) {
-        e.preventDefault();
+        if (e) { e.preventDefault(); }
 
         if (!this.state.agreeingToTerms) {
             this.props.addNotification("Must agree to Terms of Use and Privacy Policy.", "error");
