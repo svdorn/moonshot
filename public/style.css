@@ -4566,12 +4566,22 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .greenTriangle::after { background: var(--primary-cyan); }
 
 .homepage-triangles .triangle {
+    /* DEFAULTS */
     --triangle-top-start: 90%;
     --triangle-top-end: -20%;
     --triangle-right-start: -20%;
     --triangle-right-end: 90%;
     --triangle-scale: 1;
-    animation: triangle-animation ease-in 10s backwards infinite;
+    --triangle-delay: 0s;
+    --triangle-duration: 10s;
+    /* SO THAT THE TRIANGLES JUST DON'T SHOW UP IF ANIMATION ISN'T SUPPORTED */
+    top: 120%;
+    right: -20%;
+    /* ANIMATE THE TRIANGLES */
+    -webkit-animation: triangle-animation ease-in var(--triangle-duration) var(--triangle-delay) backwards infinite;
+    -moz-animation:    triangle-animation ease-in var(--triangle-duration) var(--triangle-delay) backwards infinite;
+    -o-animation:      triangle-animation ease-in var(--triangle-duration) var(--triangle-delay) backwards infinite;
+    animation:         triangle-animation ease-in var(--triangle-duration) var(--triangle-delay) backwards infinite;
 }
 
 .homepage-triangles .triangle:nth-child(1) {
@@ -4580,8 +4590,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-right-start: -20%;
     --triangle-right-end: 90%;
     --triangle-scale: .4;
-    animation-duration: 8s;
-    animation-delay: 1s;
+    --triangle-duration: 8s;
+    --triangle-delay: 1s;
 }
 .homepage-triangles .triangle:nth-child(2) {
     --triangle-top-start: 50%;
@@ -4589,7 +4599,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-right-start: -25%;
     --triangle-right-end: 75%;
     --triangle-scale: .8;
-    animation-delay: 2s;
+    --triangle-delay: 2s;
 }
 .homepage-triangles .triangle:nth-child(3) {
     --triangle-top-start: 110%;
@@ -4597,8 +4607,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-right-start: -15%;
     --triangle-right-end: 105%;
     --triangle-scale: .6;
-    animation-duration: 12s;
-    animation-delay: 2.4s;
+    --triangle-duration: 12s;
+    --triangle-delay: 2.4s;
 }
 .homepage-triangles .triangle:nth-child(4) {
     --triangle-top-start: 70%;
@@ -4606,8 +4616,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-right-start: -30%;
     --triangle-right-end: 60%;
     --triangle-scale: .4;
-    animation-duration: 7s;
-    animation-delay: 4s;
+    --triangle-duration: 7s;
+    --triangle-delay: 4s;
 }
 .homepage-triangles .triangle:nth-child(5) {
     --triangle-top-start: 120%;
@@ -4615,7 +4625,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-right-start: -30%;
     --triangle-right-end: 110%;
     --triangle-scale: 1.2;
-    animation-delay: 4.8s;
+    --triangle-delay: 4.8s;
 }
 .homepage-triangles .triangle:nth-child(6) {
     --triangle-top-start: 100%;
@@ -4623,7 +4633,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-right-start: -30%;
     --triangle-right-end: 90%;
     --triangle-scale: .6;
-    animation-delay: 6s;
+    --triangle-delay: 6s;
 }
 .homepage-triangles .triangle:nth-child(7) {
     --triangle-top-start: 130%;
@@ -4631,8 +4641,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-right-start: -10%;
     --triangle-right-end: 130%;
     --triangle-scale: .8;
-    animation-duration: 6s;
-    animation-delay: 7.2s;
+    --triangle-duration: 6s;
+    --triangle-delay: 7.2s;
 }
 .homepage-triangles .triangle:nth-child(8) {
     --triangle-top-start: 90%;
@@ -4640,7 +4650,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-right-start: -20%;
     --triangle-right-end: 90%;
     --triangle-scale: .2;
-    animation-delay: 8s;
+    --triangle-delay: 8s;
 }
 .homepage-triangles .triangle:nth-child(9) {
     --triangle-top-start: 70%;
@@ -4648,8 +4658,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-right-start: -30%;
     --triangle-right-end: 60%;
     --triangle-scale: .9;
-    animation-duration: 12s;
-    animation-delay: 9s;
+    --triangle-duration: 12s;
+    --triangle-delay: 9s;
 }
 .homepage-triangles .triangle:nth-child(10) {
     --triangle-top-start: 120%;
@@ -4657,9 +4667,45 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     --triangle-right-start: -10%;
     --triangle-right-end: 120%;
     --triangle-scale: .7;
-    animation-delay: 9.8s;
+    --triangle-delay: 9.8s;
 }
 
+@-webkit-keyframes triangle-animation {
+    0% {
+        top: var(--triangle-top-start);
+        right: var(--triangle-right-start);
+        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * .6));
+    }
+    100% {
+        top: var(--triangle-top-end);
+        right: var(--triangle-right-end);
+        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * .6));
+    }
+}
+@-moz-keyframes triangle-animation {
+    0% {
+        top: var(--triangle-top-start);
+        right: var(--triangle-right-start);
+        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * .6));
+    }
+    100% {
+        top: var(--triangle-top-end);
+        right: var(--triangle-right-end);
+        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * .6));
+    }
+}
+@-o-keyframes triangle-animation {
+    0% {
+        top: var(--triangle-top-start);
+        right: var(--triangle-right-start);
+        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * .6));
+    }
+    100% {
+        top: var(--triangle-top-end);
+        right: var(--triangle-right-end);
+        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * .6));
+    }
+}
 @keyframes triangle-animation {
     0% {
         top: var(--triangle-top-start);
