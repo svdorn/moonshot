@@ -126,7 +126,7 @@ class EmployeeResults extends Component {
 
 
     componentWillUnmount() {
-        window.addEventListener('resize', this.bound_updateWindowDimensions);
+        window.removeEventListener('resize', this.bound_updateWindowDimensions);
     }
 
 
