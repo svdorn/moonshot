@@ -24,7 +24,7 @@ class PredictiveGraph extends Component {
 
         // need to keep track of width because this will change where the points are
         this.state = { width, interiorWidth };
-        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+        this.bound_updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
 
 
@@ -60,18 +60,18 @@ class PredictiveGraph extends Component {
             const transitionEnd = this.whichTransitionEvent();
             // listen for a transition on it; this will make it so the graph can
             // update immediately on container resize intead of 1px later
-            container.addEventListener(transitionEnd, this.updateWindowDimensions)
+            container.addEventListener(transitionEnd, this.bound_updateWindowDimensions)
         }
         // otherwise, update the width according to the window's width
         else {
             this.updateWindowDimensions();
         }
-        window.addEventListener('resize', this.updateWindowDimensions);
+        window.addEventListener('resize', this.bound_updateWindowDimensions);
     }
 
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.updateWindowDimensions);
+        window.removeEventListener('resize', this.bound_updateWindowDimensions);
     }
 
 
