@@ -5,7 +5,6 @@ import {bindActionCreators} from 'redux';
 import {changePasswordForgot} from '../../actions/usersActions';
 import {TextField, CircularProgress, RaisedButton} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
-import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
 
 const style = {
@@ -89,7 +88,6 @@ class PasswordChange extends Component {
                     <title>New Password | Moonshot</title>
                     <meta name="description" content="Reset your Moonshot password. It's okay - we all forget things sometimes." />
                 </MetaTags>
-                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1 style={{marginTop:"15px"}}>Change Password</h1>
