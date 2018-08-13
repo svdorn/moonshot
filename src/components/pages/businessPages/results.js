@@ -5,7 +5,6 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
-import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';

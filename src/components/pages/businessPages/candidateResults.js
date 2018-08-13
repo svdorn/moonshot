@@ -7,7 +7,6 @@ import {bindActionCreators} from 'redux';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
-import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
 import PsychBreakdown from '../../childComponents/psychBreakdown';

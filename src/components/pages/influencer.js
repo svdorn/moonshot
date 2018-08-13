@@ -5,7 +5,6 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {Tabs, Tab, Slider, CircularProgress,Divider, Dialog, FlatButton} from 'material-ui';
-import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
