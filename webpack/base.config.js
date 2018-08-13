@@ -1,7 +1,7 @@
 var path = require('path');
 const webpack = require('webpack');
 
-//const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 console.log("__dirname: ", __dirname);
 
@@ -42,7 +42,9 @@ module.exports = {
                     // allow css modules for component-specific css files
                     modules: true,
                     // how to rename locally-scoped styles
-                    localIdentName: "[name]__[local]___[hash:base64:5]"
+                    localIdentName: "[path]___[name]__[local]___[hash:base64:5]",
+                    // how many import loaders will be used on the css
+                    importLoaders: 1
                 }
             },
             {
@@ -58,9 +60,13 @@ module.exports = {
                 loader: 'babel-loader',
                 query: {
                     presets: ['react', 'es2015', 'stage-1'],
-                    // plugins: [
-                    //     "babel-plugin-react-css-modules"
-                    // ]
+                    plugins: [
+                        "transform-react-jsx",
+                        [
+                            "react-css-modules",
+                            { context }
+                        ]
+                    ]
                 },
             }
         ]

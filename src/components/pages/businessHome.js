@@ -16,7 +16,7 @@ import { isValidEmail, goTo } from "../../miscFunctions";
 import HoverTip from '../miscComponents/hoverTip';
 
 // TODO: remove this
-import styles from "./businessHome.css";
+import "./businessHome.css";
 
 
 let rectangleKeyIndex = 0;
@@ -600,7 +600,7 @@ class BusinessHome extends Component {
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
                 </MetaTags>
                 <div className="blackBackground businessHome">
-                    <div className={styles.jingleBoi}>WHADDUP</div>
+                    <div styleName="jingle-boi">WHADDUP</div>
 
                     { this.introductionSection() }
 
