@@ -22,15 +22,18 @@ module.exports = {
                 ]
             },
             {
-                test:/\.js$/,
                 exclude:[
                     /node_modules/,
                     path.resolve(__dirname, "../credentials.js"),
                 ],
                 loader: 'babel-loader',
                 query: {
-                    presets: ['react', 'es2015', 'stage-1']
-                }
+                    presets: ['react', 'es2015', 'stage-1'],
+                    plugins: [
+                        "react-css-modules"
+                    ]
+                },
+                test:/\.js$/,
             }
         ]
     }
