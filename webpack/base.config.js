@@ -12,11 +12,20 @@ module.exports = {
     ],
     module: {
         rules: [
+            // change all the local css to be global with a prefix
+            {
+                test: /\.css$/,
+                include: path.resolve(__dirname, '../src'),
+                loaders: [
+                    "style-loader",
+                    "css-loader?importLoader=1&modules&localIdentName=[path]___[name]__[local]___[hash:base64:5]"
+                ]
+            },
             {
                 test:/\.js$/,
                 exclude:[
                     /node_modules/,
-                    path.resolve(__dirname, "./credentials.js"),
+                    path.resolve(__dirname, "../credentials.js"),
                 ],
                 loader: 'babel-loader',
                 query: {
