@@ -19,6 +19,8 @@ import { bindActionCreators } from 'redux';
 import FixedOnboardingProgress from "./components/miscComponents/fixedOnboardingProgress";
 // so that axios works in IE < 11
 require('es6-promise').polyfill();
+// get all the global styles
+//import "./styles/global.css"
 
 let theme = {
     // this messes with the slider colors

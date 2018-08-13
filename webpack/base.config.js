@@ -1,6 +1,8 @@
 var path = require('path');
 const webpack = require('webpack');
 
+//const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 console.log("__dirname: ", __dirname);
 
 let pathSections = __dirname.split("/");
@@ -12,31 +14,54 @@ const context = path.resolve(homeDirectory, "src");
 console.log("context: ", context);
 
 module.exports = {
+    // set default location for everything done in webpack to be /src
     context,
+    // where everything starts
     entry: './client.js',
-    plugins: [
-        new webpack.IgnorePlugin(/credentials.js|node_modules/)
-    ],
     module: {
+        // what to do with different type of files
         rules: [
             {
+                // search through every file in the src directory
+                include: context,
+                // select only the .css files
                 test: /\.css$/,
-                exclude: /node_modules/,
-                loader: "style-loader!css-loader?modules=true&importLoaders=1&localIdentName=[path]__[name]__[local]___[hash:base64:5]"
+                // used AFTER css-loader; takes the string generated from
+                // css-loader and adds it to the DOM with a <script> tag
+                loader: "style-loader"
             },
             {
-                exclude:[
-                    /node_modules/,
-                    path.resolve(__dirname, "../credentials.js"),
-                ],
+                // search through every file in the src directory
+                include: context,
+                // select only the .css files
+                test: /\.css$/,
+                // parses and converts the all css files into a big ol' string
+                loader: "css-loader",
+                // css-loader options
+                query: {
+                    // allow css modules for component-specific css files
+                    modules: true,
+                    // how to rename locally-scoped styles
+                    localIdentName: "[name]__[local]___[hash:base64:5]"
+                }
+            },
+            {
+                // search through every file in the src directory
+                include: context,
+                // find every js file
+                test:/\.js$/,
+                // make sure not to do this for node_modules because it could
+                // screw them up
+                exclude:[ /node_modules/ ],
+                // use babel to convert all new syntax to syntax that is widely
+                // supported accross browsers
                 loader: 'babel-loader',
                 query: {
                     presets: ['react', 'es2015', 'stage-1'],
-                    plugins: [
-                        "babel-plugin-react-css-modules"
-                    ]
+                    // plugins: [
+                    //     "babel-plugin-react-css-modules"
+                    // ]
                 },
-                test:/\.js$/,
             }
         ]
     },
@@ -45,6 +70,10 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(homeDirectory, './public')
     },
-    // show all webpack information when running
-    stats: "verbose"
+    // show ALL available webpack information when running
+    stats: "verbose",
+    // do not include credentials.js or node_modules
+    plugins: [
+        new webpack.IgnorePlugin(/credentials.js/)
+    ],
 }
