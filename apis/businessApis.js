@@ -227,7 +227,7 @@ async function createAccountAdmin(info) {
         // <<-------------------------------------------------------->> //
 
         // --->> COUNT THE USERS WITH THIS NAME TO ALLOW PROFILE URL CREATION <<--- //
-        Users.count({name: user.name})
+        Users.countDocuments({name: user.name})
         .then(count => {
             // create the user's profile url with the count after their name
             const randomNumber = crypto.randomBytes(8).toString('hex');
@@ -1541,8 +1541,8 @@ async function addCompletionsAndInProgress(position) {
             }
 
             const [ completions, usersInProgress ] = await Promise.all([
-                Users.count(completionsQuery),
-                Users.count(inProgressQuery)
+                Users.countDocuments(completionsQuery),
+                Users.countDocuments(inProgressQuery)
             ]);
 
             if (typeof position.toObject === "function") {

@@ -54,7 +54,7 @@ async function POST_saveSkill(req, res) {
         if (!skill._id) {
             console.log("did not have a skill id! skill is: ", skill);
             // count all the skills with the same name ...
-            const skillCount = await Skills.count({name: skill.name});
+            const skillCount = await Skills.countDocuments({name: skill.name});
             // ... and generate a random number ...
             const randomNumber = crypto.randomBytes(4).toString('hex');
             // ... so that we can make the skill url
@@ -486,7 +486,7 @@ async function createAdmin(name, email, password, title, businessId, businessNam
         // <<-------------------------------------------------------->> //
 
         // --->> COUNT THE USERS WITH THIS NAME TO ALLOW PROFILE URL CREATION <<--- //
-        Users.count({name: user.name})
+        Users.countDocuments({name: user.name})
         .then(count => {
             // create the user's profile url with the count after their name
             const randomNumber = crypto.randomBytes(8).toString('hex');

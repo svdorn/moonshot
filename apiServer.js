@@ -31,8 +31,10 @@ let dbConnectLink = 'mongodb://' + credentials.dbDevUsername + ':' + credentials
 if (process.env.NODE_ENV === "production") {
     dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
 }
+// options for db connection
+const dbOptions = { useNewUrlParser: true };
 // connect to mLab
-mongoose.connect(dbConnectLink);
+mongoose.connect(dbConnectLink, dbOptions);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
