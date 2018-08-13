@@ -1,25 +1,28 @@
 var path = require('path');
 const webpack = require('webpack');
 
+console.log("__dirname: ", __dirname);
+
+let pathSections = __dirname.split("/");
+pathSections.pop();
+const homeDirectory = path.resolve(pathSections.join("/"));
+console.log("homeDirectory: ", homeDirectory);
+const context = path.resolve(homeDirectory, "src");
+
+console.log("context: ", context);
+
 module.exports = {
-    entry: './src/client.js',
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, '../public')
-    },
+    context,
+    entry: './client.js',
     plugins: [
         new webpack.IgnorePlugin(/credentials.js|node_modules/)
     ],
     module: {
         rules: [
-            // change all the local css to be global with a prefix
             {
                 test: /\.css$/,
-                include: path.resolve(__dirname, '../src'),
-                loaders: [
-                    "style-loader",
-                    "css-loader?importLoader=1&modules&localIdentName=[path]___[name]__[local]___[hash:base64:5]"
-                ]
+                exclude: /node_modules/,
+                loader: "style-loader!css-loader?modules=true&importLoaders=1&localIdentName=[path]__[name]__[local]___[hash:base64:5]"
             },
             {
                 exclude:[
@@ -30,11 +33,18 @@ module.exports = {
                 query: {
                     presets: ['react', 'es2015', 'stage-1'],
                     plugins: [
-                        "react-css-modules"
+                        "babel-plugin-react-css-modules"
                     ]
                 },
                 test:/\.js$/,
             }
         ]
-    }
+    },
+    // once everything is bundled, put it in /public/bundle.js
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(homeDirectory, './public')
+    },
+    // show all webpack information when running
+    stats: "verbose"
 }
