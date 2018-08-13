@@ -16,7 +16,6 @@
         "babel-preset-stage-0": "^6.24.1",
         "chai": "^4.1.2",
         "mocha": "^5.2.0",
-        "mockgoose": "^7.3.5",
         "nodemon": "^1.18.3",
         "redux-logger": "^3.0.6",
         "sinon": "^6.1.5",
