@@ -204,10 +204,10 @@ class BusinessHome extends Component {
                             </div>*/}
                         </div>
                         <figure className="productScreenshots">
-                            <div id="myCandidatesScreenshot">
+                            <div styleName="myCandidatesScreenshot">
                                 <img src={"images/businessHome/CandidatesScreenshotTop" + this.props.jpg} alt="My Candidates Page Screenshot"/>
                             </div>
-                            <div id="resultsScreenshot">
+                            <div styleName="resultsScreenshot">
                                 <img src={"images/businessHome/ProfileScreenshot" + this.props.jpg} alt="Candidate Results Page Screenshot" />
                             </div>
                         </figure>
@@ -600,8 +600,6 @@ class BusinessHome extends Component {
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
                 </MetaTags>
                 <div className="blackBackground businessHome">
-                    <div styleName="jingle-boi">WHADDUP</div>
-
                     { this.introductionSection() }
 
                     { this.screenshotsSection() }
