@@ -8,7 +8,9 @@
     top: 103%;
     width: calc(1350px * var(--device-scale));
     height: calc(846px * var(--device-scale));
+    -webkit-transform: translate(-50%,-50%) rotate3d(.342,-.94,0,25deg) rotate(9deg);
     transform: translate(-50%,-50%) rotate3d(.342,-.94,0,25deg) rotate(9deg);
+    -webkit-box-shadow: 7px 10px 22px -3px rgba(10,10,10,.8);
     box-shadow: 7px 10px 22px -3px rgba(10,10,10,.8);
 }
 .results-screenshot {
@@ -18,7 +20,9 @@
     top: 61%;
     width: calc(1280px * var(--device-scale));
     height: calc(1977px * var(--device-scale));
+    -webkit-transform: translate(-50%,-50%) rotate3d(.5,.866,0,16deg) rotate(-2deg);
     transform: translate(-50%,-50%) rotate3d(.5,.866,0,16deg) rotate(-2deg);
+    -webkit-box-shadow: -7px 2px 29px 1px rgba(10,0,10,.7);
     box-shadow: -7px 2px 29px 1px rgba(10,0,10,.7);
 }
 
@@ -55,7 +59,6 @@
     z-index: 10;
     width: 400px;
     position: absolute;
-
     -webkit-box-shadow: 0px 0px 50px 1px #00000073;
     box-shadow: 0px 0px 50px 1px #00000073;
 }
