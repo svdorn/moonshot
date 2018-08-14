@@ -371,7 +371,7 @@ class Menu extends Component {
         else if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
-                {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
+                {optionType: "anchor", title: "Home", url: "/", anchor: "home-top"},
                 {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
                 {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
                 {optionType: "separator"},

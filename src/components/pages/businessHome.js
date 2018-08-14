@@ -174,7 +174,7 @@ class BusinessHome extends Component {
 
         return (
             <section id="introduction">
-                <a id="homeTop" name="homeTop" className="anchor" />
+                <a id="home-top" name="home-top" className="anchor" />
                 <div className="businessHome frontPage">
                     {this.state.showRectangles ?
                         <div className="skewedRectanglesContainer">
