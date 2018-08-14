@@ -189,7 +189,7 @@ class BusinessHome extends Component {
                     }
                     <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
                         <div className="content">
-                            <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400 grabbing" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
+                            <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
                             <p className="infoText notFull font18px font16pxUnder900 font14Under400">Hire the best people for your team with hiring technology that constantly learns and improves as you scale.</p>
                             <div className="buttonArea font18px font14pxUnder900">
                                 <input styleName="get-started-input" className="blackInput secondary-gray-important" type="text" placeholder="Enter a position" name="position"

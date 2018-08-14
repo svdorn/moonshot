@@ -1,8 +1,6 @@
 var path = require('path');
 const webpack = require('webpack');
 
-const autoprefixer = require("autoprefixer");
-
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 let pathSections = __dirname.split("/");
@@ -27,33 +25,9 @@ module.exports = {
                 // css-loader and adds it to the DOM with a <script> tag
                 use: [
                     "style-loader",
-                    "css-loader?modules=true&importLoaders=2&localIdentName=[path]___[name]__[local]___[hash:base64:5]",
-                    {
-                        loader: "postcss-loader",
-                        options: {
-                            config: { path: path.resolve(homeDirectory, "webpack") },
-                            plugins: () => [autoprefixer()]
-                        }
-                    }
+                    "css-loader?modules=true&importLoaders=2&localIdentName=[path]___[name]__[local]___[hash:base64:5]"
                 ]
             },
-            // {
-            //     // search through every file in the src directory
-            //     include: context,
-            //     // select only the .css files
-            //     test: /\.css$/,
-            //     // parses and converts the all css files into a big ol' string
-            //     loader: "css-loader",
-            //     // css-loader options
-            //     query: {
-            //         // allow css modules for component-specific css files
-            //         modules: true,
-            //         // how to rename locally-scoped styles
-            //         localIdentName: "[path]___[name]__[local]___[hash:base64:5]",
-            //         // how many import loaders will be used on the css
-            //         importLoaders: 1
-            //     }
-            // },
             {
                 // search through every file in the src directory
                 include: context,
