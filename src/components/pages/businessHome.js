@@ -203,7 +203,7 @@ class BusinessHome extends Component {
                                 <div>See how it works in 2 minutes</div>
                             </div>*/}
                         </div>
-                        <figure className="productScreenshots">
+                        <figure styleName="product-screenshots">
                             <div styleName="my-candidates-screenshot">
                                 <img src={"images/businessHome/CandidatesScreenshotTop" + this.props.jpg} alt="My Candidates Page Screenshot"/>
                             </div>

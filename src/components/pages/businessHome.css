@@ -30,11 +30,12 @@
 }
 
 
-.oij-oij {
-    color: red;
-}
-.oij-oij:hover {
-    color: blue;
+.product-screenshots {
+    height: auto;
+    -webkit-box-flex: 1;
+    -ms-flex: 1 0 50%;
+    flex: 1 0 50%;
+    position: relative;
 }
 
 
@@ -55,6 +56,10 @@
     .results-screenshot {
         top: 200px;
         left: 50%;
+    }
+
+    .product-screenshots {
+        height: 250px;
     }
 }
 
