@@ -4895,8 +4895,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (min-width: 1051px) {
-    .homepageTrajectoryTextLeft.forBusiness { margin-left: 2%; }
-    .homepageTrajectoryTextRight.forBusiness { width: 43%; }
+    .homepageTrajectoryTextLeft { margin-left: 2%; }
+    .homepageTrajectoryTextRight { width: 43%; }
 }
 
 @media only screen and (max-width: 1050px) {
@@ -5323,11 +5323,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 50px; }
 
-    .homepageTrajectoryTextLeft { float: initial; }
-    .homepageTrajectoryTextRight {
-        float: initial;
-        margin-left: 0px;
-    }
+
     .forBusinessTrajectoryTextLeft { float: initial; }
     .forBusinessTrajectoryTextRight {
         float: initial;
@@ -5338,22 +5334,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 0px;
         display: table;
     }
-    .homepageTrajectoryTextLeft,
-    .homepageTrajectoryTextRight {
-        width: 80%;
-        margin: auto;
-    }
-    .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
-        text-align: left;
-        margin-left: 0px;
-        margin-bottom: 20px;
-    }
-    .homepageTrajectoryTextLeftDiv.forBusiness, .homepageTrajectoryTextRightDiv.forBusiness {
-        padding-left: 20%;
-    }
-    .homepageTrajectoryTextLeftDiv.forHome, homepageTrajectoryTextRightDiv.forHome {
-        padding-left: 0;
-    }
+
     .forBusinessTrajectoryTextLeft,
     .forBusinessTrajectoryTextRight {
         width: 80%;
@@ -5368,19 +5349,24 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .forBusinessTrajectoryTextRight > img {
         visibility: initial;
     }
-    .homepageTrajectoryTextLeft.forBusiness,
-    .homepageTrajectoryTextRight.forBusiness {
-        /* margin-top: -30px; */
+    .homepageTrajectoryTextRight {
+        margin-left: 0px;
+    }
+    .homepageTrajectoryTextLeft {
+        margin-top: 0;
+    }
+    .homepageTrajectoryTextLeft,
+    .homepageTrajectoryTextRight {
+        margin: auto;
+        float: initial;
         margin-left: 0px;
         width: 100%;
     }
-    .homepageTrajectoryTextLeftDiv.forBusiness,
-    .homepageTrajectoryTextRightDiv.forBusiness {
+    .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
         text-align: left;
-        margin-bottom: 0px;
-    }
-    .homepageTrajectoryTextLeftDiv.forHome,
-    .homepageTrajectoryTextRightDiv.forHome {
+        margin-left: 0px;
+        margin-bottom: 20px;
+        padding-left: 0;
         text-align: left;
         margin-bottom: 0px;
     }
@@ -5400,14 +5386,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 120px;
         margin-top: -5px;
     }
-    .homepageTrajectoryTextRight.forBusiness
-    .homepageTrajectoryTextLeft.forBusiness {
-        height: 180px;
-    }
     #whatSkillsAreYouHiringFor > div { height: initial; }
-    .homepageTrajectoryTextLeft.forBusiness {
-        margin-top: 0;
-    }
 
     .pathwayLandingQuoteLeft {
         width: 90%;
@@ -6284,10 +6263,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .homepageTrajectory { margin-bottom: -20px; }
-    .homepageTrajectoryTextLeft.onHome, .homepageTrajectoryTextRight.onHome {
-        overflow: hidden;
-        min-height: 130px;
-    }
     /* move icons over to the left */
     .homepageTrajectoryContainer > div:nth-child(1) > div > img,
     .homepageTrajectoryContainer > div:nth-child(3) > div > img {
@@ -6297,25 +6272,30 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .homepageTrajectoryContainer > div:nth-child(5) > div > img {
         margin-left: -45%;
     }
-    .homepageTrajectoryTextLeftDiv.forBusiness,
-    .homepageTrajectoryTextRightDiv.forBusiness {
-        padding-left: 24%;
-        padding-right: 5%;
-        height: 160px;
-    }
-    .homepageTrajectoryTextLeftDiv.forHome,
-    .homepageTrajectoryTextRightDiv.forHome {
+    .homepageTrajectoryTextLeftDiv,
+    .homepageTrajectoryTextRightDiv {
         padding-left: 5%;
         padding-right: 5%;
     }
-    .homepageTrajectoryTextRight.forBusiness,
-    .homepageTrajectoryTextLeft.forBusiness {
+    .homepageTrajectoryTextRight,
+    .homepageTrajectoryTextLeft {
         height: 152px;
         overflow: visible;
+        transform: none;
+        width: 90%;
     }
-    .homepageTrajectoryTextLeftDiv.forBusiness {
+    .homepageTrajectoryTextLeftDiv {
         height: 135px;
     }
+    .homepageTrajectoryTextLeft {
+        height: 120px;
+        margin-top: 0;
+    }
+    .homepageTrajectoryTextRight { height: 160px; }
+
+    .homepageTrajectory.forBusiness { height: 160px; }
+    .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor,
+
     .forBusiness > h2 > b {
         font-size: 18px;
     }
@@ -6324,25 +6304,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: 0px;
     }
     .forBusinessLineWithCirclesContainer { margin-top: 22px; }
-    .homepageTrajectoryTextLeft.forBusiness,
-    .homepageTrajectoryTextRight.forBusiness {
-        transform: none;
-    }
 
-    .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
-        padding-left: 80px;
-    }
-    .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
-        width: 90%;
-    }
-    .homepageTrajectory.forBusiness { height: 160px; }
-    .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor,
-    .homepageTrajectoryTextLeft.forBusiness {
-        height: 120px;
-    }
     .homepageTrajectory.forBusiness#sponsorStudentsForBusiness { height: 160px; }
-    .homepageTrajectoryTextRight.forBusiness { height: 160px; }
-    .homepageTrajectoryTextLeft.forBusiness { margin-top: 0; }
+
     .forBusinessCircle:nth-child(4) { top: 336px; }
 
 
@@ -6780,11 +6744,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 
 @media only screen and (max-width: 325px) {
-    .homepageTrajectoryTextLeftDiv,
-    .homepageTrajectoryTextRightDiv {
-        padding-left: 0px;
-    }
-
     .homepageSeparator { transform: scale(2.5, .02); }
 }
 
