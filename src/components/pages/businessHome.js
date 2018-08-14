@@ -230,7 +230,7 @@ class BusinessHome extends Component {
                             proven high achievers or low performers in that position.
                         </div>
                     </div>
-                    <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
+                    <div styleName="screenshot-right" className="businessHomeTrajectoryImagesShadow forBusiness">
                         <img
                             alt="Analysis Text"
                             src={"/images/businessHome/CandidatesScreenshot" + this.props.jpg}
@@ -250,7 +250,7 @@ class BusinessHome extends Component {
                             instead of conjecture based on a resume.
                         </div>
                     </div>
-                    <div className="businessHomeTrajectoryImagesLeft businessHomeTrajectoryImagesShadow forBusiness">
+                    <div styleName="screenshot-left" className="businessHomeTrajectoryImagesShadow forBusiness">
                         <img
                             alt="Predictive Insights"
                             src={"/images/businessHome/ProdScreenshot" + this.props.jpg}
@@ -267,7 +267,7 @@ class BusinessHome extends Component {
                         </div>
                     </div>
 
-                    <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
+                    <div styleName="screenshot-right" className="businessHomeTrajectoryImagesShadow forBusiness">
                         <img
                             alt="Analysis Text"
                             src={"/images/businessHome/ProductScreenshot" + this.props.jpg}

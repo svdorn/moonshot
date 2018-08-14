@@ -32,7 +32,6 @@
     height: 100%;
 }
 
-
 .product-screenshots {
     height: auto;
     -webkit-box-flex: 1;
@@ -46,11 +45,65 @@
 }
 
 
+.screenshot-left {
+    float: left;
+}
+.screenshot-right {
+    float: right;
+    margin-right: 2%;
+}
+.screenshot-left > img, .screenshot-right > img {
+    transition: all 0.2s ease-in;
+    top: -50px;
+    height: 270px;
+    z-index: 10;
+    width: 400px;
+    position: absolute;
+}
+.screenshot-left > img {
+    margin: 30px 0 0 0;
+    left: 2%;
+}
+.screenshot-right > img {
+    right: 4%;
+    margin: 30px 30px 0 0;
+}
+
+
+@media only screen and (max-width: 1050px) {
+    .screenshot-left > img { left: 0%; }
+    .screenshot-right > img { right: 0%; }
+}
+
+@media only screen and (max-width: 1000px) {
+    .screenshot-left > img, .screenshot-right > img {
+        top: 0px;
+        height: 216px;
+        width: 320px;
+        transition: all 0.2s ease-out;
+    }
+}
+
+
 @media only screen and (max-width: 900px) {
     .results-screenshot { --device-scale: .17; }
     .my-candidates-screenshot {
         --device-scale: .39;
         top: 95%;
+    }
+}
+
+
+@media only screen and (max-width: 800px) {
+    .screenshot-left > img, .screenshot-right > img {
+        position: relative;
+        margin-top: 60px;
+    }
+    .screenshot-right, .screenshot-left {
+        float: none;
+    }
+    .screenshot-right > img {
+        margin-left: 30px;
     }
 }
 
@@ -91,5 +144,13 @@
         margin-bottom: 12px;
         margin-left: 10px;
         width: 70%;
+    }
+
+    .screenshot-left > img, .screenshot-right > img {
+        height: 172.8px;
+        width: 256px;
+    }
+    .screenshot-right {
+        margin-right: 0;
     }
 }

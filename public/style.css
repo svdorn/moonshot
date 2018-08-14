@@ -4082,25 +4082,11 @@ button.link {
     margin-top: 45px;
     font-size: 23px;
 }
-.businessHomeTrajectoryImagesLeft {
-    float: left;
-}
-.businessHomeTrajectoryImagesRight {
-    float: right;
-    margin-right: 2%;
-}
+
+
 .businessHomeTrajectoryImageRightNoBorder {
     float: right;
     margin-right: 2%;
-}
-.businessHomeTrajectoryImagesLeft > img,
-.businessHomeTrajectoryImagesRight > img {
-    transition: all 0.2s ease-in;
-    top: -50px;
-    height: 270px;
-    z-index: 10;
-    width: 400px;
-    position: absolute;
 }
 .businessHomeTrajectoryImageRightNoBorder > img {
     transition: all 0.2s ease-in;
@@ -4116,14 +4102,7 @@ button.link {
     -webkit-box-shadow: 0px 0px 50px 1px #00000073;
     box-shadow: 0px 0px 50px 1px #00000073;
 }
-.businessHomeTrajectoryImagesLeft > img {
-    margin: 30px 0 0 0;
-    left: 2%;
-}
-.businessHomeTrajectoryImagesRight > img {
-    right: 4%;
-    margin: 30px 30px 0 0;
-}
+
 
 .homepageTrajectoryTextLeftDiv,
 .homepageTrajectoryTextRightDiv {
@@ -4989,21 +4968,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .forBusinessTrajectoryTextRight > div {
         margin-right: 0px;
     }
-    .businessHomeTrajectoryImagesLeft > img {
-        left: 2%;
-    }
-    .businessHomeTrajectoryImagesRight > img {
-        right: 2%;
-    }
     .businessHomeTrajectoryImageRightNoBorder > img {
         right: 2%;
     }
-    .businessHomeTrajectoryImagesLeft > img {
-        left: 0%;
-    }
-    .businessHomeTrajectoryImagesRight > img {
-        right: 0%;
-    }
+
     .businessHomeTrajectoryImageRightNoBorder > img {
         right: 0%;
     }
@@ -5070,13 +5038,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 25px; }
 
-    .businessHomeTrajectoryImagesLeft > img,
-    .businessHomeTrajectoryImagesRight > img {
-        top: 0px;
-        height: 216px;
-        width: 320px;
-        transition: all 0.2s ease-out;
-    }
+
     .businessHomeTrajectoryImageRightNoBorder > img {
         top: 0px;
         height: 251px;
@@ -5421,24 +5383,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 50px; }
 
-    .businessHomeTrajectoryImagesLeft > img,
-    .businessHomeTrajectoryImagesRight > img {
-        position: relative;
-        margin-top: 60px;
-    }
-    .businessHomeTrajectoryImagesRight > img {
-        margin-left: 30px;
-    }
+
+
     .businessHomeTrajectoryImageRightNoBorder > img {
         margin-right: 20px;
         margin-top: 50px;
         position: relative;
     }
-    .businessHomeTrajectoryImageRightNoBorder,
-    .businessHomeTrajectoryImagesRight,
-    .businessHomeTrajectoryImagesLeft {
-        float: none;
-    }
+
     .homepageTrajectoryTextLeft { float: initial; }
     .homepageTrajectoryTextRight {
         float: initial;
@@ -5913,16 +5865,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-start: 27;
         grid-column-end: 35;
     }
-    /* TODO: REMOVE .frontPage .skewedRectangles:nth-child(2) { display: none; } */
-
-
-    /* .logoContainer.skewedContainer { position: relative; }
-    .logoContainer .skewedRectanglesContainer { overflow: visible; }
-    .logoContainer .skewedRectanglesContainer .skewedRectangles:first-child {
-        height: calc(var(--rowWidth) * 56);
-        background-color: #323232;
-        top: -145px;
-    } */
 
     .frontPage > .skewedRectanglesContainer { height: 150%; }
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) {
@@ -5930,8 +5872,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         background-color: #323232;
         top: 130px;
     }
-
-    /* TODO REPLACE ALL OF EM WITH THIS .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) */
 
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) {
         background: var(--primary-black-dark);
@@ -6844,7 +6784,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-start: 25;
     }
 
-    /* TODO MAKE SURE THIS ONE IS STILL GOOD, USED TO BE A .logoContainer DUDE */
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(7) {
         background: linear-gradient(to right, #ad84fe, #86c5fe);
         grid-row-start: 53;
@@ -6856,10 +6795,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #threeScreenshots .businessHomeTrajectoryImagesRight {
         margin-right: 0;
     }
-    .businessHomeTrajectoryImagesLeft > img, .businessHomeTrajectoryImagesRight > img {
-        height: 172.8px;
-        width: 256px;
-    }
+
     .businessHomeTrajectoryImageRightNoBorder > img {
         height: 200.8px;
         width: 297.6px;
