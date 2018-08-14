@@ -4044,10 +4044,6 @@ button.link {
     margin-top: 30px;
     width: 54%;
     overflow: auto;
-}
-/* .homepageTrajectoryTextLeft:first-child { margin-top: 60px; } */
-.homepageTrajectoryTextLeft.forBusiness,
-.homepageTrajectoryTextRight.forBusiness {
     width: 45%;
 }
 .forBusinessTrajectoryTextLeft {
@@ -4076,18 +4072,10 @@ button.link {
 .homepageTrajectoryTextLeftDiv,
 .homepageTrajectoryTextRightDiv {
     float: right;
-    margin-left: 110px;
-}
-.homepageTrajectoryTextLeftDiv.forBusiness,
-.homepageTrajectoryTextRightDiv.forBusiness {
     margin-left: 0px;
     text-align: left;
 }
-.homepageTrajectoryTextLeftDiv.forHome,
-.homepageTrajectoryTextRightDiv.forHome {
-    margin-left: 0px;
-    text-align: left;
-}
+
 .forBusinessTrajectoryTextLeftDiv,
 .forBusinessTrajectoryTextRightDiv {
     float: right;
