@@ -1,4 +1,4 @@
-.myCandidatesScreenshot {
+.my-candidates-screenshot {
     --device-scale: 0.46;
     position: absolute;
     left: 115%;
@@ -10,7 +10,7 @@
     -webkit-box-shadow: 7px 10px 22px -3px rgba(10,10,10,.8);
     box-shadow: 7px 10px 22px -3px rgba(10,10,10,.8);
 }
-.resultsScreenshot {
+.results-screenshot {
     --device-scale: 0.21;
     position: absolute;
     left: 49%;
@@ -23,16 +23,24 @@
     box-shadow: -7px 2px 29px 1px rgba(10,0,10,.7);
 }
 
-.myCandidatesScreenshot > img,
-.resultsScreenshot > img {
+.my-candidates-screenshot > img,
+.results-screenshot > img {
     width: 100%;
     height: 100%;
 }
 
 
+.oij-oij {
+    color: red;
+}
+.oij-oij:hover {
+    color: blue;
+}
+
+
 @media only screen and (max-width: 900px) {
-    .resultsScreenshot { --device-scale: .17; }
-    .myCandidatesScreenshot {
+    .results-screenshot { --device-scale: .17; }
+    .my-candidates-screenshot {
         --device-scale: .39;
         top: 95%;
     }
@@ -40,11 +48,11 @@
 
 
 @media only screen and (max-width: 700px) {
-    .myCandidatesScreenshot {
+    .my-candidates-screenshot {
         top: 262px;
         left: 92%;
     }
-    .resultsScreenshot {
+    .results-screenshot {
         top: 200px;
         left: 50%;
     }
@@ -52,12 +60,12 @@
 
 
 @media only screen and (max-width: 400px) {
-    .resultsScreenshot {
+    .results-screenshot {
         --device-scale: 0.13;
         top: 170px;
         left: 42%;
     }
-    .myCandidatesScreenshot {
+    .my-candidates-screenshot {
         --device-scale: 0.31;
         top: 215px;
         left: 104%;

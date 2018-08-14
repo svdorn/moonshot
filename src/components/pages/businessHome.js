@@ -204,10 +204,10 @@ class BusinessHome extends Component {
                             </div>*/}
                         </div>
                         <figure className="productScreenshots">
-                            <div styleName="myCandidatesScreenshot">
+                            <div styleName="my-candidates-screenshot">
                                 <img src={"images/businessHome/CandidatesScreenshotTop" + this.props.jpg} alt="My Candidates Page Screenshot"/>
                             </div>
-                            <div styleName="resultsScreenshot">
+                            <div styleName="results-screenshot">
                                 <img src={"images/businessHome/ProfileScreenshot" + this.props.jpg} alt="Candidate Results Page Screenshot" />
                             </div>
                         </figure>
