@@ -59,6 +59,9 @@
     z-index: 10;
     width: 400px;
     position: absolute;
+
+    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    box-shadow: 0px 0px 50px 1px #00000073;
 }
 .screenshot-left > img {
     margin: 30px 0 0 0;

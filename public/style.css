@@ -4084,26 +4084,6 @@ button.link {
 }
 
 
-.businessHomeTrajectoryImageRightNoBorder {
-    float: right;
-    margin-right: 2%;
-}
-.businessHomeTrajectoryImageRightNoBorder > img {
-    transition: all 0.2s ease-in;
-    top: -55px;
-    height: 314px;
-    z-index: 10;
-    width: 465px;
-    position: absolute;
-    right: 4%;
-    margin: 30px 20px 0 0;
-}
-.businessHomeTrajectoryImagesShadow > img {
-    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
-    box-shadow: 0px 0px 50px 1px #00000073;
-}
-
-
 .homepageTrajectoryTextLeftDiv,
 .homepageTrajectoryTextRightDiv {
     float: right;
@@ -4968,13 +4948,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .forBusinessTrajectoryTextRight > div {
         margin-right: 0px;
     }
-    .businessHomeTrajectoryImageRightNoBorder > img {
-        right: 2%;
-    }
-
-    .businessHomeTrajectoryImageRightNoBorder > img {
-        right: 0%;
-    }
     .boxStyle {
         margin: 200px auto 0 10px;
     }
@@ -5038,13 +5011,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 25px; }
 
-
-    .businessHomeTrajectoryImageRightNoBorder > img {
-        top: 0px;
-        height: 251px;
-        width: 372px;
-        transition: all 0.2s ease-out;
-    }
 
     .forBusiness > h2 > b {
         font-size: 25px;
@@ -5383,14 +5349,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 50px; }
 
-
-
-    .businessHomeTrajectoryImageRightNoBorder > img {
-        margin-right: 20px;
-        margin-top: 50px;
-        position: relative;
-    }
-
     .homepageTrajectoryTextLeft { float: initial; }
     .homepageTrajectoryTextRight {
         float: initial;
@@ -5555,10 +5513,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .paperBoxBusinessHome {
         margin-left: 0;
-        margin-right: 0;
-    }
-
-    .businessHomeTrajectoryImageRightNoBorder > img {
         margin-right: 0;
     }
 
@@ -6790,15 +6744,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 57;
         grid-column-start: 25;
         grid-column-end: 32;
-    }
-
-    #threeScreenshots .businessHomeTrajectoryImagesRight {
-        margin-right: 0;
-    }
-
-    .businessHomeTrajectoryImageRightNoBorder > img {
-        height: 200.8px;
-        width: 297.6px;
     }
 
     #moonshotProcess { margin-bottom: 120px; }
