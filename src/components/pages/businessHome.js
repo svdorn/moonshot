@@ -225,7 +225,7 @@ class BusinessHome extends Component {
                 <div className="homepageTrajectory forBusiness">
                     <div className="homepageTrajectoryTextLeft forBusiness">
                         <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
-                            <h2 className="primary-purple-light font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will perform the best... or the worst</h2>
+                            <h2 className="primary-purple-light font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1200only br"><br/></div>will perform the best... or the worst</h2>
                             Analyze candidates to see if they exhibit the qualities of
                             proven high achievers or low performers in that position.
                         </div>

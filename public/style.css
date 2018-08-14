@@ -4050,17 +4050,6 @@ button.link {
 .homepageTrajectoryTextRight.forBusiness {
     width: 45%;
 }
-.homepageTrajectoryTextLeftIcon,
-.homepageTrajectoryTextRightIcon {
-    height: 90px;
-    position: absolute;
-    margin-top: 18px;
-    font-size: 23px;
-}
-.homepageTrajectoryTextRightIcon.onHome {
-    height: 70px;
-    margin-top: 18px;
-}
 .forBusinessTrajectoryTextLeft {
     float: left;
     text-align: center;
@@ -4849,6 +4838,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 }
 @media only screen and (max-width: 1200px) {
+    .above1200only { display: none; }
+
     .myCandidates .candidatesAndOptions {
         width: 950px;
     }
@@ -4916,7 +4907,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (min-width: 1051px) {
-    .homepageTrajectoryTextRightIcon.onHome { margin-left: 14px; }
     .homepageTrajectoryTextLeft.forBusiness { margin-left: 2%; }
     .homepageTrajectoryTextRight.forBusiness { width: 43%; }
 }
@@ -4924,10 +4914,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 @media only screen and (max-width: 1050px) {
     .homepageTrajectoryTextLeft {
         width: 50%;
-    }
-    .homepageTrajectoryTextLeftIcon,
-    .homepageTrajectoryTextRightIcon {
-        visibility: hidden;
     }
     .homepageTrajectoryTextLeftDiv {
         margin-left: 0px;
@@ -5379,17 +5365,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .homepageTrajectoryTextLeftDiv.forHome, homepageTrajectoryTextRightDiv.forHome {
         padding-left: 0;
-    }
-    .homepageTrajectoryTextLeftIcon,
-    .homepageTrajectoryTextRightIcon {
-        visibility: initial;
-    }
-    .homepageTrajectoryTextLeftIcon,
-    .homepageTrajectoryTextRightIcon {
-        margin-left: -40%;
-    }
-    .homepageTrajectoryTextLeftIcon.smallerWidthIcon {
-        margin-left: -38%;
     }
     .forBusinessTrajectoryTextLeft,
     .forBusinessTrajectoryTextRight {
@@ -6321,11 +6296,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .homepageTrajectory { margin-bottom: -20px; }
-    /* .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
-        transform: scale(.7);
-        width: 120%;
-        margin-left: -10%;
-    } */
     .homepageTrajectoryTextLeft.onHome, .homepageTrajectoryTextRight.onHome {
         overflow: hidden;
         min-height: 130px;
@@ -6355,13 +6325,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 152px;
         overflow: visible;
     }
-    /* #whatSkillsAreYouHiringFor > div {
-        height: 135px;
-    }
-    #whatSkillsAreYouHiringFor {
-        height: 135px;
-        overflow: visible;
-    } */
     .homepageTrajectoryTextLeftDiv.forBusiness {
         height: 135px;
     }
@@ -6378,32 +6341,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         transform: none;
     }
 
-    /* .forBusinessTrajectoryTextLeft > div,
-    .forBusinessTrajectoryTextRight > div {
-        text-align: center;
-        padding-left: 0px;
-    }
-    .forBusinessTrajectoryTextLeft > img,
-    .forBusinessTrajectoryTextRight > img {
-        display: none;
-    } */
-
     .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
         padding-left: 80px;
     }
     .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
         width: 90%;
     }
-    .homepageTrajectoryTextRightIcon.onHome,
-    .homepageTrajectoryTextLeftIcon.onHome {
-        height: 70px;
-        margin-top: 20px;
-    }
-    .homepageTrajectoryTextRightIcon.personIcon.onHome { height: 60px; }
-    /* .homepageTrajectoryContainer > div:nth-child(1) > div > img, .homepageTrajectoryContainer > div:nth-child(3) > div > img {
-        height: 70px;
-        margin-top: 20px;
-    } */
     .homepageTrajectory.forBusiness { height: 160px; }
     .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor,
     .homepageTrajectoryTextLeft.forBusiness {
@@ -6849,10 +6792,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 
 @media only screen and (max-width: 325px) {
-    .homepageTrajectoryTextLeftIcon,
-    .homepageTrajectoryTextRightIcon {
-        display: none;
-    }
     .homepageTrajectoryTextLeftDiv,
     .homepageTrajectoryTextRightDiv {
         padding-left: 0px;
