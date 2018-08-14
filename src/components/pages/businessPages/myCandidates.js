@@ -26,6 +26,8 @@ import AddUserDialog from '../../childComponents/addUserDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
 import HoverTip from "../../miscComponents/hoverTip";
 
+import "./myCandidates.css";
+
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
         style={{width: "150px"}}
