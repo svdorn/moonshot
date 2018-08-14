@@ -4280,10 +4280,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 
 .grabbing {
-    cursor: -webkit-grabbing;
-    cursor:    -moz-grabbing;
-    cursor:     -ms-grabbing;
-    cursor:      -o-grabbing;
+
     cursor:         grabbing;
 }
 .grab {

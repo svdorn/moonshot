@@ -1,17 +1,14 @@
 var path = require('path');
 const webpack = require('webpack');
 
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const autoprefixer = require("autoprefixer");
 
-console.log("__dirname: ", __dirname);
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 let pathSections = __dirname.split("/");
 pathSections.pop();
 const homeDirectory = path.resolve(pathSections.join("/"));
-console.log("homeDirectory: ", homeDirectory);
 const context = path.resolve(homeDirectory, "src");
-
-console.log("context: ", context);
 
 module.exports = {
     // set default location for everything done in webpack to be /src
@@ -31,7 +28,13 @@ module.exports = {
                 use: [
                     "style-loader",
                     "css-loader?modules=true&importLoaders=2&localIdentName=[path]___[name]__[local]___[hash:base64:5]",
-                    { loader: "postcss-loader", options: { config: { path: path.resolve(homeDirectory, "webpack") } } }
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            config: { path: path.resolve(homeDirectory, "webpack") },
+                            plugins: () => [autoprefixer()]
+                        }
+                    }
                 ]
             },
             // {
