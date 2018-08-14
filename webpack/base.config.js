@@ -28,25 +28,29 @@ module.exports = {
                 test: /\.css$/,
                 // used AFTER css-loader; takes the string generated from
                 // css-loader and adds it to the DOM with a <script> tag
-                loader: "style-loader"
+                use: [
+                    "style-loader",
+                    "css-loader?modules=true&importLoaders=2&localIdentName=[path]___[name]__[local]___[hash:base64:5]",
+                    { loader: "postcss-loader", options: { config: { path: path.resolve(homeDirectory, "webpack") } } }
+                ]
             },
-            {
-                // search through every file in the src directory
-                include: context,
-                // select only the .css files
-                test: /\.css$/,
-                // parses and converts the all css files into a big ol' string
-                loader: "css-loader",
-                // css-loader options
-                query: {
-                    // allow css modules for component-specific css files
-                    modules: true,
-                    // how to rename locally-scoped styles
-                    localIdentName: "[path]___[name]__[local]___[hash:base64:5]",
-                    // how many import loaders will be used on the css
-                    importLoaders: 1
-                }
-            },
+            // {
+            //     // search through every file in the src directory
+            //     include: context,
+            //     // select only the .css files
+            //     test: /\.css$/,
+            //     // parses and converts the all css files into a big ol' string
+            //     loader: "css-loader",
+            //     // css-loader options
+            //     query: {
+            //         // allow css modules for component-specific css files
+            //         modules: true,
+            //         // how to rename locally-scoped styles
+            //         localIdentName: "[path]___[name]__[local]___[hash:base64:5]",
+            //         // how many import loaders will be used on the css
+            //         importLoaders: 1
+            //     }
+            // },
             {
                 // search through every file in the src directory
                 include: context,
