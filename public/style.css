@@ -1294,12 +1294,6 @@ form > h1 {
 
 
 
-.frontPage .infoContainer .content .buttonArea .button.getStarted {
-    margin-left: 4%;
-}
-
-
-
 .playButton {
     height: 30px;
     margin-right: 10px;
@@ -6816,15 +6810,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .buttonArea { flex-direction: column; }
 
-    .frontPage .infoContainer .content .buttonArea .blackInput.getStarted {
-        margin-bottom: 12px;
-        margin-left: 10px;
-        width: 70%;
-    }
-    .frontPage .infoContainer .content .buttonArea .button.getStarted {
-        margin-left: 10px;
-        width: 98px;
-    }
     .frontPage .infoText.flex {
         margin-right: calc((100% - 250px) / 1.2);
     }

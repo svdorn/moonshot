@@ -1,3 +1,6 @@
+.get-started-input {}
+
+
 .my-candidates-screenshot {
     --device-scale: 0.46;
     position: absolute;
@@ -38,6 +41,10 @@
     position: relative;
 }
 
+.get-started-button {
+    margin-left: 4%;
+}
+
 
 @media only screen and (max-width: 900px) {
     .results-screenshot { --device-scale: .17; }
@@ -74,5 +81,15 @@
         --device-scale: 0.31;
         top: 215px;
         left: 104%;
+    }
+
+    .get-started-button {
+        margin-left: 10px;
+        width: 98px;
+    }
+    .get-started-input {
+        margin-bottom: 12px;
+        margin-left: 10px;
+        width: 70%;
     }
 }

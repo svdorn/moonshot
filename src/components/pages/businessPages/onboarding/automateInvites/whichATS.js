@@ -87,7 +87,7 @@ class WhichATS extends Component {
                         type="text"
                         name="email"
                         placeholder="What's your ATS?"
-                        className="blackInput getStarted"
+                        className="blackInput"
                         value={this.state.ats}
                         onChange={this.onChange.bind(this)}
                     />
