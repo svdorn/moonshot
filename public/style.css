@@ -4029,11 +4029,6 @@ button.link {
     clear: both;
     height: 320px;
 }
-.homepageTrajectoryContainer {
-    max-width: 1200px;
-    margin: auto;
-}
-
 
 
 .forBusinessBoxesContainer {
@@ -6152,15 +6147,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .homepageTrajectory { margin-bottom: -20px; }
-    /* move icons over to the left */
-    .homepageTrajectoryContainer > div:nth-child(1) > div > img,
-    .homepageTrajectoryContainer > div:nth-child(3) > div > img {
-        margin-left: -48%;
-    }
-    /* move the third icon less to the left since it is smaller */
-    .homepageTrajectoryContainer > div:nth-child(5) > div > img {
-        margin-left: -45%;
-    }
 
 
     .homepageTrajectory.forBusiness { height: 160px; }
