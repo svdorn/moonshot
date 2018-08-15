@@ -1976,12 +1976,6 @@ form > h1 {
 
 .noOverflowX { overflow-x: hidden; }
 
-.pathwayLandingSkillChip {
-    border: 1px solid #da5f7b;
-    border-radius: 10px;
-    background-color: white;
-    color: #da5f7b;
-}
 .myEvalsSkillChip {
     border: 1px solid #72d6f5;
     border-radius: 10px;
@@ -3310,11 +3304,6 @@ button.link {
     display: none;
 }
 
-.pathwayLandingQuoteReplacementImg {
-    width: 100%;
-    margin-top: 50px;
-}
-
 .homepageBenefitsList {
     margin-top: 100px;
     padding-left: 40px;
@@ -4129,32 +4118,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 .blackTextImportant { color: black !important; }
-
-.pathwayLandingQuote {
-    text-align: center;
-    padding: 70px 0px;
-}
-.pathwayLandingQuoteLeft {
-    width: 55%;
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 5%;
-}
-.pathwayLandingQuoteRight {
-    width: 35%;
-    display: inline-block;
-    vertical-align: top;
-    justify-content: center;
-}
-.pathwayLandingQuoteAltRight {
-    width: 35%;
-    display: inline-block;
-    vertical-align: top;
-    justify-content: center;
-}
-.pathwayLandingLiMargin {
-    margin-right: 14%;
-}
 
 .blurred {
     filter: blur(10px);
@@ -5185,22 +5148,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 50px; }
 
-    .pathwayLandingQuoteLeft {
-        width: 90%;
-        display: block;
-        margin: auto;
-        text-align: center;
-    }
-    .pathwayLandingQuoteRight {
-        width: 500px;
-        display: block;
-        margin: 30px auto;
-        text-align: center;
-    }
-    .pathwayLandingQuoteAltRight {
-        display: none;
-    }
-
     #businessHomeStatistics {
         margin-top: 100px;
     }
@@ -5769,9 +5716,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     #pathwayMoneyIcon { height: 48px; }
     #pathwayHatIcon { height: 38px; }
-    .pathwayLandingQuoteRight {
-        width: 400px;
-    }
     .onboardingIconLi {
         margin: 0px 30px;
     }
@@ -6072,18 +6016,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-bottom: 0px;
     }
 
-    .pathwayLandingQuoteRight {
-        width: 300px;
-    }
     .list500pxStack li {
         display: block !important;
         margin-top: 40px;
     }
     .listBottom500pxStack {
         margin-top: 40px;
-    }
-    .pathwayLandingLiMargin {
-        margin-right: 0;
     }
     .halfWidthStepRight > img, .halfWidthStepLeft > img {
         height: 50px;
@@ -6450,10 +6388,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 @media only screen and (max-width: 350px) {
     .above350only { display: none; }
-    .pathwayLandingQuoteRight {
-        width: 240px;
-    }
-
     textarea.multipleChoiceCustomAnswer {
         width: 180px;
     }
