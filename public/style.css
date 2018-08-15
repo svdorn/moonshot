@@ -1446,41 +1446,6 @@ form > h1 {
     top: 2px;
     display: inline-block;
 }
-/* first and third children - the ones with text */
-.processOutline > div > div:nth-child(2n + 1) {
-    flex: 1;
-    position: relative;
-}
-.processOutline > div > div:nth-child(2n + 1) > div {
-    /* position: relative;
-    top: 38%;
-    transform: translateY(-50%); */
-}
-
-
-#moonshotProcess .processOutline .left-area {
-    z-index: 30;
-    background-color: var(--primary-black-light);
-    height: 100%;
-    width: 375px;
-    position: absolute;
-    top: 0;
-}
-#moonshotProcess .processOutline .text-part {
-    width: 275px;
-    position: absolute;
-    top: 25px;
-    right: 0;
-}
-#moonshotProcess .processOutline .text-part .text {
-    text-align: left;
-    line-height: 1.7;
-}
-#moonshotProcess .processOutline .text-part .button {
-    margin-left: 18%;
-    margin-top: 13px;
-}
-
 
 .shadowBox {
     -webkit-box-shadow: 0 0 80px 20px rgba(0,0,0,.5);
@@ -4873,15 +4838,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .processOutline > .leftArrow { left: -60px; }
     .processOutline > .rightArrow { right: -60px; }
 
-    #moonshotProcess .processOutline .left-area {
-        width: 300px;
-    }
-    #moonshotProcess .processOutline .text-part {
-        width: 235px;
-    }
-    #moonshotProcess .processOutline .text-part .button {
-        margin-top: 18px;
-    }
 
     #ATSIntegrations > div > img {
         margin-left: 30px;
@@ -5216,20 +5172,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     #moonshotProcess .processOutline { height: 190px; }
 
-    #moonshotProcess .processOutline .left-area {
-        width: 100%;
-    }
-    #moonshotProcess .processOutline .text-part {
-        width: 75%;
-        left: 13%;
-    }
-    #moonshotProcess .processOutline .text-part .text {
-        text-align: center;
-    }
-    #moonshotProcess .processOutline .text-part .button {
-        margin-left: 50%;
-        transform: translateX(-50%);
-    }
+
 
     .automate-invites .manual-invite .manual-add-example {
         --device-scale: .15;

@@ -335,13 +335,13 @@ class BusinessHome extends Component {
                             <img src={"/images/businessHome/ListViewScreenshot" + this.props.png} />
                         </div>
                         <div styleName="skew-image-cover"></div>
-                        <div className="left-area">
-                            <div className="text-part">
-                                <div className="text">
+                        <div styleName="video-companion">
+                            <div>
+                                <div styleName="video-text">
                                     We predict how successful your candidates will be before you hire them.
                                 </div>
-                                <div className="button-part">
-                                    <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font16pxUnder950 font14pxUnder400 primary-white" onClick={() => goTo("/chatbot")} style={{padding: "4.5px 15px"}}>
+                                <div>
+                                    <button styleName="video-button" className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font16pxUnder950 font14pxUnder400 primary-white" onClick={() => goTo("/chatbot")}>
                                         Try for Free
                                     </button>
                                 </div>
