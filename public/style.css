@@ -4567,38 +4567,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 .br { display: inline; }
 
-.forBusinessLineWithCirclesContainer {
-    position: absolute;
-    width: 20px;
-    left: 0;
-    right: 0;
-    margin: auto;
-    margin-top: 58px;
-}
-.forBusinessLineWithCircles {
-    position: relative;
-}
-.forBusinessLine {
-    width: 2px;
-    height: 797px;
-    z-index: 5;
-    background-color: #ADADAD;
-    margin-left: 9px;
-}
-.forBusinessCircle {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    z-index: 10;
-    border: 4px solid #ADADAD;
-    background-color: white;
-    border-radius: 10px;
-}
-.forBusinessCircle:nth-child(2) { top: 0px; }
-.forBusinessCircle:nth-child(3) { top: 270px; }
-.forBusinessCircle:nth-child(4) { top: 531px; }
-.forBusinessCircle:nth-child(5) { bottom: 0px; }
-
 .forBusinessBox { padding-top: 30px; }
 .forBusinessBoxText { padding: 0px 2px; }
 .marginTopOnDesktop { margin-top: 60px; }
@@ -5236,16 +5204,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .businessHome.frontPage { padding-bottom: 50px; }
-
-
-    .forBusinessLineWithCirclesContainer {
-        left: 12%;
-        right: initial;
-        margin: 6px 0 0;
-    }
-    .forBusinessCircle:nth-child(3) { top: 155px; }
-    .forBusinessCircle:nth-child(4) { top: 347px; }
-    .forBusinessLine { height: 546px; }
 
     .pathwayLandingQuoteLeft {
         width: 90%;
@@ -6064,10 +6022,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .processOutline > img { display: none; }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
-    .forBusinessLine {
-        height: 516px;
-        margin-top: -14px;
-    }
 
     #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
         background: var(--primary-black-light);
@@ -6126,9 +6080,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         font-size: 18px;
     }
     .forBusiness > h2 { margin-top: 0; }
-    .forBusinessLineWithCirclesContainer { margin-top: 22px; }
-
-    .forBusinessCircle:nth-child(4) { top: 336px; }
 
 
     .fullHeight, .landingPage { height: 550px; min-height: 550px; }
