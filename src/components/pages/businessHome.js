@@ -221,7 +221,7 @@ class BusinessHome extends Component {
     // second section of the page, gives three screenshots as well as corresponding information
     screenshotsSection() {
         return (
-            <section id="threeScreenshots">
+            <section id="three-screenshots">
                 <div styleName="screenshot-view">
                     <div styleName="screenshot-left-text">
                         <div styleName="screenshot-left-text-container" className="font18px font16pxUnder800 primary-white">
@@ -327,7 +327,7 @@ class BusinessHome extends Component {
 
     videoSection() {
         return (
-            <section id="moonshotProcess">
+            <section id="video-section">
                 <div styleName="video-container" className="font22px font18pxUnder950 font16pxUnder400">
                     <div>
                         <div styleName="video-screenshot">
@@ -404,7 +404,7 @@ class BusinessHome extends Component {
         // create a box for each feature
         let featureBoxes = features.map(feature => {
             return (
-                <div className="feature-box" key={feature.title}>
+                <div styleName="feature-box" key={feature.title}>
                     <div>
                         <img
                             src={`/images/businessHome/${feature.icon}${this.props.png}`}
@@ -424,7 +424,8 @@ class BusinessHome extends Component {
         featureBoxes.unshift(
             <div
                 key="featuresHeader"
-                className="primary-peach feature-box left-align font26px font22pxUnder800 font18pxUnder700"
+                styleName="feature-box"
+                className="primary-peach left-align font26px font22pxUnder800 font18pxUnder700"
                 style={{lineHeight: "1.3"}}
             >
                 We learn from each hire<br/> so that we can make the next one even better.

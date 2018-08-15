@@ -1021,28 +1021,6 @@ form > h1 {
 }
 
 
-
-#learnFromHires .feature-box {
-    width: 350px;
-    height: 120px;
-    display: inline-flex;
-    vertical-align: top;
-    position: relative;
-    margin: 15px 10px;
-}
-#learnFromHires .feature-box > div:first-child {
-    width: 100px;
-    text-align: center;
-}
-#learnFromHires .feature-box > div:last-child {
-    width: 300px;
-    text-align: left;
-}
-#learnFromHires .feature-box img {
-    height: 64px;
-}
-
-
 .menuButtonArea {
     display: flex;
     margin: 5px 0;
@@ -1299,11 +1277,9 @@ form > h1 {
     margin-right: 10px;
 }
 
-#threeScreenshots {
+#three-screenshots {
     margin: 160px auto 60px;
     max-width: 1240px;
-    position: relative;
-    z-index: 1;
 }
 
 
@@ -5013,14 +4989,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-right: 0;
     }
 
-    #learnFromHires .feature-box {
-        width: 300px;
-        margin: 10px 5px;
-    }
-    #learnFromHires .feature-box img {
-        height: 54px;
-    }
-
     .blackInput.googleJobs {
         width: 250px;
     }
@@ -5255,20 +5223,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .infoText.flex {
         margin-right: calc((100% - 350px) / 1.5);
-    }
-
-    #learnFromHires .feature-box {
-        width: 200px;
-    }
-    #learnFromHires .feature-box > div:first-child {
-        width: 100px;
-        text-align: center;
-    }
-    #learnFromHires .feature-box > div:last-child {
-        width: 200px;
-    }
-    #learnFromHires .feature-box img {
-        height: 44px;
     }
 
     .blackInput.googleJobs {
