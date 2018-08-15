@@ -1305,9 +1305,7 @@ form > h1 {
     position: relative;
     z-index: 1;
 }
-#threeScreenshots > .homepageTrajectory.forBusiness {
-    margin-bottom: 0;
-}
+
 
 #businessHomeStatistics > div:nth-child(2){
     margin: 40px auto;
@@ -4022,13 +4020,6 @@ button.link {
     user-select: none;
 }
 
-.homepageTrajectory {
-    text-align: left;
-    position: relative;
-    margin: 0 5%;
-    clear: both;
-    height: 320px;
-}
 
 
 .forBusinessBoxesContainer {
@@ -5191,7 +5182,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .under800only { display: none; }
     .pushDownAbove800 { margin-top: 50px; }
     .pushDownSlightlyAbove800 { margin-top: 40px; }
-    .homepageTrajectory { margin-bottom: -70px; }
 }
 
 @media only screen and (max-width: 800px) {
@@ -5247,12 +5237,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 50px; }
 
-    .homepageTrajectory {
-        text-align: center;
-        height: 0px;
-        display: table;
-    }
-
 
     .forBusinessLineWithCirclesContainer {
         left: 12%;
@@ -5262,15 +5246,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .forBusinessCircle:nth-child(3) { top: 155px; }
     .forBusinessCircle:nth-child(4) { top: 347px; }
     .forBusinessLine { height: 546px; }
-
-    .homepageTrajectory.forBusiness {
-        height: 180px;
-    }
-    .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor {
-        height: 120px;
-        margin-top: -5px;
-    }
-    #whatSkillsAreYouHiringFor > div { height: initial; }
 
     .pathwayLandingQuoteLeft {
         width: 90%;
@@ -6146,22 +6121,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-end: 35;
     }
 
-    .homepageTrajectory { margin-bottom: -20px; }
-
-
-    .homepageTrajectory.forBusiness { height: 160px; }
-    .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor,
 
     .forBusiness > h2 > b {
         font-size: 18px;
     }
     .forBusiness > h2 { margin-top: 0; }
-    .homepageTrajectory.forBusiness {
-        margin: 0px;
-    }
     .forBusinessLineWithCirclesContainer { margin-top: 22px; }
-
-    .homepageTrajectory.forBusiness#sponsorStudentsForBusiness { height: 160px; }
 
     .forBusinessCircle:nth-child(4) { top: 336px; }
 

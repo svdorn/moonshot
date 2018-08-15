@@ -93,9 +93,12 @@
     text-align: left;
 }
 
-
-@media only screen and (min-width: 1051px) {
-    /* .screenshot-right-text { width: 43%; } */
+.screenshot-view {
+    text-align: left;
+    position: relative;
+    margin: 0 5%;
+    clear: both;
+    height: 320px;
 }
 
 
@@ -139,6 +142,12 @@
 
 
 @media only screen and (max-width: 800px) {
+    .screenshot-view {
+        text-align: center;
+        height: 180px;
+        display: table;
+    }
+
     .screenshot-left > img, .screenshot-right > img {
         position: relative;
         margin-top: 60px;
@@ -191,6 +200,12 @@
 
 
 @media only screen and (max-width: 500px) {
+    .screenshot-view {
+        margin-bottom: -20px;
+        margin: 0px;
+        height: 160px;
+    }
+
     .screenshot-left-text-container,
     .screenshot-right-text-container {
         padding-left: 5%;
