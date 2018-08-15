@@ -71,24 +71,23 @@
     margin: 30px 30px 0 0;
 }
 
-
-.homepageTrajectoryTextLeft {
+.screenshot-left-text {
     float: left;
     margin-left: 2%;
 }
-.homepageTrajectoryTextRight {
+.screenshot-right-text {
     float: right;
     width: 43%;
 }
-.homepageTrajectoryTextLeft,
-.homepageTrajectoryTextRight {
+.screenshot-left-text,
+.screenshot-right-text {
     margin-top: 30px;
     width: 54%;
     overflow: auto;
     width: 45%;
 }
-.homepageTrajectoryTextLeftDiv,
-.homepageTrajectoryTextRightDiv {
+.screenshot-left-text-container,
+.screenshot-right-text-container {
     float: right;
     margin-left: 0px;
     text-align: left;
@@ -96,7 +95,7 @@
 
 
 @media only screen and (min-width: 1051px) {
-    /* .homepageTrajectoryTextRight { width: 43%; } */
+    /* .screenshot-right-text { width: 43%; } */
 }
 
 
@@ -104,17 +103,17 @@
     .screenshot-left > img { left: 0%; }
     .screenshot-right > img { right: 0%; }
 
-    .homepageTrajectoryTextLeft {
+    .screenshot-left-text {
         width: 49%;,
         margin-left: 0;
     }
-    .homepageTrajectoryTextRight {
+    .screenshot-right-text {
         width: 45%;
     }
-    .homepageTrajectoryTextLeftDiv {
+    .screenshot-left-text-container {
         margin-left: 0px;
     }
-    .homepageTrajectoryTextRightDiv {
+    .screenshot-right-text-container {
         margin-right: 0px;
     }
 }
@@ -151,20 +150,20 @@
         margin-left: 30px;
     }
 
-    .homepageTrajectoryTextRight {
+    .screenshot-right-text {
         margin-left: 0px;
     }
-    .homepageTrajectoryTextLeft {
+    .screenshot-left-text {
         margin-top: 0;
     }
-    .homepageTrajectoryTextLeft,
-    .homepageTrajectoryTextRight {
+    .screenshot-left-text,
+    .screenshot-right-text {
         margin: auto;
         float: initial;
         margin-left: 0px;
         width: 100%;
     }
-    .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
+    .screenshot-left-text-container, .screenshot-right-text-container {
         text-align: left;
         margin-left: 0px;
         margin-bottom: 20px;
@@ -192,26 +191,26 @@
 
 
 @media only screen and (max-width: 500px) {
-    .homepageTrajectoryTextLeftDiv,
-    .homepageTrajectoryTextRightDiv {
+    .screenshot-left-text-container,
+    .screenshot-right-text-container {
         padding-left: 5%;
         padding-right: 5%;
     }
-    .homepageTrajectoryTextRight,
-    .homepageTrajectoryTextLeft {
+    .screenshot-right-text,
+    .screenshot-left-text {
         height: 152px;
         overflow: visible;
         transform: none;
         width: 90%;
     }
-    .homepageTrajectoryTextLeftDiv {
+    .screenshot-left-text-container {
         height: 135px;
     }
-    .homepageTrajectoryTextLeft {
+    .screenshot-left-text {
         height: 120px;
         margin-top: 0;
     }
-    .homepageTrajectoryTextRight { height: 160px; }
+    .screenshot-right-text { height: 160px; }
 }
 
 
