@@ -72,10 +72,53 @@
 }
 
 
+.homepageTrajectoryTextLeft {
+    float: left;
+    margin-left: 2%;
+}
+.homepageTrajectoryTextRight {
+    float: right;
+    width: 43%;
+}
+.homepageTrajectoryTextLeft,
+.homepageTrajectoryTextRight {
+    margin-top: 30px;
+    width: 54%;
+    overflow: auto;
+    width: 45%;
+}
+.homepageTrajectoryTextLeftDiv,
+.homepageTrajectoryTextRightDiv {
+    float: right;
+    margin-left: 0px;
+    text-align: left;
+}
+
+
+@media only screen and (min-width: 1051px) {
+    /* .homepageTrajectoryTextRight { width: 43%; } */
+}
+
+
 @media only screen and (max-width: 1050px) {
     .screenshot-left > img { left: 0%; }
     .screenshot-right > img { right: 0%; }
+
+    .homepageTrajectoryTextLeft {
+        width: 49%;,
+        margin-left: 0;
+    }
+    .homepageTrajectoryTextRight {
+        width: 45%;
+    }
+    .homepageTrajectoryTextLeftDiv {
+        margin-left: 0px;
+    }
+    .homepageTrajectoryTextRightDiv {
+        margin-right: 0px;
+    }
 }
+
 
 @media only screen and (max-width: 1000px) {
     .screenshot-left > img, .screenshot-right > img {
@@ -107,6 +150,28 @@
     .screenshot-right > img {
         margin-left: 30px;
     }
+
+    .homepageTrajectoryTextRight {
+        margin-left: 0px;
+    }
+    .homepageTrajectoryTextLeft {
+        margin-top: 0;
+    }
+    .homepageTrajectoryTextLeft,
+    .homepageTrajectoryTextRight {
+        margin: auto;
+        float: initial;
+        margin-left: 0px;
+        width: 100%;
+    }
+    .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
+        text-align: left;
+        margin-left: 0px;
+        margin-bottom: 20px;
+        padding-left: 0;
+        text-align: left;
+        margin-bottom: 0px;
+    }
 }
 
 
@@ -123,6 +188,30 @@
     .product-screenshots {
         height: 250px;
     }
+}
+
+
+@media only screen and (max-width: 500px) {
+    .homepageTrajectoryTextLeftDiv,
+    .homepageTrajectoryTextRightDiv {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    .homepageTrajectoryTextRight,
+    .homepageTrajectoryTextLeft {
+        height: 152px;
+        overflow: visible;
+        transform: none;
+        width: 90%;
+    }
+    .homepageTrajectoryTextLeftDiv {
+        height: 135px;
+    }
+    .homepageTrajectoryTextLeft {
+        height: 120px;
+        margin-top: 0;
+    }
+    .homepageTrajectoryTextRight { height: 160px; }
 }
 
 

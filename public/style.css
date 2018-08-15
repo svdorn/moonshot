@@ -4033,19 +4033,7 @@ button.link {
     max-width: 1200px;
     margin: auto;
 }
-.homepageTrajectoryTextLeft {
-    float: left;
-}
-.homepageTrajectoryTextRight {
-    float: right;
-}
-.homepageTrajectoryTextLeft,
-.homepageTrajectoryTextRight {
-    margin-top: 30px;
-    width: 54%;
-    overflow: auto;
-    width: 45%;
-}
+
 .forBusinessTrajectoryTextLeft {
     float: left;
     text-align: center;
@@ -4069,12 +4057,7 @@ button.link {
 }
 
 
-.homepageTrajectoryTextLeftDiv,
-.homepageTrajectoryTextRightDiv {
-    float: right;
-    margin-left: 0px;
-    text-align: left;
-}
+
 
 .forBusinessTrajectoryTextLeftDiv,
 .forBusinessTrajectoryTextRightDiv {
@@ -4894,21 +4877,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 }
 
-@media only screen and (min-width: 1051px) {
-    .homepageTrajectoryTextLeft { margin-left: 2%; }
-    .homepageTrajectoryTextRight { width: 43%; }
-}
 
 @media only screen and (max-width: 1050px) {
-    .homepageTrajectoryTextLeft {
-        width: 50%;
-    }
-    .homepageTrajectoryTextLeftDiv {
-        margin-left: 0px;
-    }
-    .homepageTrajectoryTextRightDiv {
-        margin-right: 0px;
-    }
+
     .forBusinessTrajectoryTextLeft {
         width: 40%;
     }
@@ -5349,27 +5320,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .forBusinessTrajectoryTextRight > img {
         visibility: initial;
     }
-    .homepageTrajectoryTextRight {
-        margin-left: 0px;
-    }
-    .homepageTrajectoryTextLeft {
-        margin-top: 0;
-    }
-    .homepageTrajectoryTextLeft,
-    .homepageTrajectoryTextRight {
-        margin: auto;
-        float: initial;
-        margin-left: 0px;
-        width: 100%;
-    }
-    .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
-        text-align: left;
-        margin-left: 0px;
-        margin-bottom: 20px;
-        padding-left: 0;
-        text-align: left;
-        margin-bottom: 0px;
-    }
+
     .forBusinessLineWithCirclesContainer {
         left: 12%;
         right: initial;
@@ -6272,26 +6223,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .homepageTrajectoryContainer > div:nth-child(5) > div > img {
         margin-left: -45%;
     }
-    .homepageTrajectoryTextLeftDiv,
-    .homepageTrajectoryTextRightDiv {
-        padding-left: 5%;
-        padding-right: 5%;
-    }
-    .homepageTrajectoryTextRight,
-    .homepageTrajectoryTextLeft {
-        height: 152px;
-        overflow: visible;
-        transform: none;
-        width: 90%;
-    }
-    .homepageTrajectoryTextLeftDiv {
-        height: 135px;
-    }
-    .homepageTrajectoryTextLeft {
-        height: 120px;
-        margin-top: 0;
-    }
-    .homepageTrajectoryTextRight { height: 160px; }
+
 
     .homepageTrajectory.forBusiness { height: 160px; }
     .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor,
