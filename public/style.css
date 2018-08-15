@@ -4034,35 +4034,7 @@ button.link {
     margin: auto;
 }
 
-.forBusinessTrajectoryTextLeft {
-    float: left;
-    text-align: center;
-}
-.forBusinessTrajectoryTextRight {
-    float: right;
-    text-align: center;
-}
-.forBusinessTrajectoryTextLeft,
-.forBusinessTrajectoryTextRight {
-    margin-top: 30px;
-    width: 50%;
-    overflow: auto;
-}
-.forBusinessTrajectoryTextLeft > img,
-.forBusinessTrajectoryTextRight > img {
-    height: 90px;
-    position: absolute;
-    margin-top: 45px;
-    font-size: 23px;
-}
 
-
-
-
-.forBusinessTrajectoryTextLeftDiv,
-.forBusinessTrajectoryTextRightDiv {
-    float: right;
-}
 
 .forBusinessBoxesContainer {
     margin: auto;
@@ -4879,20 +4851,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 
 @media only screen and (max-width: 1050px) {
-
-    .forBusinessTrajectoryTextLeft {
-        width: 40%;
-    }
-    .forBusinessTrajectoryTextLeft > img,
-    .forBusinessTrajectoryTextRight > img {
-        visibility: hidden;
-    }
-    .forBusinessTrajectoryTextLeft > div {
-        margin-left: 0px;
-    }
-    .forBusinessTrajectoryTextRight > div {
-        margin-right: 0px;
-    }
     .boxStyle {
         margin: 200px auto 0 10px;
     }
@@ -5294,32 +5252,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 50px; }
 
-
-    .forBusinessTrajectoryTextLeft { float: initial; }
-    .forBusinessTrajectoryTextRight {
-        float: initial;
-        margin-left: 0px;
-    }
     .homepageTrajectory {
         text-align: center;
         height: 0px;
         display: table;
     }
 
-    .forBusinessTrajectoryTextLeft,
-    .forBusinessTrajectoryTextRight {
-        width: 80%;
-        margin: auto;
-    }
-    .forBusinessTrajectoryTextLeft > div, .forBusinessTrajectoryTextRight > div {
-        text-align: center;
-        margin-left: 0px;
-        margin-bottom: 20px;
-    }
-    .forBusinessTrajectoryTextLeft > img,
-    .forBusinessTrajectoryTextRight > img {
-        visibility: initial;
-    }
 
     .forBusinessLineWithCirclesContainer {
         left: 12%;
