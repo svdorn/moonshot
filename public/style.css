@@ -4021,13 +4021,6 @@ button.link {
 }
 
 
-
-.forBusinessBoxesContainer {
-    margin: auto;
-    text-align: center;
-    position: relative;
-}
-
 .homePathwaysDesc {
     margin: auto;
     margin-bottom: 40px;
@@ -4136,11 +4129,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 .blackTextImportant { color: black !important; }
-
-.forBusinessIcon {
-    margin-bottom: 20px;
-    height: 70px;
-}
 
 .pathwayLandingQuote {
     text-align: center;
@@ -4567,8 +4555,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 .br { display: inline; }
 
-.forBusinessBox { padding-top: 30px; }
-.forBusinessBoxText { padding: 0px 2px; }
 .marginTopOnDesktop { margin-top: 60px; }
 
 
@@ -4868,10 +4854,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 25px; }
 
-
-    .forBusiness > h2 > b {
-        font-size: 25px;
-    }
     .drawerOpener {
         visibility: visible;
         position: relative;
@@ -5028,8 +5010,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 @media only screen and (max-width: 900px) {
     .above900only { display: none; }
-
-    .forBusinessBox { padding-top: 13px; }
 
     .frontPage > .skewedRectanglesContainer {
         margin-top: -45px;
@@ -5672,10 +5652,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-start: 27;
     }
 
-    .forBusinessIcon {
-        height: 50px;
-    }
-
     #ATSIntegrations > div > img {
         margin-left: 20px;
     }
@@ -6074,13 +6050,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-start: 27;
         grid-column-end: 35;
     }
-
-
-    .forBusiness > h2 > b {
-        font-size: 18px;
-    }
-    .forBusiness > h2 { margin-top: 0; }
-
 
     .fullHeight, .landingPage { height: 550px; min-height: 550px; }
     .infoBox { padding-top: 190px; }
@@ -6481,11 +6450,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 @media only screen and (max-width: 350px) {
     .above350only { display: none; }
-    .forBusinessBox { padding-top: 10px; }
-    .forBusinessBox > p {
-        font-size: 11px;
-        margin-top: -7px;
-    }
     .pathwayLandingQuoteRight {
         width: 240px;
     }

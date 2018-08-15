@@ -222,7 +222,7 @@ class BusinessHome extends Component {
     screenshotsSection() {
         return (
             <section id="threeScreenshots">
-                <div styleName="screenshot-view" className="forBusiness">
+                <div styleName="screenshot-view">
                     <div styleName="screenshot-left-text">
                         <div styleName="screenshot-left-text-container" className="font18px font16pxUnder800 primary-white">
                             <h2 className="primary-purple-light font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1200only br"><br/></div>will perform the best... or the worst</h2>
@@ -230,7 +230,7 @@ class BusinessHome extends Component {
                             proven high achievers or low performers in that position.
                         </div>
                     </div>
-                    <div styleName="screenshot-right" className="forBusiness">
+                    <div styleName="screenshot-right">
                         <img
                             alt="Analysis Text"
                             src={"/images/businessHome/CandidatesScreenshot" + this.props.jpg}
@@ -240,7 +240,7 @@ class BusinessHome extends Component {
 
                 <br/>
 
-                <div styleName="screenshot-view" className="forBusiness">
+                <div styleName="screenshot-view">
                     <div styleName="screenshot-right-text">
                         <div styleName="screenshot-right-text-container" className="font18px font16pxUnder800 primary-white">
                             <h2 className="primary-cyan font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
@@ -250,7 +250,7 @@ class BusinessHome extends Component {
                             instead of conjecture based on a resume.
                         </div>
                     </div>
-                    <div styleName="screenshot-left" className="forBusiness">
+                    <div styleName="screenshot-left">
                         <img
                             alt="Predictive Insights"
                             src={"/images/businessHome/ProdScreenshot" + this.props.jpg}
@@ -260,7 +260,7 @@ class BusinessHome extends Component {
 
                 <br />
 
-                <div styleName="screenshot-view" className="forBusiness">
+                <div styleName="screenshot-view">
                     <div styleName="screenshot-left-text">
                         <div styleName="screenshot-left-text-container" className="font18px font16pxUnder800 primary-white">
                             <h2 className="font30px font24pxUnder800 font22pxUnder500" style={{color: "#ff748c"}}>Constantly improve with every <div className="above1000only br"><br/></div>new candidate and hire</h2>
@@ -268,7 +268,7 @@ class BusinessHome extends Component {
                         </div>
                     </div>
 
-                    <div styleName="screenshot-right" className="forBusiness">
+                    <div styleName="screenshot-right">
                         <img
                             alt="Analysis Text"
                             src={"/images/businessHome/ProductScreenshot" + this.props.jpg}
@@ -451,7 +451,7 @@ class BusinessHome extends Component {
             <section id="pricingSection">
                 <a id="pricing" name="pricing" className="anchor" />
                 { this.state.showRectangles ? this.skewedRectangles(6) : null }
-                <div className="forBusinessBoxesContainer">
+                <div style={{margin: "auto", textAlign: "center", position: "relative"}}>
                     <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
                          style={{marginBottom: '50px'}}>
                         Pay Only When You Hire
