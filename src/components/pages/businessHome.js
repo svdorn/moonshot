@@ -330,11 +330,11 @@ class BusinessHome extends Component {
             <section id="moonshotProcess">
                 <div className="processOutline font22px font18pxUnder950 font16pxUnder400">
                     <div>
-                        <div className="screenshot">
-                            <div className="dark-opacity"></div>
+                        <div styleName="video-screenshot">
+                            <div />
                             <img src={"/images/businessHome/ListViewScreenshot" + this.props.png} />
                         </div>
-                        <div className="skew-image-cover"></div>
+                        <div styleName="skew-image-cover"></div>
                         <div className="left-area">
                             <div className="text-part">
                                 <div className="text">

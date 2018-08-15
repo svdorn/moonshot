@@ -1346,33 +1346,6 @@ form > h1 {
     padding: 6px 20px;
 }
 
-#moonshotProcess .processOutline .screenshot {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-#moonshotProcess .processOutline .screenshot > .dark-opacity {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,.4);
-    z-index: 20;
-}
-#moonshotProcess .processOutline .screenshot > img {
-    height: 100%;
-    position: absolute;
-    right: 0;
-}
-#moonshotProcess .processOutline .skew-image-cover {
-    height: 100%;
-    width: 19%;
-    background-color: var(--primary-black-light);
-    position: absolute;
-    top: 0;
-    transform: skewX(-20deg) translateX(calc(360px - 50%));
-    z-index: 25;
-}
-
 
 .processButtonsContainer {
     position: relative;
@@ -1490,6 +1463,8 @@ form > h1 {
     background-color: var(--primary-black-light);
     height: 100%;
     width: 375px;
+    position: absolute;
+    top: 0;
 }
 #moonshotProcess .processOutline .text-part {
     width: 275px;
@@ -4897,9 +4872,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .processOutline > img { width: 50px; }
     .processOutline > .leftArrow { left: -60px; }
     .processOutline > .rightArrow { right: -60px; }
-    #moonshotProcess .processOutline .skew-image-cover {
-        transform: skewX(-20deg) translateX(230px);
-    }
+
     #moonshotProcess .processOutline .left-area {
         width: 300px;
     }
@@ -5242,10 +5215,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .messageHeader { margin-top: -70px; }
 
     #moonshotProcess .processOutline { height: 190px; }
-    #moonshotProcess .processOutline .screenshot,
-    #moonshotProcess .processOutline .skew-image-cover {
-        display: none;
-    }
+
     #moonshotProcess .processOutline .left-area {
         width: 100%;
     }
@@ -5580,14 +5550,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
 
-    /* END FRONT PAGE */
-
-    .paperBoxPredictiveStats {
-        height: 190px;
-        width: 180px;
-        margin: 0 8px 40px;
-    }
-
     .marginSides40pxUnder700 { margin-right: 40px; margin-left: 40px; }
 
     .pricingInput .button {
@@ -5713,12 +5675,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 13.5px;
     }
 
-    .paperBoxPredictiveStats {
-        height: 160px;
-        width: 280px;
-        display: block;
-        margin: 20px auto;
-    }
+
     .flourishes3 {
         transform: translateY(-25%) translateX(-18%);
     }
