@@ -1322,31 +1322,6 @@ form > h1 {
     z-index: 1;
 }
 
-#moonshotProcess {
-    margin-top: 280px;
-    margin-bottom: 180px;
-    position: relative;
-    z-index: 1;
-}
-#moonshotProcess h1 {
-    color: #72d6f5;
-    width: calc(100% - 60px);
-    text-align: center;
-    margin-bottom: 56px;
-    margin-left: 30px;
-
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-#moonshotProcess > div:nth-child(4) {
-    margin-top: 40px;
-}
-#moonshotProcess > div > button {
-    padding: 6px 20px;
-}
-
-
 .processButtonsContainer {
     position: relative;
     display: inline-block;
@@ -1401,33 +1376,7 @@ form > h1 {
     width: 100%;
     top: 50%;
 }
-.processOutline {
-    width: 800px;
-    background: linear-gradient(to right, #a88cfe, #7ed2fe);
-    height: 220px;
-    position: relative;
-    left: 50%;
-    margin-top: 20px;
-    transform: translateX(-50%);
 
-    -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
-    -moz-box-shadow:    0 0 80px 1px rgba(0,0,0,.5);
-    box-shadow:         0 0 80px 1px rgba(0,0,0,.5);
-
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-
-/* gray box surrounding text and centerline */
-.processOutline > div {
-    color: white;
-    width: calc(100% - 4px);
-    height: calc(100% - 4px);
-    position: relative;
-    left: 2px;
-    top: 2px;
-}
 
 .shadowBox {
     -webkit-box-shadow: 0 0 80px 20px rgba(0,0,0,.5);
@@ -4811,12 +4760,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 950px) {
-    #moonshotProcess h1 { margin-bottom: 40px; }
-    .processOutline {
-        width: 580px;
-        height: 200px;
-    }
-
     #ATSIntegrations > div > img {
         margin-left: 30px;
     }
@@ -5148,10 +5091,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .messageHeader { margin-top: -70px; }
 
-    #moonshotProcess .processOutline { height: 190px; }
-
-
-
     .automate-invites .manual-invite .manual-add-example {
         --device-scale: .15;
     }
@@ -5220,9 +5159,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .processHeaderContainer {
         height: 50px;
         width: 144px;
-    }
-    .processOutline {
-        width: 370px;
     }
 
     .homePathwaysDesc {
@@ -5565,8 +5501,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-left: 50px;
         margin-right: 50px;
     }
-
-    #moonshotProcess { margin-top: 100px; }
 
     .multipleChoiceCircle {
         margin-top: 2px;
@@ -6153,12 +6087,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-end: 32;
     }
 
-    #moonshotProcess { margin-bottom: 120px; }
-    #moonshotProcess h1 { margin-bottom: 26px; }
-    .processOutline {
-        width: 280px;
-        margin-top: 12px;
-    }
+
+
     .processHeaderContainer { width: 108px; }
 
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
