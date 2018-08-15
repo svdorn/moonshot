@@ -102,6 +102,23 @@
 }
 
 
+.stats-box {
+    height: 210px;
+    width: 280px;
+    display: inline-block;
+    margin: 0 25px 40px;
+    vertical-align: top;
+    padding: 2px;
+    background: linear-gradient(to top left, var(--primary-white) , var(--primary-cyan));
+}
+.stats-box > div {
+    padding: 20px 24px 0;
+    background: var(--primary-black-dark);
+    height: 100%;
+    width: 100%;
+}
+
+
 @media only screen and (max-width: 1050px) {
     .screenshot-left > img { left: 0%; }
     .screenshot-right > img { right: 0%; }
@@ -129,6 +146,15 @@
         width: 320px;
         transition: all 0.2s ease-out;
     }
+
+    .stats-box {
+        height: 210px;
+        width: 240px;
+        margin: 0 20px 40px;
+    }
+    .stats-box > div {
+        padding: 20px 0 0 10px;
+    }
 }
 
 
@@ -137,6 +163,12 @@
     .my-candidates-screenshot {
         --device-scale: .39;
         top: 95%;
+    }
+
+    .stats-box {
+        height: 210px;
+        width: 210px;
+        margin: 0 10px 40px;
     }
 }
 
@@ -195,6 +227,22 @@
 
     .product-screenshots {
         height: 250px;
+    }
+
+    .stats-box {
+        height: 190px;
+        width: 180px;
+        margin: 0 8px 40px;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+    .stats-box {
+        height: 160px;
+        width: 280px;
+        display: block;
+        margin: 20px auto;
     }
 }
 

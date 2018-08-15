@@ -2229,10 +2229,6 @@ form > h1 {
     margin-right: 10px;
 }
 
-#businessHomeStatistics .paperBoxPredictiveStats > div {
-    padding: 20px 24px 0;
-}
-
 button.link {
   background: none;
   margin: 0;
@@ -2391,26 +2387,11 @@ button.link {
     transform: translateX(50%);
 }
 
-.paperBoxPredictiveStats {
-    height: 210px;
-    width: 280px;
-    display: inline-block;
-    margin: 0 25px 40px;
-    vertical-align: top;
-}
 .flourishes3 {
     position: absolute;
     transform: translateY(-25%);
 }
-.gradientBorderPredictiveStats {
-    padding: 2px;
-    background: linear-gradient(to top left, var(--primary-white) , var(--primary-cyan));
-}
-.gradientBorderPredictiveStats > div {
-    background: var(--primary-black-dark);
-    height: 100%;
-    width: 100%;
-}
+
 
 .paperBoxInviteCadence {
     height: 170px;
@@ -4772,10 +4753,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         --device-scale: .2;
     }
 
-    #businessHomeStatistics .paperBoxPredictiveStats > div {
-        padding: 20px 0 0 10px;
-    }
-
     .myCandidates .candidatesAndOptions {
         width: calc(100% - 40px);
     }
@@ -4834,12 +4811,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 100%;
         margin: auto;
         padding-top: 56.25%
-    }
-
-    .paperBoxPredictiveStats {
-        height: 210px;
-        width: 240px;
-        margin: 0 20px 40px;
     }
 
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
@@ -5009,12 +4980,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .recruitee {
         height: 22.5px;
-    }
-
-    .paperBoxPredictiveStats {
-        height: 210px;
-        width: 210px;
-        margin: 0 10px 40px;
     }
 
     .font40pxUnder900 { font-size: 40px; }

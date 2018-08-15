@@ -293,7 +293,7 @@ class BusinessHome extends Component {
                             <div className="flourishes3">
                                 <embed src="/images/businessHome/Flourishes3.svg"/>
                             </div>
-                            <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
+                            <Paper styleName="stats-box"
                                 zDepth={2}>
                                 <div style={{position: "relative", textAlign:"left"}}>
                                     <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Improve Your Efficiency</div>
@@ -301,7 +301,7 @@ class BusinessHome extends Component {
                                     <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
                                 </div>
                             </Paper>
-                            <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
+                            <Paper styleName="stats-box"
                                 zDepth={2}>
                                 <div style={{position: "relative", textAlign:"left"}}>
                                     <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
@@ -309,7 +309,7 @@ class BusinessHome extends Component {
                                     <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
                                 </div>
                             </Paper>
-                            <Paper className="gradientBorderPredictiveStats paperBoxPredictiveStats"
+                            <Paper styleName="stats-box"
                                 zDepth={2}>
                                 <div style={{position: "relative", textAlign:"left"}}>
                                     <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Hire Top Performers</div>
