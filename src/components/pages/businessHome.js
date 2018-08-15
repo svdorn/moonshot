@@ -453,8 +453,10 @@ class BusinessHome extends Component {
                 <a id="pricing" name="pricing" className="anchor" />
                 { this.state.showRectangles ? this.skewedRectangles(6) : null }
                 <div style={{margin: "auto", textAlign: "center", position: "relative"}}>
-                    <div className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
-                         style={{marginBottom: '50px'}}>
+                    <div
+                        className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
+                        style={{marginBottom: '50px'}}
+                    >
                         Pay Only When You Hire
                         <div className="font18px font16pxUnder700 font12pxUnder400 primary-white">
                             Our incentives are aligned. You only pay when you hire<div className="above700only br"><br/></div> a top performer who stays at your company.
@@ -474,27 +476,19 @@ class BusinessHome extends Component {
                                 <img
                                     src={"/images/businessHome/PaperAirplane2" + this.props.png}
                                     alt="Paper Airplane Icon"
-                                    className="businessHomeBoxIcons"
+                                    styleName="aircraft-icon"
                                 />
-                                <div className="hire-number primary-white font22px font18pxUnder400">
+                                <div className="marginTop10px primary-white font22px font18pxUnder400">
                                     First Hire
                                 </div>
-                                <div className="home-peach price-free font30px font24pxUnder400">
+                                <div styleName="price-free" className="home-peach font30px font24pxUnder400">
                                     FREE
                                 </div>
                                 <ul className="primary-white font14px font12pxUnder400">
-                                    <li>
-                                        Select a position to evaluate
-                                    </li>
-                                    <li>
-                                        Invite applicants to the evaluation
-                                    </li>
-                                    <li>
-                                        Review the results
-                                    </li>
-                                    <li>
-                                        Hire the best candidate
-                                    </li>
+                                    <li>Select a position to evaluate</li>
+                                    <li>Invite applicants to the evaluation</li>
+                                    <li>Review the results</li>
+                                    <li>Hire the best candidate</li>
                                 </ul>
                                 <div className="button large round-4px gradient-transition gradient-1-home-pricing-peach gradient-2-home-pricing-pink primary-white font18px" onClick={() => goTo("/chatbot")}>
                                     Try for Free
@@ -517,9 +511,9 @@ class BusinessHome extends Component {
                                 <img
                                     src={"/images/businessHome/EnterpriseRocket2" + this.props.png}
                                     alt="Enterprise Rocket Icon"
-                                    className="businessHomeBoxIcons"
+                                    styleName="aircraft-icon"
                                 />
-                                <div className="primary-white hire-number font22px font18pxUnder400">
+                                <div className="primary-white marginTop10px font22px font18pxUnder400">
                                     Each Additional Hire
                                 </div>
                                 <div className="primary-white">
@@ -531,14 +525,17 @@ class BusinessHome extends Component {
                                     </div>
                                 </div>
                                 <ul className="primary-white font14px font12pxUnder400" style={{textAlign: "left", width: "95%", margin:"auto"}}>
-                                    <li>
-                                        Monthly payments stop if a<br/>hire is no longer employed
-                                    </li>
-                                    <li>
-                                        Pay off your balance at any time
-                                    </li>
+                                    <li>Monthly payments stop if a<br/>hire is no longer employed</li>
+                                    <li>Pay off your balance at any time</li>
                                 </ul>
-                                <div className="button large round-4px gradient-transition gradient-1-home-pricing-green gradient-2-home-pricing-blue primary-white font18px" onClick={() => goTo("/chatbot")}>
+                                <div
+                                    className=
+                                        {"button large round-4px gradient-transition \
+                                          gradient-1-home-pricing-green \
+                                          gradient-2-home-pricing-blue \
+                                          primary-white font18px"}
+                                    onClick={() => goTo("/chatbot")}
+                                >
                                     Try for Free
                                 </div>
                             </div>

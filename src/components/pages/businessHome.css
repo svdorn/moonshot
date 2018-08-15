@@ -220,6 +220,16 @@
     height: 64px;
 }
 
+.price-free {
+    font-weight: bold;
+    margin: 15px
+}
+
+.aircraft-icon {
+    height: 100px;
+    margin-top: 20px;
+}
+
 
 @media only screen and (max-width: 1050px) {
     .screenshot-left > img { left: 0%; }
@@ -488,4 +498,8 @@
         width: 280px;
         margin-bottom: 120px;
     }
+
+    .price-free { margin: 10px; }
+
+    .aircraft-icon { height: 80px; }
 }

@@ -2206,10 +2206,6 @@ button.link {
     box-shadow:         0px 10px 30px 2px #000000;
 }
 
-#pricingSection .hire-number {
-    margin-top: 10px;
-}
-
 #pricingSection .flourish-icon {
     position: absolute;
     right: -0.3%;
@@ -2308,10 +2304,6 @@ button.link {
     background: #262626;
     height: 100%;
     width: 100%;
-}
-.businessHomeBoxIcons {
-    height: 100px;
-    margin-top: 20px;
 }
 
 .discoverPageBorder {
@@ -3069,10 +3061,6 @@ button.link {
     text-align: center;
     line-height: 1.2;
     margin: 10px auto;
-}
-#pricingSection .price-free {
-    font-weight: bold;
-    margin: 15px
 }
 
 .my-employees .search-fields .add-employee {
@@ -6006,9 +5994,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 395px;
         width: 280px;
     }
-    .businessHomeBoxIcons {
-        height: 80px;
-    }
 
     .marginTop20pxUnder400 {
         margin-top: 20px;
@@ -6051,10 +6036,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 
     .pricingButton { bottom: 32px; }
-
-    #pricingSection .price-free {
-        margin: 10px;
-    }
 
     #crystalBall { margin-top: 110px; }
 
