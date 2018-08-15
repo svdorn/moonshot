@@ -328,7 +328,7 @@ class BusinessHome extends Component {
     videoSection() {
         return (
             <section id="moonshotProcess">
-                <div className="processOutline font22px font18pxUnder950 font16pxUnder400">
+                <div styleName="video-container" className="font22px font18pxUnder950 font16pxUnder400">
                     <div>
                         <div styleName="video-screenshot">
                             <div />

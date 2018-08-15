@@ -1418,33 +1418,15 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-/* arrows */
-.processOutline > img {
-    border-radius: 100%;
-    cursor: pointer;
-    position: absolute;
-    width: 60px;
-    top: 50%;
-    transform: translateY(-50%);
-    -webkit-transition: all 0.2s ease;
-    -ms-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-}
-.processOutline > .rightArrow:hover { background-color: rgba(122,222,252,.2); }
-.processOutline > .leftArrow:hover { background-color: rgba(176,129,251,.2); }
-/* arrow pointing left */
-.processOutline > .leftArrow { left: -70px; }
-.processOutline > .rightArrow { right: -70px; }
+
 /* gray box surrounding text and centerline */
 .processOutline > div {
-    background-color: var(--primary-black-dark);
     color: white;
     width: calc(100% - 4px);
     height: calc(100% - 4px);
     position: relative;
     left: 2px;
     top: 2px;
-    display: inline-block;
 }
 
 .shadowBox {
@@ -4834,10 +4816,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 580px;
         height: 200px;
     }
-    .processOutline > img { width: 50px; }
-    .processOutline > .leftArrow { left: -60px; }
-    .processOutline > .rightArrow { right: -60px; }
-
 
     #ATSIntegrations > div > img {
         margin-left: 30px;
@@ -5246,10 +5224,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .processOutline {
         width: 370px;
     }
-    .processOutline > div > div:first-child > div {
-        padding: 0 10px;
-    }
-
 
     .homePathwaysDesc {
         padding: 0;
@@ -5799,8 +5773,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .settingsTabs > div > button {
         font-size: 10px !important;
     }
-
-    .processOutline > img { display: none; }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
 
