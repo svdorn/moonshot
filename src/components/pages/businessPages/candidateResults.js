@@ -13,6 +13,8 @@ import PsychBreakdown from '../../childComponents/psychBreakdown';
 import HoverTip from "../../miscComponents/hoverTip";
 import { qualifierFromScore, getFirstName } from "../../../miscFunctions";
 
+import "./candidateResults.css";
+
 class CandidateResults extends Component {
     constructor(props) {
         super(props);
@@ -242,23 +244,10 @@ class CandidateResults extends Component {
                                 <div
                                     className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
                                     Predicted Performance<br/>
-                                    <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted, "predicted")}</p>
+                                    <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted)}</p>
                                 </div>
                                 <Slider disabled={true}
                                         value={this.getSliderValue(this.state.predicted)}
-                                        min={50}
-                                        max={150}
-                                        className="resultsSlider"
-                                />
-                            </div>
-                            <div>
-                                <div
-                                    className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                    Skill Level<br/>
-                                    <p style={style.lightBlue}>{qualifierFromScore(this.state.skill, "skill")}</p>
-                                </div>
-                                <Slider disabled={true}
-                                        value={this.getSliderValue(this.state.skill)}
                                         min={50}
                                         max={150}
                                         className="resultsSlider"

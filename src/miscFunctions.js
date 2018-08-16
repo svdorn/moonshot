@@ -66,31 +66,19 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
 
 
 // get the qualifier (e.g. "above average", "expert", etc) based on a score
-function qualifierFromScore(score, type) {
+function qualifierFromScore(score) {
     // make sure the score is a number we can use
     if (typeof score === "string") { score = parseInt(score, 10); }
     if (typeof score !== "number") { return "N/A"; }
     if (score === NaN) { return "N/A"; }
 
-    let qualifiers = undefined;
-    // for predicted performance
-    if (type === "predicted") {
-        qualifiers = ["Below Average", "Average", "Above Average"];
-    }
-    // for skill level
-    else if (type === "skill") {
-        qualifiers = ["Novice", "Intermediate", "Expert"];
-    }
-    // if invalid type provided, return N/A
-    else { return "N/A"; }
-
     // between 90 (inclusive) and 110 (exclusive) is intermediate/average
     if (score < 90) {
-        return qualifiers[0];
+        return "Below Average";
     } else if (score < 110) {
-        return qualifiers[1];
+        return "Average";
     } else {
-        return qualifiers[2];
+        return "Above Average";
     }
 }
 
