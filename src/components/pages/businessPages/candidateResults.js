@@ -24,15 +24,12 @@ class CandidateResults extends Component {
             overallScore: undefined,
             hardSkillPoints: [],
             predictivePoints: [],
-            freeResponses: [],
             psychScores: [],
             loading: true,
             areaSelected: undefined,
             windowWidth: undefined,
             // if this is true, didn't get enough props, so can't display results
             invalidProps: false,
-            // the currently selected tab
-            tab: "Analysis",
             // if there was an error loading in results
             error: false,
             // how tall the predictive graphs should be
@@ -96,7 +93,6 @@ class CandidateResults extends Component {
                     confidenceInterval: 16
                 }
             });
-            const freeResponses = res.data.frqs;
             const scores = res.data.performanceScores;
             const overallScore = scores.overall;
             // they all have a confidence interval of 16 for now
@@ -140,7 +136,6 @@ class CandidateResults extends Component {
                 skill: scores.skill,
                 hardSkillPoints,
                 predictivePoints,
-                freeResponses,
                 windowWidth: window.innerWidth
             });
         })
@@ -212,6 +207,18 @@ class CandidateResults extends Component {
 
 
     makeAnalysisSection() {
+        // if loading the info, show loading spinner
+        if (this.state.loading) {
+            return (
+                <div
+                    className="center fillScreen"
+                    style={{paddingTop: "40px"}}
+                >
+                    <CircularProgress color="#76defe" />
+                </div>
+            )
+        }
+
         if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
 
         const hardSkillsDataPoints = this.state.hardSkillPoints;
@@ -300,34 +307,6 @@ class CandidateResults extends Component {
                     }
                 </div>
         );
-    }
-
-
-    makeResponsesSection() {
-        let freeResponses = [];
-        if (typeof this.state === "object" && Array.isArray(this.state.freeResponses)) {
-            freeResponses = this.state.freeResponses;
-        }
-
-        let responses = freeResponses.map(freeResponse => {
-            return (
-                <div className="employerDiv freeResponse" key={freeResponse.question}>
-                    <span className="primary-cyan">{freeResponse.question}</span>
-                    <div className="answer">{freeResponse.answer}</div>
-                </div>
-            )
-        });
-
-        return (
-            <div className="fillScreen candidateResponses">
-                {responses}
-            </div>
-        )
-    }
-
-
-    handleTabChange = (value) => {
-        this.setState({ tab: value });
     }
 
 
@@ -482,11 +461,6 @@ class CandidateResults extends Component {
         const hardSkills = this.state.hardSkills;
         const predictiveInsights = this.state.predictiveInsights;
 
-        const loading = this.state.loading;
-        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="#76defe" /></div>
-        const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
-        const responsesSection = loading ? loadingArea : this.makeResponsesSection();
-
         let content = null;
 
         // if there was an error getting the user's results
@@ -552,23 +526,9 @@ class CandidateResults extends Component {
                                 <div className="pointer" onClick={() => this.props.exitResults()}>x</div>
                             </div>
                         </div>
-                        <Tabs
-                            style={style.topTabs}
-                            inkBarStyle={{background: 'white'}}
-                            tabItemContainerStyle={{width: this.props.mobile ? "60%" : "40%"}}
-                            className="myPathwaysTabs"
-                            onChange={this.handleTabChange.bind(this)}
-                        >
-                            <Tab label="Analysis" style={style.topTab} value="Analysis" />
-                            <Tab label="Responses" style={style.topTab} value="Responses" />
-                        </Tabs>
                     </div>
                     <div className="resultsContent">
-                        {this.state.tab === "Analysis" ?
-                            analysisSection
-                            :
-                            responsesSection
-                        }
+                        { this.makeAnalysisSection() }
                     </div>
                 </div>
             );

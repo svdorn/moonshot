@@ -2243,11 +2243,11 @@ button.link {
     width: 100%;
 }
 .candidateResults .resultsHeader {
-    height: 146px;
+    height: 111px;
 }
 .candidateResults .resultsContent {
     overflow: scroll;
-    height: calc(100vh - 364px);
+    height: calc(100vh - 329px);
     min-height: 154px;
     background-color: var(--primary-black-light);
 }
@@ -4456,10 +4456,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         top: 42px;
     }
     .mobile.candidateResults .resultsHeader {
-        height: 131px;
+        height: 96px;
     }
     .candidateResults .resultsContent {
-        height: calc(100vh - 349px);
+        height: calc(100vh - 314px);
     }
 
     .psychAnalysisQuestion {
@@ -4777,10 +4777,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: inline-block;
     }
     .candidateResults .resultsContent {
-        height: calc(100vh - 386px);
+        height: calc(100vh - 333px);
     }
     .mobile.candidateResults .resultsHeader {
-        height: 168px;
+        height: 115px;
     }
     .myCandidates tr.mobileCandidate > td > .predicted,
     .myCandidates tr.mobileCandidate > td > .score,
