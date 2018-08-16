@@ -227,6 +227,8 @@ class CandidateResults extends Component {
 
         const candidate = this.state.candidate;
 
+        const overallScore = this.round(this.state.overallScore);
+
         return (
             !candidate.endDate ?
                 <div className="analysis center aboutMeSection blackBackground" style={{paddingTop:"20px"}}>
@@ -236,18 +238,17 @@ class CandidateResults extends Component {
                 <div className="analysis center aboutMeSection blackBackground" style={{paddingBottom:"30px"}}>
                     <div className="center" className="scoreSummarySection" style={{backgroundColor:"#393939"}}>
                         <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
-                            Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
+                            Candidate Score <b style={style.lightBlue}><u>{overallScore}</u></b>
                         </div>
                         <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
                         <div className="resultsSlidersContainer">
                             <div>
                                 <div
                                     className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                    Predicted Performance<br/>
-                                    <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted)}</p>
+                                    <p style={style.lightBlue}>{qualifierFromScore(overallScore)}</p>
                                 </div>
                                 <Slider disabled={true}
-                                        value={this.getSliderValue(this.state.predicted)}
+                                        value={this.getSliderValue(overallScore)}
                                         min={50}
                                         max={150}
                                         className="resultsSlider"
