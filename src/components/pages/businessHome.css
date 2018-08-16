@@ -309,6 +309,13 @@
 }
 
 
+.trello { height: 38px; }
+.bamboo-hr { height: 28px; }
+.workable { height: 60px; }
+.slack { height: 40px; }
+.recruitee { height: 30px; }
+
+
 @media only screen and (max-width: 1050px) {
     .screenshot-left > img { left: 0%; }
     .screenshot-right > img { right: 0%; }
@@ -383,6 +390,12 @@
         width: 210px;
         margin: 0 10px 40px;
     }
+
+    .trello { height: 28.5px; }
+    .bamboo-hr { height: 21px; }
+    .workable { height: 45px; }
+    .slack { height: 30px; }
+    .recruitee { height: 22.5px; }
 }
 
 
@@ -501,6 +514,12 @@
     .feature-box img {
         height: 44px;
     }
+
+    .trello { height: 22.8px; }
+    .bamboo-hr { height: 16.8px; }
+    .workable { height: 36px; }
+    .slack { height: 24px; }
+    .recruitee { height: 18px; }
 }
 
 
@@ -513,6 +532,12 @@
     }
 
     .video-container { margin-top: 100px; }
+
+    .trello { height: 17.1px; }
+    .bamboo-hr { height: 12.6px; }
+    .workable { height: 27px; }
+    .slack { height: 18px; }
+    .recruitee { height: 13.5px; }
 }
 
 
@@ -543,6 +568,12 @@
         margin-top: 0;
     }
     .screenshot-right-text { height: 160px; }
+
+    .trello { height: 13.68px; }
+    .bamboo-hr { height: 10.08px; }
+    .workable { height: 21.6px; }
+    .slack { height: 14.4px; }
+    .recruitee { height: 10.8px; }
 }
 
 

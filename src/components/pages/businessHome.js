@@ -462,7 +462,7 @@ class BusinessHome extends Component {
                             Our incentives are aligned. You only pay when you hire<div className="above700only br"><br/></div> a top performer who stays at your company.
                         </div>
                     </div>
-                    <div styleName="pricing-box box-1" className="businessHomeGradientBorder1 paperBoxBusinessHome">
+                    <div styleName="pricing-box box-1">
                         <div style={{textAlign: "center", position: "relative"}}>
                             <img
                                 src={"/images/businessHome/Flourish1" + this.props.png}
@@ -497,7 +497,7 @@ class BusinessHome extends Component {
                         </div>
                     </div>
                     <div className="under800only" style={{height:"0px"}}><br/></div>
-                    <div styleName="pricing-box box-2" className="businessHomeGradientBorder2 paperBoxBusinessHome">
+                    <div styleName="pricing-box box-2">
                         <div style={{textAlign: "center", position: "relative"}}>
                             <img
                                 src={"/images/businessHome/Flourish2" + this.props.png}
@@ -575,11 +575,11 @@ class BusinessHome extends Component {
                     <div className="marginBottom40px font30px font24pxUnder700 font20pxUnder500">
                         Integrates with your ATS and favorite apps.
                     </div>
-                    <img src={"images/businessHome/BambooHr" + this.props.png} alt="BambooHr" className="bamboo-hr" />
-                    <img src={"images/businessHome/Trello" + this.props.png} alt="Trello" className="trello" />
-                    <img src={"images/businessHome/Workable" + this.props.png} alt="Workable" className="workable" />
-                    <img src={"images/businessHome/Slack" + this.props.png} alt="Slack" className="slack" />
-                    <img src={"images/businessHome/Recruitee" + this.props.png} alt="Recruitee" className="recruitee" />
+                    <img src={"images/businessHome/BambooHr" + this.props.png} alt="BambooHr" styleName="bamboo-hr" />
+                    <img src={"images/businessHome/Trello" + this.props.png} alt="Trello" styleName="trello" />
+                    <img src={"images/businessHome/Workable" + this.props.png} alt="Workable" styleName="workable" />
+                    <img src={"images/businessHome/Slack" + this.props.png} alt="Slack" styleName="slack" />
+                    <img src={"images/businessHome/Recruitee" + this.props.png} alt="Recruitee" styleName="recruitee" />
                     <div className="marginTop40px font20px font16pxUnder700 font12pxUnder500">
                         and many more...
                     </div>
