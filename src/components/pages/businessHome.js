@@ -469,7 +469,7 @@ class BusinessHome extends Component {
                                 alt="Flourish Icon"
                                 className="flourish-icon"
                             />
-                            <div className="pricing-container">
+                            <div styleName="pricing-container">
                                 <div className="home-peach paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
                                     Test It Out
                                 </div>
@@ -504,7 +504,7 @@ class BusinessHome extends Component {
                                 className="flourish-icon"
                                 alt="Flourish Icon"
                             />
-                            <div className="pricing-container">
+                            <div styleName="pricing-container">
                                 <div className="home-blue paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
                                     Scale It Up
                                 </div>
