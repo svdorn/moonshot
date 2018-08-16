@@ -449,7 +449,7 @@ class BusinessHome extends Component {
         const positionUrl = this.state.position ? ("?position=" + this.state.position) : "";
 
         return (
-            <section id="pricingSection">
+            <section id="pricingSection" styleName="pricing-section">
                 <a id="pricing" name="pricing" className="anchor" />
                 { this.state.showRectangles ? this.skewedRectangles(6) : null }
                 <div style={{margin: "auto", textAlign: "center", position: "relative"}}>
@@ -569,7 +569,7 @@ class BusinessHome extends Component {
 
     integrationsSection() {
         return (
-            <section id="ATSIntegrations" className="marginBottom60px">
+            <section id="ATSIntegrations" styleName="ats-integrations-section" className="marginBottom60px">
                 { this.state.showRectangles ? this.skewedRectangles(6) : null }
                 <div className="center primary-white">
                     <div className="marginBottom40px font30px font24pxUnder700 font20pxUnder500">
