@@ -493,48 +493,6 @@ form > h1 {
     overflow-x: hidden;
     overflow-y: hidden;
 }
-.skewedRectanglesContainer {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-transform: skewY(-12deg);
-    transform: skewY(-12deg);
-    overflow: hidden;
-    pointer-events: none;
-
-    /* for margin transition when text gets smaller */
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.skewedRectanglesContainer > .skewedRectangles {
-    display: grid;
-    position: absolute;
-    grid-template-rows: repeat(auto-fill, var(--rowWidth));
-    grid-template-columns:
-        [viewport-start] 1fr
-        [left-gutter-start] repeat(var(--gutterColumns),var(--gutterColumnWidth))
-        [left-gutter-end content-start] repeat(var(--contentColumns),var(--contentColumnWidth))
-        [content-end right-gutter-start] repeat(var(--gutterColumns),var(--gutterColumnWidth))
-        [right-gutter-end] 1fr [viewport-end];
-    width: 100%;
-    min-width: calc((var(--gutterColumns) * var(--gutterColumnWidth) * 2) + (var(--contentColumns) * var(--contentColumnWidth)) );
-}
-.skewedRectanglesContainer > .skewedRectangles > .skewedRectangle {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
 
 
 #employerOnboarding {
