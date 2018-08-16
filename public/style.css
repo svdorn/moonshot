@@ -626,135 +626,7 @@ form > h1 {
     grid-column-start: 28;
     grid-column-end: 32;
 }
-/* GRID FOR STATISTICS PAGE */
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer {
-    margin-top: -500px;
-    height: 1200px;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
-    height: calc(var(--rowWidth) * 400);
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 29;
-    grid-row-end: 33;
-    grid-column-start: 26;
-    grid-column-end: 33;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-    background: #323232;
-    grid-row-start: 103;
-    grid-row-end: 185;
-    grid-column-start: 1;
-    grid-column-end: 43;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-    background: #323232;
-    grid-row-start: 71;
-    grid-row-end: 103;
-    grid-column-start: 1;
-    grid-column-end: 26;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 103;
-    grid-row-end: 107;
-    grid-column-start: 32;
-    grid-column-end: 43;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 78;
-    grid-row-end: 82;
-    grid-column-start: 24;
-    grid-column-end: 29;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 67;
-    grid-row-end: 71;
-    grid-column-start: 1;
-    grid-column-end: 8;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 67;
-    grid-row-end: 71;
-    grid-column-start: 8;
-    grid-column-end: 11;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 71;
-    grid-row-end: 75;
-    grid-column-start: 7;
-    grid-column-end: 12;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(9) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 71;
-    grid-row-end: 75;
-    grid-column-start: 1;
-    grid-column-end: 7;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 67;
-    grid-row-end: 71;
-    grid-column-start: 21;
-    grid-column-end: 25;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 202;
-    grid-row-end: 206;
-    grid-column-start: 34;
-    grid-column-end: 38;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 202;
-    grid-row-end: 206;
-    grid-column-start: 38;
-    grid-column-end: 43;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 206;
-    grid-row-end: 210;
-    grid-column-start: 33;
-    grid-column-end: 38;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(14) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 206;
-    grid-row-end: 210;
-    grid-column-start: 38;
-    grid-column-end: 43;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(15) {
-    background: #323232;
-    grid-row-start: 185;
-    grid-row-end: 206;
-    grid-column-start: 20;
-    grid-column-end: 43;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 181;
-    grid-row-end: 185;
-    grid-column-start: 1;
-    grid-column-end: 11;
-}
-#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
-    background: linear-gradient(to right, #80cffe, #a196fe 65%, #80cffe);
-    grid-row-start: 185;
-    grid-row-end: 189;
-    grid-column-start: 1;
-    grid-column-end: 10;
-}
 
-/* END STATS PAGE GRID */
 /* GRID FOR LEARN FROM HIRES PAGE */
 #learnFromHires > .skewedContainer > .skewedRectanglesContainer {
     margin-top: -250px;
@@ -4563,28 +4435,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         padding-top: 56.25%
     }
 
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-        grid-row-start: 40;
-        grid-row-end: 44;
-        grid-column-end: 32;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
-        grid-column-start: 30;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
-        background: linear-gradient(to right, #80cffe, #a196fe);
-        grid-row-start: 181;
-        grid-row-end: 185;
-        grid-column-start: 1;
-        grid-column-end: 13;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
-        background: linear-gradient(to right, #80cffe, #a196fe 65%, #80cffe);
-        grid-row-start: 185;
-        grid-row-end: 189;
-        grid-column-start: 1;
-        grid-column-end: 12;
-    }
+
 
 
     #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
@@ -4824,44 +4675,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 50px; }
 
-    #businessHomeStatistics {
-        margin-top: 100px;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5-n) {
-        /* display: none; */
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-        grid-row-start: 67;
-        grid-row-end: 71;
-        grid-column-start: 1;
-        grid-column-end: 17;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        background: linear-gradient(to right, #80cffe, #a196fe);
-        grid-row-start: 103;
-        grid-row-end: 107;
-        grid-column-start: 29;
-        grid-column-end: 38;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-        display: none;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
-        background: linear-gradient(to right, #a196fe, #80cffe);
-        grid-row-start: 202;
-        grid-row-end: 206;
-        grid-column-start: 33;
-        grid-column-end: 43;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
-        grid-column-start: 28;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
-        grid-column-end: 16;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
-        grid-column-end: 15;
-    }
+
 
     #pricingSection > div > div > div > ul {
         list-style: none;
@@ -5342,30 +5156,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
 
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
-        grid-column-end: 14;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
-        grid-column-start: 14;
-        grid-column-end: 18;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(9) {
-        grid-column-end: 15;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
-        grid-column-start: 15;
-        grid-column-end: 19;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
-        display: none;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
-        grid-column-start: 29;
-        grid-column-end: 43;
-    }
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-start: 27;
-    }
+
 
     #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
         grid-column-end: 19;
@@ -5880,9 +5671,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .processHeaderContainer { width: 108px; }
 
-    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-start: 26;
-    }
+
 
 
     .pricingButton { bottom: 32px; }
