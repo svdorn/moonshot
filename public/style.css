@@ -2207,7 +2207,7 @@ button.link {
 }
 .myCandidates .arrowContainer {
     position: absolute;
-    top: 96px;
+    top: 53px;
     -webkit-transition: all 0.5s ease;
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
