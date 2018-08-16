@@ -173,7 +173,7 @@ class BusinessHome extends Component {
         const positionUrl = this.state.position ? ("?position=" + this.state.position) : "";
 
         return (
-            <section id="introduction">
+            <section id="introduction" styleName="introduction">
                 <a id="home-top" name="home-top" className="anchor" />
                 <div className="businessHome frontPage">
                     {this.state.showRectangles ?
