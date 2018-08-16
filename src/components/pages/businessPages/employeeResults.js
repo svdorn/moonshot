@@ -178,7 +178,7 @@ class EmployeeResults extends Component {
 
         return (
             <div className="analysis center aboutMeSection" style={style.tabContent}>
-                <div className="center" className="scoreSummarySection" style={{backgroundColor:"#393939"}}>
+                <div className="center" style={{backgroundColor:"#393939"}}>
                     <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
                         Employee Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                     </div>

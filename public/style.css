@@ -1051,33 +1051,7 @@ form > h1 {
     margin: 0 20px 0 40px;
 }
 
-.analysis .candidateScore {
-    margin-bottom: 30px;
-    margin-top: 25px;
-}
-
-.resultsSlidersContainer {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    position: relative;
-}
-.resultsSlidersContainer > div {
-    width: 200px;
-    position: relative;
-}
-.resultsSlider {
-    width: 200px;
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
-    top: 40px;
-}
-.resultsSlider > div > div > div {
-    background: linear-gradient(to right, #ae7efc, #75dcfc) !important;
-}
 /* make the results slider have normal cursor */
-.resultsSlider > div > div > div:nth-child(3),
 .candidatePreviewSlider > div > div > div:nth-child(3) {
     cursor: default !important;
 }
@@ -1085,7 +1059,6 @@ form > h1 {
 .candidatePreviewSlider > div > div > div {
     background: linear-gradient(to right, #983cc9, #e36273) !important;
 }
-
 
 .predictiveGraphTitle {
     margin-bottom: 25px;
@@ -2024,9 +1997,6 @@ button.link {
 .candidatePreview > .candidateLocation {
     display: inline-block;
 }
-.candidatePreview > .candidateScore {
-    display: inline-block;
-}
 .candidatePreview .hiringStageCircle {
     display: inline-block;
     width: 86px;
@@ -2768,10 +2738,6 @@ button.link {
 
 .characteristicsList > div > div {
     margin: 10px 20px;
-}
-
-.scoreSummarySection {
-    height: 200px;
 }
 
 .logoBar {
@@ -4420,17 +4386,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         bottom: inherit;
     }
 
-    .analysis .candidateScore {
-        margin-bottom: 15px;
-        margin-top: 15px;
-    }
-    .resultsSlider {
-        top: 30px;
-    }
-    .scoreSummarySection {
-        height: 150px;
-    }
-
     .results > .statsAndDescription > div {
         width: 650px;
     }
@@ -4468,10 +4423,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .results > .statsAndDescription > div {
         width: 450px;
-    }
-
-    .resultsSlider {
-        width: 150px;
     }
 
     .processHeaderContainer {
@@ -5064,9 +5015,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-top: 20px; }
     .pointBox { width: 27px; }
-    .resultsSlider {
-        width: 110px;
-    }
+
     .infoBoxImage {
         height: 38px;
         margin: auto -140px auto;

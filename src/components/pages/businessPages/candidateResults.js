@@ -236,12 +236,12 @@ class CandidateResults extends Component {
                 </div>
             :
                 <div className="analysis center aboutMeSection blackBackground" style={{paddingBottom:"30px"}}>
-                    <div className="center" className="scoreSummarySection" style={{backgroundColor:"#393939"}}>
-                        <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
+                    <div className="center" style={{backgroundColor:"#393939"}}>
+                        <div styleName="candidate-score" className="font24px font20pxUnder700 font16pxUnder500 secondary-gray inlineBlock">
                             Candidate Score <b style={style.lightBlue}><u>{overallScore}</u></b>
                         </div>
                         <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
-                        <div className="resultsSlidersContainer">
+                        <div styleName="results-slider-container">
                             <div>
                                 <div
                                     className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
@@ -251,7 +251,7 @@ class CandidateResults extends Component {
                                         value={this.getSliderValue(overallScore)}
                                         min={50}
                                         max={150}
-                                        className="resultsSlider"
+                                        styleName="results-slider"
                                 />
                             </div>
                         </div>
