@@ -627,162 +627,6 @@ form > h1 {
     grid-column-end: 32;
 }
 
-/* GRID FOR LEARN FROM HIRES PAGE */
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer {
-    margin-top: -250px;
-    height: 1800px;
-}
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
-    height: calc(var(--rowWidth) * 400);
-}
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-    background: var(--primary-black-light);
-    grid-row-start: 14;
-    grid-row-end: 35;
-    grid-column-start: 1;
-    grid-column-end: 14;
-}
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-    background: var(--primary-black-light);
-    grid-row-start: 35;
-    grid-row-end: 115;
-    grid-column-start: 1;
-    grid-column-end: 43;
-}
-
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-    background: linear-gradient(to right, #ff748c, #ffe09e);
-    grid-row-start: 10;
-    grid-row-end: 14;
-    grid-column-start: 1;
-    grid-column-end: 11;
-}
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
-    grid-row-start: 14;
-    grid-row-end: 18;
-    grid-column-start: 1;
-    grid-column-end: 12;
-}
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-    background: linear-gradient(to right, #80cffe, #a196fe 65%, #80cffe);
-    grid-row-start: 31;
-    grid-row-end: 35;
-    grid-column-start: 32;
-    grid-column-end: 43;
-}
-#learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-    background: linear-gradient(to right, #80cffe, #a196fe 35%, #80cffe);
-    grid-row-start: 35;
-    grid-row-end: 39;
-    grid-column-start: 33;
-    grid-column-end: 43;
-}
-/* END LEARN FROM HIRES PAGE GRID */
-/* START PRICING PAGE GRID */
-#pricingSection > .skewedContainer > .skewedRectanglesContainer {
-    margin-top: -535px;
-    height: 1800px;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
-    height: calc(var(--rowWidth) * 400);
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-    background: var(--primary-black-light);
-    grid-row-start: 1;
-    grid-row-end: 80;
-    grid-column-start: 1;
-    grid-column-end: 43;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-    background: var(--primary-black-light);
-    grid-row-start: 80;
-    grid-row-end: 101;
-    grid-column-start: 26;
-    grid-column-end: 43;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-    background: linear-gradient(to right, #ff748c, #ffe09e);
-    grid-row-start: 76;
-    grid-row-end: 80;
-    grid-column-start: 1;
-    grid-column-end: 11;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
-    grid-row-start: 80;
-    grid-row-end: 84;
-    grid-column-start: 1;
-    grid-column-end: 12;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-    background: linear-gradient(to right, #76defe, #7dfed2 65%, #76defe);
-    grid-row-start: 97;
-    grid-row-end: 101;
-    grid-column-start: 32;
-    grid-column-end: 43;
-}
-#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-    background: linear-gradient(to right, #76defe, #7dfed2 35%, #76defe);
-    grid-row-start: 101;
-    grid-row-end: 105;
-    grid-column-start: 33;
-    grid-column-end: 43;
-}
-/* END PRICING PAGE GRID */
-/* START ATS INTEGRATIONS PAGE GRID */
-#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer {
-    margin-top: -200px;
-    height: 1800px;
-}
-#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
-    height: calc(var(--rowWidth) * 400);
-}
-#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-    background: var(--primary-black-light);
-    grid-row-start: 26;
-    grid-row-end: 150;
-    grid-column-start: 1;
-    grid-column-end: 43;
-}
-#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-    background: var(--primary-black-light);
-    grid-row-start: 5;
-    grid-row-end: 26;
-    grid-column-start: 1;
-    grid-column-end: 19;
-}
-
-#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-    background: linear-gradient(to right, #ff748c, #ffe09e);
-    grid-row-start: 1;
-    grid-row-end: 5;
-    grid-column-start: 1;
-    grid-column-end: 11;
-}
-#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
-    grid-row-start: 5;
-    grid-row-end: 9;
-    grid-column-start: 1;
-    grid-column-end: 12;
-}
-#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-    background: linear-gradient(to right, #76defe, #7dfed2 65%, #76defe);
-    grid-row-start: 22;
-    grid-row-end: 26;
-    grid-column-start: 32;
-    grid-column-end: 43;
-}
-#ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-    background: linear-gradient(to right, #76defe, #7dfed2 35%, #76defe);
-    grid-row-start: 26;
-    grid-row-end: 30;
-    grid-column-start: 33;
-    grid-column-end: 43;
-}
-/* END ATS INTEGRATIONS PAGE GRID */
-
 
 #employerOnboarding {
     position: relative;
@@ -1157,12 +1001,7 @@ form > h1 {
 #businessHomeStatistics .horizListText {
     height: 60px;
 }
-#learnFromHires {
-    margin-top: 150px;
-    margin-bottom: 180px;
-    position: relative;
-    z-index: 1;
-}
+
 
 .processButtonsContainer {
     position: relative;
@@ -4435,34 +4274,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         padding-top: 56.25%
     }
 
-
-
-
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-        grid-column-end: 13;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-end: 14;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-        grid-column-start: 30;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-column-start: 31;
-    }
-    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-        grid-column-end: 13;
-    }
-    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-end: 14;
-    }
-    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-        grid-column-start: 30;
-    }
-    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-column-start: 31;
-    }
-
     .noPadding { padding: 0 0 0 0 }
 
     .font40pxUnder1000 { font-size: 40px; }
@@ -4527,20 +4338,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         -ms-transition: all 0.5s ease;
         transition: all 0.5s ease;
     }
-
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-        grid-column-end: 13;
-    }
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-end: 14;
-    }
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-        grid-column-start: 30;
-    }
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-column-start: 31;
-    }
-
 
 
     #ATSIntegrations > div > img {
@@ -5004,39 +4801,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     /* END WHERE LOGO CONTAINER USED TO BE */
 
 
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-        display: none;
-    }
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-        display: none;
-    }
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-end: 17;
-        grid-row-start: 31;
-        grid-row-end: 35;
-    }
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-        display: none;
-    }
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-column-start: 27;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-end: 17;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-        grid-column-start: 28;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-column-start: 27;
-    }
-    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-end: 17;
-    }
-    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-column-start: 27;
-    }
-
     #ATSIntegrations > div > img {
         margin-left: 20px;
     }
@@ -5153,31 +4917,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .flourishes3 {
         transform: translateY(-25%) translateX(-18%);
-    }
-
-
-
-
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-end: 19;
-    }
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-column-start: 25;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-end: 19;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-        grid-column-start: 27;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-column-start: 26;
-    }
-    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-column-end: 19;
-    }
-    #ATSIntegrations > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-column-start: 25;
     }
 
     .crystalBall {
@@ -5311,41 +5050,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
 
-    #learnFromHires > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-        background: var(--primary-black-light);
-        grid-row-start: 35;
-        grid-row-end: 138;
-        grid-column-start: 1;
-        grid-column-end: 43;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer {
-        margin-top: -600px;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-        grid-row-start: 1;
-        grid-row-end: 95;
-        grid-column-start: 1;
-        grid-column-end: 43;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-        display: none;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
-        display: none;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
-        grid-row-start: 95;
-        grid-row-end: 99;
-        grid-column-end: 19;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
-        display: none;
-    }
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-row-start: 91;
-        grid-row-end: 95;
-        grid-column-start: 26;
-    }
 
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child {
         height: calc(var(--rowWidth) * 80);
@@ -5655,9 +5359,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         top: 180px;
     }
 
-    #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-column-start: 25;
-    }
+
 
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(7) {
         background: linear-gradient(to right, #ad84fe, #86c5fe);

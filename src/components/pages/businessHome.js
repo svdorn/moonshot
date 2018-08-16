@@ -433,7 +433,7 @@ class BusinessHome extends Component {
         )
 
         return (
-            <section id="learnFromHires">
+            <section id="learnFromHires" styleName="learn-from-hires-section">
                 { this.state.showRectangles ? this.skewedRectangles(6) : null }
                 <div className="center">
                     <div className="primary-white inline-block" style={{maxWidth: "1200px"}}>
