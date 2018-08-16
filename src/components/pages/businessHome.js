@@ -147,7 +147,7 @@ class BusinessHome extends Component {
         let rectangles = [];
         // add the requested number of rectangles
         for (let i = 0; i < numRects; i++) {
-            rectangles.push(<div styleName="skewed-rectangle" className="skewedRectangle" key={`rectangle${rectangleKeyIndex}`} />);
+            rectangles.push(<div styleName="skewed-rectangle" key={`rectangle${rectangleKeyIndex}`} />);
             rectangleKeyIndex++;
         }
 
@@ -158,9 +158,9 @@ class BusinessHome extends Component {
         }
 
         return (
-            <div styleName="skewed-container" className="skewedContainer">
-                <div styleName="skewed-rectangles-container" className="skewedRectanglesContainer">
-                    <div styleName="skewed-rectangles" className="skewedRectangles">
+            <div styleName="skewed-container">
+                <div styleName="skewed-rectangles-container">
+                    <div styleName="skewed-rectangles">
                         { rectangles }
                     </div>
                 </div>
@@ -177,11 +177,11 @@ class BusinessHome extends Component {
                 <a id="home-top" name="home-top" className="anchor" />
                 <div className="businessHome frontPage">
                     {this.state.showRectangles ?
-                        <div styleName="skewed-rectangles-container" className="skewedRectanglesContainer">
-                            <div styleName="skewed-rectangles" className="skewedRectangles">
+                        <div styleName="skewed-rectangles-container">
+                            <div styleName="skewed-rectangles">
                                 { this.skewedRectangles(11, { rectanglesOnly: true })}
                             </div>
-                            <div styleName="skewed-rectangles" className="skewedRectangles">
+                            <div styleName="skewed-rectangles">
                                 { this.skewedRectangles(7, { rectanglesOnly: true })}
                             </div>
                         </div>
