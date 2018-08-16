@@ -462,12 +462,12 @@ class BusinessHome extends Component {
                             Our incentives are aligned. You only pay when you hire<div className="above700only br"><br/></div> a top performer who stays at your company.
                         </div>
                     </div>
-                    <div className="businessHomeGradientBorder1 paperBoxBusinessHome">
+                    <div styleName="pricing-box box-1" className="businessHomeGradientBorder1 paperBoxBusinessHome">
                         <div style={{textAlign: "center", position: "relative"}}>
                             <img
                                 src={"/images/businessHome/Flourish1" + this.props.png}
                                 alt="Flourish Icon"
-                                className="flourish-icon"
+                                styleName="flourish-icon"
                             />
                             <div styleName="pricing-container">
                                 <div className="home-peach paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
@@ -490,18 +490,18 @@ class BusinessHome extends Component {
                                     <li>Review the results</li>
                                     <li>Hire the best candidate</li>
                                 </ul>
-                                <div className="button large round-4px gradient-transition gradient-1-home-pricing-peach gradient-2-home-pricing-pink primary-white font18px" onClick={() => goTo("/chatbot")}>
+                                <button className="button large round-4px gradient-transition gradient-1-home-pricing-peach gradient-2-home-pricing-pink primary-white font18px" onClick={() => goTo("/chatbot")}>
                                     Try for Free
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>
                     <div className="under800only" style={{height:"0px"}}><br/></div>
-                    <div className="businessHomeGradientBorder2 paperBoxBusinessHome">
+                    <div styleName="pricing-box box-2" className="businessHomeGradientBorder2 paperBoxBusinessHome">
                         <div style={{textAlign: "center", position: "relative"}}>
                             <img
                                 src={"/images/businessHome/Flourish2" + this.props.png}
-                                className="flourish-icon"
+                                styleName="flourish-icon flourish-2"
                                 alt="Flourish Icon"
                             />
                             <div styleName="pricing-container">
@@ -528,7 +528,7 @@ class BusinessHome extends Component {
                                     <li>Monthly payments stop if a<br/>hire is no longer employed</li>
                                     <li>Pay off your balance at any time</li>
                                 </ul>
-                                <div
+                                <button
                                     className=
                                         {"button large round-4px gradient-transition \
                                           gradient-1-home-pricing-green \
@@ -537,7 +537,7 @@ class BusinessHome extends Component {
                                     onClick={() => goTo("/chatbot")}
                                 >
                                     Try for Free
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>

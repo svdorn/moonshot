@@ -1014,12 +1014,6 @@ form > h1 {
     max-width: 600px;
 }
 
-#pricingSection .paperBoxBusinessHome .button {
-    -webkit-box-shadow: 0px 0px 1px 0px rgba(0,0,0,.2);
-    -moz-box-shadow:    0px 0px 1px 0px rgba(0,0,0,.2);
-    box-shadow:         0px 0px 1px 0px rgba(0,0,0,.2);
-}
-
 
 .menuButtonArea {
     display: flex;
@@ -2195,33 +2189,7 @@ button.link {
     display: inline-block;
 }
 
-.paperBoxBusinessHome {
-    height: 465px;
-    width: 340px;
-    display: inline-block;
-    margin: 0 25px 40px;
-    vertical-align: top;
-    -moz-box-shadow:    0px 10px 30px 2px #000000;
-    -webkit-box-shadow: 0px 10px 30px 2px #000000;
-    box-shadow:         0px 10px 30px 2px #000000;
-}
 
-#pricingSection .flourish-icon {
-    position: absolute;
-    right: -0.3%;
-    width: 100.5%;
-    bottom: -0.5%;
-    z-index: 1;
-}
-#pricingSection .businessHomeGradientBorder2 .flourish-icon {
-    width: 101%;
-    right: 0;
-}
-#pricingSection .pricing-container {
-    z-index: 10;
-    position: relative;
-    height: 100%;
-}
 
 #pricingSection .button.large {
     position: absolute;
@@ -2287,24 +2255,7 @@ button.link {
 .gradient-2-home-pricing-pink { --gradient-color-2: #ff7d8e; }
 .gradient-1-home-pricing-green { --gradient-color-1: #2ef3ca; }
 .gradient-2-home-pricing-blue { --gradient-color-2: #2ad8ee; }
-.businessHomeGradientBorder1 {
-    padding: 3px;
-    background: linear-gradient(to top left, #ff748c, #ffe09e);
-}
-.businessHomeGradientBorder1 > div {
-    background: #262626;
-    height: 100%;
-    width: 100%;
-}
-.businessHomeGradientBorder2 {
-    padding: 3px;
-    background: linear-gradient(to top left, #76defe, #7dfed2);
-}
-.businessHomeGradientBorder2 > div {
-    background: #262626;
-    height: 100%;
-    width: 100%;
-}
+
 
 .discoverPageBorder {
     border: 3px solid white;
@@ -3042,25 +2993,6 @@ button.link {
 #pricingSection ul {
     list-style: none;
     padding: 0;
-}
-#pricingSection .businessHomeGradientBorder1 li::before {
-    content: "•";
-    color: #ff748c;
-    display: inline-block;
-    width: 20px;
-}
-#pricingSection .businessHomeGradientBorder2 li::before {
-    content: "•";
-    color: #7dfed2;
-    display: inline-block;
-    width: 20px;
-    margin-left: -20px;
-}
-#pricingSection .paperBoxBusinessHome li {
-    max-width: 250px;
-    text-align: center;
-    line-height: 1.2;
-    margin: 10px auto;
 }
 
 .my-employees .search-fields .add-employee {
@@ -4972,10 +4904,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 1em;
         margin-left: -1em
     }
-    .paperBoxBusinessHome {
-        margin-left: 0;
-        margin-right: 0;
-    }
+
 
     .blackInput.googleJobs {
         width: 250px;
@@ -5990,10 +5919,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .frontPage .infoText.flex {
         margin-right: calc((100% - 250px) / 1.2);
     }
-    .paperBoxBusinessHome {
-        height: 395px;
-        width: 280px;
-    }
+
 
     .marginTop20pxUnder400 {
         margin-top: 20px;

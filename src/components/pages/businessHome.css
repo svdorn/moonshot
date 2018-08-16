@@ -221,6 +221,65 @@
 }
 
 
+.pricing-box button {
+    -webkit-box-shadow: 0px 0px 1px 0px rgba(0,0,0,.2);
+    -moz-box-shadow:    0px 0px 1px 0px rgba(0,0,0,.2);
+    box-shadow:         0px 0px 1px 0px rgba(0,0,0,.2);
+}
+
+.pricing-box {
+    height: 465px;
+    width: 340px;
+    display: inline-block;
+    margin: 0 25px 40px;
+    vertical-align: top;
+    -moz-box-shadow:    0px 10px 30px 2px #000000;
+    -webkit-box-shadow: 0px 10px 30px 2px #000000;
+    box-shadow:         0px 10px 30px 2px #000000;
+}
+
+.pricing-box li {
+    max-width: 250px;
+    text-align: center;
+    line-height: 1.2;
+    margin: 10px auto;
+}
+
+
+.box-1 {
+    padding: 3px;
+    background: linear-gradient(to top left, #ff748c, #ffe09e);
+}
+.box-1 > div {
+    background: #262626;
+    height: 100%;
+    width: 100%;
+}
+.box-2 {
+    padding: 3px;
+    background: linear-gradient(to top left, #76defe, #7dfed2);
+}
+.box-2 > div {
+    background: #262626;
+    height: 100%;
+    width: 100%;
+}
+
+.box-1 li::before {
+    content: "•";
+    color: #ff748c;
+    display: inline-block;
+    width: 20px;
+}
+.box-2 li::before {
+    content: "•";
+    color: #7dfed2;
+    display: inline-block;
+    width: 20px;
+    margin-left: -20px;
+}
+
+
 .pricing-container {
     z-index: 10;
     position: relative;
@@ -235,6 +294,18 @@
 .aircraft-icon {
     height: 100px;
     margin-top: 20px;
+}
+
+.flourish-icon {
+    position: absolute;
+    right: -0.3%;
+    width: 100.5%;
+    bottom: -0.5%;
+    z-index: 1;
+}
+.flourish-icon.flourish-2 {
+    width: 101%;
+    right: 0;
 }
 
 
@@ -355,13 +426,17 @@
         margin-bottom: 0px;
     }
 
-
     .feature-box {
         width: 300px;
         margin: 10px 5px;
     }
     .feature-box img {
         height: 54px;
+    }
+
+    .paperBoxBusinessHome {
+        margin-left: 0;
+        margin-right: 0;
     }
 }
 
@@ -504,6 +579,11 @@
     .video-container {
         width: 280px;
         margin-bottom: 120px;
+    }
+
+    .paperBoxBusinessHome {
+        height: 395px;
+        width: 280px;
     }
 
     .price-free { margin: 10px; }
