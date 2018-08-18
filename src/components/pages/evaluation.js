@@ -19,15 +19,18 @@ class Evaluation extends Component {
     }
 
 
-    // TODO: check that the user has permission to be here and that the current
-    // evaluation is the one whose info is in redux state
+    // check that the user has permission to be here and where they currently
+    // are in their evaluation
     componentWillMount() {
-        axios.get("/evaluation/currentState")
+        const user = this.props.currentUser;
+        axios.get("/evaluation/currentState", {
+            userId: user._id, verificationToken: user.verificationToken
+        })
         .then(response => {
             // if information about the position is returned
-            if (propertyExists(response, ["data", "positionState"], "object")) {
+            if (propertyExists(response, ["data", "evaluationState"], "object")) {
                 // set the redux position state
-                this.props.setPositionState(response.data.positionState);
+                this.props.setPositionState(response.data.evaluationState);
                 // stop showing the loading spinner
                 this.setState({ loading: false });
             }
@@ -65,9 +68,47 @@ class Evaluation extends Component {
         let content = null;
 
         // get the current position information from redux state
-        const position = this.props.position;
+        const eval = this.props.evaluationState;
 
         // TODO: switch block to determine which component type to show
+        switch (eval.component) {
+            case "Pre-Eval": {
+                content = (
+                    <div>This is an eval! Ready to start?</div>
+                );
+                break;
+            }
+            case "Admin Questions": {
+                content = (
+                    <div>Admin questions here!</div>
+                );
+                break;
+            }
+            case "Psychometrics": {
+                content = (
+                    <div>Taking psych eval!</div>
+                );
+                break;
+            }
+            case "Cognition": {
+                content = (
+                    <div>Taking GCA eval!</div>
+                );
+                break;
+            }
+            case "Skill": {
+                content = (
+                    <div>Taking skill test!</div>
+                );
+                break;
+            }
+            default: {
+                content = (
+                    <div>How did we get here??</div>
+                );
+                break;
+            }
+        }
 
         return content;
     }
@@ -77,7 +118,7 @@ class Evaluation extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        position: state.users.currentPosition,
+        evaluationState: state.users.evaluationState,
         png: state.users.png
     };
 }
