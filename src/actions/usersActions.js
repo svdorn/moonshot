@@ -744,6 +744,14 @@ export function popGoBackStack() {
 }
 
 
+// set the state of the current position evaluation
+export function setPositionState(positionState) {
+    return function(dispatch) {
+        dispatch({ type: "SET_POSITION_STATE", positionState });
+    }
+}
+
+
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
     return function(dispatch) {

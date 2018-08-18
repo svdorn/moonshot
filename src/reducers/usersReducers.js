@@ -281,6 +281,10 @@ export function usersReducers(state = initialState, action) {
                 ...state, incompleteSteps: action.incompleteSteps, loadingSomething: false
             }
             break;
+        case "SET_POSITION_STATE": {
+            return { ...state, positionState: action.positionState };
+            break;
+        }
         case "RESET_INCOMPLETE_STEPS":
             return {
                 ...state, incompleteSteps: undefined

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {  } from "../../actions/usersActions";
-import {  } from "../../miscFunctions";
+import { propertyExists } from "../../miscFunctions";
 import MiscError from "../miscComponents/miscError";
 
 
@@ -24,12 +24,22 @@ class Evaluation extends Component {
     componentWillMount() {
         axios.get("/evaluation/currentState")
         .then(response => {
-
+            // if information about the position is returned
+            if (propertyExists(response, ["data", "positionState"], "object")) {
+                // set the redux position state
+                this.props.setPositionState(response.data.positionState);
+                // stop showing the loading spinner
+                this.setState({ loading: false });
+            }
+            // no information was returned, show that something went wrong
+            throw("No position state.");
         })
         .catch(error => {
             // if a known error is returned
             if (propertyExists(error, ["response", "data"], "object")) {
-                
+                // TODO: deal with all errors
+                // remove loading spinner
+                this.setState({ loading: false });
             }
             // unknown error
             else {
@@ -74,7 +84,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        setPositionState
     }, dispatch);
 }
 
