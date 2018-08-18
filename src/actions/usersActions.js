@@ -716,8 +716,9 @@ export function answerPsychQuestion(userId, verificationToken, answer) {
             dispatch({
                 type: "ANSWER_PSYCH_QUESTION",
                 user: response.data.user,
-                finishedTest: response.data.finishedTest
-            })
+                finishedTest: response.data.finishedTest,
+                finishedEval: response.data.finishedEval
+            });
         })
         .catch(err => {
             // console.log("Error answering psych question: ", err);

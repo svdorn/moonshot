@@ -255,15 +255,9 @@ async function GET_notificationPreferences(req, res) {
 }
 
 async function POST_notificationPreferences(req, res) {
-    console.log("body: ",req.body);
-    console.log("query: ",req.query);
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
     const preference = sanitize(req.body.preference);
-
-    console.log(userId);
-    console.log(verificationToken);
-    console.log(preference);
 
     let user;
     try {
@@ -1414,6 +1408,8 @@ async function POST_answerPsychQuestion(req, res) {
 
     // check if the test is over (all factors have been completed tested for)
     let finishedTest = false;
+    // if the entire evaluation is over
+    let finishedEval = false;
     if (psychometricTest.incompleteFactors.length === 0) {
         // finish the test
         psychometricTest.endDate = new Date();
@@ -1426,7 +1422,7 @@ async function POST_answerPsychQuestion(req, res) {
         if (user.positionInProgress) {
             // check if the user is taking a position evaluation and if so
             // whether they're now done with it
-            const positionId = user.positionInProgress.toString();
+            var positionId = user.positionInProgress.toString();
 
             // get the actual position for the position in progress
             const userPositionIndex = user.positions.findIndex(pos => {
@@ -1436,24 +1432,22 @@ async function POST_answerPsychQuestion(req, res) {
                 console.log("Position not found in user from position id.");
                 return res.status(500).send("Server error.");
             }
-            let userPosition = user.positions[userPositionIndex];
+            var userPosition = user.positions[userPositionIndex];
 
-            const applicationComplete =
-                (!userPosition.skillTestIds ||
-                 userPosition.testIndex >= userPosition.skillTestIds.length) &&
-                (!userPosition.freeResponseQuestions ||
-                 userPosition.freeResponseQuestions.length === 0);
+            // whether the user has finished all the required skill tests
+            const doneWithSkillTests = (
+                !Array.isArray(userPosition.skillTestIds) ||
+                 userPosition.skillTestIds.length === 0 ||
+                 userPosition.testIndex >= userPosition.skillTestIds.length
+            );
+            // whether the user has finished all required FRQs
+            const doneWithFRQs = (
+                !Array.isArray(userPosition.freeResponseQuestions) ||
+                userPosition.freeResponseQuestions.length === 0
+            );
+            finishedEval = doneWithSkillTests && doneWithFRQs;
 
-            // if the application is complete, mark it as such
-            if (applicationComplete) {
-                let business;
-                try {
-                    user = await finishPositionEvaluation(user, positionId, userPosition.businessId);
-                } catch (finishPositionError) {
-                    console.log("error finishing position: ", finishPositionError);
-                    return res.status(500).send("Server error.");
-                }
-            }
+            console.log("finishedEval: ", finishedEval);
         }
     }
 
@@ -1575,7 +1569,17 @@ async function POST_answerPsychQuestion(req, res) {
         return res.status(500).send("Server error.");
     }
 
-    res.json({user: frontEndUser(user), finishedTest});
+    // if the application is complete, mark it as such
+    if (finishedEval) {
+        console.log("calculating position info");
+        try { user = await finishPositionEvaluation(user, positionId, userPosition.businessId); }
+        catch (finishPositionError) {
+            console.log("error finishing position: ", finishPositionError);
+            return res.status(500).send("Server error.");
+        }
+    }
+
+    res.json({user: frontEndUser(user), finishedTest, finishedEval});
 }
 
 
