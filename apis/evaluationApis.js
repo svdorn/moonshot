@@ -42,16 +42,12 @@ async function GET_initialState(req, res) {
         return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
     }
 
-    console.log("user: ", user);
-
     // find the index of the position within the user's positions array
     const positionIndex = user.positions.findIndex(existingPosition => {
-        console.log("existingPosition: ", existingPosition);
-        console.log("wanted businessId: ", businessId);
-        console.log("wanted positionId: ", positionId);
-        return
-            existingPosition.businessId === businessId &&
-            existingPosition.positionId === positionId;
+        return (
+            existingPosition.businessId.toString() === businessId.toString() &&
+            existingPosition.positionId.toString() === positionId.toString()
+        );
     });
     // if the index is invalid, the user never signed up for this position
     if (positionIndex < 0) { return res.status(403).send({notSignedUp: true}); }
