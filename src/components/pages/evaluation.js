@@ -25,68 +25,89 @@ class Evaluation extends Component {
     // check that the user has permission to be here and where they currently
     // are in their evaluation
     componentWillMount() {
-        const user = this.props.currentUser;
+        // get position and business ids from url
+        const { businessId, positionId } = this.props.params;
+        // get user credentials
+        const { _id, verificationToken } = this.props.currentUser;
+        // arguments for api call
+        const args = { params: {
+            userId: _id,
+            verificationToken,
+            positionId,
+            businessId
+        } };
         // get the current stage so we can see what user wants to do
-        axios.get("/api/evaluation/initialState", { params: {
-            userId: user._id, verificationToken: user.verificationToken
-        }})
+        axios.get("/api/evaluation/initialState", args)
         .then(response => {
-            // if information about the eval is returned
-            if (propertyExists(response, ["data"], "object")) {
-                // // set the redux position state
-                // this.props.setPositionState(response.data.evaluationState);
-                // if the user has already started this eval
-                if (response.data.stage) {
-                    this.setState({
-                        inProgressStage: response.data.stage,
-                        loading: false
-                    });
-                }
-                // if the user is in the middle of a different eval already
-                else if (response.data.otherEvalInProgress && response.data.inProgressUrl) {
-                    // set state to ask user if they want to go to that other eval
-                    this.setState({
-                        inProgressUrl: response.data.inProgressUrl,
-                        loading: false
-                    });
-                }
-                // if the user has not started this and is not in the middle of
-                // a different eval, ask if ready to start this
-                else {
-                    this.setState({
-                        readyToStart: true,
-                        loading: false
-                    });
-                }
-            }
-            // no information was returned, show that something went wrong
-            else { throw("No position state."); }
+            this.handleInitialState(response);
         })
         .catch(error => {
-            // if a known error is returned
-            if (propertyExists(error, ["response", "data"], "object")) {
-                // deal with all errors
-                const errData = error.response.data;
-                // if the request is invalid
-                if (errData.badRequest) {
-                    this.setState({
-                        errorMessage: "Something was wrong about your request.",
-                        loading: false
-                    });
-                }
-                // if the user hasn't signed up for this position (wasn't invited)
-                else if (errData.notSignedUp) {
-                    this.setState({
-                        errorMessage: "It looks like you aren't signed up for this evaluation.",
-                        loading: false
-                    });
-                }
-                // any other error
-                else { this.setErrorState(); }
-            }
-            // unknown error
-            else { this.setErrorState(); }
+            this.handleInitialStateError(error);
         });
+    }
+
+
+    // handle the response with initial state data
+    handleInitialState(response) {
+        // if information about the eval is returned
+        if (propertyExists(response, ["data"], "object")) {
+            // TODO: remove
+            // // set the redux position state
+            // this.props.setPositionState(response.data.evaluationState);
+            // if the user has already started this eval
+            if (response.data.stage) {
+                this.setState({
+                    inProgressStage: response.data.stage,
+                    loading: false
+                });
+            }
+            // if the user is in the middle of a different eval already
+            else if (response.data.otherEvalInProgress && response.data.inProgressUrl) {
+                // set state to ask user if they want to go to that other eval
+                this.setState({
+                    inProgressUrl: response.data.inProgressUrl,
+                    loading: false
+                });
+            }
+            // if the user has not started this and is not in the middle of
+            // a different eval, ask if ready to start this
+            else {
+                this.setState({
+                    readyToStart: true,
+                    loading: false
+                });
+            }
+        }
+        // no information was returned, show that something went wrong
+        else { throw("No position state."); }
+    }
+
+
+    // handle any error returned when getting initial evaluation state
+    handleInitialStateError(error) {
+        // if a known error is returned
+        if (propertyExists(error, ["response", "data"], "object")) {
+            // deal with all errors
+            const errData = error.response.data;
+            // if the request is invalid
+            if (errData.badRequest) {
+                this.setState({
+                    errorMessage: "Something was wrong about your request.",
+                    loading: false
+                });
+            }
+            // if the user hasn't signed up for this position (wasn't invited)
+            else if (errData.notSignedUp) {
+                this.setState({
+                    errorMessage: "It looks like you aren't signed up for this evaluation.",
+                    loading: false
+                });
+            }
+            // any other error
+            else { this.setErrorState(); }
+        }
+        // unknown error
+        else { this.setErrorState(); }
     }
 
 
@@ -156,11 +177,6 @@ class Evaluation extends Component {
 
         // TODO: switch block to determine which component type to show
         switch (eval.component) {
-            case "Pre-Eval": {
-                return (
-                    <div>This is an eval! Ready to start?</div>
-                );
-            }
             case "Admin Questions": {
                 return (
                     <div>Admin questions here!</div>
@@ -182,6 +198,7 @@ class Evaluation extends Component {
                 );
             }
             default: {
+                // TODO: do something else here
                 content = (
                     <div>How did we get here??</div>
                 );
@@ -196,14 +213,13 @@ class Evaluation extends Component {
         // if there is an error loading the eval, show error page
         if (this.state.miscError) { return <MiscError />; }
 
-        // what will be shown to the user - based on current step in redux
+        // what will be shown to the user
         let content = null;
 
         // if there is some error, show an error page
         if (this.state.errorMessage) { return this.createErrorPage(); }
 
-        // if a component is not currently being in progress, ask them what they
-        // want to do
+        // if a component is not currently in progress, ask what to do
         if (!this.state.inProgress) { return this.createPreTestContent(); }
 
         // if the user is taking a part of the eval
