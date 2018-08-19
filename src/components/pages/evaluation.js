@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {  } from "../../actions/usersActions";
-import { propertyExists } from "../../miscFunctions";
+import { propertyExists, goTo } from "../../miscFunctions";
 import MiscError from "../miscComponents/miscError";
 
 
@@ -70,7 +70,7 @@ class Evaluation extends Component {
                 // if the request is invalid
                 if (errData.badRequest) {
                     this.setState({
-                        errorMessage: "Something was wrong about your request, refresh and try again.",
+                        errorMessage: "Something was wrong about your request.",
                         loading: false
                     });
                 }
@@ -86,7 +86,7 @@ class Evaluation extends Component {
             }
             // unknown error
             else { this.setErrorState(); }
-        })
+        });
     }
 
 
@@ -98,6 +98,28 @@ class Evaluation extends Component {
             loading: false,
             miscError: true
         });
+    }
+
+
+    // displays an error page telling the user to try again or go home
+    createErrorPage() {
+        // if there is a user error
+        if (this.state.errorMessage) {
+            return (
+                <div className="center">
+                    <div className="font20px">Something went wrong.</div>
+                    <div className="font14px">
+                        {this.state.errorMessage} Try refreshing or contacting support.
+                    </div>
+                    <div className="button round4px background-primary-cyan" onClick={goTo("/myEvaluations")}>
+                        Take Me Home
+                    </div>
+                </div>
+            );
+        }
+
+        // if there is a Moonshot error
+        return <MiscError />;
     }
 
 
@@ -177,14 +199,15 @@ class Evaluation extends Component {
         // what will be shown to the user - based on current step in redux
         let content = null;
 
+        // if there is some error, show an error page
+        if (this.state.errorMessage) { return this.createErrorPage(); }
+
         // if a component is not currently being in progress, ask them what they
         // want to do
-        if (!this.state.inProgress) { content = this.createPreTestContent(); }
+        if (!this.state.inProgress) { return this.createPreTestContent(); }
 
         // if the user is taking a part of the eval
-        content = this.createEvalContent();
-
-        return content;
+        return this.createEvalContent();
     }
 }
 
