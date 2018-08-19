@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import axios from "axios";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {  } from "../../actions/usersActions";
 import { propertyExists, goTo } from "../../miscFunctions";
@@ -53,8 +54,8 @@ class Evaluation extends Component {
         } };
         // get the current stage so we can see what user wants to do
         axios.get("/api/evaluation/initialState", args)
-        .then(this.handleInitialState)
-        .catch(this.handleInitialStateError);
+        .then(this.handleInitialState.bind(this))
+        .catch(this.handleInitialStateError.bind(this));
     }
 
 
@@ -138,12 +139,16 @@ class Evaluation extends Component {
         // if there is a user error
         if (this.state.errorMessage) {
             return (
-                <div className="center">
-                    <div className="font20px">Something went wrong.</div>
+                <div className="center primary-white">
+                    <div className="font20px" style={{margin: "20px"}}>Something went wrong.</div>
                     <div className="font14px">
                         {this.state.errorMessage} Try refreshing or contacting support.
                     </div>
-                    <div className="button round4px background-primary-cyan" onClick={goTo("/myEvaluations")}>
+                    <div
+                        className="button medium round-4px background-primary-cyan"
+                        style={{margin: "20px"}}
+                        onClick={() => goTo("/myEvaluations")}
+                    >
                         Take Me Home
                     </div>
                 </div>
@@ -184,10 +189,10 @@ class Evaluation extends Component {
     // e.g. they are taking the psych analysis, cognitive test, etc...
     createEvalContent() {
         // get the current position information from redux state
-        const eval = this.props.evaluationState;
+        const evaluation = this.props.evaluationState;
 
         // TODO: switch block to determine which component type to show
-        switch (eval.component) {
+        switch (evaluation.component) {
             case "Admin Questions": {
                 return (
                     <div>Admin questions here!</div>
@@ -219,22 +224,26 @@ class Evaluation extends Component {
 
 
     render() {
-        // if loading the page, show loading spinner
-        if (this.state.loading) { return <CircularProgress color="#76defe" />; }
-        // if there is an error loading the eval, show error page
-        if (this.state.miscError) { return <MiscError />; }
-
         // what will be shown to the user
         let content = null;
 
+        // if loading the page, show loading spinner
+        if (this.state.loading) {
+            content = <div className="center"><CircularProgress color="secondary" /></div>;
+        }
+        // if there is an error loading the eval, show error page
+        else if (this.state.miscError) { return <MiscError />; }
+
         // if there is some error, show an error page
-        if (this.state.errorMessage) { return this.createErrorPage(); }
+        else if (this.state.errorMessage) { content = this.createErrorPage(); }
 
         // if a component is not currently in progress, ask what to do
-        if (!this.state.inProgress) { return this.createPreTestContent(); }
+        else if (!this.state.inProgress) { content = this.createPreTestContent(); }
 
         // if the user is taking a part of the eval
-        return this.createEvalContent();
+        else { content = this.createEvalContent(); }
+
+        return <div className="fillScreen">{ content }</div>;
     }
 }
 
@@ -249,7 +258,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        setPositionState
+        // setPositionState
     }, dispatch);
 }
 

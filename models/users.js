@@ -446,6 +446,17 @@ const usersSchema = mongoose.Schema({
     // if the user saw the box that says 'click candidate name for more info'
     sawMyCandidatesInfoBox: Boolean,
     // <<-------------------------------------------------------------->> //
+
+
+    // ------------------------->> NEW EVAL FLOW <<-------------------------- //
+    // the eval that the user is currently taking
+    evalInProgress: {
+        // the business offering this position
+        businessId: mongoose.Schema.Types.ObjectId,
+        // the id of the position the eval is for
+        positionId: mongoose.Schema.Types.ObjectId
+    }
+    // <<------------------------------------------------------------------>> //
 });
 
 var Users = mongoose.model('Users', usersSchema);

@@ -203,6 +203,7 @@ const miscFunctions = {
     isValidPassword,
     goTo,
     truthy,
+    propertyExists,
 
     Queue,
     Stack

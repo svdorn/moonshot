@@ -22,7 +22,7 @@ const { sanitize,
 
 
 const evaluationApis = {
-    GET_currentState
+    GET_initialState
 }
 
 
@@ -36,14 +36,19 @@ async function GET_initialState(req, res) {
     }
 
     // get the current user
-    try { var user = getAndVerifyUser(userId, verificationToken); }
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
     catch (getUserError) {
         console.log("Error getting user when trying to get current eval state: ", getUserError);
         return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
     }
 
+    console.log("user: ", user);
+
     // find the index of the position within the user's positions array
-    const positionIndex = user.positions.indexOf(existingPosition => {
+    const positionIndex = user.positions.findIndex(existingPosition => {
+        console.log("existingPosition: ", existingPosition);
+        console.log("wanted businessId: ", businessId);
+        console.log("wanted positionId: ", positionId);
         return
             existingPosition.businessId === businessId &&
             existingPosition.positionId === positionId;
@@ -57,6 +62,8 @@ async function GET_initialState(req, res) {
         console.log("Error getting position when trying to get current state: ", getPositionError);
         return res.status(500).send({ serverError: true });
     }
+
+    // TODO: check if they have finished the eval already
 
     // if user is in-progress on any position
     if (user.evalInProgress) {
@@ -85,7 +92,7 @@ function getStage(user, position, positionIndex) {
 
 // get a const position from a business
 async function getPosition(businessId, positionId) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(async function(resolve, reject) {
         // get the business with that id and only the matching position
         const query = {
             "_id": businessId,
