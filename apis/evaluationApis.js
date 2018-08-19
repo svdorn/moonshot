@@ -62,25 +62,18 @@ async function GET_initialState(req, res) {
     if (user.evalInProgress) {
         // check if it is the position they are currently on
         if (user.evalInProgress.businessId === businessId && user.evalInProgress.positionId === positionId) {
-            // get the progress on the position and return it
-            return getAndReturnStage(user, position, positionIndex);
+            // tell the user that this position has already been started, then
+            // ask if they are ready to continue
+            return res.status(200).send({ alreadyInProgress: true });
         }
-        // TODO: if not, ask if they want to continue the eval they were on before
-        // or if they want to work on this new one
+        // if not, ask if they want to continue the eval they were on before
+        // or if they want to work on this new one - send them the businessId
+        // and positionId so they have a link to the in-progress eval
+        else { return res.status(200).send({ evalInProgress: user.evalInProgress }); }
     }
-    else {
-        // if not in progress, return that they have not started this position and are ready to
-
-    }
-
-    function getAndReturnStage(user, position, positionIndex) {
-        // get their progress on the position and return it
-        const progress = getStage(user, position, positionIndex);
-        // if there was no error getting the user's progress, send back the progress
-        if (!progress.error) { return res.status(200).send(progress); }
-        // if there was an error, send the error info
-        else { return res.status(progress.error.status).send(progress.error.data); }
-    }
+    // no eval is in progress, return that they have not started this position
+    // and are ready to
+    else { return res.status(200).send({ readyToStart: true }); }
 }
 
 

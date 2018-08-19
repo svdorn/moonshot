@@ -17,7 +17,22 @@ class Evaluation extends Component {
             loading: true,
             // if the user is currently taking the eval - false when asking if
             // ready to start, if want to switch to a different eval, etc
-            inProgress: false
+            inProgress: false,
+            // if there is a Moonshot error
+            miscError: false,
+            // an error message spawned by a user error
+            errorMessage: undefined,
+
+            /* PRE-EVAL */
+            // if the user already has this eval in progress
+            alreadyInProgress: false,
+            // if the user has a different eval in progress already, this will
+            // be the url of that eval
+            evalInProgress: undefined,
+            // if the user has no other eval in progress and has not started
+            // this one already
+            readyToStart: false
+            /* END PRE-EVAL */
         };
     }
 
@@ -38,12 +53,8 @@ class Evaluation extends Component {
         } };
         // get the current stage so we can see what user wants to do
         axios.get("/api/evaluation/initialState", args)
-        .then(response => {
-            this.handleInitialState(response);
-        })
-        .catch(error => {
-            this.handleInitialStateError(error);
-        });
+        .then(this.handleInitialState)
+        .catch(this.handleInitialStateError);
     }
 
 
@@ -57,15 +68,15 @@ class Evaluation extends Component {
             // if the user has already started this eval
             if (response.data.stage) {
                 this.setState({
-                    inProgressStage: response.data.stage,
+                    alreadyInProgress: true,
                     loading: false
                 });
             }
             // if the user is in the middle of a different eval already
-            else if (response.data.otherEvalInProgress && response.data.inProgressUrl) {
+            else if (response.data.evalInProgress) {
                 // set state to ask user if they want to go to that other eval
                 this.setState({
-                    inProgressUrl: response.data.inProgressUrl,
+                    evalInProgress: response.data.evalInProgress,
                     loading: false
                 });
             }
@@ -149,11 +160,11 @@ class Evaluation extends Component {
     createPreTestContent() {
         // TODO: if the user has already started the eval and is in the middle of a
         // test component, ask if they're ready to continue
-        if (this.state.inProgressStage) {
+        if (this.state.alreadyInProgress) {
             return <div>Ready to get back into it?</div>
         }
         // TODO: if the user is in the middle of a different eval already
-        else if (this.state.inProgressUrl) {
+        else if (this.state.evalInProgress) {
             return <div>Want to switch to your other eval?</div>
         }
         // TODO: if the user is ready to start the eval, ask them if they want
