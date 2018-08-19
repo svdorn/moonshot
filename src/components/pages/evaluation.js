@@ -14,7 +14,10 @@ class Evaluation extends Component {
 
         this.state = {
             // waiting for confirmation that user can be here
-            loading: true
+            loading: true,
+            // if the user is currently taking the eval - false when asking if
+            // ready to start, if want to switch to a different eval, etc
+            inProgress: false
         };
     }
 
@@ -23,38 +26,145 @@ class Evaluation extends Component {
     // are in their evaluation
     componentWillMount() {
         const user = this.props.currentUser;
-        axios.get("/evaluation/currentState", {
+        // get the current stage so we can see what user wants to do
+        axios.get("/api/evaluation/initialState", { params: {
             userId: user._id, verificationToken: user.verificationToken
-        })
+        }})
         .then(response => {
-            // if information about the position is returned
-            if (propertyExists(response, ["data", "evaluationState"], "object")) {
-                // set the redux position state
-                this.props.setPositionState(response.data.evaluationState);
-                // stop showing the loading spinner
-                this.setState({ loading: false });
+            // if information about the eval is returned
+            if (propertyExists(response, ["data"], "object")) {
+                // // set the redux position state
+                // this.props.setPositionState(response.data.evaluationState);
+                // if the user has already started this eval
+                if (response.data.stage) {
+                    this.setState({
+                        inProgressStage: response.data.stage,
+                        loading: false
+                    });
+                }
+                // if the user is in the middle of a different eval already
+                else if (response.data.otherEvalInProgress && response.data.inProgressUrl) {
+                    // set state to ask user if they want to go to that other eval
+                    this.setState({
+                        inProgressUrl: response.data.inProgressUrl,
+                        loading: false
+                    });
+                }
+                // if the user has not started this and is not in the middle of
+                // a different eval, ask if ready to start this
+                else {
+                    this.setState({
+                        readyToStart: true,
+                        loading: false
+                    });
+                }
             }
             // no information was returned, show that something went wrong
-            throw("No position state.");
+            else { throw("No position state."); }
         })
         .catch(error => {
             // if a known error is returned
             if (propertyExists(error, ["response", "data"], "object")) {
-                // TODO: deal with all errors
-                // remove loading spinner
-                this.setState({ loading: false });
+                // deal with all errors
+                const errData = error.response.data;
+                // if the request is invalid
+                if (errData.badRequest) {
+                    this.setState({
+                        errorMessage: "Something was wrong about your request, refresh and try again.",
+                        loading: false
+                    });
+                }
+                // if the user hasn't signed up for this position (wasn't invited)
+                else if (errData.notSignedUp) {
+                    this.setState({
+                        errorMessage: "It looks like you aren't signed up for this evaluation.",
+                        loading: false
+                    });
+                }
+                // any other error
+                else { this.setErrorState(); }
             }
             // unknown error
-            else {
-                // add notification telling user to try again
-                this.props.addNotification("Error loading test. Refresh or contact support.", "error");
-                // stop loading spinner and show error message
-                this.setState({
-                    loading: false,
-                    miscError: true
-                })
-            }
+            else { this.setErrorState(); }
         })
+    }
+
+
+    setErrorState() {
+        // add notification telling user to try again
+        this.props.addNotification("Error loading test. Refresh or contact support.", "error");
+        // stop loading spinner and show error message
+        this.setState({
+            loading: false,
+            miscError: true
+        });
+    }
+
+
+    // user is not doing psych test or gca test or anything at this moment, ask
+    // them what they want to do now
+    createPreTestContent() {
+        // TODO: if the user has already started the eval and is in the middle of a
+        // test component, ask if they're ready to continue
+        if (this.state.inProgressStage) {
+            return <div>Ready to get back into it?</div>
+        }
+        // TODO: if the user is in the middle of a different eval already
+        else if (this.state.inProgressUrl) {
+            return <div>Want to switch to your other eval?</div>
+        }
+        // TODO: if the user is ready to start the eval, ask them if they want
+        // to start it
+        else if (this.state.readyToStart) {
+            return <div>Ready to start?</div>
+        }
+        // shouldn't be able to get here
+        else {
+            console.log("Something is wrong.");
+            return <MiscError />;
+        }
+    }
+
+
+    // create the content that is shown when the user is in the middle of a stage
+    // e.g. they are taking the psych analysis, cognitive test, etc...
+    createEvalContent() {
+        // get the current position information from redux state
+        const eval = this.props.evaluationState;
+
+        // TODO: switch block to determine which component type to show
+        switch (eval.component) {
+            case "Pre-Eval": {
+                return (
+                    <div>This is an eval! Ready to start?</div>
+                );
+            }
+            case "Admin Questions": {
+                return (
+                    <div>Admin questions here!</div>
+                );
+            }
+            case "Psychometrics": {
+                return (
+                    <div>Taking psych eval!</div>
+                );
+            }
+            case "Cognition": {
+                return (
+                    <div>Taking GCA eval!</div>
+                );
+            }
+            case "Skill": {
+                return (
+                    <div>Taking skill test!</div>
+                );
+            }
+            default: {
+                content = (
+                    <div>How did we get here??</div>
+                );
+            }
+        }
     }
 
 
@@ -67,48 +177,12 @@ class Evaluation extends Component {
         // what will be shown to the user - based on current step in redux
         let content = null;
 
-        // get the current position information from redux state
-        const eval = this.props.evaluationState;
+        // if a component is not currently being in progress, ask them what they
+        // want to do
+        if (!this.state.inProgress) { content = this.createPreTestContent(); }
 
-        // TODO: switch block to determine which component type to show
-        switch (eval.component) {
-            case "Pre-Eval": {
-                content = (
-                    <div>This is an eval! Ready to start?</div>
-                );
-                break;
-            }
-            case "Admin Questions": {
-                content = (
-                    <div>Admin questions here!</div>
-                );
-                break;
-            }
-            case "Psychometrics": {
-                content = (
-                    <div>Taking psych eval!</div>
-                );
-                break;
-            }
-            case "Cognition": {
-                content = (
-                    <div>Taking GCA eval!</div>
-                );
-                break;
-            }
-            case "Skill": {
-                content = (
-                    <div>Taking skill test!</div>
-                );
-                break;
-            }
-            default: {
-                content = (
-                    <div>How did we get here??</div>
-                );
-                break;
-            }
-        }
+        // if the user is taking a part of the eval
+        content = this.createEvalContent();
 
         return content;
     }

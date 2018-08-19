@@ -42,16 +42,18 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 
 // import all the api functions
 const userApis = require("./apis/userApis");
-const candidateApis = require("./apis/candidateApis");
-const accountAdminApis = require("./apis/accountAdminApis");
-const businessApis = require("./apis/businessApis");
-const adminApis = require("./apis/adminApis");
 const miscApis = require("./apis/miscApis");
+const adminApis = require("./apis/adminApis");
 const skillApis = require("./apis/skillApis");
 const psychApis = require("./apis/psychApis");
-const mlFunctions = require("./apis/mlFunctions");
 const billingApis = require("./apis/billingApis");
+const businessApis = require("./apis/businessApis");
+const candidateApis = require("./apis/candidateApis");
+const evaluationApis = require("./apis/evaluationApis");
+const accountAdminApis = require("./apis/accountAdminApis");
+
 const webhooks = require("./apis/webhooks");
+const mlFunctions = require("./apis/mlFunctions");
 const helperFunctions = require("./apis/helperFunctions");
 
 
@@ -189,6 +191,8 @@ app.post('/skill/startOrContinueTest', skillApis.POST_startOrContinueTest);
 app.post("/skill/agreeToTerms", skillApis.POST_agreeToTerms);
 
 app.post('/billing/customer', billingApis.POST_customer);
+
+app.get("/evaluation/initialState", evaluationApis.GET_initialState);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
