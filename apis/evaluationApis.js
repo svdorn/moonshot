@@ -17,7 +17,8 @@ const { sanitize,
         getAndVerifyUser,
         getUserFromReq,
         frontEndUser,
-        validArgs
+        validArgs,
+        logArgs
 } = require('./helperFunctions');
 
 
@@ -33,6 +34,7 @@ async function POST_start(req, res) {
     const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
     // if the ids are not strings, return bad request error
     if (!validArgs({ stringArgs: [businessId, positionId] })) {
+        logArgs(req.query, ["businessId", "positionId"]);
         return res.status(400).send({ badRequest: true });
     }
 
@@ -72,6 +74,7 @@ async function GET_initialState(req, res) {
     const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
     // if the ids are not strings, return bad request error
     if (!validArgs({ stringArgs: [businessId, positionId] })) {
+        logArgs(req.query, ["businessId", "positionId"]);
         return res.status(400).send({ badRequest: true });
     }
 
@@ -115,16 +118,9 @@ async function GET_initialState(req, res) {
 }
 
 
-// get a user's current eval component in an evaluation
-function getStage(user, position, positionIndex) {
-    // TODO: 
-}
-
-
 // get the current state of an evaluation, including the current stage, what
 // stages have been completed, and what stages are next
-// requires: user
-// needs either (positionId and businessId) or position object
+// requires: user AND ((positionId and businessId) OR position object)
 async function getEvaluationState(options) {
     return new Promise(async function(resolve, reject) {
         if (!options.user) { return reject("No user object provided"); }
@@ -228,6 +224,8 @@ async function getEvaluationState(options) {
                     // if the skill is NOT finished and it is the current stage
                     else {
                         // TODO get the current state of the skill test
+                        console.log("NEED TO GET STATE OF SKILL TEST");
+                        return reject("Haven't coded this part yet");
                     }
                 }
                 // if the user has not started the skill and it is not the current stage
@@ -237,6 +235,8 @@ async function getEvaluationState(options) {
                 // if the user has not started this skill and it is the current stage
                 else {
                     // TODO: start the skill, then get its current state
+                    console.log("NEED TO GET STATE OF SKILL TEST");
+                    return reject("Haven't coded this part yet");
                 }
             });
         }
@@ -258,6 +258,8 @@ async function getEvaluationState(options) {
 async function getPsychState(user) {
     return new Promise(async function(resolve, reject) {
         // TODO:
+        console.log("NEED TO GET PSYCH STATE");
+        return reject("Haven't coded this part yet");
     });
 }
 
@@ -308,8 +310,8 @@ function newAdminQuestionsObject(userType) {
 // gets the index of the position within user's positions array; -1 if not found
 function userPositionIndex(user, positionId, businessId) {
     try {
-        const positionIdString = positionId.toString();
-        const businessIdString = businessId.toString();
+        var positionIdString = positionId.toString();
+        var businessIdString = businessId.toString();
     } catch (getArgsError) {
         console.log("Invalid arguments to userPositionIndex(). ", getArgsError);
         return -1;

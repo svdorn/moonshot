@@ -922,6 +922,15 @@ function validArgs(options) {
 }
 
 
+// logs the arguments provided
+// example: logArgs(req.body, ["businessId", "positionId"]);
+function logArgs(parent, args) {
+    console.log("Arguments: ");
+    args.forEach(arg => { console.log(arg, ": ", parent[arg]); });
+}
+
+
+
 // checks if a password is secure enough to be stored
 function isValidPassword(password) {
     const MIN_PASSWORD_LENGTH = 8;
@@ -990,6 +999,7 @@ const helperFunctions = {
     isValidPassword,
     isValidFileType,
     validArgs,
+    logArgs,
     truthy,
     propertyExists,
 

@@ -7,6 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { addNotification } from "../../actions/usersActions";
 import { propertyExists, goTo } from "../../miscFunctions";
 import MiscError from "../miscComponents/miscError";
+import { button } from "../../classes";
 
 
 class Evaluation extends Component {
@@ -61,7 +62,7 @@ class Evaluation extends Component {
     // are in their evaluation
     componentWillMount() {
         // get the current stage so we can see what user wants to do
-        axios.get("/api/evaluation/initialState", this.state.generalApiArgs)
+        axios.get("/api/evaluation/initialState", this.state.generalApiGetArgs)
         .then(this.handleInitialState.bind(this))
         .catch(this.handleError.bind(this));
     }
@@ -183,7 +184,7 @@ class Evaluation extends Component {
         // TODO: if the user is ready to start the eval, ask them if they want
         // to start it
         else if (this.state.readyToStart) {
-            return <div>Ready to start?</div>
+            return this.startEvalPrompt();
         }
         // shouldn't be able to get here
         else {
@@ -206,7 +207,7 @@ class Evaluation extends Component {
                     <CircularProgress color="secondary" />
                     :
                     <div
-                        className="medium button round-4px gradient-transition gradient-1-purple-light gradient-2-cyan"
+                        className={button.purpleBlue}
                         onClick={this.startEval}
                     >
                         Start
@@ -230,7 +231,7 @@ class Evaluation extends Component {
 
     // set the new state of an eval from an api call
     setEvalState(response) {
-        // TODO 
+        // TODO
     }
 
 
@@ -292,7 +293,7 @@ class Evaluation extends Component {
         // if the user is taking a part of the eval
         else { content = this.createEvalContent(); }
 
-        return <div className="fillScreen">{ content }</div>;
+        return <div className="fillScreen primary-white center">{ content }</div>;
     }
 }
 
