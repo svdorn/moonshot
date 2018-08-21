@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {  } from "../../actions/usersActions";
+import { addNotification } from "../../actions/usersActions";
 import { propertyExists, goTo } from "../../miscFunctions";
 import MiscError from "../miscComponents/miscError";
 
@@ -13,9 +13,25 @@ class Evaluation extends Component {
     constructor(props) {
         super(props);
 
+        // get position and business ids from url
+        const { businessId, positionId } = props.params;
+        // get user credentials
+        const { _id, verificationToken } = props.currentUser;
+        // general arguments for post api call
+        const generalApiPostArgs = {
+            userId: _id,
+            verificationToken,
+            positionId,
+            businessId
+        };
+        // general arguments for get api call
+        const generalApiGetArgs = { params: generalApiPostArgs };
+
         this.state = {
             // waiting for confirmation that user can be here
-            loading: true,
+            initialLoad: true,
+            // loading anything else
+            loading: false,
             // if the user is currently taking the eval - false when asking if
             // ready to start, if want to switch to a different eval, etc
             inProgress: false,
@@ -23,6 +39,9 @@ class Evaluation extends Component {
             miscError: false,
             // an error message spawned by a user error
             errorMessage: undefined,
+            // added to and used for api calls
+            generalApiGetArgs,
+            generalApiPostArgs,
 
             /* PRE-EVAL */
             // if the user already has this eval in progress
@@ -41,21 +60,10 @@ class Evaluation extends Component {
     // check that the user has permission to be here and where they currently
     // are in their evaluation
     componentWillMount() {
-        // get position and business ids from url
-        const { businessId, positionId } = this.props.params;
-        // get user credentials
-        const { _id, verificationToken } = this.props.currentUser;
-        // arguments for api call
-        const args = { params: {
-            userId: _id,
-            verificationToken,
-            positionId,
-            businessId
-        } };
         // get the current stage so we can see what user wants to do
-        axios.get("/api/evaluation/initialState", args)
+        axios.get("/api/evaluation/initialState", this.state.generalApiArgs)
         .then(this.handleInitialState.bind(this))
-        .catch(this.handleInitialStateError.bind(this));
+        .catch(this.handleError.bind(this));
     }
 
 
@@ -70,7 +78,7 @@ class Evaluation extends Component {
             if (response.data.stage) {
                 this.setState({
                     alreadyInProgress: true,
-                    loading: false
+                    initialLoad: false
                 });
             }
             // if the user is in the middle of a different eval already
@@ -78,7 +86,7 @@ class Evaluation extends Component {
                 // set state to ask user if they want to go to that other eval
                 this.setState({
                     evalInProgress: response.data.evalInProgress,
-                    loading: false
+                    initialLoad: false
                 });
             }
             // if the user has not started this and is not in the middle of
@@ -86,7 +94,7 @@ class Evaluation extends Component {
             else {
                 this.setState({
                     readyToStart: true,
-                    loading: false
+                    initialLoad: false
                 });
             }
         }
@@ -96,7 +104,7 @@ class Evaluation extends Component {
 
 
     // handle any error returned when getting initial evaluation state
-    handleInitialStateError(error) {
+    handleError(error) {
         // if a known error is returned
         if (propertyExists(error, ["response", "data"], "object")) {
             // deal with all errors
@@ -105,14 +113,14 @@ class Evaluation extends Component {
             if (errData.badRequest) {
                 this.setState({
                     errorMessage: "Something was wrong about your request.",
-                    loading: false
+                    initialLoad: false
                 });
             }
             // if the user hasn't signed up for this position (wasn't invited)
             else if (errData.notSignedUp) {
                 this.setState({
                     errorMessage: "It looks like you aren't signed up for this evaluation.",
-                    loading: false
+                    initialLoad: false
                 });
             }
             // any other error
@@ -125,10 +133,10 @@ class Evaluation extends Component {
 
     setErrorState() {
         // add notification telling user to try again
-        this.props.addNotification("Error loading test. Refresh or contact support.", "error");
+        this.props.addNotification("Error. Refresh or contact support.", "error");
         // stop loading spinner and show error message
         this.setState({
-            loading: false,
+            initialLoad: false,
             miscError: true
         });
     }
@@ -185,6 +193,47 @@ class Evaluation extends Component {
     }
 
 
+    // the screen that shows up telling the user they can start whenever ready
+    startEvalPrompt() {
+        return (
+            <div>
+                <p>This evaluation consists of some quick administrative questions and a psychometric test.</p>
+                <p>Employers cannot see your answers to any of these questions.</p>
+                <p>There will be a progress bar so you can see how much you have completed.</p>
+                <p>Before every section there will be an introduction with instructions. Read them carefully.</p>
+                <p>Click the button to start once you are ready.</p>
+                { this.state.loadingNextPage ?
+                    <CircularProgress color="secondary" />
+                    :
+                    <div
+                        className="medium button round-4px gradient-transition gradient-1-purple-light gradient-2-cyan"
+                        onClick={this.startEval}
+                    >
+                        Start
+                    </div>
+                }
+            </div>
+        )
+    }
+
+
+    // start the evaluation!
+    startEval = () => {
+        // replace the Start button with a loading circle
+        this.setState({ loading: true });
+
+        axios.post("/api/evaluations/start", this.state.generalApiPostArgs)
+        .then(this.setEvalState.bind(this))
+        .catch(this.handleError.bind(this));
+    }
+
+
+    // set the new state of an eval from an api call
+    setEvalState(response) {
+        // TODO 
+    }
+
+
     // create the content that is shown when the user is in the middle of a stage
     // e.g. they are taking the psych analysis, cognitive test, etc...
     createEvalContent() {
@@ -228,7 +277,7 @@ class Evaluation extends Component {
         let content = null;
 
         // if loading the page, show loading spinner
-        if (this.state.loading) {
+        if (this.state.initialLoad) {
             content = <div className="center"><CircularProgress color="secondary" /></div>;
         }
         // if there is an error loading the eval, show error page
@@ -258,6 +307,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        addNotification
         // setPositionState
     }, dispatch);
 }
