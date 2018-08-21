@@ -117,7 +117,7 @@ async function GET_initialState(req, res) {
 
 // get a user's current eval component in an evaluation
 function getStage(user, position, positionIndex) {
-    // TODO
+    // TODO: 
 }
 
 
@@ -127,9 +127,9 @@ function getStage(user, position, positionIndex) {
 // needs either (positionId and businessId) or position object
 async function getEvaluationState(options) {
     return new Promise(async function(resolve, reject) {
-        if (!options.user) { reject("No user object provided"); }
+        if (!options.user) { return reject("No user object provided"); }
         const user = options.user;
-        if (typeof user !== "object") { reject(`user should be object, but was ${typeof user}`); }
+        if (typeof user !== "object") { return reject(`user should be object, but was ${typeof user}`); }
         // get the position object
         let position;
         if (options.position && typeof position === "object") { position = options.position; }
@@ -139,7 +139,7 @@ async function getEvaluationState(options) {
                 "positions": { "$elemMatch": { "_id": positionId } }
             }
             try { position = (await Businesses.findOne(query))[0]; }
-            catch (getPositionError) { reject(getPositionError); }
+            catch (getPositionError) { return reject(getPositionError); }
         }
 
         let currentStage = undefined;
@@ -164,7 +164,7 @@ async function getEvaluationState(options) {
         else if (!user.adminQuestions.finished) {
             // mark Admin Questions as what the user is currently doing
             evaluationState.component = "Admin Questions";
-            try { evaluationState.question = await getCurrentAdminQuestion(user); }
+            try { evaluationState.componentInfo = await getCurrentAdminQuestion(user); }
             catch (getAdminQuestionError) {
                 console.log("Error getting admin question: ", getAdminQuestionError);
                 return res.status(500).send({ serverError: true });
@@ -185,8 +185,14 @@ async function getEvaluationState(options) {
         }
         // at this point, psych must be current component
         else {
-            // TODO
-
+            // mark the current stage as the psych test
+            evaluationState.component = "Psychometrics";
+            // get the current psych test state
+            try { evaluationState.componentInfo = await getPsychState(user); }
+            catch (getPsychStateError) {
+                console.log("Error getting psych test state: ", getPsychStateError);
+                return res.status(500).send({ serverError: true });
+            }
         }
         /* END PSYCH */
 
@@ -195,22 +201,43 @@ async function getEvaluationState(options) {
         /* END GCA */
 
         /* SKILLS - SOME EVALS */
-        // TODO
+        // check if there are any skill tests within the evaluation
         if (Array.isArray(position.skills) && position.skills.length > 0) {
+            // make sure the user has a list of skills
+            if (!Array.isArray(user.skillTests)) { user.skillTests = []; }
             // go through each skill
-            positions.skills.forEach(posSkill => {
-                // TODO: find the skill within the user's list of skills
+            positions.skills.forEach(posSkillId => {
+                // find the skill within the user's list of skills
+                const userSkillIndex = user.skillTests.findIndex(userSkill => {
+                    return userSkill.skillId.toString() === posSkillId.toString();
+                });
 
-                // TODO: if the skill is finished, add it to the completed list
-
-                // TODO: if the skill isn't finished ...
-
-                    // TODO: ... if there is already a current component, put it in the list
-                    // of incomplete steps
-
-                    // TODO: ... if there isn't already a current component ...
-
-                        //
+                // if the user has at least started the skill
+                if (userSkillIndex >= 0) {
+                    // get the user's skill test from their array of skills
+                    const userSkill = user.skillTests[userSkillIndex];
+                    // if the skill is finished, add it to the completed list
+                    if (typeof userSkill.mostRecentScore === "number") {
+                        completedSteps.push({ stage: "Skill Test" });
+                    }
+                    // if the skill is NOT finished and we already know the current stage
+                    else if (evaluationState.component) {
+                        // put it in the list of incomplete steps
+                        incompleteSteps.push({ stage: "Skill Test" });
+                    }
+                    // if the skill is NOT finished and it is the current stage
+                    else {
+                        // TODO get the current state of the skill test
+                    }
+                }
+                // if the user has not started the skill and it is not the current stage
+                else if (evaluationState.component) {
+                    incompleteSteps.push({ stage: "Skill Test" });
+                }
+                // if the user has not started this skill and it is the current stage
+                else {
+                    // TODO: start the skill, then get its current state
+                }
             });
         }
         /* END SKILLS */
@@ -222,7 +249,15 @@ async function getEvaluationState(options) {
 
         // return the user and the eval state, as the user may have been updated
         // during the process
-        resolve({ user, evaluationState });
+        return resolve({ user, evaluationState });
+    });
+}
+
+
+// get the current state of the user's psych test
+async function getPsychState(user) {
+    return new Promise(async function(resolve, reject) {
+        // TODO:
     });
 }
 
@@ -313,7 +348,7 @@ async function getPosition(businessId, positionId) {
         if (!business) { return reject(`No business with id ${businessId} and a position with id: ${positionId}`); }
 
         // only one position can have that id, so must be the one and only position
-        resolve(business.positions[0]);
+        return resolve(business.positions[0]);
     });
 }
 
