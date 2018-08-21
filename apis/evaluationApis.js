@@ -43,7 +43,7 @@ async function POST_start(req, res) {
     try {
         var [user, position] = await Promise.all([
             getAndVerifyUser(userId, verificationToken),
-            getPosition(positionId, businessId)
+            getPosition(businessId, positionId)
         ]);
     }
     catch (getUserError) {
@@ -143,14 +143,14 @@ async function getEvaluationState(options) {
         // get the position object
         let position;
         // if the position was passed in, just set position equal to that
-        if (options.position && typeof position === "object") { position = options.position; }
+        if (options.position && typeof options.position === "object") { position = options.position; }
         // otherwise get the position from the businessId and positionId
         else if (options.positionId && options.businessId) {
             try { position = await getPosition(options.businessId, options.positionId); }
             catch (getPositionError) { return reject(getPositionError); }
         }
         // if no way to find position was given, fail
-        else { return reject(`Need position or positionId and businessId. position: ${position} positionId: ${positionId} businessId: ${businessId}`); }
+        else { return reject(`Need position or positionId and businessId. position: ${options.position} positionId: ${options.positionId} businessId: ${options.businessId}`); }
 
         let currentStage = undefined;
         let evaluationState = {
@@ -180,7 +180,7 @@ async function getEvaluationState(options) {
         }
 
         // return the evaluation state
-        return resolve({ evaluationState });
+        return resolve(evaluationState);
     });
 }
 
@@ -239,6 +239,8 @@ function addPsychInfo(user, evaluationState) {
         // otherwise give the user their current psych question
         else { evaluationState.componentInfo = psych.currentQuestion; }
     }
+
+    return evaluationState;
 }
 
 
