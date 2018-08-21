@@ -193,6 +193,7 @@ app.post("/skill/agreeToTerms", skillApis.POST_agreeToTerms);
 app.post('/billing/customer', billingApis.POST_customer);
 
 app.get("/evaluation/initialState", evaluationApis.GET_initialState);
+app.get("/evaluation/currentState", evaluationApis.GET_currentState);
 app.post("/evaluation/start", evaluationApis.POST_start);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);

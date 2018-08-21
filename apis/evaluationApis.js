@@ -25,7 +25,41 @@ const { sanitize,
 
 const evaluationApis = {
     GET_initialState,
-    POST_start
+    GET_currentState,
+    POST_start,
+}
+
+
+// gets the full current state of the evaluation
+async function GET_currentState(req, res) {
+    // get everything needed from request
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
+    // if the ids are not strings, return bad request error
+    if (!validArgs({ stringArgs: [businessId, positionId] })) {
+        logArgs(req.query, ["businessId", "positionId"]);
+        return res.status(400).send({ badRequest: true });
+    }
+
+    // get the current user
+    try {
+        var [user, position] = await Promise.all([
+            getAndVerifyUser(userId, verificationToken),
+            getPosition(businessId, positionId)
+        ]);
+    }
+    catch (getUserError) {
+        logError("Error getting user when trying to get current eval state: ", getUserError);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
+    }
+
+    // get the current state of the evaluation
+    try { var evaluationState = await getEvaluationState({ user, position }); }
+    catch (getStateError) {
+        console.log("Error getting evaluation state when starting eval: ", getStateError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send({ evaluationState });
 }
 
 

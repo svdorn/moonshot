@@ -70,13 +70,14 @@ class Evaluation extends Component {
 
     // handle the response with initial state data
     handleInitialState(response) {
+        console.log(response);
         // if information about the eval is returned
         if (propertyExists(response, ["data"], "object")) {
             // TODO: remove
             // // set the redux position state
             // this.props.setPositionState(response.data.evaluationState);
             // if the user has already started this eval
-            if (response.data.stage) {
+            if (response.data.alreadyInProgress) {
                 this.setState({
                     alreadyInProgress: true,
                     initialLoad: false
@@ -143,6 +144,14 @@ class Evaluation extends Component {
     }
 
 
+    // gets the current state of the evaluation
+    getEvalState = () => {
+        axios.get("/api/evaluation/currentState", this.state.generalApiGetArgs)
+        .then(this.setEvalState.bind(this))
+        .catch(this.handleError.bind(this));
+    }
+
+
     // displays an error page telling the user to try again or go home
     createErrorPage() {
         // if there is a user error
@@ -175,7 +184,15 @@ class Evaluation extends Component {
         // TODO: if the user has already started the eval and is in the middle of a
         // test component, ask if they're ready to continue
         if (this.state.alreadyInProgress) {
-            return <div>Ready to get back into it?</div>
+            return (
+                <div>
+                    <p>You{"'"}ve already started this evaluation.</p>
+                    <p>Ready to get back into it?</p>
+                    <div className={button.purpleBlue} onClick={this.getEvalState}>
+                        Let{"'"}s Go!
+                    </div>
+                </div>
+            )
         }
         // TODO: if the user is in the middle of a different eval already
         else if (this.state.evalInProgress) {
