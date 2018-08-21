@@ -144,14 +144,14 @@ export function sawMyCandidatesInfoBox(userId, verificationToken) {
 }
 
 
-export function answerAdminQuestion(userId, verificationToken, questionType, questionId, sliderAnswer, selectedId, selectedText, finished) {
+export function answerAdminQuestion(options) {
     return function(dispatch) {
-        axios.post("/api/user/answerAdminQuestion", {userId, verificationToken, questionType, questionId, sliderAnswer, selectedId, selectedText, finished})
+        axios.post("/api/user/answerAdminQuestion", options)
         .then(response => {
-            dispatch({type: "NEW_CURRENT_USER", currentUser: response.data});
+            dispatch({type: "UPDATE_EVALUATION_STATE", evaluationState: response.evaluationState});
         })
         .catch(error => {
-            // console.log("error answering admin question: ", error);
+            dispatch({type: "ADD_NOTIFICATION", notification: {message: "Error, try refreshing.", type: "errorHeader"}});
         })
     }
 }

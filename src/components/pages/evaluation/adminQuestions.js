@@ -155,10 +155,8 @@ class AdminQuestions extends Component {
     }
 
 
-    begin() {
-        console.log("DO SOMETHING");
-        // TODO
-    }
+    // start the admin questions
+    begin() { this.props.answerAdminQuestion(this.state.credentials); }
 
 
     render() {

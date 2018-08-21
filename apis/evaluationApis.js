@@ -27,6 +27,64 @@ const evaluationApis = {
     GET_initialState,
     GET_currentState,
     POST_start,
+    POST_answerAdminQuestion
+}
+
+
+// answer a question that is shown on the administrative questions portion of an evaluation
+async function POST_answerAdminQuestion(req, res) {
+    const { userId, verificationToken, sliderAnswer, selectedId, selectedText } = sanitize(req.body);
+
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("error getting user while trying to get admin questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // make sure the user has a place to store the response
+    if (!user.adminQuestions) { user.adminQuestions = { startDate: new Date() }; }
+    if (!Array.isArray(user.adminQuestions.questions)) { user.adminQuestions.questions = []; }
+
+    // if the user has a current question, answer it
+    if (user.adminQuestions.currentQuestion && user.adminQuestions.currentQuestions.questionId) {
+        // add the response - works for both slider and mulitpleChoice questions
+        const newAnswer = {
+            user.adminQuestions.currentQuestions.questionId,
+            sliderAnswer,
+            selectedId,
+            selectedText
+        }
+        // add the response to the array of answered questions
+        user.adminQuestions.questions.push(newAnswer);
+    }
+
+    // get a new admin question for the user
+    try { var newQ = await getNewAdminQuestion(user); }
+    catch (getQuestionError) {
+        console.log("Error getting new admin question: ", getQuestionError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // if the user already answered all the admin questions, they're done
+    // move on to the next stage
+    if (newQ.finished === true) {
+        // TODO
+    }
+
+    // otherwise, return the new question to answer
+    else {
+        // TODO
+    }
+
+    // save the user
+    try { await user.save(); }
+    catch (saveUserError) {
+        console.log("error saving user while trying to answer admin question");
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send({ evaluationState });
+    //return res.json(frontEndUser(user));
 }
 
 
@@ -337,30 +395,31 @@ async function getPsychState(user) {
 
 
 // gets the next admin question for a user
-async function getCurrentAdminQuestion(user) {
+async function getNewAdminQuestion(user) {
     return new Promise(async function(resolve, reject) {
-        // want only questions that are required for the current user's type
-        const query = { "requiredFor": user.userType };
+        const answeredIds = user.adminQuestions.questions.map(question => question.questionId);
+        console.log(answeredIds);
+        // want only ...
+        const query = {
+            // ... questions that are required for the current user's type
+            "requiredFor": user.userType,
+            // ... and haven't already been answered
+            "_id": { "$nin": answeredIds }
+        };
         // the values we want for the questions
         const wantedValues = "questionType text sliderMin sliderMax options";
         // get all the necessary admin questions
         try { var questions = await Adminqs.find(query).select(wantedValues); }
         catch (getQuestionsError) { return reject(getQuestionsError); }
+
         // if the user already finished all the required questions
-        if (questions.length === user.adminQuestions.questions.length) {
-            return reject("User already finished admin questions!");
+        if (questions.length === 0) {
+            console.log("FINISHED ADMIN QUESTIONS");
+            return resolve({ finished: true });
         }
 
-        // find the index of the first unanswered question
-        const question = questions.findIndex(q => {
-            // whether the user has answered this q
-            const hasAnsweredQuestion = user.adminQuestions.questions.some(answeredQ => {
-                return answeredQ.questionId.toString() === q._id.toString();
-            });
-            return !hasAnsweredQuestion;
-        });
-
-        return resolve(question);
+        // the user is not done, just grab the first available question
+        return resolve({ question: questions[0] });
     });
 }
 

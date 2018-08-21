@@ -360,8 +360,19 @@ export function usersReducers(state = initialState, action) {
             // save the updated automateInvites object
             return { ...state, automateInvites };
         }
+        // override ALL of evaluation state
         case "SET_EVALUATION_STATE": {
             return { ...state, evaluationState: action.evaluationState }
+        }
+        // override parts of old evaluation state with new eval state
+        case "UPDATE_EVALUATION_STATE": {
+            return {
+                ...state,
+                evaluationState: {
+                    ...state.evaluationState,
+                    ...action.evaluationState
+                }
+            }
         }
         case "ADD_PATHWAY":
             return {

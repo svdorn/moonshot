@@ -52,7 +52,6 @@ const userApis = {
     GET_adminQuestions,
     GET_notificationPreferences,
     POST_notificationPreferences,
-    POST_answerAdminQuestion,
     POST_sawEvaluationIntro,
     POST_agreeToTerms,
     POST_verifyFromApiKey,
@@ -190,54 +189,6 @@ async function GET_adminQuestions(req, res) {
     return res.json(adminQuestions);
 }
 
-
-// answer a question that is shown on the administrative questions portion of an evaluation
-async function POST_answerAdminQuestion(req, res) {
-    const userId = sanitize(req.body.userId);
-    const verificationToken = sanitize(req.body.verificationToken);
-    const questionType = sanitize(req.body.questionType);
-    const questionId = sanitize(req.body.questionId);
-    const sliderAnswer = sanitize(req.body.sliderAnswer);
-    const selectedId = sanitize(req.body.selectedId);
-    const selectedText = sanitize(req.body.selectedText);
-    const finished = sanitize(req.body.finished);
-
-    // make sure the question type is valid
-    if (!["demographics", "selfRating"].includes(questionType)) {
-        return res.status(400).send("Invalid input.");
-    }
-
-    let user;
-    try { user = await getAndVerifyUser(userId, verificationToken); }
-    catch (getUserError) {
-        console.log("error getting user while trying to get admin questions: ", getUserError);
-        return res.status(500).send(errors.PERMISSIONS_ERROR);
-    }
-
-    // make sure the user has a place to store the response
-    if (!user.adminQuestions[questionType]) {
-        user.adminQuestions[questionType] = [];
-    }
-    // add the response - works for both slider and mulitpleChoice questions
-    const newAnswer = {
-        questionId,
-        sliderAnswer,
-        selectedId,
-        selectedText
-    }
-    user.adminQuestions[questionType].push(newAnswer);
-
-    user.adminQuestions.finished = finished;
-
-    // save the user
-    try { await user.save(); }
-    catch (saveUserError) {
-        console.log("error saving user while trying to answer admin question");
-        res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    return res.json(frontEndUser(user));
-}
 
 async function GET_notificationPreferences(req, res) {
     const userId = sanitize(req.query.userId);
