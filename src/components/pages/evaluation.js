@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { addNotification } from "../../actions/usersActions";
+import { addNotification, setEvaluationState } from "../../actions/usersActions";
 import { propertyExists, goTo } from "../../miscFunctions";
 import MiscError from "../miscComponents/miscError";
 import { button } from "../../classes";
@@ -192,7 +192,7 @@ class Evaluation extends Component {
                         Let{"'"}s Go!
                     </div>
                 </div>
-            )
+            );
         }
         // TODO: if the user is in the middle of a different eval already
         else if (this.state.evalInProgress) {
@@ -248,8 +248,13 @@ class Evaluation extends Component {
 
     // set the new state of an eval from an api call
     setEvalState(response) {
-        // TODO
-        console.log("new eval state: ", response);
+        if (propertyExists(response, ["data", "evaluationState"], "object")) {
+            this.props.setEvaluationState(response.data.evaluationState);
+            // show eval component
+            this.setState({ inProgress: true });
+        } else {
+            this.props.addNotification("Whoops, something's wrong. Refresh and try again.");
+        }
     }
 
 
@@ -258,6 +263,8 @@ class Evaluation extends Component {
     createEvalContent() {
         // get the current position information from redux state
         const evaluation = this.props.evaluationState;
+
+        console.log("evaluation: ", evaluation);
 
         // TODO: switch block to determine which component type to show
         switch (evaluation.component) {
@@ -283,7 +290,7 @@ class Evaluation extends Component {
             }
             default: {
                 // TODO: do something else here
-                content = (
+                return (
                     <div>How did we get here??</div>
                 );
             }
@@ -326,8 +333,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addNotification
-        // setPositionState
+        addNotification,
+        setEvaluationState
     }, dispatch);
 }
 

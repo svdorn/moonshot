@@ -360,6 +360,9 @@ export function usersReducers(state = initialState, action) {
             // save the updated automateInvites object
             return { ...state, automateInvites };
         }
+        case "SET_EVALUATION_STATE": {
+            return { ...state, evaluationState: action.evaluationState }
+        }
         case "ADD_PATHWAY":
             return {
                 ...state,

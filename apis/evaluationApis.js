@@ -228,7 +228,7 @@ function addAdminQuestionsInfo(user, evaluationState) {
     // if user has not started OR for some reason don't have a current question and aren't done
     if (!started || (!finished && !adminQs.currentQuestion)) {
         // user is on admin question stage but needs to be shown instructions
-        evaluationState.component = "Admin Question";
+        evaluationState.component = "Admin Questions";
         evaluationState.showIntro = true;
     }
 

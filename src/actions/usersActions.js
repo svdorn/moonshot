@@ -745,7 +745,7 @@ export function popGoBackStack() {
 
 
 // set the state of the current position evaluation
-export function setPositionState(evaluationState) {
+export function setEvaluationState(evaluationState) {
     return function(dispatch) {
         dispatch({ type: "SET_EVALUATION_STATE", evaluationState });
     }
