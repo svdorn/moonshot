@@ -223,7 +223,7 @@ class Evaluation extends Component {
         // replace the Start button with a loading circle
         this.setState({ loading: true });
 
-        axios.post("/api/evaluations/start", this.state.generalApiPostArgs)
+        axios.post("/api/evaluation/start", this.state.generalApiPostArgs)
         .then(this.setEvalState.bind(this))
         .catch(this.handleError.bind(this));
     }
@@ -232,6 +232,7 @@ class Evaluation extends Component {
     // set the new state of an eval from an api call
     setEvalState(response) {
         // TODO
+        console.log("new eval state: ", response);
     }
 
 

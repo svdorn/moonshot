@@ -1,6 +1,17 @@
 "use strict"
 const mongoose = require('mongoose');
 
+const adminQuestionSchema = mongoose.Schema({
+    // of the question the user answered
+    questionId: mongoose.Schema.Types.ObjectId,
+    // only applies to slider questions
+    sliderAnswer: Number,
+    // only apply to multiple choice questions - the id of the answer chosen
+    selectedId: mongoose.Schema.Types.ObjectId,
+    // the text of the answer chosen
+    selectedText: String
+});
+
 const usersSchema = mongoose.Schema({
     // user's full name
     name: String,
@@ -216,22 +227,19 @@ const usersSchema = mongoose.Schema({
 
     // questions the user has to answer - only once - before doing a position eval
     adminQuestions: {
+        // the date the user started the admin questions
+        startDate: Date,
+        // the date the user finished the admin questions
+        endDate: Date,
+        // all the admin questions that have been answered
+        questions: [ adminQuestionSchema ],
+        // the question the user is currently on
+        currentQuestion: adminQuestionSchema,
+        // DEPRECATED TODO: remove once all users transitioned from using this
         // whether the user has started the admin questions portion of the eval
         started: Boolean,
         // whether the user has finished all the admin questions and no longer needs to do them
         finished: Boolean,
-        // all the admin questions that have been answered
-        questions: [{
-            // of the question the user answered
-            questionId: mongoose.Schema.Types.ObjectId,
-            // only applies to slider questions
-            sliderAnswer: Number,
-            // only apply to multiple choice questions - the id of the answer chosen
-            selectedId: mongoose.Schema.Types.ObjectId,
-            // the text of the answer chosen
-            selectedText: String
-        }],
-        // DEPRECATED TODO: remove once all users transitioned from using this
         // questions user answered about demographics
         demographics: [{
             // of the question the user answered
