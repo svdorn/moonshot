@@ -4,10 +4,16 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { addNotification, setEvaluationState } from "../../actions/usersActions";
-import { propertyExists, goTo } from "../../miscFunctions";
-import MiscError from "../miscComponents/miscError";
-import { button } from "../../classes";
+import MetaTags from "react-meta-tags";
+import { addNotification, setEvaluationState } from "../../../actions/usersActions";
+import { propertyExists, goTo } from "../../../miscFunctions";
+import MiscError from "../../miscComponents/miscError";
+import { button } from "../../../classes";
+
+import AdminQuestions from "./adminQuestions";
+import PsychTest from "./psychTest";
+import CognitiveTest from "./cognitiveTest";
+import SkillTest from "./skillTest";
 
 
 class Evaluation extends Component {
@@ -268,11 +274,7 @@ class Evaluation extends Component {
 
         // TODO: switch block to determine which component type to show
         switch (evaluation.component) {
-            case "Admin Questions": {
-                return (
-                    <div>Admin questions here!</div>
-                );
-            }
+            case "Admin Questions": { return <AdminQuestions />; }
             case "Psychometrics": {
                 return (
                     <div>Taking psych eval!</div>
@@ -318,7 +320,15 @@ class Evaluation extends Component {
         // if the user is taking a part of the eval
         else { content = this.createEvalContent(); }
 
-        return <div className="fillScreen primary-white center">{ content }</div>;
+        return (
+            <div className="fillScreen primary-white center">
+                <MetaTags>
+                    <title>Evaluation | Moonshot</title>
+                    <meta name="description" content="Take a position evaluation to see if you and the position make a good match." />
+                </MetaTags>
+                { content }
+            </div>
+        );
     }
 }
 

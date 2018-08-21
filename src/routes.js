@@ -43,7 +43,7 @@ import AdminQuestions from './components/pages/adminQuestions/adminQuestions';
 import FreeResponse from "./components/pages/freeResponse";
 import EvaluationIntro from "./components/pages/evaluationIntro";
 // position evaluation - contains all components (psych, gca, admin questions)
-import Evaluation from "./components/pages/evaluation";
+import Evaluation from "./components/pages/evaluation/evaluation";
 
 import AdminPages from './components/pages/adminPages/adminPages';
 import BusinessEditor from './components/pages/adminPages/businessEditor';
