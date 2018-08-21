@@ -21,7 +21,7 @@ class Footer extends Component {
         const hidden = hideFooterLocations.includes(this.props.location.pathname.toLowerCase());
 
         return (
-            <div className="jsxWrapper" style={ hidden ? {display: "none"} : {} }>
+            <div className="footer-container" style={ hidden ? {display: "none"} : {} }>
                 <div className="tabsShadow" style={{position:"absolute", zIndex: "100"}}><div/></div>
                 <footer className={"footer"}>
                     <ul className="horizCenteredList">

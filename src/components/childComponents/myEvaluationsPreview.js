@@ -86,11 +86,11 @@ class MyEvaluationsPreview extends Component {
                 </div>
             );
         }
-        if (!this.props.finalized) {
+        if (!this.props.finalized && this.props.currentUser.userType === "accountAdmin") {
             positionSkills = (
                 <div key={"no skills Surrounder"} style={{display: 'inline-block', top: "-5px"}}>
                     <div key={"No Skills"}
-                         className="myEvalsSkillChip font18px font16pxUnder500"
+                         className="myEvalsSkillChip font14px font12pxUnder500"
                     >
                         Not live yet
                     </div>

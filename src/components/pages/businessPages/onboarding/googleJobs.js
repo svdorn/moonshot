@@ -52,7 +52,7 @@ class GoogleJobs extends Component {
             key++;
             return (
                 <div className="font16px font14pxUnder900 marginTop10px" key={key}>
-                    <input className="blackInput googleJobs getStarted" type="text" placeholder="Paste Job Description URL here (Optional)" name="job"
+                    <input className="blackInput googleJobs" type="text" placeholder="Paste Job Description URL here (Optional)" name="job"
                     value={job} onChange={(e) => this.onChange(e, key)}/>
                     {this.state.jobs.length === key ?
                         <div

@@ -1055,7 +1055,7 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
                    }
                 }
                 names.push(positions[i].name);
-                promises.push(Users.count(completionsQuery));
+                promises.push(Users.countDocuments(completionsQuery));
             }
 
             const counts = await Promise.all(promises);

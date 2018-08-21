@@ -92,7 +92,7 @@ class ContactUsDialog extends Component {
         let dialogBody = (
             <form onSubmit={this.handleSubmitForm.bind(this)} className="center">
                 <div className="primary-white font18px font16pxUnder700 marginTop10px">
-                    Our friendly team will be in touch shortly
+                    Our team will be in touch shortly
                 </div>
                 <Field
                     name="name"

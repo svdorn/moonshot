@@ -6,16 +6,4 @@ module.exports = merge(baseConfig, {
     // devtool: 'eval-source-map',
 
     mode: 'development',
-
-    // module: {
-    //     rules: [
-    //         {
-    //             test: /\.css$/,
-    //             use: [
-    //                 'style-loader',
-    //                 'css-loader?importLoaders=1',
-    //             ],
-    //         },
-    //     ],
-    // },
 });
