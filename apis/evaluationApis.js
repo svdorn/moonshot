@@ -18,7 +18,8 @@ const { sanitize,
         getUserFromReq,
         frontEndUser,
         validArgs,
-        logArgs
+        logArgs,
+        logError
 } = require('./helperFunctions');
 
 
@@ -39,9 +40,14 @@ async function POST_start(req, res) {
     }
 
     // get the current user
-    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    try {
+        var [user, position] = await Promise.all([
+            getAndVerifyUser(userId, verificationToken),
+            getPosition(positionId, businessId)
+        ]);
+    }
     catch (getUserError) {
-        console.log("Error getting user when trying to get current eval state: ", getUserError);
+        logError("Error getting user when trying to get current eval state: ", getUserError);
         return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
     }
 
@@ -54,6 +60,8 @@ async function POST_start(req, res) {
 
     // set the user's current position to the one given
     user.evalInProgress = { businessId, positionId }
+    // mark the position as started
+    user.positions[positionIndex].appliedStartDate = new Date();
 
     // save the user
     try { await user.save(); }
@@ -63,7 +71,7 @@ async function POST_start(req, res) {
     }
 
     // get the current state of the evaluation
-    try { var evaluationState = await getEvaluationState({ user, positionId, businessId }); }
+    try { var evaluationState = await getEvaluationState({ user, position }); }
     catch (getStateError) {
         console.log("Error getting evaluation state when starting eval: ", getStateError);
         return res.status(500).send({ serverError: true });
@@ -128,22 +136,21 @@ async function GET_initialState(req, res) {
 // requires: user AND ((positionId and businessId) OR position object)
 async function getEvaluationState(options) {
     return new Promise(async function(resolve, reject) {
-        if (!options.user) { return reject("No user object provided"); }
+        if (typeof options !== "object") { return reject("No options object provided"); }
         const user = options.user;
         if (typeof user !== "object") { return reject(`user should be object, but was ${typeof user}`); }
+
         // get the position object
         let position;
         // if the position was passed in, just set position equal to that
         if (options.position && typeof position === "object") { position = options.position; }
         // otherwise get the position from the businessId and positionId
         else if (options.positionId && options.businessId) {
-            const query = {
-                "_id": options.businessId,
-                "positions": { "$elemMatch": { "_id": options.positionId } }
-            }
             try { position = await getPosition(options.businessId, options.positionId); }
             catch (getPositionError) { return reject(getPositionError); }
         }
+        // if no way to find position was given, fail
+        else { return reject(`Need position or positionId and businessId. position: ${position} positionId: ${positionId} businessId: ${businessId}`); }
 
         let currentStage = undefined;
         let evaluationState = {
@@ -163,65 +170,17 @@ async function getEvaluationState(options) {
 
         /* GCA - ALL EVALS */
         // TODO: GCA
-        /* END GCA */
 
         /* SKILLS - SOME EVALS */
         evaluationState = addSkillInfo(user, evaluationState, position);
-
-
-        // check if there are any skill tests within the evaluation
-        if (Array.isArray(position.skills) && position.skills.length > 0) {
-            // make sure the user has a list of skills
-            if (!Array.isArray(user.skillTests)) { user.skillTests = []; }
-            // go through each skill
-            position.skills.forEach(posSkillId => {
-                // find the skill within the user's list of skills
-                const userSkillIndex = user.skillTests.findIndex(userSkill => {
-                    return userSkill.skillId.toString() === posSkillId.toString();
-                });
-
-                // if the user has at least started the skill
-                if (userSkillIndex >= 0) {
-                    // get the user's skill test from their array of skills
-                    const userSkill = user.skillTests[userSkillIndex];
-                    // if the skill is finished, add it to the completed list
-                    if (typeof userSkill.mostRecentScore === "number") {
-                        evaluationState.completedSteps.push({ stage: "Skill Test" });
-                    }
-                    // if the skill is NOT finished and we already know the current stage
-                    else if (evaluationState.component) {
-                        // put it in the list of incomplete steps
-                        evaluationState.incompleteSteps.push({ stage: "Skill Test" });
-                    }
-                    // if the skill is NOT finished and it is the current stage
-                    else {
-                        // TODO get the current state of the skill test
-                        console.log("NEED TO GET STATE OF SKILL TEST");
-                        return reject("Haven't coded this part yet");
-                    }
-                }
-                // if the user has not started the skill and it is not the current stage
-                else if (evaluationState.component) {
-                    evaluationState.incompleteSteps.push({ stage: "Skill Test" });
-                }
-                // if the user has not started this skill and it is the current stage
-                else {
-                    // TODO: start the skill, then get its current state
-                    console.log("NEED TO GET STATE OF SKILL TEST");
-                    return reject("Haven't coded this part yet");
-                }
-            });
-        }
-        /* END SKILLS */
 
         // if the user finished all the componens, they're done
         if (!evaluationState.component) {
             evaluationState.component = "Finished";
         }
 
-        // return the user and the eval state, as the user may have been updated
-        // during the process
-        return resolve({ user, evaluationState });
+        // return the evaluation state
+        return resolve({ evaluationState });
     });
 }
 

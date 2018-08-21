@@ -930,6 +930,16 @@ function logArgs(parent, args) {
 }
 
 
+// logs an error with line numbers and such
+function logError(...args) {
+    console.log("ERROR");
+    args.forEach(arg => { console.log(arg); });
+    let stack = (new Error).stack;
+    stack = stack.substring(stack.indexOf(")") + 1);
+    //stack.shift();
+    console.log("Stacktrace: ", stack);
+}
+
 
 // checks if a password is secure enough to be stored
 function isValidPassword(password) {
@@ -1000,6 +1010,7 @@ const helperFunctions = {
     isValidFileType,
     validArgs,
     logArgs,
+    logError,
     truthy,
     propertyExists,
 
