@@ -362,13 +362,17 @@ export function usersReducers(state = initialState, action) {
         }
         // override parts of old evaluation state with new eval state
         case "UPDATE_EVALUATION_STATE": {
-            return {
+            let newState = {
                 ...state,
+                // update evaluation state without resetting everything
                 evaluationState: {
                     ...state.evaluationState,
                     ...action.evaluationState
                 }
             }
+            // update user if given
+            if (action.user) { newState.currentUser = user; }
+            return newState;
         }
         case "ADD_PATHWAY":
             return {

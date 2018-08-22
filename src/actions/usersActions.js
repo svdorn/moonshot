@@ -148,7 +148,7 @@ export function answerAdminQuestion(options) {
     return function(dispatch) {
         axios.post("/api/evaluation/answerAdminQuestion", options)
         .then(response => {
-            dispatch({type: "UPDATE_EVALUATION_STATE", evaluationState: response.data.evaluationState});
+            dispatch({type: "UPDATE_EVALUATION_STATE", evaluationState: response.data.evaluationState, user: response.data.user});
         })
         .catch(error => {
             dispatch({type: "ADD_NOTIFICATION", notification: {message: "Error, try refreshing.", type: "errorHeader"}});

@@ -65,12 +65,14 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
 
     // will be modified to contain new state info
     let evaluationState = {};
+    // only return the user if needs updating
+    let returnUser = false;
 
     // if the user already answered all the admin questions, they're done
     // move on to the next stage
     if (newQ.finished === true) {
         console.log("FINISHED");
-        // TODO
+        returnUser = true;
         // mark admin questions as finished
         user.adminQuestions.endDate = new Date();
 
@@ -89,7 +91,6 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
     // otherwise
     else {
         // return the new question to answer
-        console.log("newQ.question: ", newQ.question);
         evaluationState = { componentInfo: newQ.question, showIntro: false };
         // save the question as the current question for the user
         user.adminQuestions.currentQuestion = { questionId: newQ.question._id };
@@ -98,12 +99,16 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
     // save the user
     try { await user.save(); }
     catch (saveUserError) {
-        console.log("error saving user while trying to answer admin question");
+        console.log("error saving user while trying to answer admin question: ", saveUserError);
         return res.status(500).send({ serverError: true });
     }
 
-    return res.status(200).send({ evaluationState });
-    //return res.json(frontEndUser(user));
+    // always return the new eval state
+    let toReturn = { evaluationState };
+    // return the new user if necessary
+    if (returnUser) { toReturn.user = frontEndUser(user); }
+
+    return res.status(200).send(toReturn);
 }
 
 
