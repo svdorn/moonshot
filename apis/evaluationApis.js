@@ -49,10 +49,10 @@ async function POST_answerAdminQuestion(req, res) {
     if (!Array.isArray(user.adminQuestions.questions)) { user.adminQuestions.questions = []; }
 
     // if the user has a current question, answer it
-    if (user.adminQuestions.currentQuestion && user.adminQuestions.currentQuestions.questionId) {
-        // add the response - works for both slider and mulitpleChoice questions
+    if (user.adminQuestions.currentQuestion && user.adminQuestions.currentQuestion.questionId) {
+        // add the response - works for both slider and multipleChoice questions
         const newAnswer = {
-            questionId: user.adminQuestions.currentQuestions.questionId,
+            questionId: user.adminQuestions.currentQuestion.questionId,
             sliderAnswer,
             selectedId,
             selectedText
@@ -81,6 +81,7 @@ async function POST_answerAdminQuestion(req, res) {
     // otherwise
     else {
         // return the new question to answer
+        console.log("newQ.question: ", newQ.question);
         evaluationState = { componentInfo: newQ.question, showIntro: false };
         // save the question as the current question for the user
         user.adminQuestions.currentQuestion = { questionId: newQ.question._id };

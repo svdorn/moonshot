@@ -17,12 +17,9 @@ class AdminQuestions extends Component {
         this.state = {
             selectedId: undefined,
             selectedText: undefined,
-            demographics: undefined,
-            selfRating: undefined,
             sliderValue: 1,
             question: undefined,
             questionType: undefined,
-            finished: false,
             clickedBegin: false
         };
     }
@@ -332,11 +329,6 @@ class AdminQuestions extends Component {
                 <div style={{marginBottom: "40px", width: "initial"}} className={"skillContinueButton"} onClick={this.begin.bind(this)}>Begin</div>
             </div>
         )
-    }
-
-
-    begin() {
-        this.setState({ clickedBegin: true });
     }
 
 

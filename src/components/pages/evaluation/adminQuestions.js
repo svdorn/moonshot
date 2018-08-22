@@ -48,7 +48,7 @@ class AdminQuestions extends Component {
     nextQuestion() {
         const question = this.props.questionInfo;
         // don't do anything if nothing is selected on a multiple choice question
-        if (!this.state.question || (this.state.question.questionType === "multipleChoice" && this.state.selectedId === undefined)) {
+        if (!question || !question.text || (question.questionType === "multipleChoice" && this.state.selectedId === undefined)) {
             return;
         }
 
@@ -84,7 +84,7 @@ class AdminQuestions extends Component {
         }
         return (
             <div className="adminQuestionsContainer">
-                <div className="adminQuestions question">{question.questionText}</div>
+                <div className="adminQuestions question">{question.text}</div>
                 <div className="center">
                     <div className="center adminQuestions gradingSliderContainer">
                         <Slider min={question.sliderMin}
@@ -134,7 +134,7 @@ class AdminQuestions extends Component {
 
         return (
             <div>
-                <div className="adminQuestions question">{question.questionText}</div>
+                <div className="adminQuestions question">{question.text}</div>
                 { options }
                 <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
             </div>
