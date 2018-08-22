@@ -13,10 +13,16 @@ class AdminQuestions extends Component {
     constructor(props) {
         super(props);
 
+        console.log(props);
+
         this.state = {
             selectedId: undefined,
             selectedText: undefined,
             sliderValue: 1,
+            credentials: {
+                userId: props.currentUser._id,
+                verificationToken: props.currentUser.verificationToken
+            }
         };
     }
 
@@ -46,15 +52,12 @@ class AdminQuestions extends Component {
             return;
         }
 
-        const currentUser = this.props.currentUser;
+        const { sliderValue, selectedId, selectedText } = this.state;
 
-        this.props.answerAdminQuestion(
-            currentUser._id,
-            currentUser.verificationToken,
-            this.state.sliderValue,
-            this.state.selectedId,
-            this.state.selectedText,
-        );
+        this.props.answerAdminQuestion({
+            ...this.state.credentials,
+            sliderValue, selectedId, selectedText
+        });
 
         const newState = {
             ...this.state,
@@ -162,6 +165,8 @@ class AdminQuestions extends Component {
     render() {
         let self = this;
         const question = this.props.questionInfo;
+
+        console.log("question: ", question);
 
         // the main content that will be shown in the page
         let content = null;

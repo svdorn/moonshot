@@ -281,10 +281,6 @@ export function usersReducers(state = initialState, action) {
                 ...state, incompleteSteps: action.incompleteSteps, loadingSomething: false
             }
             break;
-        case "SET_EVALUATION_STATE": {
-            return { ...state, evaluationState: action.evaluationState };
-            break;
-        }
         case "RESET_INCOMPLETE_STEPS":
             return {
                 ...state, incompleteSteps: undefined

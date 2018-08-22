@@ -49,7 +49,7 @@ async function POST_answerAdminQuestion(req, res) {
     if (user.adminQuestions.currentQuestion && user.adminQuestions.currentQuestions.questionId) {
         // add the response - works for both slider and mulitpleChoice questions
         const newAnswer = {
-            user.adminQuestions.currentQuestions.questionId,
+            questionId: user.adminQuestions.currentQuestions.questionId,
             sliderAnswer,
             selectedId,
             selectedText
@@ -65,16 +65,18 @@ async function POST_answerAdminQuestion(req, res) {
         return res.status(500).send({ serverError: true });
     }
 
+    // will be modified to contain new state info
+    let evaluationState = {};
+
     // if the user already answered all the admin questions, they're done
     // move on to the next stage
     if (newQ.finished === true) {
         // TODO
+        console.log("FINISHED");
     }
 
     // otherwise, return the new question to answer
-    else {
-        // TODO
-    }
+    else { evaluationState = { componentInfo: newQ.question, showIntro: false }; }
 
     // save the user
     try { await user.save(); }
