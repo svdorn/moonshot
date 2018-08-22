@@ -42,7 +42,10 @@ async function POST_answerAdminQuestion(req, res) {
     }
 
     // make sure the user has a place to store the response
-    if (!user.adminQuestions) { user.adminQuestions = { startDate: new Date() }; }
+    if (!user.adminQuestions) { user.adminQuestions = {}; }
+    // add a start date if the user hadn't started yet
+    if (!user.adminQuestions.startDate) { user.adminQuestions.startDate = new Date();  }
+    // if the user didn't have a place to store old questions, add it
     if (!Array.isArray(user.adminQuestions.questions)) { user.adminQuestions.questions = []; }
 
     // if the user has a current question, answer it
@@ -75,8 +78,13 @@ async function POST_answerAdminQuestion(req, res) {
         console.log("FINISHED");
     }
 
-    // otherwise, return the new question to answer
-    else { evaluationState = { componentInfo: newQ.question, showIntro: false }; }
+    // otherwise
+    else {
+        // return the new question to answer
+        evaluationState = { componentInfo: newQ.question, showIntro: false };
+        // save the question as the current question for the user
+        user.adminQuestions.currentQuestion = { questionId: newQ.question._id };
+    }
 
     // save the user
     try { await user.save(); }
@@ -256,17 +264,22 @@ async function getEvaluationState(options) {
             component: undefined
         };
 
-        /* ADMIN QUESTIONS - ALL EVALS */
-        evaluationState = addAdminQuestionsInfo(user, evaluationState);
+        // add all the info about the current state of
+        try {
+            /* ADMIN QUESTIONS - ALL EVALS */
+            evaluationState = await addAdminQuestionsInfo(user, evaluationState);
 
-        /* PSYCH - ALL EVALS*/
-        evaluationState = addPsychInfo(user, evaluationState);
+            /* PSYCH - ALL EVALS*/
+            evaluationState = await addPsychInfo(user, evaluationState);
 
-        /* GCA - ALL EVALS */
-        // TODO: GCA
+            /* GCA - ALL EVALS */
+            // TODO: GCA
 
-        /* SKILLS - SOME EVALS */
-        evaluationState = addSkillInfo(user, evaluationState, position);
+            /* SKILLS - SOME EVALS */
+            evaluationState = await addSkillInfo(user, evaluationState, position);
+        }
+        catch (getStateError) { reject(getStateError); }
+
 
         // if the user finished all the componens, they're done
         if (!evaluationState.component) {
@@ -280,107 +293,119 @@ async function getEvaluationState(options) {
 
 
 // add in info about current admin questions state
-function addAdminQuestionsInfo(user, evaluationState) {
-    const adminQs = user.adminQuestions;
-    const started = typeof adminQs === "object" && adminQs.startDate;
-    const finished = started && adminQs.endDate;
+async function addAdminQuestionsInfo(user, evaluationState) {
+    return new Promise(async function(resolve, reject) {
+        const adminQs = user.adminQuestions;
+        const started = typeof adminQs === "object" && adminQs.startDate;
+        const finished = started && adminQs.endDate;
 
-    // if user has not started OR for some reason don't have a current question and aren't done
-    if (!started || (!finished && !adminQs.currentQuestion)) {
-        // user is on admin question stage but needs to be shown instructions
-        evaluationState.component = "Admin Questions";
-        evaluationState.showIntro = true;
-    }
+        // if user has not started OR for some reason don't have a current question and aren't done
+        if (!started || (!finished && !adminQs.currentQuestion)) {
+            // user is on admin question stage but needs to be shown instructions
+            evaluationState.component = "Admin Questions";
+            evaluationState.showIntro = true;
+        }
 
-    // if user has not finished admin questions
-    else if (!finished) {
-        // mark Admin Questions as what the user is currently doing
-        evaluationState.component = "Admin Questions";
-        // add the current question for the user to answer
-        evaluationState.componentInfo = adminQs.currentQuestion;
-    }
+        // if user has not finished admin questions
+        else if (!finished) {
+            // mark Admin Questions as what the user is currently doing
+            evaluationState.component = "Admin Questions";
 
-    // if user has finished admin questions, add it as a finished stage
-    else { evaluationState.completedSteps.push({ stage: "Admin Questions" }); }
+            // get the current question from the db
+            try { var question = await Adminqs.findById(adminQs.currentQuestion.questionId); }
+            catch (getQuestionError) { reject(getQuestionError); }
+            if (!question) { reject(`Current admin question not found. Id: ${adminQs.currentQuestion.questionId}`); }
 
-    return evaluationState;
+            // add the current question for the user to answer
+            evaluationState.componentInfo = question;
+        }
+
+        // if user has finished admin questions, add it as a finished stage
+        else { evaluationState.completedSteps.push({ stage: "Admin Questions" }); }
+
+        resolve(evaluationState);
+    });
 }
 
 
 // add in info about the current state of the psych test
-function addPsychInfo(user, evaluationState) {
-    const psych = user.psychometricTest;
+async function addPsychInfo(user, evaluationState) {
+    return new Promise(async function(resolve, reject) {
+        const psych = user.psychometricTest;
 
-    // if the user has finished the psych eval, add it to the finished pile
-    if (psych && psych.endDate) {
-        evaluationState.completedSteps.push({ stage: "Psychometrics" });
-    }
+        // if the user has finished the psych eval, add it to the finished pile
+        if (psych && psych.endDate) {
+            evaluationState.completedSteps.push({ stage: "Psychometrics" });
+        }
 
-    // if there is already a current component, throw psych in the incomplete pile
-    else if (evaluationState.component){
-        evaluationState.incompleteSteps.push({ stage: "Psychometrics" });
-    }
+        // if there is already a current component, throw psych in the incomplete pile
+        else if (evaluationState.component){
+            evaluationState.incompleteSteps.push({ stage: "Psychometrics" });
+        }
 
-    // at this point, psych must be current component
-    else {
-        // mark the current stage as the psych test
-        evaluationState.component = "Psychometrics";
+        // at this point, psych must be current component
+        else {
+            // mark the current stage as the psych test
+            evaluationState.component = "Psychometrics";
 
-        // if the user has not started the psych test, show the intro for it
-        const psychStarted = psych && psych.currentQuestion && psych.startDate;
-        if (!psychStarted) { evaluationState.showIntro = true; }
+            // if the user has not started the psych test, show the intro for it
+            const psychStarted = psych && psych.currentQuestion && psych.startDate;
+            if (!psychStarted) { evaluationState.showIntro = true; }
 
-        // otherwise give the user their current psych question
-        else { evaluationState.componentInfo = psych.currentQuestion; }
-    }
+            // otherwise give the user their current psych question
+            else { evaluationState.componentInfo = psych.currentQuestion; }
+        }
 
-    return evaluationState;
+        resolve(evaluationState);
+    });
 }
 
 
 // add in info about the current state of skills
-function addSkillInfo(user, evaluationState, position) {
-    // see if there even are skills in the position
-    if (Array.isArray(position.skills) && position.skills.length > 0) {
-        // grab the user's skill tests that they already have
-        const userSkills = user.skillTests;
-        // go through each skill within the position
-        position.skills.forEach(skillId => {
-            // convert to string to save a couple cycles
-            const skillIdString = skillId.toString();
-            // find the skill within the user's skills array
-            const userSkill = userSkills.find(userSkill => userSkill.skillId.toString() === skillIdString);
-            // whether the user started and finished the skill test
-            const started = userSkill && userSkill.currentQuestion;
-            const finished = started && typeof mostRecentScore === "number";
+async function addSkillInfo(user, evaluationState, position) {
+    return new Promise(async function(resolve, reject) {
+        // see if there even are skills in the position
+        if (Array.isArray(position.skills) && position.skills.length > 0) {
+            // grab the user's skill tests that they already have
+            const userSkills = user.skillTests;
+            // go through each skill within the position
+            position.skills.forEach(skillId => {
+                // convert to string to save a couple cycles
+                const skillIdString = skillId.toString();
+                // find the skill within the user's skills array
+                const userSkill = userSkills.find(userSkill => userSkill.skillId.toString() === skillIdString);
+                // whether the user started and finished the skill test
+                const started = userSkill && userSkill.currentQuestion;
+                const finished = started && typeof mostRecentScore === "number";
 
-            // if the user already finished the skill, add to finished list
-            if (finished) { evaluationState.completedSteps.push({ stage: "Skill" }); }
+                // if the user already finished the skill, add to finished list
+                if (finished) { evaluationState.completedSteps.push({ stage: "Skill" }); }
 
-            // if the user's current component has already been determined ...
-            else if (evaluationState.component) {
-                // ... add the skill to the list of incomplete steps
-                evaluationState.incompleteSteps.push({ stage: "Skill" });
-            }
-
-            // if this skill is the current thing the user is doing
-            else {
-                evaluationState.component = "Skill";
-                // if the user has not started, show them the intro to the skill
-                if (!started) { evaluationState.showIntro = true; }
-                // otherwise give the user the current question to answer
-                else {
-                    const currQ = userSkill.currentQuestion;
-                    evaluationState.componentInfo = {
-                        // TODO
-                        hyello: "STILL NEED TO DO THIS PART"
-                    };
+                // if the user's current component has already been determined ...
+                else if (evaluationState.component) {
+                    // ... add the skill to the list of incomplete steps
+                    evaluationState.incompleteSteps.push({ stage: "Skill" });
                 }
-            }
-        })
-    }
 
-    return evaluationState;
+                // if this skill is the current thing the user is doing
+                else {
+                    evaluationState.component = "Skill";
+                    // if the user has not started, show them the intro to the skill
+                    if (!started) { evaluationState.showIntro = true; }
+                    // otherwise give the user the current question to answer
+                    else {
+                        const currQ = userSkill.currentQuestion;
+                        evaluationState.componentInfo = {
+                            // TODO
+                            hyello: "STILL NEED TO DO THIS PART"
+                        };
+                    }
+                }
+            })
+        }
+
+        resolve(evaluationState);
+    });
 }
 
 
