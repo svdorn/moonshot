@@ -371,7 +371,7 @@ export function usersReducers(state = initialState, action) {
                 }
             }
             // update user if given
-            if (action.user) { newState.currentUser = user; }
+            if (action.user) { newState.currentUser = action.user; }
             return newState;
         }
         case "ADD_PATHWAY":

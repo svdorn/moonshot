@@ -113,6 +113,7 @@ class Evaluation extends Component {
 
     // handle any error returned when getting initial evaluation state
     handleError(error) {
+        console.log("ERROR: ", error);
         // if a known error is returned
         if (propertyExists(error, ["response", "data"], "object")) {
             // deal with all errors
@@ -259,6 +260,7 @@ class Evaluation extends Component {
             // show eval component
             this.setState({ inProgress: true });
         } else {
+            console.log("response.data.evaluationState was not valid");
             this.props.addNotification("Whoops, something's wrong. Refresh and try again.");
         }
     }
@@ -274,7 +276,7 @@ class Evaluation extends Component {
 
         // TODO: switch block to determine which component type to show
         switch (evaluation.component) {
-            case "Admin Questions": { return <AdminQuestions />; }
+            case "Admin Questions": { return <AdminQuestions {...this.props.params} />; }
             case "Psychometrics": {
                 return (
                     <div>Taking psych eval!</div>

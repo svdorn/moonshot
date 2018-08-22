@@ -15,8 +15,8 @@ class AdminQuestions extends Component {
 
         console.log(props);
 
-        const { userId, verificationToken } = props.currentUser;
-        const { positionId, businessId } = props.params;
+        const { _id: userId, verificationToken } = props.currentUser;
+        const { positionId, businessId } = props;
 
         this.state = {
             selectedId: undefined,
@@ -53,6 +53,8 @@ class AdminQuestions extends Component {
         }
 
         const { sliderValue, selectedId, selectedText } = this.state;
+
+        console.log(this.state.credentials);
 
         this.props.answerAdminQuestion({
             ...this.state.credentials,
