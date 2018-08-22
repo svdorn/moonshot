@@ -364,6 +364,7 @@ export function usersReducers(state = initialState, action) {
         case "UPDATE_EVALUATION_STATE": {
             let newState = {
                 ...state,
+                loadingSomething: false,
                 // update evaluation state without resetting everything
                 evaluationState: {
                     ...state.evaluationState,

@@ -100,11 +100,15 @@ class AdminQuestions extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="skillContinueButton marginBottom50px marginTop20px"
-                     onClick={this.nextQuestion.bind(this)}
-                >
-                    Next
-                </div>
+                {this.props.loading ?
+                    <CircularProgress />
+                    :
+                    <div className="skillContinueButton marginBottom50px marginTop20px"
+                         onClick={this.nextQuestion.bind(this)}
+                    >
+                        Next
+                    </div>
+                }
             </div>
         );
     }
@@ -138,7 +142,16 @@ class AdminQuestions extends Component {
             <div>
                 <div className="adminQuestions question">{question.text}</div>
                 { options }
-                <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
+                {this.props.loading ?
+                    <CircularProgress />
+                    :
+                    <div
+                        className={"marginBottom50px " + buttonClass}
+                        onClick={this.nextQuestion.bind(this)}
+                    >
+                        Next
+                    </div>
+                }
             </div>
         );
     }
@@ -154,7 +167,17 @@ class AdminQuestions extends Component {
                     <p>Once again, your answers are collected for legal purposes only.</p>
                 </div>
                 <br/>
-                <div style={{marginBottom: "40px", width: "initial"}} className={"skillContinueButton"} onClick={this.begin.bind(this)}>Begin</div>
+                {this.props.loading ?
+                    <CircularProgress />
+                    :
+                    <div
+                        style={{marginBottom: "40px", width: "initial"}}
+                        className={"skillContinueButton"}
+                        onClick={this.begin.bind(this)}
+                    >
+                        Begin
+                    </div>
+                }
             </div>
         )
     }
@@ -214,7 +237,8 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         questionInfo: state.users.evaluationState.componentInfo,
-        showIntro: state.users.evaluationState.showIntro
+        showIntro: state.users.evaluationState.showIntro,
+        loading: state.users.loadingSomething
     };
 }
 

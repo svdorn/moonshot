@@ -146,13 +146,14 @@ export function sawMyCandidatesInfoBox(userId, verificationToken) {
 
 export function answerAdminQuestion(options) {
     return function(dispatch) {
+        dispatch({type: "START_LOADING"});
         axios.post("/api/evaluation/answerAdminQuestion", options)
         .then(response => {
             dispatch({type: "UPDATE_EVALUATION_STATE", evaluationState: response.data.evaluationState, user: response.data.user});
         })
         .catch(error => {
             console.log("error: ", error);
-            dispatch({type: "ADD_NOTIFICATION", notification: {message: "Error, try refreshing.", type: "errorHeader"}});
+            dispatch({type: "NOTIFICATION_AND_STOP_LOADING", notification: {message: "Error, try refreshing.", type: "errorHeader"}});
         });
     }
 }
