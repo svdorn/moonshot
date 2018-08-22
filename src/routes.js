@@ -39,7 +39,6 @@ import Listing from './components/pages/listing';
 import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
 
 import SkillTest from './components/pages/skillTest/skillTest';
-import AdminQuestions from './components/pages/adminQuestions/adminQuestions';
 import FreeResponse from "./components/pages/freeResponse";
 import EvaluationIntro from "./components/pages/evaluationIntro";
 // position evaluation - contains all components (psych, gca, admin questions)
@@ -92,7 +91,6 @@ const routes = (
             <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
 
             <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
-            <Route path="adminQuestions" component={AuthenticatedComponent} page={<AdminQuestions/>} />
             <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
             <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
 

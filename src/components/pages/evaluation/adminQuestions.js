@@ -191,8 +191,6 @@ class AdminQuestions extends Component {
         let self = this;
         const question = this.props.questionInfo;
 
-        console.log("question: ", question);
-
         // the main content that will be shown in the page
         let content = null;
 
@@ -208,21 +206,23 @@ class AdminQuestions extends Component {
         else {
             const questionType = question.questionType;
 
+            // slider type question
             if (questionType === "slider") {
                 content = this.makeSliderQuestion();
             }
 
+            // multiple choice type question
             else if (questionType === "multipleChoice") {
                 content = this.makeMultipleChoiceQuestion();
             }
 
-            // TODO: remove, do something else here
+            // shouldn't be able to get here
             else {
-                content = <div>WHERE AM I</div>
+                content = <div>Whoops. Something{"'"}s messed up. Try refreshing.</div>
             }
         }
 
-        return content
+        return content;
     }
 }
 
