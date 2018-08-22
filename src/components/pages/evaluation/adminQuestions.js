@@ -15,14 +15,14 @@ class AdminQuestions extends Component {
 
         console.log(props);
 
+        const { userId, verificationToken } = props.currentUser;
+        const { positionId, businessId } = props.params;
+
         this.state = {
             selectedId: undefined,
             selectedText: undefined,
             sliderValue: 1,
-            credentials: {
-                userId: props.currentUser._id,
-                verificationToken: props.currentUser.verificationToken
-            }
+            credentials: { userId, verificationToken, positionId, businessId }
         };
     }
 

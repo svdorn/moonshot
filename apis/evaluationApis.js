@@ -23,17 +23,12 @@ const { sanitize,
 } = require('./helperFunctions');
 
 
-const evaluationApis = {
-    GET_initialState,
-    GET_currentState,
-    POST_start,
-    POST_answerAdminQuestion
-}
+module.exports = {};
 
 
 // answer a question that is shown on the administrative questions portion of an evaluation
-async function POST_answerAdminQuestion(req, res) {
-    const { userId, verificationToken, sliderAnswer, selectedId, selectedText } = sanitize(req.body);
+module.exports.POST_answerAdminQuestion = async function(req, res) {
+    const { userId, verificationToken, sliderAnswer, selectedId, selectedText, businessId, positionId } = sanitize(req.body);
 
     try { var user = await getAndVerifyUser(userId, verificationToken); }
     catch (getUserError) {
@@ -74,8 +69,21 @@ async function POST_answerAdminQuestion(req, res) {
     // if the user already answered all the admin questions, they're done
     // move on to the next stage
     if (newQ.finished === true) {
-        // TODO
         console.log("FINISHED");
+        // TODO
+        // mark admin questions as finished
+        user.adminQuestions.endDate = new Date();
+
+        // calculate the new evaluation state
+        try {
+            const advanceObj = await advance(user, businessId, positionId);
+            user = advanceObj.user;
+            evaluationState = advanceObj.evaluationState;
+        }
+        catch (advanceError) {
+            console.log("Error advancing after admin questions finished: ", advanceError);
+            return res.status(500).send({ serverError: true });
+        }
     }
 
     // otherwise
@@ -99,8 +107,39 @@ async function POST_answerAdminQuestion(req, res) {
 }
 
 
+// advance to the next step and potentially finish the eval
+async function advance(user, businessId, positionId) {
+    return new Promise(async function(resolve, reject) {
+        // get the current state of the evaluation
+        try { var evaluationState = await getEvaluationState({ user, businessId, positionId }); }
+        catch (getStateError) { reject(getStateError); }
+
+        // check if the user finished the evaluation
+        if (evaluationState.component === "Finished") {
+            // find the position within the user's positions array
+            const positionIndex = user.positions.findIndex(pos => {
+                return (
+                    pos.positionId.toString() === positionId.toString() &&
+                    pos.businessId.toString() === businessId.toString()
+                );
+            });
+
+            // make sure the user has the position
+            if (positionIndex < 0) { reject(`User does not have position with id: ${positionId}, businessId: ${positionId}`); }
+
+            // mark the position eval as finished
+            if (!user.positions[positionIndex].appliedEndDate) {
+                user.positions[positionIndex].appliedEndDate = new Date();
+            }
+        }
+
+        resolve({ user, evaluationState });
+    });
+}
+
+
 // gets the full current state of the evaluation
-async function GET_currentState(req, res) {
+module.exports.GET_currentState = async function(req, res) {
     // get everything needed from request
     const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
     // if the ids are not strings, return bad request error
@@ -133,7 +172,7 @@ async function GET_currentState(req, res) {
 
 
 // starts an evaluation
-async function POST_start(req, res) {
+module.exports.POST_start = async function(req, res) {
     // get everything needed from request
     const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
     // if the ids are not strings, return bad request error
@@ -185,7 +224,7 @@ async function POST_start(req, res) {
 
 
 // gets results for a user and influencers
-async function GET_initialState(req, res) {
+module.exports.GET_initialState = async function(req, res) {
     // get everything needed from request
     const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
     // if the ids are not strings, return bad request error
@@ -512,6 +551,3 @@ async function getPosition(businessId, positionId) {
         return resolve(business.positions[0]);
     });
 }
-
-
-module.exports = evaluationApis;
