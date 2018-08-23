@@ -1,5 +1,6 @@
 const Users = require('../models/users.js');
 const Psychtests = require('../models/psychtests.js');
+const Psychquestions = require('../models/psychquestions.js');
 const Skills = require('../models/skills.js');
 const Businesses = require('../models/businesses.js');
 const Adminqs = require("../models/adminqs");
