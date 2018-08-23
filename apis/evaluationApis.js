@@ -308,21 +308,19 @@ async function newPsychTest() {
         // if the psych questions weren't found in the db
         if (!dbPsych) { reject("Psych test not found in db."); }
 
-        // make the incompleteFactors list; will end up as [0, 1, 2, ...] for however many factors there are
-        const numFactors = dbPsych.factors.length;
-        let incompleteFactors = [];
-        for (let factorIndex = 0; factorIndex < numFactors; factorIndex++) {
-            incompleteFactors.push(factorIndex);
+        // make the incomplete facet list with the ids of all facets
+        for (let factorIndex = 0; factorIndex < dbPsych.factors.length; factorIndex++) {
+            let factor = dbPsych.factors[factor];
+            for (let facetIndex = 0; facetIndex < factor.facets.length; facetIndex++) {
+                incompleteFacets.push({
+                    factorId: factor._id,
+                    facetId: facet._id
+                })
+            }
         }
 
         // the factors that need to be tested for
         let factors = dbPsych.factors.map(factor => {
-            const numFacets = factor.facets.length;
-            let incompleteFacets = [];
-            for (let facetIndex = 0; facetIndex < numFacets; facetIndex++) {
-                incompleteFacets.push(facetIndex);
-            }
-
             let facets = factor.facets.map(facet => {
                 return {
                     weight: facet.weight,
@@ -332,24 +330,20 @@ async function newPsychTest() {
                 }
             })
 
-            return {
-                factorId: factor._id,
-                name: factor.name,
-                incompleteFacets,
-                facets
-            }
+            return { factorId: factor._id, name: factor.name, facets }
         });
 
         // new empty psych test
         resolve({
             inProgress: true,
+            // starting right now
             startDate: new Date(),
             // currently not allowing any rephrases, change later
             rephrase: false,
             numRephrasesAllowed: 0,
             // 1 question per facet in development mode, 3 in production
             questionsPerFacet: process.env.NODE_ENV === "development" ? 1 : 3,
-            incompleteFactors,
+            incompleteFacets,
             factors
         });
     });
