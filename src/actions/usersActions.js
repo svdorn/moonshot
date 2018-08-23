@@ -144,33 +144,11 @@ export function sawMyCandidatesInfoBox(userId, verificationToken) {
 }
 
 
-export function answerAdminQuestion(options) {
-    return function(dispatch) {
-        dispatch({type: "START_LOADING"});
-        axios.post("/api/evaluation/answerAdminQuestion", options)
-        .then(response => {
-            dispatch({
-                type: "UPDATE_EVALUATION_STATE",
-                evaluationState: response.data.evaluationState,
-                user: response.data.user
-            });
-        })
-        .catch(error => {
-            console.log("error: ", error);
-            dispatch({
-                type: "NOTIFICATION_AND_STOP_LOADING",
-                notification: {message: "Error, try refreshing.", type: "errorHeader"}
-            });
-        });
-    }
-}
-
-
 // save an answer for ANY eval component (AdminQuestion, PsychQuestion, GCAQuestion, SkillQuestion)
 export function answerEvaluationQuestion(evalComponent, options) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
-        axios.post(`/api/evaluation/answer${evalComponent}`, options)
+        axios.post(`/api/evaluation/answer${evalComponent}Question`, options)
         .then(response => {
             dispatch({
                 type: "UPDATE_EVALUATION_STATE",

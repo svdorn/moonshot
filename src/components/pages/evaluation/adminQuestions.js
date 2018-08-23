@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { answerAdminQuestion } from "../../../actions/usersActions";
+import { answerEvaluationQuestion } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
@@ -48,7 +48,7 @@ class AdminQuestions extends Component {
 
         const { sliderValue, selectedId, selectedText } = this.state;
 
-        this.props.answerAdminQuestion({
+        this.props.answerEvaluationQuestion("Admin", {
             ...this.props.credentials,
             sliderValue, selectedId, selectedText
         });
@@ -176,7 +176,7 @@ class AdminQuestions extends Component {
 
 
     // start the admin questions
-    begin() { this.props.answerAdminQuestion(this.props.credentials); }
+    begin() { this.props.answerEvaluationQuestion("Admin", this.props.credentials); }
 
 
     render() {
@@ -209,7 +209,7 @@ class AdminQuestions extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        answerAdminQuestion
+        answerEvaluationQuestion
     }, dispatch);
 }
 

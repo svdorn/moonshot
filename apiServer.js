@@ -196,6 +196,7 @@ app.get("/evaluation/initialState", evaluationApis.GET_initialState);
 app.get("/evaluation/currentState", evaluationApis.GET_currentState);
 app.post("/evaluation/start", evaluationApis.POST_start);
 app.post("/evaluation/answerAdminQuestion", evaluationApis.POST_answerAdminQuestion);
+app.post("/evaluation/answerPsychQuestion", evaluationApis.POST_answerPsychQuestion);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);

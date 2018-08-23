@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { closeNotification, addNotification, answerPsychQuestion, startPsychEval } from "../../../actions/usersActions";
+import { closeNotification, addNotification, answerEvaluationQuestion } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import PsychSlider from "../psychAnalysis/psychSlider";
@@ -58,7 +58,7 @@ class PsychAnalysis extends Component {
     nextQuestion() {
         this.setState({ loadingQuestion: true });
         if (!this.state.loadingQuestion) {
-            this.props.answerEvalQuestion("AdminQuestion", {
+            this.props.answerEvaluationQuestion("Psych", {
                 ...this.props.credentials,
                 answer: this.state.answer
             });
@@ -67,7 +67,7 @@ class PsychAnalysis extends Component {
 
 
     // start the eval for the first time
-    startTest() { this.props.answerPsychQuestion(this.props.credentials); }
+    startTest() { this.props.answerEvaluationQuestion("Psych", this.props.credentials); }
 
 
     // when slider is moved
@@ -213,7 +213,7 @@ class PsychAnalysis extends Component {
 
     render() {
         // all info about the current question to answer
-        const question = this.props.questionInfo;
+        const questionInfo = this.props.questionInfo;
 
         // if user has not started the admin questions before, show them the intro page
         if (this.props.showIntro) { return this.makeIntroPage(); }
@@ -233,8 +233,7 @@ class PsychAnalysis extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        answerPsychQuestion,
-        startPsychEval,
+        answerEvaluationQuestion,
         addNotification
     }, dispatch);
 }
