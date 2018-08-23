@@ -274,14 +274,12 @@ class Evaluation extends Component {
 
         console.log("evaluation: ", evaluation);
 
+        const attrs = { credentials: this.state.generalApiPostArgs };
+
         // TODO: switch block to determine which component type to show
         switch (evaluation.component) {
-            case "Admin Questions": { return <AdminQuestions {...this.props.params} />; }
-            case "Psychometrics": {
-                return (
-                    <div>Taking psych eval!</div>
-                );
-            }
+            case "Admin Questions": { return <AdminQuestions {...attrs} />; }
+            case "Psychometrics": { return <PsychTest {...attrs} />; }
             case "Cognition": {
                 return (
                     <div>Taking GCA eval!</div>

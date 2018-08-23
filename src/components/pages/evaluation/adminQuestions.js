@@ -13,16 +13,10 @@ class AdminQuestions extends Component {
     constructor(props) {
         super(props);
 
-        console.log(props);
-
-        const { _id: userId, verificationToken } = props.currentUser;
-        const { positionId, businessId } = props;
-
         this.state = {
             selectedId: undefined,
             selectedText: undefined,
-            sliderValue: 1,
-            credentials: { userId, verificationToken, positionId, businessId }
+            sliderValue: 1
         };
     }
 
@@ -54,10 +48,8 @@ class AdminQuestions extends Component {
 
         const { sliderValue, selectedId, selectedText } = this.state;
 
-        console.log(this.state.credentials);
-
         this.props.answerAdminQuestion({
-            ...this.state.credentials,
+            ...this.props.credentials,
             sliderValue, selectedId, selectedText
         });
 
@@ -184,7 +176,7 @@ class AdminQuestions extends Component {
 
 
     // start the admin questions
-    begin() { this.props.answerAdminQuestion(this.state.credentials); }
+    begin() { this.props.answerAdminQuestion(this.props.credentials); }
 
 
     render() {
