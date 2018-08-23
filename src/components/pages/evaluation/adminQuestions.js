@@ -180,41 +180,29 @@ class AdminQuestions extends Component {
 
 
     render() {
-        let self = this;
+        // all info about the current question to answer
         const question = this.props.questionInfo;
 
-        // the main content that will be shown in the page
-        let content = null;
-
         // if user has not started the admin questions before, show them the intro page
-        if (this.props.showIntro) { content = this.makeIntroPage(); }
+        if (this.props.showIntro) { return this.makeIntroPage(); }
 
-        else if (!question) {
-            content = (
-                <CircularProgress color="#FB553A" />
-            );
-        }
+        // if the question has not been loaded yet
+        else if (!question) { return <CircularProgress color="#FB553A" />; }
 
         else {
             const questionType = question.questionType;
 
             // slider type question
-            if (questionType === "slider") {
-                content = this.makeSliderQuestion();
-            }
+            if (questionType === "slider") { return this.makeSliderQuestion(); }
 
             // multiple choice type question
             else if (questionType === "multipleChoice") {
-                content = this.makeMultipleChoiceQuestion();
+                return this.makeMultipleChoiceQuestion();
             }
 
             // shouldn't be able to get here
-            else {
-                content = <div>Whoops. Something{"'"}s messed up. Try refreshing.</div>
-            }
+            else { return <div>Something{"'"}s messed up. Try refreshing.</div> }
         }
-
-        return content;
     }
 }
 

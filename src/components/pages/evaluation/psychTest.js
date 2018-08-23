@@ -59,72 +59,69 @@ class PsychAnalysis extends Component {
     nextQuestion() {
         this.setState({ loadingQuestion: true });
         if (!this.state.loadingQuestion) {
-            this.props.answerPsychQuestion(this.props.currentUser._id, this.props.currentUser.verificationToken, this.state.answer);
+            this.props.answerPsychQuestion(this.props.credentials, this.state.answer);
         }
     }
 
 
-    startTest() {
-        this.props.startPsychEval(this.props.currentUser._id, this.props.currentUser.verificationToken);
-    }
+    // start the eval for the first time
+    startTest() { this.props.answerPsychQuestion(this.props.credentials); }
 
 
+    // when slider is moved
     updateAnswer(newAnswer) {
         this.setState({
             ...this.state,
             answer: newAnswer
-        })
+        });
     }
 
 
-    createContent() {
-        const psychometricTest = currentUser.psychometricTest;
+    // show this if user has never started psych test
+    makeIntroPage() {
         const isAdmin = this.props.currentUser.userType === "accountAdmin";
 
-        // if the user hasn't taken the psych test, ask them if they want to
-        if (typeof psychometricTest !== "object" || !psychometricTest.startDate) {
-            return (
-                <div className="evalPortionIntro skillsUserAgreement center">
-                    <div/>
-                    <div>
-                        {this.props.currentUser.currentPosition ?
-                            <p>This is the psychometrics portion of the evaluation. In essence, this is a personality test.</p>
-                            :
-                            <p>Welcome to the Moonshot psychometric analysis! In essence, this is a personality test.</p>
-                        }
-                        <p>{"You'll be given two choices per question. Drag the slider according to the degree that you agree with a given choice."}</p>
-                        <p><span>{"DON'T OVERTHINK."}</span>{" Each question is meant to be taken at a surface level. Don't overthink it! If you don't understand a question, take your best guess and move on."}</p>
-                        {isAdmin ? null : <p><span>{"YOU CAN"}</span>{" go to other tabs and windows. So if you don't understand something, feel free to look it up. The test should take around ten minutes."}</p>}
-                    </div>
-                    <br/>
-                    <div className="psychAnalysisButton" style={{marginTop: "20px", width: "initial"}} onClick={this.startTest.bind(this)}>
-                        Start!
-                    </div>
+        return (
+            <div className="evalPortionIntro skillsUserAgreement center">
+                <div>
+                    <p>{"This is the psychometrics portion of the evaluation. In essence, this is a personality test."}</p>
+                    <p>{"You'll be given two choices per question. Drag the slider according to the degree that you agree with a given choice."}</p>
+                    <p><span>{"DON'T OVERTHINK."}</span>{" Each question is meant to be taken at a surface level. Don't overthink it! If you don't understand a question, take your best guess and move on."}</p>
+                    <p><span>{"YOU CAN"}</span>{" go to other tabs and windows. So if you don't understand something, feel free to look it up. The test should take around ten minutes."}</p>
                 </div>
-            );
-        }
+                <br/>
+                {this.props.loading ?
+                    <CircularProgress />
+                    :
+                    <div
+                        style={{marginBottom: "40px", width: "initial"}}
+                        className={"skillContinueButton"}
+                        onClick={this.startTest.bind(this)}
+                    >
+                        Begin
+                    </div>
+                }
+            </div>
+        )
+    }
 
-        // user is taking the psych test currently - get the question
-        const currentQuestion = psychometricTest.currentQuestion;
-        if (!currentQuestion) {
-            return (
-                <div>Error</div>
-            );
-        }
+
+    // the main content - the question and the slider
+    createContent() {
+        // all information about the current psych question
+        const questionInfo = this.props.questionInfo;
 
         // get all info about the question
-        const question = currentQuestion.body;
-        const leftOption = currentQuestion.leftOption;
-        const rightOption = currentQuestion.rightOption;
-        const questionId = currentQuestion.questionId;
+        const question = questionInfo.body;
+        const leftOption = questionInfo.leftOption;
+        const rightOption = questionInfo.rightOption;
+        const questionId = questionInfo.questionId;
 
-        if (!question || !leftOption || !rightOption) {
-            return (
-                <div>Error</div>
-            );
-        }
+        // missing information about the question
+        if (!question || !leftOption || !rightOption) { return this.errorPage(); }
 
         // all is good, create styles for slider and options
+        // TODO: make this scale nicely with min and max widths
         let sliderWidth, sliderHeight;
         let windowWidth = this.state.windowWidth;
         if (windowWidth < 300) {
@@ -208,15 +205,25 @@ class PsychAnalysis extends Component {
     }
 
 
-    render() {
-        // what will be shown in the main area of the page
-        let content = this.createContent();
+    // generic error
+    errorPage() { return <div>Something is wrong. Try refreshing.</div>; }
 
-        return (
-            <div className="blackBackground fillScreen primary-white center">
-                { content }
-            </div>
-        );
+
+    render() {
+        // all info about the current question to answer
+        const question = this.props.questionInfo;
+
+        // if user has not started the admin questions before, show them the intro page
+        if (this.props.showIntro) { return this.makeIntroPage(); }
+
+        // if the question has not been loaded yet
+        else if (!questionInfo) { return <CircularProgress color="#FB553A" />; }
+
+        // the typical interface with the slider
+        else if (questionInfo.body) { return this.createContent(); }
+
+        // something is up if we get here
+        else { return this.errorPage(); }
     }
 }
 
