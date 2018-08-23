@@ -1497,7 +1497,6 @@ async function POST_answerPsychQuestion(req, res) {
             facetIndex: newFacetIndex,
             facetId: newFacet.facetId,
             questionId: newQuestion._id,
-            responseIndex: newFacet.responses.length - 1,
             body: newQuestion.body,
             leftOption: newQuestion.leftOption,
             rightOption: newQuestion.rightOption,
@@ -1593,8 +1592,6 @@ async function internalStartPsychEval(user) {
             facetIndex: facetIndex,
             facetId: facet._id,
             questionId: question._id,
-            // since this is the first response to the quiz it must be the first in the facet too
-            responseIndex: 0,
             body: question.body,
             leftOption: question.leftOption,
             rightOption: question.rightOption,

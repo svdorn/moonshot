@@ -229,6 +229,8 @@ function addPsychAnswer(psych, answer) {
 
     // get the most recent response, which is where the answer will be saved
     let response = facet.responses[facet.responses.length - 1];
+    // save whether the score should be inverted
+    response.invertScore = currQuestion.invertScore;
     // save which question got answered
     response.answeredId = questionId;
     // save the meta-data
@@ -238,14 +240,12 @@ function addPsychAnswer(psych, answer) {
     response.answer = answer;
 
     // mark the question as no longer available for use
-    facet.usedQuestions.push(questionId);
+    psych.usedQuestions.push(questionId);
 
     // check if the facet is done being tested for
     if (facet.responses.length === psych.questionsPerFacet) {
         // find the index of the facet within the incomplete facets array
-        const incFacetIdx = psych.incompleteFacets.findIndex(f => {
-            f.factorId.toString() === factorId && f.facetId.toString() === facetId;
-        })
+        const incFacetIdx = psych.incompleteFacets.findIndex(f => f.facetId.toString() === facetId);
         // remove the facet from the incomplete facets array
         psych.incompleteFacets.splice(incFacetIdx, 1);
     }
@@ -257,6 +257,9 @@ function addPsychAnswer(psych, answer) {
 
     // add to the number of psych questions answered
     psych.numQuestionsAnswered++;
+
+    // remove the just-answered question
+    psych.currentQuestion = undefined;
 
     // return the new psych test with the saved answer
     return psych;
@@ -274,15 +277,11 @@ async function newPsychTest() {
         if (!dbPsych) { reject("Psych test not found in db."); }
 
         // make the incomplete facet list with the ids of all facets
-        for (let factorIndex = 0; factorIndex < dbPsych.factors.length; factorIndex++) {
-            let factor = dbPsych.factors[factor];
-            for (let facetIndex = 0; facetIndex < factor.facets.length; facetIndex++) {
-                incompleteFacets.push({
-                    factorId: factor._id,
-                    facetId: facet._id
-                })
-            }
-        }
+        dbPsych.factors.forEach(factor => {
+            factor.facets.forEach(facet => {
+                incompleteFacets.push(facet._id);
+            });
+        });
 
         // the factors that need to be tested for
         let factors = dbPsych.factors.map(factor => {
@@ -657,113 +656,62 @@ async function addSkillInfo(user, evaluationState, position) {
 }
 
 
-// TODO: jesus christ this is ugly, refactor this
-// gets the next admin question for a user
-async function getNewPsychQuestion(psychTest) {
+// gets the next psych question for a user, or return finished if it's done
+async function getNewPsychQuestion(psych) {
     return new Promise(async function(resolve, reject) {
         // if the user is done with the psych test, return saying so
-        console.log("psychTest.incompleteFactors.length:", psychTest.incompleteFactors.length);
-        if (psychTest.incompleteFactors.length === 0) {
-            console.log("resolving to { finished: true} ");
+        if (psych.incompleteFactors.length === 0) {
+            console.log("resolving to finished: true");
             return resolve({ finished: true });
         }
 
-        // the index of the factor that will be tested next
-        // pick a random index from the index of factors that are not yet finished
-        const newFactorIndex = psychTest.incompleteFactors[randomInt(0, psychTest.incompleteFactors.length-1)];
-        let newFactor = psychTest.factors[newFactorIndex];
-        const newFactorId = newFactor.factorId;
-        const newFacetIndex = newFactor.incompleteFacets[randomInt(0, newFactor.incompleteFacets.length-1)]
-        let newFacet = newFactor.facets[newFacetIndex];
-        const newFacetId = newFacet.facetId;
-
-        // the actual psych test with all its questions
-        try { var dbPsych = await Psychtests.findOne({}); }
-        catch (getPsychTestError) { reject(getPsychTestError); }
-
-        // get the factor from the db so we can assign a new question
-        let testFactor = undefined;
-        // try using the index that we have stored. if the ids match, we have the right factor
-        if (dbPsych.factors[newFactorIndex]._id.toString() === newFactorId.toString()) {
-            testFactor = dbPsych.factors[newFactorIndex];
+        // query the db to find a question
+        const query = {
+            // want the question to be from a facet that needs more questions
+            "facetId": { "$in": psych.incompleteFacets },
+            // can't be a questions we've already used
+            "_id": { "$nin": psych.usedQuestions }
         }
-        // otherwise we need to search for the right factor
-        else {
-            testFactor = dbPsych.factors.find(currTestFactor => {
-                return currTestFactor._id.toString() === newFactorId.toString();
-            })
-        }
-        // if the real factor wasn't found
-        if (!testFactor) {
-            reject(`Couldn't find the actual test factor from the factor id \
-                    in the user object. Factor id: ${newFactorId}`);
-        }
+        try { var availableQs = await Psychquestions.find(query); }
+        catch (getQsError) { return reject(getQsError); }
 
-        // get the facet from the db so we can assign a new question
-        let testFacet = undefined;
-        // try using the index that we have stored. if the ids match, we have the right factor
-        if (testFactor.facets[newFacetIndex]._id.toString() === newFacetId.toString()) {
-            testFacet = testFactor.facets[newFacetIndex];
-        }
-        // otherwise we need to search for the right factor
-        else {
-            testFacet = testFactor.facets.find(currTestFacet => {
-                return currTestFacet._id.toString() === newFacetId.toString();
-            })
-        }
-        // if the real facet wasn't found
-        if (!testFacet) {
-            reject(`Couldn't find the actual test facet from the factor id \
-                    in the user object. Factor id: ${newFacetId}`);
-        }
+        // if we don't have any available questions somehow
+        if (availableQs.length === 0) { return reject("Ran out of questions!"); }
 
-        // factor and facet have been found
-        // now find a random question
-        let newQuestionIndex = Math.floor(Math.random() * testFacet.questions.length);
-        // if this is the index of a question that has already been used, find
-        // a question that has not yet been used
-        let questionCounter = 0;
-        while (newFacet.usedQuestions.some(questionId => {
-            return questionId.toString() === testFacet.questions[newQuestionIndex]._id.toString();
-        })) {
-            newQuestionIndex++;
-            questionCounter++;
-            // can't have a question index out of bounds, that would be sad
-            if (newQuestionIndex >= testFacet.questions.length) {
-                newQuestionIndex = 0;
-            }
+        // pick a random question from the list of potential questions
+        const questionIdx = randomInt(0, availableQs.length - 1);
+        const question = availableQs[questionIdx];
 
-            // if we have tried all the questions and all have been used, we
-            // somehow ran out
-            if (questionCounter > testFacet.questions.length) { reject("Ran out of questions!"); }
-        }
+        // get the index of the factor within the user's psych factors array
+        const factorIdx = psych.factors.findIndex(factor => question.factorId.toString() === factorId);
+        // if the factor doesn't exist in the factors array, invalid factor id
+        if (factorIdx < 0) { return reject(`Invalid factor id: ${factorId}`); }
+        // get the factor from the index
+        let factor = psych.factors[factorIdx];
 
-        // if responses isn't an array, make it one
-        if (!Array.isArray(newFacet.responses)) { newFacet.responses = []; }
-        // add the new response that is currently in the making
-        newFacet.responses.push({ startDate: new Date(), skips: [] });
+        // get the index of the facet within the factor
+        const facetIdx = factor.facets.findIndex(facet => question.facetId.toString() === facetId);
+        // if the factor doesn't exist in the factors array, invalid factor id
+        if (facetIdx < 0) { return reject(`Invalid facet id: ${facetId}`); }
+        // get the facet from the index
+        let facet = factor.facets[facetIdx];
 
-        // we now have a question
-        const newQuestion = testFacet.questions[newQuestionIndex];
-        psychTest.currentQuestion = {
-            factorIndex: newFactorIndex,
-            factorId: newFactor.factorId,
-            facetIndex: newFacetIndex,
-            facetId: newFacet.facetId,
-            questionId: newQuestion._id,
-            responseIndex: newFacet.responses.length - 1,
-            body: newQuestion.body,
-            leftOption: newQuestion.leftOption,
-            rightOption: newQuestion.rightOption,
-            invertScore: newQuestion.invertScore
-        }
+        // make sure the facet has a responses array
+        if (!Array.isArray(facet.responses)) { facet.responses = []; }
+        // start the timer on the current question
+        facet.responses.push({ startDate: new Date() });
 
-        // update the user with the info about the new question
-        newFactor.facets[newFacetIndex] = newFacet;
-        psychTest.factors[newFactorIndex] = newFactor;
+        // create the new current question
+        psych.currentQuestion = question;
+        psych.currentQuestion.questionId = question._id
+        psych.currentQuestion._id = undefined;
 
-        // return the updated psych test
-        return resolve({ psychTest });
+        // update everything that was changed
+        factor.facets[facetIdx] = facet;
+        psych.factors[factorIdx] = factor;
+
+        // return the updated psych
+        return resolve(psych);
     });
 }
 

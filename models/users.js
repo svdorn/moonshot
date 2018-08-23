@@ -287,12 +287,9 @@ const usersSchema = mongoose.Schema({
         /* TODO: DEPRECATED */
         incompleteFactors: [ Number ],
         // info for facets that don't have enough questions answered
-        incompleteFacets: [{
-            // unfinished facet
-            facetId: mongoose.Schema.Types.ObjectId,
-            // factor that facet is part of
-            factorId: mongoose.Schema.Types.ObjectId
-        }],
+        incompleteFacets: [ mongoose.Schema.Types.ObjectId ],
+        // questions that have been used and shouldn't be used again
+        usedQuestions: [ mongoose.Schema.Types.ObjectId ],
         // how many questions in total in the test the user has answered
         numQuestionsAnswered: Number,
         // current question that the user is on
@@ -303,7 +300,7 @@ const usersSchema = mongoose.Schema({
             factorIndex: Number,
             // the index of the facet within the user's factors array
             facetIndex: Number,
-
+            /* END DEPRECATED */
 
             // the id of the factor in the test db
             factorId: mongoose.Schema.Types.ObjectId,
@@ -311,8 +308,6 @@ const usersSchema = mongoose.Schema({
             facetId: mongoose.Schema.Types.ObjectId,
             // the id of the question being asked
             questionId: mongoose.Schema.Types.ObjectId,
-            // if this is the third question from this facet, responseIndex will be 2
-            responseIndex: Number,
             // the text of the question
             body: String,
             // the left option as a response to the question
@@ -347,6 +342,7 @@ const usersSchema = mongoose.Schema({
                 // name of the facet at the time the user completed the test
                 name: String,
                 // questions that have already been used for this facet
+                // TODO: DEPRECATED
                 usedQuestions: [ mongoose.Schema.Types.ObjectId ],
                 // the responses users had to facet questions
                 responses: [{
