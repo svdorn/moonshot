@@ -679,7 +679,7 @@ async function getNewPsychQuestion(psychTest) {
 
         // the actual psych test with all its questions
         try { var dbPsych = await Psychtests.findOne({}); }
-        catch (getPsychTestError) { reject(getPyschTestError); }
+        catch (getPsychTestError) { reject(getPsychTestError); }
 
         // get the factor from the db so we can assign a new question
         let testFactor = undefined;
