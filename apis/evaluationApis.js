@@ -204,97 +204,62 @@ function markPsychComplete(psychTest) {
 
 
 // returns a psych test with the given answer
-function addPsychAnswer(psychTest, answer) {
-    let factors = psychTest.factors;
-    const currentQuestion = psychTest.currentQuestion;
+function addPsychAnswer(psych, answer) {
+    let factors = psych.factors;
+    const currQuestion = psych.currentQuestion;
 
-    const factorId = currentQuestion.factorId;
-    const factorIndex = currentQuestion.factorIndex;
-    const facetId = currentQuestion.facetId;
-    const facetIndex = currentQuestion.facetIndex;
+    // best to convert to strings for easier comparisons
+    const questionId = currQuestion.questionId.toString();
+    const factorId = currQuestion.factorId.toString();
+    const facetId = currQuestion.facetId.toString();
 
-    // find out how many questions have already been answered for this facet
-    // get the factor of the question that was answered
-    let factor = factors[factorIndex];
-    // make sure we have the right factor
-    if (factor.factorId.toString() !== factorId.toString()) {
-        factorIndex = factors.findIndex(currFactor => {
-            return currFactor.factorId.toString() === factorId.toString();
-        });
-        if (!factorIndex || factorIndex === -1) {
-            console.log("Couldn't find factor with id: ", factorId);
-            return res.status(400).send("Bad input.");
-        }
-        factor = factors[factorIndex];
-    }
+    // get the index of the factor within the user's psych factors array
+    const factorIdx = psych.factors.findIndex(factor => factor.factorId.toString() === factorId);
+    // if the factor doesn't exist in the factors array, invalid factor id
+    if (factorIdx < 0) { throw new Error(`Invalid factor id: ${factorId}`); }
+    // get the factor from the index
+    let factor = psych.factors[factorIdx];
 
-    let facets = factor.facets;
-    let facet = facets[facetIndex];
-    // make sure we have the right facet
-    if (facet.facetId.toString() !== facetId.toString()) {
-        facetIndex = facets.findIndex(currFacet => {
-            return currFacet.facetId.toString() === facetId.toString();
-        });
-        if (!facetIndex || facetIndex === -1) {
-            console.log("Couldn't find facet with id: ", factorId);
-            return res.status(400).send("Bad input.");
-        }
-        facet = facets[facetIndex];
-    }
+    // get the index of the facet within the factor
+    const facetIdx = factor.facets.findIndex(facet => facet.facetId.toString() === facetId);
+    // if the factor doesn't exist in the factors array, invalid factor id
+    if (facetIdx < 0) { throw new Error(`Invalid facet id: ${facetId}`); }
+    // get the facet from the index
+    let facet = factor.facets[facetIdx];
 
-    // if this question hasn't been started, can't answer it
-    if (facet.responses.length === 0) {
-        console.log("Facet.responses.length was 0.");
-        return res.status(400).send("Haven't started that question yet.");
-    }
-
-    // the most recent response is the one that will always be edited
+    // get the most recent response, which is where the answer will be saved
     let response = facet.responses[facet.responses.length - 1];
-    response.answer = currentQuestion.invertScore === true ? answer*(-1) : answer;
-    response.answeredId = currentQuestion.questionId;
-    response.invertScore = currentQuestion.invertScore;
+    // save which question got answered
+    response.answeredId = questionId;
+    // save the meta-data
     response.endDate = new Date();
-    const startDateMillis = (new Date(response.startDate)).getTime();
-    // record number of milliseconds between starting and ending the question
-    response.totalTime = response.endDate.getTime() - startDateMillis;
+    response.totalTime = response.endDate.getTime() - new Date(response.startDate).getTime();
+    // save the actual answer
+    response.answer = answer;
 
-    // save the question as not available for use anymore
-    facet.usedQuestions.push(currentQuestion.questionId);
-
-    // save the response within the facet
-    facet.responses[facet.responses.length - 1] = response;
-    facets[facetIndex] = facet;
-    factor.facets = facets;
-
-    // create the number of questions answered field if it doesn't exist
-    if (typeof psychTest.numQuestionsAnswered !== "number") {
-        psychTest.numQuestionsAnswered = 0;
-    }
-    // let the test know that another questions has been answered
-    psychTest.numQuestionsAnswered++;
+    // mark the question as no longer available for use
+    facet.usedQuestions.push(questionId);
 
     // check if the facet is done being tested for
-    if (facet.responses.length === psychTest.questionsPerFacet) {
-        const indexOfFacetIndexToRemove = factor.incompleteFacets.findIndex(incompleteFacetIndex => {
-            return incompleteFacetIndex === facetIndex;
+    if (facet.responses.length === psych.questionsPerFacet) {
+        // find the index of the facet within the incomplete facets array
+        const incFacetIdx = psych.incompleteFacets.findIndex(f => {
+            f.factorId.toString() === factorId && f.facetId.toString() === facetId;
         })
-        // remove this facet so we know not to test for it again
-        factor.incompleteFacets.splice(indexOfFacetIndexToRemove, 1);
+        // remove the facet from the incomplete facets array
+        psych.incompleteFacets.splice(incFacetIdx, 1);
     }
 
-    factors[factorIndex] = factor;
-    psychTest.factors = factors;
+    // save everything that was just changed
+    facet.responses[facet.responses.length - 1] = response;
+    factor.facets[facetIdx] = facet;
+    psych.factors[factorIdx] = factor;
 
-    // check if the factor is done being tested for
-    if (factor.incompleteFacets.length === 0) {
-        const indexOfFactorIndexToRemove = psychTest.incompleteFactors.findIndex(incompleteFactorIndex => {
-            return incompleteFactorIndex === factorIndex;
-        });
-        // remove this factor so we know not to test for it again
-        psychTest.incompleteFactors.splice(indexOfFactorIndexToRemove, 1);
-    }
+    // add to the number of psych questions answered
+    psych.numQuestionsAnswered++;
 
-    return psychTest;
+    // return the new psych test with the saved answer
+    return psych;
 }
 
 
