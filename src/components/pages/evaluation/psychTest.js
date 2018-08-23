@@ -19,7 +19,6 @@ class PsychAnalysis extends Component {
         // start out with the slider in the middle
         this.state = {
             answer: 0,
-            loadingQuestion: false,
             windowWidth: window.innerWidth
          };
     }
@@ -36,19 +35,19 @@ class PsychAnalysis extends Component {
 
 
     // makes the button be not disabled
-    componentDidUpdate(prevProps, prevState) {
-        try {
-            if (!this.props.questionInfo) { return; }
-            const currentQuestionId = this.props.questionInfo.questionId;
-            const prevQuestionId = prevProps.questionInfo.questionId;
-            if (currentQuestionId !== prevQuestionId) {
-                this.setState({ loadingQuestion: false });
-            }
-        } catch (e) {
-            console.log(e);
-            this.props.addNotification("Whoops, something's weird. Try reloading.", "errorHeader")
-        }
-    }
+    // componentDidUpdate(prevProps, prevState) {
+    //     try {
+    //         if (!this.props.questionInfo) { return; }
+    //         const currentQuestionId = this.props.questionInfo.questionId;
+    //         const prevQuestionId = prevProps.questionInfo.questionId;
+    //         if (currentQuestionId !== prevQuestionId) {
+    //             this.setState({ loadingQuestion: false });
+    //         }
+    //     } catch (e) {
+    //         console.log(e);
+    //         this.props.addNotification("Whoops, something's weird. Try reloading.", "errorHeader")
+    //     }
+    // }
 
 
     resized() { this.setState({ windowWidth: window.innerWidth }); }
@@ -56,8 +55,7 @@ class PsychAnalysis extends Component {
 
     // move on to the next psych question
     nextQuestion() {
-        this.setState({ loadingQuestion: true });
-        if (!this.state.loadingQuestion) {
+        if (!this.props.loading) {
             this.props.answerEvaluationQuestion("Psych", {
                 ...this.props.credentials,
                 answer: this.state.answer
@@ -169,7 +167,7 @@ class PsychAnalysis extends Component {
             marginTop: `${topMargin}px`
         }
 
-        const nextButtonClass = this.state.loadingQuestion ? " disabled" : "";
+        const nextButtonClass = this.props.loading ? " disabled" : "";
 
         return (
             <div className="noselect font16px font14pxUnder600 font12pxUnder450">

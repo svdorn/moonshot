@@ -24,6 +24,8 @@ const { sanitize,
         randomInt
 } = require('./helperFunctions');
 
+const { calculatePsychScores } = require("./psychApis");
+
 
 module.exports = {};
 
@@ -128,7 +130,7 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
     }
 
     // if the user has a current question and an answer is given, save the answer
-    if (user.psychometricTest.currentQuestion && user.psychometricTest.currentQuestion.questionId && answer) {
+    if (user.psychometricTest.currentQuestion && user.psychometricTest.currentQuestion.questionId && typeof answer === "number") {
         user.psychometricTest = addPsychAnswer(user.psychometricTest, answer)
     }
 
@@ -169,7 +171,7 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
         }
     }
 
-    // if not done with the admin questions
+    // if not done with the psych questions
     else {
         // return the new question to answer
         toReturn = { evaluationState: { componentInfo: updatedPsych.psychTest.currentQuestion, showIntro: false } };
@@ -180,7 +182,7 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
     // save the user
     try { await user.save(); }
     catch (saveUserError) {
-        console.log("error saving user while trying to answer admin question: ", saveUserError);
+        console.log("error saving user while trying to answer psych question: ", saveUserError);
         return res.status(500).send({ serverError: true });
     }
 
@@ -205,6 +207,7 @@ function markPsychComplete(psychTest) {
 
 // returns a psych test with the given answer
 function addPsychAnswer(psych, answer) {
+    console.log("ADDING PSYCH ANSWER");
     let factors = psych.factors;
     const currQuestion = psych.currentQuestion;
 
@@ -240,12 +243,15 @@ function addPsychAnswer(psych, answer) {
     response.answer = answer;
 
     // mark the question as no longer available for use
+    console.log("used questions was: ", psych.usedQuestions);
     psych.usedQuestions.push(questionId);
+    console.log("used questions is: ", psych.usedQuestions);
 
     // check if the facet is done being tested for
+    console.log("facet.responses.length === psych.questionsPerFacet: ", facet.responses.length === psych.questionsPerFacet);
     if (facet.responses.length === psych.questionsPerFacet) {
         // find the index of the facet within the incomplete facets array
-        const incFacetIdx = psych.incompleteFacets.findIndex(f => f.facetId.toString() === facetId);
+        const incFacetIdx = psych.incompleteFacets.findIndex(f => f.toString() === facetId);
         // remove the facet from the incomplete facets array
         psych.incompleteFacets.splice(incFacetIdx, 1);
     }
@@ -256,6 +262,7 @@ function addPsychAnswer(psych, answer) {
     psych.factors[factorIdx] = factor;
 
     // add to the number of psych questions answered
+    if (typeof psych.numQuestionsAnswered !== "number") { psych.numQuestionsAnswered = 0; }
     psych.numQuestionsAnswered++;
 
     // remove the just-answered question
@@ -712,7 +719,7 @@ async function getNewPsychQuestion(psych) {
         psych.factors[factorIdx] = factor;
 
         // return the updated psych
-        return resolve(psych);
+        return resolve({ psychTest: psych });
     });
 }
 
