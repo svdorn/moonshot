@@ -277,6 +277,7 @@ async function newPsychTest() {
         if (!dbPsych) { reject("Psych test not found in db."); }
 
         // make the incomplete facet list with the ids of all facets
+        let incompleteFacets = [];
         dbPsych.factors.forEach(factor => {
             factor.facets.forEach(facet => {
                 incompleteFacets.push(facet._id);
@@ -660,7 +661,7 @@ async function addSkillInfo(user, evaluationState, position) {
 async function getNewPsychQuestion(psych) {
     return new Promise(async function(resolve, reject) {
         // if the user is done with the psych test, return saying so
-        if (psych.incompleteFactors.length === 0) {
+        if (psych.incompleteFacets.length === 0) {
             console.log("resolving to finished: true");
             return resolve({ finished: true });
         }
@@ -683,14 +684,14 @@ async function getNewPsychQuestion(psych) {
         const question = availableQs[questionIdx];
 
         // get the index of the factor within the user's psych factors array
-        const factorIdx = psych.factors.findIndex(factor => question.factorId.toString() === factorId);
+        const factorIdx = psych.factors.findIndex(factor => factor.factorId.toString() === question.factorId.toString());
         // if the factor doesn't exist in the factors array, invalid factor id
-        if (factorIdx < 0) { return reject(`Invalid factor id: ${factorId}`); }
+        if (factorIdx < 0) { return reject(`Invalid factor id: ${question.factorId}`); }
         // get the factor from the index
         let factor = psych.factors[factorIdx];
 
         // get the index of the facet within the factor
-        const facetIdx = factor.facets.findIndex(facet => question.facetId.toString() === facetId);
+        const facetIdx = factor.facets.findIndex(facet => facet.facetId.toString() === question.facetId.toString());
         // if the factor doesn't exist in the factors array, invalid factor id
         if (facetIdx < 0) { return reject(`Invalid facet id: ${facetId}`); }
         // get the facet from the index
