@@ -146,14 +146,10 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
 
     // if the user already answered all the psych questions, they're done
     // move on to the next stage
-    console.log("finished: ", updatedPsych.finished);
     if (updatedPsych.finished === true) {
-        console.log("updatedPsych.finished is TRUE");
         // mark the psych test complete
-        console.log("marking complete");
         user.psychometricTest = markPsychComplete(user.psychometricTest);
 
-        console.log("calulating scores");
         // calculate the user's scores from their answers
         user = calculatePsychScores(user)
 
@@ -207,7 +203,6 @@ function markPsychComplete(psychTest) {
 
 // returns a psych test with the given answer
 function addPsychAnswer(psych, answer) {
-    console.log("ADDING PSYCH ANSWER");
     let factors = psych.factors;
     const currQuestion = psych.currentQuestion;
 
@@ -243,12 +238,9 @@ function addPsychAnswer(psych, answer) {
     response.answer = answer;
 
     // mark the question as no longer available for use
-    console.log("used questions was: ", psych.usedQuestions);
     psych.usedQuestions.push(questionId);
-    console.log("used questions is: ", psych.usedQuestions);
 
     // check if the facet is done being tested for
-    console.log("facet.responses.length === psych.questionsPerFacet: ", facet.responses.length === psych.questionsPerFacet);
     if (facet.responses.length === psych.questionsPerFacet) {
         // find the index of the facet within the incomplete facets array
         const incFacetIdx = psych.incompleteFacets.findIndex(f => f.toString() === facetId);

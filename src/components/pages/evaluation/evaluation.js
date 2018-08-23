@@ -280,16 +280,8 @@ class Evaluation extends Component {
         switch (evaluation.component) {
             case "Admin Questions": { return <AdminQuestions {...attrs} />; }
             case "Psychometrics": { return <PsychTest {...attrs} />; }
-            case "Cognition": {
-                return (
-                    <div>Taking GCA eval!</div>
-                );
-            }
-            case "Skill": {
-                return (
-                    <div>Taking skill test!</div>
-                );
-            }
+            case "Cognition": { return <div>GCA eval</div>; }
+            case "Skill": { return <SkillTest {...attrs} />; }
             default: {
                 // TODO: do something else here
                 return (
