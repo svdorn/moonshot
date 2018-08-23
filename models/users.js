@@ -284,17 +284,29 @@ const usersSchema = mongoose.Schema({
         // array positions of factors that have not yet been completed
         // for example, if factors in array positions 0 and 4 were complete,
         // the array would look like [ 1, 2, 3, 5, 6 ]
+        /* TODO: DEPRECATED */
         incompleteFactors: [ Number ],
+        // info for facets that don't have enough questions answered
+        incompleteFacets: [{
+            // unfinished facet
+            facetId: mongoose.Schema.Types.ObjectId,
+            // factor that facet is part of
+            factorId: mongoose.Schema.Types.ObjectId
+        }],
         // how many questions in total in the test the user has answered
         numQuestionsAnswered: Number,
         // current question that the user is on
         currentQuestion: {
+
+            /* START DEPRECATED */
             // the index of the factor within the user's factors array
             factorIndex: Number,
-            // the id of the factor in the test db
-            factorId: mongoose.Schema.Types.ObjectId,
             // the index of the facet within the user's factors array
             facetIndex: Number,
+
+
+            // the id of the factor in the test db
+            factorId: mongoose.Schema.Types.ObjectId,
             // the id of the factor in the test db
             facetId: mongoose.Schema.Types.ObjectId,
             // the id of the question being asked
@@ -321,6 +333,7 @@ const usersSchema = mongoose.Schema({
             score: Number,
             // the array positions of facets that have not yet been completed
             // similar to incompleteFactors above
+            // TODO: DEPRECATED
             incompleteFacets: [ Number ],
             // the facets we're testing for
             facets: [{
