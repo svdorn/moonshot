@@ -149,14 +149,45 @@ export function answerAdminQuestion(options) {
         dispatch({type: "START_LOADING"});
         axios.post("/api/evaluation/answerAdminQuestion", options)
         .then(response => {
-            dispatch({type: "UPDATE_EVALUATION_STATE", evaluationState: response.data.evaluationState, user: response.data.user});
+            dispatch({
+                type: "UPDATE_EVALUATION_STATE",
+                evaluationState: response.data.evaluationState,
+                user: response.data.user
+            });
         })
         .catch(error => {
             console.log("error: ", error);
-            dispatch({type: "NOTIFICATION_AND_STOP_LOADING", notification: {message: "Error, try refreshing.", type: "errorHeader"}});
+            dispatch({
+                type: "NOTIFICATION_AND_STOP_LOADING",
+                notification: {message: "Error, try refreshing.", type: "errorHeader"}
+            });
         });
     }
 }
+
+
+// save an answer for ANY eval component (AdminQuestion, PsychQuestion, GCAQuestion, SkillQuestion)
+export function answerEvaluationQuestion(evalComponent, options) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+        axios.post(`/api/evaluation/answer${evalComponent}`, options)
+        .then(response => {
+            dispatch({
+                type: "UPDATE_EVALUATION_STATE",
+                evaluationState: response.data.evaluationState,
+                user: response.data.user
+            });
+        })
+        .catch(error => {
+            console.log("error: ", error);
+            dispatch({
+                type: "NOTIFICATION_AND_STOP_LOADING",
+                notification: {message: "Error, try refreshing.", type: "errorHeader"}
+            });
+        });
+    }
+}
+
 
 export function startLoading() {
     return function(dispatch) {
@@ -707,25 +738,6 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
             dispatch({type: "END_ONBOARDING"});
         }
 
-    }
-}
-
-
-export function answerPsychQuestion(userId, verificationToken, answer) {
-    return function(dispatch) {
-        axios.post("/api/user/answerPsychQuestion", {userId, verificationToken, answer})
-        .then(response => {
-            dispatch({
-                type: "ANSWER_PSYCH_QUESTION",
-                user: response.data.user,
-                finishedTest: response.data.finishedTest,
-                finishedEval: response.data.finishedEval
-            });
-        })
-        .catch(err => {
-            // console.log("Error answering psych question: ", err);
-            dispatch({type: "ANSWER_PSYCH_QUESTION_ERROR", notification: { message: err.response.data, type: "errorHeader" } });
-        });
     }
 }
 

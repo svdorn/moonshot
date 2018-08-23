@@ -38,6 +38,7 @@ class PsychAnalysis extends Component {
     // makes the button be not disabled
     componentDidUpdate(prevProps, prevState) {
         try {
+            if (!this.props.questionInfo) { return; }
             const currentQuestionId = this.props.questionInfo.questionId;
             const prevQuestionId = prevProps.questionInfo.questionId;
             if (currentQuestionId !== prevQuestionId) {
@@ -45,21 +46,22 @@ class PsychAnalysis extends Component {
             }
         } catch (e) {
             console.log(e);
-            this.props.addNotification("Whoops, something's weird. Try reloading.")
+            this.props.addNotification("Whoops, something's weird. Try reloading.", "errorHeader")
         }
     }
 
 
-    resized() {
-        this.setState({ windowWidth: window.innerWidth });
-    }
+    resized() { this.setState({ windowWidth: window.innerWidth }); }
 
 
     // move on to the next psych question
     nextQuestion() {
         this.setState({ loadingQuestion: true });
         if (!this.state.loadingQuestion) {
-            this.props.answerPsychQuestion(this.props.credentials, this.state.answer);
+            this.props.answerEvalQuestion("AdminQuestion", {
+                ...this.props.credentials,
+                answer: this.state.answer
+            });
         }
     }
 

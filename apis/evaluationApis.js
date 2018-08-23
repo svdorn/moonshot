@@ -63,24 +63,22 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
         return res.status(500).send({ serverError: true });
     }
 
-    // will be modified to contain new state info
-    let evaluationState = {};
-    // only return the user if needs updating
-    let returnUser = false;
+    // what will be returned to the front end
+    let toReturn;
 
     // if the user already answered all the admin questions, they're done
     // move on to the next stage
     if (newQ.finished === true) {
-        console.log("FINISHED");
-        returnUser = true;
         // mark admin questions as finished
         user.adminQuestions.endDate = new Date();
 
         // calculate the new evaluation state
         try {
-            const advanceObj = await advance(user, businessId, positionId);
-            user = advanceObj.user;
-            evaluationState = advanceObj.evaluationState;
+            // move on to the next component, potentially finishing eval
+            const { user: updatedUser, evaluationState } = await advance(user, businessId, positionId);
+            // will return the user and the new eval state
+            user = updatedUser;
+            toReturn = { user: frontEndUser(user), evaluationState };
         }
         catch (advanceError) {
             console.log("Error advancing after admin questions finished: ", advanceError);
@@ -88,10 +86,10 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
         }
     }
 
-    // otherwise
+    // if not done with the admin questions
     else {
         // return the new question to answer
-        evaluationState = { componentInfo: newQ.question, showIntro: false };
+        toReturn = { evaluationState: { componentInfo: newQ.question, showIntro: false } };
         // save the question as the current question for the user
         user.adminQuestions.currentQuestion = { questionId: newQ.question._id };
     }
@@ -102,11 +100,6 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
         console.log("error saving user while trying to answer admin question: ", saveUserError);
         return res.status(500).send({ serverError: true });
     }
-
-    // always return the new eval state
-    let toReturn = { evaluationState };
-    // return the new user if necessary
-    if (returnUser) { toReturn.user = frontEndUser(user); }
 
     return res.status(200).send(toReturn);
 }
