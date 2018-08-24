@@ -251,6 +251,7 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     // if the user already answered all the psych questions, they're done
     // move on to the next stage
     if (updatedTest.finished === true) {
+        console.log("finished, mark skill complete");
         // mark the skill test complete and score it
         user.skillTests[skillIdx] = markSkillComplete(user.skillTests[skillIdx]);
 
@@ -375,7 +376,9 @@ function markSkillComplete(userSkill) {
     userAttempt.totalTime = NOW.getTime() - (new Date(userAttempt.startDate)).getTime();
 
     // get a score for the skill
+    console.log("getting score...");
     userSkill.mostRecentScore = scoreSkillFromAttempt(userAttempt);
+    console.log("userSkill.mostRecentScore: ", userSkill.mostRecentScore);
 
     // return updated user skill
     return userSkill;
@@ -392,7 +395,7 @@ function scoreSkillFromAttempt(attempt) {
     // total questions in the test
     const totalQuestions = attempt.levels[0].questions.length;
     // number of questions answered correctly
-    const numberCorrect = 0;
+    let numberCorrect = 0;
 
     // go through every question in the first and only level, count up number correct
     attempt.levels[0].questions.forEach(q => { if (q.isCorrect) { numberCorrect++ } } );
@@ -534,7 +537,7 @@ async function newPsychTest() {
 
 
 // adds an answer for the current skill test question
-async function addSkillAnswer(userSkill, selectedId) {
+function addSkillAnswer(userSkill, selectedId) {
     // make sure arguments are valid
     if (typeof userSkill !== "object" || typeof selectedId !== "string") {
         return reject(`Invalid arguments to addSkillAnswer. userSkill: ${userSkill}, selectedId: ${selectedId}`);
@@ -561,21 +564,21 @@ async function addSkillAnswer(userSkill, selectedId) {
     userLevel.questions.push({
         questionId: userCurrQ.questionId,
         isCorrect,
-        answerId,
+        answerId: selectedId,
         startDate,
         endDate,
         totalTime
     });
 
     // save this info back to the user object
-    attempt.levels[userLevelIndex] = userLevel;
+    attempt.levels[0] = userLevel;
     userSkill.attempts[0] = attempt;
 
     // delete the current question
     userSkill.currentQuestion = undefined;
 
     // return the updated skill
-    return resolve(userSkill);
+    return userSkill;
 }
 
 
@@ -796,6 +799,8 @@ async function getEvaluationState(options) {
         // if the user finished all the componens, they're done
         if (!evaluationState.component) { evaluationState.component = "Finished"; }
 
+        console.log("evaluationState: ", evaluationState);
+
         // return the evaluation state
         return resolve(evaluationState);
     });
@@ -886,7 +891,7 @@ async function addSkillInfo(user, evaluationState, position) {
                 const userSkill = userSkills.find(uSkill => uSkill.skillId.toString() === skillIdString);
                 // whether the user started and finished the skill test
                 const started = !!userSkill && !!userSkill.currentQuestion;
-                const finished = !!started && typeof mostRecentScore === "number";
+                const finished = !!started && typeof userSkill.mostRecentScore === "number";
 
                 // if the user already finished the skill, add to finished list
                 if (finished) { evaluationState.completedSteps.push({ stage: "Skill" }); }
@@ -906,6 +911,7 @@ async function addSkillInfo(user, evaluationState, position) {
                     // otherwise give the user the current question to answer
                     else {
                         const currQ = userSkill.currentQuestion;
+                        console.log("currQ: ", currQ);
                         // get this skill from the db
                         try {
                             var skill = await Skills
@@ -1010,8 +1016,11 @@ async function getNewSkillQuestion(userSkill) {
 
         // if the user has answered every question in the only level of the test
         const dbQuestions = dbSkill.levels[0].questions;
-        if (userLevel.questions.length === dbSkill.levels[0].questions.length) {
+        console.log("userLevel.questions.length: ", userLevel.questions.length);
+        console.log("dbQuestions.length: ", dbQuestions.length);
+        if (userLevel.questions.length === dbQuestions.length) {
             // test is finished, return saying so
+            console.log("resolving to finished: true");
             return resolve({ finished: true });
         }
 
