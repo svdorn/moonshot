@@ -203,9 +203,16 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
         return res.status(400).send({ notSignedUp: true });
     }
 
+    // whether the user should be returned to the front end
+    let returnUser = false;
+
     // if the user hasn't started the skill test, start it for them
     if (!user.evalInProgress.skillId) {
-        try { user = await startNewSkill(user); }
+        try {
+            const update = await startNewSkill(user);
+            user = update.user;
+            returnUser = update.returnUser;
+        }
         catch (startSkillError) {
             console.log("Error starting skill test: ", startSkillError);
             return res.status(500).send({ serverError: true });
@@ -214,10 +221,11 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
 
     // id of the skill in progress
     const skillId = user.evalInProgress.skillId.toString();
+    console.log("skillId: ", skillId);
 
     // get index of skill
     const skillIdx = user.skillTests.findIndex(s => s.skillId.toString() === skillId);
-    if (!skillIdx) {
+    if (skillIdx < 0) {
         console.log("No in-progress skill id.");
         return res.status(500).send({ serverError: true });
     }
@@ -243,11 +251,8 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     // if the user already answered all the psych questions, they're done
     // move on to the next stage
     if (updatedTest.finished === true) {
-        // mark the skill test complete
+        // mark the skill test complete and score it
         user.skillTests[skillIdx] = markSkillComplete(user.skillTests[skillIdx]);
-
-        // calculate the user's scores from their answers
-        user = calculatePsychScores(user)
 
         // calculate the new evaluation state
         try {
@@ -258,17 +263,19 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
             toReturn = { user: frontEndUser(user), evaluationState };
         }
         catch (advanceError) {
-            console.log("Error advancing after psych finished: ", advanceError);
+            console.log("Error advancing after skill finished: ", advanceError);
             return res.status(500).send({ serverError: true });
         }
     }
 
-    // if not done with the psych questions
+    // if not done with the skill questions
     else {
         // return the new question to answer
         toReturn = { evaluationState: { componentInfo: updatedTest.componentQuestion, showIntro: false } };
         // save the question as the current question for the user
         user.skillTests[skillIdx] = updatedTest.userSkill;
+        // return the user if wanted
+        if (returnUser) { toReturn.user = user; }
     }
 
     // save the user
@@ -285,6 +292,16 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
 // start the next skill in an eval
 async function startNewSkill(user) {
     return new Promise(async function(resolve, reject) {
+        console.log("adding skill");
+        // whether the user should be returned to the front end
+        let returnUser = false;
+
+        // mark that they agreed to the skill terms (had to have to get here)
+        if (!user.agreedToSkillTerms) {
+            user.agreedToSkillTerms = true;
+            returnUser = true;
+        }
+
         // get the current position
         try { var position = await getPosition(user.evalInProgress.businessId, user.evalInProgress.positionId); }
         catch (getPositionError) { return reject(getPositionError); }
@@ -318,7 +335,7 @@ async function startNewSkill(user) {
         if (!user.evalInProgress.skillId) { return reject("No unfinished skills needed."); }
 
         // get the skill from db
-        try { var skill = await Skilltests.findById(user.evalInProgress.skillId); }
+        try { var skill = await Skills.findById(user.evalInProgress.skillId); }
         catch (getSkillTest) { return reject(getSkillTest); }
 
         // add the new skill test
@@ -336,7 +353,10 @@ async function startNewSkill(user) {
             }]
         });
 
-        return resolve(user);
+        console.log("user.skillTests: ", user.skillTests);
+        console.log("\n\nuser.evalInProgress: ", user.evalInProgress);
+
+        return resolve({ user, returnUser });
     });
 }
 
@@ -975,7 +995,7 @@ async function getNewSkillQuestion(userSkill) {
         if (typeof userSkill !== "object") { reject(`Invalid userSkill: ${userSkill}`)}
 
         // get the skill test from the db
-        try { var dbSkill = await Skilltests.findById(userSkill.skillId); }
+        try { var dbSkill = await Skills.findById(userSkill.skillId); }
         catch (getSkillError) { return reject(getSkillError); }
 
         // get the current (only) skill attempt and current (only) level

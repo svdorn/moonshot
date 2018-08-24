@@ -59,7 +59,12 @@ class SkillTest extends Component {
     }
 
 
-    startTest() { this.props.answerEvaluationQuestion("Skill", this.props.credentials); }
+    startTest() {
+        // can only start test if have agreed to skill terms now or in past
+        if (this.props.currentUser.agreedToSkillTerms || this.state.agreedToTerms) {
+            this.props.answerEvaluationQuestion("Skill", this.props.credentials);
+        }
+    }
 
 
     handleCheckMarkClick() {
@@ -93,7 +98,7 @@ class SkillTest extends Component {
 
     // rendered if the user is on the first skill test of an eval and hasn't agreed to the test terms
     userAgreementPage() {
-        const buttonClass = this.state.agreedToTerms ? "skillContinueButton" : "disabled skillContinueButton";
+        const buttonClass = "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
 
         return (
             <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">

@@ -35,6 +35,8 @@ const usersSchema = mongoose.Schema({
         // the most recent date the terms were agreed to
         date: Date
     }],
+    // if the user agreed to the terms required to take a skill test
+    agreedToSkillTerms: Boolean,
     // if the user is an account admin and was the first at the company
     firstBusinessUser: Boolean,
     // whether the user's profile is hidden from employers
