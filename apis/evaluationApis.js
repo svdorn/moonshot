@@ -874,10 +874,8 @@ async function addPsychInfo(user, evaluationState) {
 // add in info about the current state of skills
 async function addSkillInfo(user, evaluationState, position) {
     return new Promise(async function(resolve, reject) {
-        console.log("HERE");
         // see if there even are skills in the position
         if (Array.isArray(position.skills) && position.skills.length > 0) {
-            console.log("HERE 2");
             // grab the user's skill tests that they already have
             const userSkills = user.skillTests;
             // go through each skill within the position
@@ -889,9 +887,6 @@ async function addSkillInfo(user, evaluationState, position) {
                 // whether the user started and finished the skill test
                 const started = !!userSkill && !!userSkill.currentQuestion;
                 const finished = !!started && typeof mostRecentScore === "number";
-
-                console.log("started: ", started);
-                console.log("finished: ", finished);
 
                 // if the user already finished the skill, add to finished list
                 if (finished) { evaluationState.completedSteps.push({ stage: "Skill" }); }
@@ -911,18 +906,21 @@ async function addSkillInfo(user, evaluationState, position) {
                     // otherwise give the user the current question to answer
                     else {
                         const currQ = userSkill.currentQuestion;
-                        console.log("currQ: ", currQ);
                         // get this skill from the db
                         try {
                             var skill = await Skills
                                 .findById(userSkill.skillId)
-                                .select("levels.questions.body levels.questions.options.body");
+                                .select("levels.questions.body levels.questions.options.body levels.questions._id _id");
 
                             console.log("skill: ", skill);
 
                             // get the question from the skill
                             const questions = skill.levels[0].questions;
-                            const question = questions.find(q => q._id.toString() === currQ.questionId.toString());
+                            const question = questions.find(q => {
+                                console.log("q: ", q);
+                                console.log("currQ: ", currQ);
+                                return q._id.toString() === currQ.questionId.toString()
+                            });
 
                             // give this question to eval state so user can see it
                             evaluationState.componentInfo = question;
