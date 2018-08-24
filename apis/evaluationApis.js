@@ -910,17 +910,13 @@ async function addSkillInfo(user, evaluationState, position) {
                         try {
                             var skill = await Skills
                                 .findById(userSkill.skillId)
-                                .select("levels.questions.body levels.questions.options.body levels.questions._id _id");
+                                .select("levels.questions.body levels.questions._id levels.questions.options.body levels.questions.options._id");
 
                             console.log("skill: ", skill);
 
                             // get the question from the skill
                             const questions = skill.levels[0].questions;
-                            const question = questions.find(q => {
-                                console.log("q: ", q);
-                                console.log("currQ: ", currQ);
-                                return q._id.toString() === currQ.questionId.toString()
-                            });
+                            const question = questions.find(q => q._id.toString() === currQ.questionId.toString());
 
                             // give this question to eval state so user can see it
                             evaluationState.componentInfo = question;
