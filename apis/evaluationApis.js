@@ -1035,7 +1035,7 @@ async function getNewSkillQuestion(userSkill) {
         // create the question object for the eval component
         const componentQuestion = {
             body: question.body,
-            options: question.options.map(opt => { return { body: opt.body } } )
+            options: question.options.map(opt => { return { body: opt.body, _id: opt._id } } )
         }
 
         // return the new user's skill object and question
