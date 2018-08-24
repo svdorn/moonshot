@@ -300,21 +300,6 @@ export function agreeToTerms(userId, verificationToken, agreements) {
 }
 
 
-export function agreeToSkillTestTerms(userId, verificationToken) {
-    return function(dispatch) {
-        dispatch({type: "START_LOADING"});
-        axios.post("/api/skill/agreeToTerms", {userId, verificationToken})
-        .then(response => {
-            console.log("got response: ", response);
-            dispatch({type: "USER_UPDATE", currentUser: response.data});
-        })
-        .catch(error => {
-            console.log("error: ", error);
-        })
-    }
-}
-
-
 export function sawEvaluationIntro(userId, verificationToken) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});

@@ -616,7 +616,7 @@ async function addSkillInfo(user, evaluationState, position) {
             // grab the user's skill tests that they already have
             const userSkills = user.skillTests;
             // go through each skill within the position
-            position.skills.forEach(skillId => {
+            position.skills.forEach(async function(skillId) {
                 // convert to string to save a couple cycles
                 const skillIdString = skillId.toString();
                 // find the skill within the user's skills array
@@ -642,10 +642,16 @@ async function addSkillInfo(user, evaluationState, position) {
                     // otherwise give the user the current question to answer
                     else {
                         const currQ = userSkill.currentQuestion;
-                        evaluationState.componentInfo = {
-                            // TODO
-                            hyello: "STILL NEED TO DO THIS PART"
-                        };
+                        // get this skill from the db
+                        try {
+                            var skill = await Skills
+                                .findById(userSkill.skillId)
+                                .select("levels.questions.body levels.questions.options.body");
+                            // get the question from the skill
+                            var q = skill.levels[currQ.levelIndex].questions[currQ.questionIndex];
+                        }
+                        catch (getSkillError) { reject(getSkillError); }
+                        evaluationState.componentInfo = q;
                     }
                 }
             })
