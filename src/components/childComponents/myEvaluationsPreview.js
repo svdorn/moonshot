@@ -74,28 +74,10 @@ class MyEvaluationsPreview extends Component {
                     </div>
                 );
             });
-        } else {
-            positionSkills = (
-                <div key={"no skills Surrounder"} style={{display: 'inline-block'}}>
-                    <div key={"No Skills"}
-                         className="myEvalsSkillChip font14px font12pxUnder500"
-                    >
-                        No Skill Tests
-                    </div>
-                </div>
-            );
         }
-        if (!this.props.finalized) {
-            positionSkills = (
-                <div key={"no skills Surrounder"} style={{display: 'inline-block', top: "-5px"}}>
-                    <div key={"No Skills"}
-                         className="myEvalsSkillChip font18px font16pxUnder500"
-                    >
-                        Not live yet
-                    </div>
-                </div>
-            )
-        }
+
+        // don't show anything about skills if there are no skills in the position
+        else { positionSkills = null; }
 
         let infoArea = null;
         let clickableArea = null;
