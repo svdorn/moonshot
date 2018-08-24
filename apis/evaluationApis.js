@@ -387,7 +387,7 @@ function markSkillComplete(userSkill) {
 
 // get a score from the number of correct answers
 function scoreSkillFromAttempt(attempt) {
-    /* FOR NOW JUST SCORING OUT OF 100 THEN ADDING 30 */
+    /* FOR NOW JUST SCORING OUT OF 100 THEN ADDING 50 */
 
     // make sure arg is valid
     if (typeof attempt !== "object") { throw new Error(`Invalid attempt: ${attempt}`); }
@@ -402,7 +402,7 @@ function scoreSkillFromAttempt(attempt) {
 
     // get final score
     const scoreOutOf100 = (numberCorrect / totalQuestions) * 100;
-    const score = scoreOutOf100 + 30;
+    const score = scoreOutOf100 + 50;
 
     // return the final score
     return score;
@@ -586,7 +586,7 @@ function addSkillAnswer(userSkill, selectedId) {
 async function advance(user, businessId, positionId) {
     return new Promise(async function(resolve, reject) {
         // get the current state of the evaluation
-        try { var evaluationState = await getEvaluationState({ user, businessId, positionId }); }
+        try { var { evaluationState, position } = await getEvaluationState({ user, businessId, positionId }); }
         catch (getStateError) { reject(getStateError); }
 
         // check if the user finished the evaluation
@@ -604,7 +604,11 @@ async function advance(user, businessId, positionId) {
 
             // mark the position eval as finished
             if (!user.positions[positionIndex].appliedEndDate) {
+                // give it an end date
                 user.positions[positionIndex].appliedEndDate = new Date();
+                // score the user
+                try { user.positions[positionIndex] = await gradeEval(user, user.positions[positionIndex], position); }
+                catch (gradeError) { return reject(gradeError); }
             }
         }
 
@@ -636,7 +640,7 @@ module.exports.GET_currentState = async function(req, res) {
     }
 
     // get the current state of the evaluation
-    try { var evaluationState = await getEvaluationState({ user, position }); }
+    try { var { evaluationState } = await getEvaluationState({ user, position }); }
     catch (getStateError) {
         console.log("Error getting evaluation state when starting eval: ", getStateError);
         return res.status(500).send({ serverError: true });
@@ -688,7 +692,7 @@ module.exports.POST_start = async function(req, res) {
     }
 
     // get the current state of the evaluation
-    try { var evaluationState = await getEvaluationState({ user, position }); }
+    try { var { evaluationState } = await getEvaluationState({ user, position }); }
     catch (getStateError) {
         console.log("Error getting evaluation state when starting eval: ", getStateError);
         return res.status(500).send({ serverError: true });
@@ -797,13 +801,248 @@ async function getEvaluationState(options) {
 
 
         // if the user finished all the componens, they're done
-        if (!evaluationState.component) { evaluationState.component = "Finished"; }
-
-        console.log("evaluationState: ", evaluationState);
+        if (!evaluationState.component) {
+            evaluationState.component = "Finished";
+            // return the position too since they'll probably have to get graded now
+            return resolve({ evaluationState, position });
+        }
 
         // return the evaluation state
-        return resolve(evaluationState);
+        return resolve({ evaluationState });
     });
+}
+
+
+// grades an evaluation based on all the components
+async function gradeEval(user, userPosition, position) {
+    // CURRENTLY SCORE IS MADE OF MOSTLY PSYCH AND A TINY BIT OF SKILLS
+    /* ------------------------>> GRADE SKILLS <<---------------------------- */
+    const overallSkill = gradeAllSkills(user, position);
+    /* <<----------------------- END GRADE SKILLS ------------------------->> */
+
+    /* ------------------------->> GRADE PSYCH <<---------------------------- */
+    // predict growth
+    const growth = gradeGrowth(user, position);
+    console.log("growth: ", growth);
+
+    // predict performance
+    const performance = gradePerformance(user, position);
+    console.log("performance: ", performance);
+
+    // predict longevity
+    const longevity = gradeLongevity(user, position);
+    console.log("longevity: ", longevity);
+    /* <<------------------------ END GRADE PSYCH ------------------------->> */
+
+    /* ------------------------->> GRADE OVERALL <<-------------------------- */
+    // the components that make up the overall score
+    const overallContributors = [growth, performance, longevity];
+
+    // get the average of the contributors
+    let overallScore = 0;
+    let numContributors = 0;
+    overallContributors.forEach(contributor => {
+        // if the contributor score exists (was predicted)
+        if (typeof contributor === "number") {
+            overallScore += contributor;
+            numContributors++;
+        }
+    });
+    // get the average if there is at least one contributor
+    if (numContributors > 0) { overallScore = overallScore / numContributors; }
+    // otherwise just give them a score of 100
+    else { overallScore = 100; }
+    console.log("overallScore: ", overallScore);
+    /* <<----------------------- END GRADE OVERALL ------------------------>> */
+
+    // update user's scores on the position eval
+    userPosition.scores = {
+        overall: overallScore,
+        skill: overallSkill,
+        culture: undefined,
+        growth, longevity, performance
+    }
+
+    // return the updated user position
+    return userPosition;
+}
+
+
+// grade every skill from a position to get an overall score
+function gradeAllSkills(user, position) {
+    let overallSkill = undefined;
+    // check if skills are part of the position
+    if (Array.isArray(position.skills) && position.skills.length > 0) {
+        // will be the AVERAGE of all skill scores
+        overallSkill = 0;
+        // go through each of the user's skills
+        user.skillTests.forEach(skillTest => {
+            // if the position requires this skill ...
+            if (position.skills.some(s => s.toString() === skillTest.skillId.toString())) {
+                // ... add the score to the average
+                overallSkill += skillTest.mostRecentScore;
+            }
+        });
+        // divide the added up skill scores by the number of skills to get the average
+        overallSkill = overallSkill / position.skills.length;
+    }
+
+    // return the calculated score (could be undefined)
+    return overallSkill;
+}
+
+
+// get predicted growth for specific position
+function gradeGrowth(user, position) {
+    // start at a score of 0, 100 will be added after scaling
+    let growth = 0;
+
+    // how many facets are involved in the growth calculation
+    let numGrowthFacets = 0;
+
+    // go through each factor to get to each facet
+    const userFactors = user.psychometricTest.factors;
+    // make sure there are factors used in growth - otherwise growth will be 100
+    if (Array.isArray(position.growthFactors)) {
+        // go through each factor that affects growth
+        position.growthFactors.forEach(growthFactor => {
+            // find the factor within the user's psych test
+            const userFactor = userFactors.find(factor => { return factor.factorId.toString() === growthFactor.factorId.toString(); });
+
+            // add the number of facets in this factor to the total number of growth facets
+            numGrowthFacets += growthFactor.idealFacets.length;
+
+            // go through each facet to find the score compared to the ideal output
+            growthFactor.idealFacets.forEach(idealFacet => {
+                // find the facet within the user's psych test
+                const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+
+                // the score that the user needs for the max pq
+                const idealScore = idealFacet.score;
+
+                // how far off of the ideal score the user got
+                const difference = Math.abs(idealScore - userFacet.score);
+
+                // subtract the difference from the predictive score
+                growth -= difference;
+
+                // add the absolute value of the facet score, making the
+                // potential predictive score higher
+                growth += Math.abs(idealScore);
+            })
+        });
+    }
+
+    // the max pq for growth in this position
+    const maxGrowth = position.maxGrowth ? position.maxGrowth : 190;
+
+    // growth multiplier is highest growth score divided by number of growth
+    // facets divided by 5 (since each growth facet has a max score in either direction of 5)
+    // can only have a growth multiplier if there are growth facets, so if
+    // there are no growth facets, set multiplier to 1
+    const growthMultiplier = numGrowthFacets > 0 ? ((maxGrowth - 100) / numGrowthFacets) / 5 : 1;
+
+    // to get to the potential max score, multiply by the multiplier
+    growth *= growthMultiplier;
+
+    // add the starting growth pq
+    growth += 100;
+
+    // return the calculated growth score
+    return growth;
+}
+
+
+// get predicted performance for specific position
+function gradePerformance(user, position, overallSkill) {
+    // add to the score when a non-zero facet score is ideal
+    // subtract from the score whatever the differences are between the
+    // ideal facets and the actual facets
+    let performance = undefined;
+
+    const userFactors = user.psychometricTest.factors;
+    if (Array.isArray(position.idealFactors) && position.idealFactors.length > 0) {
+        // start at 100 as the baseline
+        let psychPerformance = 100;
+
+        // go through each factor to get to each facet
+        position.idealFactors.forEach(idealFactor => {
+            // find the factor within the user's psych test
+            const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
+
+            // go through each facet to find the score compared to the ideal output
+            idealFactor.idealFacets.forEach(idealFacet => {
+                // find the facet within the user's psych test
+                const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+
+                // the score that the user needs for the max pq
+                const idealScore = idealFacet.score;
+
+                // how far off of the ideal score the user got
+                const difference = Math.abs(idealScore - userFacet.score);
+
+                // subtract the difference from the predictive score
+                psychPerformance -= difference;
+
+                // add the absolute value of the facet score, making the
+                // potential predictive score higher
+                psychPerformance += Math.abs(idealScore);
+            });
+        });
+
+        // take skills into account if there were any in the eval
+        if (overallSkill) {
+            // psych will account for 80% of prediction, skills 20%
+            performance = (psychPerormance * .8) + (overallSkill * .2);
+        }
+        // otherwise performance is just psych performance
+        const performance = psychPerformance;
+    }
+
+    // return calculated performance
+    return performance;
+}
+
+
+// get predicted longevity for specific position
+function gradeLongevity(user, position) {
+    // longevity is predicted as 190 - (2 * difference between scores and ideal outputs)
+    let longevity = undefined;
+
+    // how many facets are involved in the longevity calculation
+    let numLongevityFacets = 0;
+
+    // make sure there are factors used in longevity - otherwise longevity will be undefined
+    const userFactors = user.psychometricTest.factors;
+    if (Array.isArray(position.longevityFactors) && position.longevityActive) {
+        longevity = 190;
+        // go through each factor that affects longevity
+        position.longevityFactors.forEach(longevityFactor => {
+            // find the factor within the user's psych test
+            const userFactor = userFactors.find(factor => { return factor.factorId.toString() === longevityFactor.factorId.toString(); });
+
+            // add the number of facets in this factor to the total number of longevity facets
+            numLongevityFacets += longevityFactor.idealFacets.length;
+
+            // go through each facet to find the score compared to the ideal output
+            longevityFactor.idealFacets.forEach(idealFacet => {
+                // find the facet within the user's psych test
+                const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+
+                // the score that the user needs for the max pq
+                const idealScore = idealFacet.score;
+
+                // how far off of the ideal score the user got
+                const difference = Math.abs(idealScore - userFacet.score);
+
+                // subtract the difference from the predictive score
+                longevity -= (2 * difference);
+            })
+        });
+    }
+
+    // return predicted longevity for the position
+    return longevity;
 }
 
 
