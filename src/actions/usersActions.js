@@ -150,6 +150,13 @@ export function answerEvaluationQuestion(evalComponent, options) {
         dispatch({type: "START_LOADING"});
         axios.post(`/api/evaluation/answer${evalComponent}Question`, options)
         .then(response => {
+            // if the user finished the eval
+            if (response.data.evaluationState.component === "Finished") {
+                // go home
+                goTo("/myEvaluations");
+                // add a notification saying they finished the eval
+                dispatch({type: "ADD_NOTIFICATION", notification: {message: "Congratulations, you finished the evaluation! We'll be in touch soon.", type: "infoHeader"}})
+            }
             dispatch({
                 type: "UPDATE_EVALUATION_STATE",
                 evaluationState: response.data.evaluationState,
