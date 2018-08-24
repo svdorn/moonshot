@@ -36,7 +36,7 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
 
     try { var user = await getAndVerifyUser(userId, verificationToken); }
     catch (getUserError) {
-        console.log("error getting user while trying to get admin questions: ", getUserError);
+        console.log("Error getting user while trying to get admin questions: ", getUserError);
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
 
@@ -101,7 +101,7 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
     // save the user
     try { await user.save(); }
     catch (saveUserError) {
-        console.log("error saving user while trying to answer admin question: ", saveUserError);
+        console.log("Error saving user while trying to answer admin question: ", saveUserError);
         return res.status(500).send({ serverError: true });
     }
 
@@ -116,7 +116,7 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
     // get the user
     try { var user = await getAndVerifyUser(userId, verificationToken); }
     catch (getUserError) {
-        console.log("error getting user while trying to get admin questions: ", getUserError);
+        console.log("Error getting user while trying to get admin questions: ", getUserError);
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
 
@@ -178,7 +178,7 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
     // save the user
     try { await user.save(); }
     catch (saveUserError) {
-        console.log("error saving user while trying to answer psych question: ", saveUserError);
+        console.log("Error saving user while trying to answer psych question: ", saveUserError);
         return res.status(500).send({ serverError: true });
     }
 
@@ -193,7 +193,7 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     // get the user
     try { var user = await getAndVerifyUser(userId, verificationToken); }
     catch (getUserError) {
-        console.log("error getting user while trying to get admin questions: ", getUserError);
+        console.log("Error getting user while trying to get admin questions: ", getUserError);
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
 
@@ -221,7 +221,6 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
 
     // id of the skill in progress
     const skillId = user.evalInProgress.skillId.toString();
-    console.log("skillId: ", skillId);
 
     // get index of skill
     const skillIdx = user.skillTests.findIndex(s => s.skillId.toString() === skillId);
@@ -251,7 +250,6 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     // if the user already answered all the psych questions, they're done
     // move on to the next stage
     if (updatedTest.finished === true) {
-        console.log("finished, mark skill complete");
         // mark the skill test complete and score it
         user.skillTests[skillIdx] = markSkillComplete(user.skillTests[skillIdx]);
 
@@ -282,7 +280,7 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     // save the user
     try { await user.save(); }
     catch (saveUserError) {
-        console.log("error saving user while trying to answer skill question: ", saveUserError);
+        console.log("Error saving user while trying to answer skill question: ", saveUserError);
         return res.status(500).send({ serverError: true });
     }
 
@@ -293,7 +291,6 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
 // start the next skill in an eval
 async function startNewSkill(user) {
     return new Promise(async function(resolve, reject) {
-        console.log("adding skill");
         // whether the user should be returned to the front end
         let returnUser = false;
 
@@ -354,9 +351,6 @@ async function startNewSkill(user) {
             }]
         });
 
-        console.log("user.skillTests: ", user.skillTests);
-        console.log("\n\nuser.evalInProgress: ", user.evalInProgress);
-
         return resolve({ user, returnUser });
     });
 }
@@ -376,9 +370,7 @@ function markSkillComplete(userSkill) {
     userAttempt.totalTime = NOW.getTime() - (new Date(userAttempt.startDate)).getTime();
 
     // get a score for the skill
-    console.log("getting score...");
     userSkill.mostRecentScore = scoreSkillFromAttempt(userAttempt);
-    console.log("userSkill.mostRecentScore: ", userSkill.mostRecentScore);
 
     // return updated user skill
     return userSkill;
@@ -818,21 +810,17 @@ async function gradeEval(user, userPosition, position) {
     // CURRENTLY SCORE IS MADE OF MOSTLY PSYCH AND A TINY BIT OF SKILLS
     /* ------------------------>> GRADE SKILLS <<---------------------------- */
     const overallSkill = gradeAllSkills(user, position);
-    console.log("overallSkill: ", overallSkill);
     /* <<----------------------- END GRADE SKILLS ------------------------->> */
 
     /* ------------------------->> GRADE PSYCH <<---------------------------- */
     // predict growth
     const growth = gradeGrowth(user, position);
-    console.log("growth: ", growth);
 
     // predict performance
     const performance = gradePerformance(user, position, overallSkill);
-    console.log("performance: ", performance);
 
     // predict longevity
     const longevity = gradeLongevity(user, position);
-    console.log("longevity: ", longevity);
     /* <<------------------------ END GRADE PSYCH ------------------------->> */
 
     /* ------------------------->> GRADE OVERALL <<-------------------------- */
@@ -853,7 +841,6 @@ async function gradeEval(user, userPosition, position) {
     if (numContributors > 0) { overallScore = overallScore / numContributors; }
     // otherwise just give them a score of 100
     else { overallScore = 100; }
-    console.log("overallScore: ", overallScore);
     /* <<----------------------- END GRADE OVERALL ------------------------>> */
 
     // update user's scores on the position eval
@@ -991,12 +978,8 @@ function gradePerformance(user, position, overallSkill) {
             });
         });
 
-        console.log("psychPerformance: ", psychPerformance);
-        console.log("overallSkill: ", overallSkill);
-
         // take skills into account if there were any in the eval
         if (typeof overallSkill === "number") {
-            console.log("overallSkill is a number");
             // psych will account for 80% of prediction, skills 20%
             performance = (psychPerformance * .8) + (overallSkill * .2);
         }
@@ -1150,20 +1133,16 @@ async function addSkillInfo(user, evaluationState, position) {
                 // if this skill is the current thing the user is doing
                 else {
                     evaluationState.component = "Skill";
-                    console.log("adding skill");
                     // if the user has not started, show them the intro to the skill
                     if (!started) { evaluationState.showIntro = true; }
                     // otherwise give the user the current question to answer
                     else {
                         const currQ = userSkill.currentQuestion;
-                        console.log("currQ: ", currQ);
                         // get this skill from the db
                         try {
                             var skill = await Skills
                                 .findById(userSkill.skillId)
                                 .select("levels.questions.body levels.questions._id levels.questions.options.body levels.questions.options._id");
-
-                            console.log("skill: ", skill);
 
                             // get the question from the skill
                             const questions = skill.levels[0].questions;
@@ -1171,8 +1150,6 @@ async function addSkillInfo(user, evaluationState, position) {
 
                             // give this question to eval state so user can see it
                             evaluationState.componentInfo = question;
-
-                            console.log("evaluationState.componentInfo: ", evaluationState.componentInfo);
                         }
                         catch (getSkillError) { reject(getSkillError); }
                     }
@@ -1190,7 +1167,6 @@ async function getNewPsychQuestion(psych) {
     return new Promise(async function(resolve, reject) {
         // if the user is done with the psych test, return saying so
         if (psych.incompleteFacets.length === 0) {
-            console.log("resolving to finished: true");
             return resolve({ finished: true });
         }
 
@@ -1261,11 +1237,8 @@ async function getNewSkillQuestion(userSkill) {
 
         // if the user has answered every question in the only level of the test
         const dbQuestions = dbSkill.levels[0].questions;
-        console.log("userLevel.questions.length: ", userLevel.questions.length);
-        console.log("dbQuestions.length: ", dbQuestions.length);
         if (userLevel.questions.length === dbQuestions.length) {
             // test is finished, return saying so
-            console.log("resolving to finished: true");
             return resolve({ finished: true });
         }
 
