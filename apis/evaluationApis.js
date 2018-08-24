@@ -794,9 +794,7 @@ async function getEvaluationState(options) {
 
 
         // if the user finished all the componens, they're done
-        if (!evaluationState.component) {
-            evaluationState.component = "Finished";
-        }
+        if (!evaluationState.component) { evaluationState.component = "Finished"; }
 
         // return the evaluation state
         return resolve(evaluationState);
@@ -876,19 +874,24 @@ async function addPsychInfo(user, evaluationState) {
 // add in info about the current state of skills
 async function addSkillInfo(user, evaluationState, position) {
     return new Promise(async function(resolve, reject) {
+        console.log("HERE");
         // see if there even are skills in the position
         if (Array.isArray(position.skills) && position.skills.length > 0) {
+            console.log("HERE 2");
             // grab the user's skill tests that they already have
             const userSkills = user.skillTests;
             // go through each skill within the position
-            position.skills.forEach(async function(skillId) {
+            for (let skillIdx = 0; skillIdx < position.skills.length; skillIdx++) {
                 // convert to string to save a couple cycles
-                const skillIdString = skillId.toString();
+                const skillIdString = position.skills[skillIdx].toString();
                 // find the skill within the user's skills array
-                const userSkill = userSkills.find(userSkill => userSkill.skillId.toString() === skillIdString);
+                const userSkill = userSkills.find(uSkill => uSkill.skillId.toString() === skillIdString);
                 // whether the user started and finished the skill test
-                const started = userSkill && userSkill.currentQuestion;
-                const finished = started && typeof mostRecentScore === "number";
+                const started = !!userSkill && !!userSkill.currentQuestion;
+                const finished = !!started && typeof mostRecentScore === "number";
+
+                console.log("started: ", started);
+                console.log("finished: ", finished);
 
                 // if the user already finished the skill, add to finished list
                 if (finished) { evaluationState.completedSteps.push({ stage: "Skill" }); }
@@ -902,25 +905,34 @@ async function addSkillInfo(user, evaluationState, position) {
                 // if this skill is the current thing the user is doing
                 else {
                     evaluationState.component = "Skill";
+                    console.log("adding skill");
                     // if the user has not started, show them the intro to the skill
                     if (!started) { evaluationState.showIntro = true; }
                     // otherwise give the user the current question to answer
                     else {
                         const currQ = userSkill.currentQuestion;
+                        console.log("currQ: ", currQ);
                         // get this skill from the db
                         try {
                             var skill = await Skills
                                 .findById(userSkill.skillId)
                                 .select("levels.questions.body levels.questions.options.body");
+
+                            console.log("skill: ", skill);
+
                             // get the question from the skill
                             const questions = skill.levels[0].questions;
                             const question = questions.find(q => q._id.toString() === currQ.questionId.toString());
+
+                            // give this question to eval state so user can see it
+                            evaluationState.componentInfo = question;
+
+                            console.log("evaluationState.componentInfo: ", evaluationState.componentInfo);
                         }
                         catch (getSkillError) { reject(getSkillError); }
-                        evaluationState.componentInfo = question;
                     }
                 }
-            })
+            }
         }
 
         resolve(evaluationState);
