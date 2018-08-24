@@ -827,7 +827,7 @@ async function gradeEval(user, userPosition, position) {
     console.log("growth: ", growth);
 
     // predict performance
-    const performance = gradePerformance(user, position);
+    const performance = gradePerformance(user, position, overallSkill);
     console.log("performance: ", performance);
 
     // predict longevity
@@ -903,11 +903,8 @@ function gradeGrowth(user, position) {
 
     // go through each factor to get to each facet
     const userFactors = user.psychometricTest.factors;
-    console.log("userFactors: ", userFactors);
-    console.log("position.growthFactors: ", position.growthFactors);
     // make sure there are factors used in growth - otherwise growth will be 100
     if (Array.isArray(position.growthFactors)) {
-        console.log("in here");
         // go through each factor that affects growth
         position.growthFactors.forEach(growthFactor => {
             // find the factor within the user's psych test
@@ -994,13 +991,18 @@ function gradePerformance(user, position, overallSkill) {
             });
         });
 
+        console.log("psychPerformance: ", psychPerformance);
+        console.log("overallSkill: ", overallSkill);
+
         // take skills into account if there were any in the eval
-        if (overallSkill) {
+        if (typeof overallSkill === "number") {
+            console.log("overallSkill is a number");
             // psych will account for 80% of prediction, skills 20%
-            performance = (psychPerormance * .8) + (overallSkill * .2);
+            performance = (psychPerformance * .8) + (overallSkill * .2);
         }
+
         // otherwise performance is just psych performance
-        const performance = psychPerformance;
+        else { performance = psychPerformance; }
     }
 
     // return calculated performance
