@@ -32,7 +32,8 @@ class ProgressBar extends Component {
             if (stepNumber === stepCounter) {
                 if (evaluationState.component === "Psychometrics") {
                     const psychTest = this.props.currentUser.psychometricTest;
-                    amountFinished = (psychTest.numQuestionsAnswered / psychTest.numQuestions) * 100;
+                    try { amountFinished = (psychTest.numQuestionsAnswered / ((psychTest.incompleteFacets.length * psychTest.questionsPerFacet) + psychTest.numQuestionsAnswered)) * 100; }
+                    catch (e) { amountFinished = 0; }
                 } else {
                     // TODO: MAKE THIS A LEGIT PERCENTAGE OF HOW MUCH IS DONE (0 - 100)
                     amountFinished = 0;
