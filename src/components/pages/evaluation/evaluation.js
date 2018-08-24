@@ -10,6 +10,7 @@ import { propertyExists, goTo } from "../../../miscFunctions";
 import MiscError from "../../miscComponents/miscError";
 import { button } from "../../../classes";
 
+import ProgressBar from "./progressBar";
 import AdminQuestions from "./adminQuestions";
 import PsychTest from "./psychTest";
 import CognitiveTest from "./cognitiveTest";
@@ -281,15 +282,24 @@ class Evaluation extends Component {
 
         const attrs = { credentials: this.state.generalApiPostArgs };
 
+        let content = null;
+
         // switch block to determine which component type to show
         switch (evaluation.component) {
-            case "Admin Questions": { return <AdminQuestions {...attrs} />; }
-            case "Psychometrics": { return <PsychTest {...attrs} />; }
-            case "Cognition": { return <div>GCA eval</div>; }
-            case "Skill": { return <SkillTest {...attrs} />; }
-            case "Finished": { return this.finishedPage(); }
-            default: { return <div>Hmm. Something is wrong. Try refreshing.</div>; }
+            case "Admin Questions": { content = <AdminQuestions {...attrs} />; break; }
+            case "Psychometrics": { content = <PsychTest {...attrs} />; break; }
+            case "Cognition": { content = <div>GCA eval</div>; break; }
+            case "Skill": { content = <SkillTest {...attrs} />; break; }
+            case "Finished": { content = this.finishedPage(); break; }
+            default: { content = <div>Hmm. Something is wrong. Try refreshing.</div>; break; }
         }
+
+        return (
+            <div>
+                <ProgressBar />
+                { content }
+            </div>
+        )
     }
 
 

@@ -169,10 +169,13 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
 
     // if not done with the psych questions
     else {
-        // return the new question to answer
-        toReturn = { evaluationState: { componentInfo: updatedPsych.psychTest.currentQuestion, showIntro: false } };
         // save the question as the current question for the user
         user.psychometricTest = updatedPsych.psychTest;
+        // return the new question to answer
+        toReturn = {
+            evaluationState: { componentInfo: updatedPsych.psychTest.currentQuestion, showIntro: false },
+            user
+        };
     }
 
     // save the user
