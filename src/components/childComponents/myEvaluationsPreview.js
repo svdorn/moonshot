@@ -17,6 +17,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { continueEval } from "../../actions/usersActions";
 import axios from "axios";
+import { goTo } from "../../miscFunctions";
 
 class MyEvaluationsPreview extends Component {
 
@@ -30,8 +31,9 @@ class MyEvaluationsPreview extends Component {
 
     // used for candidates and employees only
     continueEval = () => {
-        const currentUser = this.props.currentUser;
-        this.props.continueEval(currentUser._id, currentUser.verificationToken, this.props.positionId, this.props.businessId);
+        //const currentUser = this.props.currentUser;
+        //this.props.continueEval(currentUser._id, currentUser.verificationToken, this.props.positionId, this.props.businessId);
+        goTo(`/evaluation/${this.props.businessId}/${this.props.positionId}`);
     }
 
 
