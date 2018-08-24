@@ -818,6 +818,7 @@ async function gradeEval(user, userPosition, position) {
     // CURRENTLY SCORE IS MADE OF MOSTLY PSYCH AND A TINY BIT OF SKILLS
     /* ------------------------>> GRADE SKILLS <<---------------------------- */
     const overallSkill = gradeAllSkills(user, position);
+    console.log("overallSkill: ", overallSkill);
     /* <<----------------------- END GRADE SKILLS ------------------------->> */
 
     /* ------------------------->> GRADE PSYCH <<---------------------------- */
@@ -902,8 +903,11 @@ function gradeGrowth(user, position) {
 
     // go through each factor to get to each facet
     const userFactors = user.psychometricTest.factors;
+    console.log("userFactors: ", userFactors);
+    console.log("position.growthFactors: ", position.growthFactors);
     // make sure there are factors used in growth - otherwise growth will be 100
     if (Array.isArray(position.growthFactors)) {
+        console.log("in here");
         // go through each factor that affects growth
         position.growthFactors.forEach(growthFactor => {
             // find the factor within the user's psych test
