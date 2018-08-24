@@ -583,6 +583,9 @@ async function advance(user, businessId, positionId) {
 
         // check if the user finished the evaluation
         if (evaluationState.component === "Finished") {
+            // position is no longer the position in progress
+            user.evalInProgress = undefined;
+
             // find the position within the user's positions array
             const positionIndex = user.positions.findIndex(pos => {
                 return (
@@ -724,6 +727,9 @@ module.exports.GET_initialState = async function(req, res) {
     }
 
     // TODO: check if they have finished the eval already
+    if (user.positions[positionIndex].appliedEndDate) {
+        return res.status(200).send({ finished: true });
+    }
 
     // if user is in-progress on any position
     if (user.evalInProgress && user.evalInProgress.businessId && user.evalInProgress.positionId) {

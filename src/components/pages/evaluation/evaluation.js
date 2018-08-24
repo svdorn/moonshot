@@ -39,6 +39,8 @@ class Evaluation extends Component {
             initialLoad: true,
             // loading anything else
             loading: false,
+            // if the user has finished the eval
+            finished: false,
             // if the user is currently taking the eval - false when asking if
             // ready to start, if want to switch to a different eval, etc
             inProgress: false,
@@ -76,18 +78,15 @@ class Evaluation extends Component {
 
     // handle the response with initial state data
     handleInitialState(response) {
-        console.log(response);
         // if information about the eval is returned
         if (propertyExists(response, ["data"], "object")) {
-            // TODO: remove
-            // // set the redux position state
-            // this.props.setPositionState(response.data.evaluationState);
+            // if the user already finished this eval
+            if (response.data.finished) {
+                this.setState({ finished: true, initialLoad: false });
+            }
             // if the user has already started this eval
             if (response.data.alreadyInProgress) {
-                this.setState({
-                    alreadyInProgress: true,
-                    initialLoad: false
-                });
+                this.setState({ alreadyInProgress: true, initialLoad: false });
             }
             // if the user is in the middle of a different eval already
             else if (response.data.evalInProgress) {
@@ -99,12 +98,7 @@ class Evaluation extends Component {
             }
             // if the user has not started this and is not in the middle of
             // a different eval, ask if ready to start this
-            else {
-                this.setState({
-                    readyToStart: true,
-                    initialLoad: false
-                });
-            }
+            else { this.setState({ readyToStart: true, initialLoad: false }); }
         }
         // no information was returned, show that something went wrong
         else { throw("No position state."); }
@@ -285,11 +279,9 @@ class Evaluation extends Component {
         // get the current position information from redux state
         const evaluation = this.props.evaluationState;
 
-        console.log("evaluation: ", evaluation);
-
         const attrs = { credentials: this.state.generalApiPostArgs };
 
-        // TODO: switch block to determine which component type to show
+        // switch block to determine which component type to show
         switch (evaluation.component) {
             case "Admin Questions": { return <AdminQuestions {...attrs} />; }
             case "Psychometrics": { return <PsychTest {...attrs} />; }
@@ -314,6 +306,9 @@ class Evaluation extends Component {
 
         // if there is some error, show an error page
         else if (this.state.errorMessage) { content = this.createErrorPage(); }
+
+        // if the test is finished
+        else if (this.state.finished) { content = this.finishedPage(); }
 
         // if a component is not currently in progress, ask what to do
         else if (!this.state.inProgress) { content = this.createPreTestContent(); }
