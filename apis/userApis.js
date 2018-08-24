@@ -2022,73 +2022,37 @@ async function GET_positions(req, res) {
         const verificationToken = sanitize(req.query.verificationToken);
 
         // get the user who is asking for their evaluations page
-        let user;
-        try {
-            user = await getAndVerifyUser(userId, verificationToken);
-        } catch (getUserError) {
+        try { var user = await getAndVerifyUser(userId, verificationToken); }
+        catch (getUserError) {
             console.log("error getting user when trying to get positions for evaluations page: ", getUserError);
             const status = getUserError.status ? getUserError.status : 500;
-            const message = getUserError.message ? getUserError.message : "Server error.";
+            const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
             return res.status(status).send(message);
         }
 
-        // get the user's positions they have applied or are applying to
+        // get the user's positions they have applied to
         const positions = user.positions;
-        // lets us make an array of unique business ids for businesses who have
-        // positions that the user has applied to; this object also tells us
-        // which businesses have which positions that we want
-        let usedBusinessIds = {};
-        let businessIds = [];
-        // need an array of all the position ids for the query
-        positions.forEach(position => {
-            const businessId = position.businessId;
-            // the info needed on the front end about the position that the user has
-            const positionInfo = {
-                positionId: position.positionId.toString(),
-                assignedDate: position.assignedDate,
-                deadline: position.deadline,
-                completedDate: position.appliedEndDate
-            };
-            // if this businessId has not already been added to the array ...
-            if (usedBusinessIds[businessId] === undefined) {
-                // ... add it ...
-                businessIds.push(mongoose.Types.ObjectId(businessId));
-                // ... and mark it as being added by adding the current position information
-                usedBusinessIds[businessId] = [ positionInfo ];
-            }
-
-            // otherwise, just add the position info to the array for later
-            else {
-                usedBusinessIds[businessId].push(positionInfo);
-            }
-        });
-
-        // get all the businesses who have positions that the user is applying to
-        let businesses = [];
-        try {
-            businesses = await Businesses
-            .find({ "_id": { "$in": businessIds } })
-            .select("name logo positions.name positions.timeAllotted positions._id positions.skillNames");
-        } catch (getBusinessesError) {
-            console.log("error getting businesses while trying to get positions for user: ", getBusinessesError);
-            return res.status(500).send("Server error.");
+        const positionIds = positions.map(p => p.positionId);
+        // gets the businesses that have the wanted positions with ONLY the wanted positions
+        const query = { "positions._id": { "$in": positionIds } };
+        try { var businesses = await Businesses.find(query); }
+        catch (getBusinessesError) {
+            console.log("Error getting businesses when getting positions: ", getBusinessesError);
+            return res.status(500).send(errors.SERVER_ERROR);
         }
 
-        // create the positions to send back to the user
+        // create array to host all the positions
         let positionsToReturn = [];
+
         // go through each business
         businesses.forEach(business => {
-            // go through each position for that business
+            // go through each position for the business
             business.positions.forEach(bizPosition => {
-                const validPositions = usedBusinessIds[business._id.toString()]
-
-                const positionIndex = validPositions.findIndex(pos => {
-                    return pos.positionId === bizPosition._id.toString();
-                });
-
-                // if this position is one the user is applying/has applied to...
-                if (positionIndex >= 0) {
-                    // ... and add the position to the list of positions to return
+                // get the corresponding user position
+                const userPosition = positions.find(p => p.positionId.toString() === bizPosition._id.toString());
+                // only add the position if the user is enrolled in it
+                if (userPosition) {
+                    // add the formatted position
                     positionsToReturn.push({
                         businessName: business.name,
                         businessLogo: business.logo,
@@ -2096,10 +2060,11 @@ async function GET_positions(req, res) {
                         positionName: bizPosition.name,
                         positionId: bizPosition._id,
                         skills: bizPosition.skillNames,
-                        assignedDate: validPositions[positionIndex].assignedDate,
-                        deadline: validPositions[positionIndex].deadline,
-                        completedDate: validPositions[positionIndex].completedDate
-                    })
+                        assignedDate: userPosition.assignedDate,
+                        deadline: userPosition.deadline,
+                        startDate: userPosition.appliedStartDate,
+                        completedDate: userPosition.appliedEndDate
+                    });
                 }
             });
         });
