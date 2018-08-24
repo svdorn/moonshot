@@ -266,6 +266,19 @@ class Evaluation extends Component {
     }
 
 
+    // page to show if a user comes here after already having finished the eval
+    finishedPage() {
+        return (
+            <div className="primary-white">
+                <h3>Congratulations!</h3>
+                <p>You finished the evaluation!</p>
+                <p>We{"'"}ll be in touch soon.</p>
+                <div className={button.purpleBlue} onClick={() => goTo("/myEvaluations")}>Take Me Home</div>
+            </div>
+        );
+    }
+
+
     // create the content that is shown when the user is in the middle of a stage
     // e.g. they are taking the psych analysis, cognitive test, etc...
     createEvalContent() {
@@ -282,12 +295,8 @@ class Evaluation extends Component {
             case "Psychometrics": { return <PsychTest {...attrs} />; }
             case "Cognition": { return <div>GCA eval</div>; }
             case "Skill": { return <SkillTest {...attrs} />; }
-            default: {
-                // TODO: do something else here
-                return (
-                    <div>How did we get here??</div>
-                );
-            }
+            case "Finished": { return this.finishedPage(); }
+            default: { return <div>Hmm. Something is wrong. Try refreshing.</div>; }
         }
     }
 
