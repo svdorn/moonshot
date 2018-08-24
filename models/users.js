@@ -486,7 +486,9 @@ const usersSchema = mongoose.Schema({
         // the business offering this position
         businessId: mongoose.Schema.Types.ObjectId,
         // the id of the position the eval is for
-        positionId: mongoose.Schema.Types.ObjectId
+        positionId: mongoose.Schema.Types.ObjectId,
+        // *optional* id of the skill the user is currently on
+        skillId: mongoose.Schema.Types.ObjectId
     }
     // <<------------------------------------------------------------------>> //
 });

@@ -186,9 +186,208 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
 }
 
 
+// start/answer a question for skill tests
+module.exports.POST_answerSkillQuestion = async function(req, res) {
+    const { userId, verificationToken, selectedId, businessId, positionId } = sanitize(req.body);
+
+    // get the user
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("error getting user while trying to get admin questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // user has to be taking an eval to answer a skill question
+    if (!user.evalInProgress) {
+        console.log("No eval in progress when user tried to answer a skill question.");
+        return res.status(400).send({ notSignedUp: true });
+    }
+
+    // if the user hasn't started the skill test, start it for them
+    if (!user.evalInProgress.skillId) {
+        try { user = await startNewSkill(user); }
+        catch (startSkillError) {
+            console.log("Error starting skill test: ", startSkillError);
+            return res.status(500).send({ serverError: true });
+        }
+    }
+
+    // id of the skill in progress
+    const skillId = user.evalInProgress.skillId.toString();
+
+    // get index of skill
+    const skillIdx = user.skillTests.findIndex(s => s.skillId.toString() === skillId);
+    if (!skillIdx) {
+        console.log("No in-progress skill id.");
+        return res.status(500).send({ serverError: true });
+    }
+
+    // get the skill from the user object
+    let userSkill = user.skillTests[skillIdx];
+
+    // if the user has a current question and an answer is given, save the answer
+    if (userSkill.currentQuestion && userSkill.currentQuestion.questionId && typeof selectedId === "string") {
+        user.skillTests[skillIdx] = addSkillAnswer(userSkill, selectedId);
+    }
+
+    // checks if the test is over, if not gets a new question
+    try { var updatedTest = await getNewSkillQuestion(user.skillTests[skillIdx]); }
+    catch (getQuestionError) {
+        console.log("Error getting new skill question: ", getQuestionError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // what will be returned to the front end
+    let toReturn;
+
+    // if the user already answered all the psych questions, they're done
+    // move on to the next stage
+    if (updatedTest.finished === true) {
+        // mark the skill test complete
+        user.skillTests[skillIdx] = markSkillComplete(user.skillTests[skillIdx]);
+
+        // calculate the user's scores from their answers
+        user = calculatePsychScores(user)
+
+        // calculate the new evaluation state
+        try {
+            // move on to the next component, potentially finishing eval
+            const { user: updatedUser, evaluationState } = await advance(user, businessId, positionId);
+            // will return the user and the new eval state
+            user = updatedUser;
+            toReturn = { user: frontEndUser(user), evaluationState };
+        }
+        catch (advanceError) {
+            console.log("Error advancing after psych finished: ", advanceError);
+            return res.status(500).send({ serverError: true });
+        }
+    }
+
+    // if not done with the psych questions
+    else {
+        // return the new question to answer
+        toReturn = { evaluationState: { componentInfo: updatedTest.componentQuestion, showIntro: false } };
+        // save the question as the current question for the user
+        user.skillTests[skillIdx] = updatedTest.userSkill;
+    }
+
+    // save the user
+    try { await user.save(); }
+    catch (saveUserError) {
+        console.log("error saving user while trying to answer skill question: ", saveUserError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send(toReturn);
+}
+
+
+// start the next skill in an eval
+async function startNewSkill(user) {
+    return new Promise(async function(resolve, reject) {
+        // get the current position
+        try { var position = await getPosition(user.evalInProgress.businessId, user.evalInProgress.positionId); }
+        catch (getPositionError) { return reject(getPositionError); }
+
+        // make the skill tests array if it didn't exist
+        if (!Array.isArray(user.skillTests)) { user.skillTests = []; }
+
+        // delete any skill that has been started but not finished
+        let skillIdx = 0;
+        while(skillIdx < user.skillTests.length) {
+            if (user.skillTests[skillIdx] && typeof user.skillTests[skillIdx].mostRecentScore !== "number") {
+                user.skillTests.splice(skillIdx, 1);
+            } else {
+                skillIdx++;
+            }
+        }
+
+        // find out what the current skill id should be by going through each position skill
+        for (posSkillIdx = 0; posSkillIdx < position.skills.length; posSkillIdx++) {
+            const skillId = position.skills[posSkillIdx].toString();
+            // seeing if the user has NOT completed this one already
+            const userSkills = user.skillTests;
+            const skillCompleted = userSkills.some(s => {
+                return s.skillId.toString() === skillId && typeof s.mostRecentScore === "number";
+            });
+            // if the skill is not completed, marks it as the current one
+            if (!skillCompleted) { user.evalInProgress.skillId = skillId; break; }
+        }
+
+        // if the user already finished all needed skills
+        if (!user.evalInProgress.skillId) { return reject("No unfinished skills needed."); }
+
+        // get the skill from db
+        try { var skill = await Skilltests.findById(user.evalInProgress.skillId); }
+        catch (getSkillTest) { return reject(getSkillTest); }
+
+        // add the new skill test
+        user.skillTests.push({
+            skillId: skill._id,
+            name: skill.name,
+            attempts: [{
+                inProgress: true,
+                startDate: new Date(),
+                currentLevel: 1,
+                levels: [{
+                    levelNumber: 1,
+                    questions: []
+                }]
+            }]
+        });
+
+        return resolve(user);
+    });
+}
+
+
+// mark a skill test as finished
+function markSkillComplete(userSkill) {
+    // make sure userSkill is valid
+    if (typeof userSkill !== "object") { throw new Error(`Invalid userSkill: ${userSkill}`); }
+
+    // get one and only attempt
+    let userAttempt = userSkill.attempts[0];
+
+    // record time meta-data
+    const NOW = new Date();
+    userAttempt.endDate = NOW;
+    userAttempt.totalTime = NOW.getTime() - (new Date(userAttempt.startDate)).getTime();
+
+    // get a score for the skill
+    userSkill.mostRecentScore = scoreSkillFromAttempt(userAttempt);
+
+    // return updated user skill
+    return userSkill;
+}
+
+
+// get a score from the number of correct answers
+function scoreSkillFromAttempt(attempt) {
+    /* FOR NOW JUST SCORING OUT OF 100 THEN ADDING 30 */
+
+    // make sure arg is valid
+    if (typeof attempt !== "object") { throw new Error(`Invalid attempt: ${attempt}`); }
+
+    // total questions in the test
+    const totalQuestions = attempt.levels[0].questions.length;
+    // number of questions answered correctly
+    const numberCorrect = 0;
+
+    // go through every question in the first and only level, count up number correct
+    attempt.levels[0].questions.forEach(q => { if (q.isCorrect) { numberCorrect++ } } );
+
+    // get final score
+    const scoreOutOf100 = (numberCorrect / totalQuestions) * 100;
+    const score = scoreOutOf100 + 30;
+
+    // return the final score
+    return score;
+}
+
+
 // mark a psych test as finished
 function markPsychComplete(psychTest) {
-    console.log("MARKING COMPLETE");
     psychTest.inProgress = false;
 
     if (!psychTest.endDate) {
@@ -311,6 +510,52 @@ async function newPsychTest() {
             factors
         });
     });
+}
+
+
+// adds an answer for the current skill test question
+async function addSkillAnswer(userSkill, selectedId) {
+    // make sure arguments are valid
+    if (typeof userSkill !== "object" || typeof selectedId !== "string") {
+        return reject(`Invalid arguments to addSkillAnswer. userSkill: ${userSkill}, selectedId: ${selectedId}`);
+    }
+
+    // only allowing one attempt
+    let attempt = userSkill.attempts[0];
+
+    // get the current question from the user object
+    let userCurrQ = userSkill.currentQuestion;
+
+    // get the current level - only allowing skills with one level at the moment
+    let userLevel = attempt.levels[0];
+
+    // only one answer can be correct, see if the answer is correct
+    const isCorrect = userCurrQ.correctAnswer.toString() === selectedId.toString();
+
+    // time meta-data
+    const startDate = new Date(userCurrQ.startDate);
+    const endDate = new Date();
+    const totalTime = endDate.getTime() - startDate.getTime();
+
+    // add the question to the list of finished questions
+    userLevel.questions.push({
+        questionId: userCurrQ.questionId,
+        isCorrect,
+        answerId,
+        startDate,
+        endDate,
+        totalTime
+    });
+
+    // save this info back to the user object
+    attempt.levels[userLevelIndex] = userLevel;
+    userSkill.attempts[0] = attempt;
+
+    // delete the current question
+    userSkill.currentQuestion = undefined;
+
+    // return the updated skill
+    return resolve(userSkill);
 }
 
 
@@ -648,10 +893,11 @@ async function addSkillInfo(user, evaluationState, position) {
                                 .findById(userSkill.skillId)
                                 .select("levels.questions.body levels.questions.options.body");
                             // get the question from the skill
-                            var q = skill.levels[currQ.levelIndex].questions[currQ.questionIndex];
+                            const questions = skill.levels[0].questions;
+                            const question = questions.find(q => q._id.toString() === currQ.questionId.toString());
                         }
                         catch (getSkillError) { reject(getSkillError); }
-                        evaluationState.componentInfo = q;
+                        evaluationState.componentInfo = question;
                     }
                 }
             })
@@ -718,6 +964,62 @@ async function getNewPsychQuestion(psych) {
 
         // return the updated psych
         return resolve({ psychTest: psych });
+    });
+}
+
+
+// gets the next skill question for user (if test is not over)
+async function getNewSkillQuestion(userSkill) {
+    return new Promise(async function(resolve, reject) {
+        // make sure the user skill is valid
+        if (typeof userSkill !== "object") { reject(`Invalid userSkill: ${userSkill}`)}
+
+        // get the skill test from the db
+        try { var dbSkill = await Skilltests.findById(userSkill.skillId); }
+        catch (getSkillError) { return reject(getSkillError); }
+
+        // get the current (only) skill attempt and current (only) level
+        let userAttempt = userSkill.attempts[0];
+        let userLevel = userAttempt.levels[0];
+
+        // if the user has answered every question in the only level of the test
+        const dbQuestions = dbSkill.levels[0].questions;
+        if (userLevel.questions.length === dbSkill.levels[0].questions.length) {
+            // test is finished, return saying so
+            return resolve({ finished: true });
+        }
+
+        // otherwise make an object that lets us know which question ids have been answered
+        let answeredIds = {};
+        userLevel.questions.forEach(q => answeredIds[q.questionId.toString()] = true);
+
+        // get a list of questions that have not been answered
+        const availableQs = dbQuestions.filter(q => !answeredIds[q._id.toString()]);
+
+        // get a random question from that list
+        const questionIdx = randomInt(0, availableQs.length - 1);
+        const question = availableQs[questionIdx];
+
+        // figure out id of correct answer for that question
+        const correctAnswer = question.options.find(opt => opt.isCorrect)._id;
+
+        // mark it as the current question
+        userSkill.currentQuestion = {
+            levelNumber: 1,
+            levelIndex: 0,
+            questionId: question._id,
+            startDate: new Date(),
+            correctAnswer
+        }
+
+        // create the question object for the eval component
+        const componentQuestion = {
+            body: question.body,
+            options: question.options.map(opt => { return { body: opt.body } } )
+        }
+
+        // return the new user's skill object and question
+        return resolve({ userSkill, componentQuestion });
     });
 }
 

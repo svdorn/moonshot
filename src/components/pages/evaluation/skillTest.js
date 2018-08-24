@@ -53,7 +53,7 @@ class SkillTest extends Component {
         if (typeof this.state.selectedId !== "undefined" && !this.props.loading) {
             this.props.answerEvaluationQuestion("Skill", {
                 ...this.props.credentials,
-                answer: this.state.selectedId
+                selectedId: this.state.selectedId
             });
         }
     }
