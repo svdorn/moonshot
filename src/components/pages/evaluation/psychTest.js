@@ -34,22 +34,6 @@ class PsychAnalysis extends Component {
     }
 
 
-    // makes the button be not disabled
-    // componentDidUpdate(prevProps, prevState) {
-    //     try {
-    //         if (!this.props.questionInfo) { return; }
-    //         const currentQuestionId = this.props.questionInfo.questionId;
-    //         const prevQuestionId = prevProps.questionInfo.questionId;
-    //         if (currentQuestionId !== prevQuestionId) {
-    //             this.setState({ loadingQuestion: false });
-    //         }
-    //     } catch (e) {
-    //         console.log(e);
-    //         this.props.addNotification("Whoops, something's weird. Try reloading.", "errorHeader")
-    //     }
-    // }
-
-
     resized() { this.setState({ windowWidth: window.innerWidth }); }
 
 
@@ -121,22 +105,16 @@ class PsychAnalysis extends Component {
         if (!question || !leftOption || !rightOption) { return this.errorPage(); }
 
         // all is good, create styles for slider and options
-        // TODO: make this scale nicely with min and max widths
-        let sliderWidth, sliderHeight;
         let windowWidth = this.state.windowWidth;
-        if (windowWidth < 300) {
-            windowWidth = 300;
-        }
-        if (windowWidth > 600) {
-            sliderWidth = 350;
-            sliderHeight = 200;
-        } else if (windowWidth > 450) {
-            sliderWidth = 250;
-            sliderHeight = 120;
-        } else {
-            sliderWidth = 150;
-            sliderHeight = 80;
-        }
+
+        // MAX and MIN widths
+        if (windowWidth > 850) { windowWidth = 850; }
+        else if (windowWidth < 300) { windowWidth = 300; }
+
+        function widthParabolicFunc(x) { return x * (.7 - ((x-300)/2000)); }
+        const sliderWidth = widthParabolicFunc(windowWidth);
+        const sliderHeight = sliderWidth * 4 / 7;
+
         const topMargin = 110;
         const sliderAndAnswerContainerStyle = {
             width: sliderWidth,
