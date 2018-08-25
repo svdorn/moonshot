@@ -206,8 +206,6 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
         return res.status(400).send({ notSignedUp: true });
     }
 
-    console.log("here");
-
     // whether the user should be returned to the front end
     let returnUser = false;
 
@@ -255,7 +253,6 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     // if the user already answered all the psych questions, they're done
     // move on to the next stage
     if (updatedTest.finished === true) {
-        console.log('here??');
         // mark the skill test complete and score it
         user.skillTests[skillIdx] = markSkillComplete(user.skillTests[skillIdx]);
 
@@ -278,14 +275,12 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
 
     // if not done with the skill questions
     else {
-        console.log("here2");
         // return the new question to answer
         toReturn = { evaluationState: { componentInfo: updatedTest.componentQuestion, showIntro: false } };
         // save the question as the current question for the user
         user.skillTests[skillIdx] = updatedTest.userSkill;
         // return the user if wanted
         if (returnUser) { toReturn.user = user; }
-        console.log("toReturn: ", toReturn);
     }
 
     // save the user

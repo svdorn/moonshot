@@ -175,8 +175,6 @@ class SkillTest extends Component {
         // all info about the current question to answer
         const questionInfo = this.props.questionInfo;
 
-        console.log("this.props.showIntro: ", this.props.showIntro);
-
         // if user has never done a skill test before, show them the legalese stuff
         if (this.props.showIntro && !this.props.currentUser.agreedToSkillTerms) {
             return this.userAgreementPage();
