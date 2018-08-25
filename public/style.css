@@ -3799,7 +3799,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     bottom: 20px;
     height: 70px;
     width: 200px;
-    z-index: 1000;
+    z-index: 1100;
     background-color: var(--primary-black-dark);
     -webkit-box-shadow: 0 0 10px 3px rgba(0,0,0,.5);
     -moz-box-shadow:    0 0 10px 3px rgba(0,0,0,.5);
