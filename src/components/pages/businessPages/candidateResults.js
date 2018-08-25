@@ -278,22 +278,27 @@ class CandidateResults extends Component {
                         forCandidate={false}
                     />
 
-                    <div
-                        className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">
-                        Skills Evaluation
-                    </div>
-                    {this.state.windowWidth ?
+                    {Array.isArray(this.state.hardSkillPoints) && this.state.hardSkillPoints.length > 0 ?
                         <div>
-                            <PredictiveGraph
-                                dataPoints={this.state.hardSkillPoints}
-                                height={this.state.graphHeight}
-                                className="graph"
-                                containerName={"candidateResults"}
-                                ref={ instance => { this.child2 = instance; } }
-                            />
+                            <div
+                                className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">
+                                Skills Evaluation
+                            </div>
+                            {this.state.windowWidth ?
+                                <div>
+                                    <PredictiveGraph
+                                        dataPoints={this.state.hardSkillPoints}
+                                        height={this.state.graphHeight}
+                                        className="graph"
+                                        containerName={"candidateResults"}
+                                        ref={ instance => { this.child2 = instance; } }
+                                    />
+                                </div>
+                                :
+                                <div ref={ instance => { this.child2 = instance; } } />
+                            }
                         </div>
-                        :
-                        <div ref={ instance => { this.child2 = instance; } } />
+                        : null
                     }
                 </div>
         );
@@ -530,7 +535,8 @@ class CandidateResults extends Component {
             <div className={"blackBackground candidateEvalResults " + mobileClass + this.props.className}
                 onTransitionEnd={() => {
                     if (candidate.endDate) {
-                        this.child1.parentTransitioned(); this.child2.parentTransitioned();
+                        try {this.child1.parentTransitioned(); this.child2.parentTransitioned();}
+                        catch (e) { console.log(e); }
                     }
                 }}
             >
