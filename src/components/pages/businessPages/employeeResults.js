@@ -178,7 +178,7 @@ class EmployeeResults extends Component {
 
         return (
             <div className="analysis center aboutMeSection" style={style.tabContent}>
-                <div className="center" className="scoreSummarySection" style={{backgroundColor:"#393939"}}>
+                <div className="center" style={{backgroundColor:"#393939"}}>
                     <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
                         Employee Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                     </div>
@@ -188,23 +188,10 @@ class EmployeeResults extends Component {
                             <div
                                 className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
                                 Performance<br/>
-                                <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted, "predicted")}</p>
+                                <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted)}</p>
                             </div>
                             <Slider disabled={true}
                                     value={this.getSliderValue(this.state.predicted)}
-                                    min={50}
-                                    max={150}
-                                    className="resultsSlider"
-                            />
-                        </div>
-                        <div>
-                            <div
-                                className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                Skill Level<br/>
-                                <p style={style.lightBlue}>{qualifierFromScore(this.state.skill, "skill")}</p>
-                            </div>
-                            <Slider disabled={true}
-                                    value={this.getSliderValue(this.state.skill)}
                                     min={50}
                                     max={150}
                                     className="resultsSlider"

@@ -37,32 +37,33 @@ Stack.prototype.size = function() { return this.data.length; }
 
 const FOR_USER = [
     "_id",
-    "verificationToken",
+    "info",
     "name",
     "email",
-    "emailToContact",
-    "phoneNumber",
-    "userType",
     "admin",
-    "termsAndConditions",
-    "firstBusinessUser",
-    "hideProfile",
-    "profileUrl",
-    "dateSignedUp",
-    "hasFinishedOnboarding",
-    "positions",
-    "referredByCode",
-    "onboarding",
-    "verified",
     "skills",
-    "skillTests",
-    "info",
     "redirect",
+    "verified",
+    "userType",
+    "positions",
+    "profileUrl",
+    "skillTests",
+    "onboarding",
+    "phoneNumber",
+    "hideProfile",
+    "dateSignedUp",
     "businessInfo",
+    "emailToContact",
     "adminQuestions",
-    "psychometricTest",
+    "referredByCode",
     "currentPosition",
-    "sawMyCandidatesInfoBox"
+    "psychometricTest",
+    "verificationToken",
+    "firstBusinessUser",
+    "agreedToSkillTerms",
+    "termsAndConditions",
+    "hasFinishedOnboarding",
+    "sawMyCandidatesInfoBox",
 ];
 
 // removes information from a db user object so that it can be passed for that
@@ -922,10 +923,70 @@ function validArgs(options) {
 }
 
 
+// logs the arguments provided
+// example: logArgs(req.body, ["businessId", "positionId"]);
+function logArgs(parent, args) {
+    console.log("Arguments: ");
+    args.forEach(arg => { console.log(arg, ": ", parent[arg]); });
+}
+
+
+// logs an error with line numbers and such
+function logError(...args) {
+    console.log("ERROR");
+    args.forEach(arg => { console.log(arg); });
+    let stack = (new Error).stack;
+    stack = stack.substring(stack.indexOf(")") + 1);
+    //stack.shift();
+    console.log("Stacktrace: ", stack);
+}
+
+
 // checks if a password is secure enough to be stored
 function isValidPassword(password) {
     const MIN_PASSWORD_LENGTH = 8;
     return typeof password === "string" && password.length >= MIN_PASSWORD_LENGTH;
+}
+
+
+// checks if a value is truthy (not null or undefined or empty string)
+function truthy(thing) { return !!thing; }
+
+
+// check if a child property exists on an object, and optionally checks if the
+// EX: if we have an object named user like this:
+// { info: { name: "Austin" } }
+// this returns true: propertyExists(user, ["info", "name"], "string")
+// this returns true: propertyExists(user, ["info", "name"])
+// this returns false: propertyExists(user, ["info", "name"], "object")
+// this returns false: propertyExists(user, ["info", "career"])
+function propertyExists(object, propertyTree, type) {
+    let parent = object;
+    // if the parent does not exist, property can't exist
+    if (!parent) { return false; }
+    // if no properties given, property can't exist
+    if (!Array.isArray(propertyTree) || propertyTree.length === 0) { return false; }
+
+    // start with the first property in the tree
+    let treePropIndex = 0;
+    // go through each property in the tree
+    while (treePropIndex < propertyTree.length) {
+        // make sure the parent is an object so it can have given properties
+        if (typeof parent !== "object") { return false; }
+        // name of the object property
+        const propName = propertyTree[treePropIndex];
+        // if the property is not truthy (does not exist), fail
+        if (!parent[propName]) { return false; }
+        // the property is legit, so set the parent to be the value of the child prop
+        parent = parent[propName];
+        // move to the next property
+        treePropIndex++;
+    }
+    // at this point, parent is the value we wanted to check
+    // if there is a defined wanted type, check for it
+    if (truthy(type)) { return typeof parent === type; }
+    // otherwise return that the property is valid
+    else { return true; }
 }
 
 
@@ -949,6 +1010,10 @@ const helperFunctions = {
     isValidPassword,
     isValidFileType,
     validArgs,
+    logArgs,
+    logError,
+    truthy,
+    propertyExists,
 
     Queue,
     Stack,

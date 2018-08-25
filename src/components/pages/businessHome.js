@@ -15,7 +15,6 @@ import ProgressBarDialog from '../miscComponents/progressBarDialog';
 import { isValidEmail, goTo } from "../../miscFunctions";
 import HoverTip from '../miscComponents/hoverTip';
 
-// TODO: remove this
 import "./businessHome.css";
 
 

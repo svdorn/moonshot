@@ -66,31 +66,19 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
 
 
 // get the qualifier (e.g. "above average", "expert", etc) based on a score
-function qualifierFromScore(score, type) {
+function qualifierFromScore(score) {
     // make sure the score is a number we can use
     if (typeof score === "string") { score = parseInt(score, 10); }
     if (typeof score !== "number") { return "N/A"; }
     if (score === NaN) { return "N/A"; }
 
-    let qualifiers = undefined;
-    // for predicted performance
-    if (type === "predicted") {
-        qualifiers = ["Below Average", "Average", "Above Average"];
-    }
-    // for skill level
-    else if (type === "skill") {
-        qualifiers = ["Novice", "Intermediate", "Expert"];
-    }
-    // if invalid type provided, return N/A
-    else { return "N/A"; }
-
     // between 90 (inclusive) and 110 (exclusive) is intermediate/average
     if (score < 90) {
-        return qualifiers[0];
+        return "Below Average";
     } else if (score < 110) {
-        return qualifiers[1];
+        return "Average";
     } else {
-        return qualifiers[2];
+        return "Above Average";
     }
 }
 
@@ -167,6 +155,43 @@ function truthy(thing) {
 }
 
 
+// check if a child property exists on an object, and optionally checks if the
+// EX: if we have an object named user like this:
+// { info: { name: "Austin" } }
+// this returns true: propertyExists(user, ["info", "name"], "string")
+// this returns true: propertyExists(user, ["info", "name"])
+// this returns false: propertyExists(user, ["info", "name"], "object")
+// this returns false: propertyExists(user, ["info", "career"])
+function propertyExists(object, propertyTree, type) {
+    let parent = object;
+    // if the parent does not exist, property can't exist
+    if (!parent) { return false; }
+    // if no properties given, property can't exist
+    if (!Array.isArray(propertyTree) || propertyTree.length === 0) { return false; }
+
+    // start with the first property in the tree
+    let treePropIndex = 0;
+    // go through each property in the tree
+    while (treePropIndex < propertyTree.length) {
+        // make sure the parent is an object so it can have given properties
+        if (typeof parent !== "object") { return false; }
+        // name of the object property
+        const propName = propertyTree[treePropIndex];
+        // if the property is not truthy (does not exist), fail
+        if (!parent[propName]) { return false; }
+        // the property is legit, so set the parent to be the value of the child prop
+        parent = parent[propName];
+        // move to the next property
+        treePropIndex++;
+    }
+    // at this point, parent is the value we wanted to check
+    // if there is a defined wanted type, check for it
+    if (truthy(type)) { return typeof parent === type; }
+    // otherwise return that the property is valid
+    else { return true; }
+}
+
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -178,6 +203,7 @@ const miscFunctions = {
     isValidPassword,
     goTo,
     truthy,
+    propertyExists,
 
     Queue,
     Stack

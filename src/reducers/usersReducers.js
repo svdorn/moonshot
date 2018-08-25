@@ -266,16 +266,6 @@ export function usersReducers(state = initialState, action) {
                 ...state, currentUser: action.currentUser, loadingSomething: false
             }
             break;
-        case "ANSWER_PSYCH_QUESTION":
-            return {
-                ...state, currentUser: action.user, finishedPsychTest: action.finishedTest
-            }
-            break;
-        case "ANSWER_PSYCH_QUESTION_ERROR":
-            return {
-                ...state, notification: action.notification, notificationDate: new Date()
-            }
-            break;
         case "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS":
             return {
                 ...state, incompleteSteps: action.incompleteSteps, loadingSomething: false
@@ -355,6 +345,25 @@ export function usersReducers(state = initialState, action) {
             }
             // save the updated automateInvites object
             return { ...state, automateInvites };
+        }
+        // override ALL of evaluation state
+        case "SET_EVALUATION_STATE": {
+            return { ...state, evaluationState: action.evaluationState }
+        }
+        // override parts of old evaluation state with new eval state
+        case "UPDATE_EVALUATION_STATE": {
+            let newState = {
+                ...state,
+                loadingSomething: false,
+                // update evaluation state without resetting everything
+                evaluationState: {
+                    ...state.evaluationState,
+                    ...action.evaluationState
+                }
+            }
+            // update user if given
+            if (action.user) { newState.currentUser = action.user; }
+            return newState;
         }
         case "ADD_PATHWAY":
             return {

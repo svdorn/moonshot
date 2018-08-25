@@ -1,6 +1,17 @@
 "use strict"
 const mongoose = require('mongoose');
 
+const adminQuestionSchema = mongoose.Schema({
+    // of the question the user answered
+    questionId: mongoose.Schema.Types.ObjectId,
+    // only applies to slider questions
+    sliderAnswer: Number,
+    // only apply to multiple choice questions - the id of the answer chosen
+    selectedId: mongoose.Schema.Types.ObjectId,
+    // the text of the answer chosen
+    selectedText: String
+});
+
 const usersSchema = mongoose.Schema({
     // user's full name
     name: String,
@@ -24,6 +35,8 @@ const usersSchema = mongoose.Schema({
         // the most recent date the terms were agreed to
         date: Date
     }],
+    // if the user agreed to the terms required to take a skill test
+    agreedToSkillTerms: Boolean,
     // if the user is an account admin and was the first at the company
     firstBusinessUser: Boolean,
     // whether the user's profile is hidden from employers
@@ -216,6 +229,17 @@ const usersSchema = mongoose.Schema({
 
     // questions the user has to answer - only once - before doing a position eval
     adminQuestions: {
+        // the date the user started the admin questions
+        startDate: Date,
+        // the date the user finished the admin questions
+        endDate: Date,
+        // all the admin questions that have been answered
+        questions: [ adminQuestionSchema ],
+        // the question the user is currently on
+        currentQuestion: adminQuestionSchema,
+        // DEPRECATED TODO: remove once all users transitioned from using this
+        // whether the user has started the admin questions portion of the eval
+        started: Boolean,
         // whether the user has finished all the admin questions and no longer needs to do them
         finished: Boolean,
         // questions user answered about demographics
@@ -240,6 +264,7 @@ const usersSchema = mongoose.Schema({
             // the text of the answer chosen
             selectedText: String
         }]
+        // END DEPRECATED
     },
 
     // the user's psychometric test answers and results
@@ -261,23 +286,30 @@ const usersSchema = mongoose.Schema({
         // array positions of factors that have not yet been completed
         // for example, if factors in array positions 0 and 4 were complete,
         // the array would look like [ 1, 2, 3, 5, 6 ]
+        /* TODO: DEPRECATED */
         incompleteFactors: [ Number ],
+        // info for facets that don't have enough questions answered
+        incompleteFacets: [ mongoose.Schema.Types.ObjectId ],
+        // questions that have been used and shouldn't be used again
+        usedQuestions: [ mongoose.Schema.Types.ObjectId ],
         // how many questions in total in the test the user has answered
         numQuestionsAnswered: Number,
         // current question that the user is on
         currentQuestion: {
+
+            /* START DEPRECATED */
             // the index of the factor within the user's factors array
             factorIndex: Number,
-            // the id of the factor in the test db
-            factorId: mongoose.Schema.Types.ObjectId,
             // the index of the facet within the user's factors array
             facetIndex: Number,
+            /* END DEPRECATED */
+
+            // the id of the factor in the test db
+            factorId: mongoose.Schema.Types.ObjectId,
             // the id of the factor in the test db
             facetId: mongoose.Schema.Types.ObjectId,
             // the id of the question being asked
             questionId: mongoose.Schema.Types.ObjectId,
-            // if this is the third question from this facet, responseIndex will be 2
-            responseIndex: Number,
             // the text of the question
             body: String,
             // the left option as a response to the question
@@ -298,6 +330,7 @@ const usersSchema = mongoose.Schema({
             score: Number,
             // the array positions of facets that have not yet been completed
             // similar to incompleteFactors above
+            // TODO: DEPRECATED
             incompleteFacets: [ Number ],
             // the facets we're testing for
             facets: [{
@@ -311,6 +344,7 @@ const usersSchema = mongoose.Schema({
                 // name of the facet at the time the user completed the test
                 name: String,
                 // questions that have already been used for this facet
+                // TODO: DEPRECATED
                 usedQuestions: [ mongoose.Schema.Types.ObjectId ],
                 // the responses users had to facet questions
                 responses: [{
@@ -356,6 +390,8 @@ const usersSchema = mongoose.Schema({
         deadline: Date,
         // the date the user started application
         appliedStartDate: Date,
+        // date the user pressed "Start"
+        startDate: Date,
         // when the user ended and submitted the application
         appliedEndDate: Date,
         // if the user agreed to not cheat on the skill tests
@@ -446,6 +482,19 @@ const usersSchema = mongoose.Schema({
     // if the user saw the box that says 'click candidate name for more info'
     sawMyCandidatesInfoBox: Boolean,
     // <<-------------------------------------------------------------->> //
+
+
+    // ------------------------->> NEW EVAL FLOW <<-------------------------- //
+    // the eval that the user is currently taking
+    evalInProgress: {
+        // the business offering this position
+        businessId: mongoose.Schema.Types.ObjectId,
+        // the id of the position the eval is for
+        positionId: mongoose.Schema.Types.ObjectId,
+        // *optional* id of the skill the user is currently on
+        skillId: mongoose.Schema.Types.ObjectId
+    }
+    // <<------------------------------------------------------------------>> //
 });
 
 var Users = mongoose.model('Users', usersSchema);
