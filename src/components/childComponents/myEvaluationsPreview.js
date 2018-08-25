@@ -154,13 +154,13 @@ class MyEvaluationsPreview extends Component {
         }
 
         let positionKeyArea = null;
-        if (editing && this.props.positionKey) {
-            positionKeyArea = (
-                <div className="primary-cyan font12px position-key">
-                    Position Key: { this.props.positionKey }
-                </div>
-            );
-        }
+        // if (editing && this.props.positionKey) {
+        //     positionKeyArea = (
+        //         <div className="primary-cyan font12px position-key">
+        //             Position Key: { this.props.positionKey }
+        //         </div>
+        //     );
+        // }
 
         return(
             <div>
