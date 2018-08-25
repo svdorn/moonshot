@@ -151,7 +151,7 @@ class BusinessSignup extends Component {
                     <meta name="description" content="Create an account for your business. Moonshot helps you find the best candidates possible. Don't waste resources on any bad hires." />
                 </MetaTags>
                 <div>
-                    <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>
+                    {/*<HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>*/}
                     <div className="form lightBlackForm" style={{marginTop: "10px"}}>
                         {this.state.email != "" && this.props.userPosted ?
                             <div className="center">

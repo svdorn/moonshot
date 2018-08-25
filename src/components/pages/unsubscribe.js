@@ -99,7 +99,7 @@ class Unsubscribe extends Component {
                     <title>Unsubscribe | Moonshot</title>
                     <meta name="description" content="Unsubscribe from all Moonshot emails. Sorry to see you go!" />
                 </MetaTags>
-                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
+                {/*<HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />*/}
                 <div className="form lightBlackForm noBlur">
                     {this.state.unsubscribedViaUrl ?
                         <div style={{padding:"10px"}}>{this.props.location.query.email} was successfully unsubscribed.</div>

@@ -59,7 +59,7 @@ class ContactUs extends Component {
                 <title>Contact Us | Moonshot</title>
                 <meta name="description" content="Questions? Comments? New sushi restaurant we should try? Contact Moonshot here!" />
                 </MetaTags>
-                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
+                {/*<HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />*/}
                 <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1 style={{marginTop:"15px"}}>Contact Us</h1>
