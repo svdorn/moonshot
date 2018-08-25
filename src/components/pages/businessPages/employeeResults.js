@@ -5,7 +5,6 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
-import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
@@ -17,6 +16,8 @@ import { qualifierFromScore } from "../../../miscFunctions";
 class EmployeeResults extends Component {
     constructor(props) {
         super(props);
+
+        this.bound_updateWindowDimensions = this.updateWindowDimensions.bind(this);
 
         this.state = {
             candidate: {},
@@ -34,7 +35,7 @@ class EmployeeResults extends Component {
 
     componentDidMount() {
         // set resize listener
-        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+        window.addEventListener('resize', this.bound_updateWindowDimensions);
 
         let candidateId = "";
         let businessId = "";
@@ -124,7 +125,7 @@ class EmployeeResults extends Component {
 
 
     componentWillUnmount() {
-        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+        window.removeEventListener('resize', this.bound_updateWindowDimensions);
     }
 
 
@@ -177,7 +178,7 @@ class EmployeeResults extends Component {
 
         return (
             <div className="analysis center aboutMeSection" style={style.tabContent}>
-                <div className="center" className="scoreSummarySection" style={{backgroundColor:"#393939"}}>
+                <div className="center" style={{backgroundColor:"#393939"}}>
                     <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
                         Employee Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                     </div>
@@ -187,23 +188,10 @@ class EmployeeResults extends Component {
                             <div
                                 className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
                                 Performance<br/>
-                                <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted, "predicted")}</p>
+                                <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted)}</p>
                             </div>
                             <Slider disabled={true}
                                     value={this.getSliderValue(this.state.predicted)}
-                                    min={50}
-                                    max={150}
-                                    className="resultsSlider"
-                            />
-                        </div>
-                        <div>
-                            <div
-                                className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                Skill Level<br/>
-                                <p style={style.lightBlue}>{qualifierFromScore(this.state.skill, "skill")}</p>
-                            </div>
-                            <Slider disabled={true}
-                                    value={this.getSliderValue(this.state.skill)}
                                     min={50}
                                     max={150}
                                     className="resultsSlider"

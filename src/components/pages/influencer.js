@@ -5,7 +5,6 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {Tabs, Tab, Slider, CircularProgress,Divider, Dialog, FlatButton} from 'material-ui';
-import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
@@ -17,6 +16,8 @@ import HoverTip from "../miscComponents/hoverTip";
 class Influencer extends Component {
     constructor(props) {
         super(props);
+
+        this.bound_updateWindowDimensions = this.updateWindowDimensions.bind(this);
 
         this.state = {
             candidate: {},
@@ -45,7 +46,7 @@ class Influencer extends Component {
 
     componentDidMount() {
         // set resize listener
-        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+        window.addEventListener('resize', this.bound_updateWindowDimensions);
 
         let userId = "";
         let businessId = "";
@@ -221,7 +222,7 @@ class Influencer extends Component {
 
 
     componentWillUnmount() {
-        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+        window.removeEventListener('resize', this.bound_updateWindowDimensions);
     }
 
 

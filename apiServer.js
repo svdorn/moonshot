@@ -31,8 +31,10 @@ let dbConnectLink = 'mongodb://' + credentials.dbDevUsername + ':' + credentials
 if (process.env.NODE_ENV === "production") {
     dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
 }
+// options for db connection
+const dbOptions = { useNewUrlParser: true };
 // connect to mLab
-mongoose.connect(dbConnectLink);
+mongoose.connect(dbConnectLink, dbOptions);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
@@ -40,16 +42,18 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 
 // import all the api functions
 const userApis = require("./apis/userApis");
-const candidateApis = require("./apis/candidateApis");
-const accountAdminApis = require("./apis/accountAdminApis");
-const businessApis = require("./apis/businessApis");
-const adminApis = require("./apis/adminApis");
 const miscApis = require("./apis/miscApis");
+const adminApis = require("./apis/adminApis");
 const skillApis = require("./apis/skillApis");
 const psychApis = require("./apis/psychApis");
-const mlFunctions = require("./apis/mlFunctions");
 const billingApis = require("./apis/billingApis");
+const businessApis = require("./apis/businessApis");
+const candidateApis = require("./apis/candidateApis");
+const evaluationApis = require("./apis/evaluationApis");
+const accountAdminApis = require("./apis/accountAdminApis");
+
 const webhooks = require("./apis/webhooks");
+const mlFunctions = require("./apis/mlFunctions");
 const helperFunctions = require("./apis/helperFunctions");
 
 
@@ -114,7 +118,6 @@ app.use(session({
 app.post('/user/submitFreeResponse', userApis.POST_submitFreeResponse);
 app.post("/user/addPositionEval", userApis.POST_addPositionEval);
 app.post('/user/startPositionEval', userApis.POST_startPositionEval);
-app.post('/user/continuePositionEval', userApis.POST_continuePositionEval);
 app.post('/user/startPsychEval', userApis.POST_startPsychEval);
 app.post('/user/answerPsychQuestion', userApis.POST_answerPsychQuestion);
 app.post('/user/signOut', userApis.POST_signOut);
@@ -135,7 +138,7 @@ app.get("/user/influencerResults", userApis.GET_influencerResults);
 app.get("/user/checkEmailVerified", userApis.GET_checkUserVerified);
 app.get("/user/notificationPreferences", userApis.GET_notificationPreferences);
 app.post("/user/postNotificationPreferences", userApis.POST_notificationPreferences);
-app.post("/user/answerAdminQuestion", userApis.POST_answerAdminQuestion);
+
 app.post("/user/sawEvaluationIntro", userApis.POST_sawEvaluationIntro);
 app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
 app.post("/user/verifyFromApiKey", userApis.POST_verifyFromApiKey);
@@ -182,11 +185,14 @@ app.get("/admin/business", adminApis.GET_business);
 app.post("/admin/saveBusiness", adminApis.POST_saveBusiness);
 app.get("/admin/blankPosition", adminApis.GET_blankPosition);
 
-app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);
-app.post('/skill/startOrContinueTest', skillApis.POST_startOrContinueTest);
-app.post("/skill/agreeToTerms", skillApis.POST_agreeToTerms);
-
 app.post('/billing/customer', billingApis.POST_customer);
+
+app.get("/evaluation/initialState", evaluationApis.GET_initialState);
+app.get("/evaluation/currentState", evaluationApis.GET_currentState);
+app.post("/evaluation/start", evaluationApis.POST_start);
+app.post("/evaluation/answerAdminQuestion", evaluationApis.POST_answerAdminQuestion);
+app.post("/evaluation/answerPsychQuestion", evaluationApis.POST_answerPsychQuestion);
+app.post("/evaluation/answerSkillQuestion", evaluationApis.POST_answerSkillQuestion);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);

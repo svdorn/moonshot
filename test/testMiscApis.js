@@ -11,17 +11,17 @@ chai.use(sinonChai);
 
 const { mockReq, mockRes } = require('sinon-express-mock');
 const mongoose = require('mongoose');
-const Mockgoose = require('mockgoose').Mockgoose;
-const mockgoose = new Mockgoose(mongoose);
+// const Mockgoose = require('mockgoose').Mockgoose;
+// const mockgoose = new Mockgoose(mongoose);
 
 // connect to the fake db
-before(function(done) {
-	mockgoose.prepareStorage().then(function() {
-		mongoose.connect('mongodb://example.com/TestingDB', function(err) {
-			done(err);
-		});
-	});
-});
+// before(function(done) {
+// 	mockgoose.prepareStorage().then(function() {
+// 		mongoose.connect('mongodb://example.com/TestingDB', function(err) {
+// 			done(err);
+// 		});
+// 	});
+// });
 
 const {
 	POST_createReferralCode,

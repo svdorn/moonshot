@@ -202,7 +202,7 @@ class ReferralCode extends Component {
                     >
                         <AffiliateAgreement/>
                     </Dialog>
-                    <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                    {/*<HomepageTriangles style={{pointerEvents:"none"}} variation="1" />*/}
                     <div className="form" style={{padding: "10px 20px"}}>
                         {this.state.referralCode ?
                             <div className="primary-cyan">

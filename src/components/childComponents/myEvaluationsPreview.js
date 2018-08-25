@@ -15,8 +15,8 @@ import {
 import { browserHistory } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { continueEval } from "../../actions/usersActions";
 import axios from "axios";
+import { goTo } from "../../miscFunctions";
 
 class MyEvaluationsPreview extends Component {
 
@@ -30,8 +30,7 @@ class MyEvaluationsPreview extends Component {
 
     // used for candidates and employees only
     continueEval = () => {
-        const currentUser = this.props.currentUser;
-        this.props.continueEval(currentUser._id, currentUser.verificationToken, this.props.positionId, this.props.businessId);
+        goTo(`/evaluation/${this.props.businessId}/${this.props.positionId}`);
     }
 
 
@@ -75,28 +74,10 @@ class MyEvaluationsPreview extends Component {
                     </div>
                 );
             });
-        } else {
-            positionSkills = (
-                <div key={"no skills Surrounder"} style={{display: 'inline-block'}}>
-                    <div key={"No Skills"}
-                         className="myEvalsSkillChip font14px font12pxUnder500"
-                    >
-                        No Skill Tests
-                    </div>
-                </div>
-            );
         }
-        if (!this.props.finalized) {
-            positionSkills = (
-                <div key={"no skills Surrounder"} style={{display: 'inline-block', top: "-5px"}}>
-                    <div key={"No Skills"}
-                         className="myEvalsSkillChip font18px font16pxUnder500"
-                    >
-                        Not live yet
-                    </div>
-                </div>
-            )
-        }
+
+        // don't show anything about skills if there are no skills in the position
+        else { positionSkills = null; }
 
         let infoArea = null;
         let clickableArea = null;
@@ -154,7 +135,7 @@ class MyEvaluationsPreview extends Component {
                 clickableArea = (
                     <div style={{marginTop: "20px"}}>
                             <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={this.continueEval} style={{padding: "5px 17px"}}>
-                                {"Start | Continue"}
+                                {this.props.startDate ? "Continue" : "Start"}
                             </button>
                     </div>
                 );
@@ -173,13 +154,13 @@ class MyEvaluationsPreview extends Component {
         }
 
         let positionKeyArea = null;
-        if (editing && this.props.positionKey) {
-            positionKeyArea = (
-                <div className="primary-cyan font12px position-key">
-                    Position Key: { this.props.positionKey }
-                </div>
-            );
-        }
+        // if (editing && this.props.positionKey) {
+        //     positionKeyArea = (
+        //         <div className="primary-cyan font12px position-key">
+        //             Position Key: { this.props.positionKey }
+        //         </div>
+        //     );
+        // }
 
         return(
             <div>
@@ -207,7 +188,7 @@ class MyEvaluationsPreview extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        continueEval
+
     }, dispatch);
 }
 

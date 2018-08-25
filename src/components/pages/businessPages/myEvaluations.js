@@ -247,6 +247,8 @@ class MyEvaluations extends Component {
                     let attributes = {};
                     attributes.company = position.businessName;
 
+                    console.log("position: ", position);
+
                     // if user is manager or account admin, preview will look editable
                     if (["accountAdmin", "manager"].includes(currentUser.userType)) {
                         attributes.variation = "edit";
@@ -272,6 +274,7 @@ class MyEvaluations extends Component {
                             attributes.name = position.positionName;
                             attributes.company = position.businessName;
                             attributes.assignedDate = position.assignedDate;
+                            attributes.startDate = position.startDate;
                             attributes.completedDate = position.completedDate;
                             attributes.businessId = position.businessId.toString();
                             attributes.positionId = position.positionId.toString();

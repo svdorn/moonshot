@@ -25,9 +25,9 @@ const styles = {
 
 
 // pages that have a header but don't show the header shadow
-const noShadowPages = ["businesssignup"];
+const noShadowPages = [];
 // pages where the menu scrolls with the page
-const nonFixedMenuPages = ["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "businesssignup"];
+const nonFixedMenuPages = ["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "evaluation"];
 // pages that don't have a header at all
 const noMenuPages = ["chatbot"];
 
@@ -46,6 +46,8 @@ class Menu extends Component {
         // class for the header, only needed for pages with unusual menus
         const headerClass = props.location.pathname === "/" && window.scrollY === 0 ? "noShadow" : "";
         const position = '';
+
+        this.bound_checkForHeaderClassUpdate = this.checkForHeaderClassUpdate.bind(this);
 
         // set the initial state
         this.state = {
@@ -286,11 +288,11 @@ class Menu extends Component {
 
         if (pathname === "/") {
             // make sure there aren't already event listeners on scroll/resize ...
-            window.removeEventListener("scroll", this.checkForHeaderClassUpdate.bind(this));
-            window.removeEventListener("resize", this.checkForHeaderClassUpdate.bind(this));
+            window.removeEventListener("scroll", this.bound_checkForHeaderClassUpdate);
+            window.removeEventListener("resize", this.bound_checkForHeaderClassUpdate);
             // ... then add event listeners for adding the shadow to the menu
-            window.addEventListener("scroll", this.checkForHeaderClassUpdate.bind(this));
-            window.addEventListener("resize", this.checkForHeaderClassUpdate.bind(this));
+            window.addEventListener("scroll", this.bound_checkForHeaderClassUpdate);
+            window.addEventListener("resize", this.bound_checkForHeaderClassUpdate);
             // if the user has not scrolled and the menu has a shadow, get rid of the shadow
             if (this.state.headerClass !== "noShadow" && window.scrollY === 0) {
                 this.setState({ headerClass: "noShadow" });
@@ -301,8 +303,8 @@ class Menu extends Component {
             }
         } else {
             // if there are event listeners for scrolling/resizing, get rid of them
-            window.removeEventListener("scroll", this.checkForHeaderClassUpdate.bind(this));
-            window.removeEventListener("resize", this.checkForHeaderClassUpdate.bind(this));
+            window.removeEventListener("scroll", this.bound_checkForHeaderClassUpdate);
+            window.removeEventListener("resize", this.bound_checkForHeaderClassUpdate);
             // make sure the menu has a shadow
             if (this.state.headerClass === "noShadow") {
                 this.setState({ headerClass: "" });
@@ -369,7 +371,7 @@ class Menu extends Component {
         else if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
-                {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
+                {optionType: "anchor", title: "Home", url: "/", anchor: "home-top"},
                 {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
                 {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
                 {optionType: "separator"},
@@ -561,7 +563,7 @@ class Menu extends Component {
                     }
                     desktopMenu.push(
                         <div key="tryForFreeButton" className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
-                            <input className="blackInput getStarted secondary-gray-important" type="text" placeholder="Enter a position..." name="position" value={self.state.position} onChange={self.onChange.bind(self)}
+                            <input className="blackInput secondary-gray-important" type="text" placeholder="Enter a position..." name="position" value={self.state.position} onChange={self.onChange.bind(self)}
                             />
                             <div className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}} onClick={() => goTo("/chatbot" + positionUrl)}>
                                 Try for Free

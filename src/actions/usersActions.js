@@ -144,17 +144,35 @@ export function sawMyCandidatesInfoBox(userId, verificationToken) {
 }
 
 
-export function answerAdminQuestion(userId, verificationToken, questionType, questionId, sliderAnswer, selectedId, selectedText, finished) {
+// save an answer for ANY eval component (AdminQuestion, PsychQuestion, GCAQuestion, SkillQuestion)
+export function answerEvaluationQuestion(evalComponent, options) {
     return function(dispatch) {
-        axios.post("/api/user/answerAdminQuestion", {userId, verificationToken, questionType, questionId, sliderAnswer, selectedId, selectedText, finished})
+        dispatch({type: "START_LOADING"});
+        axios.post(`/api/evaluation/answer${evalComponent}Question`, options)
         .then(response => {
-            dispatch({type: "NEW_CURRENT_USER", currentUser: response.data});
+            // if the user finished the eval
+            if (response.data.evaluationState.component === "Finished") {
+                // go home
+                goTo("/myEvaluations");
+                // add a notification saying they finished the eval
+                dispatch({type: "ADD_NOTIFICATION", notification: {message: "Congratulations, you finished the evaluation! We'll be in touch soon.", type: "infoHeader"}})
+            }
+            dispatch({
+                type: "UPDATE_EVALUATION_STATE",
+                evaluationState: response.data.evaluationState,
+                user: response.data.user
+            });
         })
         .catch(error => {
-            // console.log("error answering admin question: ", error);
-        })
+            console.log("error: ", error);
+            dispatch({
+                type: "NOTIFICATION_AND_STOP_LOADING",
+                notification: {message: "Error, try refreshing.", type: "errorHeader"}
+            });
+        });
     }
 }
+
 
 export function startLoading() {
     return function(dispatch) {
@@ -238,28 +256,6 @@ export function positionSignup(userId, verificationToken, positionId, businessId
 }
 
 
-export function continueEval(userId, verificationToken, positionId, businessId) {
-    return function(dispatch) {
-        axios.post("/api/user/continuePositionEval", {userId, verificationToken, positionId, businessId})
-        .then(response => {
-            dispatch({type: "CONTINUE_POSITION_EVAL", currentUser: response.data.updatedUser});
-            if (response.data.finished) {
-                // console.log("All parts already answered!");
-            } else {
-                browserHistory.push(response.data.nextUrl);
-                window.scrollTo(0, 0);
-            }
-        })
-        .catch(error => {
-            // console.log("Error starting position evaluation: ", error);
-            // if (error.response && error.response.data) {
-            //     console.log(error.response.data);
-            // }
-        })
-    }
-}
-
-
 export function startPsychEval(userId, verificationToken) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
@@ -280,21 +276,6 @@ export function agreeToTerms(userId, verificationToken, agreements) {
         dispatch({type: "START_LOADING"});
         axios.post("/api/user/agreeToTerms", {userId, verificationToken, termsAndConditions: agreements})
         .then(response => {
-            dispatch({type: "USER_UPDATE", currentUser: response.data});
-        })
-        .catch(error => {
-            console.log("error: ", error);
-        })
-    }
-}
-
-
-export function agreeToSkillTestTerms(userId, verificationToken) {
-    return function(dispatch) {
-        dispatch({type: "START_LOADING"});
-        axios.post("/api/skill/agreeToTerms", {userId, verificationToken})
-        .then(response => {
-            console.log("got response: ", response);
             dispatch({type: "USER_UPDATE", currentUser: response.data});
         })
         .catch(error => {
@@ -709,24 +690,6 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
 }
 
 
-export function answerPsychQuestion(userId, verificationToken, answer) {
-    return function(dispatch) {
-        axios.post("/api/user/answerPsychQuestion", {userId, verificationToken, answer})
-        .then(response => {
-            dispatch({
-                type: "ANSWER_PSYCH_QUESTION",
-                user: response.data.user,
-                finishedTest: response.data.finishedTest
-            })
-        })
-        .catch(err => {
-            // console.log("Error answering psych question: ", err);
-            dispatch({type: "ANSWER_PSYCH_QUESTION_ERROR", notification: { message: err.response.data, type: "errorHeader" } });
-        });
-    }
-}
-
-
 // change info during onboarding for automating candidate emails
 export function changeAutomateInvites(args) {
     return function (dispatch) {
@@ -739,6 +702,14 @@ export function changeAutomateInvites(args) {
 export function popGoBackStack() {
     return function(dispatch) {
         dispatch({ type: "POP_GO_BACK_STACK" });
+    }
+}
+
+
+// set the state of the current position evaluation
+export function setEvaluationState(evaluationState) {
+    return function(dispatch) {
+        dispatch({ type: "SET_EVALUATION_STATE", evaluationState });
     }
 }
 

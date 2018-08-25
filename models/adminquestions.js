@@ -17,7 +17,9 @@ var adminquestionsSchema = mongoose.Schema({
         options: [{
             // the text of the option
             body: String,
-        }]
+        }],
+        // which candidate types have to answer this question
+        requiredFor: [ String ]
     }],
     // questions asking user to self-rate aspects of job performance
     selfRating: [{
@@ -35,7 +37,9 @@ var adminquestionsSchema = mongoose.Schema({
             body: String,
             // the id of the question - the user stores this when they answer a question
             _id: mongoose.Schema.Types.ObjectId
-        }]
+        }],
+        // which candidate types have to answer this question
+        requiredFor: [ String ]
     }]
 });
 

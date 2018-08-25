@@ -26,6 +26,8 @@ import AddUserDialog from '../../childComponents/addUserDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
 import HoverTip from "../../miscComponents/hoverTip";
 
+import "./myCandidates.css";
+
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
         style={{width: "150px"}}
@@ -1211,7 +1213,7 @@ class MyCandidates extends Component {
         let positionId = this.state.positionId;
 
         const tabs = (
-            <div className="center" style={{position:"relative", marginTop:"10px"}}>
+            <div className="center" style={{position:"relative", marginTop:"28px"}}>
                 <div className="myCandidatesTabs">
                     { this.tabParts() }
                 </div>

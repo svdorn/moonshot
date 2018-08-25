@@ -227,7 +227,7 @@ async function createAccountAdmin(info) {
         // <<-------------------------------------------------------->> //
 
         // --->> COUNT THE USERS WITH THIS NAME TO ALLOW PROFILE URL CREATION <<--- //
-        Users.count({name: user.name})
+        Users.countDocuments({name: user.name})
         .then(count => {
             // create the user's profile url with the count after their name
             const randomNumber = crypto.randomBytes(8).toString('hex');
@@ -320,6 +320,10 @@ async function createBusiness(info) {
             // go through each position that should be created
             positions.forEach(position => {
                 // create the position with basic fields
+                // TODO: HI STEVE
+                // make this change to use the correct growth and performance ideal facets
+                // right now it always adds the dev ones
+                // thanks <3
                 let bizPos = {
                     name: position.name,
                     positionType: position.positionType,
@@ -327,7 +331,129 @@ async function createBusiness(info) {
                     timeAllotted: 30,
                     dateCreated: NOW,
                     // assuming it'll take some time to create the position, so it's not ready yet
-                    finalized: false
+                    finalized: true,
+
+                    // TODO: HI STEVE
+                    // definitely do this in a different way, just doing it quick and
+                    // ugly right now cuz i gotta go soon
+                    "idealFactors": [
+                        {
+                            "_id": "5b4fa8657811ec0e16df76e5",
+                            "idealFacets": [
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76e9",
+                                    "facetId": "5aff0b612689cb00e45ce2b6",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76e8",
+                                    "facetId": "5aff0b612689cb00e45ce2b1",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76e7",
+                                    "facetId": "5aff0b612689cb00e45ce2ac",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76e6",
+                                    "facetId": "5aff0b612689cb00e45ce2a7",
+                                    "score": 5
+                                }
+                            ],
+                            "factorId": "5aff0b612689cb00e45ce2a6"
+                        },
+                        {
+                            "_id": "5b4fa8657811ec0e16df76df",
+                            "idealFacets": [
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76e4",
+                                    "facetId": "5aff0b612689cb00e45ce2a1",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76e3",
+                                    "facetId": "5aff0b612689cb00e45ce29c",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76e2",
+                                    "facetId": "5aff0b612689cb00e45ce296",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76e1",
+                                    "facetId": "5aff0b612689cb00e45ce291",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76e0",
+                                    "facetId": "5aff0b612689cb00e45ce28c",
+                                    "score": 5
+                                }
+                            ],
+                            "factorId": "5aff0b612689cb00e45ce28b"
+                        }
+                    ],
+                    "growthFactors": [
+                        {
+                            "_id": "5b4fa8657811ec0e16df76f0",
+                            "idealFacets": [
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76f4",
+                                    "facetId": "5aff0b612689cb00e45ce2b6",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76f3",
+                                    "facetId": "5aff0b612689cb00e45ce2b1",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76f2",
+                                    "facetId": "5aff0b612689cb00e45ce2ac",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76f1",
+                                    "facetId": "5aff0b612689cb00e45ce2a7",
+                                    "score": 5
+                                }
+                            ],
+                            "factorId": "5aff0b612689cb00e45ce2a6"
+                        },
+                        {
+                            "_id": "5b4fa8657811ec0e16df76ea",
+                            "idealFacets": [
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76ef",
+                                    "facetId": "5aff0b612689cb00e45ce2a1",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76ee",
+                                    "facetId": "5aff0b612689cb00e45ce29c",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76ed",
+                                    "facetId": "5aff0b612689cb00e45ce296",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76ec",
+                                    "facetId": "5aff0b612689cb00e45ce291",
+                                    "score": 5
+                                },
+                                {
+                                    "_id": "5b4fa8657811ec0e16df76eb",
+                                    "facetId": "5aff0b612689cb00e45ce28c",
+                                    "score": 5
+                                }
+                            ],
+                            "factorId": "5aff0b612689cb00e45ce28b"
+                        }
+                    ]
                 }
                 // add the position
                 business.positions.push(bizPos);
@@ -1541,8 +1667,8 @@ async function addCompletionsAndInProgress(position) {
             }
 
             const [ completions, usersInProgress ] = await Promise.all([
-                Users.count(completionsQuery),
-                Users.count(inProgressQuery)
+                Users.countDocuments(completionsQuery),
+                Users.countDocuments(inProgressQuery)
             ]);
 
             if (typeof position.toObject === "function") {

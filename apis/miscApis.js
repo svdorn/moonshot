@@ -195,7 +195,6 @@ async function POST_resetAlan(req, res) {
             "questionId": {
                 _id: "5aff0b612689cb00e45ce2e7"
             },
-            "responseIndex": 0,
             "body": "You get pulled over and forgot your license:",
             "leftOption": "You\u2019re so unlucky!",
             "rightOption": "It\u2019s just a bad day!",
