@@ -376,7 +376,7 @@ class BusinessHome extends Component {
             },
             {
                 title: "Unlimited Employees",
-                text1: "Evaluate employees to strenthen",
+                text1: "Evaluate employees to strengthen",
                 text2: "your company's predictive baseline",
                 icon: "EmployeeIcon",
                 alt: "Employee Icon",
