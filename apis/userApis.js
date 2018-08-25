@@ -1930,7 +1930,7 @@ async function GET_positions(req, res) {
                         skills: bizPosition.skillNames,
                         assignedDate: userPosition.assignedDate,
                         deadline: userPosition.deadline,
-                        startDate: userPosition.appliedStartDate,
+                        startDate: userPosition.startDate,
                         completedDate: userPosition.appliedEndDate
                     });
                 }

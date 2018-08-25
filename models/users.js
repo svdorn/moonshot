@@ -390,6 +390,8 @@ const usersSchema = mongoose.Schema({
         deadline: Date,
         // the date the user started application
         appliedStartDate: Date,
+        // date the user pressed "Start"
+        startDate: Date,
         // when the user ended and submitted the application
         appliedEndDate: Date,
         // if the user agreed to not cheat on the skill tests

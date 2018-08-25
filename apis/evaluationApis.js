@@ -680,7 +680,12 @@ module.exports.POST_start = async function(req, res) {
     // set the user's current position to the one given
     user.evalInProgress = { businessId, positionId }
     // mark the position as started
-    user.positions[positionIndex].appliedStartDate = new Date();
+    const NOW = new Date();
+    if (user.positions[positionIndex].appliedStartDate) {
+        user.positions[positionIndex].appliedStartDate = new Date();
+    } if (user.positions[positionIndex].startDate) {
+        user.positions[positionIndex].startDate = new Date();
+    }
 
     // save the user
     try { await user.save(); }
