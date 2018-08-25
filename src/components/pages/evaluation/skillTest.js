@@ -85,7 +85,7 @@ class SkillTest extends Component {
                     :
                     <div
                         style={{marginBottom: "40px", width: "initial"}}
-                        className={buttonClass}
+                        className="noselect skillContinueButton"
                         onClick={this.startTest.bind(this)}
                     >
                         Begin
@@ -175,13 +175,15 @@ class SkillTest extends Component {
         // all info about the current question to answer
         const questionInfo = this.props.questionInfo;
 
+        console.log("this.props.showIntro: ", this.props.showIntro);
+
         // if user has never done a skill test before, show them the legalese stuff
         if (this.props.showIntro && !this.props.currentUser.agreedToSkillTerms) {
             return this.userAgreementPage();
         }
 
         // if the user has taken a skill test before
-        else if (this.props.showIntro) { return this.makeIntroPage(); }
+        else if (this.props.showIntro) { return this.introPage(); }
 
         // if the question has not been loaded yet
         else if (!questionInfo) { return <CircularProgress color="secondary" />; }
