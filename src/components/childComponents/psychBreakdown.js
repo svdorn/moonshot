@@ -172,7 +172,7 @@ class PsychBreakdown extends Component {
         return (
             <div className={"results psychSection blackBackground primary-white" + extraClass}>
                 <div className="title primary-white center font24px font20pxUnder700 font16pxUnder500">
-                    Psychometric Analysis
+                    Personality Analysis
                 </div>
                 <div className="statsAndDescription" style={coloredText}>
                     <div className="stats lightBlackBackground">

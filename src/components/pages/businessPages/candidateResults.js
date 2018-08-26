@@ -259,7 +259,7 @@ class CandidateResults extends Component {
 
                     {this.state.windowWidth ?
                         <div>
-                            <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predicted Performance"}</div>
+                            <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predictive Insights"}</div>
                             <PredictiveGraph
                                 dataPoints={this.state.predictivePoints}
                                 height={this.state.graphHeight}
