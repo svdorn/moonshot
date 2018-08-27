@@ -109,16 +109,17 @@ async function POST_createBusinessAndUser(req, res) {
     // user is the first at their company (so they have to do onboarding)
     user.firstBusinessUser = true;
 
+    if (process.env.NODE_ENV === "production") {
     // add the company to the user on intercom
-    try {
-        var companies = [];
-        companies.push({id: business.intercomId});
-        var intercom = await client.users.update({id: user.intercom.id, companies})
-    } catch (updateIntercomError) {
-        console.log("error updating an intercom user: ", updateIntercomError);
-        return res.status(500).send("Server error.");
+        try {
+            var companies = [];
+            companies.push({id: business.intercomId});
+            var intercom = await client.users.update({id: user.intercom.id, companies})
+        } catch (updateIntercomError) {
+            console.log("error updating an intercom user: ", updateIntercomError);
+            return res.status(500).send("Server error.");
+        }
     }
-
 
     try { user = await user.save(); }
     catch (saveUserError) {
@@ -133,7 +134,11 @@ async function POST_createBusinessAndUser(req, res) {
     // do this after sending success message to user just in case this fails
     let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
     if (process.env.NODE_ENV === "development") {
-        recipients = [ process.env.DEV_EMAIL ];
+        if (process.env.DEV_EMAIL) {
+            recipients = [ process.env.DEV_EMAIL ];
+        } else {
+            recipients = [ "stevedorn9@gmail.com" ];
+        }
     }
     let subject = 'New Account Admin Sign Up';
     let content =
@@ -142,6 +147,8 @@ async function POST_createBusinessAndUser(req, res) {
         +   `<p>Name: ${user.name}</p>`
         +   `<p>Email: ${user.email}</p>`
         +   `<p>Business name: ${business.name}</p>`
+        +   `<p>Position name: ${business.positions[0].name}</p>`
+        +   `<p>Position type: ${business.positions[0].positionType}</p>`
         + '</div>';
     try { await sendEmailPromise({recipients, subject, content}); }
     catch (alertEmailError) {
@@ -259,28 +266,30 @@ async function createAccountAdmin(info) {
             if (!verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
 
             // create a user on intercom and add intercom information to the user
-            try {
-                var intercom = await client.users.create({
-                    email: email,
-                     name: name,
-                     custom_attributes: {
-                         user_type: user.userType
-                     }
-                 });
-            }
-            catch (createIntercomError) {
-                console.log("error creating an intercom user: ", createIntercomError);
-                return res.status(500).send("Server error.");
-            }
+            if (process.env.NODE_ENV === "production") {
+                try {
+                    var intercom = await client.users.create({
+                        email: email,
+                         name: name,
+                         custom_attributes: {
+                             user_type: user.userType
+                         }
+                     });
+                }
+                catch (createIntercomError) {
+                    console.log("error creating an intercom user: ", createIntercomError);
+                    return res.status(500).send("Server error.");
+                }
 
-            // Add the intercom info to the user
-            if (intercom.body) {
-                user.intercom = {};
-                user.intercom.email = intercom.body.email;
-                user.intercom.id = intercom.body.id;
-            } else {
-                console.log("error creating an intercom user: ", createIntercomError);
-                return res.status(500).send("Server error.");
+                // Add the intercom info to the user
+                if (intercom.body) {
+                    user.intercom = {};
+                    user.intercom.email = intercom.body.email;
+                    user.intercom.id = intercom.body.id;
+                } else {
+                    console.log("error creating an intercom user: ", createIntercomError);
+                    return res.status(500).send("Server error.");
+                }
             }
 
             // make the user db object
@@ -319,142 +328,7 @@ async function createBusiness(info) {
         if (Array.isArray(positions)) {
             // go through each position that should be created
             positions.forEach(position => {
-                // create the position with basic fields
-                // TODO: HI STEVE
-                // make this change to use the correct growth and performance ideal facets
-                // right now it always adds the dev ones
-                // thanks <3
-                let bizPos = {
-                    name: position.name,
-                    positionType: position.positionType,
-                    length: 30,
-                    timeAllotted: 30,
-                    dateCreated: NOW,
-                    // assuming it'll take some time to create the position, so it's not ready yet
-                    finalized: true,
-
-                    // TODO: HI STEVE
-                    // definitely do this in a different way, just doing it quick and
-                    // ugly right now cuz i gotta go soon
-                    "idealFactors": [
-                        {
-                            "_id": "5b4fa8657811ec0e16df76e5",
-                            "idealFacets": [
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76e9",
-                                    "facetId": "5aff0b612689cb00e45ce2b6",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76e8",
-                                    "facetId": "5aff0b612689cb00e45ce2b1",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76e7",
-                                    "facetId": "5aff0b612689cb00e45ce2ac",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76e6",
-                                    "facetId": "5aff0b612689cb00e45ce2a7",
-                                    "score": 5
-                                }
-                            ],
-                            "factorId": "5aff0b612689cb00e45ce2a6"
-                        },
-                        {
-                            "_id": "5b4fa8657811ec0e16df76df",
-                            "idealFacets": [
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76e4",
-                                    "facetId": "5aff0b612689cb00e45ce2a1",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76e3",
-                                    "facetId": "5aff0b612689cb00e45ce29c",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76e2",
-                                    "facetId": "5aff0b612689cb00e45ce296",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76e1",
-                                    "facetId": "5aff0b612689cb00e45ce291",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76e0",
-                                    "facetId": "5aff0b612689cb00e45ce28c",
-                                    "score": 5
-                                }
-                            ],
-                            "factorId": "5aff0b612689cb00e45ce28b"
-                        }
-                    ],
-                    "growthFactors": [
-                        {
-                            "_id": "5b4fa8657811ec0e16df76f0",
-                            "idealFacets": [
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76f4",
-                                    "facetId": "5aff0b612689cb00e45ce2b6",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76f3",
-                                    "facetId": "5aff0b612689cb00e45ce2b1",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76f2",
-                                    "facetId": "5aff0b612689cb00e45ce2ac",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76f1",
-                                    "facetId": "5aff0b612689cb00e45ce2a7",
-                                    "score": 5
-                                }
-                            ],
-                            "factorId": "5aff0b612689cb00e45ce2a6"
-                        },
-                        {
-                            "_id": "5b4fa8657811ec0e16df76ea",
-                            "idealFacets": [
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76ef",
-                                    "facetId": "5aff0b612689cb00e45ce2a1",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76ee",
-                                    "facetId": "5aff0b612689cb00e45ce29c",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76ed",
-                                    "facetId": "5aff0b612689cb00e45ce296",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76ec",
-                                    "facetId": "5aff0b612689cb00e45ce291",
-                                    "score": 5
-                                },
-                                {
-                                    "_id": "5b4fa8657811ec0e16df76eb",
-                                    "facetId": "5aff0b612689cb00e45ce28c",
-                                    "score": 5
-                                }
-                            ],
-                            "factorId": "5aff0b612689cb00e45ce28b"
-                        }
-                    ]
-                }
+                bizPos = createPosition(position.name, position.positionType);
                 // add the position
                 business.positions.push(bizPos);
             });
@@ -555,19 +429,20 @@ async function createBusiness(info) {
                 }
             }
         ];
+        if (process.env.NODE_ENV === "production") {
+            business.intercomId = crypto.randomBytes(16).toString('hex');
 
-        business.intercomId = crypto.randomBytes(16).toString('hex');
-
-        // create a user on intercom and add intercom information to the user
-        try {
-            var intercom = await client.companies.create({
-                 name: name,
-                 company_id: business.intercomId
-             });
-        }
-        catch (createIntercomError) {
-            console.log("error creating an intercom company: ", createIntercomError);
-            return res.status(500).send("Server error.");
+            // create a user on intercom and add intercom information to the user
+            try {
+                var intercom = await client.companies.create({
+                     name: name,
+                     company_id: business.intercomId
+                 });
+            }
+            catch (createIntercomError) {
+                console.log("error creating an intercom company: ", createIntercomError);
+                return res.status(500).send("Server error.");
+            }
         }
 
         // create the business in the db
@@ -577,6 +452,154 @@ async function createBusiness(info) {
         // return the new business
         return resolve(business);
     });
+}
+
+
+function createPosition(name, type) {
+    // defaults for all position values
+    const bizPos = {
+        name: name,
+        positionType: type,
+        length: 25,
+        dateCreated: Date.now(),
+        finalized: true,
+    }
+
+    const devFactors = {
+        "growthFactors": [
+            {
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
+                        "score": 5
+                    }
+                ],
+                "factorId":mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6")
+            },
+            {
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
+                        "score": 5
+                    }
+                ],
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b")
+            }
+        ],
+        "idealFactors": [
+            {
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
+                        "score": 5
+                    }
+                ],
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6")
+            },
+            {
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
+                        "score": 5
+                    }
+                ],
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b")
+            }
+        ]
+    }
+
+    console.log("Dev Factors: ", devFactors);
+    console.log("positionType: ", bizPos.positionType);
+    console.log("bizPos: ", bizPos);
+
+    // TODO: create different default mappings when Justin gives them to us
+    const salesFactors = devFactors;
+    const supportFactors = devFactors;
+    const marketingFactors = devFactors;
+    const productFactors = devFactors;
+
+    let growthFactors;
+    let idealFactors;
+    // set correct ideal and growth factors
+    if (type == "Developer") {
+        bizPos.growthFactors = devFactors.growthFactors;
+        bizPos.idealFactors = devFactors.idealFactors;
+        console.log("adding dev factors");
+        console.log("growth: ", devFactors.growthFactors);
+        console.log("ideal: ", devFactors.idealFactors);
+    } else if (type === "Sales") {
+        bizPos.growthFactors = salesFactors.growthFactors;
+        bizPos.idealFactors = salesFactors.idealFactors;
+    } else if (type === "Support") {
+        bizPos.growthFactors = supportFactors.growthFactors;
+        bizPos.idealFactors = supportFactors.idealFactors;
+    } else if (type === "Marketing") {
+        bizPos.growthFactors = marketingFactors.growthFactors;
+        bizPos.idealFactors = marketingFactors.idealFactors;
+    } else if (type === "Product") {
+        bizPos.growthFactors = productFactors.growthFactors;
+        bizPos.idealFactors = productFactors.idealFactors;
+    }
+
+    console.log("bizPos after: ", bizPos);
+
+    return bizPos;
 }
 
 

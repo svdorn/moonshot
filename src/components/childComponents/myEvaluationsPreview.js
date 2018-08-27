@@ -15,8 +15,9 @@ import {
 import { browserHistory } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import axios from "axios";
 import { goTo } from "../../miscFunctions";
+import { openAddUserModal } from "../../actions/usersActions";
+import axios from "axios";
 
 class MyEvaluationsPreview extends Component {
 
@@ -48,40 +49,20 @@ class MyEvaluationsPreview extends Component {
         }
     }
 
+    openAddUserModal() {
+        this.props.openAddUserModal();
+    }
+
 
     render() {
         // variations can be edit or take
         // user is a manager or account admin
         const editing = this.props.variation === "edit"
 
-        const skills = this.props.skills;
-
-        let positionSkills;
-
-        if (skills && skills.length > 0) {
-            positionSkills = skills.map(function (skill, index) {
-                if (index >= 3) {
-                    return null;
-                }
-
-                return (
-                    <div key={skill + "Surrounder"} style={{display: 'inline-block'}} className="marginRight10px">
-                        <div key={skill}
-                             className="myEvalsSkillChip font14px font12pxUnder500"
-                        >
-                            {skill}
-                        </div>
-                    </div>
-                );
-            });
-        }
-
-        // don't show anything about skills if there are no skills in the position
-        else { positionSkills = null; }
-
         let infoArea = null;
-        let clickableArea = null;
         let estimatedLength = null;
+        let clickableArea = null;
+        let businessButton = null;
 
         if (editing) {
             clickableArea = (
@@ -109,19 +90,18 @@ class MyEvaluationsPreview extends Component {
             );
 
             infoArea = (
-                <div className="primary-cyan font16px center myEvalsInfoRight">
-                    Time Allotted
-                    <div className="primary-white marginBottom10px">{this.props.timeAllotted} Days</div>
+                <div className="primary-cyan font16px center myEvalsInfoRight marginTop15px">
                     Completions
                     <div className="primary-white marginBottom10px">{this.props.completions} Users</div>
                     In Progress
                     <div className="primary-white">{this.props.usersInProgress} Users</div>
                 </div>
             );
-
-            estimatedLength = (
-                <div className="primary-white font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom10px">Estimated Length:
-                    <div className="primary-cyan" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
+            businessButton = (
+                <div style={{marginTop: "20px"}}>
+                        <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={this.openAddUserModal.bind(this)} style={{padding: "5px 17px"}}>
+                            {"Invite Candidates"}
+                        </button>
                 </div>
             );
         } else {
@@ -141,6 +121,12 @@ class MyEvaluationsPreview extends Component {
                 );
             }
 
+            estimatedLength = (
+                <div className="primary-white font16px font14pxUnder800 font12pxUnder400 marginTop20px marginBottom10px">Estimated Length:
+                    <div className="primary-cyan" style={{display:"inline-block"}}>&nbsp;25 mins</div>
+                </div>
+            );
+
             infoArea = (
                 <div className="primary-cyan font16px center myEvalsInfoRight">
                     Assigned
@@ -154,13 +140,13 @@ class MyEvaluationsPreview extends Component {
         }
 
         let positionKeyArea = null;
-        // if (editing && this.props.positionKey) {
-        //     positionKeyArea = (
-        //         <div className="primary-cyan font12px position-key">
-        //             Position Key: { this.props.positionKey }
-        //         </div>
-        //     );
-        // }
+        if (editing && this.props.positionKey) {
+            positionKeyArea = (
+                <div className="primary-cyan font12px position-key">
+                    Position Key: { this.props.positionKey }
+                </div>
+            );
+        }
 
         return(
             <div>
@@ -175,10 +161,9 @@ class MyEvaluationsPreview extends Component {
                         { infoArea }
                         <div className="font18px font16pxUnder800 primary-cyan">{this.props.name}</div>
                         <div className="secondary-gray">{this.props.company} Evaluation</div>
-                        { editing ? estimatedLength : null }
-                        { editing ? positionSkills : <div className="marginTop20px">{positionSkills}</div> }
+                        { estimatedLength }
                         { clickableArea }
-                        { positionKeyArea }
+                        { businessButton }
                     </div>
                 </div>
             </div>
@@ -188,7 +173,7 @@ class MyEvaluationsPreview extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        openAddUserModal
     }, dispatch);
 }
 

@@ -247,8 +247,6 @@ class MyEvaluations extends Component {
                     let attributes = {};
                     attributes.company = position.businessName;
 
-                    console.log("position: ", position);
-
                     // if user is manager or account admin, preview will look editable
                     if (["accountAdmin", "manager"].includes(currentUser.userType)) {
                         attributes.variation = "edit";
@@ -279,15 +277,13 @@ class MyEvaluations extends Component {
                             attributes.businessId = position.businessId.toString();
                             attributes.positionId = position.positionId.toString();
                         } catch (attributeError) {
-                            console.log(attributeError);
-                            console.log("position: ", position);
                             this.props.addNotification("Something went wrong, try reloading.", "error");
                             return "";
                         }
                     }
 
                     return (
-                        <li style={{marginTop: '25px', listStyleType:"none"}}
+                        <li style={{marginTop: '35px', listStyleType:"none"}}
                             key={key}
                         >
                             <MyEvaluationsPreview {...attributes} />
@@ -316,7 +312,7 @@ class MyEvaluations extends Component {
             key++;
 
             evaluations.push (
-                <li style={{marginTop: '25px', listStyleType:"none"}}
+                <li style={{marginTop: '35px', listStyleType:"none"}}
                     key={key}
                 >
                     <div style={{filter:"blur(5px)"}}>

@@ -225,7 +225,7 @@ class Results extends Component {
 
                 <div>
                     <PredictiveGraph
-                        title={"Predicted Performance"}
+                        title={"Predictive Insights"}
                         dataPoints={this.state.predictivePoints}
                         height={graphHeight}
                     />

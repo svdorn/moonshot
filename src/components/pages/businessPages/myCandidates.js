@@ -363,8 +363,8 @@ class MyCandidates extends Component {
                 else { return 0; }
                 break;
             case "score": return this.compareByScore(candA, candB, "overall"); break;
-            case "predicted": return this.compareByScore(candA, candB, "predicted"); break;
-            case "skill": return this.compareByScore(candA, candB, "skill"); break;
+            case "growth": return this.compareByScore(candA, candB, "growth"); break;
+            case "performance": return this.compareByScore(candA, candB, "performance"); break;
             case "stage": return this.compareByStage(candA, candB); break;
             // if an invalid sort criteria is given, all candidates are of equal sorting value
             default: return 0; break;
@@ -768,12 +768,12 @@ class MyCandidates extends Component {
         candidateRows = this.state.sortedCandidates.map(candidate => {
             const isSelected = this.state.resultsCandidateId === candidate._id;
             let score = null;
-            let predicted = null;
-            let skill = null;
+            let growth = null;
+            let performance = null;
             if (typeof candidate.scores === "object") {
                 if (candidate.scores.overall) { score = candidate.scores.overall; }
-                if (candidate.scores.predicted) { predicted = candidate.scores.predicted; }
-                if (candidate.scores.skill) { skill = candidate.scores.skill; }
+                if (candidate.scores.growth) { growth = candidate.scores.growth; }
+                if (candidate.scores.performance) { performance = candidate.scores.performance; }
             }
 
             // mobile view
@@ -797,16 +797,16 @@ class MyCandidates extends Component {
                             </div>
                             <br/><div style={{height:"8px",display:"block"}}/>
                             <div className="predicted">
-                                {"Predicted"}<br/>
-                                {this.getQualifier(predicted, "predicted")}
+                                {"Growth"}<br/>
+                                {this.getQualifier(growth, "growth")}
                             </div>
                             <div className={"score"}>
                                 {"Score"}<br/>
                                 {this.makePretty(score)}
                             </div>
                             <div className="skill">
-                                {"Skill"}<br/>
-                                {this.getQualifier(skill, "skill")}
+                                {"Performance"}<br/>
+                                {this.getQualifier(performance, "performance")}
                             </div>
                         </td>
                     </tr>
@@ -838,16 +838,16 @@ class MyCandidates extends Component {
                         {this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}
                     </td>
                     <td className="predicted">
-                        {this.makePretty(predicted)}
+                        {this.makePretty(growth)}
                     </td>
                     <td className="skill">
-                        {this.makePretty(skill)}
+                        {this.makePretty(performance)}
                     </td>
                 </tr>
             );
         });
 
-        let headers = ["name", "score", "interest", "stage", "predicted", "skill"].map(sortTerm => {
+        let headers = ["name", "score", "interest", "stage", "growth", "performance"].map(sortTerm => {
             return (
                 <td className={sortTerm} key={"tableHeader" + sortTerm}>
                     <div className="inlineBlock clickableNoUnderline" onClick={() => this.handleSortByChange(sortTerm)}>
@@ -1098,7 +1098,7 @@ class MyCandidates extends Component {
 
     // lets you choose the filters for the candidates you see on mobile
     mobileSortByDropdown() {
-        let sortItems = ["Name", "Score", "Interest", "Stage", "Predicted", "Skill"].map(sortTerm => {
+        let sortItems = ["Name", "Score", "Interest", "Stage", "Growth", "Performance"].map(sortTerm => {
             const lowercaseSortTerm = sortTerm.toLowerCase();
             return (
                 <MenuItem
@@ -1198,8 +1198,6 @@ class MyCandidates extends Component {
         if (newIndex < 0 || newIndex >= this.state.sortedCandidates.length) {
             return console.log("invalid index");
         }
-
-        console.log("new candidate index: ", newIndex);
 
         this.setState({
             resultsCandidateId: this.state.sortedCandidates[newIndex]._id,
