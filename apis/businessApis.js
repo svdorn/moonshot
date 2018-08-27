@@ -429,19 +429,20 @@ async function createBusiness(info) {
                 }
             }
         ];
+        if (process.env.NODE_ENV === "production") {
+            business.intercomId = crypto.randomBytes(16).toString('hex');
 
-        business.intercomId = crypto.randomBytes(16).toString('hex');
-
-        // create a user on intercom and add intercom information to the user
-        try {
-            var intercom = await client.companies.create({
-                 name: name,
-                 company_id: business.intercomId
-             });
-        }
-        catch (createIntercomError) {
-            console.log("error creating an intercom company: ", createIntercomError);
-            return res.status(500).send("Server error.");
+            // create a user on intercom and add intercom information to the user
+            try {
+                var intercom = await client.companies.create({
+                     name: name,
+                     company_id: business.intercomId
+                 });
+            }
+            catch (createIntercomError) {
+                console.log("error creating an intercom company: ", createIntercomError);
+                return res.status(500).send("Server error.");
+            }
         }
 
         // create the business in the db

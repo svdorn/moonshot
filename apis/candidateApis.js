@@ -163,41 +163,44 @@ function POST_candidate(req, res) {
         // make sure all pre-reqs to creating user are met
         if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
 
+        if (process.env.NODE_ENV === "production") {
+
         // Add companies to user list for intercom
         let companies = [];
-        if (user.userType === "accountAdmin") {
-            try {
-                var intercomId = await Businesses.findById(businessId).select("intercomId");
-            } catch (findBusinessError) { return reject(findBusinessError); }
-            if (intercomId.intercomId) {
-                companies.push({id: intercomId.intercomId});
+            if (user.userType === "accountAdmin") {
+                try {
+                    var intercomId = await Businesses.findById(businessId).select("intercomId");
+                } catch (findBusinessError) { return reject(findBusinessError); }
+                if (intercomId.intercomId) {
+                    companies.push({id: intercomId.intercomId});
+                }
             }
-        }
 
-        // create a user on intercom and add intercom information to the user
-        try {
-            var intercom = await client.users.create({
-                email: email,
-                 name: name,
-                 companies,
-                 custom_attributes: {
-                     user_type: user.userType
-                 }
-             });
-        }
-        catch (createIntercomError) {
-            console.log("error creating an intercom user: ", createIntercomError);
-            return res.status(500).send("Server error.");
-        }
+            // create a user on intercom and add intercom information to the user
+            try {
+                var intercom = await client.users.create({
+                    email: email,
+                     name: name,
+                     companies,
+                     custom_attributes: {
+                         user_type: user.userType
+                     }
+                 });
+            }
+            catch (createIntercomError) {
+                console.log("error creating an intercom user: ", createIntercomError);
+                return res.status(500).send("Server error.");
+            }
 
-        // Add the intercom info to the user
-        if (intercom.body) {
-            user.intercom = {};
-            user.intercom.email = intercom.body.email;
-            user.intercom.id = intercom.body.id;
-        } else {
-            console.log("error creating an intercom user: ", createIntercomError);
-            return res.status(500).send("Server error.");
+            // Add the intercom info to the user
+            if (intercom.body) {
+                user.intercom = {};
+                user.intercom.email = intercom.body.email;
+                user.intercom.id = intercom.body.id;
+            } else {
+                console.log("error creating an intercom user: ", createIntercomError);
+                return res.status(500).send("Server error.");
+            }
         }
         // make the user db object
         try {
