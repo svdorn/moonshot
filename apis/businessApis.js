@@ -109,16 +109,17 @@ async function POST_createBusinessAndUser(req, res) {
     // user is the first at their company (so they have to do onboarding)
     user.firstBusinessUser = true;
 
+    if (process.env.NODE_ENV === "production") {
     // add the company to the user on intercom
-    try {
-        var companies = [];
-        companies.push({id: business.intercomId});
-        var intercom = await client.users.update({id: user.intercom.id, companies})
-    } catch (updateIntercomError) {
-        console.log("error updating an intercom user: ", updateIntercomError);
-        return res.status(500).send("Server error.");
+        try {
+            var companies = [];
+            companies.push({id: business.intercomId});
+            var intercom = await client.users.update({id: user.intercom.id, companies})
+        } catch (updateIntercomError) {
+            console.log("error updating an intercom user: ", updateIntercomError);
+            return res.status(500).send("Server error.");
+        }
     }
-
 
     try { user = await user.save(); }
     catch (saveUserError) {
@@ -133,7 +134,11 @@ async function POST_createBusinessAndUser(req, res) {
     // do this after sending success message to user just in case this fails
     let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
     if (process.env.NODE_ENV === "development") {
-        recipients = [ process.env.DEV_EMAIL ];
+        if (process.env.DEV_EMAIL) {
+            recipients = [ process.env.DEV_EMAIL ];
+        } else {
+            recipients = [ "stevedorn9@gmail.com" ];
+        }
     }
     let subject = 'New Account Admin Sign Up';
     let content =
@@ -142,6 +147,8 @@ async function POST_createBusinessAndUser(req, res) {
         +   `<p>Name: ${user.name}</p>`
         +   `<p>Email: ${user.email}</p>`
         +   `<p>Business name: ${business.name}</p>`
+        +   `<p>Position name: ${business.positions[0].name}</p>`
+        +   `<p>Position type: ${business.positions[0].positionType}</p>`
         + '</div>';
     try { await sendEmailPromise({recipients, subject, content}); }
     catch (alertEmailError) {
@@ -259,28 +266,30 @@ async function createAccountAdmin(info) {
             if (!verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
 
             // create a user on intercom and add intercom information to the user
-            try {
-                var intercom = await client.users.create({
-                    email: email,
-                     name: name,
-                     custom_attributes: {
-                         user_type: user.userType
-                     }
-                 });
-            }
-            catch (createIntercomError) {
-                console.log("error creating an intercom user: ", createIntercomError);
-                return res.status(500).send("Server error.");
-            }
+            if (process.env.NODE_ENV === "production") {
+                try {
+                    var intercom = await client.users.create({
+                        email: email,
+                         name: name,
+                         custom_attributes: {
+                             user_type: user.userType
+                         }
+                     });
+                }
+                catch (createIntercomError) {
+                    console.log("error creating an intercom user: ", createIntercomError);
+                    return res.status(500).send("Server error.");
+                }
 
-            // Add the intercom info to the user
-            if (intercom.body) {
-                user.intercom = {};
-                user.intercom.email = intercom.body.email;
-                user.intercom.id = intercom.body.id;
-            } else {
-                console.log("error creating an intercom user: ", createIntercomError);
-                return res.status(500).send("Server error.");
+                // Add the intercom info to the user
+                if (intercom.body) {
+                    user.intercom = {};
+                    user.intercom.email = intercom.body.email;
+                    user.intercom.id = intercom.body.id;
+                } else {
+                    console.log("error creating an intercom user: ", createIntercomError);
+                    return res.status(500).send("Server error.");
+                }
             }
 
             // make the user db object
