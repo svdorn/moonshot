@@ -626,7 +626,6 @@ async function sendNotificationEmails(businessId, user) {
     return new Promise(async function(resolve, reject) {
         const ONE_DAY = 1000 * 60 * 60 * 24;
         let time = ONE_DAY;
-        console.log("Sending emails rn");
 
         let moonshotUrl = 'https://www.moonshotinsights.io/';
         // if we are in development, links are to localhost
