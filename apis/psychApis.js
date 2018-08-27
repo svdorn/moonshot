@@ -33,7 +33,6 @@ function calculatePsychScores(user) {
                 // multiply the score by -1 if it's supposed to be inverted
                 if (facet.responses[responseIndex].invertScore) {
                     answer = answer * -1;
-                    console.log("inverting score");
                 }
                 facetTotal += answer;
             }
@@ -41,12 +40,10 @@ function calculatePsychScores(user) {
             facet.score = facetTotal / numResponses;
             factor.facets[facetIndex] = facet;
             factorTotal += facet.score;
-            console.log(`facet ${facet.name} score: ${facet.score}`);
         }
 
         factor.score = factorTotal / numFacets;
         psychTest.factors[factorIndex] = factor;
-        console.log(`factor ${factor.name} score: ${factor.score}`);
     }
 
     // give the graded psych test back to the user

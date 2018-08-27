@@ -479,6 +479,7 @@ async function addEvaluation(user, businessId, positionId, startDate) {
 // doesn't save the user object, caller has to do that
 async function finishPositionEvaluation(user, positionId, businessId) {
     return new Promise(async function(resolve, reject) {
+        console.log("Finishing position evaluation");
         let idType = "";
         let userArray = "";
         if (user.userType === "candidate") {
@@ -704,6 +705,7 @@ async function sendNotificationEmails(businessId, user) {
     return new Promise(async function(resolve, reject) {
         const ONE_DAY = 1000 * 60 * 60 * 24;
         let time = ONE_DAY;
+        console.log("Sending emails rn");
 
         let moonshotUrl = 'https://www.moonshotinsights.io/';
         // if we are in development, links are to localhost
@@ -717,6 +719,7 @@ async function sendNotificationEmails(businessId, user) {
 
         // send email to candidate
         let recipient = [user.email];
+        console.log("recipient: ", recipient);
         let subject = "You've Finished Your Evaluation!";
         let content =
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
@@ -1238,6 +1241,7 @@ async function POST_answerPsychQuestion(req, res) {
 
         finishedTest = true;
 
+        console.log("positionInProgress: ", user.positionInProgress)
         if (user.positionInProgress) {
             // check if the user is taking a position evaluation and if so
             // whether they're now done with it
@@ -1377,6 +1381,9 @@ async function POST_answerPsychQuestion(req, res) {
     }
 
     user.psychometricTest = psychometricTest;
+
+    console.log("finishedTest: ", finishedTest);
+    console.log("finishedEval: ", finishedEval);
 
     // grade the test if it's finished
     if (finishedTest) { user = calculatePsychScores(user); }
