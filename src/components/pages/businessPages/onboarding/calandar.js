@@ -29,7 +29,7 @@ class Calandar extends Component {
                         Our CEO set aside time to meet with you personally so that you can hit the ground running.
                         If you would like to maximize your use of Moonshot Insights please reserve a time below that would work best for you.
                     </div>
-                    <div className="calendly-inline-widget marginTop10px marginBottom20px" data-url="https://calendly.com/kyle-treige-moonshot/30min" style={{minWidth:"320px", height: "370px", zIndex:"100"}}></div>
+                    <div className="calendly-inline-widget calendly marginTop10px marginBottom20px" data-url="https://calendly.com/kyle-treige-moonshot/30min" style={{height: "370px", zIndex:"100"}}></div>
                     <div className="previous-next-area font16px center paddingBottom40px">
                         <div
                             className="previous noselect clickable underline inlineBlock"

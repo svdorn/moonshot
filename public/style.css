@@ -786,6 +786,10 @@ form > h1 {
     padding: 10px 5%;
 }
 
+.calendly > iframe {
+    max-width: 500px;
+}
+
 .invite-admins > div,
 .invite-employees > div,
 .congratulations > div,
