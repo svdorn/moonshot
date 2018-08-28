@@ -1,9 +1,9 @@
 .easeLogo {
-    height: 80px;
+    height: 70px;
 }
 
 @media only screen and (max-width: 500px) {
     .easeLogo {
-        height: 60px;
+        height: 50px;
     }
 }

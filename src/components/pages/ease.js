@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {  } from "../../actions/usersActions";
 import {  } from "../../miscFunctions";
 import MetaTags from 'react-meta-tags';
+import { goTo } from "../../miscFunctions";
 
 import "./ease.css";
 
@@ -39,7 +40,7 @@ class Ease extends Component {
             <Select
                 disableUnderline={true}
                 classes={{
-                    root: "selectRootWhite font20px",
+                    root: "selectRootWhite font20px font16pxUnder500",
                     icon: "selectIconWhiteImportant selectIconMargin"
                 }}
                 value={position}
@@ -57,7 +58,23 @@ class Ease extends Component {
     }
 
     handleSignUp() {
-        
+        const position = this.state.position;
+        let URL = "/signup?code=";
+        let code = "";
+        if (position === "Content Marketer") {
+            code = "d08d646c25";
+        } else if (position === "Web Developer") {
+            code = "215391f4c5";
+        } else if (position === "Graphic Designer") {
+            code = "cc53e5a6f4";
+        } else if (position === "Digital Media Buyer or Planner") {
+            code = "1269aec924";
+        } else if (position === "Copywriting Marketer") {
+            code = "fef356ac1e";
+        }
+
+        URL += code;
+        goTo(URL);
     }
 
     render() {
@@ -70,7 +87,7 @@ class Ease extends Component {
                 <div className="marginTop40px">
                     <img src={"/logos/EaseLogo" + this.props.png} styleName="easeLogo"/>
                 </div>
-                <div className="font18px marginTop10px marginBottom10px primary-cyan">
+                <div className="font18px font16pxUnder500 marginTop10px marginBottom10px primary-cyan" style={{width: "88%", margin:"auto"}}>
                     Select the position you would like to apply for below.
                 </div>
                 <div className="font30px font16pxUnder400 marginTop20px marginBottom20px">

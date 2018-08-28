@@ -4783,6 +4783,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         font-size: 10px !important;
     }
 
+    .selectIconMargin { margin-top: -2px; }
+
+
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
 
 
