@@ -67,25 +67,14 @@ class MyEvaluationsPreview extends Component {
         if (editing) {
             clickableArea = (
                 <div className="secondary-gray font16px font14pxUnder800 marginTop10px">
-                    {this.props.finalized ?
-                        <div>
-                            <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className="underline clickable" style={{display: "inline-block"}}>
-                                Candidate Results
-                            </div>
-                            <div onClick={() => this.goTo(`/myEmployees?position=${this.props.name}`)} className="underline marginLeft20px clickable" style={{display: "inline-block"}}>
-                                Grade Employees
-                            </div>
+                    <div>
+                        <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className="underline clickable" style={{display: "inline-block"}}>
+                            Candidate Results
                         </div>
-                        :
-                        <div>
-                            <div className="underline blur3px"style={{display: "inline-block"}}>
-                                Candidate Results
-                            </div>
-                            <div className="underline marginLeft20px blur3px" style={{display: "inline-block"}}>
-                                Grade Employees
-                            </div>
+                        <div onClick={() => this.goTo(`/myEmployees?position=${this.props.name}`)} className="underline marginLeft20px clickable" style={{display: "inline-block"}}>
+                            Grade Employees
                         </div>
-                    }
+                    </div>
                 </div>
             );
 
