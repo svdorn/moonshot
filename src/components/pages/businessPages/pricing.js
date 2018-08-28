@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import MetaTags from 'react-meta-tags';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import HoverTip from '../../miscComponents/hoverTip';
@@ -266,6 +267,10 @@ class Pricing extends Component {
     render() {
         return (
             <div className="jsxWrapper blackBackground fillScreen paddingBottom20px">
+                <MetaTags>
+                    <title>Pricing | Moonshot</title>
+                    <meta name="description" content="View the pricing structure for hiring candidates."/>
+                </MetaTags>
                 { this.pricingSection() }
                 { this.learnFromHiresSection() }
             </div>
