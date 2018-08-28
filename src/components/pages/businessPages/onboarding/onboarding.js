@@ -12,6 +12,7 @@ import AutomateInvites from "./automateInvites/automateInvites";
 import InviteCadence from './inviteCadence';
 import InviteAdmins from "./inviteAdmins";
 import InviteEmployees from "./inviteEmployees";
+import Calandar from './calandar';
 import YouTube from 'react-youtube';
 import OnboardingProgress from "../../../miscComponents/onboardingProgress";
 import AddUserDialog from '../../../childComponents/addUserDialog';
@@ -192,6 +193,11 @@ class Onboarding extends Component {
                 name: "Invite Employees",
                 length: "30s",
                 step: 7
+            },
+            {
+                name: "1-on-1 Call",
+                length: "30s",
+                step: 8
             }
         ];
 
@@ -314,13 +320,19 @@ class Onboarding extends Component {
                     );
                     break;
                 case 8:
+                    stepName = "1-on-1 Call";
+                    body = (
+                        <Calandar {...childProps} />
+                    );
+                    break;
+                case 9:
                     stepName = "Congratulations!"
                     body = this.createCongratulations();
                     break;
             }
         }
 
-        const NUM_ONBOARDING_STEPS = 8;
+        const NUM_ONBOARDING_STEPS = 9;
 
         return (
             <div className="fillScreen">
