@@ -23,8 +23,6 @@ class Onboarding extends Component {
     constructor(props) {
         super(props);
 
-        //name, percent, finished (Bool)
-
         this.state = {
 
         };
@@ -96,29 +94,26 @@ class Onboarding extends Component {
     // the final page, all it does is show the onboarding bar as complete and
     // brings the user to the evals page
     createCongratulations() {
+        console.log("currentUser: ", this.props.currentUser);
         return (
             <div className="congratulations primary-white center" style={{height: "100%"}}>
                 <div>
                     <div className="font16px text-left">
-                        You made it! The launch date of your first evaluation
-                        takes a few days from the time you activate your account
-                        to go live. We{"'"}ll let you know the second it{"'"}s
-                        ready. In the meantime, you can see its status {"in "}
+                        Welcome to Moonshot Insights! Your evaluation is live. To ensure your success, we aligned our incentives
+                        by enabling you to invite an unlimited number of candidates and employees. The more candidates that we evaluate,
+                        the less likely you are to miss out on hiring top performers. Additionally, we constantly improve candidate predictions
+                        when we generate and learn from more of your hiring and performance data. To further align incentives, you only pay us when
+                        you hire a high-potential performer who stays at your company, as you can see in&nbsp;
                         <span
-                            onClick={() => this.goTo("/myEvaluations")}
+                            onClick={() => goTo("/pricing")}
                             className="primary-cyan pointer"
                         >
-                            evaluations
+                            Pricing
                         </span>.
+                        Your first hire with Moonshot Insights is free. From now on, every hire you make should be better than the last, because
+                        you have more data and context on how to make better hiring decisions.
                     </div>
-                    <div
-                        className="medium button round-4px background-primary-cyan"
-                        style={{padding: "3px 30px", margin: "0 auto"}}
-                        onClick={() => this.goTo("/myEvaluations")}
-                    >
-                        Evaluations
-                    </div>
-                    <div className="previous-next-area font16px center">
+                    <div className="previous-next-area font16px center paddingBottom40px">
                         <div
                             className="previous noselect clickable underline inlineBlock"
                             onClick={this.handlePrevious.bind(this)}
@@ -127,9 +122,9 @@ class Onboarding extends Component {
                         </div>
                         <div
                             className="button noselect round-4px background-primary-cyan inlineBlock"
-                            onClick={() => this.goTo("/myEvaluations")}
+                            onClick={() => goTo("/myEvaluations")}
                         >
-                            Finish
+                            Get Started
                         </div>
                     </div>
                 </div>
