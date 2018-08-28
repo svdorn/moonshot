@@ -206,7 +206,7 @@ class BusinessSignup extends Component {
                                             className="primary-cyan hover-primary-cyan"
                                         >privacy policy</a>
                                         {" and "}
-                                        <a  href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf"
+                                        <a  href="https://www.docdroid.net/pGBcFSh/moonshot-insights-agreement.pdf"
                                             target="_blank"
                                             className="primary-cyan hover-primary-cyan"
                                         >terms of service</a>.
