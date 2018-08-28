@@ -2510,6 +2510,7 @@ button.link {
 .myCandidates .position-select-root { max-width: 180px; }
 .selectIconWhiteImportant { color: white !important; }
 .selectIconGrayImportant { color: #5E5E5E !important; }
+.selectIconMargin { margin-top: -5px; }
 .topOptionWhite { color: white; }
 .topOptionGray { color: #5E5E5E; }
 .mobile .myCandidatesSelect > div { margin-bottom: 0; }
@@ -4781,6 +4782,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .settingsTabs > div > button {
         font-size: 10px !important;
     }
+
+    .selectIconMargin { margin-top: -2px; }
+
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
 
