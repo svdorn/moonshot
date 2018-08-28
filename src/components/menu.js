@@ -42,6 +42,8 @@ class Menu extends Component {
             dropDownSelected = "Add User";
         } else if (this.props.location.pathname === '/billing') {
             dropDownSelected = "Billing";
+        } else if (this.props.location.pathname === '/pricing') {
+            dropDownSelected = "Pricing";
         }
         // class for the header, only needed for pages with unusual menus
         const headerClass = props.location.pathname === "/" && window.scrollY === 0 ? "noShadow" : "";
@@ -74,6 +76,10 @@ class Menu extends Component {
         } else if (pathname === '/billing') {
             if (this.state.dropDownSelected !== "Billing") {
                 this.setState({dropDownSelected: "Billing"})
+            }
+        } else if (pathname === '/pricing') {
+            if (this.state.dropDownSelected !== "Pricing") {
+                this.setState({dropDownSelected: "Pricing"})
             }
         } else {
             // set dropdown to be on Profile if not on settings or onboarding pages
@@ -128,6 +134,9 @@ class Menu extends Component {
                 break;
             case "Billing":
                 goTo("/billing");
+                break;
+            case "Pricing":
+                goTo("/pricing");
                 break;
             default:
                 break;
@@ -323,6 +332,9 @@ class Menu extends Component {
             } else if (pathname === '/billing') {
                 dropdownClass += " currentRoute";
                 underlineWidth = "46px";
+            } else if (pathname === '/pricing') {
+                dropdownClass += " currentRoute";
+                underlineWidth = "50px";
             } else if (nonFixedMenuPages.includes(pathFirstPart)){
                 additionalHeaderClass += " notFixed";
             }
@@ -394,6 +406,7 @@ class Menu extends Component {
                     {optionType: "url", title: "Add User", url: "/addUser"},
                     {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "url", title: "Billing", url: "/billing"},
+                    {optionType: "url", title: "Pricing", url: "/pricing"},
                     {optionType: "signOut"}
                 ]}
             ];
