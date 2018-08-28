@@ -1620,21 +1620,21 @@ async function getPosition(businessId, positionId) {
         // get the business with that id and only the matching position
         const query = {
             "_id": businessId,
-            "positions": {
-                "$elemMatch": {
-                    "_id": positionId
-                }
-            }
         }
 
         // get the one business that satisfies the query
         try { var business = await Businesses.findOne(query); }
         catch (getBizError) { return reject(getBizError); }
 
+        // get the index of the position
+        const posIndex = business.positions.findIndex(
+            pos => pos._id.toString() === positionId.toString()
+        );
+
         // if no business was found with that position id and business id
         if (!business) { return reject(`No business with id ${businessId} and a position with id: ${positionId}`); }
 
         // only one position can have that id, so must be the one and only position
-        return resolve(business.positions[0]);
+        return resolve(business.positions[posIndex]);
     });
 }

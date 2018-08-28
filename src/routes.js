@@ -23,6 +23,7 @@ import Influencer from './components/pages/influencer';
 import Main from './main';
 import AuthenticatedComponent from './components/authenticatedComponent/authenticatedComponent';
 import Settings from './components/pages/settings/settings';
+import Ease from './components/pages/ease';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
@@ -74,6 +75,7 @@ const routes = (
             <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
             <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={businessAdminUserTypes} firstBusinessUser={true} />
             <Route path="businessSignup" component={BusinessSignup} />
+            <Route path="ease" component={Ease} />
             <Route path="chatbot" component={Chatbot} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
             <Route path="listing" component={Listing} />
