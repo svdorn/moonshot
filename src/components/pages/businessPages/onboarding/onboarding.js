@@ -94,7 +94,6 @@ class Onboarding extends Component {
     // the final page, all it does is show the onboarding bar as complete and
     // brings the user to the evals page
     createCongratulations() {
-        console.log("currentUser: ", this.props.currentUser);
         return (
             <div className="congratulations primary-white center" style={{height: "100%"}}>
                 <div>
