@@ -564,9 +564,7 @@ function createPosition(name, type) {
         ]
     }
 
-    console.log("Dev Factors: ", devFactors);
     console.log("positionType: ", bizPos.positionType);
-    console.log("bizPos: ", bizPos);
 
     // TODO: create different default mappings when Justin gives them to us
     const salesFactors = devFactors;
@@ -596,9 +594,7 @@ function createPosition(name, type) {
         bizPos.growthFactors = productFactors.growthFactors;
         bizPos.idealFactors = productFactors.idealFactors;
     }
-
-    console.log("bizPos after: ", bizPos);
-
+    
     return bizPos;
 }
 

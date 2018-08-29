@@ -114,7 +114,7 @@ class MyEvaluations extends Component {
             const businessId = user.businessInfo.businessId;
             const verificationToken = user.verificationToken;
             const positionName = vals.position;
-            const positionType = user.businessInfo.businessId;
+            const positionType = this.state.positionType;
 
             this.props.startLoading();
 
