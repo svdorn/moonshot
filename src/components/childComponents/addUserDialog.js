@@ -50,6 +50,10 @@ class AddUserDialog extends Component {
 
 
     componentDidMount() {
+        this.getPositions();
+    }
+
+    getPositions() {
         let self = this;
         axios.get("/api/business/positions", {
             params: {
@@ -95,6 +99,9 @@ class AddUserDialog extends Component {
         }
         // set the state if needed
         if (shouldSetState) {
+            if (this.props.modalOpen) {
+                this.getPositions();
+            }
             this.setState(newState);
         }
     }

@@ -23,6 +23,7 @@ import axios from 'axios';
 import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import CreatingEvalProgress from '../../miscComponents/creatingEvalProgress';
+import { goTo } from '../../../miscFunctions';
 
 const required = value => (value ? undefined : 'This field is required.');
 
@@ -59,13 +60,6 @@ class MyEvaluations extends Component {
             open: false,
             screen: 1
         }
-    }
-
-    goTo(route) {
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
     }
 
     handleOpen = () => {
@@ -207,12 +201,13 @@ class MyEvaluations extends Component {
         this.setState({
             open: false
         }, () => {
+            goTo('/myEvaluations');
             self.props.openAddUserModal();
         });
     }
 
     startPsychEval() {
-        this.goTo("/psychometricAnalysis");
+        goTo("/psychometricAnalysis");
     }
 
     render() {
