@@ -412,7 +412,7 @@ class MyEvaluations extends Component {
         } else if (screen === 2) {
                     dialogBody = (
                         <div>
-                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"30px auto"}}>
                                 Evaluation Added
                             </div>
                             <div className="primary-white-important font16px font14pxUnder700 font12pxUnder400" style={{width:"90%", margin:"10px auto 0"}}>
