@@ -16,14 +16,13 @@ import {
 import {connect} from 'react-redux';
 import { browserHistory } from "react-router";
 import {bindActionCreators} from 'redux';
-import { addEvaluationEmail, addNotification } from '../../../actions/usersActions';
+import { addNotification, startLoading, stopLoading, openAddUserModal } from '../../../actions/usersActions';
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import CreatingEvalProgress from '../../miscComponents/creatingEvalProgress';
-
 
 const required = value => (value ? undefined : 'This field is required.');
 
@@ -51,8 +50,12 @@ class MyEvaluations extends Component {
             logo: undefined,
             // name of the business the user works for - doesn't apply for candidates
             businessName: undefined,
-            // the time estimated (in hours) for whether the evals are still being created
-            estimatedTime: undefined,
+            // type of position for adding an evaluation
+            positionType: "Developer",
+            // list of position Types
+            positionTypes: ["Developer", "Sales", "Support", "Marketing", "Product"],
+            // error adding a position
+            addPositionError: undefined,
             open: false,
             screen: 1
         }
@@ -71,7 +74,7 @@ class MyEvaluations extends Component {
 
 
     handleClose = () => {
-        this.setState({open: false, screen: 1});
+        this.setState({open: false, screen: 1, addPositionError: undefined});
     };
 
     handleNextScreen = () => {
@@ -81,8 +84,14 @@ class MyEvaluations extends Component {
         }
     }
 
+    handlePositionTypeChange = (event, index) => {
+        const positionType = this.state.positionTypes[index];
+        this.setState({positionType})
+    };
+
     handleSubmit(e) {
         try {
+            let self = this;
             e.preventDefault();
             const vals = this.props.formData.addEval.values;
 
@@ -102,16 +111,28 @@ class MyEvaluations extends Component {
             // get all necessary params
             const user = this.props.currentUser;
             const userId = user._id;
+            const businessId = user.businessInfo.businessId;
             const verificationToken = user.verificationToken;
             const positionName = vals.position;
+            const positionType = user.businessInfo.businessId;
 
-            this.props.addEvaluationEmail(userId, verificationToken, positionName);
-            this.handleNextScreen();
+            this.props.startLoading();
+
+            axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName, positionType})
+            .then(res => {
+                self.positionsUpdate(res.data);
+                self.handleNextScreen();
+                self.props.stopLoading();
+            })
+            .catch(error => {
+                self.props.stopLoading();
+                self.setState({addPositionError: "Error adding position."})
+            })
         }
 
         catch (error) {
-            console.log("Error getting params: ", error);
-            this.props.addNotification("Error submitting new position. Contact support to get your position set up!");
+            this.props.stopLoading();
+            this.setState({addPositionError: "Error adding position."})
             return;
         }
     }
@@ -158,25 +179,36 @@ class MyEvaluations extends Component {
         }
     }
 
-
     // call this after positions are found from back end
     positionsFound(positions, logo, businessName) {
         if (Array.isArray(positions) && positions.length > 0) {
-            // get the estimated time
-            let estimatedTime = undefined;
-            if (positions.length === 1 && !(positions[0].finalized)) {
-                let time = (new Date()) - new Date(positions[0].dateCreated);
-                let hours = 100 - parseInt((time / (1000 * 60 * 60)) % 24);
-                if (hours < 4) {
-                    estimatedTime = 4;
-                } else {
-                    estimatedTime = hours;
-                }
-            }
-            this.setState({ positions, logo, businessName, estimatedTime });
+            this.setState({ positions, logo, businessName });
         } else {
             this.setState({ noPositions: true });
         }
+    }
+
+    positionsUpdate(positions) {
+        if (Array.isArray(positions) && positions.length > 0) {
+            // add the position to the end of the list
+            let position = positions[positions.length-1];
+            let newPositions = this.state.positions;
+            position.completions = 0;
+            position.usersInProgress = 0;
+            newPositions.push(position);
+            this.setState({ positions: newPositions });
+        } else {
+            this.setState({ noPositions: true });
+        }
+    }
+
+    inviteCandidates() {
+        let self = this;
+        this.setState({
+            open: false
+        }, () => {
+            self.props.openAddUserModal();
+        });
     }
 
     startPsychEval() {
@@ -206,6 +238,15 @@ class MyEvaluations extends Component {
                 backgroundColor: "white",
                 position: "absolute",
                 top: "12px"
+            },
+            anchorOrigin: {
+                vertical: "top",
+                horizontal: "left"
+            },
+            menuLabelStyle: {
+
+                fontSize: "18px",
+                color: "white"
             }
         }
 
@@ -325,6 +366,10 @@ class MyEvaluations extends Component {
             );
         }
 
+        const positionTypeItems = this.state.positionTypes.map(function (positionType, index) {
+            return <MenuItem value={positionType} primaryText={positionType} key={index}/>
+        });
+
         // Dialog for adding evaluation
         const screen = this.state.screen;
         let dialogBody = <div></div>;
@@ -334,31 +379,49 @@ class MyEvaluations extends Component {
                             <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
                                 Add Evaluation
                             </div>
-                            <div className="primary-white font16px font14pxUnder700 font12pxUnder400 marginTop10px">
-                                Let us know the position you&#39;d like to add an evaluation for and we&#39;ll contact you within 24 hours confirming next steps.
+                            <div className="primary-white font16px font14pxUnder700 marginTop10px marginBottom10px">
+                                Enter the position name and position type for the evaluation you are adding.
                             </div>
                             <Field
                                 name="position"
                                 component={renderTextField}
-                                label="Position"
+                                label="Position Name"
                                 validate={[required]}
-                                className="marginTop10px"
                             /><br/>
+                            <div className="primary-cyan font18px marginTop10px">
+                                Select a position type:
+                                <br/>
+                                <DropDownMenu value={this.state.positionType}
+                                          onChange={this.handlePositionTypeChange}
+                                          labelStyle={style.menuLabelStyle}
+                                          anchorOrigin={style.anchorOrigin}
+                                          style={{fontSize: "16px"}}
+                                >
+                                    {positionTypeItems}
+                                </DropDownMenu>
+                            </div><br/>
                             <RaisedButton
                                 label="Continue"
                                 type="submit"
-                                className="raisedButtonBusinessHome marginTop20px"
+                                className="raisedButtonBusinessHome marginTop10px"
                                 /><br/>
+                            {this.state.addPositionError ? <div className="secondary-red font16px marginTop10px">{this.state.addPositionError}</div> : null }
+                            {this.props.loading ? <CircularProgress color="white" style={{marginTop: "8px"}}/> : null}
                         </form>
                     );
         } else if (screen === 2) {
                     dialogBody = (
                         <div>
                             <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
-                                We&#39;ll get back to your shortly!
+                                Evaluation Added
                             </div>
                             <div className="primary-white-important font16px font14pxUnder700 font12pxUnder400" style={{width:"90%", margin:"10px auto 0"}}>
-                                Thanks for adding an evaluation, we&#39;ll get back to you shortly with next steps.
+                                Thanks for adding an evaluation, begin inviting candidates here:
+                                <div className="marginTop20px">
+                                        <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={this.inviteCandidates.bind(this)} style={{padding: "5px 17px"}}>
+                                            {"Invite Candidates"}
+                                        </button>
+                                </div>
                             </div>
                         </div>
                     );
@@ -394,20 +457,6 @@ class MyEvaluations extends Component {
                         My Evaluations
                     </div>
                 </div>
-                {
-                    this.state.estimatedTime ?
-                    <div className="marginBottom40px center">
-                        <div className="marginBottom20px font18px font16pxUnder500 secondary-gray">
-                            Estimated time before your {this.state.positions[0].name} Evaluation goes live: {this.state.estimatedTime} hours
-                        </div>
-                        <div>
-                            <CreatingEvalProgress
-                                time={(100 - this.state.estimatedTime)}
-                                style={{margin:"auto"}}/>
-                        </div>
-                    </div>
-                    : null
-                }
                 <div className="marginBottom60px">
                     {evaluations}
                 </div>
@@ -419,7 +468,9 @@ class MyEvaluations extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addNotification,
-        addEvaluationEmail
+        startLoading,
+        stopLoading,
+        openAddUserModal
     }, dispatch);
 }
 

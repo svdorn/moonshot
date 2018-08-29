@@ -29,7 +29,7 @@ const errors = require('./errors.js');
 
 
 const businessApis = {
-    POST_addEvaluationEmail,
+    POST_addEvaluation,
     POST_contactUsEmailNotLoggedIn,
     POST_contactUsEmail,
     POST_updateHiringStage,
@@ -1226,47 +1226,29 @@ function POST_googleJobsLinks(req, res) {
 }
 
 
-// account admin wants to create a new business, so send an email saying to
-// contact them about it
-async function POST_addEvaluationEmail(req, res) {
-    // get all the params
-    const userId = sanitize(req.body.userId);
-    const verificationToken = sanitize(req.body.verificationToken);
-    const positionName = sanitize(req.body.positionName);
+// add an evaluation to the business on request
+async function POST_addEvaluation(req, res) {
+    const { userId, verificationToken, businessId, positionName, positionType } = sanitize(req.body);
 
-    // get the user and the business (to verify and get info)
-    try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
-    catch (error) {
-        console.log("Error finding user/business trying to add an evaluation: ", error);
-        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    try {
+        var business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId);
+    } catch (verifyAccountAdminError) {
+        console.log("Error verifying business account admin: ", error);
+        return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    const bizName = business.name;
-    const userName = user.name;
+     business.positions.push(createPosition(positionName, positionType));
 
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+     try {
+         await business.save();
+     }
+     catch (saveBizError) {
+         console.log("Error saving business with a non-finalized position when adding users: ", saveBizError);
+         console.log("Arrays that were not saved into business: ", candidateEmails, employeeEmails);
+         return res.status(500).send("Error adding users. Contact support or try again.");
+     }
 
-    let subject = `ACTION REQUIRED - ${bizName} requested new position`;
-
-    let content =
-          "<div>"
-        +   `<h2>${userName} at ${bizName} requested a new position</h2>`
-        +   "<h3>Business</h3>"
-        +   `<p>${bizName}</p>`
-        +   "<h3>Position Name</h3>"
-        +   `<p>${positionName}</p>`
-        +   `<h3>${userName}'s Email</h3>`
-        +   `<p>${user.email}</p>`
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
+    return res.json(business.positions);
 }
 
 function POST_contactUsEmailNotLoggedIn(req, res) {
