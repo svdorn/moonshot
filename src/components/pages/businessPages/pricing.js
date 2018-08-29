@@ -6,6 +6,7 @@ import MetaTags from 'react-meta-tags';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import HoverTip from '../../miscComponents/hoverTip';
+import AddUserDialog from '../../childComponents/addUserDialog';
 import { goTo } from "../../../miscFunctions";
 
 import './pricing.css';
@@ -271,6 +272,7 @@ class Pricing extends Component {
                     <title>Pricing | Moonshot</title>
                     <meta name="description" content="View the pricing structure for hiring candidates."/>
                 </MetaTags>
+                <AddUserDialog />
                 { this.pricingSection() }
                 { this.learnFromHiresSection() }
             </div>
