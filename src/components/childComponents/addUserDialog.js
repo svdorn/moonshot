@@ -99,6 +99,7 @@ class AddUserDialog extends Component {
         }
         // set the state if needed
         if (shouldSetState) {
+            // TODO: Austin look at this when you get back (is needed cuz now can add positions in the middle of being on a page, might need positions in redux for account admins now)
             if (this.props.modalOpen) {
                 this.getPositions();
             }
