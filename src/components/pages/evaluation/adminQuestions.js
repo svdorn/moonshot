@@ -93,7 +93,7 @@ class AdminQuestions extends Component {
                     </div>
                 </div>
                 {this.props.loading ?
-                    <CircularProgress />
+                    <CircularProgress color="ff582d" />
                     :
                     <div className="skillContinueButton marginBottom50px marginTop20px"
                          onClick={this.nextQuestion.bind(this)}
@@ -135,7 +135,7 @@ class AdminQuestions extends Component {
                 <div className="adminQuestions question">{question.text}</div>
                 { options }
                 {this.props.loading ?
-                    <CircularProgress />
+                    <CircularProgress color="#ff582d" />
                     :
                     <div
                         className={"marginBottom50px " + buttonClass}
@@ -160,7 +160,7 @@ class AdminQuestions extends Component {
                 </div>
                 <br/>
                 {this.props.loading ?
-                    <CircularProgress />
+                    <CircularProgress color="#ff582d" />
                     :
                     <div
                         style={{marginBottom: "40px", width: "initial"}}
@@ -187,7 +187,7 @@ class AdminQuestions extends Component {
         if (this.props.showIntro) { return this.makeIntroPage(); }
 
         // if the question has not been loaded yet
-        else if (!question) { return <CircularProgress color="#FB553A" />; }
+        else if (!question) { return <CircularProgress color="#ff582d" />; }
 
         else {
             const questionType = question.questionType;

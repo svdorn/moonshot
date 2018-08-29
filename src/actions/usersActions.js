@@ -516,18 +516,6 @@ export function changePasswordForgot(user) {
     }
 }
 
-// Send an email when admin tries to add another evaluation
-export function addEvaluationEmail(userId, verificationToken, positionName){
-    return function(dispatch) {
-        axios.post("api/business/addEvaluationEmail", {userId, verificationToken, positionName})
-            .then(function(response) { } )
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
-
 // Send an email when somebody completes a pathway
 export function completePathway(user){
     return function(dispatch) {

@@ -217,7 +217,7 @@ form > h1 {
 }
 
 .evalPortionIntro { text-align: center }
-.evalPortionIntro > div:not(:first-child) {
+.evalPortionIntro > div {
     text-align: left;
     width: 700px;
     display: inline-block;
@@ -782,14 +782,19 @@ form > h1 {
     padding: 3px 30px;
 }
 
-.invite-admins, .invite-employees, .congratulations, .google-jobs {
+.invite-admins, .invite-employees, .congratulations, .google-jobs .calandar-calendly {
     padding: 10px 5%;
+}
+
+.calendly > iframe {
+    max-width: 500px;
 }
 
 .invite-admins > div,
 .invite-employees > div,
 .congratulations > div,
-.google-jobs > div {
+.google-jobs > div,
+.calandar-calendly > div {
     display: flex;
     flex-direction: column;
     justify-content: space-around;

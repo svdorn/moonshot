@@ -19,7 +19,7 @@ class AgreeToTerms extends Component {
         }
         // agreement to add for non-candidates (account admins, managers, employees)
         else {
-            agreements.push({name: "Terms and Conditions", link: "https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf", type: "foreign"});
+            agreements.push({name: "Terms of Service", link: "https://www.docdroid.net/pGBcFSh/moonshot-insights-agreement.pdf", type: "foreign"});
         }
 
         // if userChecked is true, render the child component

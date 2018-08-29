@@ -75,7 +75,7 @@ class PsychAnalysis extends Component {
                 </div>
                 <br/>
                 {this.props.loading ?
-                    <CircularProgress />
+                    <CircularProgress color="#ff582d" />
                     :
                     <div
                         style={{marginBottom: "40px", width: "initial"}}
@@ -195,7 +195,7 @@ class PsychAnalysis extends Component {
         if (this.props.showIntro) { return this.makeIntroPage(); }
 
         // if the question has not been loaded yet
-        else if (!questionInfo) { return <CircularProgress color="#FB553A" />; }
+        else if (!questionInfo) { return <CircularProgress color="#76defe" />; }
 
         // the typical interface with the slider
         else if (questionInfo.body) { return this.createContent(); }
