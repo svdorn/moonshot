@@ -201,7 +201,6 @@ class MyEvaluations extends Component {
         this.setState({
             open: false
         }, () => {
-            goTo('/myEvaluations');
             self.props.openAddUserModal();
         });
     }
