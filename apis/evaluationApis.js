@@ -1,6 +1,7 @@
 const Users = require('../models/users.js');
 const Psychtests = require('../models/psychtests.js');
 const Psychquestions = require('../models/psychquestions.js');
+const Cognitivetests = require('../models/cognitivetests.js');
 const Skills = require('../models/skills.js');
 const Businesses = require('../models/businesses.js');
 const Adminqs = require("../models/adminqs");
@@ -294,6 +295,94 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     return res.status(200).send(toReturn);
 }
 
+// start/answer a question for skill tests
+module.exports.POST_answerCognitiveQuestion = async function(req, res) {
+    const { userId, verificationToken, selectedId, businessId, positionId } = sanitize(req.body);
+
+    // get the user
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("Error getting user while trying to answer cognitive questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // user has to be taking an eval to answer a skill question
+    if (!user.evalInProgress) {
+        console.log("No eval in progress when user tried to answer a cognitive question.");
+        return res.status(400).send({ notSignedUp: true });
+    }
+
+    // whether the user should be returned to the front end
+    let returnUser = false;
+
+    // if the user hasn't started the cognitive test, start it for them
+    if (!user.cognitiveTest || !user.cognitiveTest.startDate) {
+        try { user.cognitiveTest = await newCognitiveTest(); }
+        catch (startCognitiveError) {
+            console.log("Error starting cognitive test: ", startCognitiveError);
+            return res.status(500).send({ serverError: true });
+        }
+    }
+
+    // get the skill from the user object
+    let gcaTest = user.cognitiveTest;
+
+    // if the user has a current question and an answer is given, save the answer
+    if (gcaTest.currentQuestion && gcaTest.currentQuestion.questionId && typeof selectedId === "string") {
+        user.cognitiveTest = addCognitiveAnswer(selectedId);
+    }
+
+    // checks if the test is over, if not gets a new question
+    try { var updatedTest = await getNewCognitiveQuestion(user.cognitiveTest); }
+    catch (getQuestionError) {
+        console.log("Error getting new cognitive question: ", getQuestionError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // what will be returned to the front end
+    let toReturn;
+
+    // if the user already answered all the cognitive questions, they're done
+    // move on to the next stage
+    if (updatedTest.finished === true) {
+        // mark the cognitive test complete and score it
+        user.cognitiveTest = markCognitiveComplete(user.cognitiveTest);
+
+        // calculate the new evaluation state
+        try {
+            // move on to the next component, potentially finishing eval
+            const { user: updatedUser, evaluationState } = await advance(user, businessId, positionId);
+            // will return the user and the new eval state
+            user = updatedUser;
+            toReturn = { user: frontEndUser(user), evaluationState };
+        }
+        catch (advanceError) {
+            console.log("Error advancing after skill finished: ", advanceError);
+            return res.status(500).send({ serverError: true });
+        }
+    }
+
+    // if not done with the skill questions
+    else {
+        // save the question as the current question for the user
+        user.cognitiveTest = updatedUser.cognitiveTest;
+        // return the new question to answer
+        toReturn = {
+            evaluationState: { componentInfo: updatedPsych.cognitiveTest.currentQuestion, showIntro: false },
+            user
+        };
+    }
+
+    // save the user
+    try { await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user while trying to answer skill question: ", saveUserError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send(toReturn);
+}
+
 
 // start the next skill in an eval
 async function startNewSkill(user) {
@@ -421,6 +510,19 @@ function markPsychComplete(psychTest) {
     return psychTest;
 }
 
+// mark the cognitive test as finished
+function markCognitiveComplete(cognitiveTest) {
+    cognitiveTest.inProgress = false;
+
+    if (!cognitiveTest.endDate) {
+        const NOW = new Date();
+        cognitiveTest.endDate = NOW;
+        cognitiveTest.totalTime = NOW.getTime() - cognitiveTest.startDate.getTime();
+    }
+
+    return cognitiveTest;
+}
+
 
 // returns a psych test with the given answer
 function addPsychAnswer(psych, answer) {
@@ -534,6 +636,46 @@ async function newPsychTest() {
     });
 }
 
+// return a fresh new just-started cognitive eval
+async function newCognitiveTest() {
+    return new Promise(async function(resolve, reject) {
+        // get all the cognitive questions from the db
+        try { var dbCognitive = await Cognitivetests.findOne({}); }
+        catch (getCognitiveError) { reject(getCognitiveError); }
+
+        // get the first question from the cognitive test
+        const question = dbCognitive.levels[0].questions[0];
+
+        // the id of the first question
+        const questionId = question._id;
+
+        // figure out id of correct answer for that question
+        const correctAnswer = question.options.find(opt => opt.isCorrect)._id;
+
+        // mark it as the current question
+        const currentQuestion = {
+            levelNumber: 1,
+            levelIndex: 0,
+            questionId,
+            startDate: new Date(),
+            correctAnswer
+        }
+
+        // new empty cognitive test
+        resolve({
+            inProgress: true,
+            // starting right now
+            startDate: new Date(),
+            currentLevel: 1,
+            levels: [{
+                levelNumber: 1,
+                questions: []
+            }],
+            currentQuestion
+        });
+    });
+}
+
 
 // adds an answer for the current skill test question
 function addSkillAnswer(userSkill, selectedId) {
@@ -578,6 +720,47 @@ function addSkillAnswer(userSkill, selectedId) {
 
     // return the updated skill
     return userSkill;
+}
+
+// adds an answer for the current cognitive test question
+function addCognitiveAnswer(selectedId) {
+    // make sure arguments are valid
+    if (typeof selectedId !== "string") {
+        return reject(`Invalid arguments to addCognitiveAnswer. selectedId: ${selectedId}`);
+    }
+
+    // get the current question from the user object
+    let userCurrQ = user.cognitiveTest.currentQuestion;
+
+    // get the current level - only allowing skills with one level at the moment
+    let userLevel = user.cognitiveTest.levels[0];
+
+    // only one answer can be correct, see if the answer is correct
+    const isCorrect = userCurrQ.correctAnswer.toString() === selectedId.toString();
+
+    // time meta-data
+    const startDate = new Date(userCurrQ.startDate);
+    const endDate = new Date();
+    const totalTime = endDate.getTime() - startDate.getTime();
+
+    // add the question to the list of finished questions
+    userLevel.questions.push({
+        questionId: userCurrQ.questionId,
+        isCorrect,
+        answerId: selectedId,
+        startDate,
+        endDate,
+        totalTime
+    });
+
+    // save this info back to the user object
+    user.cognitiveTest.levels[0] = userLevel;
+
+    // delete the current question
+    user.cognitiveTest.currentQuestion = undefined;
+
+    // return the updated test
+    return user.cognitiveTest;
 }
 
 
@@ -1073,7 +1256,7 @@ async function getEvaluationState(options) {
             evaluationState = await addPsychInfo(user, evaluationState);
 
             /* GCA - ALL EVALS */
-            // TODO: GCA
+            evaluationState = await addCognitiveInfo(user, evaluationState);
 
             /* SKILLS - SOME EVALS */
             evaluationState = await addSkillInfo(user, evaluationState, position);
@@ -1450,6 +1633,38 @@ async function addSkillInfo(user, evaluationState, position) {
     });
 }
 
+// add in info about the current state of cognitive
+async function addCognitiveInfo(user, evaluationState) {
+    return new Promise(async function(resolve, reject) {
+        const cognitive = user.cognitiveTest;
+
+        // if the user has finished the psych eval, add it to the finished pile
+        if (cognitive && cognitive.endDate) {
+            evaluationState.completedSteps.push({ stage: "Cognitive" });
+        }
+
+        // if there is already a current component, throw cognitive in the incomplete pile
+        else if (evaluationState.component){
+            evaluationState.incompleteSteps.push({ stage: "Cognitive" });
+        }
+
+        // at this point, cognitive must be current component
+        else {
+            // mark the current stage as the psych test
+            evaluationState.component = "Cognitive";
+
+            // if the user has not started the psych test, show the intro for it
+            const cognitiveStarted = cognitive && cognitive.currentQuestion && cognitive.startDate;
+            if (!cognitiveStarted) { evaluationState.showIntro = true; }
+
+            // otherwise give the user their current psych question
+            else { evaluationState.componentInfo = cognitiveStarted.currentQuestion; }
+        }
+
+        resolve(evaluationState);
+    });
+}
+
 
 // gets the next psych question for a user, or return finished if it's done
 async function getNewPsychQuestion(psych) {
@@ -1562,6 +1777,58 @@ async function getNewSkillQuestion(userSkill) {
 
         // return the new user's skill object and question
         return resolve({ userSkill, componentQuestion });
+    });
+}
+async function getNewCognitiveQuestion(cognitiveTest) {
+    return new Promise(async function(resolve, reject) {
+        // make sure the user cognitive test is valid
+        if (typeof cognitiveTest !== "object") { reject(`Invalid cognitiveTest: ${cognitiveTest}`)}
+
+        // get the cognitive test from the db
+        try { var dbCognitive = await Cognitivetests.findOne({}); }
+        catch (getCognitiveError) { reject(getCognitiveError); }
+
+        // get the current (only) level
+        let userLevel = cognitiveTest.levels[0];
+
+        // if the user has answered every question in the only level of the test
+        const dbQuestions = dbCognitive.levels[0].questions;
+        if (userLevel.questions.length === dbQuestions.length) {
+            // test is finished, return saying so
+            return resolve({ finished: true });
+        }
+
+        // otherwise make an object that lets us know which question ids have been answered
+        let answeredIds = {};
+        userLevel.questions.forEach(q => answeredIds[q.questionId.toString()] = true);
+
+        // get a list of questions that have not been answered
+        const availableQs = dbQuestions.filter(q => !answeredIds[q._id.toString()]);
+
+        // get a random question from that list
+        const questionIdx = randomInt(0, availableQs.length - 1);
+        const question = availableQs[questionIdx];
+
+        // figure out id of correct answer for that question
+        const correctAnswer = question.options.find(opt => opt.isCorrect)._id;
+
+        // mark it as the current question
+        cognitiveTest.currentQuestion = {
+            levelNumber: 1,
+            levelIndex: 0,
+            questionId: question._id,
+            startDate: new Date(),
+            correctAnswer
+        }
+
+        // create the question object for the eval component
+        const componentQuestion = {
+            body: question.body,
+            options: question.options.map(opt => { return { body: opt.body, _id: opt._id } } )
+        }
+
+        // return the new user's skill object and question
+        return resolve({ cognitiveTest, componentQuestion });
     });
 }
 

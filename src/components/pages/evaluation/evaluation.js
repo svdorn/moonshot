@@ -288,7 +288,7 @@ class Evaluation extends Component {
         switch (evaluation.component) {
             case "Admin Questions": { content = <AdminQuestions {...attrs} />; break; }
             case "Psychometrics": { content = <PsychTest {...attrs} />; break; }
-            case "Cognition": { content = <div>GCA eval</div>; break; }
+            case "Cognition": { content = <div><CognitiveTest {...attrs} /></div>; break; }
             case "Skill": { content = <SkillTest {...attrs} />; break; }
             case "Finished": { content = this.finishedPage(); break; }
             default: { content = <div>Hmm. Something is wrong. Try refreshing.</div>; break; }
