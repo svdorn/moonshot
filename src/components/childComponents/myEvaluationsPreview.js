@@ -112,7 +112,7 @@ class MyEvaluationsPreview extends Component {
 
             estimatedLength = (
                 <div className="primary-white font16px font14pxUnder800 font12pxUnder400 marginTop20px marginBottom10px">Estimated Length:
-                    <div className="primary-cyan" style={{display:"inline-block"}}>&nbsp;25 mins</div>
+                    <div className="primary-cyan" style={{display:"inline-block"}}>&nbsp;{this.props.length ? <div className="inlineBlock">{this.props.length} mins</div>:<div className="inlineBlock">25 mins</div>}</div>
                 </div>
             );
 

@@ -1933,6 +1933,7 @@ async function GET_positions(req, res) {
                         businessLogo: business.logo,
                         businessId: business._id,
                         positionName: bizPosition.name,
+                        length: bizPosition.length,
                         positionId: bizPosition._id,
                         skills: bizPosition.skillNames,
                         assignedDate: userPosition.assignedDate,

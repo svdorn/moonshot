@@ -164,9 +164,8 @@ function POST_candidate(req, res) {
         if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
 
         if (process.env.NODE_ENV === "production") {
-
-        // Add companies to user list for intercom
-        let companies = [];
+            // Add companies to user list for intercom
+            let companies = [];
             if (user.userType === "accountAdmin") {
                 try {
                     var intercomId = await Businesses.findById(businessId).select("intercomId");

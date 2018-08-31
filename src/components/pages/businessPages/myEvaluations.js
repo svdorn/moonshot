@@ -277,6 +277,7 @@ class MyEvaluations extends Component {
 
             evaluations = this.state.positions.map(position => {
                 key++;
+                console.log("position in my evals: ", position);
                 // make sure position is the right type
                 if (position && typeof position === "object") {
                     let attributes = {};
@@ -306,6 +307,7 @@ class MyEvaluations extends Component {
                             attributes.logo = position.businessLogo;
                             attributes.name = position.positionName;
                             attributes.company = position.businessName;
+                            attributes.length = position.length;
                             attributes.assignedDate = position.assignedDate;
                             attributes.startDate = position.startDate;
                             attributes.completedDate = position.completedDate;
