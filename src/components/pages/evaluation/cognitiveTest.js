@@ -124,6 +124,7 @@ class CognitiveTest extends Component {
         const answers = questionInfo.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
             const selectedClass = isSelected ? " selected" : "";
+            console.log("option: ", option);
             return (
                 <div key={option.body}
                      onClick={() => self.selectAnswer(option._id)}

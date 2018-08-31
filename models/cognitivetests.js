@@ -31,7 +31,7 @@ var cognitiveSchema = mongoose.Schema({
             options: [{
                 // the text of the image link. for now only doing multiple choice questions
                 // with text-only answers
-                img: String,
+                body: String,
                 // whether this answer is the correct one
                 isCorrect: Boolean,
             }]
