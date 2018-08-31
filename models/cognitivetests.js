@@ -39,5 +39,5 @@ var cognitiveSchema = mongoose.Schema({
     }]
 });
 
-var Cognitive = mongoose.model('Cognitive', cognitiveSchema);
-module.exports = Cognitive;
+var Cognitivetests = mongoose.model('Cognitivetests', cognitiveSchema);
+module.exports = Cognitivetests;

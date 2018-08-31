@@ -71,6 +71,9 @@ class CognitiveTest extends Component {
         this.setState({ agreedToTerms: !this.state.agreedToTerms });
     }
 
+    // generic error
+    errorPage() { return <div>Something is wrong. Try refreshing.</div>; }
+
     // rendered if the user is on the first skill test of an eval and hasn't agreed to the test terms
     userAgreementPage() {
         const buttonClass = "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
@@ -147,6 +150,9 @@ class CognitiveTest extends Component {
 
 
     render() {
+
+        console.log("in cognitive test");
+        console.log("evaluation state: ", this.props.evaluationState);
         // all info about the current question to answer
         const questionInfo = this.props.questionInfo;
 
@@ -181,6 +187,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        evaluationState: state.users.evaluationState,
         questionInfo: state.users.evaluationState.componentInfo,
         showIntro: state.users.evaluationState.showIntro,
         loading: state.users.loadingSomething,

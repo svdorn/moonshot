@@ -188,6 +188,7 @@ class PsychAnalysis extends Component {
 
 
     render() {
+        console.log("currentUser: ", this.props.currentUser);
         // all info about the current question to answer
         const questionInfo = this.props.questionInfo;
 

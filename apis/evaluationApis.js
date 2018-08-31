@@ -365,12 +365,15 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
     // if not done with the skill questions
     else {
         // save the question as the current question for the user
-        user.cognitiveTest = updatedUser.cognitiveTest;
+        user.cognitiveTest = updatedTest.cognitiveTest;
+        console.log("updated currQ: ", updatedTest.cognitiveTest.currentQuestion);
+
         // return the new question to answer
         toReturn = {
-            evaluationState: { componentInfo: updatedPsych.cognitiveTest.currentQuestion, showIntro: false },
+            evaluationState: { componentInfo: updatedTest.cognitiveTest.currentQuestion, showIntro: false },
             user
         };
+        console.log("to return: ", toReturn);
     }
 
     // save the user
@@ -639,27 +642,6 @@ async function newPsychTest() {
 // return a fresh new just-started cognitive eval
 async function newCognitiveTest() {
     return new Promise(async function(resolve, reject) {
-        // get all the cognitive questions from the db
-        try { var dbCognitive = await Cognitivetests.findOne({}); }
-        catch (getCognitiveError) { reject(getCognitiveError); }
-
-        // get the first question from the cognitive test
-        const question = dbCognitive.levels[0].questions[0];
-
-        // the id of the first question
-        const questionId = question._id;
-
-        // figure out id of correct answer for that question
-        const correctAnswer = question.options.find(opt => opt.isCorrect)._id;
-
-        // mark it as the current question
-        const currentQuestion = {
-            levelNumber: 1,
-            levelIndex: 0,
-            questionId,
-            startDate: new Date(),
-            correctAnswer
-        }
 
         // new empty cognitive test
         resolve({
@@ -670,8 +652,7 @@ async function newCognitiveTest() {
             levels: [{
                 levelNumber: 1,
                 questions: []
-            }],
-            currentQuestion
+            }]
         });
     });
 }
@@ -1820,6 +1801,7 @@ async function getNewCognitiveQuestion(cognitiveTest) {
             startDate: new Date(),
             correctAnswer
         }
+        console.log(cognitiveTest);
 
         // create the question object for the eval component
         const componentQuestion = {

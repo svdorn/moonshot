@@ -193,6 +193,7 @@ app.post("/evaluation/start", evaluationApis.POST_start);
 app.post("/evaluation/answerAdminQuestion", evaluationApis.POST_answerAdminQuestion);
 app.post("/evaluation/answerPsychQuestion", evaluationApis.POST_answerPsychQuestion);
 app.post("/evaluation/answerSkillQuestion", evaluationApis.POST_answerSkillQuestion);
+app.post("/evaluation/answerCognitiveQuestion", evaluationApis.POST_answerCognitiveQuestion);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
