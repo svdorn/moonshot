@@ -124,7 +124,6 @@ class CognitiveTest extends Component {
         const answers = questionInfo.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
             const selectedClass = isSelected ? " selected" : "";
-            console.log("option: ", option);
             return (
                 <div key={option.body}
                      onClick={() => self.selectAnswer(option._id)}
@@ -152,8 +151,6 @@ class CognitiveTest extends Component {
 
     render() {
 
-        console.log("in cognitive test");
-        console.log("evaluation state: ", this.props.evaluationState);
         // all info about the current question to answer
         const questionInfo = this.props.questionInfo;
 

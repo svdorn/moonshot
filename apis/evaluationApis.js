@@ -1803,14 +1803,11 @@ async function getNewCognitiveQuestion(cognitiveTest) {
             startDate: new Date(),
             correctAnswer
         }
-        console.log(cognitiveTest);
-        console.log("question: ", question);
-
 
         // create the question object for the eval component
         const componentQuestion = {
             body: question.body,
-            options: question.options.map(opt => { console.log("opt: ", opt); return { body: opt.body, _id: opt._id } } )
+            options: question.options.map(opt => { return { body: opt.body, _id: opt._id } } )
         }
 
         // return the new user's skill object and question
