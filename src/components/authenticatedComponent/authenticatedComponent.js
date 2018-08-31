@@ -64,7 +64,7 @@ class AuthenticatedComponent extends Component {
                     necessaryAgreements.push("Terms of Use");
                 }
                 // everyone else (employees, account admins, managers) has to agree to terms and conditions
-                else { necessaryAgreements.push("Terms and Conditions"); }
+                else { necessaryAgreements.push("Terms of Service"); }
                 // assume the agreements have all been agreed to
                 agreedToTerms = true;
                 // go through each necessary agreement ...

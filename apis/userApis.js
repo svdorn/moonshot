@@ -1933,6 +1933,7 @@ async function GET_positions(req, res) {
                         businessLogo: business.logo,
                         businessId: business._id,
                         positionName: bizPosition.name,
+                        length: bizPosition.length,
                         positionId: bizPosition._id,
                         skills: bizPosition.skillNames,
                         assignedDate: userPosition.assignedDate,
@@ -1968,7 +1969,7 @@ async function POST_agreeToTerms(req, res) {
         user = await getAndVerifyUser(userId, verificationToken);
 
         // make sure the terms and conditions being agreed to are valid
-        const validAgreements = ["Privacy Policy", "Terms of Use", "Affiliate Agreement", "Service Level Agreement", "Terms and Conditions"];
+        const validAgreements = ["Privacy Policy", "Terms of Use", "Affiliate Agreement", "Service Level Agreement", "Terms and Conditions", "Terms of Service"];
         const agreeingTo = termsAndConditions.filter(agreement => {
             return validAgreements.includes(agreement.name);
         });
