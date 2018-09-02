@@ -983,7 +983,13 @@ form > h1 {
     margin-left: 0;
 }
 
-
+.cognitiveMultipleChoiceAnswer {
+    cursor: pointer;
+    margin: 0 5% auto;
+    display: inline-block;
+    margin-bottom: 30px;
+    position: relative;
+}
 
 .skillMultipleChoiceAnswer {
     cursor: pointer;

@@ -125,11 +125,10 @@ class CognitiveTest extends Component {
             const isSelected = this.state.selectedId === option._id;
             const selectedClass = isSelected ? " selected" : "";
             const imgSrc = "/images/cognitiveTest/" + option.body;
-            console.log("body: ", option.body);
             return (
                 <div key={option.body}
                      onClick={() => self.selectAnswer(option._id)}
-                     className={"skillMultipleChoiceAnswer" + selectedClass}
+                     className={"cognitiveMultipleChoiceAnswer" + selectedClass}
                 >
                     <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
                     <div className="cognitiveTestImg"><img src={imgSrc + this.props.png} /></div>
@@ -144,8 +143,10 @@ class CognitiveTest extends Component {
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
                 <StyledContent contentArray={questionInfo.body} style={{marginBottom:"40px"}} />
-                { answers }
-                <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
+                <div className="center" style={{maxWidth: "800px", margin:"auto"}}>
+                    { answers }
+                </div>
+                <div className={"marginBottom50px marginTop40px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
             </div>
         );
     }
