@@ -74,7 +74,6 @@ app.use(session({
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
 
-
 // --->> TEST WEBHOOKS <<--- //
 
 // const WebHooks = require("node-webhooks");

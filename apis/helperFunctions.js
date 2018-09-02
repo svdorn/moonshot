@@ -693,7 +693,6 @@ async function getAndVerifyUser(userId, verificationToken) {
     })
 }
 
-
 // get and verify user from express request
 async function getUserFromReq(req, requestType) {
     return new Promise(async function(resolve, reject) {

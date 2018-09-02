@@ -124,13 +124,15 @@ class CognitiveTest extends Component {
         const answers = questionInfo.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
             const selectedClass = isSelected ? " selected" : "";
+            const imgSrc = "/images/cognitiveTest/" + option.body;
+            console.log("body: ", option.body);
             return (
                 <div key={option.body}
                      onClick={() => self.selectAnswer(option._id)}
                      className={"skillMultipleChoiceAnswer" + selectedClass}
                 >
                     <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
-                    <div className="skillMultipleChoiceOptionText">{htmlDecode(option.body)}</div>
+                    <div className="cognitiveTestImg"><img src={imgSrc + this.props.png} /></div>
                 </div>
             );
         });
