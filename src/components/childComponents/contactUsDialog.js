@@ -60,8 +60,7 @@ class ContactUsDialog extends Component {
         let notValid = false;
         const requiredFields = [
             'name',
-            'email',
-            'company',
+            'email'
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -111,8 +110,7 @@ class ContactUsDialog extends Component {
                 <Field
                     name="company"
                     component={renderTextField}
-                    label="Company*"
-                    validate={[required]}
+                    label="Company"
                     style={{marginTop: "5px"}}
                 /><br/>
                 <Field

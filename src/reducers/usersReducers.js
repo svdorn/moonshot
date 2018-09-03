@@ -43,7 +43,7 @@ export function usersReducers(state = initialState, action) {
         case "CONTACT_US_EMAIL_FAILURE":
             return {
                 ...state,
-                message: action.payload,
+                contactUsModal: false,
                 loadingSomething: false
             };
             break;
