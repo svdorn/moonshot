@@ -44,6 +44,20 @@ class ContactUsDialog extends Component {
         };
     }
 
+    componentDidMount() {
+        const user = this.props.currentUser;
+
+        // set initial values
+        const email = user ? user.email : "";
+        const name = user ? user.name : "";
+        const phoneNumber = "";
+        const company = "";
+        const message = "";
+
+        const initialValues = { email, name, phoneNumber, company, message };
+        this.props.initialize(initialValues);
+    }
+
     componentDidUpdate() {
         // make sure the props defining whether the modal is open matches the state for that
         if (this.props.open != this.state.open && this.props.open != undefined) {
