@@ -23,7 +23,9 @@ class EmailIcon extends Component {
                 style={this.props.style ? this.props.style : {}}
                 className={this.props.className ? this.props.className : ""}
                 onClick={typeof this.props.onClick === "function" ? this.props.onClick : () => {}}
-            />
+            >
+                <div/>
+            </div>
         );
     }
 }

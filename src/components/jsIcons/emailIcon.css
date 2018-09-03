@@ -22,13 +22,13 @@
 
 .email-icon {
     display: inline-block;
-    border-radius: 2px;
     border-width: 2px;
     border-color: var(--outline-color);
     border-style: solid;
     position: relative;
 }
 
+/* folded-over part of the envelope */
 .email-icon::before {
     content: "";
     position: absolute;
@@ -39,6 +39,7 @@
     background-color: var(--outline-color);
     margin-top: 2px;
     transform: skew(40deg) rotate(40deg);
+    border-bottom-right-radius: 4px;
 }
 
 .email-icon::after {
@@ -51,4 +52,5 @@
     background-color: var(--outline-color);
     margin-top: 2px;
     transform: skew(-40deg) rotate(-40deg);
+    border-bottom-left-radius: 4px;
 }

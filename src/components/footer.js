@@ -41,7 +41,7 @@ class Footer extends Component {
                             <div styleName="social-icons">
                                 <EmailIcon
                                     onClick={() => this.props.openContactUsModal()}
-                                    style={{width: "24px", height: "16px"}}
+                                    style={{width: "20px", height: "16px"}}
                                     color="white"
                                     hoverColor="white"
                                     className="pointer"
