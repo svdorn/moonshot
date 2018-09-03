@@ -26,9 +26,7 @@ class Notification extends Component {
         }
     }
 
-    onCloseClick() {
-        this.props.closeNotification();
-    }
+    onCloseClick() { this.props.closeNotification(); }
 
     render() {
         const messageStyle = {

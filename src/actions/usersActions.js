@@ -73,7 +73,7 @@ export function contactUsEmail(user){
         axios.post("api/business/contactUsEmailNotLoggedIn", user)
             .then(function(response) {
                 dispatch({type:"CONTACT_US_EMAIL_SUCCESS"});
-                dispatch({type: "ADD_NOTIFICATION", notification:{message:response.data, type:"infoHeader"}});
+                dispatch({type: "ADD_NOTIFICATION", notification:{message:"Message sent, we'll get back to you soon!", type:"infoHeader"}});
             })
             .catch(function(err) {
                 dispatch({type:"CONTACT_US_EMAIL_FAILURE"});
