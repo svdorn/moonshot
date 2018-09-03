@@ -99,7 +99,8 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 notification: action.notification,
-                notificationDate: new Date()
+                notificationDate: new Date(),
+                autoCloseNotification: action.notification.closeSelf === false ? false : true
             };
             break;
         case "NOTIFICATION_AND_STOP_LOADING":

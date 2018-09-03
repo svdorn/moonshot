@@ -76,9 +76,8 @@ export function contactUsEmail(user){
                 dispatch({type: "ADD_NOTIFICATION", notification:{message:response.data, type:"infoHeader"}});
             })
             .catch(function(err) {
-                console.log("error: ", err);
                 dispatch({type:"CONTACT_US_EMAIL_FAILURE"});
-                dispatch({type: "ADD_NOTIFICATION", notification:{message:"Error sending email.", type:"infoHeader"}});
+                dispatch({type: "ADD_NOTIFICATION", notification:{message:"Something went wrong :( Send us an email at support@moonshotinsights.io", type:"infoHeader", closeSelf:false}});
             })
     }
 }

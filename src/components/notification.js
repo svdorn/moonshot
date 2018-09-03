@@ -19,9 +19,11 @@ class Notification extends Component {
 
 
     componentDidUpdate(prevProps, prevState) {
-        // close after 5 seconds
+        // close after 5 seconds as long as the notification doesn't say not to
         const self = this;
-        setTimeout(() => self.close(), 5000);
+        if (this.props.autoCloseNotification !== false) {
+            setTimeout(() => self.close(), 5000);
+        }
     }
 
     onCloseClick() {
@@ -67,7 +69,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         notification: state.users.notification,
-        notificationDate: state.users.notificationDate
+        notificationDate: state.users.notificationDate,
+        autoCloseNotification: state.users.autoCloseNotification
     };
 }
 
