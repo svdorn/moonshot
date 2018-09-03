@@ -45,6 +45,11 @@ class ContactUsDialog extends Component {
     }
 
     componentDidMount() {
+        this.initializeValues();
+    }
+
+
+    initializeValues() {
         const user = this.props.currentUser;
 
         // set initial values
@@ -58,13 +63,20 @@ class ContactUsDialog extends Component {
         this.props.initialize(initialValues);
     }
 
-    componentDidUpdate() {
+
+    componentDidUpdate(prevProps, prevState) {
         // make sure the props defining whether the modal is open matches the state for that
         if (this.props.open != this.state.open && this.props.open != undefined) {
             const open = this.props.open;
             this.setState({open});
         }
+
+        // if logged-in status changed
+        if (!prevProps.currentUser !== !this.props.currentUser) {
+            this.initializeValues();
+        }
     }
+
 
     handleSubmitForm(e) {
         e.preventDefault();
