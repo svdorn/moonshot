@@ -1,11 +1,11 @@
 "use strict"
-import React, {Component} from 'react';
-import {ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, IconMenu, IconButton} from 'material-ui';
+import React, { Component } from 'react';
+import { ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, IconMenu, IconButton } from 'material-ui';
 import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
-import {connect} from 'react-redux';
-import {browserHistory, withRouter} from 'react-router';
-import {bindActionCreators} from 'redux';
-import {signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal} from "../actions/usersActions";
+import { connect } from 'react-redux';
+import { browserHistory, withRouter } from 'react-router';
+import { bindActionCreators } from 'redux';
+import { signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal } from "../actions/usersActions";
 import { isValidEmail, goTo } from "../miscFunctions";
 import { axios } from 'axios';
 import { animateScroll } from "react-scroll";
