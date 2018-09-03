@@ -45,11 +45,11 @@ class ContactUsDialog extends Component {
     }
 
     componentDidMount() {
-        this.initializeValues();
+        this.resetValues();
     }
 
 
-    initializeValues() {
+    resetValues() {
         const user = this.props.currentUser;
 
         // set initial values
@@ -73,7 +73,7 @@ class ContactUsDialog extends Component {
 
         // if logged-in status changed
         if (!prevProps.currentUser !== !this.props.currentUser) {
-            this.initializeValues();
+            this.resetValues();
         }
     }
 
@@ -107,6 +107,8 @@ class ContactUsDialog extends Component {
         };
 
         this.props.contactUsEmail(user);
+
+        this.resetValues();
     }
 
     handleClose() {
