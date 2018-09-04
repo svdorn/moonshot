@@ -171,11 +171,12 @@ class CognitiveTest extends Component {
         const answers = questionInfo.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
             const selectedClass = isSelected ? " selected" : "";
+            const outOfTimeClass = this.state.outOfTime ? " outOfTime" : "";
             const imgSrc = "/images/cognitiveTest/" + option.body;
             return (
                 <div key={option.body}
                      onClick={this.state.outOfTime? null : () => self.selectAnswer(option._id)}
-                     className={"cognitiveMultipleChoiceAnswer" + selectedClass}
+                     className={"cognitiveMultipleChoiceAnswer" + selectedClass + outOfTimeClass}
                 >
                     <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
                     <div styleName="answersImg"><img src={imgSrc + this.props.png} /></div>

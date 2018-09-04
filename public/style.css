@@ -990,6 +990,9 @@ form > h1 {
     margin-bottom: 30px;
     position: relative;
 }
+.cognitiveMultipleChoiceAnswer.outOfTime {
+    cursor: not-allowed;
+}
 
 .skillMultipleChoiceAnswer {
     cursor: pointer;
