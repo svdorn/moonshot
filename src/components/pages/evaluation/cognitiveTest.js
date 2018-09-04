@@ -183,10 +183,6 @@ class CognitiveTest extends Component {
             );
         });
 
-        console.log("selectedId: ", this.state.selectedId);
-        console.log("out of time: ", this.state.outOfTime);
-        console.log("together: ", (this.state.selectedId || this.state.outOfTime));
-
         const canContinue = !this.props.loading && (this.state.selectedId || this.state.outOfTime);
         const buttonClass = "skillContinueButton" + (!canContinue ? " disabled" : "");
 
