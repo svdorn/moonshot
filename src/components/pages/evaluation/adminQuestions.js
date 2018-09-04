@@ -3,11 +3,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { answerEvaluationQuestion } from "../../../actions/usersActions";
+import { answerEvaluationQuestion, skipAdminQuestions } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
 import { CircularProgress, Slider } from "material-ui";
+import { button } from "../../../classes";
 
 class AdminQuestions extends Component {
     constructor(props) {
@@ -95,7 +96,7 @@ class AdminQuestions extends Component {
                 {this.props.loading ?
                     <CircularProgress color="ff582d" />
                     :
-                    <div className="skillContinueButton marginBottom50px marginTop20px"
+                    <div className={`${button.orangeRed} marginBottom50px marginTop20px`}
                          onClick={this.nextQuestion.bind(this)}
                     >
                         Next
@@ -128,7 +129,7 @@ class AdminQuestions extends Component {
             );
         });
 
-        const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
+        const buttonClass = this.state.selectedId === undefined ? button.disabled : button.orangeRed;
 
         return (
             <div>
@@ -154,20 +155,30 @@ class AdminQuestions extends Component {
             <div className="evalPortionIntro center">
                 <div/>
                 <div>
-                    <p>You will be asked a series of short questions for legal and administrative purposes.</p>
-                    <p>None of your answers will be shown to employers, nor will they affect your candidacy or employment status.</p>
-                    <p>Once again, your answers are collected for legal purposes only.</p>
+                    <p>The following is a series of questions administered by Moonshot Insights to collect pertinent information for regulatory purposes. Your answers will only be used for government reporting purposes and will only be presented in de-identified form to maintain confidentiality. Answers you provide will not affect your candidacy or employment status.</p>
+                    <p>The following questions are not part of your application or administered by the employer you are applying to work for. You can voluntarily answer the questions and refusal to provide them will not subject you to any adverse treatment.</p>
+                    <p>Once again, your answers are collected for government reporting purposes only and you can choose not to answer any or all of the questions.</p>
                 </div>
                 <br/>
                 {this.props.loading ?
                     <CircularProgress color="#ff582d" />
                     :
-                    <div
-                        style={{marginBottom: "40px", width: "initial"}}
-                        className={"skillContinueButton"}
-                        onClick={this.begin.bind(this)}
-                    >
-                        Begin
+                    <div style={{textAlign: "center"}}>
+                        <div
+                            style={{width: "initial", margin: "10px"}}
+                            className={button.orangeRed}
+                            onClick={this.begin.bind(this)}
+                        >
+                            Begin
+                        </div>
+                        <br/>
+                        <div
+                            className="inline-block underline font14px pointer"
+                            style={{marginBottom: "40px"}}
+                            onClick={this.skipAdminQuestions.bind(this)}
+                        >
+                            Click here if you prefer not to answer
+                        </div>
                     </div>
                 }
             </div>
@@ -177,6 +188,10 @@ class AdminQuestions extends Component {
 
     // start the admin questions
     begin() { this.props.answerEvaluationQuestion("Admin", this.props.credentials); }
+
+
+    // skip all the admin questions
+    skipAdminQuestions() { this.props.skipAdminQuestions(this.props.credentials); }
 
 
     render() {
@@ -209,7 +224,8 @@ class AdminQuestions extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        answerEvaluationQuestion
+        answerEvaluationQuestion,
+        skipAdminQuestions
     }, dispatch);
 }
 

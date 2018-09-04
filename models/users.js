@@ -229,6 +229,8 @@ const usersSchema = mongoose.Schema({
 
     // questions the user has to answer - only once - before doing a position eval
     adminQuestions: {
+        // whether the user opted out of the admin questions
+        skipped: Boolean,
         // the date the user started the admin questions
         startDate: Date,
         // the date the user finished the admin questions

@@ -1921,10 +1921,17 @@ async function GET_positions(req, res) {
 
         // go through each business
         businesses.forEach(business => {
+            // get the id of the business
+            const businessIdString = business._id.toString();
             // go through each position for the business
             business.positions.forEach(bizPosition => {
                 // get the corresponding user position
-                const userPosition = positions.find(p => p.positionId.toString() === bizPosition._id.toString());
+                const userPosition = positions.find(p => {
+                    return (
+                        p.positionId.toString() === bizPosition._id.toString() &&
+                        p.businessId.toString() === businessIdString
+                    );
+                });
                 // only add the position if the user is enrolled in it
                 if (userPosition) {
                     // add the formatted position
