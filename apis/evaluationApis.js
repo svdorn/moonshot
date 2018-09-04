@@ -1639,9 +1639,16 @@ async function addCognitiveInfo(user, evaluationState) {
             // if the user has not started the psych test, show the intro for it
             const cognitiveStarted = cognitive && cognitive.currentQuestion && cognitive.startDate;
             if (!cognitiveStarted) { evaluationState.showIntro = true; }
+            // otherwise give the user their current cognitive question
+            else {
+                try { var dbCognitive = await Cognitivetests.findOne({}); }
+                catch (getCognitiveError) { reject(getCognitiveError); }
 
-            // otherwise give the user their current psych question
-            else { evaluationState.componentInfo = cognitiveStarted.currentQuestion; }
+                const questions = dbCognitive.levels[0].questions;
+                const question = questions.find(q => q._id.toString() === cognitive.currentQuestion.questionId.toString());
+
+                evaluationState.componentInfo = question;
+             }
         }
 
         resolve(evaluationState);
