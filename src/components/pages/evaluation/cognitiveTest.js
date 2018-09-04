@@ -102,12 +102,12 @@ class CognitiveTest extends Component {
 
         return (
             <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
-                <div className="font24px" style={{marginBottom: "20px"}}><span>Skills</span></div>
+                <div className="font24px"><span>Cognitive Test</span></div>
                 <div>
                     <p>This is the cognitive portion of the evaluation. Here you will be tested on your aptitude in general cognition.</p>
-                    <p><span>TIME IS A FACTOR.</span> After 45 seconds for each question, your score for that question will decrease as time goes on.</p>
+                    <p><span>TIME IS A FACTOR.</span> You have 45 seconds to complete each question. After this, whatever answer you have will be saved and if you have no answer the question will be marked wrong.</p>
                     <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
-                    <p>The number of questions in the skills test will change as you go depending on a number of factors. It will end once a score has been determined, but each test should take no more than ten minutes.</p>
+                    <p>The test will take no more than 8 minutes.</p>
                 </div>
                 <br/>
                 <div>
