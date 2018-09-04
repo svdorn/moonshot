@@ -84,9 +84,9 @@ class Landbot extends Component {
             const timeDifference = finishedPosting - startPosting;
             // want to give the user 1.5 seconds to process the end of the chatbot
             // before navigating away
-            const TOTAL_WAIT_TIME = 1500;
-            // if it took less than 1.5 seconds to save the data
-            if (timeDifference < 1500) {
+            const TOTAL_WAIT_TIME = 4000;
+            // if it took less than 3 seconds to save the data
+            if (timeDifference < TOTAL_WAIT_TIME) {
                 // how much longer to wait before redirecting
                 const remainingWaitTime = TOTAL_WAIT_TIME - timeDifference;
                 // wait the remaining time, then redirect
