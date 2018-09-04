@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import ContactUsDialog from '../childComponents/contactUsDialog';
 import MetaTags from 'react-meta-tags';
 import { renderTextField, renderPasswordField, isValidEmail } from "../../miscFunctions";
 
@@ -176,7 +175,6 @@ class Login extends Component {
                     <title>Log In | Moonshot</title>
                     <meta name="description" content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
                 </MetaTags>
-                <ContactUsDialog />
                 {/*<HomepageTriangles className="slightly-blurred" style={{pointerEvents:"none"}} variation="1" />*/}
                 <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>

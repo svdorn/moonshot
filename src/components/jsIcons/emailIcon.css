@@ -1,0 +1,64 @@
+.outline-orange { --outline-color: #ff582d; }
+.outline-cyan { --outline-color: #76defe; }
+.outline-peach { --outline-color: #ff6a6f; }
+.outline-white { --outline-color: #ffffff; }
+.outline-purple-light { --outline-color: #b17dfe; }
+.outline-purple-dark { --outline-color: #731ae8; }
+.outline-black-light { --outline-color: #393939; }
+.outline-black-dark { --outline-color: #2e2e2e; }
+.outline-gray { --outline-color: #d7d7d7; }
+.outline-red { --outline-color: #eb394f; }
+
+.hover-color-orange:hover { --outline-color: #ff582d; }
+.hover-color-cyan:hover { --outline-color: #76defe; }
+.hover-color-peach:hover { --outline-color: #ff6a6f; }
+.hover-color-white:hover { --outline-color: #ffffff; }
+.hover-color-purple-light:hover { --outline-color: #b17dfe; }
+.hover-color-purple-dark:hover { --outline-color: #731ae8; }
+.hover-color-black-light:hover { --outline-color: #393939; }
+.hover-color-black-dark:hover { --outline-color: #2e2e2e; }
+.hover-color-gray:hover { --outline-color: #d7d7d7; }
+.hover-color-red:hover { --outline-color: #eb394f; }
+
+.email-icon {
+    display: inline-block;
+    border-width: 2px;
+    border-color: var(--outline-color);
+    border-style: solid;
+    position: relative;
+    overflow: hidden;
+}
+
+.email-icon > div:first-child {
+    width: 50%;
+    height: 200%;
+    border-radius: 5px;
+
+}
+
+/* folded-over part of the envelope */
+/* .email-icon::before {
+    content: "";
+    position: absolute;
+    width: 45%;
+    left: 0;
+    top: 0;
+    height: 3px;
+    background-color: var(--outline-color);
+    margin-top: 2px;
+    transform: skew(40deg) rotate(40deg);
+    border-bottom-right-radius: 4px;
+}
+
+.email-icon::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 45%;
+    height: 3px;
+    background-color: var(--outline-color);
+    margin-top: 2px;
+    transform: skew(-40deg) rotate(-40deg);
+    border-bottom-left-radius: 4px;
+} */

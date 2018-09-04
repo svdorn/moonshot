@@ -10,7 +10,6 @@ import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import AddUserDialog from '../childComponents/addUserDialog';
-import ContactUsDialog from '../childComponents/contactUsDialog';
 import ProgressBarDialog from '../miscComponents/progressBarDialog';
 import { isValidEmail, goTo } from "../../miscFunctions";
 import HoverTip from '../miscComponents/hoverTip';
@@ -592,7 +591,6 @@ class BusinessHome extends Component {
         return (
             <div>
                 {(this.props.currentUser && this.props.currentUser.userType == "accountAdmin") ? <AddUserDialog /> : null}
-                <ContactUsDialog />
                 <MetaTags>
                     <title>Moonshot</title>
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />

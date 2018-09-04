@@ -1,7 +1,11 @@
 "use strict"
 import React, { Component } from 'react';
-import {browserHistory, withRouter} from 'react-router';
+import { browserHistory, withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { openContactUsModal } from "../actions/usersActions";
+import EmailIcon from "./jsIcons/emailIcon";
+import "./footer.css";
 
 class Footer extends Component {
     goTo(route) {
@@ -34,28 +38,31 @@ class Footer extends Component {
                             <div className="primary-white font12px font10pxUnder400">
                                 &copy; 2018 Moonshot Learning Inc. All rights reserved.
                             </div>
-                            <div style={{marginTop: "10px"}}>
+                            <div styleName="social-icons">
+
+                                <img
+                                    alt="Mail Icon"
+                                    className="pointer"
+                                    onClick={() => this.props.openContactUsModal()}
+                                    style={{height: "14px"}}
+                                    src={"/icons/mail" + this.props.png}
+                                />
                                 <a href="https://www.facebook.com/MoonshotInsights/" target="_blank">
                                     <img
                                         alt="Facebook Logo"
-                                        width={13}
-                                        height={20}
+                                        style={{width: "13px", height: "20px"}}
                                         src={"/logos/Facebook" + this.props.png}/>
                                 </a>
-                                <a href="https://twitter.com/Moonshotinsight" target="_blank"
-                                   style={{marginLeft: "20px"}}>
+                                <a href="https://twitter.com/Moonshotinsight" target="_blank">
                                     <img
                                         alt="Twitter Logo"
-                                        width={20}
-                                        height={20}
+                                        style={{width: "20px", height: "20px"}}
                                         src={"/logos/Twitter" + this.props.png}/>
                                 </a>
-                                <a href="https://www.linkedin.com/company/18233111/" target="_blank"
-                                   style={{marginLeft: "20px"}}>
+                                <a href="https://www.linkedin.com/company/18233111/" target="_blank">
                                     <img
                                         alt="LinkedIn Logo"
-                                        width={20}
-                                        height={20}
+                                        style={{width: "20px", height: "20px"}}
                                         src={"/logos/LinkedIn" + this.props.png}/>
                                 </a>
                             </div>
@@ -67,6 +74,14 @@ class Footer extends Component {
     }
 }
 
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        openContactUsModal
+    }, dispatch);
+}
+
+
 function mapStateToProps(state) {
     return {
         png: state.users.png
@@ -75,4 +90,4 @@ function mapStateToProps(state) {
 
 Footer = withRouter(Footer);
 
-export default connect(mapStateToProps)(Footer);
+export default connect(mapStateToProps, mapDispatchToProps)(Footer);

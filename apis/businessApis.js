@@ -12,6 +12,7 @@ const crypto = require('crypto');
 
 // get helper functions
 const { sanitize,
+        getFirstName,
         sendEmail,
         sendEmailPromise,
         getAndVerifyUser,
@@ -22,7 +23,9 @@ const { sanitize,
         isValidFileType,
         isValidEmail,
         isValidPassword,
-        validArgs
+        validArgs,
+        founderEmails,
+        emailFooter
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -594,7 +597,7 @@ function createPosition(name, type) {
         bizPos.growthFactors = productFactors.growthFactors;
         bizPos.idealFactors = productFactors.idealFactors;
     }
-    
+
     return bizPos;
 }
 
@@ -1247,48 +1250,58 @@ async function POST_addEvaluation(req, res) {
     return res.json(business.positions);
 }
 
-function POST_contactUsEmailNotLoggedIn(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'ACTION REQUIRED - Contact Us Form Filled Out';
-    if (req.body.phoneNumber) {
-        var phoneNumber = sanitize(req.body.phoneNumber);
-    }
-    if (req.body.message) {
-        var message = sanitize(req.body.message);
+async function POST_contactUsEmailNotLoggedIn(req, res) {
+    const { phoneNumber, message, name, email, company } = sanitize(req.body);
+
+    // email to moonshot with the message the user entered
+    let toMoonshotContent =
+        `<div>
+            <h2>Contact Us Form Filled Out:</h2>
+            <h3>Name</h3>
+            <p>${name}</p>
+            <h3>Email</h3>
+            <p>${email}</p>
+            <h3>Company</h3>
+            <p>${company}</p>
+            <h3>Phone Number</h3>
+            <p>${phoneNumber}</p>
+            <h3>Message</h3>
+            <p>${message}</p>
+        </div>`;
+
+    // tells the user that we got their message
+    const messageReceivedContent =
+        `<div>
+            <p>Hi${name ? " " + getFirstName(name) : ""}!</p>
+            <p>Just wanted to let you know that we got your message. We'll get back to you as soon as we can!</p>
+            ${emailFooter(email)}
+        </div>`;
+
+
+    try { // sending email to moonshot with the message from the user
+        await sendEmailPromise({
+            recipients: founderEmails,
+            subject: "ACTION REQUIRED - Contact Us Form Filled Out",
+            content: toMoonshotContent
+        });
+    } catch (sendEmailError) {
+        console.log("Error sending contact us email: ", sendEmailError);
+        return res.status(500).send({success: false});
     }
 
-    let content = "<div>"
-        + "<h2>Contact Us Form Filled Out:</h2>"
-        + "<h3>Name</h3>"
-        + "<p>"
-        + sanitize(req.body.name)
-        + "</p>"
-        + "<h3>Email</h3>"
-        + "<p>"
-        + sanitize(req.body.email)
-        + "</p>"
-        + "<h3>Company</h3>"
-        + "<p>"
-        + sanitize(req.body.company)
-        + "</p>"
-        + "<h3>Phone Number</h3>"
-        + "<p>"
-        + phoneNumber
-        + "</p>"
-        + "<h3>Message</h3>"
-        + "<p>"
-        + message
-        + "</p>"
-        + "</div>";
+    try { // sending the "email received" message
+        await sendEmailPromise({
+            recipients: [email],
+            subject: "We Got Your Message!",
+            content: messageReceivedContent
+        });
+    } catch (sendReplyError) {
+        // if there is an error sending the reply email we can return successfully
+        // since moonshot got the email, which is the important part
+        console.log("Error sending email to user telling them we got their email: ", sendReplyError);
+    }
 
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you! We will be in touch shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
+    return res.status(200).send({success: true});
 }
 
 function POST_contactUsEmail(req, res) {

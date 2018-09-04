@@ -111,11 +111,11 @@ class Landbot extends Component {
 
 
     render() {
-        let landbotUrl = "https://landbot.io/u/H-65209-HM84ZVFHD0CU5T9Z/index.html";
-        if (this.state.position) {
-            landbotUrl += "?position=" + encodeURIComponent(this.state.position.trim());
-        }
-        
+        let landbotUrl = "https://landbot.io/u/H-75367-JMQ0F0TW1XMBPB07/index.html";
+        // if (this.state.position) {
+        //     landbotUrl += "?position=" + encodeURIComponent(this.state.position.trim());
+        // }
+
         return (
             <div className="landbot-container">
                 <iframe
