@@ -45,7 +45,7 @@ class Footer extends Component {
                                     className="pointer"
                                     onClick={() => this.props.openContactUsModal()}
                                     style={{height: "14px"}}
-                                    src={"/icons/mail" + this.props.png}
+                                    src={"/icons/Mail" + this.props.png}
                                 />
                                 <a href="https://www.facebook.com/MoonshotInsights/" target="_blank">
                                     <img
