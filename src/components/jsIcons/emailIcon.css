@@ -26,10 +26,18 @@
     border-color: var(--outline-color);
     border-style: solid;
     position: relative;
+    overflow: hidden;
+}
+
+.email-icon > div:first-child {
+    width: 50%;
+    height: 200%;
+    border-radius: 5px;
+
 }
 
 /* folded-over part of the envelope */
-.email-icon::before {
+/* .email-icon::before {
     content: "";
     position: absolute;
     width: 45%;
@@ -53,4 +61,4 @@
     margin-top: 2px;
     transform: skew(-40deg) rotate(-40deg);
     border-bottom-left-radius: 4px;
-}
+} */

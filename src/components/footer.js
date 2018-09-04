@@ -39,12 +39,13 @@ class Footer extends Component {
                                 &copy; 2018 Moonshot Learning Inc. All rights reserved.
                             </div>
                             <div styleName="social-icons">
-                                <EmailIcon
-                                    onClick={() => this.props.openContactUsModal()}
-                                    style={{width: "20px", height: "16px"}}
-                                    color="white"
-                                    hoverColor="white"
+
+                                <img
+                                    alt="Mail Icon"
                                     className="pointer"
+                                    onClick={() => this.props.openContactUsModal()}
+                                    style={{height: "14px"}}
+                                    src={"/icons/mail" + this.props.png}
                                 />
                                 <a href="https://www.facebook.com/MoonshotInsights/" target="_blank">
                                     <img
