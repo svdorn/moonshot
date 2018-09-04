@@ -66,7 +66,7 @@ export function closeContactUsModal() {
 }
 
 // Send an email when form filled out on forBusiness page
-export function contactUsEmail(user){
+export function contactUsEmail(user, callback) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
 
@@ -74,10 +74,12 @@ export function contactUsEmail(user){
             .then(function(response) {
                 dispatch({type:"CONTACT_US_EMAIL_SUCCESS"});
                 dispatch({type: "ADD_NOTIFICATION", notification:{message:"Message sent, we'll get back to you soon!", type:"infoHeader"}});
+                if (typeof callback === "function") { callback(); }
             })
             .catch(function(err) {
                 dispatch({type:"CONTACT_US_EMAIL_FAILURE"});
-                dispatch({type: "ADD_NOTIFICATION", notification:{message:"Something went wrong :( Send us an email at support@moonshotinsights.io", type:"infoHeader", closeSelf:false}});
+                dispatch({type: "ADD_NOTIFICATION", notification:{message:"Something went wrong :( Shoot us an email at support@moonshotinsights.io", type:"errorHeader", closeSelf:false}});
+                if (typeof callback === "function") { callback(); }
             })
     }
 }

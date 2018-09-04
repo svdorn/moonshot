@@ -106,9 +106,7 @@ class ContactUsDialog extends Component {
             message: vals.message
         };
 
-        this.props.contactUsEmail(user);
-
-        this.resetValues();
+        this.props.contactUsEmail(user, this.resetValues.bind(this));
     }
 
     handleClose() {
