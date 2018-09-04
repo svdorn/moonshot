@@ -2,6 +2,10 @@
     height: 250px;
 }
 
+.error-red {
+    color: #ff4d4d;
+}
+
 .answersImg {
     display: inline-block;
     margin-left: 30px;
