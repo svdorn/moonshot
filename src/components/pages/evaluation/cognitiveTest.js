@@ -40,7 +40,6 @@ class CognitiveTest extends Component {
     componentDidUpdate() {
         if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId)) {
             this.setState({ questionId: this.props.questionInfo.questionId },() => {
-                console.log("updating question: ", this.props.questionInfo);
                 this.getTimer();
             })
         }
@@ -76,11 +75,12 @@ class CognitiveTest extends Component {
     // move on to the next question (or start/finish the test)
     nextQuestion() {
         if ((typeof this.state.selectedId !== "undefined" || this.state.outOfTime) && !this.props.loading) {
-            this.resetTimer();
-            this.props.answerEvaluationQuestion("Cognitive", {
-                ...this.props.credentials,
-                selectedId: this.state.selectedId
-            })
+            this.resetTimer(() => {
+                this.props.answerEvaluationQuestion("Cognitive", {
+                    ...this.props.credentials,
+                    selectedId: this.state.selectedId
+                })
+            });    
         }
     }
 
@@ -165,14 +165,14 @@ class CognitiveTest extends Component {
         }
     }
 
-    resetTimer() {
+    resetTimer(callback) {
         for (let i = 0; i < this.state.timeouts.length; i++) {
             clearTimeout(this.state.timeouts[i]);
         }
         this.setState({
             timer: undefined,
             outOfTime: false
-        });
+        }, callback);
     }
 
 
