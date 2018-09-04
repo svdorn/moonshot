@@ -18,10 +18,30 @@ class CognitiveTest extends Component {
 
         this.state = {
             selectedId: undefined,
-            agreedToTerms: false
+            questionId: undefined,
+            agreedToTerms: false,
+            // the time they have left to finish the questions
+            timer: undefined,
+            // whether the timer is done or not
+            outOfTime: false
         };
     }
 
+    componentDidMount() {
+        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId)) {
+            this.setState({ questionId: this.props.questionInfo.questionId },() => {
+                this.getTimer();
+            })
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId)) {
+            this.setState({ questionId: this.props.questionInfo.questionId },() => {
+                this.getTimer();
+            })
+        }
+    }
 
     // shuffles a general array, used for shuffling questions around
     shuffle(arr) {
@@ -55,7 +75,9 @@ class CognitiveTest extends Component {
         if (typeof this.state.selectedId !== "undefined" && !this.props.loading) {
             this.props.answerEvaluationQuestion("Cognitive", {
                 ...this.props.credentials,
-                selectedId: this.state.selectedId
+                selectedId: this.state.selectedId,
+                outOfTime: false,
+                timer: undefined
             });
         }
     }
@@ -116,6 +138,30 @@ class CognitiveTest extends Component {
         );
     }
 
+    getTimer() {
+        if (!this.state.timer) {
+            const questionInfo = this.props.questionInfo;
+            const time = (new Date()).getTime() - new Date(questionInfo.startDate).getTime();
+            var seconds = 45 - Math.floor(time / 1000);
+        } else {
+            var seconds = this.state.timer - 1;
+        }
+
+        // If there is no time left, set outOfTime to be true and don't continue counting down
+        if (seconds <= 0) {
+            this.setState({ outOfTime: true })
+        } else {
+            let self = this;
+            this.setState({
+                timer: seconds
+            }, () => {
+                setTimeout(function() {
+                    self.getTimer();
+                }, 1000);
+            });
+        }
+    }
+
 
     // main content with the quiz and questions
     createContent() {
@@ -144,8 +190,11 @@ class CognitiveTest extends Component {
         const rpmImg = "/images/cognitiveTest/" + questionInfo.rpm;
 
         // otherwise, good to go - show them the question
+        console.log("timer: ", this.state.timer);
+        console.log("out of time: ", this.state.outOfTime);
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
+                {this.state.outOfTime ? <div className="secondary-gray">Out of time</div> : <div className="secondary-gray">0:{this.state.timer}</div> }
                 <div className="marginBottom40px"><img styleName="rpmImg" src={rpmImg + this.props.png} /></div>
                 <div className="center" style={{maxWidth: "800px", margin:"auto"}}>
                     { answers }
@@ -173,7 +222,9 @@ class CognitiveTest extends Component {
         else if (!questionInfo) { return <CircularProgress color="secondary" />; }
 
         // the typical interface with the slider
-        else if (questionInfo.rpm) { return this.createContent(); }
+        else if (questionInfo.rpm) {
+            return this.createContent();
+        }
 
         // something is up if we get here
         else { return this.errorPage(); }

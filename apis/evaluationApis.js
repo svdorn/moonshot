@@ -1645,9 +1645,17 @@ async function addCognitiveInfo(user, evaluationState) {
                 catch (getCognitiveError) { reject(getCognitiveError); }
 
                 const questions = dbCognitive.levels[0].questions;
-                const question = questions.find(q => q._id.toString() === cognitive.currentQuestion.questionId.toString());
+                let question = questions.find(q => q._id.toString() === cognitive.currentQuestion.questionId.toString());
 
-                evaluationState.componentInfo = question;
+                const componentQuestion = {
+                    rpm: question.rpm,
+                    options: question.options.map(opt => { return { body: opt.body, _id: opt._id } } ),
+                    startDate: cognitive.currentQuestion.startDate,
+                    questionId: question._id
+                }
+                console.log("q: ", componentQuestion);
+
+                evaluationState.componentInfo = componentQuestion;
              }
         }
 
@@ -1802,19 +1810,23 @@ async function getNewCognitiveQuestion(cognitiveTest) {
         // figure out id of correct answer for that question
         const correctAnswer = question.options.find(opt => opt.isCorrect)._id;
 
+        const startDate = new Date();
+
         // mark it as the current question
         cognitiveTest.currentQuestion = {
             levelNumber: 1,
             levelIndex: 0,
             questionId: question._id,
-            startDate: new Date(),
+            startDate,
             correctAnswer
         }
 
         // create the question object for the eval component
         const componentQuestion = {
             rpm: question.rpm,
-            options: question.options.map(opt => { return { body: opt.body, _id: opt._id } } )
+            options: question.options.map(opt => { return { body: opt.body, _id: opt._id } } ),
+            startDate,
+            questionId: question._id
         }
 
         // return the new user's skill object and question
