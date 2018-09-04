@@ -44,13 +44,39 @@ class ContactUsDialog extends Component {
         };
     }
 
-    componentDidUpdate() {
+    componentDidMount() {
+        this.resetValues();
+    }
+
+
+    resetValues() {
+        const user = this.props.currentUser;
+
+        // set initial values
+        const email = user ? user.email : "";
+        const name = user ? user.name : "";
+        const phoneNumber = "";
+        const company = "";
+        const message = "";
+
+        const initialValues = { email, name, phoneNumber, company, message };
+        this.props.initialize(initialValues);
+    }
+
+
+    componentDidUpdate(prevProps, prevState) {
         // make sure the props defining whether the modal is open matches the state for that
         if (this.props.open != this.state.open && this.props.open != undefined) {
             const open = this.props.open;
             this.setState({open});
         }
+
+        // if logged-in status changed
+        if (!prevProps.currentUser !== !this.props.currentUser) {
+            this.resetValues();
+        }
     }
+
 
     handleSubmitForm(e) {
         e.preventDefault();
@@ -60,8 +86,7 @@ class ContactUsDialog extends Component {
         let notValid = false;
         const requiredFields = [
             'name',
-            'email',
-            'company',
+            'email'
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -81,7 +106,7 @@ class ContactUsDialog extends Component {
             message: vals.message
         };
 
-        this.props.contactUsEmail(user);
+        this.props.contactUsEmail(user, this.resetValues.bind(this));
     }
 
     handleClose() {
@@ -111,8 +136,7 @@ class ContactUsDialog extends Component {
                 <Field
                     name="company"
                     component={renderTextField}
-                    label="Company*"
-                    validate={[required]}
+                    label="Company"
                     style={{marginTop: "5px"}}
                 /><br/>
                 <Field

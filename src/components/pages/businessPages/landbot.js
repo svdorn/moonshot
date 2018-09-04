@@ -84,9 +84,9 @@ class Landbot extends Component {
             const timeDifference = finishedPosting - startPosting;
             // want to give the user 1.5 seconds to process the end of the chatbot
             // before navigating away
-            const TOTAL_WAIT_TIME = 1500;
-            // if it took less than 1.5 seconds to save the data
-            if (timeDifference < 1500) {
+            const TOTAL_WAIT_TIME = 4000;
+            // if it took less than 4 seconds to save the data
+            if (timeDifference < TOTAL_WAIT_TIME) {
                 // how much longer to wait before redirecting
                 const remainingWaitTime = TOTAL_WAIT_TIME - timeDifference;
                 // wait the remaining time, then redirect
@@ -111,11 +111,11 @@ class Landbot extends Component {
 
 
     render() {
-        let landbotUrl = "https://landbot.io/u/H-65209-HM84ZVFHD0CU5T9Z/index.html";
-        if (this.state.position) {
-            landbotUrl += "?position=" + encodeURIComponent(this.state.position.trim());
-        }
-        
+        let landbotUrl = "https://landbot.io/u/H-75367-JMQ0F0TW1XMBPB07/index.html";
+        // if (this.state.position) {
+        //     landbotUrl += "?position=" + encodeURIComponent(this.state.position.trim());
+        // }
+
         return (
             <div className="landbot-container">
                 <iframe
