@@ -188,9 +188,19 @@ class CognitiveTest extends Component {
 
         const rpmImg = "/images/cognitiveTest/" + questionInfo.rpm;
 
+        let timer = "00";
+        if (this.state.timer) {
+            const time = this.state.timer;
+            if (time < 10) {
+                timer = "0" + time;
+            } else {
+                timer = time;
+            }
+        }
+
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
-                {this.state.outOfTime ? <div className="secondary-red">Out of time</div> : <div className="secondary-gray">0:{this.state.timer}</div> }
+                {this.state.outOfTime ? <div className="secondary-red">Out of time</div> : <div className="secondary-gray">0:{timer}</div> }
                 <div className="marginBottom40px"><img styleName="rpmImg" src={rpmImg + this.props.png} /></div>
                 <div className="center" style={{maxWidth: "800px", margin:"auto"}}>
                     { answers }
