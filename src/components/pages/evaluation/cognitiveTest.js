@@ -10,6 +10,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import ProgressBar from '../../miscComponents/progressBar';
 import { htmlDecode } from "../../../miscFunctions";
 
+import "./cognitiveTest.css";
+
 class CognitiveTest extends Component {
     constructor(props) {
         super(props);
@@ -131,7 +133,7 @@ class CognitiveTest extends Component {
                      className={"cognitiveMultipleChoiceAnswer" + selectedClass}
                 >
                     <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
-                    <div className="cognitiveTestImg"><img src={imgSrc + this.props.png} /></div>
+                    <div styleName="answersImg"><img src={imgSrc + this.props.png} /></div>
                 </div>
             );
         });
@@ -139,10 +141,12 @@ class CognitiveTest extends Component {
         const canContinue = !this.props.loading && this.state.selectedId;
         const buttonClass = "skillContinueButton" + (canContinue === undefined ? " disabled" : "");
 
+        const rpmImg = "/images/cognitiveTest/" + questionInfo.rpm;
+
         // otherwise, good to go - show them the question
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
-                <StyledContent contentArray={questionInfo.body} style={{marginBottom:"40px"}} />
+                <div className="marginBottom40px"><img styleName="rpmImg" src={rpmImg + this.props.png} /></div>
                 <div className="center" style={{maxWidth: "800px", margin:"auto"}}>
                     { answers }
                 </div>
@@ -169,7 +173,7 @@ class CognitiveTest extends Component {
         else if (!questionInfo) { return <CircularProgress color="secondary" />; }
 
         // the typical interface with the slider
-        else if (questionInfo.body) { return this.createContent(); }
+        else if (questionInfo.rpm) { return this.createContent(); }
 
         // something is up if we get here
         else { return this.errorPage(); }

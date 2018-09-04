@@ -1806,7 +1806,7 @@ async function getNewCognitiveQuestion(cognitiveTest) {
 
         // create the question object for the eval component
         const componentQuestion = {
-            body: question.body,
+            rpm: question.rpm,
             options: question.options.map(opt => { return { body: opt.body, _id: opt._id } } )
         }
 

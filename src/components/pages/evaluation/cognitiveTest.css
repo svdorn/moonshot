@@ -1,0 +1,11 @@
+.rpmImg {
+    height: 250px;
+}
+
+.answersImg {
+    display: inline-block;
+    margin-left: 30px;
+}
+.answersImg > img {
+    height: 70px;
+}
