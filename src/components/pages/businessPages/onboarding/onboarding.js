@@ -248,7 +248,7 @@ class Onboarding extends Component {
                         <div>
                             <div>
                                 <YouTube
-                                    videoId="m4_M9onXmpY"
+                                    videoId="LNF5Sqxn7R4"
                                     opts={opts}
                                     onReady={this._onReady}
                                     onEnd={this._onEnd}
