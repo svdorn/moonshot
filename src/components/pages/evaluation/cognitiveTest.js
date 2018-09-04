@@ -72,12 +72,10 @@ class CognitiveTest extends Component {
 
     // move on to the next question (or start/finish the test)
     nextQuestion() {
-        if (typeof this.state.selectedId !== "undefined" && !this.props.loading) {
+        if ((typeof this.state.selectedId !== "undefined" || this.state.outOfTime) && !this.props.loading) {
             this.props.answerEvaluationQuestion("Cognitive", {
                 ...this.props.credentials,
-                selectedId: this.state.selectedId,
-                outOfTime: false,
-                timer: undefined
+                selectedId: this.state.selectedId
             });
         }
     }
@@ -153,7 +151,8 @@ class CognitiveTest extends Component {
         } else {
             let self = this;
             this.setState({
-                timer: seconds
+                timer: seconds,
+                outOfTime: false
             }, () => {
                 setTimeout(function() {
                     self.getTimer();
@@ -175,7 +174,7 @@ class CognitiveTest extends Component {
             const imgSrc = "/images/cognitiveTest/" + option.body;
             return (
                 <div key={option.body}
-                     onClick={() => self.selectAnswer(option._id)}
+                     onClick={this.state.outOfTime? null : () => self.selectAnswer(option._id)}
                      className={"cognitiveMultipleChoiceAnswer" + selectedClass}
                 >
                     <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
@@ -184,17 +183,18 @@ class CognitiveTest extends Component {
             );
         });
 
-        const canContinue = !this.props.loading && this.state.selectedId;
-        const buttonClass = "skillContinueButton" + (canContinue === undefined ? " disabled" : "");
+        console.log("selectedId: ", this.state.selectedId);
+        console.log("out of time: ", this.state.outOfTime);
+        console.log("together: ", (this.state.selectedId || this.state.outOfTime));
+
+        const canContinue = !this.props.loading && (this.state.selectedId || this.state.outOfTime);
+        const buttonClass = "skillContinueButton" + (!canContinue ? " disabled" : "");
 
         const rpmImg = "/images/cognitiveTest/" + questionInfo.rpm;
 
-        // otherwise, good to go - show them the question
-        console.log("timer: ", this.state.timer);
-        console.log("out of time: ", this.state.outOfTime);
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
-                {this.state.outOfTime ? <div className="secondary-gray">Out of time</div> : <div className="secondary-gray">0:{this.state.timer}</div> }
+                {this.state.outOfTime ? <div className="secondary-red">Out of time</div> : <div className="secondary-gray">0:{this.state.timer}</div> }
                 <div className="marginBottom40px"><img styleName="rpmImg" src={rpmImg + this.props.png} /></div>
                 <div className="center" style={{maxWidth: "800px", margin:"auto"}}>
                     { answers }

@@ -331,7 +331,7 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
     let gcaTest = user.cognitiveTest;
 
     // if the user has a current question and an answer is given, save the answer
-    if (gcaTest.currentQuestion && gcaTest.currentQuestion.questionId && typeof selectedId === "string") {
+    if (gcaTest.currentQuestion && gcaTest.currentQuestion.questionId) {
         user.cognitiveTest = addCognitiveAnswer(user.cognitiveTest, selectedId);
     }
 
@@ -707,11 +707,6 @@ function addSkillAnswer(userSkill, selectedId) {
 
 // adds an answer for the current cognitive test question
 function addCognitiveAnswer(cognitive, selectedId) {
-    // make sure arguments are valid
-    if (typeof selectedId !== "string") {
-        return reject(`Invalid arguments to addCognitiveAnswer. selectedId: ${selectedId}`);
-    }
-
     // get the current question from the user object
     let userCurrQ = cognitive.currentQuestion;
 
@@ -719,7 +714,11 @@ function addCognitiveAnswer(cognitive, selectedId) {
     let userLevel = cognitive.levels[0];
 
     // only one answer can be correct, see if the answer is correct
-    const isCorrect = userCurrQ.correctAnswer.toString() === selectedId.toString();
+    if (typeof selectedId === "string") {
+        var isCorrect = userCurrQ.correctAnswer.toString() === selectedId.toString();
+    } else {
+        var isCorrect = false;
+    }
 
     // time meta-data
     const startDate = new Date(userCurrQ.startDate);
