@@ -30,7 +30,7 @@ class CognitiveTest extends Component {
     }
 
     componentDidMount() {
-        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId)) {
+        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && !this.props.questionInfo.factorId) {
             this.setState({ questionId: this.props.questionInfo.questionId },() => {
                 this.getTimer();
             })
@@ -38,7 +38,7 @@ class CognitiveTest extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId)) {
+        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && !this.props.questionInfo.factorId) {
             this.setState({ questionId: this.props.questionInfo.questionId },() => {
                 this.getTimer();
             })
@@ -75,12 +75,13 @@ class CognitiveTest extends Component {
     // move on to the next question (or start/finish the test)
     nextQuestion() {
         if ((typeof this.state.selectedId !== "undefined" || this.state.outOfTime) && !this.props.loading) {
+            const selectedId = this.state.selectedId;
             this.resetTimer(() => {
                 this.props.answerEvaluationQuestion("Cognitive", {
                     ...this.props.credentials,
-                    selectedId: this.state.selectedId
+                    selectedId
                 })
-            });    
+            });
         }
     }
 
@@ -171,7 +172,8 @@ class CognitiveTest extends Component {
         }
         this.setState({
             timer: undefined,
-            outOfTime: false
+            outOfTime: false,
+            selectedId: undefined
         }, callback);
     }
 

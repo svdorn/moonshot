@@ -260,6 +260,8 @@ const usersSchema = mongoose.Schema({
                 // how long it took overall in milliseconds to finish the
                 // question (difference between endDate and startDate)
                 totalTime: Number,
+                // if they were over the time limit
+                overTime: Boolean
             }]
         }]
     },

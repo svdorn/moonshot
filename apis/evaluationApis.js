@@ -725,6 +725,11 @@ function addCognitiveAnswer(cognitive, selectedId) {
     const endDate = new Date();
     const totalTime = endDate.getTime() - startDate.getTime();
 
+    // delay time (52 seconds) to see if they took too long on the question or not. There is some internet delay
+    if (totalTime > 52000) {
+        var overTime = true;
+    }
+
     // add the question to the list of finished questions
     userLevel.questions.push({
         questionId: userCurrQ.questionId,
@@ -732,7 +737,8 @@ function addCognitiveAnswer(cognitive, selectedId) {
         answerId: selectedId,
         startDate,
         endDate,
-        totalTime
+        totalTime,
+        overTime
     });
 
     // save this info back to the user object
