@@ -28,12 +28,27 @@ const { sanitize,
 const { calculatePsychScores } = require("./psychApis");
 
 
+const ObjectId = mongoose.Types.ObjectId;
+//createAdminqs();
+async function createAdminqs() {
+    let q = new Adminqs({
+        questionType: "multipleChoice",
+        text: "Please select the option that best applies to you.",
+        options: [
+            {body: "Hispanic or Latino or Spanish Origin", _id: new ObjectId()},
+            {body: "Non Hispanic or Latino or Spanish Origin", _id: new ObjectId()}
+        ]
+    })
+    await q.save().then(ques => {console.log(ques);});
+}
+
+
 module.exports = {};
 
 
 // answer a question that is shown on the administrative questions portion of an evaluation
 module.exports.POST_answerAdminQuestion = async function(req, res) {
-    const { userId, verificationToken, sliderAnswer, selectedId, selectedText, businessId, positionId } = sanitize(req.body);
+    let { userId, verificationToken, sliderAnswer, selectedId, selectedText, businessId, positionId } = sanitize(req.body);
 
     try { var user = await getAndVerifyUser(userId, verificationToken); }
     catch (getUserError) {
@@ -48,6 +63,14 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
     // if the user didn't have a place to store old questions, add it
     if (!Array.isArray(user.adminQuestions.questions)) { user.adminQuestions.questions = []; }
 
+    // if the user prefers not to answer, save that the user doesn't want to answer
+    let preferNotToAnswer = selectedText === "Prefer Not to Answer";
+    // if the user selected "Prefer Not To Answer", there is no valid id
+    if (preferNotToAnswer) { selectedId = undefined; }
+
+    console.log("Prefer not to answer: ", preferNotToAnswer);
+    console.log("selectedId: ", selectedId);
+
     // if the user has a current question, answer it
     if (user.adminQuestions.currentQuestion && user.adminQuestions.currentQuestion.questionId) {
         // add the response - works for both slider and multipleChoice questions
@@ -55,7 +78,8 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
             questionId: user.adminQuestions.currentQuestion.questionId,
             sliderAnswer,
             selectedId,
-            selectedText
+            selectedText,
+            preferNotToAnswer
         }
         // add the response to the array of answered questions
         user.adminQuestions.questions.push(newAnswer);

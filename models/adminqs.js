@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 
 var adminqsSchema = mongoose.Schema({
-    // can be multipleChoice or slider
+    // can be multipleChoice or slider or multipleChoiceAndCustom or originCountry
     questionType: String,
     // what the question is asking
     text: String,
@@ -16,7 +16,7 @@ var adminqsSchema = mongoose.Schema({
         // the text of the option
         body: String,
         // the id of the question - the user stores this when they answer a question
-        _id: mongoose.Schema.Types.ObjectId
+        _id: mongoose.Schema.ObjectId
     }],
     // which candidate types have to answer this question
     requiredFor: [ String ]

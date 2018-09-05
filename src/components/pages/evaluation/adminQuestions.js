@@ -115,6 +115,7 @@ class AdminQuestions extends Component {
             return null;
         }
 
+        // add all the options to the question
         let options = question.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
             const selectedClass = isSelected ? " selected" : "";
@@ -128,6 +129,20 @@ class AdminQuestions extends Component {
                 </div>
             );
         });
+
+        // add the option not to answer
+        const PREFER_NOT = "Prefer Not to Answer";
+        const isSelected = this.state.selectedId === PREFER_NOT;
+        const selectedClass = isSelected ? " selected" : "";
+        options.push(
+            <div key={PREFER_NOT}
+                 onClick={() => self.selectAnswer(PREFER_NOT, PREFER_NOT)}
+                 className={"skillMultipleChoiceAnswer" + selectedClass}
+            >
+                <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
+                <div className="skillMultipleChoiceOptionText">{PREFER_NOT}</div>
+            </div>
+        );
 
         const buttonClass = this.state.selectedId === undefined ? button.disabled : button.orangeRed;
 
