@@ -18,15 +18,15 @@ var app = express();
 if (process.env.NODE_ENV !== "test") {
     app.use(logger('dev'));
 }
-app.use(fileUpload());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
 var prerender = prerenderNode.set('prerenderToken', 'LYjJ7i8UHyhooHVMA3bB');
 prerender.crawlerUserAgents.push('googlebot');
 prerender.crawlerUserAgents.push('bingbot');
 prerender.crawlerUserAgents.push('yandex');
 app.use(prerender);
+app.use(fileUpload());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
 
 // trust the first proxy encountered because we run through a proxy
 app.set('trust proxy', 1);
