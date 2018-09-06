@@ -209,6 +209,8 @@ class AdminQuestions extends Component {
         // whether there is another drop down to add further down the drop down tree
         let addAnotherDropDown = true;
 
+        console.log("here");
+
         // go through every drop down and sub drop down
         while (addAnotherDropDown) {
             // the options for the drop down
@@ -232,8 +234,8 @@ class AdminQuestions extends Component {
             // assume there isn't another drop down to render
             addAnotherDropDown = false;
 
-            // if an option is selected, check if there is a sub dropdown for it
-            if (this.state.dropDownSelected.length > level) {
+            // if an option is selected for this level, check if there is a sub dropdown for it
+            if (this.state.dropDownSelected[level]) {
                 // get the full object of the option that is selected
                 const selectedOption = currDropDown.options[this.state.dropDownSelected[level].index];
                 // get the sub drop down of that option
@@ -272,10 +274,13 @@ class AdminQuestions extends Component {
     handleDropDownChange(level, selectedOption) {
         console.log("level: ", level);
         console.log("selectedOption: ", selectedOption);
-        // add the info to the array of selected items, removing anything past it in the tree
-        const dropDownSelected = this.state.dropDownSelected.slice(0, level).concat([ selectedOption ]);
+        // add the info to the array of selected items, removing anything past
+        // it in the tree; second arg is null to reset the next value
+        const dropDownSelected = this.state.dropDownSelected.slice(0, level).concat([ selectedOption, null ]);
         // save the options
         this.setState({ dropDownSelected });
+
+        console.log("dropDownSelected", dropDownSelected);
     }
 
 
