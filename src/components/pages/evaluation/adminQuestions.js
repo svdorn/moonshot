@@ -131,8 +131,6 @@ class AdminQuestions extends Component {
             return null;
         }
 
-        console.log("question: ", question);
-
         // add all the options to the question
         let options = question.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
