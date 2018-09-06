@@ -11,6 +11,7 @@ const crypto = require('crypto');
 const sanitizeHtml = require('sanitize-html');
 const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
+const prerender = require('prerender-node');
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(prerender.set('prerenderToken', 'LYjJ7i8UHyhooHVMA3bB'));
 
 // trust the first proxy encountered because we run through a proxy
 app.set('trust proxy', 1);
