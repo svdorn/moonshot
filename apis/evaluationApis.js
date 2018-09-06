@@ -33,10 +33,16 @@ const ObjectId = mongoose.Types.ObjectId;
 async function createAdminqs() {
     let q = new Adminqs({
         questionType: "multipleChoice",
-        text: "Please select the option that best applies to you.",
+        requiredFor: ["candidate", "employee"],
+        text: "Of which group(s) are you a member?",
         options: [
-            {body: "Hispanic or Latino or Spanish Origin", _id: new ObjectId()},
-            {body: "Non Hispanic or Latino or Spanish Origin", _id: new ObjectId()}
+            {body: "American Indian or Alaska Native", _id: new ObjectId()},
+            {body: "Asian", _id: new ObjectId()},
+            {body: "Black or African American", _id: new ObjectId()},
+            {body: "Native Hawaiian or Other Pacific Islander", _id: new ObjectId()},
+            {body: "White", _id: new ObjectId()},
+            {body: "Two or More Races", _id: new ObjectId()},
+            {body: "Other", _id: new ObjectId(), includeInputArea: true}
         ]
     })
     await q.save().then(ques => {console.log(ques);});

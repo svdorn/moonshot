@@ -15,6 +15,8 @@ var adminqsSchema = mongoose.Schema({
     options: [{
         // the text of the option
         body: String,
+        // whether a text box should be included that can be typed into
+        includeInputArea: Boolean,
         // the id of the question - the user stores this when they answer a question
         _id: mongoose.Schema.ObjectId
     }],

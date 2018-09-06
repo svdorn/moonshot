@@ -10,6 +10,8 @@ import StyledContent from "../../childComponents/styledContent";
 import { CircularProgress, Slider } from "material-ui";
 import { button } from "../../../classes";
 
+import "./evaluation.css";
+
 class AdminQuestions extends Component {
     constructor(props) {
         super(props);
@@ -17,7 +19,9 @@ class AdminQuestions extends Component {
         this.state = {
             selectedId: undefined,
             selectedText: undefined,
-            sliderValue: 1
+            sliderValue: 1,
+            otherInput: "",
+            otherInputSelected: false
         };
     }
 
@@ -30,8 +34,17 @@ class AdminQuestions extends Component {
     }
 
 
-    selectAnswer(selectedId, selectedText) {
-        this.setState({...this.state, selectedId, selectedText});
+    selectAnswer(selectedId, selectedText, otherInputSelected) {
+        this.setState({...this.state, selectedId, selectedText, otherInputSelected});
+    }
+
+
+    // change response to an "Other" question
+    changeOtherInput(e) {
+        // get the input the user entered
+        const otherInput = e.target.value;
+        // save it to state
+        this.setState({ otherInput });
     }
 
 
@@ -47,7 +60,10 @@ class AdminQuestions extends Component {
             return;
         }
 
-        const { sliderValue, selectedId, selectedText } = this.state;
+        let { sliderValue, selectedId, selectedText } = this.state;
+
+        // take the input value if Other selected
+        if (this.state.otherInputSelected) { selectedText = this.state.otherInput; }
 
         this.props.answerEvaluationQuestion("Admin", {
             ...this.props.credentials,
@@ -115,17 +131,31 @@ class AdminQuestions extends Component {
             return null;
         }
 
+        console.log("question: ", question);
+
         // add all the options to the question
         let options = question.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
             const selectedClass = isSelected ? " selected" : "";
+
+            const inputArea = !option.includeInputArea ? null : (
+                <input
+                    type="text"
+                    styleName="other-input"
+                    placeholder="Please Specify"
+                    onChange={this.changeOtherInput.bind(this)}
+                    value={this.state.otherInput}
+                />
+            );
+
             return (
                 <div key={option.body}
-                     onClick={() => self.selectAnswer(option._id, option.body)}
+                     onClick={() => self.selectAnswer(option._id, option.body, option.includeInputArea)}
                      className={"skillMultipleChoiceAnswer" + selectedClass}
                 >
                     <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
                     <div className="skillMultipleChoiceOptionText">{option.body}</div>
+                    {inputArea}
                 </div>
             );
         });
