@@ -4,8 +4,7 @@ import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
 import { answerEvaluationQuestion, skipAdminQuestions } from "../../../actions/usersActions";
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import Select from "react-select";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
@@ -13,6 +12,18 @@ import { CircularProgress, Slider } from "material-ui";
 import { button } from "../../../classes";
 
 import "./evaluation.css";
+
+const dropDownStyles = {
+    container: base => ({
+        ...base,
+        width: "25%",
+        minWidth: "180px"
+    }),
+    option: base => ({
+        ...base,
+        color: "black",
+    })
+}
 
 class AdminQuestions extends Component {
     constructor(props) {
@@ -23,7 +34,9 @@ class AdminQuestions extends Component {
             selectedText: undefined,
             sliderValue: 1,
             otherInput: "",
-            otherInputSelected: false
+            otherInputSelected: false,
+            // goes in order from top level to bottom level
+            dropDownSelected: []
         };
     }
 
@@ -183,53 +196,63 @@ class AdminQuestions extends Component {
 
     makeDropDownsQuestion() {
         const self = this;
+        // current question to answer
         const question = this.props.questionInfo;
-
+        // if the user can go on to the next question, will look clickable
         const buttonClass = this.state.selectedId === undefined ? button.disabled : button.orangeRed;
-
+        // the list of drop downs to render
         const dropDowns = [];
-
+        // the drop down we are currently dealing with
         let currDropDown = question.dropDown;
+        // start at the first (top) drop down menu
+        let level = 0;
+        // whether there is another drop down to add further down the drop down tree
+        let addAnotherDropDown = true;
 
-        let keyCounter = 0;
+        // go through every drop down and sub drop down
+        while (addAnotherDropDown) {
+            // the options for the drop down
+            const options = currDropDown.options.map((option, index) => {
+                return { value: option.body, label: option.body, index };
+            });
 
-        // // go through every drop down and sub drop down
-        // do {
-        //     // create the stage name menu items
-        //     const stages = stageNames.map(stage => {
-        //         keyCounter++;
-        //         return (
-        //             <MenuItem
-        //                 value={stage}
-        //                 key={`listItem${keyCounter}`}
-        //             >
-        //                 { stage }
-        //             </MenuItem>
-        //         )
-        //     });
-        //
-        //     // add the drop down to the list of them
-        //     dropDowns.push(
-        //         <Select
-        //             disableUnderline={true}
-        //             classes={{
-        //                 root: "selectRootWhite myCandidatesSelect",
-        //                 icon: "selectIconWhiteImportant"
-        //             }}
-        //             value={hiringStage}
-        //             onChange={this.handleSelectChange()}
-        //             key={`${candidateId}hiringStage`}
-        //         >
-        //             { listItems }
-        //         </Select>
-        //     )
-        // } // only add the next one if is exists and the current one has been answered
-        // while (typeof currDropDown.subDropDown === "object" && Array.isArray(currDropDown.subDropDown.options) && currDropDown.subDropDown.options.length > 0);
+            const placeholder = { level };
+
+            // add the drop down to the list of them
+            dropDowns.push(
+                <Select
+                    value={this.state.dropDownSelected[level]}
+                    onChange={(selectedOption) => this.handleDropDownChange(placeholder.level, selectedOption)}
+                    options={options}
+                    styles={dropDownStyles}
+                    key={`dropdown${level}-${currDropDown.title}`}
+                />
+            );
+
+            // assume there isn't another drop down to render
+            addAnotherDropDown = false;
+
+            // if an option is selected, check if there is a sub dropdown for it
+            if (this.state.dropDownSelected.length > level) {
+                // get the full object of the option that is selected
+                const selectedOption = currDropDown.options[this.state.dropDownSelected[level].index];
+                // get the sub drop down of that option
+                currDropDown = selectedOption.subDropDown;
+                // check that it is a legit drop down
+                if (typeof currDropDown === "object" && Array.isArray(currDropDown.options) && currDropDown.options.length > 0) {
+                    // if so, we'll want to add it
+                    addAnotherDropDown = true;
+                }
+            }
+
+            // go a level down the drop down tree
+            level++;
+        }
+
 
         return (
             <div>
-                <div className="adminQuestions question">{question.text}</div>
-                { options }
+                { dropDowns }
                 {this.props.loading ?
                     <CircularProgress color="#ff582d" />
                     :
@@ -242,6 +265,17 @@ class AdminQuestions extends Component {
                 }
             </div>
         );
+    }
+
+
+    // select a drop down value
+    handleDropDownChange(level, selectedOption) {
+        console.log("level: ", level);
+        console.log("selectedOption: ", selectedOption);
+        // add the info to the array of selected items, removing anything past it in the tree
+        const dropDownSelected = this.state.dropDownSelected.slice(0, level).concat([ selectedOption ]);
+        // save the options
+        this.setState({ dropDownSelected });
     }
 
 
@@ -300,18 +334,12 @@ class AdminQuestions extends Component {
         else if (!question) { return <CircularProgress color="#ff582d" />; }
 
         else {
-            const questionType = question.questionType;
-
-            // slider type question
-            if (questionType === "slider") { return this.makeSliderQuestion(); }
-
-            // multiple choice type question
-            else if (questionType === "multipleChoice") {
-                return this.makeMultipleChoiceQuestion();
+            switch (question.questionType) {
+                case "slider": { return this.makeSliderQuestion(); }
+                case "multipleChoice": { return this.makeMultipleChoiceQuestion(); }
+                case "dropDown": { return this.makeDropDownsQuestion(); }
+                default: { return <div>Something{"'"}s messed up. Try refreshing.</div> }
             }
-
-            // shouldn't be able to get here
-            else { return <div>Something{"'"}s messed up. Try refreshing.</div> }
         }
     }
 }
