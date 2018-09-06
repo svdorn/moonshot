@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
 import { answerEvaluationQuestion, skipAdminQuestions } from "../../../actions/usersActions";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
@@ -158,21 +160,71 @@ class AdminQuestions extends Component {
             );
         });
 
-        // add the option not to answer
-        const PREFER_NOT = "Prefer Not to Answer";
-        const isSelected = this.state.selectedId === PREFER_NOT;
-        const selectedClass = isSelected ? " selected" : "";
-        options.push(
-            <div key={PREFER_NOT}
-                 onClick={() => self.selectAnswer(PREFER_NOT, PREFER_NOT)}
-                 className={"skillMultipleChoiceAnswer" + selectedClass}
-            >
-                <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
-                <div className="skillMultipleChoiceOptionText">{PREFER_NOT}</div>
+        const buttonClass = this.state.selectedId === undefined ? button.disabled : button.orangeRed;
+
+        return (
+            <div>
+                <div className="adminQuestions question">{question.text}</div>
+                { options }
+                {this.props.loading ?
+                    <CircularProgress color="#ff582d" />
+                    :
+                    <div
+                        className={"marginBottom50px " + buttonClass}
+                        onClick={this.nextQuestion.bind(this)}
+                    >
+                        Next
+                    </div>
+                }
             </div>
         );
+    }
+
+
+    makeDropDownsQuestion() {
+        const self = this;
+        const question = this.props.questionInfo;
 
         const buttonClass = this.state.selectedId === undefined ? button.disabled : button.orangeRed;
+
+        const dropDowns = [];
+
+        let currDropDown = question.dropDown;
+
+        let keyCounter = 0;
+
+        // // go through every drop down and sub drop down
+        // do {
+        //     // create the stage name menu items
+        //     const stages = stageNames.map(stage => {
+        //         keyCounter++;
+        //         return (
+        //             <MenuItem
+        //                 value={stage}
+        //                 key={`listItem${keyCounter}`}
+        //             >
+        //                 { stage }
+        //             </MenuItem>
+        //         )
+        //     });
+        //
+        //     // add the drop down to the list of them
+        //     dropDowns.push(
+        //         <Select
+        //             disableUnderline={true}
+        //             classes={{
+        //                 root: "selectRootWhite myCandidatesSelect",
+        //                 icon: "selectIconWhiteImportant"
+        //             }}
+        //             value={hiringStage}
+        //             onChange={this.handleSelectChange()}
+        //             key={`${candidateId}hiringStage`}
+        //         >
+        //             { listItems }
+        //         </Select>
+        //     )
+        // } // only add the next one if is exists and the current one has been answered
+        // while (typeof currDropDown.subDropDown === "object" && Array.isArray(currDropDown.subDropDown.options) && currDropDown.subDropDown.options.length > 0);
 
         return (
             <div>

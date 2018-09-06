@@ -43,10 +43,24 @@ async function createAdminqs() {
                         {
                             title: "Country",
                             options: [
-                                { _id: new ObjectId(), body: "North America" }
+                                { _id: new ObjectId(), body: "United States" },
+                                { _id: new ObjectId(), body: "Canada" },
                             ]
                         }
-                }
+                },
+                {
+                    _id: new ObjectId(), body: "South America", subDropDown:
+                        {
+                            title: "Country",
+                            options: [
+                                { _id: new ObjectId(), body: "Brazil" },
+                                { _id: new ObjectId(), body: "Ecuador" },
+                            ]
+                        }
+                },
+                {
+                    _id: new ObjectId(), body: "Prefer Not to Answer"
+                },
             ]
         }
         // options: [
@@ -83,14 +97,6 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
     // if the user didn't have a place to store old questions, add it
     if (!Array.isArray(user.adminQuestions.questions)) { user.adminQuestions.questions = []; }
 
-    // if the user prefers not to answer, save that the user doesn't want to answer
-    let preferNotToAnswer = selectedText === "Prefer Not to Answer";
-    // if the user selected "Prefer Not To Answer", there is no valid id
-    if (preferNotToAnswer) { selectedId = undefined; }
-
-    console.log("Prefer not to answer: ", preferNotToAnswer);
-    console.log("selectedId: ", selectedId);
-
     // if the user has a current question, answer it
     if (user.adminQuestions.currentQuestion && user.adminQuestions.currentQuestion.questionId) {
         // add the response - works for both slider and multipleChoice questions
@@ -98,8 +104,7 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
             questionId: user.adminQuestions.currentQuestion.questionId,
             sliderAnswer,
             selectedId,
-            selectedText,
-            preferNotToAnswer
+            selectedText
         }
         // add the response to the array of answered questions
         user.adminQuestions.questions.push(newAnswer);
