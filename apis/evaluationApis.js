@@ -1,7 +1,7 @@
 const Users = require('../models/users.js');
 const Psychtests = require('../models/psychtests.js');
 const Psychquestions = require('../models/psychquestions.js');
-const Cognitivetests = require('../models/cognitivetests.js');
+const GCA = require('../models/cognitivequestions.js');
 const Skills = require('../models/skills.js');
 const Businesses = require('../models/businesses.js');
 const Adminqs = require("../models/adminqs");
@@ -306,12 +306,6 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
 
-    // user has to be taking an eval to answer a skill question
-    if (!user.evalInProgress) {
-        console.log("No eval in progress when user tried to answer a cognitive question.");
-        return res.status(400).send({ notSignedUp: true });
-    }
-
     // whether the user should be returned to the front end
     let returnUser = false;
 
@@ -325,6 +319,12 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
             console.log("Error starting cognitive test: ", startCognitiveError);
             return res.status(500).send({ serverError: true });
         }
+    }
+
+    // if the user has already finished the cognitive test, can't take it again
+    else if (user.cognitiveTest && user.cognitiveTest.endDate) {
+        console.log("User tried to answer cognitive question after having finished test. User: ", user);
+        return res.status(400).send({ message: "Already finished cognitive test." });
     }
 
     // get the cognitive test from the user object
@@ -367,13 +367,11 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
 
     // if not done with the skill questions
     else {
-        // save the question as the current question for the user
-        //console.log("updated currQ: ", updatedTest.cognitiveTest.currentQuestion);
-
         // return the new question to answer
         toReturn = {
             evaluationState: { componentInfo: updatedTest.componentQuestion, showIntro: false },
         };
+        // set cognitive test to most updated version of itself
         user.cognitiveTest = updatedTest.cognitiveTest;
         if (returnUser) { toReturn.user = user; }
     }
@@ -644,17 +642,13 @@ async function newPsychTest() {
 // return a fresh new just-started cognitive eval
 async function newCognitiveTest() {
     return new Promise(async function(resolve, reject) {
-
         // new empty cognitive test
         resolve({
             inProgress: true,
             // starting right now
             startDate: new Date(),
-            currentLevel: 1,
-            levels: [{
-                levelNumber: 1,
-                questions: []
-            }]
+            // hasn't answered any questions yet
+            questions: []
         });
     });
 }
@@ -710,15 +704,8 @@ function addCognitiveAnswer(cognitive, selectedId) {
     // get the current question from the user object
     let userCurrQ = cognitive.currentQuestion;
 
-    // get the current level - only allowing skills with one level at the moment
-    let userLevel = cognitive.levels[0];
-
     // only one answer can be correct, see if the answer is correct
-    if (typeof selectedId === "string") {
-        var isCorrect = userCurrQ.correctAnswer.toString() === selectedId.toString();
-    } else {
-        var isCorrect = false;
-    }
+    const isCorrect = typeof selectedId === "string" && userCurrQ.correctAnswer.toString() === selectedId.toString();
 
     // time meta-data
     const startDate = new Date(userCurrQ.startDate);
@@ -726,12 +713,10 @@ function addCognitiveAnswer(cognitive, selectedId) {
     const totalTime = endDate.getTime() - startDate.getTime();
 
     // delay time (52 seconds) to see if they took too long on the question or not. There is some internet delay
-    if (totalTime > 52000) {
-        var overTime = true;
-    }
+    if (totalTime > 52000) { var overTime = true; }
 
     // add the question to the list of finished questions
-    userLevel.questions.push({
+    cognitive.questions.push({
         questionId: userCurrQ.questionId,
         isCorrect,
         answerId: selectedId,
@@ -740,9 +725,6 @@ function addCognitiveAnswer(cognitive, selectedId) {
         totalTime,
         overTime
     });
-
-    // save this info back to the user object
-    cognitive.levels[0] = userLevel;
 
     // delete the current question
     cognitive.currentQuestion = undefined;
@@ -1646,19 +1628,21 @@ async function addCognitiveInfo(user, evaluationState) {
             if (!cognitiveStarted) { evaluationState.showIntro = true; }
             // otherwise give the user their current cognitive question
             else {
-                try { var dbCognitive = await Cognitivetests.findOne({}); }
+                try {
+                    var question = await GCA
+                        // find the question with the id of the user's current question
+                        .findById(cognitive.currentQuestion.questionId)
+                        // don't include whether each question is correct
+                        .select("-options.isCorrect")
+                }
                 catch (getCognitiveError) { reject(getCognitiveError); }
-
-                const questions = dbCognitive.levels[0].questions;
-                let question = questions.find(q => q._id.toString() === cognitive.currentQuestion.questionId.toString());
 
                 const componentQuestion = {
                     rpm: question.rpm,
-                    options: question.options.map(opt => { return { body: opt.body, _id: opt._id } } ),
+                    options: question.options,
                     startDate: cognitive.currentQuestion.startDate,
                     questionId: question._id
                 }
-                console.log("q: ", componentQuestion);
 
                 evaluationState.componentInfo = componentQuestion;
              }
@@ -1782,35 +1766,30 @@ async function getNewSkillQuestion(userSkill) {
         return resolve({ userSkill, componentQuestion });
     });
 }
+
+
 async function getNewCognitiveQuestion(cognitiveTest) {
     return new Promise(async function(resolve, reject) {
         // make sure the user cognitive test is valid
         if (typeof cognitiveTest !== "object") { reject(`Invalid cognitiveTest: ${cognitiveTest}`)}
 
-        // get the cognitive test from the db
-        try { var dbCognitive = await Cognitivetests.findOne({}); }
-        catch (getCognitiveError) { reject(getCognitiveError); }
+        // create a list of ids of questions the user has already answered
+        const answeredIds = cognitiveTest.questions.map(cogQ => cogQ.questionId);
 
-        // get the current (only) level
-        let userLevel = cognitiveTest.levels[0];
-
-        // if the user has answered every question in the only level of the test
-        const dbQuestions = dbCognitive.levels[0].questions;
-        if (userLevel.questions.length === dbQuestions.length) {
-            // test is finished, return saying so
-            return resolve({ finished: true });
+        // query the db to find a question
+        const query = {
+            // can't be a question we've already used
+            "_id": { "$nin": answeredIds }
         }
+        try { var availableQs = await GCA.find(query); }
+        catch (getQsError) { return reject(getQsError); }
 
-        // otherwise make an object that lets us know which question ids have been answered
-        let answeredIds = {};
-        userLevel.questions.forEach(q => answeredIds[q.questionId.toString()] = true);
+        // if we don't have any available questions, finished with the test
+        if (availableQs.length === 0) { return resolve({ finished: true }); }
 
-        // get a list of questions that have not been answered
-        const availableQs = dbQuestions.filter(q => !answeredIds[q._id.toString()]);
-
-        // get a random question from that list
+        // pick a random question from the list of potential questions
         const questionIdx = randomInt(0, availableQs.length - 1);
-        const question = availableQs[questionIdx];
+        let question = availableQs[questionIdx];
 
         // figure out id of correct answer for that question
         const correctAnswer = question.options.find(opt => opt.isCorrect)._id;
@@ -1819,8 +1798,6 @@ async function getNewCognitiveQuestion(cognitiveTest) {
 
         // mark it as the current question
         cognitiveTest.currentQuestion = {
-            levelNumber: 1,
-            levelIndex: 0,
             questionId: question._id,
             startDate,
             correctAnswer
@@ -1829,7 +1806,7 @@ async function getNewCognitiveQuestion(cognitiveTest) {
         // create the question object for the eval component
         const componentQuestion = {
             rpm: question.rpm,
-            options: question.options.map(opt => { return { body: opt.body, _id: opt._id } } ),
+            options: question.options.map(opt => { return { src: opt.src, _id: opt._id } } ),
             startDate,
             questionId: question._id
         }

@@ -188,14 +188,14 @@ class CognitiveTest extends Component {
             const isSelected = this.state.selectedId === option._id;
             const selectedClass = isSelected ? " selected" : "";
             const outOfTimeClass = this.state.outOfTime ? " outOfTime" : "";
-            const imgSrc = "/images/cognitiveTest/" + option.body;
+            const imgSrc = option.src + this.props.png;
             return (
-                <div key={option.body}
+                <div key={option.src}
                      onClick={this.state.outOfTime? null : () => self.selectAnswer(option._id)}
                      className={"cognitiveMultipleChoiceAnswer" + selectedClass + outOfTimeClass}
                 >
                     <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
-                    <div styleName="answersImg"><img src={imgSrc + this.props.png} /></div>
+                    <div styleName="answersImg"><img src={imgSrc} /></div>
                 </div>
             );
         });
@@ -203,7 +203,7 @@ class CognitiveTest extends Component {
         const canContinue = !this.props.loading && (this.state.selectedId || this.state.outOfTime);
         const buttonClass = "skillContinueButton" + (!canContinue ? " disabled" : "");
 
-        const rpmImg = "/images/cognitiveTest/" + questionInfo.rpm;
+        const rpmSrc = questionInfo.rpm + this.props.png;
 
         let timer = "00";
         if (this.state.timer) {
@@ -218,7 +218,7 @@ class CognitiveTest extends Component {
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
                 {this.state.outOfTime ? <div styleName="error-red">Out of time - please advance to the next question.</div> : <div className="secondary-gray">0:{timer}</div> }
-                <div className="marginBottom40px"><img styleName="rpmImg" src={rpmImg + this.props.png} /></div>
+                <div className="marginBottom40px"><img styleName="rpmImg" src={rpmSrc} /></div>
                 <div className="center" style={{maxWidth: "800px", margin:"auto"}}>
                     { answers }
                 </div>

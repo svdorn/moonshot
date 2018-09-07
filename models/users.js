@@ -219,50 +219,33 @@ const usersSchema = mongoose.Schema({
         // the question the user is currently answering, undefined if test not
         // in progress; will always be for most recent (in progress) test
         currentQuestion: {
-            // level of difficulty of the question
-            levelNumber: Number,
-            // index of the level within the skill database kept for time optimization
-            levelIndex: Number,
             // id of the question currently being answered
             questionId: mongoose.Schema.Types.ObjectId,
-            // index of the qustion in the skill database for time optimization
-            questionIndex: Number,
             // the time the question was assigned to the user
             startDate: Date,
-            // the correct answers so that we don't have to re-find the question
+            // the correct answer so that we don't have to re-find the question
             // when getting the next question and grading this one
-            //correctAnswers: [ mongoose.Schema.Types.ObjectId ],
-            // similar premise but with the new way skills are done
             correctAnswer: mongoose.Schema.Types.ObjectId
         },
         // the score the user got on the test; undefined if in progress
         score: Number,
-        // the level they're currently on
-        currentLevel: Number,
-        // the levels the user got through with the associated answers to questions
-        levels: [{
-            // the level of difficulty of the questions
-            levelNumber: Number,
-            // the questions the candidate answered at this level of difficulty
-            questions: [{
-                // id of the question
-                questionId: mongoose.Schema.Types.ObjectId,
-                // if the candidate chose the correct answers
-                isCorrect: Boolean,
-                // the ids of answers that the user chose
-                //answerIds: [ mongoose.Schema.Types.ObjectId ],
-                // the id of the answer that the user chose
-                answerId: mongoose.Schema.Types.ObjectId,
-                // the date and time the user started the question
-                startDate: Date,
-                // the date and time the user finished the question
-                endDate: Date,
-                // how long it took overall in milliseconds to finish the
-                // question (difference between endDate and startDate)
-                totalTime: Number,
-                // if they were over the time limit
-                overTime: Boolean
-            }]
+        // the gca questions the user answered
+        questions: [{
+            // id of the question
+            questionId: mongoose.Schema.Types.ObjectId,
+            // if the candidate chose the correct answers
+            isCorrect: Boolean,
+            // the id of the answer that the user chose
+            answerId: mongoose.Schema.Types.ObjectId,
+            // the date and time the user started the question
+            startDate: Date,
+            // the date and time the user finished the question
+            endDate: Date,
+            // how long it took overall in milliseconds to finish the
+            // question (difference between endDate and startDate)
+            totalTime: Number,
+            // if they were over the time limit
+            overTime: Boolean
         }]
     },
 
