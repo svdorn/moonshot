@@ -350,7 +350,11 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
     // move on to the next stage
     if (updatedTest.finished === true) {
         // mark the cognitive test complete and score it
-        user.cognitiveTest = markCognitiveComplete(user.cognitiveTest);
+        try { user = await finishCognitive(user); }
+        catch(finishError) {
+            console.log("Error finishing user's cognitive test: ", finishError);
+            return res.status(500).send({ serverError: true });
+        }
 
         // calculate the new evaluation state
         try {
@@ -515,16 +519,117 @@ function markPsychComplete(psychTest) {
 }
 
 // mark the cognitive test as finished
-function markCognitiveComplete(cognitiveTest) {
-    cognitiveTest.inProgress = false;
+async function finishCognitive(user) {
+    return new Promise(async function(resolve, reject) {
+        let cognitiveTest = user.cognitiveTest;
 
-    if (!cognitiveTest.endDate) {
-        const NOW = new Date();
-        cognitiveTest.endDate = NOW;
-        cognitiveTest.totalTime = NOW.getTime() - cognitiveTest.startDate.getTime();
-    }
+        cognitiveTest.inProgress = false;
 
-    return cognitiveTest;
+        if (!cognitiveTest.endDate) {
+            const NOW = new Date();
+            cognitiveTest.endDate = NOW;
+            cognitiveTest.totalTime = NOW.getTime() - cognitiveTest.startDate.getTime();
+        }
+
+        // ----------------------->> GRADE THE TEST <<----------------------- //
+
+        // get the ids of all the questions the user answered
+        const answeredIds = cognitiveTest.questions.map(q => q.questionId);
+        // query to get all the questions from the db
+        const query = { "_id": { "$in": answeredIds } };
+        // get all the questions in normal object form
+        try { var questions = await GCA.find(query).select("_id difficulty discrimination guessChance").lean(); }
+        catch (getQuestionsError) { return reject(getQuestionsError); }
+        // go through each question
+        questions.forEach((dbQ, index) => {
+            // get the question in the user object correlating to this question
+            const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
+            // add whether the user is correct to the question
+            questions[index].isCorrect = userQuestion.isCorrect;
+        });
+
+        // the value of all sampled points times their weights added up together
+        let totalValue = 0;
+        // all the weights added up
+        let totalWeight = 0;
+
+        // calculate the value of the function at every point from 0 to 200
+        // going up by .1 every iteration
+        for (let theta = 0; theta < 200; theta += .1) {
+            // calculate the value of the likelihood function at this point
+            const value = expectationAPriori(questions, theta);
+            // the weight is equal to the value, so value * weight = value ^ 2
+            totalValue += value * value;
+            totalWeight += value;
+        }
+
+        cognitiveTest.score = totalValue / totalWeight;
+
+        console.log("Score: ", cognitiveTest.score);
+
+        // <<--------------------- FINISH GRADING TEST -------------------->> //
+
+        user.cognitiveTest = cognitiveTest;
+
+        // return the graded test
+        return resolve(user);
+    });
+}
+
+
+// this function gets the value needed for bayesian expectation a priori calculation
+// it is simply the theta likelihood times the normal distribution of scores for
+// the population
+// the reason we do this is to account for the possibility that someone gets every
+// question right or every question wrong, as that would get them a score involving
+// infinity either way
+// using expectation a priori also involves getting the average weighted value
+// instead of the max of this function because it can then account for the asymmetry
+// in the IRF caused by the guessing chance
+function expectationAPriori(questions, theta) {
+    return thetaLikelihood(questions, theta) * normalDistribution(theta);
+}
+// this function graphs the likelihood that a user has any given theta
+// return value is the probability that a user will have the given theta
+// does this by multiplying item response functions for each question along with
+// whether the user was correct or incorrect for that question
+function thetaLikelihood(questions, theta) {
+    let value = 1;
+    // go through each question
+    questions.forEach(question => {
+        // find the value of the item response function at that point
+        const irfValue = itemResponseFunction(question, theta);
+        // if the user got the question right, multiply the likelihood by the
+        // normal item response function for the question
+        if (question.isCorrect) { value *= irfValue }
+        // otherwise multiply it by 1 minus the value to show it's more likely
+        // that the user's true theta value is lower
+        else { value *= 1 - irfValue; }
+    });
+    // return the product of all the IRF values
+    return value;
+}
+// normal distribution of scores across the distribution
+// this should ideally be a perfectly normal distribution with mean of
+// 100 and standard deviation of 15
+// assume that's what it is because we don't have the data yet to know
+// what the actual mean and std dev are
+function normalDistribution(theta) {
+    // formula: (1/(stddev * sqrt(2pi)) * e ^ ((-(theta * mean)^2) / 2(stddev^2))
+    const scalar = 1 / (100 * Math.sqrt(2 * Math.PI));
+    const exponent = -Math.pow((theta - 100), 2) / 450;
+    return scalar * Math.pow(Math.E, exponent);
+}
+// the probability of getting a question right based on the question's:
+// difficulty (how hard the question is)
+// discrimination (how good the question is at determining theta)
+// guessChance (chance user will get question right just by guessing)
+// as well as theta (general cognitive ability of the user)
+function itemResponseFunction(question, theta) {
+    const { guessChance, difficulty, discrimination } = question;
+    const numerator = 1 - guessChance;
+    const denominator = 1 + Math.pow(Math.E, -(discrimination * (theta - difficulty)));
+    return guessChance + (numerator / denominator);
 }
 
 
