@@ -113,6 +113,7 @@ class AdminQuestions extends Component {
             selectedId: undefined,
             selectedText: undefined,
             sliderValue: 1,
+            otherInput: "",
             dropDownSelected: []
         }
 
