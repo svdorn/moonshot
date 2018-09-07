@@ -466,6 +466,7 @@ function createPosition(name, type) {
         length: 25,
         dateCreated: Date.now(),
         finalized: true,
+        timeAllotted: 14
     }
 
     const devFactors = {
@@ -1238,9 +1239,7 @@ async function POST_addEvaluation(req, res) {
 
      business.positions.push(createPosition(positionName, positionType));
 
-     try {
-         await business.save();
-     }
+     try { await business.save(); }
      catch (saveBizError) {
          console.log("Error saving business with a non-finalized position when adding users: ", saveBizError);
          console.log("Arrays that were not saved into business: ", candidateEmails, employeeEmails);
