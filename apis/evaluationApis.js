@@ -295,6 +295,7 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     return res.status(200).send(toReturn);
 }
 
+
 // start/answer a question for skill tests
 module.exports.POST_answerCognitiveQuestion = async function(req, res) {
     const { userId, verificationToken, selectedId, businessId, positionId } = sanitize(req.body);
@@ -705,7 +706,8 @@ function addCognitiveAnswer(cognitive, selectedId) {
     let userCurrQ = cognitive.currentQuestion;
 
     // only one answer can be correct, see if the answer is correct
-    const isCorrect = typeof selectedId === "string" && userCurrQ.correctAnswer.toString() === selectedId.toString();
+    const validAnswer = typeof selectedId === "string";
+    const isCorrect = validAnswer && userCurrQ.correctAnswer.toString() === selectedId.toString();
 
     // time meta-data
     const startDate = new Date(userCurrQ.startDate);
