@@ -244,10 +244,12 @@ class AdminQuestions extends Component {
 
             // add the drop down to the list of them
             dropDowns.push(
-                <div>
-                    <div style={{display:"inline-block", marginRight:"5px"}}>
-                        {currDropDown.title}:
-                    </div>
+                <div style={{margin: "10px"}} key={`dropdown-${level}`}>
+                    {!currDropDown.title ? null :
+                        <div style={{textAlign:"center", display:"inline-block", width:"120px"}}>
+                            {currDropDown.title}:
+                        </div>
+                    }
                     <Select
                         value={this.state.dropDownSelected[level]}
                         onChange={(selectedOption) => this.handleDropDownChange(placeholder.level, selectedOption)}
@@ -300,6 +302,8 @@ class AdminQuestions extends Component {
 
     // select a drop down value
     handleDropDownChange(level, selectedOption) {
+        // if an invalid argument is provided, return
+        if (typeof selectedOption !== "object" || !selectedOption.value) { return; }
         // add the info to the array of selected items, removing anything past
         // it in the tree; second arg is null to reset the next value
         const dropDownSelected = this.state.dropDownSelected.slice(0, level).concat([ selectedOption, null ]);

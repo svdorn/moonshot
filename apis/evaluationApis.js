@@ -38,40 +38,49 @@ async function createAdminqs() {
         dropDown: {
             title: "Continent",
             options: [
-                {
-                    _id: new ObjectId(), body: "North America", subDropDown:
-                        {
-                            title: "Country",
-                            options: [
-                                { _id: new ObjectId(), body: "United States" },
-                                { _id: new ObjectId(), body: "Canada" },
-                            ]
-                        }
-                },
-                {
-                    _id: new ObjectId(), body: "South America", subDropDown:
-                        {
-                            title: "Country",
-                            options: [
-                                { _id: new ObjectId(), body: "Brazil" },
-                                { _id: new ObjectId(), body: "Ecuador" },
-                            ]
-                        }
-                },
-                {
-                    _id: new ObjectId(), body: "Prefer Not to Answer"
-                },
+                { _id: new ObjectId(), body: "Anglican (Episcopal)"},
+                { _id: new ObjectId(), body: "Bahá'í"},
+                { _id: new ObjectId(), body: "Baptist"},
+                { _id: new ObjectId(), body: "Buddhist"},
+                { _id: new ObjectId(), body: "Caodaiist"},
+                { _id: new ObjectId(), body: "Cheondoist"},
+                { _id: new ObjectId(), body: "Christian Scientist"},
+                { _id: new ObjectId(), body: "Church of Christ"},
+                { _id: new ObjectId(), body: "Church of World Messianity"},
+                { _id: new ObjectId(), body: "Confucianist"},
+                { _id: new ObjectId(), body: "Congregationalist (UCC)"},
+                { _id: new ObjectId(), body: "Disciples of Christ"},
+                { _id: new ObjectId(), body: "Friend (Quaker)"},
+                { _id: new ObjectId(), body: "Hindu"},
+                { _id: new ObjectId(), body: "Jain"},
+                { _id: new ObjectId(), body: "Jehovah's Witness"},
+                { _id: new ObjectId(), body: "Jewish"},
+                { _id: new ObjectId(), body: "Latter-day Saint (Mormon)"},
+                { _id: new ObjectId(), body: "Lutheran"},
+                { _id: new ObjectId(), body: "Methodist"},
+                { _id: new ObjectId(), body: "Moravian"},
+                { _id: new ObjectId(), body: "Muslim"},
+                { _id: new ObjectId(), body: "Orthodox"},
+                { _id: new ObjectId(), body: "Other - Christian"},
+                { _id: new ObjectId(), body: "Other - Non-Christian"},
+                { _id: new ObjectId(), body: "Pentacostal"},
+                { _id: new ObjectId(), body: "Presbyterian"},
+                { _id: new ObjectId(), body: "Rastafari"},
+                { _id: new ObjectId(), body: "Reformed"},
+                { _id: new ObjectId(), body: "Roman Catholic"},
+                { _id: new ObjectId(), body: "Seicho-no-Ie-ist"},
+                { _id: new ObjectId(), body: "Seventh Day Adventist"},
+                { _id: new ObjectId(), body: "Sikh"},
+                { _id: new ObjectId(), body: "Taoist"},
+                { _id: new ObjectId(), body: "Tenrikyoist"},
+                { _id: new ObjectId(), body: "Unitarian Universalist (UU)"},
+                { _id: new ObjectId(), body: "Wiccan (Pagan)"},
+                { _id: new ObjectId(), body: "Yazidi"},
+                { _id: new ObjectId(), body: "None"},
+                { _id: new ObjectId(), body: "Other"},
+                { _id: new ObjectId(), body: "Prefer Not to Answer"}
             ]
         }
-        // options: [
-        //     {body: "American Indian or Alaska Native", _id: new ObjectId()},
-        //     {body: "Asian", _id: new ObjectId()},
-        //     {body: "Black or African American", _id: new ObjectId()},
-        //     {body: "Native Hawaiian or Other Pacific Islander", _id: new ObjectId()},
-        //     {body: "White", _id: new ObjectId()},
-        //     {body: "Two or More Races", _id: new ObjectId()},
-        //     {body: "Other", _id: new ObjectId(), includeInputArea: true}
-        // ]
     })
     await q.save().then(ques => {console.log(ques);});
 }
