@@ -11,12 +11,18 @@ const crypto = require('crypto');
 const sanitizeHtml = require('sanitize-html');
 const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
+const prerenderNode = require('prerender-node');
 
 var app = express();
 
 if (process.env.NODE_ENV !== "test") {
     app.use(logger('dev'));
 }
+var prerender = prerenderNode.set('prerenderToken', 'LYjJ7i8UHyhooHVMA3bB');
+prerender.crawlerUserAgents.push('googlebot');
+prerender.crawlerUserAgents.push('bingbot');
+prerender.crawlerUserAgents.push('yandex');
+app.use(prerender);
 app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
