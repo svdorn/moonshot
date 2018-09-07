@@ -219,7 +219,8 @@ form > h1 {
 .evalPortionIntro { text-align: center }
 .evalPortionIntro > div {
     text-align: left;
-    width: 700px;
+    width: 80%;
+    max-width: 1200px;
     display: inline-block;
 }
 .skillsUserAgreement .checkbox {
