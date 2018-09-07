@@ -17,7 +17,8 @@ const dropDownStyles = {
     container: base => ({
         ...base,
         width: "25%",
-        minWidth: "180px"
+        minWidth: "180px",
+        display: "inline-block"
     }),
     option: base => ({
         ...base,
@@ -243,13 +244,18 @@ class AdminQuestions extends Component {
 
             // add the drop down to the list of them
             dropDowns.push(
-                <Select
-                    value={this.state.dropDownSelected[level]}
-                    onChange={(selectedOption) => this.handleDropDownChange(placeholder.level, selectedOption)}
-                    options={options}
-                    styles={dropDownStyles}
-                    key={`dropdown${level}-${currDropDown.title}`}
-                />
+                <div>
+                    <div style={{display:"inline-block", marginRight:"5px"}}>
+                        {currDropDown.title}:
+                    </div>
+                    <Select
+                        value={this.state.dropDownSelected[level]}
+                        onChange={(selectedOption) => this.handleDropDownChange(placeholder.level, selectedOption)}
+                        options={options}
+                        styles={dropDownStyles}
+                        key={`dropdown${level}-${currDropDown.title}`}
+                    />
+                </div>
             );
 
             // assume there isn't another drop down to render
@@ -275,7 +281,8 @@ class AdminQuestions extends Component {
 
         return (
             <div>
-                { dropDowns }
+                <div className="adminQuestions question">{question.text}</div>
+                <div className="center" style={{marginBottom:"40px"}}>{ dropDowns }</div>
                 {this.props.loading ?
                     <CircularProgress color="#ff582d" />
                     :
@@ -356,7 +363,6 @@ class AdminQuestions extends Component {
         else if (!question) { return <CircularProgress color="#ff582d" />; }
 
         else {
-            console.log("question: ", question);
             switch (question.questionType) {
                 case "slider": { return this.makeSliderQuestion(); }
                 case "multipleChoice": { return this.makeMultipleChoiceQuestion(); }
