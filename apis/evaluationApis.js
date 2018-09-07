@@ -82,7 +82,7 @@ module.exports = {};
 
 // answer a question that is shown on the administrative questions portion of an evaluation
 module.exports.POST_answerAdminQuestion = async function(req, res) {
-    let { userId, verificationToken, sliderAnswer, selectedId, selectedText, businessId, positionId } = sanitize(req.body);
+    let { userId, verificationToken, businessId, positionId, sliderAnswer, selectedId, selectedText, dropDownResponses } = sanitize(req.body);
 
     try { var user = await getAndVerifyUser(userId, verificationToken); }
     catch (getUserError) {
@@ -104,7 +104,8 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
             questionId: user.adminQuestions.currentQuestion.questionId,
             sliderAnswer,
             selectedId,
-            selectedText
+            selectedText,
+            dropDownResponses
         }
         // add the response to the array of answered questions
         user.adminQuestions.questions.push(newAnswer);
@@ -1671,7 +1672,7 @@ async function getNewAdminQuestion(user) {
             "_id": { "$nin": answeredIds }
         };
         // the values we want for the questions
-        const wantedValues = "questionType text sliderMin sliderMax options";
+        const wantedValues = "questionType text sliderMin sliderMax options dropDown";
         // get all the necessary admin questions
         try { var questions = await Adminqs.find(query).select(wantedValues); }
         catch (getQuestionsError) { return reject(getQuestionsError); }

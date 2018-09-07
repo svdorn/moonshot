@@ -70,26 +70,49 @@ class AdminQuestions extends Component {
 
     nextQuestion() {
         const question = this.props.questionInfo;
-        // don't do anything if nothing is selected on a multiple choice question
-        if (!question || !question.text || (question.questionType === "multipleChoice" && this.state.selectedId === undefined)) {
-            return;
+        // can't submit if there is no question
+        if (!question) { return; }
+
+        // args that will be sent with POST method
+        let apiArgs = { ...this.props.credentials };
+
+        // don't submit if no answer is provided
+        switch (question.questionType) {
+            case "multipleChoice": {
+                // if no value chosen, can't submit
+                if (this.state.selectedId === undefined) { return; }
+                // add values to save to backend
+                apiArgs.selectedId = this.state.selectedId;
+                // take the input value if Other selected
+                apiArgs.selectedText = this.state.otherInputSelected ?
+                    this.state.otherInput : this.state.selectedText;
+                break;
+            }
+            case "dropDown": {
+                // if no value is selected in the first drop down, can't submit
+                if (!this.state.dropDownSelected[0]) { return; }
+                apiArgs.dropDownResponses = this.state.dropDownSelected;
+            }
+            // sliders can't have an invalid value
+            case "slider": {
+                apiArgs.sliderValue = this.state.sliderValue;
+                break;
+            }
+            // if you get here, something has gone terribly wrong
+            default: {
+                return this.props.addNotification("Whoops, something went wrong. Try refreshing.", "errorHeader");
+            }
         }
 
-        let { sliderValue, selectedId, selectedText } = this.state;
-
-        // take the input value if Other selected
-        if (this.state.otherInputSelected) { selectedText = this.state.otherInput; }
-
-        this.props.answerEvaluationQuestion("Admin", {
-            ...this.props.credentials,
-            sliderValue, selectedId, selectedText
-        });
+        // send answer to the backend
+        this.props.answerEvaluationQuestion("Admin", apiArgs);
 
         const newState = {
             ...this.state,
             selectedId: undefined,
             selectedText: undefined,
-            sliderValue: 1
+            sliderValue: 1,
+            dropDownSelected: []
         }
 
         this.setState(newState);
@@ -199,7 +222,7 @@ class AdminQuestions extends Component {
         // current question to answer
         const question = this.props.questionInfo;
         // if the user can go on to the next question, will look clickable
-        const buttonClass = this.state.selectedId === undefined ? button.disabled : button.orangeRed;
+        const buttonClass = this.state.dropDownSelected.length > 0 && !!this.state.dropDownSelected[0] ? button.orangeRed : button.disabled;
         // the list of drop downs to render
         const dropDowns = [];
         // the drop down we are currently dealing with
@@ -209,13 +232,11 @@ class AdminQuestions extends Component {
         // whether there is another drop down to add further down the drop down tree
         let addAnotherDropDown = true;
 
-        console.log("here");
-
         // go through every drop down and sub drop down
         while (addAnotherDropDown) {
             // the options for the drop down
             const options = currDropDown.options.map((option, index) => {
-                return { value: option.body, label: option.body, index };
+                return { value: option.body, label: option.body, index, optionId: option._id };
             });
 
             const placeholder = { level };
@@ -272,15 +293,11 @@ class AdminQuestions extends Component {
 
     // select a drop down value
     handleDropDownChange(level, selectedOption) {
-        console.log("level: ", level);
-        console.log("selectedOption: ", selectedOption);
         // add the info to the array of selected items, removing anything past
         // it in the tree; second arg is null to reset the next value
         const dropDownSelected = this.state.dropDownSelected.slice(0, level).concat([ selectedOption, null ]);
         // save the options
         this.setState({ dropDownSelected });
-
-        console.log("dropDownSelected", dropDownSelected);
     }
 
 
@@ -339,6 +356,7 @@ class AdminQuestions extends Component {
         else if (!question) { return <CircularProgress color="#ff582d" />; }
 
         else {
+            console.log("question: ", question);
             switch (question.questionType) {
                 case "slider": { return this.makeSliderQuestion(); }
                 case "multipleChoice": { return this.makeMultipleChoiceQuestion(); }

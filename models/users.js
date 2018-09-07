@@ -10,13 +10,13 @@ const adminQuestionSchema = mongoose.Schema({
     selectedId: mongoose.Schema.Types.ObjectId,
     // the text of the answer chosen - if the question is fill-in-the-blank, has what was entered
     selectedText: String,
-    // only applies to the question asking their country of origin
-    originCountry: {
-        // the continent the country is on
-        continent: String,
-        // the country of origin
-        country: String
-    }
+    // values for drop down questions
+    dropDownResponses: [{
+        // the text answer to the question
+        value: String,
+        // the id of the response
+        optionId: mongoose.Schema.Types.ObjectId
+    }]
 });
 
 const usersSchema = mongoose.Schema({
