@@ -518,6 +518,7 @@ function markPsychComplete(psychTest) {
     return psychTest;
 }
 
+
 // mark the cognitive test as finished
 async function finishCognitive(user) {
     return new Promise(async function(resolve, reject) {
@@ -553,19 +554,20 @@ async function finishCognitive(user) {
         // all the weights added up
         let totalWeight = 0;
 
+        // calculate the average theta value
         // calculate the value of the function at every point from 0 to 200
         // going up by .1 every iteration
         for (let theta = 0; theta < 200; theta += .1) {
             // calculate the value of the likelihood function at this point
             const value = expectationAPriori(questions, theta);
-            // the weight is equal to the value, so value * weight = value ^ 2
-            totalValue += value * value;
+            // the weight is equal to the value of the likelihood function * normal distribution
+            totalValue += theta * value;
             totalWeight += value;
         }
 
         cognitiveTest.score = totalValue / totalWeight;
 
-        console.log("Score: ", cognitiveTest.score);
+        console.log(`User ${user._id} finished GCA test with score: `, cognitiveTest.score);
 
         // <<--------------------- FINISH GRADING TEST -------------------->> //
 
