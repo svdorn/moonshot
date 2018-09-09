@@ -8,8 +8,15 @@ const adminQuestionSchema = mongoose.Schema({
     sliderAnswer: Number,
     // only apply to multiple choice questions - the id of the answer chosen
     selectedId: mongoose.Schema.Types.ObjectId,
-    // the text of the answer chosen
-    selectedText: String
+    // the text of the answer chosen - if the question is fill-in-the-blank, has what was entered
+    selectedText: String,
+    // values for drop down questions
+    dropDownResponses: [{
+        // the text answer to the question
+        value: String,
+        // the id of the response
+        optionId: mongoose.Schema.Types.ObjectId
+    }]
 });
 
 const usersSchema = mongoose.Schema({
@@ -229,6 +236,8 @@ const usersSchema = mongoose.Schema({
 
     // questions the user has to answer - only once - before doing a position eval
     adminQuestions: {
+        // whether the user opted out of the admin questions
+        skipped: Boolean,
         // the date the user started the admin questions
         startDate: Date,
         // the date the user finished the admin questions
