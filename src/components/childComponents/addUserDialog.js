@@ -1,13 +1,14 @@
 "use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {postEmailInvites, closeAddUserModal, emailFailureExitPage, postCreateLink} from '../../actions/usersActions';
-import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
-import {Field, reduxForm} from 'redux-form';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { postEmailInvites, closeAddUserModal, emailFailureExitPage, postCreateLink, addNotification } from '../../actions/usersActions';
+import { TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
+import { Field, reduxForm } from 'redux-form';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
 import { isValidEmail } from "../../miscFunctions";
+import { button } from "../../classes.js";
 
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => {
@@ -44,7 +45,8 @@ class AddUserDialog extends Component {
             //numManagerEmails: 1,
             numAdminEmails: 1,
             formErrors: false,
-            duplicateEmails: false
+            duplicateEmails: false,
+            loadingSendVerificationEmail: false
         }
     }
 
@@ -122,7 +124,8 @@ class AddUserDialog extends Component {
               //numManagerEmails: 1,
               numAdminEmails: 1,
               formErrors: false,
-              duplicateEmails: false
+              duplicateEmails: false,
+              loadingSendVerificationEmail: false
           });
         this.props.closeAddUserModal();
     };
@@ -159,10 +162,7 @@ class AddUserDialog extends Component {
             const emailString = email.replace(new RegExp("[0-9]", "g"),"");
 
             // if this email has already been seen, show an error message
-            if (usedEmails[emailAddr] === true) {
-                console.log("no dupes!");
-                return;
-            }
+            if (usedEmails[emailAddr] === true) { return; }
             // otherwise add this email to the list of emails already seen
             else { usedEmails[emailAddr] = true; }
 
@@ -321,6 +321,29 @@ class AddUserDialog extends Component {
     }
 
 
+    sendVerificationEmail() {
+        if (this.state.loadingSendVerificationEmail) { return; }
+
+        // set up the loading spinner
+        this.setState({ loadingSendVerificationEmail: true });
+
+        const user = this.props.currentUser;
+        const credentials = {
+            userId: user._id,
+            verificationToken: user.verificationToken
+        }
+        axios.post("/api/accountAdmin/sendVerificationEmail", credentials)
+        .then(response => {
+            this.props.addNotification(`Verification email sent to ${user.email}!`, "info");
+            this.handleClose();
+        })
+        .catch(error => {
+            this.props.addNotification(`Error sending verification email. Refresh and try again.`, "error");
+            this.handleClose();
+        })
+    }
+
+
     //name, email, password, confirm password, signup button
     render() {
         const style = {
@@ -346,6 +369,34 @@ class AddUserDialog extends Component {
                 className="primary-white-important"
             />,
         ];
+
+        // if the user isn't verified, prompt them to verify their email
+        if (!this.props.currentUser.verified) {
+            return (
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    paperClassName="dialogForBiz"
+                    contentClassName="center"
+                >
+                    <div className="primary-white">
+                        Verify your email first! Need a new verification email?
+                        <br/>
+                        <div
+                            className={this.state.loadingSendVerificationEmail ? button.disabled : button.purpleBlue}
+                            onClick={this.sendVerificationEmail.bind(this)}
+                            style={{margin: "20px"}}
+                        >
+                            Send Verification Email
+                        </div><br/>
+                        {this.state.loadingSendVerificationEmail ? <CircularProgress color="#76defe"/> : null}
+                    </div>
+                </Dialog>
+            )
+        }
 
         const positions = this.state.positions;
 
@@ -751,10 +802,7 @@ class AddUserDialog extends Component {
         }
 
         return (
-            <div>
-                {body}
-
-            </div>
+            <div>{ body }</div>
         );
     }
 }
@@ -764,7 +812,8 @@ function mapDispatchToProps(dispatch) {
         postEmailInvites,
         closeAddUserModal,
         emailFailureExitPage,
-        postCreateLink
+        postCreateLink,
+        addNotification
     }, dispatch);
 }
 
