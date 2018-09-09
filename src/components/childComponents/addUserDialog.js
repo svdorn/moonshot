@@ -258,7 +258,6 @@ class AddUserDialog extends Component {
             positionId: position._id,
             positionName: position.name
         }
-        console.log("creating link");
 
         this.props.postCreateLink(currentUserInfo);
         this.handleScreenLinkNext();
@@ -371,32 +370,33 @@ class AddUserDialog extends Component {
         ];
 
         // if the user isn't verified, prompt them to verify their email
-        if (!this.props.currentUser.verified) {
-            return (
-                <Dialog
-                    actions={actions}
-                    modal={false}
-                    open={this.state.open}
-                    onRequestClose={this.handleClose}
-                    autoScrollBodyContent={true}
-                    paperClassName="dialogForBiz"
-                    contentClassName="center"
-                >
-                    <div className="primary-white">
-                        Verify your email first! Need a new verification email?
-                        <br/>
-                        <div
-                            className={this.state.loadingSendVerificationEmail ? button.disabled : button.purpleBlue}
-                            onClick={this.sendVerificationEmail.bind(this)}
-                            style={{margin: "20px"}}
-                        >
-                            Send Verification Email
-                        </div><br/>
-                        {this.state.loadingSendVerificationEmail ? <CircularProgress color="#76defe"/> : null}
-                    </div>
-                </Dialog>
-            )
-        }
+        // if (!this.props.currentUser.verified) {
+        //     return (
+        //         <Dialog
+        //             actions={actions}
+        //             modal={false}
+        //             open={this.state.open}
+        //             onRequestClose={this.handleClose}
+        //             autoScrollBodyContent={true}
+        //             paperClassName="dialogForBiz"
+        //             contentClassName="center"
+        //         >
+        //             <div className="primary-white">
+        //                 Verify your email first! Need a new verification email?<br/>
+        //                 If you{"'"}ve already verified your email, refresh the site.
+        //                 <br/>
+        //                 <div
+        //                     className={this.state.loadingSendVerificationEmail ? button.disabled : button.purpleBlue}
+        //                     onClick={this.sendVerificationEmail.bind(this)}
+        //                     style={{margin: "20px"}}
+        //                 >
+        //                     Send Verification Email
+        //                 </div><br/>
+        //                 {this.state.loadingSendVerificationEmail ? <CircularProgress color="#76defe"/> : null}
+        //             </div>
+        //         </Dialog>
+        //     )
+        // }
 
         const positions = this.state.positions;
 
