@@ -1230,7 +1230,7 @@ async function POST_addEvaluation(req, res) {
     try {
         var business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId);
     } catch (verifyAccountAdminError) {
-        console.log("Error verifying business account admin: ", error);
+        console.log("Error verifying business account admin: ", verifyAccountAdminError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
@@ -1522,8 +1522,8 @@ async function GET_business(req, res) {
 async function verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId) {
     return new Promise(async (resolve, reject) => {
         try {
-            const { business } = await busverifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId);
-            return res.status(200).send(business);
+            const { business } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId);
+            return resolve(business);
         }
 
         catch (error) { reject(error); }
