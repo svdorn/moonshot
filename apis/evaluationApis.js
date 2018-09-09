@@ -558,7 +558,8 @@ async function finishCognitive(user) {
         // calculate the value of the function at every point from 0 to 200
         // going up by .1 every iteration
         for (let theta = 0; theta < 200; theta += .1) {
-            // calculate the value of the likelihood function at this point
+            // calculate the value of the likelihood function times the normal
+            // distribution at this point
             const value = expectationAPriori(questions, theta);
             // the weight is equal to the value of the likelihood function * normal distribution
             totalValue += theta * value;
