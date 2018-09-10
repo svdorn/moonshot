@@ -1419,11 +1419,9 @@ async function gradeEval(user, userPosition, position) {
 
     /* ------------------------->> GRADE OVERALL <<-------------------------- */
     // get the cognitive test score
-    const gca =
-        typeof user.cognitiveTest === "object" &&
-        typeof user.cognitiveTest.score === "number" ?
-            user.cognitiveTest.score : undefined;
-    const overallScore = gradeOverall({ gca, overallSkill, growth, performance, longevity });
+    const gca = typeof user.cognitiveTest === "object" ? user.cognitiveTest.score : undefined;
+    // grade the overall score
+    const overallScore = gradeOverall({ gca, growth, performance, longevity }, position.weights);
 
     // // the components that make up the overall score
     // const overallContributors = [growth, performance, longevity];
@@ -1458,16 +1456,26 @@ async function gradeEval(user, userPosition, position) {
 
 
 // calculate the overall score based on sub-scores like gca and performance
-function gradeOverall(subscores) {
+function gradeOverall(subscores, weights) {
     let totalValue = 0;
     let totalWeight = 0;
-    let { gca, performance } = subscores;
-    if (typeof gca === "number") {
-
+    // go through every score type (gca, performance, etc) and add its weighted value
+    for (let scoreType in subscores) {
+        if (!subscores.hasOwnProperty(scoreType)) continue;
+        // only use the score if it exists as a number
+        if (typeof subscores[scoreType] === "number") {
+            // get the weight of the type
+            let weight = weights[scoreType];
+            // if weight not provided, assume weighed at .2
+            if (typeof weight !== "number") {
+                console.log("Invalid weight of ", weight, " for score type ", scoreType, " in position ", position);
+                weight = .2;
+            }
+            totalValue += subscores[scoreType] * weight;
+            totalWeight += weight;
+        }
     }
-    if (typeof performance === "number") {
-
-    }
+    return (totalValue / totalWeight);
 }
 
 

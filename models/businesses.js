@@ -82,7 +82,17 @@ const positionSchema = mongoose.Schema({
             // best score for longevity for this facet in this position
             score: Number
         }]
-    }]
+    }],
+    // weights of each score in determining overall score
+    weights: {
+        // how comparatively important performance is
+        performance: Number,
+        // etc
+        growth: Number,
+        longevity: Number,
+        culture: Number,
+        gca: Number
+    }
 })
 
 
