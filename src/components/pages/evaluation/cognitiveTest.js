@@ -185,7 +185,7 @@ class CognitiveTest extends Component {
 
         const questionInfo = this.props.questionInfo;
 
-        const answers = options.map(option => {
+        const answers = questionInfo.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
             const selectedClass = isSelected ? " selected" : "";
             const outOfTimeClass = this.state.outOfTime ? " outOfTime" : "";
