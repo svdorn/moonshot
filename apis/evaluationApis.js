@@ -30,26 +30,6 @@ const { sanitize,
 const { calculatePsychScores } = require("./psychApis");
 
 
-const ObjectId = mongoose.Types.ObjectId;
-//createAdminqs();
-async function createAdminqs() {
-    let q = new Adminqs({
-        questionType: "multipleChoice",
-        requiredFor: ["candidate", "employee"],
-        text: "What is your sexual orientation?",
-        options: [
-            { _id: new ObjectId(), body: "Asexual" },
-            { _id: new ObjectId(), body: "Heterosexual" },
-            { _id: new ObjectId(), body: "Gay/Lesbian" },
-            { _id: new ObjectId(), body: "Bi/Pansexual" },
-            { _id: new ObjectId(), body: "Other", includeInputArea: true},
-            { _id: new ObjectId(), body: "Prefer Not to Answer" }
-        ]
-    })
-    await q.save().then(ques => {console.log(ques);});
-}
-
-
 module.exports = {};
 
 
@@ -316,6 +296,7 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
 
     return res.status(200).send(toReturn);
 }
+
 
 module.exports.POST_skipAdminQuestions = async function(req, res) {
     const { userId, verificationToken, selectedId, businessId, positionId } = sanitize(req.body);
@@ -1575,90 +1556,87 @@ function gradeGrowth(user, position) {
 }
 
 
-// weights for general positions, used for Dev, Prod, Marketing
-const generalPositionWeights = {
-    "Emotionality": 1,
-    "Extraversion": 0,
-    "Agreeableness": 0,
-    "Conscientiousness": 1.4375,
-    "Openness to Experience": 0,
-    "Honesty-Humility": 1.125,
-    "Altruism": 0
-}
-// list of weights for grading performance
-const performanceWeights = {
-    "General": generalPositionWeights,
-    "Marketing": generalPositionWeights,
-    "Product": generalPositionWeights,
-    "Development": generalPositionWeights,
-    "Sales": {
-        "Emotionality": 1,
-        "Extraversion": 1.5,
-        "Agreeableness": 0,
-        "Conscientiousness": 2.4,
-        "Openness to Experience": 0,
-        "Honesty-Humility": 1.714,
-        "Altruism": 0
-    },
-    "Support": {
-        "Emotionality": 1.18,
-        "Extraversion": 1,
-        "Agreeableness": 1.723,
-        "Conscientiousness": 2.455,
-        "Openness to Experience": 1.545,
-        "Honesty-Humility": 1.636,
-        "Altruism": 0
-    },
-    "Manager": {
-        "Emotionality": 1.025,
-        "Extraversion": 1.7,
-        "Agreeableness": 1,
-        "Conscientiousness": 2,
-        "Openness to Experience": 0,
-        "Honesty-Humility": 1.756,
-        "Altruism": 0
-    }
-}
 // get predicted performance for specific position
 function gradePerformance(user, position, overallSkill) {
-    // get the function type of the position ("Development", "Support", etc)
-    const type = position.positionType;
-    // get the user's psych test
+    // get the user's psych test scores
     const psych = user.psychometricTest;
-    // the weights for this position type
-    let weights = performanceWeights[type];
-    // if the type isn't valid, just use the general ones
-    if (!weights) {
-        console.log(`Position with id ${position._id} had type: `, type, " which was invalid. Using General weights.");
-        weights = performanceWeights["General"];
-    }
+    // get all the ideal factors from the position
+    const idealFactors = position.idealFactors;
     // the added-up weighted factor score values
-    let totalValue = 0;
+    let totalPerfValue = 0;
     // the total weight of all factors, will divide by this to get the final score
-    let totalWeight = 0;
-    // go through every factor,
+    let totalPerfWeight = 0;
+    // go through every factor
     psych.factors.forEach(factor => {
-        // get the average of all the facets for the factor
-        const factorAvg = factor.score;
-        // get the standardized factor score
-        const stdFactorScore = (factorAvg * 10) + 94.847;
-        // get the weight of the factor for this position
-        const weight = weights[factor.name];
-        // if the weight is invalid, don't use this factor in calculation
-        if (typeof weight !== "number") {
-            console.log("Invalid weight: ", weight, " in factor ", factor, ` of position with id ${position._id}`);
-        } else {
-            // add the weighted factor score to the total value
-            totalValue += stdFactorScore * weight;
-            // add the weight to the total weight
-            totalWeight += weight;
-        }
+        let totalFactorValue = 0;
+        let totalFactorWeight = 0;
+        // find the corresponding ideal factor scores within the position
+        const idealFactor = idealFactors.find(iFactor => iFactor.factorId.toString() === factor._id.toString());
+        // go through each facet and find its standardized facet score
+        factor.facets.forEach(facet => {
+            // find the corresponding ideal facet
+            const idealFacet = idealFactor.idealFacets.find(iFacet => iFacet.facetId.toString() === facet._id.toString());
+            // facet multiplier ensures that the scaled facet is score is between 0 and 10
+            const facetMultiplier = 10 / Math.max(Math.abs(idealFacet.score - 5), Math.abs(idealFacet.score + 5));
+            // the distance between the ideal facet score and the actual facet
+            // score, scaled to be min 0 max 10
+            const scaledFacetScore = facetMultiplier * (idealFacet.score - facet.score);
+            // add the weighted value to be averaged
+            totalFactorValue += scaledFacetScore * idealFacet.weight;
+            totalFactorWeight += idealFacet.weight;
+        });
+        // the weighted average of the facets
+        const factorScore = 144.847 - (10 * (totalFactorValue / totalFactorWeight));
+        // add the weighted score so it can be averaged
+        totalPerfValue += factorScore * idealFactor.weight;
+        totalPerfWeight += idealFactor.weight;
     });
-    // if the total weight is 0, something has gone terribly wrong
-    if (totalWeight === 0) { return throw new Error("Total factor weight of 0. Invalid psych factors."); }
-    // otherwise calculate the final weighted average score and return it
-    return (totalValue / totalWeight);
+    // return the weighted average of the factors
+    return (totalPerfValue / totalPerfWeight);
 }
+
+
+
+// get predicted performance for specific position
+// function gradePerformance(user, position, overallSkill) {
+//     // get the function type of the position ("Development", "Support", etc)
+//     const type = position.positionType;
+//     // get the user's psych test
+//     const psych = user.psychometricTest;
+//     // the weights for this position type
+//     let weights = performanceWeights[type];
+//     // if the type isn't valid, just use the general ones
+//     if (!weights) {
+//         console.log(`Position with id ${position._id} had type: `, type, " which was invalid. Using General weights.");
+//         weights = performanceWeights["General"];
+//     }
+//     // the added-up weighted factor score values
+//     let totalValue = 0;
+//     // the total weight of all factors, will divide by this to get the final score
+//     let totalWeight = 0;
+//     // go through every factor,
+//     psych.factors.forEach(factor => {
+//         // get the average of all the facets for the factor
+//         const factorAvg = factor.score;
+//         // get the standardized factor score
+//         const stdFactorScore = (factorAvg * 10) + 94.847;
+//         // get the weight of the factor for this position
+//         const weight = weights[factor.name];
+//         // if the weight is invalid, don't use this factor in calculation
+//         if (typeof weight !== "number") {
+//             console.log("Invalid weight: ", weight, " in factor ", factor, ` of position with id ${position._id}`);
+//         } else {
+//             // add the weighted factor score to the total value
+//             totalValue += stdFactorScore * weight;
+//             // add the weight to the total weight
+//             totalWeight += weight;
+//         }
+//     });
+//     // if the total weight is 0, something has gone terribly wrong
+//     if (totalWeight === 0) { throw new Error("Total factor weight of 0. Invalid psych factors."); }
+//     // otherwise calculate the final weighted average score and return it
+//     return (totalValue / totalWeight);
+// }
 
 
 
@@ -1882,6 +1860,7 @@ async function addSkillInfo(user, evaluationState, position) {
         resolve(evaluationState);
     });
 }
+
 
 // add in info about the current state of cognitive
 async function addCognitiveInfo(user, evaluationState) {
