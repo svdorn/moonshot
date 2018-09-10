@@ -11,12 +11,18 @@ const crypto = require('crypto');
 const sanitizeHtml = require('sanitize-html');
 const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
+const prerenderNode = require('prerender-node');
 
 var app = express();
 
 if (process.env.NODE_ENV !== "test") {
     app.use(logger('dev'));
 }
+var prerender = prerenderNode.set('prerenderToken', 'LYjJ7i8UHyhooHVMA3bB');
+prerender.crawlerUserAgents.push('googlebot');
+prerender.crawlerUserAgents.push('bingbot');
+prerender.crawlerUserAgents.push('yandex');
+app.use(prerender);
 app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -193,6 +199,8 @@ app.post("/evaluation/answerAdminQuestion", evaluationApis.POST_answerAdminQuest
 app.post("/evaluation/answerPsychQuestion", evaluationApis.POST_answerPsychQuestion);
 app.post("/evaluation/answerSkillQuestion", evaluationApis.POST_answerSkillQuestion);
 app.post("/evaluation/answerCognitiveQuestion", evaluationApis.POST_answerCognitiveQuestion);
+app.post("/evaluation/skipAdminQuestions", evaluationApis.POST_skipAdminQuestions);
+
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);

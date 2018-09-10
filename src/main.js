@@ -1,8 +1,5 @@
 "use strict"
 import React, { Component } from 'react';
-import Menu from './components/menu';
-import Footer from './components/footer';
-import Notification from './components/notification'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {
@@ -16,9 +13,14 @@ import { Paper, CircularProgress } from 'material-ui';
 import { getUserFromSession, setWebpSupport } from './actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import FixedOnboardingProgress from "./components/miscComponents/fixedOnboardingProgress";
 // so that axios works in IE < 11
 require('es6-promise').polyfill();
+
+import Menu from './components/menu';
+import Footer from './components/footer';
+import Notification from './components/notification'
+import FixedOnboardingProgress from "./components/miscComponents/fixedOnboardingProgress";
+import ContactUsDialog from './components/childComponents/contactUsDialog';
 
 let theme = {
     // this messes with the slider colors
@@ -104,8 +106,9 @@ class Main extends Component {
                 <div>
                     <Menu/>
                     <Notification/>
+                    <ContactUsDialog/>
                     { this.props.children }
-                    <FixedOnboardingProgress />
+                    <FixedOnboardingProgress/>
                     <Footer/>
                 </div>
             );

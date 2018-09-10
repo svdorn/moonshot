@@ -43,6 +43,8 @@ const positionSchema = mongoose.Schema({
     idealFactors: [{
         // the id of the factor
         factorId: mongoose.Schema.Types.ObjectId,
+        // the weight of the factors
+        weight: Number,
         // all ideal facet scores
         idealFacets: [{
             // id of the facet
@@ -57,6 +59,8 @@ const positionSchema = mongoose.Schema({
     growthFactors: [{
         // id of the factor involved in growth
         factorId: mongoose.Schema.Types.ObjectId,
+        // the weight of the factors
+        weight: Number,
         // ideal facet scores for growth
         idealFacets: [{
             // id of the facet to score

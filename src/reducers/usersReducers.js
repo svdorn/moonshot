@@ -43,7 +43,7 @@ export function usersReducers(state = initialState, action) {
         case "CONTACT_US_EMAIL_FAILURE":
             return {
                 ...state,
-                message: action.payload,
+                contactUsModal: false,
                 loadingSomething: false
             };
             break;
@@ -99,7 +99,8 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 notification: action.notification,
-                notificationDate: new Date()
+                notificationDate: new Date(),
+                autoCloseNotification: action.notification.closeSelf === false ? false : true
             };
             break;
         case "NOTIFICATION_AND_STOP_LOADING":

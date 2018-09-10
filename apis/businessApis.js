@@ -12,6 +12,7 @@ const crypto = require('crypto');
 
 // get helper functions
 const { sanitize,
+        getFirstName,
         sendEmail,
         sendEmailPromise,
         getAndVerifyUser,
@@ -22,7 +23,9 @@ const { sanitize,
         isValidFileType,
         isValidEmail,
         isValidPassword,
-        validArgs
+        validArgs,
+        founderEmails,
+        emailFooter
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -460,62 +463,168 @@ function createPosition(name, type) {
     const bizPos = {
         name: name,
         positionType: type,
-        length: 25,
+        length: 22,
         dateCreated: Date.now(),
         finalized: true,
+        timeAllotted: 60
     }
 
-    const devFactors = {
-        "growthFactors": [
+    const generalPositionWeights = {
+       "emotionality": 1,
+       "extraversion": 0,
+       "agreeableness": 0,
+       "conscientiousness": 1.4375,
+       "opennessToExperience": 0,
+       "honestyHumility": 1.125,
+       "altruism": 0
+   }
+
+   let positionWeights = generalPositionWeights;
+
+    switch(type) {
+        case "General":
+        case "Developer":
+        case "Marketing":
+        case "Product":
+            positionWeights = generalPositionWeights;
+            break;
+        case "Sales":
+            positionWeights =
             {
-                "idealFacets": [
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
-                        "score": 5
-                    }
-                ],
-                "factorId":mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6")
-            },
+               "emotionality": 1,
+               "extraversion": 1.5,
+               "agreeableness": 0,
+               "conscientiousness": 2.4,
+               "opennessToExperience": 0,
+               "honestyHumility": 1.714,
+               "altruism": 0
+           };
+           break;
+        case "Support":
+            positionWeights =
             {
-                "idealFacets": [
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
-                        "score": 5
-                    }
-                ],
-                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b")
-            }
-        ],
+               "emotionality": 1.18,
+               "extraversion": 1,
+               "agreeableness": 1.723,
+               "conscientiousness": 2.455,
+               "opennessToExperience": 1.545,
+               "honestyHumility": 1.636,
+               "altruism": 0
+           };
+           break;
+        case "Manager":
+            positionWeights =
+            {
+               "emotionality": 1.025,
+               "extraversion": 1.7,
+               "agreeableness": 1,
+               "conscientiousness": 2,
+               "opennessToExperience": 0,
+               "honestyHumility": 1.756,
+               "altruism": 0
+           };
+           break;
+        default:
+            break;
+    }
+
+    const factors = {
         "idealFactors": [
             {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ff"),
+                "weight": positionWeights.honestyHumility,
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30f"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30a"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce305"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce300"),
+                        "score": 5
+                    }
+                ]
+            },
+            {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ea"),
+                "weight": positionWeights.emotionality,
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2fa"),
+                        "score": -5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f5"),
+                        "score": -5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f0"),
+                        "score": -5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2eb"),
+                        "score": -5
+                    }
+                ]
+            },
+            {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d0"),
+                "weight": positionWeights.extraversion,
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e5"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e0"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2db"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d6"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d1"),
+                        "score": 5
+                    }
+                ]
+            },
+            {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bb"),
+                "weight": positionWeights.agreeableness,
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2cb"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c6"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c1"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bc"),
+                        "score": 5
+                    }
+                ]
+            },
+            {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6"),
+                "weight": positionWeights.conscientiousness,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
@@ -533,10 +642,11 @@ function createPosition(name, type) {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
                         "score": 5
                     }
-                ],
-                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6")
+                ]
             },
             {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b"),
+                "weight": positionWeights.opennessToExperience,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
@@ -558,43 +668,25 @@ function createPosition(name, type) {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
                         "score": 5
                     }
-                ],
-                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b")
+                ]
+            },
+            {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce275"),
+                "weight": positionWeights.altruism,
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce285"),
+                        "score": 5
+                    }
+                ]
             }
         ]
-    }
+    };
 
-    console.log("positionType: ", bizPos.positionType);
-
-    // TODO: create different default mappings when Justin gives them to us
-    const salesFactors = devFactors;
-    const supportFactors = devFactors;
-    const marketingFactors = devFactors;
-    const productFactors = devFactors;
-
-    let growthFactors;
-    let idealFactors;
     // set correct ideal and growth factors
-    if (type == "Developer") {
-        bizPos.growthFactors = devFactors.growthFactors;
-        bizPos.idealFactors = devFactors.idealFactors;
-        console.log("adding dev factors");
-        console.log("growth: ", devFactors.growthFactors);
-        console.log("ideal: ", devFactors.idealFactors);
-    } else if (type === "Sales") {
-        bizPos.growthFactors = salesFactors.growthFactors;
-        bizPos.idealFactors = salesFactors.idealFactors;
-    } else if (type === "Support") {
-        bizPos.growthFactors = supportFactors.growthFactors;
-        bizPos.idealFactors = supportFactors.idealFactors;
-    } else if (type === "Marketing") {
-        bizPos.growthFactors = marketingFactors.growthFactors;
-        bizPos.idealFactors = marketingFactors.idealFactors;
-    } else if (type === "Product") {
-        bizPos.growthFactors = productFactors.growthFactors;
-        bizPos.idealFactors = productFactors.idealFactors;
-    }
-    
+    bizPos.growthFactors = factors.idealFactors;
+    bizPos.idealFactors = factors.idealFactors;
+
     return bizPos;
 }
 
@@ -1235,9 +1327,7 @@ async function POST_addEvaluation(req, res) {
 
      business.positions.push(createPosition(positionName, positionType));
 
-     try {
-         await business.save();
-     }
+     try { await business.save(); }
      catch (saveBizError) {
          console.log("Error saving business with a non-finalized position when adding users: ", saveBizError);
          console.log("Arrays that were not saved into business: ", candidateEmails, employeeEmails);
@@ -1247,48 +1337,58 @@ async function POST_addEvaluation(req, res) {
     return res.json(business.positions);
 }
 
-function POST_contactUsEmailNotLoggedIn(req, res) {
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'ACTION REQUIRED - Contact Us Form Filled Out';
-    if (req.body.phoneNumber) {
-        var phoneNumber = sanitize(req.body.phoneNumber);
-    }
-    if (req.body.message) {
-        var message = sanitize(req.body.message);
+async function POST_contactUsEmailNotLoggedIn(req, res) {
+    const { phoneNumber, message, name, email, company } = sanitize(req.body);
+
+    // email to moonshot with the message the user entered
+    let toMoonshotContent =
+        `<div>
+            <h2>Contact Us Form Filled Out:</h2>
+            <h3>Name</h3>
+            <p>${name}</p>
+            <h3>Email</h3>
+            <p>${email}</p>
+            <h3>Company</h3>
+            <p>${company}</p>
+            <h3>Phone Number</h3>
+            <p>${phoneNumber}</p>
+            <h3>Message</h3>
+            <p>${message}</p>
+        </div>`;
+
+    // tells the user that we got their message
+    const messageReceivedContent =
+        `<div>
+            <p>Hi${name ? " " + getFirstName(name) : ""}!</p>
+            <p>Just wanted to let you know that we got your message. We'll get back to you as soon as we can!</p>
+            ${emailFooter(email)}
+        </div>`;
+
+
+    try { // sending email to moonshot with the message from the user
+        await sendEmailPromise({
+            recipients: founderEmails,
+            subject: "ACTION REQUIRED - Contact Us Form Filled Out",
+            content: toMoonshotContent
+        });
+    } catch (sendEmailError) {
+        console.log("Error sending contact us email: ", sendEmailError);
+        return res.status(500).send({success: false});
     }
 
-    let content = "<div>"
-        + "<h2>Contact Us Form Filled Out:</h2>"
-        + "<h3>Name</h3>"
-        + "<p>"
-        + sanitize(req.body.name)
-        + "</p>"
-        + "<h3>Email</h3>"
-        + "<p>"
-        + sanitize(req.body.email)
-        + "</p>"
-        + "<h3>Company</h3>"
-        + "<p>"
-        + sanitize(req.body.company)
-        + "</p>"
-        + "<h3>Phone Number</h3>"
-        + "<p>"
-        + phoneNumber
-        + "</p>"
-        + "<h3>Message</h3>"
-        + "<p>"
-        + message
-        + "</p>"
-        + "</div>";
+    try { // sending the "email received" message
+        await sendEmailPromise({
+            recipients: [email],
+            subject: "We Got Your Message!",
+            content: messageReceivedContent
+        });
+    } catch (sendReplyError) {
+        // if there is an error sending the reply email we can return successfully
+        // since moonshot got the email, which is the important part
+        console.log("Error sending email to user telling them we got their email: ", sendReplyError);
+    }
 
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you! We will be in touch shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
+    return res.status(200).send({success: true});
 }
 
 function POST_contactUsEmail(req, res) {

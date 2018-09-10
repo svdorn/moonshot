@@ -219,8 +219,10 @@ form > h1 {
 .evalPortionIntro { text-align: center }
 .evalPortionIntro > div {
     text-align: left;
-    width: 700px;
     margin: auto;
+   width: 80%;
+    max-width: 1200px;
+    display: inline-block;
 }
 .skillsUserAgreement .checkbox {
     position: absolute;
@@ -690,9 +692,10 @@ form > h1 {
     transition: all 0.5s ease;
 }
 .button.disabled.gradient-transition {
-    background: linear-gradient(to right, #111111, #afafaf, #111111);
-    background-position-x: 100%;
-    background-size: 150%;
+    background: linear-gradient(to right, var(--primary-black-light), #676767, var(--primary-black-light));
+    cursor: not-allowed;
+    background-position-x: 108%;
+    background-size: 188%;
 }
 .button.disabled.gradient-transition:hover {
     background-position-x: 100%;
@@ -981,17 +984,6 @@ form > h1 {
 }
 #ATSIntegrations > div > img:first-child {
     margin-left: 0;
-}
-
-.cognitiveMultipleChoiceAnswer {
-    cursor: pointer;
-    margin: 0 5% auto;
-    display: inline-block;
-    margin-bottom: 30px;
-    position: relative;
-}
-.cognitiveMultipleChoiceAnswer.outOfTime {
-    cursor: not-allowed;
 }
 
 .skillMultipleChoiceAnswer {

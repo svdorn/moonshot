@@ -167,6 +167,28 @@ function frontEndUser(dbUser, fieldsToInclude) {
     return newUser;
 }
 
+// shuffles a general array, used for shuffling questions around
+function shuffle(arr) {
+    let array = arr.slice();
+    let currentIndex = array.length,
+        temporaryValue,
+        randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+}
+
 
 function randomInt(lowBound, highBound) {
     const range = highBound - lowBound;
@@ -175,6 +197,9 @@ function randomInt(lowBound, highBound) {
 
 
 function getFirstName(name) {
+    // return empty string on invalid input
+    if (typeof name !== "string" || name.length === 0) { return ""; }
+
     // split by spaces, get array of non-spaced names, return the first one
     let firstName = "";
     try {
@@ -989,6 +1014,27 @@ function propertyExists(object, propertyTree, type) {
 }
 
 
+// email addresses of all the founders
+const founderEmails = process.env.NODE_ENV === "production" ? ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"] : [process.env.DEV_EMAIL];
+
+
+// standard email footer
+function emailFooter(userEmail) {
+    let moonshotUrl = process.env.NODE_ENV === "development" ? 'http://localhost:8081/' : 'https://moonshotinsights.io/';
+
+    return (
+        `<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>
+        <div style="text-align:center"><a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px; "src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a></div>
+        <div style="text-align:left;width:100%;display:inline-block;">
+            <div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">
+                <i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>
+                <a style="color:#C8C8C8; margin-top:20px;" href="${moonshotUrl}unsubscribe?email=${userEmail}">Opt-out of future messages.</a></i>
+            </div>
+        </div>`
+    );
+}
+
+
 const helperFunctions = {
     sanitize,
     removeEmptyFields,
@@ -998,6 +1044,7 @@ const helperFunctions = {
     getFirstName,
     removeDuplicates,
     randomInt,
+    shuffle,
     frontEndUser,
     getAndVerifyUser,
     getUserFromReq,
@@ -1013,11 +1060,13 @@ const helperFunctions = {
     logError,
     truthy,
     propertyExists,
+    emailFooter,
 
     Queue,
     Stack,
 
-    FOR_USER
+    FOR_USER,
+    founderEmails
 }
 
 

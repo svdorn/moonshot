@@ -25,9 +25,11 @@ class CognitiveTest extends Component {
             // whether the timer is done or not
             outOfTime: false,
             // the timeouts
-            timeouts: []
+            timeouts: [],
+            loading: false
         };
     }
+
 
     componentDidMount() {
         if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && !this.props.questionInfo.factorId) {
@@ -38,35 +40,14 @@ class CognitiveTest extends Component {
     }
 
     componentDidUpdate() {
+
+
         if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && !this.props.questionInfo.factorId) {
             this.setState({ questionId: this.props.questionInfo.questionId },() => {
                 this.getTimer();
             })
         }
     }
-
-    // shuffles a general array, used for shuffling questions around
-    shuffle(arr) {
-        let array = arr.slice();
-        let currentIndex = array.length,
-            temporaryValue,
-            randomIndex;
-
-        // While there remain elements to shuffle...
-        while (0 !== currentIndex) {
-            // Pick a remaining element...
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex -= 1;
-
-            // And swap it with the current element.
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
-        }
-
-        return array;
-    }
-
 
     // when any answer is clicked
     selectAnswer(selectedId) { this.setState({...this.state, selectedId}); }
@@ -157,7 +138,8 @@ class CognitiveTest extends Component {
             let self = this;
             this.setState({
                 timer: seconds,
-                outOfTime: false
+                outOfTime: false,
+                loading: false
             }, () => {
                 self.state.timeouts.push(setTimeout(function() {
                     self.getTimer();
@@ -173,7 +155,8 @@ class CognitiveTest extends Component {
         this.setState({
             timer: undefined,
             outOfTime: false,
-            selectedId: undefined
+            selectedId: undefined,
+            loading: true
         }, callback);
     }
 
@@ -192,9 +175,9 @@ class CognitiveTest extends Component {
             return (
                 <div key={option.src}
                      onClick={this.state.outOfTime? null : () => self.selectAnswer(option._id)}
-                     className={"cognitiveMultipleChoiceAnswer" + selectedClass + outOfTimeClass}
+                     styleName={"multipleChoiceAnswer" + selectedClass + outOfTimeClass}
                 >
-                    <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
+                    <div styleName={"multipleChoiceCircle" + selectedClass + outOfTimeClass}><div/></div>
                     <div styleName="answersImg"><img src={imgSrc} /></div>
                 </div>
             );
@@ -217,12 +200,14 @@ class CognitiveTest extends Component {
 
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
+                {this.state.loading ? <div className="secondary-gray">Loading next question...</div> :<div>
                 {this.state.outOfTime ? <div styleName="error-red">Out of time - please advance to the next question.</div> : <div className="secondary-gray">0:{timer}</div> }
                 <div className="marginBottom40px"><img styleName="rpmImg" src={rpmSrc} /></div>
-                <div className="center" style={{maxWidth: "800px", margin:"auto"}}>
+                <div className="center" style={{maxWidth: "1000px", margin:"auto"}}>
                     { answers }
                 </div>
-                <div className={"marginBottom50px marginTop40px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
+                <div className={"marginBottom50px marginTop30px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div></div>
+            }
             </div>
         );
     }

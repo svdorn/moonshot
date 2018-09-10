@@ -626,11 +626,12 @@ class BusinessEditor extends Component {
             );
 
             // create input for how much time candidates get to finish the eval
+            let timeAllottedValue = position.timeAllotted ? position.timeAllotted.toString() : "";
             let timeAllottedInput = (
                 <input
-                    value={position.timeAllotted.toString()}
+                    value={timeAllottedValue}
                     onChange={(e) => self.timeAllottedChange(e, positionIndex)}
-                    placeholder="Length in minutes"
+                    placeholder="Time Allotted in Days"
                 />
             );
 

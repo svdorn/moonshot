@@ -66,16 +66,20 @@ export function closeContactUsModal() {
 }
 
 // Send an email when form filled out on forBusiness page
-export function contactUsEmail(user){
+export function contactUsEmail(user, callback) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
 
         axios.post("api/business/contactUsEmailNotLoggedIn", user)
             .then(function(response) {
-                dispatch({type:"CONTACT_US_EMAIL_SUCCESS", payload: response.data})
+                dispatch({type:"CONTACT_US_EMAIL_SUCCESS"});
+                dispatch({type: "ADD_NOTIFICATION", notification:{message:"Message sent, we'll get back to you soon!", type:"infoHeader"}});
+                if (typeof callback === "function") { callback(); }
             })
             .catch(function(err) {
-                dispatch({type:"CONTACT_US_EMAIL_FAILURE", payload: "Error sending email."})
+                dispatch({type:"CONTACT_US_EMAIL_FAILURE"});
+                dispatch({type: "ADD_NOTIFICATION", notification:{message:"Something went wrong :( Shoot us an email at support@moonshotinsights.io", type:"errorHeader", closeSelf:false}});
+                if (typeof callback === "function") { callback(); }
             })
     }
 }
@@ -149,37 +153,60 @@ export function answerEvaluationQuestion(evalComponent, options) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
         axios.post(`/api/evaluation/answer${evalComponent}Question`, options)
-        .then(response => {
-            // if the user finished the eval
-            if (response.data.evaluationState.component === "Finished") {
-                // go home
-                goTo("/myEvaluations");
-                // add a notification saying they finished the eval
-                dispatch({type: "ADD_NOTIFICATION", notification: {message: "Congratulations, you finished the evaluation! We'll be in touch soon.", type: "infoHeader"}})
-            }
-            dispatch({
-                type: "UPDATE_EVALUATION_STATE",
-                evaluationState: response.data.evaluationState,
-                user: response.data.user
-            });
-        })
-        .catch(error => {
-            console.log("error: ", error);
-            dispatch({
-                type: "NOTIFICATION_AND_STOP_LOADING",
-                notification: {message: "Error, try refreshing.", type: "errorHeader"}
-            });
-        });
+        .then(response => updateEvalState(dispatch, response.data))
+        .catch(error => defaultErrorHandler(dispatch, { error }));
     }
 }
 
 
+// skip all the evaluation admin questions
+export function skipAdminQuestions(options) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+        axios.post("/api/evaluation/skipAdminQuestions", options)
+        .then(response => updateEvalState(dispatch, response.data))
+        .catch(error => defaultErrorHandler(dispatch, { error }));
+    }
+}
+
+
+function updateEvalState(dispatch, data) {
+    // if the user finished the eval
+    if (data.evaluationState.component === "Finished") {
+        // go home
+        goTo("/myEvaluations");
+        // add a notification saying they finished the eval
+        dispatch({type: "ADD_NOTIFICATION", notification: {message: "Congratulations, you finished the evaluation! We'll be in touch soon.", type: "infoHeader"}})
+    }
+    dispatch({
+        type: "UPDATE_EVALUATION_STATE",
+        evaluationState: data.evaluationState,
+        user: data.user
+    });
+}
+
+
+// stop the loading bar and show an error message, also log an error if provided
+function defaultErrorHandler(dispatch, options) {
+    // log the error if provided
+    if (options.error) { console.log(options.error); }
+    // the message to show the user
+    const errorMessage = options.message ? options.message : "Error, try refreshing."
+
+    dispatch({
+        type: "NOTIFICATION_AND_STOP_LOADING",
+        notification: {message: errorMessage, type: "errorHeader"}
+    });
+}
+
+
+// generally used to bring up the loading spinner
 export function startLoading() {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
     }
 }
-
+// generally used to remove the loading spinner
 export function stopLoading() {
     return function(dispatch) {
         dispatch({type: "STOP_LOADING"});
