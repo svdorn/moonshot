@@ -1,0 +1,12 @@
+.social-icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 140px;
+    left: 50%;
+    margin: 10px auto 0;
+}
+
+.social-icons img {
+    vertical-align: sub;
+}

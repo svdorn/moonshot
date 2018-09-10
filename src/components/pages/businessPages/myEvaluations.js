@@ -305,6 +305,7 @@ class MyEvaluations extends Component {
                             attributes.deadline = position.deadline;
                             attributes.logo = position.businessLogo;
                             attributes.name = position.positionName;
+                            attributes.length = position.length;
                             attributes.company = position.businessName;
                             attributes.length = position.length;
                             attributes.assignedDate = position.assignedDate;

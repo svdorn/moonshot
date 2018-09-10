@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
-import ContactUsDialog from '../childComponents/contactUsDialog';
 import { renderTextField, isValidEmail } from  "../../miscFunctions";
 
 
@@ -59,7 +58,6 @@ class ForgotPassword extends Component {
                     <title>Forgot Password | Moonshot</title>
                     <meta name="description" content="Reset your Moonshot password. It's okay - we all forget things sometimes." />
                 </MetaTags>
-                <ContactUsDialog />
                 <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Forgot Password</h1>

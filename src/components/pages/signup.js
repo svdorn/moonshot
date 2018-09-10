@@ -9,7 +9,6 @@ import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {browserHistory} from 'react-router';
 import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
-import ContactUsDialog from '../childComponents/contactUsDialog';
 import MetaTags from 'react-meta-tags';
 import { renderTextField, renderPasswordField, isValidEmail } from "../../miscFunctions";
 
@@ -238,7 +237,6 @@ class Signup extends Component {
                     >
                         <TermsOfUse/>
                     </Dialog>
-                    <ContactUsDialog />
                     {/*<HomepageTriangles className="slightly-blurred" style={{pointerEvents: "none"}} variation="5"/>*/}
                     <div className="form lightBlackForm">
                         {this.state.email != "" && this.props.userPosted ?
