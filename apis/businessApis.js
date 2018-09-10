@@ -527,7 +527,7 @@ function createPosition(name, type) {
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2db"),
                         "score": 5
-                    },growthFactors
+                    },
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d6"),
                         "score": 5
