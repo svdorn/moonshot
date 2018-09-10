@@ -469,10 +469,70 @@ function createPosition(name, type) {
         timeAllotted: 60
     }
 
+    const generalPositionWeights = {
+       "emotionality": 1,
+       "extraversion": 0,
+       "agreeableness": 0,
+       "conscientiousness": 1.4375,
+       "opennessToExperience": 0,
+       "honestyHumility": 1.125,
+       "altruism": 0
+   }
+
+   let positionWeights = generalPositionWeights;
+
+    switch(type) {
+        case "General":
+        case "Developer":
+        case "Marketing":
+        case "Product":
+            positionWeights = generalPositionWeights;
+            break;
+        case "Sales":
+            positionWeights =
+            {
+               "emotionality": 1,
+               "extraversion": 1.5,
+               "agreeableness": 0,
+               "conscientiousness": 2.4,
+               "opennessToExperience": 0,
+               "honestyHumility": 1.714,
+               "altruism": 0
+           };
+           break;
+        case "Support":
+            positionWeights =
+            {
+               "emotionality": 1.18,
+               "extraversion": 1,
+               "agreeableness": 1.723,
+               "conscientiousness": 2.455,
+               "opennessToExperience": 1.545,
+               "honestyHumility": 1.636,
+               "altruism": 0
+           };
+           break;
+        case "Manager":
+            positionWeights =
+            {
+               "emotionality": 1.025,
+               "extraversion": 1.7,
+               "agreeableness": 1,
+               "conscientiousness": 2,
+               "opennessToExperience": 0,
+               "honestyHumility": 1.756,
+               "altruism": 0
+           };
+           break;
+        default:
+            break;
+    }
+
     const factors = {
         "idealFactors": [
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ff"),
+                "weight": positionWeights.honestyHumility,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30f"),
@@ -494,6 +554,7 @@ function createPosition(name, type) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ea"),
+                "weight": positionWeights.emotionality,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2fa"),
@@ -515,6 +576,7 @@ function createPosition(name, type) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d0"),
+                "weight": positionWeights.extraversion,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e5"),
@@ -540,6 +602,7 @@ function createPosition(name, type) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bb"),
+                "weight": positionWeights.agreeableness,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2cb"),
@@ -561,6 +624,7 @@ function createPosition(name, type) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6"),
+                "weight": positionWeights.conscientiousness,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
@@ -582,6 +646,7 @@ function createPosition(name, type) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b"),
+                "weight": positionWeights.opennessToExperience,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
@@ -607,6 +672,7 @@ function createPosition(name, type) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce275"),
+                "weight": positionWeights.altruism,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce285"),
