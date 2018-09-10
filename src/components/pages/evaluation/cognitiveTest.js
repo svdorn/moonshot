@@ -193,9 +193,9 @@ class CognitiveTest extends Component {
             return (
                 <div key={option.src}
                      onClick={this.state.outOfTime? null : () => self.selectAnswer(option._id)}
-                     className={"cognitiveMultipleChoiceAnswer" + selectedClass + outOfTimeClass}
+                     styleName={"multipleChoiceAnswer" + selectedClass + outOfTimeClass}
                 >
-                    <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
+                    <div styleName={"multipleChoiceCircle" + selectedClass + outOfTimeClass}><div/></div>
                     <div styleName="answersImg"><img src={imgSrc} /></div>
                 </div>
             );
@@ -220,7 +220,7 @@ class CognitiveTest extends Component {
             <div className="font16px font14pxUnder600 font12pxUnder450">
                 {this.state.outOfTime ? <div styleName="error-red">Out of time - please advance to the next question.</div> : <div className="secondary-gray">0:{timer}</div> }
                 <div className="marginBottom40px"><img styleName="rpmImg" src={rpmSrc} /></div>
-                <div className="center" style={{maxWidth: "800px", margin:"auto"}}>
+                <div className="center" style={{maxWidth: "1000px", margin:"auto"}}>
                     { answers }
                 </div>
                 <div className={"marginBottom50px marginTop40px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>

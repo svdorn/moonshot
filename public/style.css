@@ -219,14 +219,10 @@ form > h1 {
 .evalPortionIntro { text-align: center }
 .evalPortionIntro > div {
     text-align: left;
-<<<<<<< HEAD
-    width: 700px;
     margin: auto;
-=======
-    width: 80%;
+   width: 80%;
     max-width: 1200px;
     display: inline-block;
->>>>>>> origin/dev
 }
 .skillsUserAgreement .checkbox {
     position: absolute;
@@ -988,17 +984,6 @@ form > h1 {
 }
 #ATSIntegrations > div > img:first-child {
     margin-left: 0;
-}
-
-.cognitiveMultipleChoiceAnswer {
-    cursor: pointer;
-    margin: 0 5% auto;
-    display: inline-block;
-    margin-bottom: 30px;
-    position: relative;
-}
-.cognitiveMultipleChoiceAnswer.outOfTime {
-    cursor: not-allowed;
 }
 
 .skillMultipleChoiceAnswer {
