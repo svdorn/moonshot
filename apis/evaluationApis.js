@@ -23,7 +23,8 @@ const { sanitize,
         validArgs,
         logArgs,
         logError,
-        randomInt
+        randomInt,
+        shuffle
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require("./psychApis");
@@ -1796,6 +1797,9 @@ async function getNewCognitiveQuestion(cognitiveTest) {
         // figure out id of correct answer for that question
         const correctAnswer = question.options.find(opt => opt.isCorrect)._id;
 
+        // shuffle the options
+        const opts = shuffle(question.options);
+
         const startDate = new Date();
 
         // mark it as the current question
@@ -1808,7 +1812,7 @@ async function getNewCognitiveQuestion(cognitiveTest) {
         // create the question object for the eval component
         const componentQuestion = {
             rpm: question.rpm,
-            options: question.options.map(opt => { return { src: opt.src, _id: opt._id } } ),
+            options: opts.map(opt => { return { src: opt.src, _id: opt._id } } ),
             startDate,
             questionId: question._id
         }
