@@ -394,7 +394,7 @@ function POST_updateAllOnboarding(req, res) {
             }
 
             if (info) {
-                // if info exists, try to save it
+                // if info exists, try toad save it
                 const fullInfo = removeEmptyFields(info);
 
                 for (const prop in fullInfo) {
@@ -416,7 +416,7 @@ function POST_updateAllOnboarding(req, res) {
             }
 
             user.save(function (saveErr, updatedUser) {
-                if (saveErr) {
+                if (saveErr) {ad
                     console.log("Error saving user information when updating info from onboarding: ", saveErr);
                     res.status(500).send("Server error, couldn't save information.");
                     return;

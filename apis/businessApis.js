@@ -463,63 +463,104 @@ function createPosition(name, type) {
     const bizPos = {
         name: name,
         positionType: type,
-        length: 25,
+        length: 22,
         dateCreated: Date.now(),
         finalized: true,
-        timeAllotted: 14
+        timeAllotted: 60
     }
 
-    const devFactors = {
-        "growthFactors": [
-            {
-                "idealFacets": [
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
-                        "score": 5
-                    }
-                ],
-                "factorId":mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6")
-            },
-            {
-                "idealFacets": [
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
-                        "score": 5
-                    }
-                ],
-                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b")
-            }
-        ],
+    const factors = {
         "idealFactors": [
             {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ff"),
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30f"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30a"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce305"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce300"),
+                        "score": 5
+                    }
+                ]
+            },
+            {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ea"),
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2fa"),
+                        "score": -5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f5"),
+                        "score": -5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f0"),
+                        "score": -5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2eb"),
+                        "score": -5
+                    }
+                ]
+            },
+            {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d0"),
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e5"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e0"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2db"),
+                        "score": 5
+                    },growthFactors
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d6"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d1"),
+                        "score": 5
+                    }
+                ]
+            },
+            {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bb"),
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2cb"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c6"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c1"),
+                        "score": 5
+                    },
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bc"),
+                        "score": 5
+                    }
+                ]
+            },
+            {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6"),
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
@@ -537,10 +578,10 @@ function createPosition(name, type) {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
                         "score": 5
                     }
-                ],
-                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6")
+                ]
             },
             {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b"),
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
@@ -562,42 +603,23 @@ function createPosition(name, type) {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
                         "score": 5
                     }
-                ],
-                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b")
+                ]
+            },
+            {
+                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce275"),
+                "idealFacets": [
+                    {
+                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce285"),
+                        "score": 5
+                    }
+                ]
             }
         ]
-    }
+    };
 
-    console.log("positionType: ", bizPos.positionType);
-
-    // TODO: create different default mappings when Justin gives them to us
-    const salesFactors = devFactors;
-    const supportFactors = devFactors;
-    const marketingFactors = devFactors;
-    const productFactors = devFactors;
-
-    let growthFactors;
-    let idealFactors;
     // set correct ideal and growth factors
-    if (type == "Developer") {
-        bizPos.growthFactors = devFactors.growthFactors;
-        bizPos.idealFactors = devFactors.idealFactors;
-        console.log("adding dev factors");
-        console.log("growth: ", devFactors.growthFactors);
-        console.log("ideal: ", devFactors.idealFactors);
-    } else if (type === "Sales") {
-        bizPos.growthFactors = salesFactors.growthFactors;
-        bizPos.idealFactors = salesFactors.idealFactors;
-    } else if (type === "Support") {
-        bizPos.growthFactors = supportFactors.growthFactors;
-        bizPos.idealFactors = supportFactors.idealFactors;
-    } else if (type === "Marketing") {
-        bizPos.growthFactors = marketingFactors.growthFactors;
-        bizPos.idealFactors = marketingFactors.idealFactors;
-    } else if (type === "Product") {
-        bizPos.growthFactors = productFactors.growthFactors;
-        bizPos.idealFactors = productFactors.idealFactors;
-    }
+    bizPos.growthFactors = factors.idealFactors;
+    bizPos.idealFactors = factors.idealFactors;
 
     return bizPos;
 }
