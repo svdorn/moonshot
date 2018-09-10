@@ -392,6 +392,149 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
 }
 
 
+// gets the full current state of the evaluation
+module.exports.GET_currentState = async function(req, res) {
+    // get everything needed from request
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
+    // if the ids are not strings, return bad request error
+    if (!validArgs({ stringArgs: [businessId, positionId] })) {
+        logArgs(req.query, ["businessId", "positionId"]);
+        return res.status(400).send({ badRequest: true });
+    }
+
+    // get the current user
+    try {
+        var [user, position] = await Promise.all([
+            getAndVerifyUser(userId, verificationToken),
+            getPosition(businessId, positionId)
+        ]);
+    }
+    catch (getUserError) {
+        logError("Error getting user when trying to get current eval state: ", getUserError);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
+    }
+
+    // get the current state of the evaluation
+    try { var { evaluationState } = await getEvaluationState({ user, position }); }
+    catch (getStateError) {
+        console.log("Error getting evaluation state when starting eval: ", getStateError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send({ evaluationState });
+}
+
+
+// starts an evaluation
+module.exports.POST_start = async function(req, res) {
+    // get everything needed from request
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
+    // if the ids are not strings, return bad request error
+    if (!validArgs({ stringArgs: [businessId, positionId] })) {
+        logArgs(req.query, ["businessId", "positionId"]);
+        return res.status(400).send({ badRequest: true });
+    }
+
+    // get the current user
+    try {
+        var [user, position] = await Promise.all([
+            getAndVerifyUser(userId, verificationToken),
+            getPosition(businessId, positionId)
+        ]);
+    }
+    catch (getUserError) {
+        logError("Error getting user when trying to get current eval state: ", getUserError);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
+    }
+
+    // make sure the user is enrolled in the position
+    const positionIndex = userPositionIndex(user, positionId, businessId);
+    if (positionIndex < 0) {
+        console.log(`User did not have position with positionId: ${positionId}, businessId: ${businessId}`);
+        return res.status(403).send({ notSignedUp: true });
+    }
+
+    // set the user's current position to the one given
+    user.evalInProgress = { businessId, positionId }
+    // mark the position as started
+    const NOW = new Date();
+    if (user.positions[positionIndex].appliedStartDate) {
+        user.positions[positionIndex].appliedStartDate = new Date();
+    } if (user.positions[positionIndex].startDate) {
+        user.positions[positionIndex].startDate = new Date();
+    }
+
+    // save the user
+    try { await user.save(); }
+    catch (saveError) {
+        console.log("Error saving user with new eval in progress: ", saveError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // get the current state of the evaluation
+    try { var { evaluationState } = await getEvaluationState({ user, position }); }
+    catch (getStateError) {
+        console.log("Error getting evaluation state when starting eval: ", getStateError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send({ user: frontEndUser(user), evaluationState });
+}
+
+
+// gets results for a user and influencers
+module.exports.GET_initialState = async function(req, res) {
+    // get everything needed from request
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
+    // if the ids are not strings, return bad request error
+    if (!validArgs({ stringArgs: [businessId, positionId] })) {
+        logArgs(req.query, ["businessId", "positionId"]);
+        return res.status(400).send({ badRequest: true });
+    }
+
+    // get the current user
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("Error getting user when trying to get current eval state: ", getUserError);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
+    }
+
+    // find the index of the position within the user's positions array
+    const positionIndex = userPositionIndex(user, positionId, businessId);
+    // if the index is invalid, the user never signed up for this position
+    if (positionIndex < 0) { return res.status(403).send({notSignedUp: true}); }
+
+    // get the position from the database
+    try { var position = await getPosition(businessId, positionId); }
+    catch (getPositionError) {
+        console.log(`Error getting position when trying to get initial state - businessId: ${businessId}, positionId: ${positionId}: `, getPositionError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // TODO: check if they have finished the eval already
+    if (user.positions[positionIndex].appliedEndDate) {
+        return res.status(200).send({ finished: true });
+    }
+
+    // if user is in-progress on any position
+    if (user.evalInProgress && user.evalInProgress.businessId && user.evalInProgress.positionId) {
+        // check if it is the position they are currently on
+        if (user.evalInProgress.businessId.toString() === businessId && user.evalInProgress.positionId.toString() === positionId) {
+            // tell the user that this position has already been started, then
+            // ask if they are ready to continue
+            return res.status(200).send({ alreadyInProgress: true });
+        }
+        // if not, ask if they want to continue the eval they were on before
+        // or if they want to work on this new one - send them the businessId
+        // and positionId so they have a link to the in-progress eval
+        else { return res.status(200).send({ evalInProgress: user.evalInProgress }); }
+    }
+    // no eval is in progress, return that they have not started this position
+    // and are ready to
+    else { return res.status(200).send({ readyToStart: true }); }
+}
+
+
 // start the next skill in an eval
 async function startNewSkill(user) {
     return new Promise(async function(resolve, reject) {
@@ -1153,149 +1296,6 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
 }
 
 
-// gets the full current state of the evaluation
-module.exports.GET_currentState = async function(req, res) {
-    // get everything needed from request
-    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
-    // if the ids are not strings, return bad request error
-    if (!validArgs({ stringArgs: [businessId, positionId] })) {
-        logArgs(req.query, ["businessId", "positionId"]);
-        return res.status(400).send({ badRequest: true });
-    }
-
-    // get the current user
-    try {
-        var [user, position] = await Promise.all([
-            getAndVerifyUser(userId, verificationToken),
-            getPosition(businessId, positionId)
-        ]);
-    }
-    catch (getUserError) {
-        logError("Error getting user when trying to get current eval state: ", getUserError);
-        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
-    }
-
-    // get the current state of the evaluation
-    try { var { evaluationState } = await getEvaluationState({ user, position }); }
-    catch (getStateError) {
-        console.log("Error getting evaluation state when starting eval: ", getStateError);
-        return res.status(500).send({ serverError: true });
-    }
-
-    return res.status(200).send({ evaluationState });
-}
-
-
-// starts an evaluation
-module.exports.POST_start = async function(req, res) {
-    // get everything needed from request
-    const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
-    // if the ids are not strings, return bad request error
-    if (!validArgs({ stringArgs: [businessId, positionId] })) {
-        logArgs(req.query, ["businessId", "positionId"]);
-        return res.status(400).send({ badRequest: true });
-    }
-
-    // get the current user
-    try {
-        var [user, position] = await Promise.all([
-            getAndVerifyUser(userId, verificationToken),
-            getPosition(businessId, positionId)
-        ]);
-    }
-    catch (getUserError) {
-        logError("Error getting user when trying to get current eval state: ", getUserError);
-        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
-    }
-
-    // make sure the user is enrolled in the position
-    const positionIndex = userPositionIndex(user, positionId, businessId);
-    if (positionIndex < 0) {
-        console.log(`User did not have position with positionId: ${positionId}, businessId: ${businessId}`);
-        return res.status(403).send({ notSignedUp: true });
-    }
-
-    // set the user's current position to the one given
-    user.evalInProgress = { businessId, positionId }
-    // mark the position as started
-    const NOW = new Date();
-    if (user.positions[positionIndex].appliedStartDate) {
-        user.positions[positionIndex].appliedStartDate = new Date();
-    } if (user.positions[positionIndex].startDate) {
-        user.positions[positionIndex].startDate = new Date();
-    }
-
-    // save the user
-    try { await user.save(); }
-    catch (saveError) {
-        console.log("Error saving user with new eval in progress: ", saveError);
-        return res.status(500).send({ serverError: true });
-    }
-
-    // get the current state of the evaluation
-    try { var { evaluationState } = await getEvaluationState({ user, position }); }
-    catch (getStateError) {
-        console.log("Error getting evaluation state when starting eval: ", getStateError);
-        return res.status(500).send({ serverError: true });
-    }
-
-    return res.status(200).send({ user: frontEndUser(user), evaluationState });
-}
-
-
-// gets results for a user and influencers
-module.exports.GET_initialState = async function(req, res) {
-    // get everything needed from request
-    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
-    // if the ids are not strings, return bad request error
-    if (!validArgs({ stringArgs: [businessId, positionId] })) {
-        logArgs(req.query, ["businessId", "positionId"]);
-        return res.status(400).send({ badRequest: true });
-    }
-
-    // get the current user
-    try { var user = await getAndVerifyUser(userId, verificationToken); }
-    catch (getUserError) {
-        console.log("Error getting user when trying to get current eval state: ", getUserError);
-        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
-    }
-
-    // find the index of the position within the user's positions array
-    const positionIndex = userPositionIndex(user, positionId, businessId);
-    // if the index is invalid, the user never signed up for this position
-    if (positionIndex < 0) { return res.status(403).send({notSignedUp: true}); }
-
-    // get the position from the database
-    try { var position = await getPosition(businessId, positionId); }
-    catch (getPositionError) {
-        console.log(`Error getting position when trying to get initial state - businessId: ${businessId}, positionId: ${positionId}: `, getPositionError);
-        return res.status(500).send({ serverError: true });
-    }
-
-    // TODO: check if they have finished the eval already
-    if (user.positions[positionIndex].appliedEndDate) {
-        return res.status(200).send({ finished: true });
-    }
-
-    // if user is in-progress on any position
-    if (user.evalInProgress && user.evalInProgress.businessId && user.evalInProgress.positionId) {
-        // check if it is the position they are currently on
-        if (user.evalInProgress.businessId.toString() === businessId && user.evalInProgress.positionId.toString() === positionId) {
-            // tell the user that this position has already been started, then
-            // ask if they are ready to continue
-            return res.status(200).send({ alreadyInProgress: true });
-        }
-        // if not, ask if they want to continue the eval they were on before
-        // or if they want to work on this new one - send them the businessId
-        // and positionId so they have a link to the in-progress eval
-        else { return res.status(200).send({ evalInProgress: user.evalInProgress }); }
-    }
-    // no eval is in progress, return that they have not started this position
-    // and are ready to
-    else { return res.status(200).send({ readyToStart: true }); }
-}
-
-
 // get the current state of an evaluation, including the current stage, what
 // stages have been completed, and what stages are next
 // requires: user AND ((positionId and businessId) OR position object)
@@ -1360,39 +1360,43 @@ async function getEvaluationState(options) {
 // grades an evaluation based on all the components
 async function gradeEval(user, userPosition, position) {
     // CURRENTLY SCORE IS MADE OF MOSTLY PSYCH AND A TINY BIT OF SKILLS
-    /* ------------------------>> GRADE SKILLS <<---------------------------- */
+    // GRADE ALL THE SKILLS
     const overallSkill = gradeAllSkills(user, position);
-    /* <<----------------------- END GRADE SKILLS ------------------------->> */
 
     /* ------------------------->> GRADE PSYCH <<---------------------------- */
     // predict growth
     const growth = gradeGrowth(user, position);
-
     // predict performance
     const performance = gradePerformance(user, position, overallSkill);
-
     // predict longevity
     const longevity = gradeLongevity(user, position);
     /* <<------------------------ END GRADE PSYCH ------------------------->> */
 
     /* ------------------------->> GRADE OVERALL <<-------------------------- */
-    // the components that make up the overall score
-    const overallContributors = [growth, performance, longevity];
+    // get the cognitive test score
+    const gca =
+        typeof user.cognitiveTest === "object" &&
+        typeof user.cognitiveTest.score === "number" ?
+            user.cognitiveTest.score : undefined;
+    const overallScore = gradeOverall({ gca, overallSkill, growth, performance, longevity });
 
-    // get the average of the contributors
-    let overallScore = 0;
-    let numContributors = 0;
-    overallContributors.forEach(contributor => {
-        // if the contributor score exists (was predicted)
-        if (typeof contributor === "number") {
-            overallScore += contributor;
-            numContributors++;
-        }
-    });
-    // get the average if there is at least one contributor
-    if (numContributors > 0) { overallScore = overallScore / numContributors; }
-    // otherwise just give them a score of 100
-    else { overallScore = 100; }
+    // // the components that make up the overall score
+    // const overallContributors = [growth, performance, longevity];
+    //
+    // // get the average of the contributors
+    // let overallScore = 0;
+    // let numContributors = 0;
+    // overallContributors.forEach(contributor => {
+    //     // if the contributor score exists (was predicted)
+    //     if (typeof contributor === "number") {
+    //         overallScore += contributor;
+    //         numContributors++;
+    //     }
+    // });
+    // // get the average if there is at least one contributor
+    // if (numContributors > 0) { overallScore = overallScore / numContributors; }
+    // // otherwise just give them a score of 100
+    // else { overallScore = 100; }
     /* <<----------------------- END GRADE OVERALL ------------------------>> */
 
     // update user's scores on the position eval
@@ -1405,6 +1409,20 @@ async function gradeEval(user, userPosition, position) {
 
     // return the updated user position
     return userPosition;
+}
+
+
+// calculate the overall score based on sub-scores like gca and performance
+function gradeOverall(subscores) {
+    let totalValue = 0;
+    let totalWeight = 0;
+    let { gca, performance } = subscores;
+    if (typeof gca === "number") {
+
+    }
+    if (typeof performance === "number") {
+
+    }
 }
 
 
@@ -1493,56 +1511,144 @@ function gradeGrowth(user, position) {
 }
 
 
+// weights for general positions, used for Dev, Prod, Marketing
+const generalPositionWeights = {
+    "Emotionality": 1,
+    "Extraversion": 0,
+    "Agreeableness": 0,
+    "Conscientiousness": 1.4375,
+    "Openness to Experience": 0,
+    "Honesty-Humility": 1.125,
+    "Altruism": 0
+}
+// list of weights for grading performance
+const performanceWeights = {
+    "General": generalPositionWeights,
+    "Marketing": generalPositionWeights,
+    "Product": generalPositionWeights,
+    "Development": generalPositionWeights,
+    "Sales": {
+        "Emotionality": 1,
+        "Extraversion": 1.5,
+        "Agreeableness": 0,
+        "Conscientiousness": 2.4,
+        "Openness to Experience": 0,
+        "Honesty-Humility": 1.714,
+        "Altruism": 0
+    },
+    "Support": {
+        "Emotionality": 1.18,
+        "Extraversion": 1,
+        "Agreeableness": 1.723,
+        "Conscientiousness": 2.455,
+        "Openness to Experience": 1.545,
+        "Honesty-Humility": 1.636,
+        "Altruism": 0
+    },
+    "Manager": {
+        "Emotionality": 1.025,
+        "Extraversion": 1.7,
+        "Agreeableness": 1,
+        "Conscientiousness": 2,
+        "Openness to Experience": 0,
+        "Honesty-Humility": 1.756,
+        "Altruism": 0
+    }
+}
 // get predicted performance for specific position
 function gradePerformance(user, position, overallSkill) {
-    // add to the score when a non-zero facet score is ideal
-    // subtract from the score whatever the differences are between the
-    // ideal facets and the actual facets
-    let performance = undefined;
-
-    const userFactors = user.psychometricTest.factors;
-    if (Array.isArray(position.idealFactors) && position.idealFactors.length > 0) {
-        // start at 100 as the baseline
-        let psychPerformance = 100;
-
-        // go through each factor to get to each facet
-        position.idealFactors.forEach(idealFactor => {
-            // find the factor within the user's psych test
-            const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
-
-            // go through each facet to find the score compared to the ideal output
-            idealFactor.idealFacets.forEach(idealFacet => {
-                // find the facet within the user's psych test
-                const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
-
-                // the score that the user needs for the max pq
-                const idealScore = idealFacet.score;
-
-                // how far off of the ideal score the user got
-                const difference = Math.abs(idealScore - userFacet.score);
-
-                // subtract the difference from the predictive score
-                psychPerformance -= difference;
-
-                // add the absolute value of the facet score, making the
-                // potential predictive score higher
-                psychPerformance += Math.abs(idealScore);
-            });
-        });
-
-        // take skills into account if there were any in the eval
-        if (typeof overallSkill === "number") {
-            // psych will account for 80% of prediction, skills 20%
-            performance = (psychPerformance * .8) + (overallSkill * .2);
-        }
-
-        // otherwise performance is just psych performance
-        else { performance = psychPerformance; }
+    // get the function type of the position ("Development", "Support", etc)
+    const type = position.positionType;
+    // get the user's psych test
+    const psych = user.psychometricTest;
+    // the weights for this position type
+    let weights = performanceWeights[type];
+    // if the type isn't valid, just use the general ones
+    if (!weights) {
+        console.log(`Position with id ${position._id} had type: `, type, " which was invalid. Using General weights.");
+        weights = performanceWeights["General"];
     }
-
-    // return calculated performance
-    return performance;
+    // the added-up weighted factor score values
+    let totalValue = 0;
+    // the total weight of all factors, will divide by this to get the final score
+    let totalWeight = 0;
+    // go through every factor,
+    psych.factors.forEach(factor => {
+        // get the average of all the facets for the factor
+        const factorAvg = factor.score;
+        // get the standardized factor score
+        const stdFactorScore = (factorAvg * 10) + 94.847;
+        // get the weight of the factor for this position
+        const weight = weights[factor.name];
+        // if the weight is invalid, don't use this factor in calculation
+        if (typeof weight !== "number") {
+            console.log("Invalid weight: ", weight, " in factor ", factor, ` of position with id ${position._id}`);
+        } else {
+            // add the weighted factor score to the total value
+            totalValue += stdFactorScore * weight;
+            // add the weight to the total weight
+            totalWeight += weight;
+        }
+    });
+    // if the total weight is 0, something has gone terribly wrong
+    if (totalWeight === 0) { return throw new Error("Total factor weight of 0. Invalid psych factors."); }
+    // otherwise calculate the final weighted average score and return it
+    return (totalValue / totalWeight);
 }
+
+
+
+// // OLD VERSION OF GRADING PERFORMANCE USING IDEAL OUTPUTS
+// // get predicted performance for specific position
+// function gradePerformance(user, position, overallSkill) {
+//     // add to the score when a non-zero facet score is ideal
+//     // subtract from the score whatever the differences are between the
+//     // ideal facets and the actual facets
+//     let performance = undefined;
+//
+//     const userFactors = user.psychometricTest.factors;
+//     if (Array.isArray(position.idealFactors) && position.idealFactors.length > 0) {
+//         // start at 100 as the baseline
+//         let psychPerformance = 100;
+//
+//         // go through each factor to get to each facet
+//         position.idealFactors.forEach(idealFactor => {
+//             // find the factor within the user's psych test
+//             const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
+//
+//             // go through each facet to find the score compared to the ideal output
+//             idealFactor.idealFacets.forEach(idealFacet => {
+//                 // find the facet within the user's psych test
+//                 const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+//
+//                 // the score that the user needs for the max pq
+//                 const idealScore = idealFacet.score;
+//
+//                 // how far off of the ideal score the user got
+//                 const difference = Math.abs(idealScore - userFacet.score);
+//
+//                 // subtract the difference from the predictive score
+//                 psychPerformance -= difference;
+//
+//                 // add the absolute value of the facet score, making the
+//                 // potential predictive score higher
+//                 psychPerformance += Math.abs(idealScore);
+//             });
+//         });
+//
+//         // take skills into account if there were any in the eval
+//         if (typeof overallSkill === "number") {
+//             // psych will account for 80% of prediction, skills 20%
+//             performance = (psychPerformance * .8) + (overallSkill * .2);
+//         }
+//
+//         // otherwise performance is just psych performance
+//         else { performance = psychPerformance; }
+//     }
+//
+//     // return calculated performance
+//     return performance;
+// }
 
 
 // get predicted longevity for specific position
