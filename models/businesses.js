@@ -50,7 +50,9 @@ const positionSchema = mongoose.Schema({
             // id of the facet
             facetId: mongoose.Schema.Types.ObjectId,
             // the optimal facet score for this position
-            score: Number
+            score: Number,
+            // the weight of the facet
+            weight: Number
         }]
     }],
     // maximum growth score allowed (default is 190)
@@ -66,7 +68,9 @@ const positionSchema = mongoose.Schema({
             // id of the facet to score
             facetId: mongoose.Schema.Types.ObjectId,
             // best score for growth for this facet in this position
-            score: Number
+            score: Number,
+            // the weight of the facet
+            weight: Number
         }]
     }],
     // if the position is calculating for longevity
