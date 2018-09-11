@@ -199,6 +199,11 @@ async function createAccountAdmin(info) {
                 name: "Terms and Conditions",
                 date: NOW,
                 agreed: true
+            },
+            {
+                name: "Terms of Service",
+                date: NOW,
+                agreed: true
             }
         ];
         // user has just signed up
@@ -1272,7 +1277,7 @@ async function POST_addEvaluation(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-     try { await business.positions.push(createPosition(positionName, positionType)); }
+     try { business.positions.push(await createPosition(positionName, positionType)); }
      catch (addPosError) {
          console.log("Error adding position ", addPosError);
          return res.status(500).send(errors.SERVER_ERROR);
