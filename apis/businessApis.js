@@ -775,19 +775,13 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
 
 // send email invites to multiple email addresses with varying user types
 async function POST_emailInvites(req, res) {
-    const body = req.body;
-    const candidateEmails = sanitize(body.candidateEmails);
-    const employeeEmails = sanitize(body.employeeEmails);
-    const adminEmails = sanitize(body.adminEmails);
-    const userId = sanitize(body.currentUserInfo.userId);
-    const userName = sanitize(body.currentUserInfo.userName);
-    const verificationToken = sanitize(body.currentUserInfo.verificationToken);
-    const businessId = sanitize(body.currentUserInfo.businessId);
-    const positionId = sanitize(body.currentUserInfo.positionId);
-    const positionName = sanitize(body.currentUserInfo.positionName);
+    const { candidateEmails, employeeEmails, adminEmails, userId, userName,
+            verificationToken, businessId, positionId, positionName } = sanitize(req.body);
 
     // if one of the arguments doesn't exist, return with error code
     if (!Array.isArray(candidateEmails) || !Array.isArray(employeeEmails) || !Array.isArray(adminEmails) || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
+        console.log(candidateEmails, employeeEmails, adminEmails, userId, userName,
+                verificationToken, businessId, positionId, positionName);
         return res.status(400).send("Bad request.");
     }
 
@@ -799,11 +793,14 @@ async function POST_emailInvites(req, res) {
     }
 
     // get the business and ensure the user has access to send invite emails
-    let business;
-    try { business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId); }
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
     catch (verifyUserError) {
         console.log("error verifying user or getting business when sending invite emails: ", verifyUserError);
         return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    if (!user.verified) {
+        return res.status(500).send("Email not yet verified. Do that first!");
     }
 
     // find the position within the business
@@ -1233,7 +1230,7 @@ async function POST_addEvaluation(req, res) {
     try {
         var business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId);
     } catch (verifyAccountAdminError) {
-        console.log("Error verifying business account admin: ", error);
+        console.log("Error verifying business account admin: ", verifyAccountAdminError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
@@ -1525,6 +1522,18 @@ async function GET_business(req, res) {
 async function verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId) {
     return new Promise(async (resolve, reject) => {
         try {
+            const { business } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId);
+            return resolve(business);
+        }
+
+        catch (error) { reject(error); }
+    })
+}
+
+// does the same but returns both user and business
+async function verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId) {
+    return new Promise(async (resolve, reject) => {
+        try {
             // find the user and business
             let [user, business] = await Promise.all([
                 Users.findById(userId),
@@ -1549,14 +1558,13 @@ async function verifyAccountAdminAndReturnBusiness(userId, verificationToken, bu
             }
 
             // successful verification
-            resolve(business);
+            resolve({ business, user });
         }
 
-        catch (error) {
-            reject(error);
-        }
+        catch (error) { reject(error); }
     })
 }
+
 
 function GET_employeeQuestions(req, res) {
     const userId = sanitize(req.query.userId);

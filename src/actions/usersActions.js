@@ -439,7 +439,7 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
     return function(dispatch) {
         dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
 
-        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, adminEmails, currentUserInfo})
+        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, adminEmails, ...currentUserInfo})
             // email invites success
             .then(function(res) {
                 const waitingForFinalization = !!res && !!res.data && res.data.waitingForFinalization === true;
