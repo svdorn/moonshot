@@ -180,6 +180,7 @@ app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/business", businessApis.GET_business);
 app.get("/business/employeeQuestions", businessApis.GET_employeeQuestions);
 app.get("/business/positions", businessApis.GET_positions);
+app.get("/business/positionsForApply", businessApis.GET_positionsForApply);
 app.get("/business/evaluationResults", businessApis.GET_evaluationResults);
 app.get("/business/apiKey", businessApis.GET_apiKey);
 

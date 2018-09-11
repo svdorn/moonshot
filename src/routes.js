@@ -25,6 +25,7 @@ import Main from './main';
 import AuthenticatedComponent from './components/authenticatedComponent/authenticatedComponent';
 import Settings from './components/pages/settings/settings';
 import Ease from './components/pages/ease';
+import Apply from './components/pages/apply';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
@@ -78,6 +79,7 @@ const routes = (
             <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={businessAdminUserTypes} firstBusinessUser={true} />
             <Route path="businessSignup" component={BusinessSignup} />
             <Route path="ease" component={Ease} />
+            <Route path="apply/:company" component={Apply} />
             <Route path="chatbot" component={Chatbot} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
             <Route path="listing" component={Listing} />
