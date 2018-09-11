@@ -114,10 +114,6 @@ class Apply extends Component {
             <div className="jsxWrapper blackBackground fillScreen center">
                 {this.state.company ?
                     <div>
-                        <MetaTags>
-                            <title>{this.state.company} | Moonshot</title>
-                            <meta name="description" content="Apply for jobs at different companies." />
-                        </MetaTags>
                         <div className="marginTop50px marginBottom30px">
                             <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">{this.state.company} Evaluation</div>
                             <div className="font16px font14pxUnder700 font12pxUnder500 secondary-gray" styleName="powered-by">Powered by Moonshot Insights</div>
@@ -134,10 +130,6 @@ class Apply extends Component {
                     </div>
                     :
                     <div>
-                        <MetaTags>
-                            <title>Apply | Moonshot</title>
-                            <meta name="description" content="Apply for jobs at different companies." />
-                        </MetaTags>
                         <div className="font18px font16pxUnder700 font14pxUnder500 secondary-gray marginTop30px">
                             Loading...
                         </div>

@@ -25,6 +25,8 @@ import Main from './main';
 import AuthenticatedComponent from './components/authenticatedComponent/authenticatedComponent';
 import Settings from './components/pages/settings/settings';
 import Ease from './components/pages/ease';
+import ApplyContainer from './components/pages/applyContainer';
+import GeneralApply from './components/pages/generalApply';
 import Apply from './components/pages/apply';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
@@ -79,7 +81,6 @@ const routes = (
             <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={businessAdminUserTypes} firstBusinessUser={true} />
             <Route path="businessSignup" component={BusinessSignup} />
             <Route path="ease" component={Ease} />
-            <Route path="apply/:company" component={Apply} />
             <Route path="chatbot" component={Chatbot} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
             <Route path="listing" component={Listing} />
@@ -93,6 +94,11 @@ const routes = (
             <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
             <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
             <Route path="serviceLevelAgreement" component={ServiceLevelAgreement} standalone={true} />
+
+            <Route path="apply" page={<ApplyContainer/>}>
+                <IndexRoute component={GeneralApply} />
+                <Route path=":company" component={Apply} />
+            </Route>
 
             <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
 
