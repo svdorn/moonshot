@@ -53,6 +53,7 @@ const businessApis = {
     GET_employeeSearch,
     GET_employeeQuestions,
     GET_positions,
+    GET_positionsForApply,
     GET_evaluationResults,
     GET_apiKey,
 
@@ -199,6 +200,11 @@ async function createAccountAdmin(info) {
                 name: "Terms and Conditions",
                 date: NOW,
                 agreed: true
+            },
+            {
+                name: "Terms of Service",
+                date: NOW,
+                agreed: true
             }
         ];
         // user has just signed up
@@ -319,8 +325,30 @@ async function createBusiness(info) {
         // create NOW variable for easy reference
         const NOW = new Date();
 
+        // initialize id string
+        let _id;
+        // see if this id already exists
+        try {
+            // will contain any code that has the same random characters
+            let foundId;
+            // if this gets up to 8 something is super weird
+            let counter = 0;
+            do {
+                if (counter >= 8) { throw "Too many ids found that had already been used." }
+                counter++;
+                // assign randomChars 10 random hex characters
+                _id = mongoose.Types.ObjectId();
+                // try to find another code with the same random characters
+                const foundId = Businesses.findOne({ _id: _id });
+            } while (foundId);
+        } catch (findIdError) {
+            console.log("Error looking for business id with same characters.");
+            return reject(findIdError);
+        }
+
         // initialize mostly empty business
         let business = {
+            _id,
             name,
             positions: [],
             logo: "hr.png",
@@ -330,11 +358,11 @@ async function createBusiness(info) {
         // check if positions should be added
         if (Array.isArray(positions)) {
             // go through each position that should be created
-            positions.forEach(position => {
-                bizPos = createPosition(position.name, position.positionType);
+            for (let i = 0; i < positions.length; i++) {
+                bizPos = await createPosition(positions[i].name, positions[i].positionType, _id);
                 // add the position
                 business.positions.push(bizPos);
-            });
+            }
         };
 
         // create an API_Key for the business
@@ -458,148 +486,164 @@ async function createBusiness(info) {
 }
 
 
-function createPosition(name, type) {
-    // defaults for all position values
-    const bizPos = {
-        name: name,
-        positionType: type,
-        length: 25,
-        dateCreated: Date.now(),
-        finalized: true,
-        timeAllotted: 14
-    }
+async function createPosition(name, type, businessId) {
+    return new Promise(async function(resolve, reject) {
 
-    const devFactors = {
-        "growthFactors": [
-            {
-                "idealFacets": [
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
-                        "score": 5
-                    }
-                ],
-                "factorId":mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6")
-            },
-            {
-                "idealFacets": [
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
-                        "score": 5
-                    }
-                ],
-                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b")
-            }
-        ],
-        "idealFactors": [
-            {
-                "idealFacets": [
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
-                        "score": 5
-                    }
-                ],
-                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6")
-            },
-            {
-                "idealFacets": [
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
-                        "score": 5
-                    },
-                    {
-                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
-                        "score": 5
-                    }
-                ],
-                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b")
-            }
-        ]
-    }
+        // defaults for all position values
+        const bizPos = {
+            name: name,
+            positionType: type,
+            length: 25,
+            dateCreated: Date.now(),
+            finalized: true,
+            timeAllotted: 14
+        }
 
-    console.log("positionType: ", bizPos.positionType);
+        const devFactors = {
+            "growthFactors": [
+                {
+                    "idealFacets": [
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
+                            "score": 5
+                        }
+                    ],
+                    "factorId":mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6")
+                },
+                {
+                    "idealFacets": [
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
+                            "score": 5
+                        }
+                    ],
+                    "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b")
+                }
+            ],
+            "idealFactors": [
+                {
+                    "idealFacets": [
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
+                            "score": 5
+                        }
+                    ],
+                    "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6")
+                },
+                {
+                    "idealFacets": [
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
+                            "score": 5
+                        },
+                        {
+                            "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
+                            "score": 5
+                        }
+                    ],
+                    "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b")
+                }
+            ]
+        }
 
-    // TODO: create different default mappings when Justin gives them to us
-    const salesFactors = devFactors;
-    const supportFactors = devFactors;
-    const marketingFactors = devFactors;
-    const productFactors = devFactors;
+        console.log("positionType: ", bizPos.positionType);
 
-    let growthFactors;
-    let idealFactors;
-    // set correct ideal and growth factors
-    if (type == "Developer") {
-        bizPos.growthFactors = devFactors.growthFactors;
-        bizPos.idealFactors = devFactors.idealFactors;
-        console.log("adding dev factors");
-        console.log("growth: ", devFactors.growthFactors);
-        console.log("ideal: ", devFactors.idealFactors);
-    } else if (type === "Sales") {
-        bizPos.growthFactors = salesFactors.growthFactors;
-        bizPos.idealFactors = salesFactors.idealFactors;
-    } else if (type === "Support") {
-        bizPos.growthFactors = supportFactors.growthFactors;
-        bizPos.idealFactors = supportFactors.idealFactors;
-    } else if (type === "Marketing") {
-        bizPos.growthFactors = marketingFactors.growthFactors;
-        bizPos.idealFactors = marketingFactors.idealFactors;
-    } else if (type === "Product") {
-        bizPos.growthFactors = productFactors.growthFactors;
-        bizPos.idealFactors = productFactors.idealFactors;
-    }
+        // TODO: create different default mappings when Justin gives them to us
+        const salesFactors = devFactors;
+        const supportFactors = devFactors;
+        const marketingFactors = devFactors;
+        const productFactors = devFactors;
 
-    return bizPos;
+        let growthFactors;
+        let idealFactors;
+        // set correct ideal and growth factors
+        if (type == "Developer") {
+            bizPos.growthFactors = devFactors.growthFactors;
+            bizPos.idealFactors = devFactors.idealFactors;
+            console.log("adding dev factors");
+            console.log("growth: ", devFactors.growthFactors);
+            console.log("ideal: ", devFactors.idealFactors);
+        } else if (type === "Sales") {
+            bizPos.growthFactors = salesFactors.growthFactors;
+            bizPos.idealFactors = salesFactors.idealFactors;
+        } else if (type === "Support") {
+            bizPos.growthFactors = supportFactors.growthFactors;
+            bizPos.idealFactors = supportFactors.idealFactors;
+        } else if (type === "Marketing") {
+            bizPos.growthFactors = marketingFactors.growthFactors;
+            bizPos.idealFactors = marketingFactors.idealFactors;
+        } else if (type === "Product") {
+            bizPos.growthFactors = productFactors.growthFactors;
+            bizPos.idealFactors = productFactors.idealFactors;
+        }
+
+        // initialize position id string
+        let _id = mongoose.Types.ObjectId();
+
+        bizPos._id = _id;
+
+        let code;
+        try { code = await createLink(businessId, _id, "candidate"); }
+        catch(createLinkError) {
+            console.log("error creating link: ", createLinkError)
+            return res.status(500).send(errors.SERVER_ERROR);
+        }
+        bizPos.code = code.code;
+
+        return resolve(bizPos);
+    })
 }
 
 
@@ -1234,7 +1278,11 @@ async function POST_addEvaluation(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-     business.positions.push(createPosition(positionName, positionType));
+     try { business.positions.push(await createPosition(positionName, positionType)); }
+     catch (addPosError) {
+         console.log("Error adding position ", addPosError);
+         return res.status(500).send(errors.SERVER_ERROR);
+     }
 
      try { await business.save(); }
      catch (saveBizError) {
@@ -1651,6 +1699,28 @@ async function GET_positions(req, res) {
     }
 
     return res.json({ logo: business.logo, businessName: business.name, positions });
+}
+
+// get all positions for a business
+async function GET_positionsForApply(req, res) {
+    const name = sanitize(req.query.name);
+
+    if (!name) {
+        return res.status(400).send("Bad request.");
+    }
+
+    // get the business the user works for
+    let business;
+    try {
+        business = await Businesses
+            .findOne({"name": name})
+            .select("logo name positions positions.name positions.code");
+    } catch (findBizError) {
+        console.log("Error finding business when getting positions: ", findBizError);
+        return res.status(500).send("Server error, couldn't get positions.");
+    }
+
+    return res.json({ logo: business.logo, businessName: business.name, positions: business.positions });
 }
 
 
