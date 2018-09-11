@@ -24,6 +24,8 @@ const positionSchema = mongoose.Schema({
     currentlyHiring: Boolean,
     // which of the 5 functions the position falls under
     positionType: String,
+    // if the position involves management
+    isManager: Boolean,
     // the skill tests a candidate must complete in order to apply
     skills: [ mongoose.Schema.Types.ObjectId ],
     // the names of the skills the candidates must complete in order to apply

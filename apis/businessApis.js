@@ -69,7 +69,7 @@ const businessApis = {
 // create a business and the first account admin for that business
 async function POST_createBusinessAndUser(req, res) {
     // get necessary arguments
-    const { name, company, email, positionTitle, password, positionType } = sanitize(req.body);
+    const { name, company, email, positionTitle, password, positionType, isManager } = sanitize(req.body);
 
     // validate arguments
     const stringArgs = [ name, company, email, positionTitle, password, positionType ];
@@ -97,7 +97,7 @@ async function POST_createBusinessAndUser(req, res) {
     // create business
     const newBusinessInfo = {
         name: company,
-        positions: [{ name: positionTitle, positionType }]
+        positions: [{ name: positionTitle, positionType, isManager }]
     }
     try { var business = await createBusiness(newBusinessInfo); }
     catch (createBizError) {
@@ -359,7 +359,7 @@ async function createBusiness(info) {
         if (Array.isArray(positions)) {
             // go through each position that should be created
             for (let i = 0; i < positions.length; i++) {
-                bizPos = await createPosition(positions[i].name, positions[i].positionType, _id);
+                bizPos = await createPosition(positions[i].name, positions[i].positionType, _id, positions[i].isManager);
                 // add the position
                 business.positions.push(bizPos);
             }
@@ -486,7 +486,7 @@ async function createBusiness(info) {
 }
 
 
-function createPosition(name, type) {
+function createPosition(name, type, isManager) {
     // defaults for all position values
     const bizPos = {
         name: name,
@@ -497,63 +497,64 @@ function createPosition(name, type) {
         timeAllotted: 60
     }
 
-    const generalPositionWeights = {
-       "emotionality": 1,
-       "extraversion": 0,
-       "agreeableness": 0,
-       "conscientiousness": 1.4375,
-       "opennessToExperience": 0,
-       "honestyHumility": 1.125,
-       "altruism": 0
-   }
+    let positionWeights;
+    // if the position is a manager, use different factor weights
+    if (isManager) {
+        positionWeights = {
+           "emotionality": 1.025,
+           "extraversion": 1.7,
+           "agreeableness": 1,
+           "conscientiousness": 2,
+           "opennessToExperience": 0,
+           "honestyHumility": 1.756,
+           "altruism": 0
+       };
+    }
+    // otherwise use Function-specific weights
+    else {
+        const generalPositionWeights = {
+            "emotionality": 1,
+            "extraversion": 0,
+            "agreeableness": 0,
+            "conscientiousness": 1.4375,
+            "opennessToExperience": 0,
+            "honestyHumility": 1.125,
+            "altruism": 0
+        }
 
-   let positionWeights = generalPositionWeights;
-
-    switch(type) {
-        case "General":
-        case "Developer":
-        case "Marketing":
-        case "Product":
-            positionWeights = generalPositionWeights;
-            break;
-        case "Sales":
-            positionWeights =
-            {
-               "emotionality": 1,
-               "extraversion": 1.5,
-               "agreeableness": 0,
-               "conscientiousness": 2.4,
-               "opennessToExperience": 0,
-               "honestyHumility": 1.714,
-               "altruism": 0
-           };
-           break;
-        case "Support":
-            positionWeights =
-            {
-               "emotionality": 1.18,
-               "extraversion": 1,
-               "agreeableness": 1.723,
-               "conscientiousness": 2.455,
-               "opennessToExperience": 1.545,
-               "honestyHumility": 1.636,
-               "altruism": 0
-           };
-           break;
-        case "Manager":
-            positionWeights =
-            {
-               "emotionality": 1.025,
-               "extraversion": 1.7,
-               "agreeableness": 1,
-               "conscientiousness": 2,
-               "opennessToExperience": 0,
-               "honestyHumility": 1.756,
-               "altruism": 0
-           };
-           break;
-        default:
-            break;
+        switch(type) {
+            case "General":
+            case "Developer":
+            case "Marketing":
+            case "Product":
+                positionWeights = generalPositionWeights;
+                break;
+            case "Sales":
+                positionWeights = {
+                   "emotionality": 1,
+                   "extraversion": 1.5,
+                   "agreeableness": 0,
+                   "conscientiousness": 2.4,
+                   "opennessToExperience": 0,
+                   "honestyHumility": 1.714,
+                   "altruism": 0
+               };
+               break;
+            case "Support":
+                positionWeights = {
+                   "emotionality": 1.18,
+                   "extraversion": 1,
+                   "agreeableness": 1.723,
+                   "conscientiousness": 2.455,
+                   "opennessToExperience": 1.545,
+                   "honestyHumility": 1.636,
+                   "altruism": 0
+               };
+               break;
+            default:
+                positionWeights = generalPositionWeights;
+                break;
+        }
     }
 
     const factors = {
@@ -1368,7 +1369,7 @@ function POST_googleJobsLinks(req, res) {
 
 // add an evaluation to the business on request
 async function POST_addEvaluation(req, res) {
-    const { userId, verificationToken, businessId, positionName, positionType } = sanitize(req.body);
+    const { userId, verificationToken, businessId, positionName, positionType, isManager } = sanitize(req.body);
 
     try {
         var business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId);
@@ -1377,7 +1378,7 @@ async function POST_addEvaluation(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-     try { business.positions.push(await createPosition(positionName, positionType)); }
+     try { business.positions.push(await createPosition(positionName, positionType, isManager)); }
      catch (addPosError) {
          console.log("Error adding position ", addPosError);
          return res.status(500).send(errors.SERVER_ERROR);
