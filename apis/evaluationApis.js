@@ -735,7 +735,6 @@ async function finishCognitive(user) {
             const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
             // add whether the user is correct to the question
             questions[index].isCorrect = userQuestion.isCorrect;
-            console.log("isCorrect: ", userQuestion.isCorrect);
         });
 
         // the value of all sampled points times their weights added up together
@@ -750,7 +749,6 @@ async function finishCognitive(user) {
             // calculate the value of the likelihood function times the normal
             // distribution at this point
             const value = expectationAPriori(questions, theta);
-            console.log("theta: ", theta, "value: ", value);
             // the weight is equal to the value of the likelihood function * normal distribution
             totalValue += theta * value;
             totalWeight += value;
@@ -821,8 +819,7 @@ function normalDistribution(theta) {
 // guessChance (chance user will get question right just by guessing)
 // as well as theta (general cognitive ability of the user)
 function itemResponseFunction(question, theta) {
-    let { guessChance, difficulty, discrimination } = question;
-
+    const { guessChance, difficulty, discrimination } = question;
     const numerator = 1 - guessChance;
     const denominator = 1 + Math.pow(Math.E, -(discrimination * (theta - difficulty)));
     return guessChance + (numerator / denominator);
@@ -1010,8 +1007,6 @@ function addCognitiveAnswer(cognitive, selectedId) {
     // only one answer can be correct, see if the answer is correct
     const validAnswer = typeof selectedId === "string";
     const isCorrect = validAnswer && userCurrQ.correctAnswer.toString() === selectedId.toString();
-
-    console.log("correct: ", isCorrect);
 
     // time meta-data
     const startDate = new Date(userCurrQ.startDate);
