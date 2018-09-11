@@ -28,12 +28,32 @@ const { sanitize,
 const { calculatePsychScores } = require("./psychApis");
 
 
+const ObjectId = mongoose.Types.ObjectId;
+//createAdminqs();
+async function createAdminqs() {
+    let q = new Adminqs({
+        questionType: "multipleChoice",
+        requiredFor: ["candidate", "employee"],
+        text: "What is your sexual orientation?",
+        options: [
+            { _id: new ObjectId(), body: "Asexual" },
+            { _id: new ObjectId(), body: "Heterosexual" },
+            { _id: new ObjectId(), body: "Gay/Lesbian" },
+            { _id: new ObjectId(), body: "Bi/Pansexual" },
+            { _id: new ObjectId(), body: "Other", includeInputArea: true},
+            { _id: new ObjectId(), body: "Prefer Not to Answer" }
+        ]
+    })
+    await q.save().then(ques => {console.log(ques);});
+}
+
+
 module.exports = {};
 
 
 // answer a question that is shown on the administrative questions portion of an evaluation
 module.exports.POST_answerAdminQuestion = async function(req, res) {
-    const { userId, verificationToken, sliderAnswer, selectedId, selectedText, businessId, positionId } = sanitize(req.body);
+    let { userId, verificationToken, businessId, positionId, sliderAnswer, selectedId, selectedText, dropDownResponses } = sanitize(req.body);
 
     try { var user = await getAndVerifyUser(userId, verificationToken); }
     catch (getUserError) {
@@ -55,7 +75,8 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
             questionId: user.adminQuestions.currentQuestion.questionId,
             sliderAnswer,
             selectedId,
-            selectedText
+            selectedText,
+            dropDownResponses
         }
         // add the response to the array of answered questions
         user.adminQuestions.questions.push(newAnswer);
@@ -292,6 +313,50 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     }
 
     return res.status(200).send(toReturn);
+}
+
+
+// skip all the admin questions
+module.exports.POST_skipAdminQuestions = async function(req, res) {
+    const { userId, verificationToken, selectedId, businessId, positionId } = sanitize(req.body);
+
+    // get the user
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("Error getting user while trying to get admin questions: ", getUserError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // user has to be taking an eval to skip the admin questions
+    if (!user.evalInProgress) {
+        console.log("No eval in progress when user tried to skip the eval questions.");
+        return res.status(400).send({ notSignedUp: true });
+    }
+
+    // get the current time
+    const NOW = new Date();
+
+    // make sure the user has the necessary admin questions fields to mark it finished
+    if (typeof user.adminQuestions !== "object") { user.adminQuestions = {}; }
+    // give admin questions a start date if none exists
+    if (!user.adminQuestions.startDate) { user.adminQuestions.startDate = NOW; }
+    // mark the user as not wanting to answer any of the admin questions
+    user.adminQuestions.skipped = true;
+    // mark the admin questions as completed if not already marked
+    if (!user.adminQuestions.endDate) { user.adminQuestions.endDate = NOW; }
+
+    // move on to the next component, potentially finishing eval
+    const { user: updatedUser, evaluationState } = await advance(user, businessId, positionId);
+
+    // save the user
+    try { user = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user who tried to skip admin questions: ", saveUserError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // return the user and the new eval state
+    return res.status(200).send({ user: frontEndUser(user), evaluationState });
 }
 
 
@@ -1578,7 +1643,7 @@ async function getNewAdminQuestion(user) {
             "_id": { "$nin": answeredIds }
         };
         // the values we want for the questions
-        const wantedValues = "questionType text sliderMin sliderMax options";
+        const wantedValues = "questionType text sliderMin sliderMax options dropDown";
         // get all the necessary admin questions
         try { var questions = await Adminqs.find(query).select(wantedValues); }
         catch (getQuestionsError) { return reject(getQuestionsError); }

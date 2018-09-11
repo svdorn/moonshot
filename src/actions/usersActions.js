@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router'
 import { reset } from 'redux-form';
-import { goTo } from "../miscFunctions";
+import { goTo, propertyExists } from "../miscFunctions";
 
 
 // GET USER FROM SESSION
@@ -153,37 +153,60 @@ export function answerEvaluationQuestion(evalComponent, options) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
         axios.post(`/api/evaluation/answer${evalComponent}Question`, options)
-        .then(response => {
-            // if the user finished the eval
-            if (response.data.evaluationState.component === "Finished") {
-                // go home
-                goTo("/myEvaluations");
-                // add a notification saying they finished the eval
-                dispatch({type: "ADD_NOTIFICATION", notification: {message: "Congratulations, you finished the evaluation! We'll be in touch soon.", type: "infoHeader"}})
-            }
-            dispatch({
-                type: "UPDATE_EVALUATION_STATE",
-                evaluationState: response.data.evaluationState,
-                user: response.data.user
-            });
-        })
-        .catch(error => {
-            console.log("error: ", error);
-            dispatch({
-                type: "NOTIFICATION_AND_STOP_LOADING",
-                notification: {message: "Error, try refreshing.", type: "errorHeader"}
-            });
-        });
+        .then(response => updateEvalState(dispatch, response.data))
+        .catch(error => defaultErrorHandler(dispatch, { error }));
     }
 }
 
 
+// skip all the evaluation admin questions
+export function skipAdminQuestions(options) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+        axios.post("/api/evaluation/skipAdminQuestions", options)
+        .then(response => updateEvalState(dispatch, response.data))
+        .catch(error => defaultErrorHandler(dispatch, { error }));
+    }
+}
+
+
+function updateEvalState(dispatch, data) {
+    // if the user finished the eval
+    if (data.evaluationState.component === "Finished") {
+        // go home
+        goTo("/myEvaluations");
+        // add a notification saying they finished the eval
+        dispatch({type: "ADD_NOTIFICATION", notification: {message: "Congratulations, you finished the evaluation! We'll be in touch soon.", type: "infoHeader"}})
+    }
+    dispatch({
+        type: "UPDATE_EVALUATION_STATE",
+        evaluationState: data.evaluationState,
+        user: data.user
+    });
+}
+
+
+// stop the loading bar and show an error message, also log an error if provided
+function defaultErrorHandler(dispatch, options) {
+    // log the error if provided
+    if (options.error) { console.log(options.error); }
+    // the message to show the user
+    const errorMessage = options.message ? options.message : "Error, try refreshing."
+
+    dispatch({
+        type: "NOTIFICATION_AND_STOP_LOADING",
+        notification: {message: errorMessage, type: "errorHeader"}
+    });
+}
+
+
+// generally used to bring up the loading spinner
 export function startLoading() {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
     }
 }
-
+// generally used to remove the loading spinner
 export function stopLoading() {
     return function(dispatch) {
         dispatch({type: "STOP_LOADING"});
@@ -356,33 +379,58 @@ export function submitFreeResponse(userId, verificationToken, frqs) {
 }
 
 
+// set the user as posted to show screen saying user should check email
+export function setUserPosted() {
+    return function(dispatch) { dispatch({ type: "POST_USER" }); }
+}
+
+
 // POST USER
 export function postUser(user) {
     return function(dispatch) {
-
         dispatch({type: "POST_USER_REQUESTED"});
 
-        // post user to database
         axios.post("/api/candidate/candidate", user)
-            // user successfully posted
-            .then(function(response) {
-                // send verification email
-                axios.post("/api/candidate/sendVerificationEmail", {email: user.email})
-                    // successfully sent verification email
-                    .then(function(emailResponse) {
-                        dispatch({type:"POST_USER"});
-                        window.scrollTo(0,0);
-                    })
-                    // error sending verification email
-                    .catch(function(emailError) {
-                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: emailError.response.data, type: "errorHeader"}});
-                        window.scrollTo(0,0);
-                    });
-            })
-            // error posting user
-            .catch(function(err) {
-                dispatch({type: "POST_USER_REJECTED", notification:{message: err.response.data, type: "errorHeader"}});
-            });
+        .then(response => {
+            dispatch({type: "POST_USER"});
+            window.scrollTo(0,0);
+        }).catch(error => {
+            // standard error message
+            let message = "Could not create account. Refresh and try again.";
+            if (propertyExists(error, ["response", "data"], "object")) {
+                const data = error.response.data;
+                // if the user was created, must have just been an error sending
+                // the verification email
+                if (data.userCreated) {
+                    return dispatch({type: "CREATED_NO_VERIFY_EMAIL_SENT", sendVerifyEmailTo: user.email});
+                }
+                // if no user created, see if there is an error message
+                else if (typeof data.message === "string") { message = data.message; }
+            }
+            dispatch({type: "POST_USER_REJECTED", notification: {message, type: "errorHeader"}});
+        });
+
+        // // post user to database
+        // axios.post("/api/candidate/candidate", user)
+        //     // user successfully posted
+        //     .then(function(response) {
+        //         // send verification email
+        //         axios.post("/api/candidate/sendVerificationEmail", {email: user.email})
+        //             // successfully sent verification email
+        //             .then(function(emailResponse) {
+        //                 dispatch({type:"POST_USER"});
+        //                 window.scrollTo(0,0);
+        //             })
+        //             // error sending verification email
+        //             .catch(function(emailError) {
+        //                 dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: emailError.response.data, type: "errorHeader"}});
+        //                 window.scrollTo(0,0);
+        //             });
+        //     })
+        //     // error posting user
+        //     .catch(function(err) {
+        //         dispatch({type: "POST_USER_REJECTED", notification:{message: err.response.data, type: "errorHeader"}});
+        //     });
     }
 }
 
@@ -391,7 +439,7 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
     return function(dispatch) {
         dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
 
-        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, adminEmails, currentUserInfo})
+        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, adminEmails, ...currentUserInfo})
             // email invites success
             .then(function(res) {
                 const waitingForFinalization = !!res && !!res.data && res.data.waitingForFinalization === true;

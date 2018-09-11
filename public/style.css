@@ -219,7 +219,8 @@ form > h1 {
 .evalPortionIntro { text-align: center }
 .evalPortionIntro > div {
     text-align: left;
-    width: 700px;
+    width: 80%;
+    max-width: 1200px;
     display: inline-block;
 }
 .skillsUserAgreement .checkbox {
@@ -690,9 +691,10 @@ form > h1 {
     transition: all 0.5s ease;
 }
 .button.disabled.gradient-transition {
-    background: linear-gradient(to right, #111111, #afafaf, #111111);
-    background-position-x: 100%;
-    background-size: 150%;
+    background: linear-gradient(to right, var(--primary-black-light), #676767, var(--primary-black-light));
+    cursor: not-allowed;
+    background-position-x: 108%;
+    background-size: 188%;
 }
 .button.disabled.gradient-transition:hover {
     background-position-x: 100%;
@@ -3577,6 +3579,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginBottom10px { margin-bottom: 10px; }
 .marginBottom5px { margin-bottom: 5px; }
 .marginBottom30pxImportant { margin-bottom: 30px !important; }
+.marginTop50px { margin-top: 50px; }
 .marginTop40px { margin-top: 40px; }
 .marginTop30px { margin-top: 30px; }
 .marginTop24px { margin-top: 24px; }

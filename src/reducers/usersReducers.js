@@ -39,6 +39,15 @@ export function usersReducers(state = initialState, action) {
                 message: undefined
             };
             break;
+        case "CREATED_NO_VERIFY_EMAIL_SENT": {
+            return {
+                ...state,
+                sendVerifyEmailTo: action.sendVerifyEmailTo,
+                loadingSomething: false,
+                userPosted: true
+            }
+            break;
+        }
         case "CONTACT_US_EMAIL_SUCCESS":
         case "CONTACT_US_EMAIL_FAILURE":
             return {
@@ -150,7 +159,8 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 userPosted: true,
                 loadingSomething: false,
-                waitingForFinalization: action.waitingForFinalization
+                waitingForFinalization: action.waitingForFinalization,
+                sendVerifyEmailTo: undefined
             };
             break;
         case "POST_USER_SUCCESS_EMAIL_FAIL":
