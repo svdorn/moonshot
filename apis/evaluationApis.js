@@ -735,6 +735,7 @@ async function finishCognitive(user) {
             const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
             // add whether the user is correct to the question
             questions[index].isCorrect = userQuestion.isCorrect;
+            console.log("isCorrect: ", userQuestion.isCorrect);
         });
 
         // the value of all sampled points times their weights added up together
@@ -745,10 +746,11 @@ async function finishCognitive(user) {
         // calculate the average theta value
         // calculate the value of the function at every point from 0 to 200
         // going up by .1 every iteration
-        for (let theta = 0; theta < 200; theta += .1) {
+        for (let theta = 0; theta <= 200; theta += 1) {
             // calculate the value of the likelihood function times the normal
             // distribution at this point
             const value = expectationAPriori(questions, theta);
+            console.log("theta: ", theta, "value: ", value);
             // the weight is equal to the value of the likelihood function * normal distribution
             totalValue += theta * value;
             totalWeight += value;
@@ -779,6 +781,7 @@ async function finishCognitive(user) {
 // in the IRF caused by the guessing chance
 function expectationAPriori(questions, theta) {
     return thetaLikelihood(questions, theta) * normalDistribution(theta);
+    //return thetaLikelihood(questions, theta);
 }
 // this function graphs the likelihood that a user has any given theta
 // return value is the probability that a user will have the given theta
@@ -792,10 +795,12 @@ function thetaLikelihood(questions, theta) {
         const irfValue = itemResponseFunction(question, theta);
         // if the user got the question right, multiply the likelihood by the
         // normal item response function for the question
-        if (question.isCorrect) { value *= irfValue }
-        // otherwise multiply it by 1 minus the value to show it's more likely
-        // that the user's true theta value is lower
-        else { value *= 1 - irfValue; }
+        // if (question.isCorrect) { value *= irfValue }
+        // // otherwise multiply it by 1 minus the value to show it's more likely
+        // // that the user's true theta value is lower
+        // else { value *= 1 - irfValue; }
+
+        value *= 1 - irfValue;
     });
     // return the product of all the IRF values
     return value;
@@ -817,7 +822,10 @@ function normalDistribution(theta) {
 // guessChance (chance user will get question right just by guessing)
 // as well as theta (general cognitive ability of the user)
 function itemResponseFunction(question, theta) {
-    const { guessChance, difficulty, discrimination } = question;
+    let { guessChance, difficulty, discrimination } = question;
+
+    discrimination = .05;
+
     const numerator = 1 - guessChance;
     const denominator = 1 + Math.pow(Math.E, -(discrimination * (theta - difficulty)));
     return guessChance + (numerator / denominator);
@@ -1005,6 +1013,8 @@ function addCognitiveAnswer(cognitive, selectedId) {
     // only one answer can be correct, see if the answer is correct
     const validAnswer = typeof selectedId === "string";
     const isCorrect = validAnswer && userCurrQ.correctAnswer.toString() === selectedId.toString();
+
+    console.log("correct: ", isCorrect);
 
     // time meta-data
     const startDate = new Date(userCurrQ.startDate);
