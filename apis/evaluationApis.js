@@ -996,6 +996,7 @@ function addSkillAnswer(userSkill, selectedId) {
     return userSkill;
 }
 
+
 // adds an answer for the current cognitive test question
 function addCognitiveAnswer(cognitive, selectedId) {
     // get the current question from the user object
@@ -1072,6 +1073,7 @@ async function advance(user, businessId, positionId) {
         resolve({ user, evaluationState });
     });
 }
+
 
 async function sendNotificationEmails(businessId, user) {
     return new Promise(async function(resolve, reject) {
@@ -1193,6 +1195,7 @@ async function sendNotificationEmails(businessId, user) {
         }
     });
 }
+
 
 async function sendDelayedEmail(recipient, time, lastSent, positions, interval, firstTime) {
     return new Promise(async function(resolve, reject) {
@@ -1408,9 +1411,12 @@ async function gradeEval(user, userPosition, position) {
     // GRADE ALL THE SKILLS
     const overallSkill = gradeAllSkills(user, position);
 
+    // get the gca score
+    const gca = typeof user.cognitiveTest === "object" ? user.cognitiveTest.score : undefined;
+
     /* ------------------------->> GRADE PSYCH <<---------------------------- */
     // predict growth
-    const growth = gradeGrowth(user, position);
+    const growth = gradeGrowth(user, position, gca);
     // predict performance
     const performance = gradePerformance(user, position, overallSkill);
     // predict longevity
@@ -1418,8 +1424,6 @@ async function gradeEval(user, userPosition, position) {
     /* <<------------------------ END GRADE PSYCH ------------------------->> */
 
     /* ------------------------->> GRADE OVERALL <<-------------------------- */
-    // get the cognitive test score
-    const gca = typeof user.cognitiveTest === "object" ? user.cognitiveTest.score : undefined;
     // grade the overall score
     const overallScore = gradeOverall({ gca, growth, performance, longevity }, position.weights);
 
@@ -1503,63 +1507,101 @@ function gradeAllSkills(user, position) {
 }
 
 
+// // get predicted growth for specific position
+// function gradeGrowth(user, position) {
+//     // start at a score of 0, 100 will be added after scaling
+//     let growth = 0;
+//
+//     // how many facets are involved in the growth calculation
+//     let numGrowthFacets = 0;
+//
+//     // go through each factor to get to each facet
+//     const userFactors = user.psychometricTest.factors;
+//     // make sure there are factors used in growth - otherwise growth will be 100
+//     if (Array.isArray(position.growthFactors)) {
+//         // go through each factor that affects growth
+//         position.growthFactors.forEach(growthFactor => {
+//             // find the factor within the user's psych test
+//             const userFactor = userFactors.find(factor => { return factor.factorId.toString() === growthFactor.factorId.toString(); });
+//
+//             // add the number of facets in this factor to the total number of growth facets
+//             numGrowthFacets += growthFactor.idealFacets.length;
+//
+//             // go through each facet to find the score compared to the ideal output
+//             growthFactor.idealFacets.forEach(idealFacet => {
+//                 // find the facet within the user's psych test
+//                 const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+//
+//                 // the score that the user needs for the max pq
+//                 const idealScore = idealFacet.score;
+//
+//                 // how far off of the ideal score the user got
+//                 const difference = Math.abs(idealScore - userFacet.score);
+//
+//                 // subtract the difference from the predictive score
+//                 growth -= difference;
+//
+//                 // add the absolute value of the facet score, making the
+//                 // potential predictive score higher
+//                 growth += Math.abs(idealScore);
+//             })
+//         });
+//     }
+//
+//     // the max pq for growth in this position
+//     const maxGrowth = position.maxGrowth ? position.maxGrowth : 190;
+//
+//     // growth multiplier is highest growth score divided by number of growth
+//     // facets divided by 5 (since each growth facet has a max score in either direction of 5)
+//     // can only have a growth multiplier if there are growth facets, so if
+//     // there are no growth facets, set multiplier to 1
+//     const growthMultiplier = numGrowthFacets > 0 ? ((maxGrowth - 100) / numGrowthFacets) / 5 : 1;
+//
+//     // to get to the potential max score, multiply by the multiplier
+//     growth *= growthMultiplier;
+//
+//     // add the starting growth pq
+//     growth += 100;
+//
+//     // return the calculated growth score
+//     return growth;
+// }
+
+
 // get predicted growth for specific position
-function gradeGrowth(user, position) {
-    // start at a score of 0, 100 will be added after scaling
-    let growth = 0;
-
-    // how many facets are involved in the growth calculation
-    let numGrowthFacets = 0;
-
-    // go through each factor to get to each facet
-    const userFactors = user.psychometricTest.factors;
-    // make sure there are factors used in growth - otherwise growth will be 100
-    if (Array.isArray(position.growthFactors)) {
-        // go through each factor that affects growth
-        position.growthFactors.forEach(growthFactor => {
-            // find the factor within the user's psych test
-            const userFactor = userFactors.find(factor => { return factor.factorId.toString() === growthFactor.factorId.toString(); });
-
-            // add the number of facets in this factor to the total number of growth facets
-            numGrowthFacets += growthFactor.idealFacets.length;
-
-            // go through each facet to find the score compared to the ideal output
-            growthFactor.idealFacets.forEach(idealFacet => {
-                // find the facet within the user's psych test
-                const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
-
-                // the score that the user needs for the max pq
-                const idealScore = idealFacet.score;
-
-                // how far off of the ideal score the user got
-                const difference = Math.abs(idealScore - userFacet.score);
-
-                // subtract the difference from the predictive score
-                growth -= difference;
-
-                // add the absolute value of the facet score, making the
-                // potential predictive score higher
-                growth += Math.abs(idealScore);
-            })
-        });
+function gradeGrowth(user, position, gcaScore) {
+    // get the user's psych test scores
+    const psych = user.psychometricTest;
+    // find conscientiousness, as that's the only factor that matters for now
+    const conscFactor = psych.factors.find(factor => factor.name === "Conscientiousness");
+    // how many facets are in the factor
+    let numFacets = 0;
+    // total value, can be divided by numFacets later to get average
+    let addedUpFacets = 0;
+    // go through each facet and find its standardized facet score
+    conscFactor.facets.forEach(facet => {
+        // add facet score to the total value
+        addedUpFacets += facet.score;
+        numFacets++;
+    });
+    // the weighted average of the facets
+    let growth = 94.847 + (10 * (addedUpFacets / numFacets));
+    // incorporate gca if it exists
+    if (typeof gcaScore === "number") {
+        const gcaWeights = {
+            "Sales": 2.024,
+            "Support": 1.889,
+            "Development": 3.174,
+            "Marketing": 2.217,
+            "Product": 2.217,
+            "Manager": 2.9
+        }
+        let gcaWeight = gcaWeights[position.positionType];
+        if (!gcaWeight) { gcaWeight = 2.217; }
+        // weigh psych to skills 3:1
+        growth = (growth + (gcaWeight * gcaScore)) / (1 + gcaWeight);
     }
-
-    // the max pq for growth in this position
-    const maxGrowth = position.maxGrowth ? position.maxGrowth : 190;
-
-    // growth multiplier is highest growth score divided by number of growth
-    // facets divided by 5 (since each growth facet has a max score in either direction of 5)
-    // can only have a growth multiplier if there are growth facets, so if
-    // there are no growth facets, set multiplier to 1
-    const growthMultiplier = numGrowthFacets > 0 ? ((maxGrowth - 100) / numGrowthFacets) / 5 : 1;
-
-    // to get to the potential max score, multiply by the multiplier
-    growth *= growthMultiplier;
-
-    // add the starting growth pq
-    growth += 100;
-
-    // return the calculated growth score
+    // return the predicted performance
     return growth;
 }
 
@@ -1599,8 +1641,15 @@ function gradePerformance(user, position, overallSkill) {
         totalPerfValue += factorScore * idealFactor.weight;
         totalPerfWeight += idealFactor.weight;
     });
-    // return the weighted average of the factors
-    return (totalPerfValue / totalPerfWeight);
+    // get the weighted average of the factors
+    let performance = totalPerfValue / totalPerfWeight;
+    // incorporate skills if taken
+    if (typeof overallSkill === "number") {
+        // weigh psych to skills 3:1
+        performance = (.75 * performance) + (.25 * overallSkill);
+    }
+    // return the predicted performance
+    return performance;
 }
 
 
