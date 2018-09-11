@@ -467,6 +467,11 @@ function sanitizeObject(obj) {
         return sanitizeArray(obj);
     }
 
+    if (typeof obj !== "object" || typeof obj.hasOwnProperty !== "function") {
+        console.log("sanitizeObject got a non-object: ", obj);
+        return undefined;
+    }
+
     let newObj = {};
 
     for (var prop in obj) {

@@ -14,9 +14,13 @@ const errors = require('./errors.js');
 const { sanitize,
         removeEmptyFields,
         verifyUser,
+        isValidEmail,
         sendEmail,
+        sendEmailPromise,
         getFirstName,
-        frontEndUser
+        frontEndUser,
+        emailFooter,
+        getUserFromReq
 } = require('./helperFunctions.js');
 
 // get function to start position evaluation
@@ -32,16 +36,18 @@ const candidateApis = {
 
 
 function POST_candidate(req, res) {
-    const SERVER_ERROR = "Server error, try again later.";
-    const code = sanitize(req.body.code);
-    const name = sanitize(req.body.name);
-    const email = sanitize(req.body.email);
-    const password = sanitize(req.body.password);
+    const { code, name, email, password } = sanitize(req.body);
 
-    let user = {
-        name,
-        email: email.toLowerCase()
-    };
+    // if invalid password is given, don't let the user create an account
+    if (typeof password !== "string" || password.length < 8) {
+        return res.status(400).send({message: "Password must be at least 8 characters long."});
+    }
+    // if invalid email is given, don't let the user create an account
+    if (!isValidEmail(email)) {
+        return res.status(400).send({message: "Invalid email."});
+    }
+
+    let user = { name, email: email.toLowerCase() };
 
     // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
     // the db business document for the business offering the position the user signed up for
@@ -103,7 +109,7 @@ function POST_candidate(req, res) {
     Users.find({ email })
     .then(foundUsers => {
         if (foundUsers.length > 0) {
-            return res.status(400).send("An account with that email address already exists.");
+            return res.status(400).send({message: "An account with that email address already exists."});
         } else {
             // mark that we are good to make this user, then try to do it
             verifiedUniqueEmail = true;
@@ -112,7 +118,7 @@ function POST_candidate(req, res) {
     })
     .catch(findUserError => {
         console.log("error finding user by email: ", findUserError);
-        return res.status(500).send(SERVER_ERROR);
+        return res.status(500).send({message: errors.SERVER_ERROR});
     });
     // <<-------------------------------------------------------->> //
 
@@ -123,10 +129,10 @@ function POST_candidate(req, res) {
     }).catch(verifyCodeError => {
         if (typeof verifyCodeError === "object" && verifyCodeError.status && verifyCodeError.message) {
             console.log(verifyCodeError.error);
-            return res.status(verifyCodeError.status).send(verifyCodeError.message);
+            return res.status(verifyCodeError.status).send({message: verifyCodeError.message});
         } else {
             console.log("Error verifying position code: ", verifyCodeError);
-            return res.status(500).send(SERVER_ERROR);
+            return res.status(500).send({message: errors.SERVER_ERROR});
         }
     });
     // <<-------------------------------------------------------->> //
@@ -141,14 +147,17 @@ function POST_candidate(req, res) {
         makeUser();
     }).catch (countError => {
         console.log("Couldn't count the number of users: ", countError);
-        return res.status(500).send("Server error.");
+        return res.status(500).send({message: errors.SERVER_ERROR});
     })
     // <<-------------------------------------------------------->> //
 
     // --->>            HASH THE USER'S PASSWORD              <<--- //
     const saltRounds = 10;
     bcrypt.hash(password, saltRounds, function(hashError, hash) {
-        if (hashError) { console.log("hash error: ", hashError); return res.status(500).send(SERVER_ERROR); }
+        if (hashError) {
+            console.log("hash error: ", hashError);
+            return res.status(500).send({ message: errors.SERVER_ERROR });
+        }
 
         // change the stored password to be the hash
         user.password = hash;
@@ -164,14 +173,16 @@ function POST_candidate(req, res) {
         if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
 
         if (process.env.NODE_ENV === "production") {
-
-        // Add companies to user list for intercom
-        let companies = [];
+            // Add companies to user list for intercom
+            let companies = [];
             if (user.userType === "accountAdmin") {
                 try {
                     var intercomId = await Businesses.findById(businessId).select("intercomId");
-                } catch (findBusinessError) { return reject(findBusinessError); }
-                if (intercomId.intercomId) {
+                } catch (findBusinessError) {
+                    console.log(findBusinessError);
+                    return res.status(500).send({ message: errors.SERVER_ERROR });
+                }
+                if (intercomId && intercomId.intercomId) {
                     companies.push({id: intercomId.intercomId});
                 }
             }
@@ -189,7 +200,7 @@ function POST_candidate(req, res) {
             }
             catch (createIntercomError) {
                 console.log("error creating an intercom user: ", createIntercomError);
-                return res.status(500).send("Server error.");
+                return res.status(500).send({message: errors.SERVER_ERROR});
             }
 
             // Add the intercom info to the user
@@ -199,7 +210,7 @@ function POST_candidate(req, res) {
                 user.intercom.id = intercom.body.id;
             } else {
                 console.log("error creating an intercom user: ", createIntercomError);
-                return res.status(500).send("Server error.");
+                return res.status(500).send({message: errors.SERVER_ERROR});
             }
         }
         // make the user db object
@@ -207,7 +218,7 @@ function POST_candidate(req, res) {
             user = await Users.create(user);
         } catch (createUserError) {
             console.log("Error creating user: ", createUserError);
-            return res.status(500).send("Server error.");
+            return res.status(500).send({message: errors.SERVER_ERROR});
         }
 
         // delete the used sign up code
@@ -233,18 +244,22 @@ function POST_candidate(req, res) {
                 user.positionInProgress = user.positions[0].positionId;
             }
 
-            // save the user and the business with the new evaluation information
-            //let [savedUser, savedBusiness] = await Promise.all([user.save(), business.save()]);
             // save the user with the new evaluation information
             await user.save();
-
-            // user was successfully created
-            return res.json(true);
         }
         catch (addEvalOrSaveError) {
             console.log("Couldn't add evaluation to user: ", addEvalOrSaveError);
-            return res.status(500).send(SERVER_ERROR);
+            return res.status(500).send({message: errors.SERVER_ERROR});
         }
+
+        try { await sendVerificationEmail(user); }
+        catch (sendEmailError) {
+            console.log("Error sending verification email: ", sendEmailError);
+            return res.status(500).send({ userCreated: true });
+        }
+
+        // user was successfully created
+        return res.status(200).send({ success: true });
 
         // THESE TWO WILL NOT RUN - there are guaranteed return statements beforehand
         // add the user to the referrer's list of referred users
@@ -462,44 +477,57 @@ function POST_endOnboarding(req, res) {
 }
 
 
-function POST_sendVerificationEmail(req, res) {
-    let email = sanitize(req.body.email);
-    let query = {email: email};
+async function sendVerificationEmail(user) {
+    return new Promise(async function(resolve, reject) {
+        let moonshotUrl = 'https://moonshotinsights.io/';
+        // if we are in development, links are to localhost
+        if (process.env.NODE_ENV === "development") {
+            moonshotUrl = 'http://localhost:8081/';
+        }
 
-    let moonshotUrl = 'https://moonshotinsights.io/';
-    // if we are in development, links are to localhost
-    if (process.env.NODE_ENV === "development") {
-        moonshotUrl = 'http://localhost:8081/';
+        let recipients = [ user.email ];
+        let subject = 'Verify Email';
+        let content =
+            `<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
+                <div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>
+                <p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.
+                <br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>
+                <a  style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:8px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;"
+                    href="${moonshotUrl}verifyEmail?token=${user.emailVerificationToken}"
+                >
+                    Verify Account
+                </a>
+                <p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>
+                ${emailFooter(user.email)}
+            </div>`;
+
+        try {
+            await sendEmailPromise({recipients, subject, content});
+            return resolve();
+        }
+        // send email error
+        catch (sendEmailError) { return reject(sendEmailError); }
+    });
+}
+
+
+async function POST_sendVerificationEmail(req, res) {
+    const { email } = sanitize(req.body);
+
+    try { var user = await Users.findOne({ email }); }
+    catch (getUserError) {
+        console.log("Error getting user when sending verification email: ", getUserError);
+        return res.status(500).send({message: errors.SERVER_ERROR});
+    }
+    if (!user) { return res.status(400).send({ message: "Invalid email." }); }
+
+    try { await sendVerificationEmail(user); }
+    catch (sendEmailError) {
+        console.log("Error sending verification email: ", sendEmailError);
+        return res.status(500).send({message: errors.SERVER_ERROR});
     }
 
-    Users.findOne(query, function (err, user) {
-        let recipient = [user.email];
-        let subject = 'Verify email';
-        let content =
-            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                + '<div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.'
-                + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>'
-                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'verifyEmail?token='
-                + user.emailVerificationToken
-                + '">Verify Account</a>'
-                + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
-                + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                + '<div style="text-align:left;width:95%;display:inline-block;">'
-                    + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
-                    + '</div>'
-                + '</div>'
-            + '</div>';
-
-        const sendFrom = "Moonshot";
-        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-            if (success) { return res.json(msg); }
-            else { return res.status(500).send(msg); }
-        })
-    });
+    return res.status(200).send({success: true});
 }
 
 
