@@ -1,9 +1,28 @@
-.easeLogo {
-    height: 70px;
+.powered-by {
+    padding-left: 170px;
+    margin-top: -10px;
+}
+
+.next-button > span {
+    margin-right: 0;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition:    all 0.3s ease;
+    -ms-transition:     all 0.3s ease;
+    transition:         all 0.3s ease;
+}
+.next-button:hover > span {
+    margin:5px;
+}
+
+
+@media only screen and (max-width: 700px) {
+    .powered-by {
+        padding-left: 140px;
+    }
 }
 
 @media only screen and (max-width: 500px) {
-    .easeLogo {
-        height: 50px;
+    .powered-by {
+        padding-left: 100px;
     }
 }
