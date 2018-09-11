@@ -746,7 +746,7 @@ async function finishCognitive(user) {
         // calculate the average theta value
         // calculate the value of the function at every point from 0 to 200
         // going up by .1 every iteration
-        for (let theta = 0; theta <= 200; theta += 1) {
+        for (let theta = 0; theta <= 200; theta += .1) {
             // calculate the value of the likelihood function times the normal
             // distribution at this point
             const value = expectationAPriori(questions, theta);
@@ -781,7 +781,6 @@ async function finishCognitive(user) {
 // in the IRF caused by the guessing chance
 function expectationAPriori(questions, theta) {
     return thetaLikelihood(questions, theta) * normalDistribution(theta);
-    //return thetaLikelihood(questions, theta);
 }
 // this function graphs the likelihood that a user has any given theta
 // return value is the probability that a user will have the given theta
@@ -795,12 +794,10 @@ function thetaLikelihood(questions, theta) {
         const irfValue = itemResponseFunction(question, theta);
         // if the user got the question right, multiply the likelihood by the
         // normal item response function for the question
-        // if (question.isCorrect) { value *= irfValue }
-        // // otherwise multiply it by 1 minus the value to show it's more likely
-        // // that the user's true theta value is lower
-        // else { value *= 1 - irfValue; }
-
-        value *= 1 - irfValue;
+        if (question.isCorrect) { value *= irfValue }
+        // otherwise multiply it by 1 minus the value to show it's more likely
+        // that the user's true theta value is lower
+        else { value *= 1 - irfValue; }
     });
     // return the product of all the IRF values
     return value;
@@ -811,9 +808,11 @@ function thetaLikelihood(questions, theta) {
 // assume that's what it is because we don't have the data yet to know
 // what the actual mean and std dev are
 function normalDistribution(theta) {
-    // formula: (1/(stddev * sqrt(2pi)) * e ^ ((-(theta * mean)^2) / 2(stddev^2))
-    const scalar = 1 / (100 * Math.sqrt(2 * Math.PI));
-    const exponent = -Math.pow((theta - 100), 2) / 450;
+    const mean = 100;
+    const standardDeviation = 15;
+    // formula: (1/(stddev * sqrt(2pi)) * e ^ (-(((theta - mean)/stddev)^2) / 2)
+    const scalar = 1 / (standardDeviation * Math.sqrt(2 * Math.PI));
+    const exponent = -0.5 * Math.pow(((theta - mean) / standardDeviation), 2);
     return scalar * Math.pow(Math.E, exponent);
 }
 // the probability of getting a question right based on the question's:
@@ -823,8 +822,6 @@ function normalDistribution(theta) {
 // as well as theta (general cognitive ability of the user)
 function itemResponseFunction(question, theta) {
     let { guessChance, difficulty, discrimination } = question;
-
-    discrimination = .05;
 
     const numerator = 1 - guessChance;
     const denominator = 1 + Math.pow(Math.E, -(discrimination * (theta - difficulty)));
