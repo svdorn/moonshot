@@ -1454,6 +1454,8 @@ async function gradeEval(user, userPosition, position) {
         growth, longevity, performance
     }
 
+    console.log(userPosition.scores);
+
     // return the updated user position
     return userPosition;
 }
@@ -1466,19 +1468,23 @@ function gradeOverall(subscores, weights) {
     // go through every score type (gca, performance, etc) and add its weighted value
     for (let scoreType in subscores) {
         if (!subscores.hasOwnProperty(scoreType)) continue;
+        console.log("scoreType: ", scoreType);
         // only use the score if it exists as a number
         if (typeof subscores[scoreType] === "number") {
+            console.log("is number");
             // get the weight of the type
-            let weight = weights[scoreType];
+            let weight = weights ? weights[scoreType] : .2;
             // if weight not provided, assume weighed at .2
             if (typeof weight !== "number") {
                 console.log("Invalid weight of ", weight, " for score type ", scoreType, " in position ", position);
                 weight = .2;
             }
+            console.log("weight is: ", weight);
             totalValue += subscores[scoreType] * weight;
             totalWeight += weight;
         }
     }
+    console.log("overall score: ", totalValue/totalWeight);
     return (totalValue / totalWeight);
 }
 
@@ -1596,11 +1602,15 @@ function gradeGrowth(user, position, gcaScore) {
             "Product": 2.217,
             "Manager": 2.9
         }
+        console.log("position.positionType: ", position.positionType);
         let gcaWeight = gcaWeights[position.positionType];
         if (!gcaWeight) { gcaWeight = 2.217; }
+        console.log("gcaWeight: ", gcaWeight);
         // weigh psych to skills 3:1
         growth = (growth + (gcaWeight * gcaScore)) / (1 + gcaWeight);
     }
+
+    console.log("growth: ", growth);
     // return the predicted performance
     return growth;
 }
@@ -1621,25 +1631,36 @@ function gradePerformance(user, position, overallSkill) {
         let totalFactorValue = 0;
         let totalFactorWeight = 0;
         // find the corresponding ideal factor scores within the position
-        const idealFactor = idealFactors.find(iFactor => iFactor.factorId.toString() === factor._id.toString());
-        // go through each facet and find its standardized facet score
-        factor.facets.forEach(facet => {
-            // find the corresponding ideal facet
-            const idealFacet = idealFactor.idealFacets.find(iFacet => iFacet.facetId.toString() === facet._id.toString());
-            // facet multiplier ensures that the scaled facet is score is between 0 and 10
-            const facetMultiplier = 10 / Math.max(Math.abs(idealFacet.score - 5), Math.abs(idealFacet.score + 5));
-            // the distance between the ideal facet score and the actual facet
-            // score, scaled to be min 0 max 10
-            const scaledFacetScore = facetMultiplier * (idealFacet.score - facet.score);
-            // add the weighted value to be averaged
-            totalFactorValue += scaledFacetScore * idealFacet.weight;
-            totalFactorWeight += idealFacet.weight;
-        });
-        // the weighted average of the facets
-        const factorScore = 144.847 - (10 * (totalFactorValue / totalFactorWeight));
-        // add the weighted score so it can be averaged
-        totalPerfValue += factorScore * idealFactor.weight;
-        totalPerfWeight += idealFactor.weight;
+        const idealFactor = idealFactors.find(iFactor => iFactor.factorId.toString() === factor.factorId.toString());
+        // use this factor if it is has ideal facets
+        if (idealFactor) {
+            console.log("Ideal factor: ", factor.name);
+            // go through each facet and find its standardized facet score
+            factor.facets.forEach(facet => {
+                // find the corresponding ideal facet
+                const idealFacet = idealFactor.idealFacets.find(iFacet => iFacet.facetId.toString() === facet.facetId.toString());
+                // facet multiplier ensures that the scaled facet is score is between 0 and 10
+                const facetMultiplier = 10 / Math.max(Math.abs(idealFacet.score - 5), Math.abs(idealFacet.score + 5));
+                // the distance between the ideal facet score and the actual facet
+                // score, scaled to be min 0 max 10
+                const scaledFacetScore = facetMultiplier * (idealFacet.score - facet.score);
+                // get facet weight; default facet weight is 1
+                let facetWeight = typeof idealFacet.weight === "number" ? idealFacet.weight : 1;
+                // add the weighted value to be averaged
+                totalFactorValue += scaledFacetScore * facetWeight;
+                totalFactorWeight += facetWeight;
+
+                console.log("facet scaled score: ", scaledFacetScore);
+                console.log("facetWeight: ", facetWeight);
+            });
+            // the weighted average of the facets
+            const factorScore = 144.847 - (10 * (totalFactorValue / totalFactorWeight));
+            // get factor weight; default factor weight is 1
+            let factorWeight = typeof idealFactor.weight === "number" ? idealFactor.weight : 1;
+            // add the weighted score so it can be averaged
+            totalPerfValue += factorScore * factorWeight;
+            totalPerfWeight += factorWeight;
+        }
     });
     // get the weighted average of the factors
     let performance = totalPerfValue / totalPerfWeight;
