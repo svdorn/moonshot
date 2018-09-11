@@ -53,6 +53,7 @@ const businessApis = {
     GET_employeeSearch,
     GET_employeeQuestions,
     GET_positions,
+    GET_positionsForApply,
     GET_evaluationResults,
     GET_apiKey,
 
@@ -199,6 +200,11 @@ async function createAccountAdmin(info) {
                 name: "Terms and Conditions",
                 date: NOW,
                 agreed: true
+            },
+            {
+                name: "Terms of Service",
+                date: NOW,
+                agreed: true
             }
         ];
         // user has just signed up
@@ -319,8 +325,30 @@ async function createBusiness(info) {
         // create NOW variable for easy reference
         const NOW = new Date();
 
+        // initialize id string
+        let _id;
+        // see if this id already exists
+        try {
+            // will contain any code that has the same random characters
+            let foundId;
+            // if this gets up to 8 something is super weird
+            let counter = 0;
+            do {
+                if (counter >= 8) { throw "Too many ids found that had already been used." }
+                counter++;
+                // assign randomChars 10 random hex characters
+                _id = mongoose.Types.ObjectId();
+                // try to find another code with the same random characters
+                const foundId = await Businesses.findOne({ _id: _id });
+            } while (foundId);
+        } catch (findIdError) {
+            console.log("Error looking for business id with same characters.");
+            return reject(findIdError);
+        }
+
         // initialize mostly empty business
         let business = {
+            _id,
             name,
             positions: [],
             logo: "hr.png",
@@ -330,11 +358,11 @@ async function createBusiness(info) {
         // check if positions should be added
         if (Array.isArray(positions)) {
             // go through each position that should be created
-            positions.forEach(position => {
-                bizPos = createPosition(position.name, position.positionType);
+            for (let i = 0; i < positions.length; i++) {
+                bizPos = await createPosition(positions[i].name, positions[i].positionType, _id);
                 // add the position
                 business.positions.push(bizPos);
-            });
+            }
         };
 
         // create an API_Key for the business
@@ -735,7 +763,7 @@ function createCode(businessId, positionId, userType, email, open) {
                 // assign randomChars 10 random hex characters
                 randomChars = crypto.randomBytes(5).toString('hex');
                 // try to find another code with the same random characters
-                const foundCode = Signupcodes.findOne({ code: randomChars });
+                const foundCode = await Signupcodes.findOne({ code: randomChars });
             } while (foundCode);
         } catch (findCodeError) {
             console.log("Error looking for code with same characters.");
@@ -890,19 +918,13 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
 
 // send email invites to multiple email addresses with varying user types
 async function POST_emailInvites(req, res) {
-    const body = req.body;
-    const candidateEmails = sanitize(body.candidateEmails);
-    const employeeEmails = sanitize(body.employeeEmails);
-    const adminEmails = sanitize(body.adminEmails);
-    const userId = sanitize(body.currentUserInfo.userId);
-    const userName = sanitize(body.currentUserInfo.userName);
-    const verificationToken = sanitize(body.currentUserInfo.verificationToken);
-    const businessId = sanitize(body.currentUserInfo.businessId);
-    const positionId = sanitize(body.currentUserInfo.positionId);
-    const positionName = sanitize(body.currentUserInfo.positionName);
+    const { candidateEmails, employeeEmails, adminEmails, userId, userName,
+            verificationToken, businessId, positionId, positionName } = sanitize(req.body);
 
     // if one of the arguments doesn't exist, return with error code
     if (!Array.isArray(candidateEmails) || !Array.isArray(employeeEmails) || !Array.isArray(adminEmails) || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
+        console.log(candidateEmails, employeeEmails, adminEmails, userId, userName,
+                verificationToken, businessId, positionId, positionName);
         return res.status(400).send("Bad request.");
     }
 
@@ -914,11 +936,14 @@ async function POST_emailInvites(req, res) {
     }
 
     // get the business and ensure the user has access to send invite emails
-    let business;
-    try { business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId); }
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
     catch (verifyUserError) {
         console.log("error verifying user or getting business when sending invite emails: ", verifyUserError);
         return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    if (!user.verified) {
+        return res.status(500).send("Email not yet verified. Do that first!");
     }
 
     // find the position within the business
@@ -1348,11 +1373,15 @@ async function POST_addEvaluation(req, res) {
     try {
         var business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId);
     } catch (verifyAccountAdminError) {
-        console.log("Error verifying business account admin: ", error);
+        console.log("Error verifying business account admin: ", verifyAccountAdminError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-     business.positions.push(createPosition(positionName, positionType));
+     try { business.positions.push(await createPosition(positionName, positionType)); }
+     catch (addPosError) {
+         console.log("Error adding position ", addPosError);
+         return res.status(500).send(errors.SERVER_ERROR);
+     }
 
      try { await business.save(); }
      catch (saveBizError) {
@@ -1640,6 +1669,18 @@ async function GET_business(req, res) {
 async function verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId) {
     return new Promise(async (resolve, reject) => {
         try {
+            const { business } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId);
+            return resolve(business);
+        }
+
+        catch (error) { reject(error); }
+    })
+}
+
+// does the same but returns both user and business
+async function verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId) {
+    return new Promise(async (resolve, reject) => {
+        try {
             // find the user and business
             let [user, business] = await Promise.all([
                 Users.findById(userId),
@@ -1664,14 +1705,13 @@ async function verifyAccountAdminAndReturnBusiness(userId, verificationToken, bu
             }
 
             // successful verification
-            resolve(business);
+            resolve({ business, user });
         }
 
-        catch (error) {
-            reject(error);
-        }
+        catch (error) { reject(error); }
     })
 }
+
 
 function GET_employeeQuestions(req, res) {
     const userId = sanitize(req.query.userId);
@@ -1758,6 +1798,28 @@ async function GET_positions(req, res) {
     }
 
     return res.json({ logo: business.logo, businessName: business.name, positions });
+}
+
+// get all positions for a business
+async function GET_positionsForApply(req, res) {
+    const name = sanitize(req.query.name);
+
+    if (!name) {
+        return res.status(400).send("Bad request.");
+    }
+
+    // get the business the user works for
+    let business;
+    try {
+        business = await Businesses
+            .findOne({"name": name})
+            .select("logo name positions positions.name positions.code");
+    } catch (findBizError) {
+        console.log("Error finding business when getting positions: ", findBizError);
+        return res.status(500).send("Server error, couldn't get positions.");
+    }
+
+    return res.json({ logo: business.logo, businessName: business.name, positions: business.positions });
 }
 
 
@@ -2276,8 +2338,6 @@ async function generateApiKey() {
         do { API_Key = crypto.randomBytes(12).toString("hex"); }
         // ... until the key does not exist in the array of every other key
         while (existingKeys.includes(API_Key));
-
-        console.log("new api key:", API_Key);
 
         // return the new api key
         return resolve(API_Key);

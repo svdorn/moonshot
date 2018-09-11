@@ -1,16 +1,18 @@
 "use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {postUser, onSignUpPage, closeNotification, addNotification} from '../../actions/usersActions';
-import {TextField, CircularProgress, FlatButton, Dialog, RaisedButton} from 'material-ui';
-import {Field, reduxForm} from 'redux-form';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { postUser, onSignUpPage, closeNotification, addNotification, setUserPosted } from '../../actions/usersActions';
+import { TextField, CircularProgress, FlatButton, Dialog, RaisedButton } from 'material-ui';
+import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import {browserHistory} from 'react-router';
+import { browserHistory } from 'react-router';
 import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
 import MetaTags from 'react-meta-tags';
 import { renderTextField, renderPasswordField, isValidEmail } from "../../miscFunctions";
+import { button } from "../../classes";
+import axios from "axios";
 
 
 const validate = values => {
@@ -45,7 +47,9 @@ class Signup extends Component {
             email: "",
             agreeingToTerms: false,
             openPP: false,
-            openTOU:false,
+            openTOU: false,
+            sendingVerificationEmail: false,
+            contactSupport: false
         }
     }
 
@@ -172,8 +176,126 @@ class Signup extends Component {
     };
 
 
+    sendVerificationEmail = () => {
+        this.setState({ sendingVerificationEmail: true });
+
+        axios.post("/api/candidate/sendVerificationEmail", {email: this.props.sendVerifyEmailTo})
+        .then(response => { this.props.setUserPosted(); })
+        .catch(error => {
+            this.setState({ contactSupport: true, sendingVerificationEmail: false });
+        })
+    }
+
+
+    // create the main content of the page
+    createContent() {
+        if (this.state.contactSupport) {
+            return (
+                <div className="center">
+                    Error sending verification email. Contact us at support@moonshotinsights.io
+                </div>
+            )
+        }
+
+        // if the user tried to make an account but verify email couldn't be sent
+        if (this.props.sendVerifyEmailTo) {
+            return (
+                <div className="center">
+                    <h1>Verify your email address</h1>
+                    {this.state.sendingVerificationEmail ?
+                        <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/>
+                        :
+                        <div
+                            className={button.purpleBlue}
+                            onClick={() => this.sendVerificationEmail()}
+                            style={{marginTop: "20px"}}
+                        >
+                            Send Verification Email to {this.props.sendVerifyEmailTo}
+                        </div>
+                    }
+                </div>
+            )
+        }
+
+        if (this.state.email != "" && this.props.userPosted) {
+            return (
+                <div className="center">
+                    <h1>Verify your email address</h1>
+                    <p style={{margin: "20px"}}>We sent {this.state.email} a verification link. Check your junk folder if you
+                        can{"'"}t find our email.</p>
+                </div>
+            )
+        }
+
+        return (
+            <div>
+                <form onSubmit={this.handleSubmit.bind(this)}>
+                    <h1 style={{marginTop: "15px"}}>Sign Up</h1>
+                    <div className="inputContainer">
+                        <Field
+                            name="name"
+                            component={renderTextField}
+                            label="Full Name"
+                        /><br/>
+                    </div>
+                    <div className="inputContainer">
+                        <Field
+                            name="email"
+                            component={renderTextField}
+                            label="Email"
+                        /><br/>
+                    </div>
+                    <div className="inputContainer">
+                        <Field
+                            name="password"
+                            component={renderPasswordField}
+                            label="Password"
+                        /><br/>
+                    </div>
+                    <div className="inputContainer">
+                        <Field
+                            name="password2"
+                            component={renderPasswordField}
+                            label="Confirm Password"
+                        /><br/>
+                    </div>
+
+                    <div style={{margin: "20px 20px 10px"}}>
+                        <div className="checkbox smallCheckbox whiteCheckbox"
+                             onClick={this.handleCheckMarkClick.bind(this)}>
+                            <img
+                                alt=""
+                                className={"checkMark" + this.state.agreeingToTerms}
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                            />
+                        </div>
+
+                        I have read and agree to the Moonshot Insights <bdi className="clickable primary-cyan" onClick={this.handleOpenPP}>Privacy
+                        Policy</bdi> and <bdi className="clickable primary-cyan" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
+                    </div>
+                    <br/>
+                    <RaisedButton
+                        label="Sign Up"
+                        type="submit"
+                        className="raisedButtonBusinessHome"
+                        style={{margin: '-10px 0 10px'}}
+                    />
+                    <br/>
+                    <div className="clickable"
+                         onClick={() => this.goTo({pathname: '/login', query: urlQuery})}
+                         style={{display: "inline-block"}}>Already have an account?
+                    </div>
+                </form>
+                {this.props.loadingCreateUser ? <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/> : ""}
+            </div>
+        );
+    }
+
+
     //name, email, password, confirm password, signup button
     render() {
+        let content = this.createContent();
+
         let urlQuery = {};
         try {
             urlQuery = this.props.location.query;
@@ -239,74 +361,7 @@ class Signup extends Component {
                     </Dialog>
                     {/*<HomepageTriangles className="slightly-blurred" style={{pointerEvents: "none"}} variation="5"/>*/}
                     <div className="form lightBlackForm">
-                        {this.state.email != "" && this.props.userPosted ?
-                            <div className="center">
-                                <h1>Verify your email address</h1>
-                                <p style={{margin: "20px"}}>We sent {this.state.email} a verification link. Check your junk folder if you
-                                    can{"'"}t find our email.</p>
-                            </div>
-                            :
-                            <div>
-                                <form onSubmit={this.handleSubmit.bind(this)}>
-                                    <h1 style={{marginTop: "15px"}}>Sign Up</h1>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="name"
-                                            component={renderTextField}
-                                            label="Full Name"
-                                        /><br/>
-                                    </div>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="email"
-                                            component={renderTextField}
-                                            label="Email"
-                                        /><br/>
-                                    </div>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="password"
-                                            component={renderPasswordField}
-                                            label="Password"
-                                        /><br/>
-                                    </div>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="password2"
-                                            component={renderPasswordField}
-                                            label="Confirm Password"
-                                        /><br/>
-                                    </div>
-
-                                    <div style={{margin: "20px 20px 10px"}}>
-                                        <div className="checkbox smallCheckbox whiteCheckbox"
-                                             onClick={this.handleCheckMarkClick.bind(this)}>
-                                            <img
-                                                alt=""
-                                                className={"checkMark" + this.state.agreeingToTerms}
-                                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                                            />
-                                        </div>
-
-                                        I have read and agree to the Moonshot Insights <bdi className="clickable primary-cyan" onClick={this.handleOpenPP}>Privacy
-                                        Policy</bdi> and <bdi className="clickable primary-cyan" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
-                                    </div>
-                                    <br/>
-                                    <RaisedButton
-                                        label="Sign Up"
-                                        type="submit"
-                                        className="raisedButtonBusinessHome"
-                                        style={{margin: '-10px 0 10px'}}
-                                    />
-                                    <br/>
-                                    <div className="clickable"
-                                         onClick={() => this.goTo({pathname: '/login', query: urlQuery})}
-                                         style={{display: "inline-block"}}>Already have an account?
-                                    </div>
-                                </form>
-                                {this.props.loadingCreateUser ? <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/> : ""}
-                            </div>
-                        }
+                        { content }
                     </div>
                 </div>
             </div>
@@ -348,7 +403,8 @@ function mapDispatchToProps(dispatch) {
         postUser,
         onSignUpPage,
         addNotification,
-        closeNotification
+        closeNotification,
+        setUserPosted
     }, dispatch);
 }
 
@@ -358,7 +414,8 @@ function mapStateToProps(state) {
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        sendVerifyEmailTo: state.users.sendVerifyEmailTo
     };
 }
 
