@@ -69,7 +69,8 @@ const businessApis = {
 // create a business and the first account admin for that business
 async function POST_createBusinessAndUser(req, res) {
     // get necessary arguments
-    const { name, company, email, positionTitle, password, positionType, isManager } = sanitize(req.body);
+    let { name, company, email, positionTitle, password, positionType, isManager } = sanitize(req.body);
+    isManager = !!(isManager === "YES");
 
     // validate arguments
     const stringArgs = [ name, company, email, positionTitle, password, positionType ];
@@ -99,6 +100,7 @@ async function POST_createBusinessAndUser(req, res) {
         name: company,
         positions: [{ name: positionTitle, positionType, isManager }]
     }
+    console.log("newBusinessInfo: ", newBusinessInfo);
     try { var business = await createBusiness(newBusinessInfo); }
     catch (createBizError) {
         console.log("Error creating business from business signup: ", createBizError);
@@ -486,11 +488,10 @@ async function createBusiness(info) {
 }
 
 
-function createPosition(name, type, isManager) {
-    console.log("Manager: ", isManager);
-
+function createPosition(name, type, businessId, isManager) {
     // defaults for all position values
     const bizPos = {
+        businessId,
         name: name,
         positionType: type,
         isManager,
@@ -1381,7 +1382,7 @@ async function POST_addEvaluation(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-     try { business.positions.push(await createPosition(positionName, positionType, isManager)); }
+     try { business.positions.push(await createPosition(positionName, positionType, businessId, isManager)); }
      catch (addPosError) {
          console.log("Error adding position ", addPosError);
          return res.status(500).send(errors.SERVER_ERROR);
