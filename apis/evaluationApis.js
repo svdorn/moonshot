@@ -671,7 +671,7 @@ function markSkillComplete(userSkill) {
 
 // get a score from the number of correct answers
 function scoreSkillFromAttempt(attempt) {
-    /* FOR NOW JUST SCORING OUT OF 100 THEN ADDING 50 */
+    /* FOR NOW JUST SCORING OUT OF 100 THEN ADDING 30 */
 
     // make sure arg is valid
     if (typeof attempt !== "object") { throw new Error(`Invalid attempt: ${attempt}`); }
@@ -686,7 +686,7 @@ function scoreSkillFromAttempt(attempt) {
 
     // get final score
     const scoreOutOf100 = (numberCorrect / totalQuestions) * 100;
-    const score = scoreOutOf100 + 50;
+    const score = scoreOutOf100 + 30;
 
     // return the final score
     return score;
@@ -1647,7 +1647,7 @@ function gradePerformance(user, position, overallSkill) {
                 const facetMultiplier = 10 / Math.max(Math.abs(idealFacet.score - 5), Math.abs(idealFacet.score + 5));
                 // the distance between the ideal facet score and the actual facet
                 // score, scaled to be min 0 max 10
-                const scaledFacetScore = facetMultiplier * (idealFacet.score - facet.score);
+                const scaledFacetScore = facetMultiplier * Math.abs(idealFacet.score - facet.score);
                 // get facet weight; default facet weight is 1
                 let facetWeight = typeof idealFacet.weight === "number" ? idealFacet.weight : 1;
                 // add the weighted value to be averaged
