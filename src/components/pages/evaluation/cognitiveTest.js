@@ -40,8 +40,6 @@ class CognitiveTest extends Component {
     }
 
     componentDidUpdate() {
-
-
         if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && !this.props.questionInfo.factorId) {
             this.setState({ questionId: this.props.questionInfo.questionId },() => {
                 this.getTimer();
@@ -75,6 +73,14 @@ class CognitiveTest extends Component {
     }
 
 
+    // agree to the terms to taking the test
+    agreeToTerms() {
+        if (this.state.agreedToTerms) {
+            this.setState({ showExample: true });
+        }
+    }
+
+
     handleCheckMarkClick() {
         this.setState({ agreedToTerms: !this.state.agreedToTerms });
     }
@@ -83,44 +89,79 @@ class CognitiveTest extends Component {
     errorPage() { return <div>Something is wrong. Try refreshing.</div>; }
 
     // rendered if the user is on the first skill test of an eval and hasn't agreed to the test terms
-    userAgreementPage() {
-        const buttonClass = "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
+    introPage() {
+        // if the user agreed to the terms and is seeing an example now
+        if (this.state.showExample) {
+            return (
+                <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
+                    <div className="font24px"><span>Cognitive Test</span></div>
+                    <div>
+                        <p>You will be given a series of problems. Each will contain 8 images arranged in a 3 x 3 grid. These shapes make up some pattern. The grid is missing an the image in the bottom right.</p>
+                        <p>Your goal is to find the image that matches the pattern. In the example there are only two options to choose from, but in the real test there will be 8 options.</p>
+                        <p>Click the option that you think is correct and click the {"\"Next\""} button before time runs out.</p>
+                        <p>Once you click {"\"Start\""} you have to finish the full test at the same time or you will lose points.</p>
+                        <p>The test is meant to be difficult, so do your best but don{"'"}t worry if you don{"'"}t get them all!</p>
+                        <p style={{marginBottom: "0"}}>Good luck!</p>
+                    </div>
+                    <img
+                        src={"/images/cognitiveTest/RPM-Example" + this.props.png}
+                        styleName="example-rpm"
+                    /><br/>
+                    {this.props.loading ?
+                        <CircularProgress color="secondary" style={{marginBottom: "40px"}} />
+                        :
+                        <div
+                            style={{marginBottom: "40px", width: "initial"}}
+                            className="noselect skillContinueButton"
+                            onClick={this.startTest.bind(this)}
+                        >
+                            Start
+                        </div>
+                    }
+                </div>
+            );
+        }
+        // if the user needs to agree to the user agreement first
+        else {
+            const buttonClass = "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
 
-        return (
-            <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
-                <div className="font24px"><span>Cognitive Test</span></div>
-                <div>
-                    <p>This is the cognitive portion of the evaluation. Here you will be tested on your aptitude in general cognition.</p>
-                    <p><span>TIME IS A FACTOR.</span> You have 45 seconds to complete each question. After this, whatever answer you have will be saved and if you have no answer the question will be marked wrong.</p>
-                    <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
-                    <p>The test will take no more than 8 minutes.</p>
-                </div>
-                <br/>
-                <div>
-                    <div className="checkbox mediumCheckbox whiteCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
-                        <img
-                            alt=""
-                            className={"checkMark" + this.state.agreedToTerms}
-                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                        />
+            return (
+                <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
+                    <div className="font24px"><span>Cognitive Test</span></div>
+                    <div>
+                        <p>This is the cognitive portion of the evaluation. Here you will be tested on your aptitude in general cognition.</p>
+                        <p><span>TIME IS A FACTOR.</span> You have 45 seconds to complete each question. After this, whatever answer you have will be saved and if you have no answer the question will be marked wrong.</p>
+                        <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
+                        <p>The test will take no more than 8 minutes.</p>
                     </div>
-                    <p style={{padding: "0 40px"}}>By checking this box, I agree that I will answer the questions without help from anyone or any external resources and that if I were to be discovered doing so, at any point, all my results are void.</p>
-                </div>
-                <br/>
-                {this.props.loading ?
-                    <CircularProgress color="secondary" style={{marginBottom: "40px"}} />
-                    :
-                    <div
-                        style={{marginBottom: "40px", width: "initial"}}
-                        className={buttonClass}
-                        onClick={this.startTest.bind(this)}
-                    >
-                        Begin
+                    <br/>
+                    <div>
+                        <div className="checkbox mediumCheckbox whiteCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                            <img
+                                alt=""
+                                className={"checkMark" + this.state.agreedToTerms}
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                            />
+                        </div>
+                        <p style={{padding: "0 40px"}}>By checking this box, I agree that I will answer the questions without help from anyone or any external resources and that if I were to be discovered doing so, at any point, all my results are void.</p>
                     </div>
-                }
-            </div>
-        );
+                    <br/>
+                    {this.props.loading ?
+                        <CircularProgress color="secondary" style={{marginBottom: "40px"}} />
+                        :
+                        <div
+                            style={{marginBottom: "40px", width: "initial"}}
+                            className={buttonClass}
+                            onClick={this.agreeToTerms.bind(this)}
+                        >
+                            Continue
+                        </div>
+                    }
+                </div>
+            );
+        }
     }
+
 
     getTimer() {
         if (!this.state.timer) {
@@ -214,25 +255,22 @@ class CognitiveTest extends Component {
 
 
     render() {
-
         // all info about the current question to answer
         const questionInfo = this.props.questionInfo;
 
-        // if user has never done a skill test before, show them the legalese stuff
+        // if user has never done a cognitive test before, show them the legalese stuff
         if (this.props.showIntro && !this.props.currentUser.agreedToSkillTerms) {
-            return this.userAgreementPage();
+            return this.introPage(true);
         }
 
-        // if the user has taken a skill test before
-        else if (this.props.showIntro) { return this.introPage(); }
+        // if the user has taken a cognitive test before
+        else if (this.props.showIntro) { return this.introPage(false); }
 
         // if the question has not been loaded yet
         else if (!questionInfo) { return <CircularProgress color="secondary" />; }
 
         // the typical interface with the slider
-        else if (questionInfo.rpm) {
-            return this.createContent();
-        }
+        else if (questionInfo.rpm) { return this.createContent(); }
 
         // something is up if we get here
         else { return this.errorPage(); }

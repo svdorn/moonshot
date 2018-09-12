@@ -48,6 +48,12 @@
     display: none;
 }
 
+.example-rpm {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+}
+
 @media only screen and (max-width: 700px) {
     .rpmImg {
         height: 200px;

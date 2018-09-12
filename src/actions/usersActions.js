@@ -171,6 +171,9 @@ export function skipAdminQuestions(options) {
 
 
 function updateEvalState(dispatch, data) {
+    // scroll up if needed
+    const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    if (scrollTop > 80) { window.scrollTo(0,80); }
     // if the user finished the eval
     if (data.evaluationState.component === "Finished") {
         // go home
