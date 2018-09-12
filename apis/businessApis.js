@@ -501,10 +501,10 @@ function createPosition(name, type, businessId, isManager) {
         timeAllotted: 60
     }
 
-    let positionWeights;
+    let factorWeights;
     // if the position is a manager, use different factor weights
     if (isManager) {
-        positionWeights = {
+        factorWeights = {
            "emotionality": 1.025,
            "extraversion": 1.7,
            "agreeableness": 1,
@@ -513,10 +513,17 @@ function createPosition(name, type, businessId, isManager) {
            "honestyHumility": 1.756,
            "altruism": 0
        };
+       bizPos.weights = {
+           performance: .2,
+           growth: 0,
+           longevity: 0,
+           culture: 0,
+           gca: .58
+       }
     }
     // otherwise use Function-specific weights
     else {
-        const generalPositionWeights = {
+        const generalFactorWeights = {
             "emotionality": 1,
             "extraversion": 0,
             "agreeableness": 0,
@@ -528,13 +535,29 @@ function createPosition(name, type, businessId, isManager) {
 
         switch(type) {
             case "General":
-            case "Developer":
             case "Marketing":
             case "Product":
-                positionWeights = generalPositionWeights;
+                factorWeights = generalFactorWeights;
+                bizPos.weights = {
+                    performance: .23,
+                    growth: 0,
+                    longevity: 0,
+                    culture: 0,
+                    gca: .51
+                }
+                break;
+            case "Developer":
+                factorWeights = generalFactorWeights;
+                bizPos.weights = {
+                    performance: .23,
+                    growth: 0,
+                    longevity: 0,
+                    culture: 0,
+                    gca: .73
+                }
                 break;
             case "Sales":
-                positionWeights = {
+                factorWeights = {
                    "emotionality": 1,
                    "extraversion": 1.5,
                    "agreeableness": 0,
@@ -543,9 +566,16 @@ function createPosition(name, type, businessId, isManager) {
                    "honestyHumility": 1.714,
                    "altruism": 0
                };
+               bizPos.weights = {
+                   performance: .252,
+                   growth: 0,
+                   longevity: 0,
+                   culture: 0,
+                   gca: .51
+               }
                break;
             case "Support":
-                positionWeights = {
+                factorWeights = {
                    "emotionality": 1.18,
                    "extraversion": 1,
                    "agreeableness": 1.723,
@@ -554,9 +584,16 @@ function createPosition(name, type, businessId, isManager) {
                    "honestyHumility": 1.636,
                    "altruism": 0
                };
+               bizPos.weights = {
+                   performance: .27,
+                   growth: 0,
+                   longevity: 0,
+                   culture: 0,
+                   gca: .51
+               }
                break;
             default:
-                positionWeights = generalPositionWeights;
+                factorWeights = generalFactorWeights;
                 break;
         }
     }
@@ -565,7 +602,7 @@ function createPosition(name, type, businessId, isManager) {
         "idealFactors": [
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ff"),
-                "weight": positionWeights.honestyHumility,
+                "weight": factorWeights.honestyHumility,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30f"),
@@ -591,7 +628,7 @@ function createPosition(name, type, businessId, isManager) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ea"),
-                "weight": positionWeights.emotionality,
+                "weight": factorWeights.emotionality,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2fa"),
@@ -617,7 +654,7 @@ function createPosition(name, type, businessId, isManager) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d0"),
-                "weight": positionWeights.extraversion,
+                "weight": factorWeights.extraversion,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e5"),
@@ -648,7 +685,7 @@ function createPosition(name, type, businessId, isManager) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bb"),
-                "weight": positionWeights.agreeableness,
+                "weight": factorWeights.agreeableness,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2cb"),
@@ -674,7 +711,7 @@ function createPosition(name, type, businessId, isManager) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6"),
-                "weight": positionWeights.conscientiousness,
+                "weight": factorWeights.conscientiousness,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
@@ -700,7 +737,7 @@ function createPosition(name, type, businessId, isManager) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b"),
-                "weight": positionWeights.opennessToExperience,
+                "weight": factorWeights.opennessToExperience,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
@@ -731,7 +768,7 @@ function createPosition(name, type, businessId, isManager) {
             },
             {
                 "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce275"),
-                "weight": positionWeights.altruism,
+                "weight": factorWeights.altruism,
                 "idealFacets": [
                     {
                         "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce285"),
