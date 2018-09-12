@@ -24,6 +24,7 @@ class CandidateResults extends Component {
         this.state = {
             candidate: {},
             overallScore: undefined,
+            gca: undefined,
             hardSkillPoints: [],
             predictivePoints: [],
             psychScores: [],
@@ -97,6 +98,7 @@ class CandidateResults extends Component {
             });
             const scores = res.data.performanceScores;
             const overallScore = scores.overall;
+            const gca = res.data.gca;
             // they all have a confidence interval of 16 for now
             const predictivePoints = [
                 {
@@ -127,6 +129,8 @@ class CandidateResults extends Component {
                 }
             ];
 
+            const performance = this.round(scores.performance);
+
             let self = this;
             self.setState({
                 ...self.state,
@@ -134,6 +138,8 @@ class CandidateResults extends Component {
                 psychScores: res.data.psychScores,
                 candidate,
                 overallScore,
+                gca,
+                performance,
                 predicted: scores.predicted,
                 skill: scores.skill,
                 hardSkillPoints,
@@ -224,10 +230,9 @@ class CandidateResults extends Component {
         if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
 
         const hardSkillsDataPoints = this.state.hardSkillPoints;
-
         const candidate = this.state.candidate;
-
         const overallScore = this.round(this.state.overallScore);
+        const gca = this.state.gca ? this.round(this.state.gca) : undefined;
 
         return (
             !candidate.endDate ?
@@ -243,17 +248,33 @@ class CandidateResults extends Component {
                         <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
                         <div styleName="results-slider-container">
                             <div>
-                                <div
-                                    className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                    <p style={style.lightBlue}>{qualifierFromScore(overallScore)}</p>
+                                {gca ? <div>Performance: {this.state.performance}</div> : null}
+                                <div className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
+                                    <p style={style.lightBlue}>{qualifierFromScore(gca ? this.state.performance : overallScore)}</p>
                                 </div>
                                 <Slider disabled={true}
-                                        value={this.getSliderValue(overallScore)}
+                                        value={this.getSliderValue(gca ? this.state.performance : overallScore)}
                                         min={50}
                                         max={150}
                                         styleName="results-slider"
                                 />
                             </div>
+                            {gca ?
+                                <div>
+                                    <div>Cognitive Ability: {gca}</div>
+                                    <div
+                                        className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
+                                        <p style={style.lightBlue}>{qualifierFromScore(gca)}</p>
+                                    </div>
+                                    <Slider disabled={true}
+                                            value={gca}
+                                            min={70}
+                                            max={130}
+                                            styleName="results-slider"
+                                    />
+                                </div>
+                                : null
+                            }
                         </div>
                     </div>
 

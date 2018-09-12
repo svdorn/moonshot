@@ -1980,6 +1980,7 @@ async function GET_evaluationResults(req, res) {
             stats
         }
     });
+    const gcaTest = user.cognitiveTest;
     const results = {
         title: user.title,
         name: user.name,
@@ -1989,6 +1990,7 @@ async function GET_evaluationResults(req, res) {
         isDismissed: userPosition.isDismissed,
         endDate: userPosition.appliedEndDate,
         performanceScores: userPosition.scores,
+        gca: gcaTest && typeof gcaTest.score === "number" ? gcaTest.score : undefined,
         frqs, skillScores, psychScores
     };
     // <<------------------------------------------------------------------>> //
