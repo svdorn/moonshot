@@ -66,9 +66,7 @@ class MyEvaluations extends Component {
         }
     }
 
-    handleOpen = () => {
-        this.setState({open: true});
-    };
+    handleOpen = () => { this.setState({ open: true }); };
 
 
     handleClose = () => {
@@ -108,9 +106,7 @@ class MyEvaluations extends Component {
 
             // Form validation before submit
             let notValid = false;
-            const requiredFields = [
-                'position',
-            ];
+            const requiredFields = [ 'position' ];
             requiredFields.forEach(field => {
                 if (!vals || !vals[field]) {
                     this.props.touch(field);
@@ -139,9 +135,11 @@ class MyEvaluations extends Component {
 
             axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName, positionType, isManager})
             .then(res => {
+                self.setState({ positionType: "Position Type", newPosIsManager: false });
                 self.positionsUpdate(res.data);
                 self.handleNextScreen();
                 self.props.stopLoading();
+                self.props.reset();
             })
             .catch(error => {
                 self.props.stopLoading();
