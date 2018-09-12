@@ -1056,17 +1056,35 @@ function addCognitiveAnswer(cognitive, selectedId) {
     // get the current question from the user object
     let userCurrQ = cognitive.currentQuestion;
 
-    // only one answer can be correct, see if the answer is correct
-    const validAnswer = typeof selectedId === "string";
-    const isCorrect = validAnswer && userCurrQ.correctAnswer.toString() === selectedId.toString();
-
     // time meta-data
     const startDate = new Date(userCurrQ.startDate);
     const endDate = new Date();
     const totalTime = endDate.getTime() - startDate.getTime();
 
     // delay time (65 seconds) to see if they took too long on the question or not. There is some internet delay
-    if (totalTime > 65000) { var overTime = true; }
+    let overTime = false;
+    if (totalTime > 65000) { overTime = true; }
+
+    // check if a valid answer was provided
+    let validAnswer = typeof selectedId === "string";
+
+    // if over on time or didn't provide an answer, check if the user already
+    // has an answer that was auto-submitted
+    let autoSubmittedAnswerUsed = false;
+    if ((overTime || !validAnswer) && userCurrQ.autoSubmittedAnswerId != undefined) {
+        // change the selected id to the one that was answered
+        selectedId = userCurrQ.autoSubmittedAnswerId;
+        // re-check that the answer is valid
+        validAnswer = typeof selectedId === "string";
+        // answer was not over time ...
+        overTime = false;
+        // but the user did click "next" after time was up, so their auto-submitted
+        // answer was used - this is just for data purposes, not for any further logic
+        autoSubmittedAnswerUsed = true;
+    }
+
+    // only one answer can be correct, see if the answer is correct
+    const isCorrect = validAnswer && userCurrQ.correctAnswer.toString() === selectedId.toString();
 
     // add the question to the list of finished questions
     cognitive.questions.push({
@@ -1076,7 +1094,8 @@ function addCognitiveAnswer(cognitive, selectedId) {
         startDate,
         endDate,
         totalTime,
-        overTime
+        overTime,
+        autoSubmittedAnswerUsed
     });
 
     // delete the current question

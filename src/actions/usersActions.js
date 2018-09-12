@@ -183,7 +183,7 @@ export function skipAdminQuestions(options) {
 
 function updateEvalState(dispatch, data) {
     // if nothing should be made based on the update, do nothing
-    if (this.data.noChange) { return; }
+    if (typeof data === "object" && data.noChange) { return; }
     // scroll up if needed
     const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
     if (scrollTop > 80) { window.scrollTo(0,80); }

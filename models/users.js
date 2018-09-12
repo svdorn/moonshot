@@ -255,7 +255,9 @@ const usersSchema = mongoose.Schema({
             // question (difference between endDate and startDate)
             totalTime: Number,
             // if they were over the time limit
-            overTime: Boolean
+            overTime: Boolean,
+            // if the auto-submitted answer was used because the user was late
+            autoSubmittedAnswerUsed: Boolean
         }]
     },
 
