@@ -3,20 +3,20 @@
 }
 
 .rpmImg {
-    height: 250px;
+    height: 300px;
 }
 
 .answersImg {
 }
 .answersImg > img {
-    height: 70px;
+    height: 90px;
 }
 
 .multipleChoiceAnswer {
     cursor: pointer;
-    margin: 0 2% auto;
+    margin: 0 1% auto;
     display: inline-block;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     position: relative;
 }
 .multipleChoiceAnswer.outOfTime {
@@ -29,7 +29,7 @@
     border-radius: 100%;
     position: relative;
     background: linear-gradient(to right, #fe256e, #ff5438);
-    left: 30px;
+    left: 39px;
 }
 .multipleChoiceCircle.outOfTime {
     background: #3a3a3a;

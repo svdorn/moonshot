@@ -101,7 +101,8 @@ class CognitiveTest extends Component {
                         <p>Click the option that you think is correct and click the {"\"Next\""} button before time runs out.</p>
                         <p>Once you click {"\"Start\""} you have to finish the full test at the same time or you will lose points.</p>
                         <p>The test is meant to be difficult, so do your best but don{"'"}t worry if you don{"'"}t get them all!</p>
-                        <p style={{marginBottom: "0"}}>Good luck!</p>
+                        <p>Good luck!</p>
+                        <p style={{marginBottom: "0"}}>(P.S. The process of elimination doesn{"'"}t usually work out so great. It{"'"}s generally better to figure out what you think the answer should be before looking at the solutions.)</p>
                     </div>
                     <img
                         src={"/images/cognitiveTest/RPM-Example" + this.props.png}
@@ -130,7 +131,7 @@ class CognitiveTest extends Component {
                     <div className="font24px"><span>Cognitive Test</span></div>
                     <div>
                         <p>This is the cognitive portion of the evaluation. Here you will be tested on your aptitude in general cognition.</p>
-                        <p><span>TIME IS A FACTOR.</span> You have 45 seconds to complete each question. After this, whatever answer you have will be saved and if you have no answer the question will be marked wrong.</p>
+                        <p><span>TIME IS A FACTOR.</span> You have 60 seconds to complete each question. After this, whatever answer you have will be saved and if you have no answer the question will be marked wrong.</p>
                         <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
                         <p>The test will take no more than 8 minutes.</p>
                     </div>
@@ -167,14 +168,14 @@ class CognitiveTest extends Component {
         if (!this.state.timer) {
             const questionInfo = this.props.questionInfo;
             const time = (new Date()).getTime() - new Date(questionInfo.startDate).getTime();
-            var seconds = 45 - Math.floor(time / 1000);
+            var seconds = 60 - Math.floor(time / 1000);
         } else {
             var seconds = this.state.timer - 1;
         }
 
         // If there is no time left, set outOfTime to be true and don't continue counting down
         if (seconds <= 0) {
-            this.setState({ outOfTime: true })
+            this.setState({ outOfTime: true });
         } else {
             let self = this;
             this.setState({
