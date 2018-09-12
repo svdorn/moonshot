@@ -734,7 +734,8 @@ async function finishCognitive(user) {
             // get the question in the user object correlating to this question
             const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
             // add whether the user is correct to the question
-            questions[index].isCorrect = userQuestion.isCorrect;
+            // if the user went over on time, mark it incorrect for grading
+            questions[index].isCorrect = userQuestion.isCorrect && !userQuestion.overTime;
         });
 
         // the value of all sampled points times their weights added up together
@@ -1013,8 +1014,8 @@ function addCognitiveAnswer(cognitive, selectedId) {
     const endDate = new Date();
     const totalTime = endDate.getTime() - startDate.getTime();
 
-    // delay time (52 seconds) to see if they took too long on the question or not. There is some internet delay
-    if (totalTime > 52000) { var overTime = true; }
+    // delay time (65 seconds) to see if they took too long on the question or not. There is some internet delay
+    if (totalTime > 65000) { var overTime = true; }
 
     // add the question to the list of finished questions
     cognitive.questions.push({

@@ -34,8 +34,9 @@ class CognitiveTest extends Component {
     componentDidMount() {
         if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && !this.props.questionInfo.factorId) {
             this.setState({ questionId: this.props.questionInfo.questionId },() => {
+                console.log("getting timer");
                 this.getTimer();
-            })
+            });
         }
     }
 
