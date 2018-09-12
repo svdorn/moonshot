@@ -487,10 +487,13 @@ async function createBusiness(info) {
 
 
 function createPosition(name, type, isManager) {
+    console.log("Manager: ", isManager);
+
     // defaults for all position values
     const bizPos = {
         name: name,
         positionType: type,
+        isManager,
         length: 22,
         dateCreated: Date.now(),
         finalized: true,
