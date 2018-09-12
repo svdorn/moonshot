@@ -176,7 +176,10 @@ class CognitiveTest extends Component {
 
         // If there is no time left, set outOfTime to be true and don't continue counting down
         if (seconds <= 0) {
-            this.setState({ outOfTime: true });
+            this.setState({ outOfTime: true }, () => {
+                // after setting that the user is out of time, submit their current answer
+                //this.props.answerOutOfTimeCognitive({ ...this.props.credentials, selectedId });
+            });
         } else {
             let self = this;
             this.setState({

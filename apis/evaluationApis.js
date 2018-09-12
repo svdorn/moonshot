@@ -437,6 +437,57 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
 }
 
 
+// answer a question for a skill test because user ran out of time, not because user hit next
+module.exports.POST_answerOutOfTimeCognitive = async function(req, res) {
+    const { userId, verificationToken, selectedId, businessId, positionId } = sanitize(req.body);
+
+    // get the user
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("Error getting user while trying to answer cognitive questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    if (!user.cognitiveTest || !user.congitiveTest.currentQuestion) {
+        console.log("User automatically submitted question but had no current question: ", user);
+        return res.status(400).send({ message: "No question to answer." });
+    }
+
+    // if the user has already finished the cognitive test, can't auto-answer a question
+    else if (user.cognitiveTest && user.cognitiveTest.endDate) {
+        console.log("User automatically submitted question after having finished test. User: ", user);
+        return res.status(400).send({ message: "Already finished cognitive test." });
+    }
+
+    // get the cognitive test from the user object
+    let gcaTest = user.cognitiveTest;
+
+    // if the user has a current question and an answer is given, save the answer
+    if (gcaTest.currentQuestion && gcaTest.currentQuestion.questionId) {
+        user.cognitiveTest = addCognitiveAnswer(user.cognitiveTest, selectedId);
+    }
+
+    // checks if the test is over, if not gets a new question
+    try { var updatedTest = await getNewCognitiveQuestion(user.cognitiveTest); }
+    catch (getQuestionError) {
+        console.log("Error getting new cognitive question: ", getQuestionError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // set cognitive test to most updated version of itself
+    user.cognitiveTest = updatedTest.cognitiveTest;
+
+    // save the user
+    try { await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user while trying to answer skill question: ", saveUserError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send({ success: true });
+}
+
+
 // gets the full current state of the evaluation
 module.exports.GET_currentState = async function(req, res) {
     // get everything needed from request

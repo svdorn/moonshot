@@ -232,7 +232,10 @@ const usersSchema = mongoose.Schema({
             startDate: Date,
             // the correct answer so that we don't have to re-find the question
             // when getting the next question and grading this one
-            correctAnswer: mongoose.Schema.Types.ObjectId
+            correctAnswer: mongoose.Schema.Types.ObjectId,
+            // answer that was automatically submitted for the user because
+            // they ran out of time
+            autoSubmittedAnswerId: mongoose.Schema.Types.ObjectId
         },
         // the score the user got on the test; undefined if in progress
         score: Number,
