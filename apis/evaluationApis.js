@@ -614,7 +614,7 @@ module.exports.GET_initialState = async function(req, res) {
         return res.status(500).send({ serverError: true });
     }
 
-    // TODO: check if they have finished the eval already
+    // check if they have finished the eval already
     if (user.positions[positionIndex].appliedEndDate) {
         return res.status(200).send({ finished: true });
     }
@@ -1915,12 +1915,19 @@ async function addAdminQuestionsInfo(user, evaluationState) {
             evaluationState.component = "Admin Questions";
 
             // get the current question from the db
-            try { var question = await Adminqs.findById(adminQs.currentQuestion.questionId); }
+            try {
+                var [ question, totalAdminQuestions ] = await Promise.all([
+                    Adminqs.findById(adminQs.currentQuestion.questionId),
+                    Adminqs.countDocuments({ "requiredFor": user.userType })
+                ]);
+            }
             catch (getQuestionError) { reject(getQuestionError); }
             if (!question) { reject(`Current admin question not found. Id: ${adminQs.currentQuestion.questionId}`); }
 
             // add the current question for the user to answer
             evaluationState.componentInfo = question;
+            // add the current progress
+            evaluationState.stepProgress = (adminQs.questions.length / totalAdminQuestions) * 100;
         }
 
         // if user has finished admin questions, add it as a finished stage
