@@ -257,7 +257,10 @@ const usersSchema = mongoose.Schema({
             // if they were over the time limit
             overTime: Boolean,
             // if the auto-submitted answer was used because the user was late
-            autoSubmittedAnswerUsed: Boolean
+            autoSubmittedAnswerUsed: Boolean,
+            // if the question is assumed to be wrong because the user got
+            // too many questions wrong in a row
+            assumedIncorrect: Boolean
         }]
     },
 

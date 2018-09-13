@@ -394,6 +394,9 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
     // if the user already answered all the cognitive questions, they're done
     // move on to the next stage
     if (updatedTest.finished === true) {
+        // if the cognitive test was updated by the getNewCognitiveQuestion function,
+        // save it to the user
+        if (updatedTest.cognitiveTest) { user.cognitiveTest = updatedTest.cognitiveTest; }
         // mark the cognitive test complete and score it
         try { user = await finishCognitive(user); }
         catch(finishError) {
@@ -1092,7 +1095,8 @@ function addCognitiveAnswer(cognitive, selectedId) {
         endDate,
         totalTime,
         overTime,
-        autoSubmittedAnswerUsed
+        autoSubmittedAnswerUsed,
+        assumedIncorrect: false
     });
 
     // delete the current question
@@ -2183,21 +2187,48 @@ async function getNewCognitiveQuestion(cognitiveTest) {
 
         // create a list of ids of questions the user has already answered
         const answeredIds = cognitiveTest.questions.map(cogQ => cogQ.questionId);
+        // query the db to find a question, can't be one that's already been used
+        const query = { "_id": { "$nin": answeredIds } };
 
-        // query the db to find a question
-        const query = {
-            // can't be a question we've already used
-            "_id": { "$nin": answeredIds }
+        // see if the user should be finished due to getting 3 questions wrong in a row
+        if (cognitiveTest.questions.length >= 3) {
+            // number of questions in a row the user has gotten wrong
+            let wrongInARow = 0;
+            // go through each question
+            for (let qIdx = 0; qIdx < cognitiveTest.questions.length; qIdx++) {
+                // if the user got the question right, reset the number of questions wrong in a row
+                if (cognitiveTest.questions[qIdx].isCorrect) { wrongInARow = 0; }
+                // otherwise increase the number of consecutive incorrect answers
+                else { wrongInARow++; }
+                // if the user got more than three wrong in a row, test is finished
+                if (wrongInARow === 3) {
+                    // mark the rest of the questions in the test as incorrect,
+                    // as the assumption is that the user wouldn't be getting them right
+                    // get the rest of the questions
+                    try { var questions = await GCA.find(query); }
+                    catch (getQsError) { return reject(getQsError); }
+                    questions.forEach(q => {
+                        cognitiveTest.questions.push({
+                            questionId: q._id,
+                            isCorrect: false,
+                            overTime: false,
+                            autoSubmittedAnswerUsed: false,
+                            assumedIncorrect: true
+                        });
+                    });
+                    // return saying we're done and give the updated test
+                    return resolve({ finished: true, cognitiveTest });
+                }
+            }
         }
-        try { var availableQs = await GCA.find(query); }
-        catch (getQsError) { return reject(getQsError); }
+
+        // sort in ascending order so that we get the easiest difficulty
+        const sort = { "difficulty": "ascending" };
+        try { var question = await GCA.findOne(query).sort(sort); }
+        catch (getQError) { return reject(getQError); }
 
         // if we don't have any available questions, finished with the test
-        if (availableQs.length === 0) { return resolve({ finished: true }); }
-
-        // pick a random question from the list of potential questions
-        const questionIdx = randomInt(0, availableQs.length - 1);
-        let question = availableQs[questionIdx];
+        if (!question) { return resolve({ finished: true }); }
 
         // figure out id of correct answer for that question
         const correctAnswer = question.options.find(opt => opt.isCorrect)._id;
