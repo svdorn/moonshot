@@ -65,7 +65,12 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
     }
 
     // get a new admin question for the user
-    try { var newQ = await getNewAdminQuestion(user); }
+    try {
+        var [ newQ, totalAdminQuestions ] = await Promise.all([
+            getNewAdminQuestion(user),
+            Adminqs.countDocuments({ "requiredFor": user.userType })
+        ]);
+    }
     catch (getQuestionError) {
         console.log("Error getting new admin question: ", getQuestionError);
         return res.status(500).send({ serverError: true });
@@ -96,8 +101,10 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
 
     // if not done with the admin questions
     else {
+        // the current progress in the step
+        const stepProgress = (user.adminQuestions.questions.length / totalAdminQuestions) * 100;
         // return the new question to answer
-        toReturn = { evaluationState: { componentInfo: newQ.question, showIntro: false } };
+        toReturn = { evaluationState: { componentInfo: newQ.question, showIntro: false, stepProgress } };
         // save the question as the current question for the user
         user.adminQuestions.currentQuestion = { questionId: newQ.question._id };
     }

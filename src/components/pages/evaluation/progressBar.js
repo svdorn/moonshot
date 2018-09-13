@@ -28,26 +28,36 @@ class ProgressBar extends Component {
         let stepCircles = [];
         let stepBars = [];
         for (let stepCounter = 1; stepCounter <= numSteps; stepCounter++) {
+            // let amountFinished = 100;
+            // if (stepNumber === stepCounter) {
+            //     if (evaluationState.component === "Psychometrics") {
+            //         // TODO: HI STEVE, sorry about this being so nasty
+            //         // make it so that the entire psych test is NOT passed to the front end
+            //         // and then also change how this works to fit that
+            //         // thanks bb <3
+            //         // ps also if you want to make it so progress is shown within
+            //         // the other steps that would be dope too but not necessary (mostly Admin Questions)
+            //         const psychTest = this.props.currentUser.psychometricTest;
+            //         try { amountFinished = (psychTest.numQuestionsAnswered / ((psychTest.incompleteFacets.length * psychTest.questionsPerFacet) + psychTest.numQuestionsAnswered)) * 100; }
+            //         catch (e) { amountFinished = 0; }
+            //     } else {
+            //         // TODO: MAKE THIS A LEGIT PERCENTAGE OF HOW MUCH IS DONE (0 - 100)
+            //         amountFinished = 0;
+            //     }
+            // }
+            // else if (stepNumber < stepCounter) {
+            //     amountFinished = 0;
+            // }
+
+            // all completed steps are 100% done
             let amountFinished = 100;
+            // current step has to see how much it has done
             if (stepNumber === stepCounter) {
-                if (evaluationState.component === "Psychometrics") {
-                    // TODO: HI STEVE, sorry about this being so nasty
-                    // make it so that the entire psych test is NOT passed to the front end
-                    // and then also change how this works to fit that
-                    // thanks bb <3
-                    // ps also if you want to make it so progress is shown within
-                    // the other steps that would be dope too but not necessary (mostly Admin Questions)
-                    const psychTest = this.props.currentUser.psychometricTest;
-                    try { amountFinished = (psychTest.numQuestionsAnswered / ((psychTest.incompleteFacets.length * psychTest.questionsPerFacet) + psychTest.numQuestionsAnswered)) * 100; }
-                    catch (e) { amountFinished = 0; }
-                } else {
-                    // TODO: MAKE THIS A LEGIT PERCENTAGE OF HOW MUCH IS DONE (0 - 100)
-                    amountFinished = 0;
-                }
+                amountFinished = typeof this.props.evaluationState.stepProgress === "number" ? evaluationState.stepProgress : 0;
             }
-            else if (stepNumber < stepCounter) {
-                amountFinished = 0;
-            }
+            // incomplete steps are not done at all
+            else if (stepNumber < stepCounter) { amountFinished = 0; }
+
             let r = rAlways;
             let g = gStart + ((gEnd - gStart) * stepCounter / (numSteps + 1));
             let b = bStart + ((bEnd - bStart) * stepCounter / (numSteps + 1));

@@ -372,6 +372,7 @@ export function usersReducers(state = initialState, action) {
                     ...action.evaluationState
                 }
             }
+            console.log("new eval state in reducer: ", newState.evaluationState);
             // update user if given
             if (action.user) { newState.currentUser = action.user; }
             return newState;

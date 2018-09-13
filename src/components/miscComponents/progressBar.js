@@ -69,19 +69,23 @@ class ProgressBar extends Component {
         let stepCircles = [];
         let stepBars = [];
         for (let stepCounter = 1; stepCounter <= numSteps; stepCounter++) {
+            // all completed steps are 100% done
             let amountFinished = 100;
+            // current step has to see how much it has done
             if (stepNumber === stepCounter) {
-                if (stepName === PSYCH_ANALYSIS) {
-                    const psychTest = currentUser.psychometricTest;
-                    amountFinished = (psychTest.numQuestionsAnswered / psychTest.numQuestions) * 100;
-                } else {
-                    // TODO: MAKE THIS A LEGIT PERCENTAGE OF HOW MUCH IS DONE (0 - 100)
-                    amountFinished = 0;
-                }
+                // if (stepName === PSYCH_ANALYSIS) {
+                //     const psychTest = currentUser.psychometricTest;
+                //     amountFinished = (psychTest.numQuestionsAnswered / psychTest.numQuestions) * 100;
+                // } else {
+                //     // TODO: MAKE THIS A LEGIT PERCENTAGE OF HOW MUCH IS DONE (0 - 100)
+                //     amountFinished = 0;
+                // }
+                console.log("evaluationState in progress bar: ", this.props.evaluationState);
+                amountFinished = typeof this.props.evaluationState.stepProgress === "number" ? evaluationState.stepProgress : 0;
             }
-            else if (stepNumber < stepCounter) {
-                amountFinished = 0;
-            }
+            // incomplete steps are not done at all
+            else if (stepNumber < stepCounter) { amountFinished = 0; }
+
             let r = rAlways;
             let g = gStart + ((gEnd - gStart) * stepCounter / (numSteps + 1));
             let b = bStart + ((bEnd - bStart) * stepCounter / (numSteps + 1));
@@ -130,7 +134,8 @@ class ProgressBar extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        evaluationState: state.users.evaluationState,
     };
 }
 
