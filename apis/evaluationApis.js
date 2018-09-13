@@ -291,7 +291,11 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     // if not done with the skill questions
     else {
         // return the new question to answer
-        toReturn = { evaluationState: { componentInfo: updatedTest.componentQuestion, showIntro: false } };
+        toReturn = { evaluationState: {
+            componentInfo: updatedTest.componentQuestion,
+            showIntro: false,
+            stepProgress: updatedTest.stepProgress
+        } };
         // save the question as the current question for the user
         user.skillTests[skillIdx] = updatedTest.userSkill;
         // return the user if wanted
@@ -2034,6 +2038,9 @@ async function addSkillInfo(user, evaluationState, position) {
 
                             // give this question to eval state so user can see it
                             evaluationState.componentInfo = question;
+                            // update the step progress
+                            const numAnswered = userSkill.attempts && userSkill.attempts.levels && userSkill.attempts.levels.length > 0 && userSkill.attempts.levels[0].questions ? userSkill.attempts.levels[0].questions.length : 0;
+                            evaluationState.stepProgress = (userSkill.attempts.levels[0].questions.length / questions) * 100;
                         }
                         catch (getSkillError) { reject(getSkillError); }
                     }
@@ -2191,6 +2198,9 @@ async function getNewSkillQuestion(userSkill) {
         // get a list of questions that have not been answered
         const availableQs = dbQuestions.filter(q => !answeredIds[q._id.toString()]);
 
+        // get the step progress
+        const stepProgress = (userLevel.questions.length / dbQuestions.length) * 100;
+
         // get a random question from that list
         const questionIdx = randomInt(0, availableQs.length - 1);
         const question = availableQs[questionIdx];
@@ -2214,7 +2224,7 @@ async function getNewSkillQuestion(userSkill) {
         }
 
         // return the new user's skill object and question
-        return resolve({ userSkill, componentQuestion });
+        return resolve({ userSkill, componentQuestion, stepProgress });
     });
 }
 
