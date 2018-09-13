@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { closeNotification, answerEvaluationQuestion, addNotification } from "../../../actions/usersActions";
+import { closeNotification, answerEvaluationQuestion, answerOutOfTimeCognitive, addNotification } from "../../../actions/usersActions";
 import axios from "axios";
 import StyledContent from "../../childComponents/styledContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -34,8 +34,7 @@ class CognitiveTest extends Component {
     componentDidMount() {
         if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && !this.props.questionInfo.factorId) {
             this.setState({ questionId: this.props.questionInfo.questionId },() => {
-                console.log("getting timer");
-                this.getTimer();
+                this.getTimer(true);
             });
         }
     }
@@ -43,7 +42,7 @@ class CognitiveTest extends Component {
     componentDidUpdate() {
         if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && !this.props.questionInfo.factorId) {
             this.setState({ questionId: this.props.questionInfo.questionId },() => {
-                this.getTimer();
+                this.getTimer(true);
             })
         }
     }
@@ -165,7 +164,9 @@ class CognitiveTest extends Component {
     }
 
 
-    getTimer() {
+    // get the time remaining for the question - initial call is a boolean for
+    // whether this is being called on page load
+    getTimer(initialCall) {
         if (!this.state.timer) {
             const questionInfo = this.props.questionInfo;
             const time = (new Date()).getTime() - new Date(questionInfo.startDate).getTime();
@@ -177,8 +178,13 @@ class CognitiveTest extends Component {
         // If there is no time left, set outOfTime to be true and don't continue counting down
         if (seconds <= 0) {
             this.setState({ outOfTime: true }, () => {
-                // after setting that the user is out of time, submit their current answer
-                // this.props.answerOutOfTimeCognitive({ ...this.props.credentials, selectedId });
+                if (!initialCall) {
+                    // after setting that the user is out of time, submit their current answer
+                    this.props.answerOutOfTimeCognitive({
+                        ...this.props.credentials,
+                        selectedId: this.state.selectedId
+                    });
+                }
             });
         } else {
             let self = this;
@@ -188,11 +194,12 @@ class CognitiveTest extends Component {
                 loading: false
             }, () => {
                 self.state.timeouts.push(setTimeout(function() {
-                    self.getTimer();
+                    self.getTimer(false);
                 }, 1000));
             });
         }
     }
+
 
     resetTimer(callback) {
         for (let i = 0; i < this.state.timeouts.length; i++) {
@@ -229,7 +236,7 @@ class CognitiveTest extends Component {
             );
         });
 
-        const canContinue = !this.props.loading && (this.state.selectedId || this.state.outOfTime);
+        const canContinue = !this.props.loading && (!!this.state.selectedId || this.state.outOfTime);
         const buttonClass = "skillContinueButton" + (!canContinue ? " disabled" : "");
 
         const rpmSrc = questionInfo.rpm + this.props.png;
@@ -287,6 +294,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
         answerEvaluationQuestion,
+        answerOutOfTimeCognitive,
         addNotification
     }, dispatch);
 }

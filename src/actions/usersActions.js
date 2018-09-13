@@ -162,10 +162,9 @@ export function answerEvaluationQuestion(evalComponent, options) {
 // save a gca answer because time ran out
 export function answerOutOfTimeCognitive(options) {
     return function(dispatch) {
-        dispatch({type: "START_LOADING"});
         axios.post(`/api/evaluation/answerOutOfTimeCognitive`, options)
         .then(response => updateEvalState(dispatch, response.data))
-        .catch(error => defaultErrorHandler(dispatch, { error, doNotAlertUser }));
+        .catch(error => defaultErrorHandler(dispatch, { error, doNotAlertUser: true }));
     }
 }
 
@@ -208,7 +207,7 @@ function defaultErrorHandler(dispatch, options) {
     if (options.doNotAlertUser) { return; }
     // log the error if provided
     if (options.error) { console.log(options.error); }
-    // the message to show the user
+    // the message to show the userPositionIndex
     const errorMessage = options.message ? options.message : "Error, try refreshing."
 
     dispatch({

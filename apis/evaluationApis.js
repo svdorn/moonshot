@@ -439,7 +439,7 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
 
 // answer a question for a skill test because user ran out of time, not because user hit next
 module.exports.POST_answerOutOfTimeCognitive = async function(req, res) {
-    const { userId, verificationToken, selectedId, businessId, positionId } = sanitize(req.body);
+    const { userId, verificationToken, selectedId } = sanitize(req.body);
 
     // get the user
     try { var user = await getAndVerifyUser(userId, verificationToken); }
@@ -448,7 +448,8 @@ module.exports.POST_answerOutOfTimeCognitive = async function(req, res) {
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
 
-    if (!user.cognitiveTest || !user.congitiveTest.currentQuestion) {
+    // if the user doesn't have a current question, can't auto-answer it
+    if (!user.cognitiveTest || !user.cognitiveTest.currentQuestion) {
         console.log("User automatically submitted question but had no current question: ", user);
         return res.status(400).send({ message: "No question to answer." });
     }
@@ -459,28 +460,24 @@ module.exports.POST_answerOutOfTimeCognitive = async function(req, res) {
         return res.status(400).send({ message: "Already finished cognitive test." });
     }
 
-    // get the cognitive test from the user object
-    let gcaTest = user.cognitiveTest;
-
-    // if the user has a current question and an answer is given, save the answer
-    if (gcaTest.currentQuestion && gcaTest.currentQuestion.questionId) {
-        user.cognitiveTest = addCognitiveAnswer(user.cognitiveTest, selectedId);
+    // check if the current question was started at between 55 and 65 seconds ago
+    const startDate = new Date(user.cognitiveTest.currentQuestion.startDate);
+    const now = new Date();
+    const timeElapsed = now.getTime() - startDate.getTime();
+    if (timeElapsed < 55000 ) {
+        // if time is < 55 seconds, doesn't make sense that the question ran out of time
+        // if time is > 65 seconds, user could have submitted this at any time
+        console.log("Invalid amount of time elapsed while auto submitting a question: ", timeElapsed);
+        return res.status(400).send({ message: "Invalid auto-save." });
     }
 
-    // checks if the test is over, if not gets a new question
-    try { var updatedTest = await getNewCognitiveQuestion(user.cognitiveTest); }
-    catch (getQuestionError) {
-        console.log("Error getting new cognitive question: ", getQuestionError);
-        return res.status(500).send({ serverError: true });
-    }
-
-    // set cognitive test to most updated version of itself
-    user.cognitiveTest = updatedTest.cognitiveTest;
+    // save the auto-submitted answer
+    user.cognitiveTest.currentQuestion.autoSubmittedAnswerId = selectedId;
 
     // save the user
     try { await user.save(); }
     catch (saveUserError) {
-        console.log("Error saving user while trying to answer skill question: ", saveUserError);
+        console.log("Error saving user while trying to auto-save cognitive question: ", saveUserError);
         return res.status(500).send({ serverError: true });
     }
 
@@ -1074,8 +1071,8 @@ function addCognitiveAnswer(cognitive, selectedId) {
     if ((overTime || !validAnswer) && userCurrQ.autoSubmittedAnswerId != undefined) {
         // change the selected id to the one that was answered
         selectedId = userCurrQ.autoSubmittedAnswerId;
-        // re-check that the answer is valid
-        validAnswer = typeof selectedId === "string";
+        // know answer is valid
+        validAnswer = true;
         // answer was not over time ...
         overTime = false;
         // but the user did click "next" after time was up, so their auto-submitted
