@@ -184,7 +184,11 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
         user.psychometricTest = updatedPsych.psychTest;
         // return the new question to answer
         toReturn = {
-            evaluationState: { componentInfo: updatedPsych.psychTest.currentQuestion, showIntro: false },
+            evaluationState: {
+                componentInfo: updatedPsych.psychTest.currentQuestion,
+                showIntro: false,
+                stepProgress: updatedPsych.stepProgress
+            },
             user
         };
     }
@@ -1963,7 +1967,16 @@ async function addPsychInfo(user, evaluationState) {
             if (!psychStarted) { evaluationState.showIntro = true; }
 
             // otherwise give the user their current psych question
-            else { evaluationState.componentInfo = psych.currentQuestion; }
+            else {
+                evaluationState.componentInfo = psych.currentQuestion;
+                // find the current progress of the psych eval
+                // number of facets in the entire psych test
+                let totalFacets = 0;
+                psych.factors.forEach(f1 => { f1.facets.forEach(f2 => { totalFacets++; }); });
+                const numAnsweredQuestions = psych.usedQuestions ? psych.usedQuestions.length : 0;
+                // update step progress
+                evaluationState.stepProgress = (numAnsweredQuestions / (psych.questionsPerFacet * totalFacets)) * 100;
+            }
         }
 
         resolve(evaluationState);
@@ -2132,8 +2145,17 @@ async function getNewPsychQuestion(psych) {
         factor.facets[facetIdx] = facet;
         psych.factors[factorIdx] = factor;
 
+        // find the current progress of the psych eval
+        // number of facets in the entire psych test
+        let totalFacets = 0;
+        psych.factors.forEach(f1 => { f1.facets.forEach(f2 => { totalFacets++; }); });
+        const numAnsweredQuestions = psych.usedQuestions ? psych.usedQuestions.length : 0;
+
         // return the updated psych
-        return resolve({ psychTest: psych });
+        return resolve({
+            psychTest: psych,
+            stepProgress: (numAnsweredQuestions / (psych.questionsPerFacet * totalFacets)) * 100
+        });
     });
 }
 

@@ -355,7 +355,6 @@ const usersSchema = mongoose.Schema({
         numQuestionsAnswered: Number,
         // current question that the user is on
         currentQuestion: {
-
             /* START DEPRECATED */
             // the index of the factor within the user's factors array
             factorIndex: Number,
