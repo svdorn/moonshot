@@ -433,7 +433,11 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
     else {
         // return the new question to answer
         toReturn = {
-            evaluationState: { componentInfo: updatedTest.componentQuestion, showIntro: false },
+            evaluationState: {
+                componentInfo: updatedTest.componentQuestion,
+                showIntro: false,
+                stepProgress: updatedTest.stepProgress
+            },
         };
         // set cognitive test to most updated version of itself
         user.cognitiveTest = updatedTest.cognitiveTest;
@@ -2067,14 +2071,12 @@ async function addCognitiveInfo(user, evaluationState) {
             if (!cognitiveStarted) { evaluationState.showIntro = true; }
             // otherwise give the user their current cognitive question
             else {
-                try {
-                    var question = await GCA
-                        // find the question with the id of the user's current question
-                        .findById(cognitive.currentQuestion.questionId)
-                        // don't include whether each question is correct
-                        .select("-options.isCorrect")
-                }
+                // get all the questions, don't include whether each question is correct
+                try { var questions = await GCA.find({}).select("-options.isCorrect"); }
                 catch (getCognitiveError) { reject(getCognitiveError); }
+
+                // get the current question
+                const question = questions.find(q => q._id.toString() === cognitive.currentQuestion.questionId.toString());
 
                 const componentQuestion = {
                     rpm: question.rpm,
@@ -2084,6 +2086,7 @@ async function addCognitiveInfo(user, evaluationState) {
                 }
 
                 evaluationState.componentInfo = componentQuestion;
+                evaluationState.stepProgress = (cognitive.questions.length / questions.length) * 100;
              }
         }
 
@@ -2225,6 +2228,13 @@ async function getNewCognitiveQuestion(cognitiveTest) {
         const answeredIds = cognitiveTest.questions.map(cogQ => cogQ.questionId);
         // query the db to find a question, can't be one that's already been used
         const query = { "_id": { "$nin": answeredIds } };
+        // sort in ascending order so that we get the easiest difficulty
+        const sort = { "difficulty": "ascending" };
+        try { var unansweredQuestions = await GCA.find(query).sort(sort); }
+        catch (getQError) { return reject(getQError); }
+
+        // if we don't have any available questions, finished with the test
+        if (unansweredQuestions.length === 0) { return resolve({ finished: true }); }
 
         // see if the user should be finished due to getting 3 questions wrong in a row
         if (cognitiveTest.questions.length >= 3) {
@@ -2258,13 +2268,8 @@ async function getNewCognitiveQuestion(cognitiveTest) {
             }
         }
 
-        // sort in ascending order so that we get the easiest difficulty
-        const sort = { "difficulty": "ascending" };
-        try { var question = await GCA.findOne(query).sort(sort); }
-        catch (getQError) { return reject(getQError); }
-
-        // if we don't have any available questions, finished with the test
-        if (!question) { return resolve({ finished: true }); }
+        // get the easiest question
+        const question = unansweredQuestions[0];
 
         // figure out id of correct answer for that question
         const correctAnswer = question.options.find(opt => opt.isCorrect)._id;
@@ -2281,6 +2286,9 @@ async function getNewCognitiveQuestion(cognitiveTest) {
             correctAnswer
         }
 
+        // progress within cognitive test
+        const stepProgress = (cognitiveTest.questions.length / (cognitiveTest.questions.length + unansweredQuestions.length)) * 100;
+
         // create the question object for the eval component
         const componentQuestion = {
             rpm: question.rpm,
@@ -2290,7 +2298,7 @@ async function getNewCognitiveQuestion(cognitiveTest) {
         }
 
         // return the new user's skill object and question
-        return resolve({ cognitiveTest, componentQuestion });
+        return resolve({ cognitiveTest, componentQuestion, stepProgress });
     });
 }
 
