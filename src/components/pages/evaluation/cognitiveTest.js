@@ -94,13 +94,13 @@ class CognitiveTest extends Component {
         if (this.state.showExample) {
             return (
                 <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
-                    <div className="font24px"><span>Cognitive Test</span></div>
+                    <div className="font24px"><span>Pattern Recognition</span></div>
                     <div>
                         <p>You will be given a series of problems. Each will contain 8 images arranged in a 3 x 3 grid. These shapes make up some pattern. The grid is missing an the image in the bottom right.</p>
                         <p>Your goal is to find the image that matches the pattern. In the example there are only two options to choose from, but in the real test there will be 8 options.</p>
                         <p>Click the option that you think is correct and click the {"\"Next\""} button before time runs out.</p>
                         <p>Once you click {"\"Start\""} you have to finish the full test at the same time or you will lose points.</p>
-                        <p>The test is meant to be difficult, so do your best but don{"'"}t worry if you don{"'"}t get them all!</p>
+                        <p>The test is meant to be very difficult, so do your best but don{"'"}t worry if you don{"'"}t get them all!</p>
                         <p>Good luck!</p>
                         <p style={{marginBottom: "0"}}>(P.S. The process of elimination doesn{"'"}t usually work out so great. It{"'"}s generally better to figure out what you think the answer should be before looking at the solutions.)</p>
                     </div>
@@ -128,9 +128,9 @@ class CognitiveTest extends Component {
 
             return (
                 <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
-                    <div className="font24px"><span>Cognitive Test</span></div>
+                    <div className="font24px"><span>Pattern Recognition</span></div>
                     <div>
-                        <p>This is the cognitive portion of the evaluation. Here you will be tested on your aptitude in general cognition.</p>
+                        <p>This is the pattern recognition portion of the evaluation. Here you will be tested on your aptitude in general cognition.</p>
                         <p><span>TIME IS A FACTOR.</span> You have 60 seconds to complete each question. After this, whatever answer you have will be saved and if you have no answer the question will be marked wrong.</p>
                         <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
                         <p>The test will take no more than 8 minutes.</p>

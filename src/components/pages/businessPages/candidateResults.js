@@ -261,7 +261,7 @@ class CandidateResults extends Component {
                             </div>
                             {gca ?
                                 <div>
-                                    <div>Cognitive Ability: {gca}</div>
+                                    <div>Complex Thinking: {gca}</div>
                                     <div
                                         className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
                                         <p style={style.lightBlue}>{qualifierFromScore(gca)}</p>
