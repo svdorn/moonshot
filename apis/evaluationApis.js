@@ -1,6 +1,7 @@
 const Users = require('../models/users.js');
 const Psychtests = require('../models/psychtests.js');
 const Psychquestions = require('../models/psychquestions.js');
+const GCA = require('../models/cognitivequestions.js');
 const Skills = require('../models/skills.js');
 const Businesses = require('../models/businesses.js');
 const Adminqs = require("../models/adminqs");
@@ -22,29 +23,301 @@ const { sanitize,
         validArgs,
         logArgs,
         logError,
-        randomInt
+        randomInt,
+        shuffle
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require("./psychApis");
 
 
-const ObjectId = mongoose.Types.ObjectId;
-//createAdminqs();
-async function createAdminqs() {
-    let q = new Adminqs({
-        questionType: "multipleChoice",
-        requiredFor: ["candidate", "employee"],
-        text: "What is your sexual orientation?",
-        options: [
-            { _id: new ObjectId(), body: "Asexual" },
-            { _id: new ObjectId(), body: "Heterosexual" },
-            { _id: new ObjectId(), body: "Gay/Lesbian" },
-            { _id: new ObjectId(), body: "Bi/Pansexual" },
-            { _id: new ObjectId(), body: "Other", includeInputArea: true},
-            { _id: new ObjectId(), body: "Prefer Not to Answer" }
-        ]
-    })
-    await q.save().then(ques => {console.log(ques);});
+// update all old businesses to have new position information
+//updateBusinesses();
+async function updateBusinesses() {
+    try {
+        let businesses = await Businesses.find({});
+        businesses.forEach(business => {
+            let positions = business.positions;
+
+            for (let posIdx = 0; posIdx < positions.length; posIdx++) {
+                let position = positions[posIdx];
+
+                position.finalized = true;
+                if (typeof position.positionType !== "string") { position.positionType = "General" }
+                if (!position.length) { position.length = 25; }
+                if (!position.timeAllotted) { position.timeAllotted = 14; }
+
+                if (position.positionType === "Developer") { position.positionType = "Development"; }
+                const positionType = position.positionType ? position.positionType : "General";
+
+                const generalFactorWeights = {
+                    "emotionality": 1,
+                    "extraversion": 0,
+                    "agreeableness": 0,
+                    "conscientiousness": 1.4375,
+                    "opennessToExperience": 0,
+                    "honestyHumility": 1.125,
+                    "altruism": 0
+                }
+
+                switch(positionType) {
+                    case "General":
+                    case "Marketing":
+                    case "Product":
+                        factorWeights = generalFactorWeights;
+                        position.weights = {
+                            performance: .23,
+                            growth: 0,
+                            longevity: 0,
+                            culture: 0,
+                            gca: .51
+                        }
+                        break;
+                    case "Development":
+                        factorWeights = generalFactorWeights;
+                        position.weights = {
+                            performance: .23,
+                            growth: 0,
+                            longevity: 0,
+                            culture: 0,
+                            gca: .73
+                        }
+                        break;
+                    case "Sales":
+                        factorWeights = {
+                           "emotionality": 1,
+                           "extraversion": 1.5,
+                           "agreeableness": 0,
+                           "conscientiousness": 2.4,
+                           "opennessToExperience": 0,
+                           "honestyHumility": 1.714,
+                           "altruism": 0
+                       };
+                       position.weights = {
+                           performance: .252,
+                           growth: 0,
+                           longevity: 0,
+                           culture: 0,
+                           gca: .51
+                       }
+                       break;
+                    case "Support":
+                        factorWeights = {
+                           "emotionality": 1.18,
+                           "extraversion": 1,
+                           "agreeableness": 1.723,
+                           "conscientiousness": 2.455,
+                           "opennessToExperience": 1.545,
+                           "honestyHumility": 1.636,
+                           "altruism": 0
+                       };
+                       position.weights = {
+                           performance: .27,
+                           growth: 0,
+                           longevity: 0,
+                           culture: 0,
+                           gca: .51
+                       }
+                       break;
+                    default:
+                        factorWeights = generalFactorWeights;
+                        break;
+                }
+
+                const factors = {
+                    "idealFactors": [
+                        {
+                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ff"),
+                            "weight": factorWeights.honestyHumility,
+                            "idealFacets": [
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30f"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30a"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce305"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce300"),
+                                    "score": 5,
+                                    "weight": 1
+                                }
+                            ]
+                        },
+                        {
+                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ea"),
+                            "weight": factorWeights.emotionality,
+                            "idealFacets": [
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2fa"),
+                                    "score": -5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f5"),
+                                    "score": -5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f0"),
+                                    "score": -5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2eb"),
+                                    "score": -5,
+                                    "weight": 1
+                                }
+                            ]
+                        },
+                        {
+                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d0"),
+                            "weight": factorWeights.extraversion,
+                            "idealFacets": [
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e5"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e0"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2db"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d6"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d1"),
+                                    "score": 5,
+                                    "weight": 1
+                                }
+                            ]
+                        },
+                        {
+                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bb"),
+                            "weight": factorWeights.agreeableness,
+                            "idealFacets": [
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2cb"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c6"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c1"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bc"),
+                                    "score": 5,
+                                    "weight": 1
+                                }
+                            ]
+                        },
+                        {
+                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6"),
+                            "weight": factorWeights.conscientiousness,
+                            "idealFacets": [
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
+                                    "score": 5,
+                                    "weight": 1
+                                }
+                            ]
+                        },
+                        {
+                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b"),
+                            "weight": factorWeights.opennessToExperience,
+                            "idealFacets": [
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
+                                    "score": 5,
+                                    "weight": 1
+                                },
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
+                                    "score": 5,
+                                    "weight": 1
+                                }
+                            ]
+                        },
+                        {
+                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce275"),
+                            "weight": factorWeights.altruism,
+                            "idealFacets": [
+                                {
+                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce285"),
+                                    "score": 5,
+                                    "weight": 1
+                                }
+                            ]
+                        }
+                    ]
+                };
+
+                // set correct ideal and growth factors
+                position.idealFactors = factors.idealFactors;
+                position.growthFactors = factors.idealFactors;
+
+                positions[posIdx] = position;
+            }
+
+            business.positions = positions;
+            business.save();
+        })
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 
@@ -83,7 +356,12 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
     }
 
     // get a new admin question for the user
-    try { var newQ = await getNewAdminQuestion(user); }
+    try {
+        var [ newQ, totalAdminQuestions ] = await Promise.all([
+            getNewAdminQuestion(user),
+            Adminqs.countDocuments({ "requiredFor": user.userType })
+        ]);
+    }
     catch (getQuestionError) {
         console.log("Error getting new admin question: ", getQuestionError);
         return res.status(500).send({ serverError: true });
@@ -114,8 +392,10 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
 
     // if not done with the admin questions
     else {
+        // the current progress in the step
+        const stepProgress = (user.adminQuestions.questions.length / totalAdminQuestions) * 100;
         // return the new question to answer
-        toReturn = { evaluationState: { componentInfo: newQ.question, showIntro: false } };
+        toReturn = { evaluationState: { componentInfo: newQ.question, showIntro: false, stepProgress } };
         // save the question as the current question for the user
         user.adminQuestions.currentQuestion = { questionId: newQ.question._id };
     }
@@ -195,7 +475,11 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
         user.psychometricTest = updatedPsych.psychTest;
         // return the new question to answer
         toReturn = {
-            evaluationState: { componentInfo: updatedPsych.psychTest.currentQuestion, showIntro: false },
+            evaluationState: {
+                componentInfo: updatedPsych.psychTest.currentQuestion,
+                showIntro: false,
+                stepProgress: updatedPsych.stepProgress
+            },
             user
         };
     }
@@ -298,7 +582,11 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
     // if not done with the skill questions
     else {
         // return the new question to answer
-        toReturn = { evaluationState: { componentInfo: updatedTest.componentQuestion, showIntro: false } };
+        toReturn = { evaluationState: {
+            componentInfo: updatedTest.componentQuestion,
+            showIntro: false,
+            stepProgress: updatedTest.stepProgress
+        } };
         // save the question as the current question for the user
         user.skillTests[skillIdx] = updatedTest.userSkill;
         // return the user if wanted
@@ -316,7 +604,6 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
 }
 
 
-// skip all the admin questions
 module.exports.POST_skipAdminQuestions = async function(req, res) {
     const { userId, verificationToken, selectedId, businessId, positionId } = sanitize(req.body);
 
@@ -357,6 +644,300 @@ module.exports.POST_skipAdminQuestions = async function(req, res) {
 
     // return the user and the new eval state
     return res.status(200).send({ user: frontEndUser(user), evaluationState });
+}
+
+
+// start/answer a question for skill tests
+module.exports.POST_answerCognitiveQuestion = async function(req, res) {
+    const { userId, verificationToken, selectedId, businessId, positionId } = sanitize(req.body);
+
+    // get the user
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("Error getting user while trying to answer cognitive questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // whether the user should be returned to the front end
+    let returnUser = false;
+
+    // if the user hasn't started the cognitive test, start it for them
+    if (!user.cognitiveTest || !user.cognitiveTest.startDate) {
+        try {
+            user.cognitiveTest = await newCognitiveTest();
+            returnUser = true;
+        }
+        catch (startCognitiveError) {
+            console.log("Error starting cognitive test: ", startCognitiveError);
+            return res.status(500).send({ serverError: true });
+        }
+    }
+
+    // if the user has already finished the cognitive test, can't take it again
+    else if (user.cognitiveTest && user.cognitiveTest.endDate) {
+        console.log("User tried to answer cognitive question after having finished test. User: ", user);
+        return res.status(400).send({ message: "Already finished cognitive test." });
+    }
+
+    // get the cognitive test from the user object
+    let gcaTest = user.cognitiveTest;
+
+    // if the user has a current question and an answer is given, save the answer
+    if (gcaTest.currentQuestion && gcaTest.currentQuestion.questionId) {
+        user.cognitiveTest = addCognitiveAnswer(user.cognitiveTest, selectedId);
+    }
+
+    // checks if the test is over, if not gets a new question
+    try { var updatedTest = await getNewCognitiveQuestion(user.cognitiveTest); }
+    catch (getQuestionError) {
+        console.log("Error getting new cognitive question: ", getQuestionError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // what will be returned to the front end
+    let toReturn;
+
+    // if the user already answered all the cognitive questions, they're done
+    // move on to the next stage
+    if (updatedTest.finished === true) {
+        // if the cognitive test was updated by the getNewCognitiveQuestion function,
+        // save it to the user
+        if (updatedTest.cognitiveTest) { user.cognitiveTest = updatedTest.cognitiveTest; }
+        // mark the cognitive test complete and score it
+        try { user = await finishCognitive(user); }
+        catch(finishError) {
+            console.log("Error finishing user's cognitive test: ", finishError);
+            return res.status(500).send({ serverError: true });
+        }
+
+        // calculate the new evaluation state
+        try {
+            // move on to the next component, potentially finishing eval
+            const { user: updatedUser, evaluationState } = await advance(user, businessId, positionId);
+            // will return the user and the new eval state
+            user = updatedUser;
+            toReturn = { user: frontEndUser(user), evaluationState };
+        }
+        catch (advanceError) {
+            console.log("Error advancing after skill finished: ", advanceError);
+            return res.status(500).send({ serverError: true });
+        }
+    }
+
+    // if not done with the skill questions
+    else {
+        // return the new question to answer
+        toReturn = {
+            evaluationState: {
+                componentInfo: updatedTest.componentQuestion,
+                showIntro: false,
+                stepProgress: updatedTest.stepProgress
+            },
+        };
+        // set cognitive test to most updated version of itself
+        user.cognitiveTest = updatedTest.cognitiveTest;
+        if (returnUser) { toReturn.user = user; }
+    }
+
+    // save the user
+    try { await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user while trying to answer skill question: ", saveUserError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send(toReturn);
+}
+
+
+// answer a question for a skill test because user ran out of time, not because user hit next
+module.exports.POST_answerOutOfTimeCognitive = async function(req, res) {
+    const { userId, verificationToken, selectedId } = sanitize(req.body);
+
+    // get the user
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("Error getting user while trying to answer cognitive questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // if the user doesn't have a current question, can't auto-answer it
+    if (!user.cognitiveTest || !user.cognitiveTest.currentQuestion) {
+        console.log("User automatically submitted question but had no current question: ", user);
+        return res.status(400).send({ message: "No question to answer." });
+    }
+
+    // if the user has already finished the cognitive test, can't auto-answer a question
+    else if (user.cognitiveTest && user.cognitiveTest.endDate) {
+        console.log("User automatically submitted question after having finished test. User: ", user);
+        return res.status(400).send({ message: "Already finished cognitive test." });
+    }
+
+    // check if the current question was started at between 55 and 65 seconds ago
+    const startDate = new Date(user.cognitiveTest.currentQuestion.startDate);
+    const now = new Date();
+    const timeElapsed = now.getTime() - startDate.getTime();
+    if (timeElapsed < 55000 ) {
+        // if time is < 55 seconds, doesn't make sense that the question ran out of time
+        // if time is > 65 seconds, user could have submitted this at any time
+        console.log("Invalid amount of time elapsed while auto submitting a question: ", timeElapsed);
+        return res.status(400).send({ message: "Invalid auto-save." });
+    }
+
+    // save the auto-submitted answer
+    user.cognitiveTest.currentQuestion.autoSubmittedAnswerId = selectedId;
+
+    // save the user
+    try { await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user while trying to auto-save cognitive question: ", saveUserError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send({ success: true });
+}
+
+
+// gets the full current state of the evaluation
+module.exports.GET_currentState = async function(req, res) {
+    // get everything needed from request
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
+    // if the ids are not strings, return bad request error
+    if (!validArgs({ stringArgs: [businessId, positionId] })) {
+        logArgs(req.query, ["businessId", "positionId"]);
+        return res.status(400).send({ badRequest: true });
+    }
+
+    // get the current user
+    try {
+        var [user, position] = await Promise.all([
+            getAndVerifyUser(userId, verificationToken),
+            getPosition(businessId, positionId)
+        ]);
+    }
+    catch (getUserError) {
+        logError("Error getting user when trying to get current eval state: ", getUserError);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
+    }
+
+    // get the current state of the evaluation
+    try { var { evaluationState } = await getEvaluationState({ user, position }); }
+    catch (getStateError) {
+        console.log("Error getting evaluation state when starting eval: ", getStateError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send({ evaluationState });
+}
+
+
+// starts an evaluation
+module.exports.POST_start = async function(req, res) {
+    // get everything needed from request
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
+    // if the ids are not strings, return bad request error
+    if (!validArgs({ stringArgs: [businessId, positionId] })) {
+        logArgs(req.query, ["businessId", "positionId"]);
+        return res.status(400).send({ badRequest: true });
+    }
+
+    // get the current user
+    try {
+        var [user, position] = await Promise.all([
+            getAndVerifyUser(userId, verificationToken),
+            getPosition(businessId, positionId)
+        ]);
+    }
+    catch (getUserError) {
+        logError("Error getting user when trying to get current eval state: ", getUserError);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
+    }
+
+    // make sure the user is enrolled in the position
+    const positionIndex = userPositionIndex(user, positionId, businessId);
+    if (positionIndex < 0) {
+        console.log(`User did not have position with positionId: ${positionId}, businessId: ${businessId}`);
+        return res.status(403).send({ notSignedUp: true });
+    }
+
+    // set the user's current position to the one given
+    user.evalInProgress = { businessId, positionId }
+    // mark the position as started
+    const NOW = new Date();
+    if (!user.positions[positionIndex].appliedStartDate) {
+        user.positions[positionIndex].appliedStartDate = new Date();
+    } if (!user.positions[positionIndex].startDate) {
+        user.positions[positionIndex].startDate = new Date();
+    }
+
+    // save the user
+    try { await user.save(); }
+    catch (saveError) {
+        console.log("Error saving user with new eval in progress: ", saveError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // get the current state of the evaluation
+    try { var { evaluationState } = await getEvaluationState({ user, position }); }
+    catch (getStateError) {
+        console.log("Error getting evaluation state when starting eval: ", getStateError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    return res.status(200).send({ user: frontEndUser(user), evaluationState });
+}
+
+
+// gets results for a user and influencers
+module.exports.GET_initialState = async function(req, res) {
+    // get everything needed from request
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
+    // if the ids are not strings, return bad request error
+    if (!validArgs({ stringArgs: [businessId, positionId] })) {
+        logArgs(req.query, ["businessId", "positionId"]);
+        return res.status(400).send({ badRequest: true });
+    }
+
+    // get the current user
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("Error getting user when trying to get current eval state: ", getUserError);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
+    }
+
+    // find the index of the position within the user's positions array
+    const positionIndex = userPositionIndex(user, positionId, businessId);
+    // if the index is invalid, the user never signed up for this position
+    if (positionIndex < 0) { return res.status(403).send({notSignedUp: true}); }
+
+    // get the position from the database
+    try { var position = await getPosition(businessId, positionId); }
+    catch (getPositionError) {
+        console.log(`Error getting position when trying to get initial state - businessId: ${businessId}, positionId: ${positionId}: `, getPositionError);
+        return res.status(500).send({ serverError: true });
+    }
+
+    // check if they have finished the eval already
+    if (user.positions[positionIndex].appliedEndDate) {
+        return res.status(200).send({ finished: true });
+    }
+
+    // if user is in-progress on any position
+    if (user.evalInProgress && user.evalInProgress.businessId && user.evalInProgress.positionId) {
+        // check if it is the position they are currently on
+        if (user.evalInProgress.businessId.toString() === businessId && user.evalInProgress.positionId.toString() === positionId) {
+            // tell the user that this position has already been started, then
+            // ask if they are ready to continue
+            return res.status(200).send({ alreadyInProgress: true });
+        }
+        // if not, ask if they want to continue the eval they were on before
+        // or if they want to work on this new one - send them the businessId
+        // and positionId so they have a link to the in-progress eval
+        else { return res.status(200).send({ evalInProgress: user.evalInProgress }); }
+    }
+    // no eval is in progress, return that they have not started this position
+    // and are ready to
+    else { return res.status(200).send({ readyToStart: true }); }
 }
 
 
@@ -451,7 +1032,7 @@ function markSkillComplete(userSkill) {
 
 // get a score from the number of correct answers
 function scoreSkillFromAttempt(attempt) {
-    /* FOR NOW JUST SCORING OUT OF 100 THEN ADDING 50 */
+    /* FOR NOW JUST SCORING OUT OF 100 THEN ADDING 30 */
 
     // make sure arg is valid
     if (typeof attempt !== "object") { throw new Error(`Invalid attempt: ${attempt}`); }
@@ -466,7 +1047,7 @@ function scoreSkillFromAttempt(attempt) {
 
     // get final score
     const scoreOutOf100 = (numberCorrect / totalQuestions) * 100;
-    const score = scoreOutOf100 + 50;
+    const score = scoreOutOf100 + 30;
 
     // return the final score
     return score;
@@ -484,6 +1065,126 @@ function markPsychComplete(psychTest) {
     }
 
     return psychTest;
+}
+
+
+// mark the cognitive test as finished
+async function finishCognitive(user) {
+    return new Promise(async function(resolve, reject) {
+        let cognitiveTest = user.cognitiveTest;
+
+        cognitiveTest.inProgress = false;
+
+        if (!cognitiveTest.endDate) {
+            const NOW = new Date();
+            cognitiveTest.endDate = NOW;
+            cognitiveTest.totalTime = NOW.getTime() - cognitiveTest.startDate.getTime();
+        }
+
+        // ----------------------->> GRADE THE TEST <<----------------------- //
+
+        // get the ids of all the questions the user answered
+        const answeredIds = cognitiveTest.questions.map(q => q.questionId);
+        // query to get all the questions from the db
+        const query = { "_id": { "$in": answeredIds } };
+        // get all the questions in normal object form
+        try { var questions = await GCA.find(query).select("_id difficulty discrimination guessChance").lean(); }
+        catch (getQuestionsError) { return reject(getQuestionsError); }
+        // go through each question
+        questions.forEach((dbQ, index) => {
+            // get the question in the user object correlating to this question
+            const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
+            // add whether the user is correct to the question
+            // if the user went over on time, mark it incorrect for grading
+            questions[index].isCorrect = userQuestion.isCorrect && !userQuestion.overTime;
+        });
+
+        // the value of all sampled points times their weights added up together
+        let totalValue = 0;
+        // all the weights added up
+        let totalWeight = 0;
+
+        // calculate the average theta value
+        // calculate the value of the function at every point from 0 to 200
+        // going up by .1 every iteration
+        for (let theta = 0; theta <= 200; theta += .1) {
+            // calculate the value of the likelihood function times the normal
+            // distribution at this point
+            const value = expectationAPriori(questions, theta);
+            // the weight is equal to the value of the likelihood function * normal distribution
+            totalValue += theta * value;
+            totalWeight += value;
+        }
+
+        cognitiveTest.score = totalValue / totalWeight;
+
+        console.log(`User ${user._id} finished GCA test with score: `, cognitiveTest.score);
+
+        // <<--------------------- FINISH GRADING TEST -------------------->> //
+
+        user.cognitiveTest = cognitiveTest;
+
+        // return the graded test
+        return resolve(user);
+    });
+}
+
+
+// this function gets the value needed for bayesian expectation a priori calculation
+// it is simply the theta likelihood times the normal distribution of scores for
+// the population
+// the reason we do this is to account for the possibility that someone gets every
+// question right or every question wrong, as that would get them a score involving
+// infinity either way
+// using expectation a priori also involves getting the average weighted value
+// instead of the max of this function because it can then account for the asymmetry
+// in the IRF caused by the guessing chance
+function expectationAPriori(questions, theta) {
+    return thetaLikelihood(questions, theta) * normalDistribution(theta);
+}
+// this function graphs the likelihood that a user has any given theta
+// return value is the probability that a user will have the given theta
+// does this by multiplying item response functions for each question along with
+// whether the user was correct or incorrect for that question
+function thetaLikelihood(questions, theta) {
+    let value = 1;
+    // go through each question
+    questions.forEach(question => {
+        // find the value of the item response function at that point
+        const irfValue = itemResponseFunction(question, theta);
+        // if the user got the question right, multiply the likelihood by the
+        // normal item response function for the question
+        if (question.isCorrect) { value *= irfValue }
+        // otherwise multiply it by 1 minus the value to show it's more likely
+        // that the user's true theta value is lower
+        else { value *= 1 - irfValue; }
+    });
+    // return the product of all the IRF values
+    return value;
+}
+// normal distribution of scores across the distribution
+// this should ideally be a perfectly normal distribution with mean of
+// 100 and standard deviation of 15
+// assume that's what it is because we don't have the data yet to know
+// what the actual mean and std dev are
+function normalDistribution(theta) {
+    const mean = 100;
+    const standardDeviation = 15;
+    // formula: (1/(stddev * sqrt(2pi)) * e ^ (-(((theta - mean)/stddev)^2) / 2)
+    const scalar = 1 / (standardDeviation * Math.sqrt(2 * Math.PI));
+    const exponent = -0.5 * Math.pow(((theta - mean) / standardDeviation), 2);
+    return scalar * Math.pow(Math.E, exponent);
+}
+// the probability of getting a question right based on the question's:
+// difficulty (how hard the question is)
+// discrimination (how good the question is at determining theta)
+// guessChance (chance user will get question right just by guessing)
+// as well as theta (general cognitive ability of the user)
+function itemResponseFunction(question, theta) {
+    const { guessChance, difficulty, discrimination } = question;
+    const numerator = 1 - guessChance;
+    const denominator = 1 + Math.pow(Math.E, -(discrimination * (theta - difficulty)));
+    return guessChance + (numerator / denominator);
 }
 
 
@@ -599,6 +1300,20 @@ async function newPsychTest() {
     });
 }
 
+// return a fresh new just-started cognitive eval
+async function newCognitiveTest() {
+    return new Promise(async function(resolve, reject) {
+        // new empty cognitive test
+        resolve({
+            inProgress: true,
+            // starting right now
+            startDate: new Date(),
+            // hasn't answered any questions yet
+            questions: []
+        });
+    });
+}
+
 
 // adds an answer for the current skill test question
 function addSkillAnswer(userSkill, selectedId) {
@@ -646,6 +1361,62 @@ function addSkillAnswer(userSkill, selectedId) {
 }
 
 
+// adds an answer for the current cognitive test question
+function addCognitiveAnswer(cognitive, selectedId) {
+    // get the current question from the user object
+    let userCurrQ = cognitive.currentQuestion;
+
+    // time meta-data
+    const startDate = new Date(userCurrQ.startDate);
+    const endDate = new Date();
+    const totalTime = endDate.getTime() - startDate.getTime();
+
+    // delay time (65 seconds) to see if they took too long on the question or not. There is some internet delay
+    let overTime = false;
+    if (totalTime > 65000) { overTime = true; }
+
+    // check if a valid answer was provided
+    let validAnswer = typeof selectedId === "string";
+
+    // if over on time or didn't provide an answer, check if the user already
+    // has an answer that was auto-submitted
+    let autoSubmittedAnswerUsed = false;
+    if ((overTime || !validAnswer) && userCurrQ.autoSubmittedAnswerId != undefined) {
+        // change the selected id to the one that was answered
+        selectedId = userCurrQ.autoSubmittedAnswerId;
+        // know answer is valid
+        validAnswer = true;
+        // answer was not over time ...
+        overTime = false;
+        // but the user did click "next" after time was up, so their auto-submitted
+        // answer was used - this is just for data purposes, not for any further logic
+        autoSubmittedAnswerUsed = true;
+    }
+
+    // only one answer can be correct, see if the answer is correct
+    const isCorrect = validAnswer && userCurrQ.correctAnswer.toString() === selectedId.toString();
+
+    // add the question to the list of finished questions
+    cognitive.questions.push({
+        questionId: userCurrQ.questionId,
+        isCorrect,
+        answerId: selectedId,
+        startDate,
+        endDate,
+        totalTime,
+        overTime,
+        autoSubmittedAnswerUsed,
+        assumedIncorrect: false
+    });
+
+    // delete the current question
+    cognitive.currentQuestion = undefined;
+
+    // return the updated test
+    return cognitive;
+}
+
+
 // advance to the next step and potentially finish the eval
 async function advance(user, businessId, positionId) {
     return new Promise(async function(resolve, reject) {
@@ -686,6 +1457,7 @@ async function advance(user, businessId, positionId) {
         resolve({ user, evaluationState });
     });
 }
+
 
 async function sendNotificationEmails(businessId, user) {
     return new Promise(async function(resolve, reject) {
@@ -807,6 +1579,7 @@ async function sendNotificationEmails(businessId, user) {
         }
     });
 }
+
 
 async function sendDelayedEmail(recipient, time, lastSent, positions, interval, firstTime) {
     return new Promise(async function(resolve, reject) {
@@ -955,149 +1728,6 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
 }
 
 
-// gets the full current state of the evaluation
-module.exports.GET_currentState = async function(req, res) {
-    // get everything needed from request
-    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
-    // if the ids are not strings, return bad request error
-    if (!validArgs({ stringArgs: [businessId, positionId] })) {
-        logArgs(req.query, ["businessId", "positionId"]);
-        return res.status(400).send({ badRequest: true });
-    }
-
-    // get the current user
-    try {
-        var [user, position] = await Promise.all([
-            getAndVerifyUser(userId, verificationToken),
-            getPosition(businessId, positionId)
-        ]);
-    }
-    catch (getUserError) {
-        logError("Error getting user when trying to get current eval state: ", getUserError);
-        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
-    }
-
-    // get the current state of the evaluation
-    try { var { evaluationState } = await getEvaluationState({ user, position }); }
-    catch (getStateError) {
-        console.log("Error getting evaluation state when starting eval: ", getStateError);
-        return res.status(500).send({ serverError: true });
-    }
-
-    return res.status(200).send({ evaluationState });
-}
-
-
-// starts an evaluation
-module.exports.POST_start = async function(req, res) {
-    // get everything needed from request
-    const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
-    // if the ids are not strings, return bad request error
-    if (!validArgs({ stringArgs: [businessId, positionId] })) {
-        logArgs(req.query, ["businessId", "positionId"]);
-        return res.status(400).send({ badRequest: true });
-    }
-
-    // get the current user
-    try {
-        var [user, position] = await Promise.all([
-            getAndVerifyUser(userId, verificationToken),
-            getPosition(businessId, positionId)
-        ]);
-    }
-    catch (getUserError) {
-        logError("Error getting user when trying to get current eval state: ", getUserError);
-        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
-    }
-
-    // make sure the user is enrolled in the position
-    const positionIndex = userPositionIndex(user, positionId, businessId);
-    if (positionIndex < 0) {
-        console.log(`User did not have position with positionId: ${positionId}, businessId: ${businessId}`);
-        return res.status(403).send({ notSignedUp: true });
-    }
-
-    // set the user's current position to the one given
-    user.evalInProgress = { businessId, positionId }
-    // mark the position as started
-    const NOW = new Date();
-    if (user.positions[positionIndex].appliedStartDate) {
-        user.positions[positionIndex].appliedStartDate = new Date();
-    } if (user.positions[positionIndex].startDate) {
-        user.positions[positionIndex].startDate = new Date();
-    }
-
-    // save the user
-    try { await user.save(); }
-    catch (saveError) {
-        console.log("Error saving user with new eval in progress: ", saveError);
-        return res.status(500).send({ serverError: true });
-    }
-
-    // get the current state of the evaluation
-    try { var { evaluationState } = await getEvaluationState({ user, position }); }
-    catch (getStateError) {
-        console.log("Error getting evaluation state when starting eval: ", getStateError);
-        return res.status(500).send({ serverError: true });
-    }
-
-    return res.status(200).send({ user: frontEndUser(user), evaluationState });
-}
-
-
-// gets results for a user and influencers
-module.exports.GET_initialState = async function(req, res) {
-    // get everything needed from request
-    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
-    // if the ids are not strings, return bad request error
-    if (!validArgs({ stringArgs: [businessId, positionId] })) {
-        logArgs(req.query, ["businessId", "positionId"]);
-        return res.status(400).send({ badRequest: true });
-    }
-
-    // get the current user
-    try { var user = await getAndVerifyUser(userId, verificationToken); }
-    catch (getUserError) {
-        console.log("Error getting user when trying to get current eval state: ", getUserError);
-        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
-    }
-
-    // find the index of the position within the user's positions array
-    const positionIndex = userPositionIndex(user, positionId, businessId);
-    // if the index is invalid, the user never signed up for this position
-    if (positionIndex < 0) { return res.status(403).send({notSignedUp: true}); }
-
-    // get the position from the database
-    try { var position = await getPosition(businessId, positionId); }
-    catch (getPositionError) {
-        console.log(`Error getting position when trying to get initial state - businessId: ${businessId}, positionId: ${positionId}: `, getPositionError);
-        return res.status(500).send({ serverError: true });
-    }
-
-    // TODO: check if they have finished the eval already
-    if (user.positions[positionIndex].appliedEndDate) {
-        return res.status(200).send({ finished: true });
-    }
-
-    // if user is in-progress on any position
-    if (user.evalInProgress && user.evalInProgress.businessId && user.evalInProgress.positionId) {
-        // check if it is the position they are currently on
-        if (user.evalInProgress.businessId.toString() === businessId && user.evalInProgress.positionId.toString() === positionId) {
-            // tell the user that this position has already been started, then
-            // ask if they are ready to continue
-            return res.status(200).send({ alreadyInProgress: true });
-        }
-        // if not, ask if they want to continue the eval they were on before
-        // or if they want to work on this new one - send them the businessId
-        // and positionId so they have a link to the in-progress eval
-        else { return res.status(200).send({ evalInProgress: user.evalInProgress }); }
-    }
-    // no eval is in progress, return that they have not started this position
-    // and are ready to
-    else { return res.status(200).send({ readyToStart: true }); }
-}
-
-
 // get the current state of an evaluation, including the current stage, what
 // stages have been completed, and what stages are next
 // requires: user AND ((positionId and businessId) OR position object)
@@ -1138,7 +1768,7 @@ async function getEvaluationState(options) {
             evaluationState = await addPsychInfo(user, evaluationState);
 
             /* GCA - ALL EVALS */
-            // TODO: GCA
+            evaluationState = await addCognitiveInfo(user, evaluationState);
 
             /* SKILLS - SOME EVALS */
             evaluationState = await addSkillInfo(user, evaluationState, position);
@@ -1162,39 +1792,42 @@ async function getEvaluationState(options) {
 // grades an evaluation based on all the components
 async function gradeEval(user, userPosition, position) {
     // CURRENTLY SCORE IS MADE OF MOSTLY PSYCH AND A TINY BIT OF SKILLS
-    /* ------------------------>> GRADE SKILLS <<---------------------------- */
+    // GRADE ALL THE SKILLS
     const overallSkill = gradeAllSkills(user, position);
-    /* <<----------------------- END GRADE SKILLS ------------------------->> */
+
+    // get the gca score
+    const gca = typeof user.cognitiveTest === "object" ? user.cognitiveTest.score : undefined;
 
     /* ------------------------->> GRADE PSYCH <<---------------------------- */
     // predict growth
-    const growth = gradeGrowth(user, position);
-
+    const growth = gradeGrowth(user, position, gca);
     // predict performance
     const performance = gradePerformance(user, position, overallSkill);
-
     // predict longevity
     const longevity = gradeLongevity(user, position);
     /* <<------------------------ END GRADE PSYCH ------------------------->> */
 
     /* ------------------------->> GRADE OVERALL <<-------------------------- */
-    // the components that make up the overall score
-    const overallContributors = [growth, performance, longevity];
+    // grade the overall score
+    const overallScore = gradeOverall({ gca, growth, performance, longevity }, position.weights);
 
-    // get the average of the contributors
-    let overallScore = 0;
-    let numContributors = 0;
-    overallContributors.forEach(contributor => {
-        // if the contributor score exists (was predicted)
-        if (typeof contributor === "number") {
-            overallScore += contributor;
-            numContributors++;
-        }
-    });
-    // get the average if there is at least one contributor
-    if (numContributors > 0) { overallScore = overallScore / numContributors; }
-    // otherwise just give them a score of 100
-    else { overallScore = 100; }
+    // // the components that make up the overall score
+    // const overallContributors = [growth, performance, longevity];
+    //
+    // // get the average of the contributors
+    // let overallScore = 0;
+    // let numContributors = 0;
+    // overallContributors.forEach(contributor => {
+    //     // if the contributor score exists (was predicted)
+    //     if (typeof contributor === "number") {
+    //         overallScore += contributor;
+    //         numContributors++;
+    //     }
+    // });
+    // // get the average if there is at least one contributor
+    // if (numContributors > 0) { overallScore = overallScore / numContributors; }
+    // // otherwise just give them a score of 100
+    // else { overallScore = 100; }
     /* <<----------------------- END GRADE OVERALL ------------------------>> */
 
     // update user's scores on the position eval
@@ -1205,8 +1838,42 @@ async function gradeEval(user, userPosition, position) {
         growth, longevity, performance
     }
 
+    console.log(userPosition.scores);
+
     // return the updated user position
     return userPosition;
+}
+
+
+// calculate the overall score based on sub-scores like gca and performance
+function gradeOverall(subscores, weights) {
+    console.log("weights: ", weights);
+    let totalValue = 0;
+    let totalWeight = 0;
+    // go through every score type (gca, performance, etc) and add its weighted value
+    for (let scoreType in subscores) {
+        if (!subscores.hasOwnProperty(scoreType)) continue;
+        console.log("scoreType: ", scoreType);
+        console.log("subscores[scoreType]: ", subscores[scoreType]);
+        // only use the score if it exists as a number
+        if (typeof subscores[scoreType] === "number") {
+            // get the weight of the type
+            let weight = weights ? weights[scoreType] : undefined;
+            console.log("weights[scoreType]: ", weights[scoreType]);
+            // if weight not provided, assume weighed at .2
+            if (typeof weight !== "number") {
+                console.log("Invalid weight of: ", weight, " for score type: ", scoreType, " in position with id: ", position._id);
+                if (scoreType === "gca") { weight = .51; }
+                else if (scoreType === "performance") { weight = .23 }
+                else { weight = 0; }
+            }
+            console.log("weight is: ", weight);
+            totalValue += subscores[scoreType] * weight;
+            totalWeight += weight;
+        }
+    }
+    console.log("overall score: ", (totalValue/totalWeight));
+    return (totalValue / totalWeight);
 }
 
 
@@ -1234,117 +1901,264 @@ function gradeAllSkills(user, position) {
 }
 
 
+// // get predicted growth for specific position
+// function gradeGrowth(user, position) {
+//     // start at a score of 0, 100 will be added after scaling
+//     let growth = 0;
+//
+//     // how many facets are involved in the growth calculation
+//     let numGrowthFacets = 0;
+//
+//     // go through each factor to get to each facet
+//     const userFactors = user.psychometricTest.factors;
+//     // make sure there are factors used in growth - otherwise growth will be 100
+//     if (Array.isArray(position.growthFactors)) {
+//         // go through each factor that affects growth
+//         position.growthFactors.forEach(growthFactor => {
+//             // find the factor within the user's psych test
+//             const userFactor = userFactors.find(factor => { return factor.factorId.toString() === growthFactor.factorId.toString(); });
+//
+//             // add the number of facets in this factor to the total number of growth facets
+//             numGrowthFacets += growthFactor.idealFacets.length;
+//
+//             // go through each facet to find the score compared to the ideal output
+//             growthFactor.idealFacets.forEach(idealFacet => {
+//                 // find the facet within the user's psych test
+//                 const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+//
+//                 // the score that the user needs for the max pq
+//                 const idealScore = idealFacet.score;
+//
+//                 // how far off of the ideal score the user got
+//                 const difference = Math.abs(idealScore - userFacet.score);
+//
+//                 // subtract the difference from the predictive score
+//                 growth -= difference;
+//
+//                 // add the absolute value of the facet score, making the
+//                 // potential predictive score higher
+//                 growth += Math.abs(idealScore);
+//             })
+//         });
+//     }
+//
+//     // the max pq for growth in this position
+//     const maxGrowth = position.maxGrowth ? position.maxGrowth : 190;
+//
+//     // growth multiplier is highest growth score divided by number of growth
+//     // facets divided by 5 (since each growth facet has a max score in either direction of 5)
+//     // can only have a growth multiplier if there are growth facets, so if
+//     // there are no growth facets, set multiplier to 1
+//     const growthMultiplier = numGrowthFacets > 0 ? ((maxGrowth - 100) / numGrowthFacets) / 5 : 1;
+//
+//     // to get to the potential max score, multiply by the multiplier
+//     growth *= growthMultiplier;
+//
+//     // add the starting growth pq
+//     growth += 100;
+//
+//     // return the calculated growth score
+//     return growth;
+// }
+
+
 // get predicted growth for specific position
-function gradeGrowth(user, position) {
-    // start at a score of 0, 100 will be added after scaling
-    let growth = 0;
-
-    // how many facets are involved in the growth calculation
-    let numGrowthFacets = 0;
-
-    // go through each factor to get to each facet
-    const userFactors = user.psychometricTest.factors;
-    // make sure there are factors used in growth - otherwise growth will be 100
-    if (Array.isArray(position.growthFactors)) {
-        // go through each factor that affects growth
-        position.growthFactors.forEach(growthFactor => {
-            // find the factor within the user's psych test
-            const userFactor = userFactors.find(factor => { return factor.factorId.toString() === growthFactor.factorId.toString(); });
-
-            // add the number of facets in this factor to the total number of growth facets
-            numGrowthFacets += growthFactor.idealFacets.length;
-
-            // go through each facet to find the score compared to the ideal output
-            growthFactor.idealFacets.forEach(idealFacet => {
-                // find the facet within the user's psych test
-                const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
-
-                // the score that the user needs for the max pq
-                const idealScore = idealFacet.score;
-
-                // how far off of the ideal score the user got
-                const difference = Math.abs(idealScore - userFacet.score);
-
-                // subtract the difference from the predictive score
-                growth -= difference;
-
-                // add the absolute value of the facet score, making the
-                // potential predictive score higher
-                growth += Math.abs(idealScore);
-            })
-        });
+function gradeGrowth(user, position, gcaScore) {
+    // get the user's psych test scores
+    const psych = user.psychometricTest;
+    // find conscientiousness, as that's the only factor that matters for now
+    const conscFactor = psych.factors.find(factor => factor.name === "Conscientiousness");
+    // how many facets are in the factor
+    let numFacets = 0;
+    // total value, can be divided by numFacets later to get average
+    let addedUpFacets = 0;
+    // go through each facet and find its standardized facet score
+    conscFactor.facets.forEach(facet => {
+        // add facet score to the total value
+        addedUpFacets += facet.score;
+        numFacets++;
+    });
+    // the weighted average of the facets
+    let growth = 94.847 + (10 * (addedUpFacets / numFacets));
+    // incorporate gca if it exists
+    if (typeof gcaScore === "number") {
+        const gcaWeights = {
+            "Sales": 2.024,
+            "Support": 1.889,
+            "Development": 3.174,
+            "Marketing": 2.217,
+            "Product": 2.217,
+            "General": 2.217
+        }
+        console.log("position.positionType: ", position.positionType);
+        let gcaWeight = gcaWeights[position.positionType];
+        // manager positions have different gca weighting
+        if (position.isManager) { gcaWeight = 2.9; }
+        if (!gcaWeight) { gcaWeight = 2.217; }
+        console.log("gcaWeight: ", gcaWeight);
+        // weigh psych to skills 3:1
+        growth = (growth + (gcaWeight * gcaScore)) / (1 + gcaWeight);
     }
 
-    // the max pq for growth in this position
-    const maxGrowth = position.maxGrowth ? position.maxGrowth : 190;
-
-    // growth multiplier is highest growth score divided by number of growth
-    // facets divided by 5 (since each growth facet has a max score in either direction of 5)
-    // can only have a growth multiplier if there are growth facets, so if
-    // there are no growth facets, set multiplier to 1
-    const growthMultiplier = numGrowthFacets > 0 ? ((maxGrowth - 100) / numGrowthFacets) / 5 : 1;
-
-    // to get to the potential max score, multiply by the multiplier
-    growth *= growthMultiplier;
-
-    // add the starting growth pq
-    growth += 100;
-
-    // return the calculated growth score
+    console.log("growth: ", growth);
+    // return the predicted performance
     return growth;
 }
 
 
 // get predicted performance for specific position
 function gradePerformance(user, position, overallSkill) {
-    // add to the score when a non-zero facet score is ideal
-    // subtract from the score whatever the differences are between the
-    // ideal facets and the actual facets
-    let performance = undefined;
+    // get the user's psych test scores
+    const psych = user.psychometricTest;
+    // get all the ideal factors from the position
+    const idealFactors = position.idealFactors;
+    // the added-up weighted factor score values
+    let totalPerfValue = 0;
+    // the total weight of all factors, will divide by this to get the final score
+    let totalPerfWeight = 0;
+    // go through every factor
+    psych.factors.forEach(factor => {
+        let totalFactorValue = 0;
+        let totalFactorWeight = 0;
+        // find the corresponding ideal factor scores within the position
+        const idealFactor = idealFactors.find(iFactor => iFactor.factorId.toString() === factor.factorId.toString());
+        // use this factor if it is has ideal facets
+        if (idealFactor) {
+            console.log("Ideal factor: ", factor.name);
+            // go through each facet and find its standardized facet score
+            factor.facets.forEach(facet => {
+                // find the corresponding ideal facet
+                const idealFacet = idealFactor.idealFacets.find(iFacet => iFacet.facetId.toString() === facet.facetId.toString());
+                // facet multiplier ensures that the scaled facet is score is between 0 and 10
+                const facetMultiplier = 10 / Math.max(Math.abs(idealFacet.score - 5), Math.abs(idealFacet.score + 5));
+                // the distance between the ideal facet score and the actual facet
+                // score, scaled to be min 0 max 10
+                const scaledFacetScore = facetMultiplier * Math.abs(idealFacet.score - facet.score);
+                // get facet weight; default facet weight is 1
+                let facetWeight = typeof idealFacet.weight === "number" ? idealFacet.weight : 1;
+                // add the weighted value to be averaged
+                totalFactorValue += scaledFacetScore * facetWeight;
+                totalFactorWeight += facetWeight;
 
-    const userFactors = user.psychometricTest.factors;
-    if (Array.isArray(position.idealFactors) && position.idealFactors.length > 0) {
-        // start at 100 as the baseline
-        let psychPerformance = 100;
-
-        // go through each factor to get to each facet
-        position.idealFactors.forEach(idealFactor => {
-            // find the factor within the user's psych test
-            const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
-
-            // go through each facet to find the score compared to the ideal output
-            idealFactor.idealFacets.forEach(idealFacet => {
-                // find the facet within the user's psych test
-                const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
-
-                // the score that the user needs for the max pq
-                const idealScore = idealFacet.score;
-
-                // how far off of the ideal score the user got
-                const difference = Math.abs(idealScore - userFacet.score);
-
-                // subtract the difference from the predictive score
-                psychPerformance -= difference;
-
-                // add the absolute value of the facet score, making the
-                // potential predictive score higher
-                psychPerformance += Math.abs(idealScore);
+                console.log("facet scaled score: ", scaledFacetScore);
+                console.log("facetWeight: ", facetWeight);
             });
-        });
-
-        // take skills into account if there were any in the eval
-        if (typeof overallSkill === "number") {
-            // psych will account for 80% of prediction, skills 20%
-            performance = (psychPerformance * .8) + (overallSkill * .2);
+            // the weighted average of the facets
+            const factorScore = 144.847 - (10 * (totalFactorValue / totalFactorWeight));
+            // get factor weight; default factor weight is 1
+            let factorWeight = typeof idealFactor.weight === "number" ? idealFactor.weight : 1;
+            // add the weighted score so it can be averaged
+            totalPerfValue += factorScore * factorWeight;
+            totalPerfWeight += factorWeight;
         }
-
-        // otherwise performance is just psych performance
-        else { performance = psychPerformance; }
+    });
+    // get the weighted average of the factors
+    let performance = totalPerfValue / totalPerfWeight;
+    // incorporate skills if taken
+    if (typeof overallSkill === "number") {
+        // weigh psych to skills 3:1
+        performance = (.75 * performance) + (.25 * overallSkill);
     }
-
-    // return calculated performance
+    // return the predicted performance
     return performance;
 }
+
+
+
+// get predicted performance for specific position
+// function gradePerformance(user, position, overallSkill) {
+//     // get the function type of the position ("Development", "Support", etc)
+//     const type = position.positionType;
+//     // get the user's psych test
+//     const psych = user.psychometricTest;
+//     // the weights for this position type
+//     let weights = performanceWeights[type];
+//     // if the type isn't valid, just use the general ones
+//     if (!weights) {
+//         console.log(`Position with id ${position._id} had type: `, type, " which was invalid. Using General weights.");
+//         weights = performanceWeights["General"];
+//     }
+//     // the added-up weighted factor score values
+//     let totalValue = 0;
+//     // the total weight of all factors, will divide by this to get the final score
+//     let totalWeight = 0;
+//     // go through every factor,
+//     psych.factors.forEach(factor => {
+//         // get the average of all the facets for the factor
+//         const factorAvg = factor.score;
+//         // get the standardized factor score
+//         const stdFactorScore = (factorAvg * 10) + 94.847;
+//         // get the weight of the factor for this position
+//         const weight = weights[factor.name];
+//         // if the weight is invalid, don't use this factor in calculation
+//         if (typeof weight !== "number") {
+//             console.log("Invalid weight: ", weight, " in factor ", factor, ` of position with id ${position._id}`);
+//         } else {
+//             // add the weighted factor score to the total value
+//             totalValue += stdFactorScore * weight;
+//             // add the weight to the total weight
+//             totalWeight += weight;
+//         }
+//     });
+//     // if the total weight is 0, something has gone terribly wrong
+//     if (totalWeight === 0) { throw new Error("Total factor weight of 0. Invalid psych factors."); }
+//     // otherwise calculate the final weighted average score and return it
+//     return (totalValue / totalWeight);
+// }
+
+
+
+// // OLD VERSION OF GRADING PERFORMANCE USING IDEAL OUTPUTS
+// // get predicted performance for specific position
+// function gradePerformance(user, position, overallSkill) {
+//     // add to the score when a non-zero facet score is ideal
+//     // subtract from the score whatever the differences are between the
+//     // ideal facets and the actual facets
+//     let performance = undefined;
+//
+//     const userFactors = user.psychometricTest.factors;
+//     if (Array.isArray(position.idealFactors) && position.idealFactors.length > 0) {
+//         // start at 100 as the baseline
+//         let psychPerformance = 100;
+//
+//         // go through each factor to get to each facet
+//         position.idealFactors.forEach(idealFactor => {
+//             // find the factor within the user's psych test
+//             const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
+//
+//             // go through each facet to find the score compared to the ideal output
+//             idealFactor.idealFacets.forEach(idealFacet => {
+//                 // find the facet within the user's psych test
+//                 const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+//
+//                 // the score that the user needs for the max pq
+//                 const idealScore = idealFacet.score;
+//
+//                 // how far off of the ideal score the user got
+//                 const difference = Math.abs(idealScore - userFacet.score);
+//
+//                 // subtract the difference from the predictive score
+//                 psychPerformance -= difference;
+//
+//                 // add the absolute value of the facet score, making the
+//                 // potential predictive score higher
+//                 psychPerformance += Math.abs(idealScore);
+//             });
+//         });
+//
+//         // take skills into account if there were any in the eval
+//         if (typeof overallSkill === "number") {
+//             // psych will account for 80% of prediction, skills 20%
+//             performance = (psychPerformance * .8) + (overallSkill * .2);
+//         }
+//
+//         // otherwise performance is just psych performance
+//         else { performance = psychPerformance; }
+//     }
+//
+//     // return calculated performance
+//     return performance;
+// }
 
 
 // get predicted longevity for specific position
@@ -1401,6 +2215,7 @@ async function addAdminQuestionsInfo(user, evaluationState) {
             // user is on admin question stage but needs to be shown instructions
             evaluationState.component = "Admin Questions";
             evaluationState.showIntro = true;
+            evaluationState.stepProgress = 0;
         }
 
         // if user has not finished admin questions
@@ -1409,12 +2224,19 @@ async function addAdminQuestionsInfo(user, evaluationState) {
             evaluationState.component = "Admin Questions";
 
             // get the current question from the db
-            try { var question = await Adminqs.findById(adminQs.currentQuestion.questionId); }
+            try {
+                var [ question, totalAdminQuestions ] = await Promise.all([
+                    Adminqs.findById(adminQs.currentQuestion.questionId),
+                    Adminqs.countDocuments({ "requiredFor": user.userType })
+                ]);
+            }
             catch (getQuestionError) { reject(getQuestionError); }
             if (!question) { reject(`Current admin question not found. Id: ${adminQs.currentQuestion.questionId}`); }
 
             // add the current question for the user to answer
             evaluationState.componentInfo = question;
+            // add the current progress
+            evaluationState.stepProgress = (adminQs.questions.length / totalAdminQuestions) * 100;
         }
 
         // if user has finished admin questions, add it as a finished stage
@@ -1447,12 +2269,23 @@ async function addPsychInfo(user, evaluationState) {
 
             // if the user has not started the psych test, show the intro for it
             const psychStarted = psych && psych.currentQuestion && psych.startDate;
-            if (!psychStarted) { evaluationState.showIntro = true; }
+            if (!psychStarted) {
+                evaluationState.showIntro = true;
+                evaluationState.stepProgress = 0;
+            }
 
             // otherwise give the user their current psych question
-            else { evaluationState.componentInfo = psych.currentQuestion; }
+            else {
+                evaluationState.componentInfo = psych.currentQuestion;
+                // find the current progress of the psych eval
+                // number of facets in the entire psych test
+                let totalFacets = 0;
+                psych.factors.forEach(f1 => { f1.facets.forEach(f2 => { totalFacets++; }); });
+                const numAnsweredQuestions = psych.usedQuestions ? psych.usedQuestions.length : 0;
+                // update step progress
+                evaluationState.stepProgress = (numAnsweredQuestions / (psych.questionsPerFacet * totalFacets)) * 100;
+            }
         }
-
         resolve(evaluationState);
     });
 }
@@ -1488,7 +2321,10 @@ async function addSkillInfo(user, evaluationState, position) {
                 else {
                     evaluationState.component = "Skill";
                     // if the user has not started, show them the intro to the skill
-                    if (!started) { evaluationState.showIntro = true; }
+                    if (!started) {
+                        evaluationState.showIntro = true;
+                        evaluationState.stepProgress = 0;
+                    }
                     // otherwise give the user the current question to answer
                     else {
                         const currQ = userSkill.currentQuestion;
@@ -1504,11 +2340,66 @@ async function addSkillInfo(user, evaluationState, position) {
 
                             // give this question to eval state so user can see it
                             evaluationState.componentInfo = question;
+                            // update the step progress
+                            const numAnswered = userSkill.attempts && userSkill.attempts.levels && userSkill.attempts.levels.length > 0 && userSkill.attempts.levels[0].questions ? userSkill.attempts.levels[0].questions.length : 0;
+                            evaluationState.stepProgress = (userSkill.attempts.levels[0].questions.length / questions) * 100;
                         }
                         catch (getSkillError) { reject(getSkillError); }
                     }
                 }
             }
+        }
+
+        resolve(evaluationState);
+    });
+}
+
+
+// add in info about the current state of cognitive
+async function addCognitiveInfo(user, evaluationState) {
+    return new Promise(async function(resolve, reject) {
+        const cognitive = user.cognitiveTest;
+
+        // if the user has finished the psych eval, add it to the finished pile
+        if (cognitive && cognitive.endDate) {
+            evaluationState.completedSteps.push({ stage: "Cognitive" });
+        }
+
+        // if there is already a current component, throw cognitive in the incomplete pile
+        else if (evaluationState.component){
+            evaluationState.incompleteSteps.push({ stage: "Cognitive" });
+        }
+
+        // at this point, cognitive must be current component
+        else {
+            // mark the current stage as the psych test
+            evaluationState.component = "Cognitive";
+
+            // if the user has not started the psych test, show the intro for it
+            const cognitiveStarted = cognitive && cognitive.currentQuestion && cognitive.startDate;
+            if (!cognitiveStarted) {
+                evaluationState.showIntro = true;
+                evaluationState.stepProgress = 0;
+            }
+            // otherwise give the user their current cognitive question
+            else {
+                // get all the questions, don't include whether each question is correct
+                try { var questions = await GCA.find({}).select("-options.isCorrect"); }
+                catch (getCognitiveError) { reject(getCognitiveError); }
+
+                // get the current question
+                const question = questions.find(q => q._id.toString() === cognitive.currentQuestion.questionId.toString());
+
+                const componentQuestion = {
+                    rpm: question.rpm,
+                    options: question.options,
+                    startDate: cognitive.currentQuestion.startDate,
+                    questionId: question._id
+                }
+
+                evaluationState.componentInfo = componentQuestion;
+                evaluationState.stepProgress = (cognitive.questions.length / questions.length) * 100;
+             }
         }
 
         resolve(evaluationState);
@@ -1569,8 +2460,17 @@ async function getNewPsychQuestion(psych) {
         factor.facets[facetIdx] = facet;
         psych.factors[factorIdx] = factor;
 
+        // find the current progress of the psych eval
+        // number of facets in the entire psych test
+        let totalFacets = 0;
+        psych.factors.forEach(f1 => { f1.facets.forEach(f2 => { totalFacets++; }); });
+        const numAnsweredQuestions = psych.usedQuestions ? psych.usedQuestions.length : 0;
+
         // return the updated psych
-        return resolve({ psychTest: psych });
+        return resolve({
+            psychTest: psych,
+            stepProgress: (numAnsweredQuestions / (psych.questionsPerFacet * totalFacets)) * 100
+        });
     });
 }
 
@@ -1603,6 +2503,9 @@ async function getNewSkillQuestion(userSkill) {
         // get a list of questions that have not been answered
         const availableQs = dbQuestions.filter(q => !answeredIds[q._id.toString()]);
 
+        // get the step progress
+        const stepProgress = (userLevel.questions.length / dbQuestions.length) * 100;
+
         // get a random question from that list
         const questionIdx = randomInt(0, availableQs.length - 1);
         const question = availableQs[questionIdx];
@@ -1626,7 +2529,91 @@ async function getNewSkillQuestion(userSkill) {
         }
 
         // return the new user's skill object and question
-        return resolve({ userSkill, componentQuestion });
+        return resolve({ userSkill, componentQuestion, stepProgress });
+    });
+}
+
+
+async function getNewCognitiveQuestion(cognitiveTest) {
+    return new Promise(async function(resolve, reject) {
+        // make sure the user cognitive test is valid
+        if (typeof cognitiveTest !== "object") { reject(`Invalid cognitiveTest: ${cognitiveTest}`)}
+
+        // create a list of ids of questions the user has already answered
+        const answeredIds = cognitiveTest.questions.map(cogQ => cogQ.questionId);
+        // query the db to find a question, can't be one that's already been used
+        const query = { "_id": { "$nin": answeredIds } };
+        // sort in ascending order so that we get the easiest difficulty
+        const sort = { "difficulty": "ascending" };
+        try { var unansweredQuestions = await GCA.find(query).sort(sort); }
+        catch (getQError) { return reject(getQError); }
+
+        // if we don't have any available questions, finished with the test
+        if (unansweredQuestions.length === 0) { return resolve({ finished: true }); }
+
+        // see if the user should be finished due to getting 3 questions wrong in a row
+        if (cognitiveTest.questions.length >= 3) {
+            // number of questions in a row the user has gotten wrong
+            let wrongInARow = 0;
+            // go through each question
+            for (let qIdx = 0; qIdx < cognitiveTest.questions.length; qIdx++) {
+                // if the user got the question right, reset the number of questions wrong in a row
+                if (cognitiveTest.questions[qIdx].isCorrect) { wrongInARow = 0; }
+                // otherwise increase the number of consecutive incorrect answers
+                else { wrongInARow++; }
+                // if the user got more than three wrong in a row, test is finished
+                if (wrongInARow === 3) {
+                    // mark the rest of the questions in the test as incorrect,
+                    // as the assumption is that the user wouldn't be getting them right
+                    // get the rest of the questions
+                    try { var questions = await GCA.find(query); }
+                    catch (getQsError) { return reject(getQsError); }
+                    questions.forEach(q => {
+                        cognitiveTest.questions.push({
+                            questionId: q._id,
+                            isCorrect: false,
+                            overTime: false,
+                            autoSubmittedAnswerUsed: false,
+                            assumedIncorrect: true
+                        });
+                    });
+                    // return saying we're done and give the updated test
+                    return resolve({ finished: true, cognitiveTest });
+                }
+            }
+        }
+
+        // get the easiest question
+        const question = unansweredQuestions[0];
+
+        // figure out id of correct answer for that question
+        const correctAnswer = question.options.find(opt => opt.isCorrect)._id;
+
+        // shuffle the options
+        const opts = shuffle(question.options);
+
+        const startDate = new Date();
+
+        // mark it as the current question
+        cognitiveTest.currentQuestion = {
+            questionId: question._id,
+            startDate,
+            correctAnswer
+        }
+
+        // progress within cognitive test
+        const stepProgress = (cognitiveTest.questions.length / (cognitiveTest.questions.length + unansweredQuestions.length)) * 100;
+
+        // create the question object for the eval component
+        const componentQuestion = {
+            rpm: question.rpm,
+            options: opts.map(opt => { return { src: opt.src, _id: opt._id } } ),
+            startDate,
+            questionId: question._id
+        }
+
+        // return the new user's skill object and question
+        return resolve({ cognitiveTest, componentQuestion, stepProgress });
     });
 }
 

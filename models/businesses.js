@@ -24,6 +24,8 @@ const positionSchema = mongoose.Schema({
     currentlyHiring: Boolean,
     // which of the 5 functions the position falls under
     positionType: String,
+    // if the position involves management
+    isManager: Boolean,
     // the skill tests a candidate must complete in order to apply
     skills: [ mongoose.Schema.Types.ObjectId ],
     // the names of the skills the candidates must complete in order to apply
@@ -45,12 +47,16 @@ const positionSchema = mongoose.Schema({
     idealFactors: [{
         // the id of the factor
         factorId: mongoose.Schema.Types.ObjectId,
+        // the weight of the factor
+        weight: Number,
         // all ideal facet scores
         idealFacets: [{
             // id of the facet
             facetId: mongoose.Schema.Types.ObjectId,
             // the optimal facet score for this position
-            score: Number
+            score: Number,
+            // the weight of the facet
+            weight: Number
         }]
     }],
     // maximum growth score allowed (default is 190)
@@ -59,12 +65,16 @@ const positionSchema = mongoose.Schema({
     growthFactors: [{
         // id of the factor involved in growth
         factorId: mongoose.Schema.Types.ObjectId,
+        // the weight of the factor
+        weight: Number,
         // ideal facet scores for growth
         idealFacets: [{
             // id of the facet to score
             facetId: mongoose.Schema.Types.ObjectId,
             // best score for growth for this facet in this position
-            score: Number
+            score: Number,
+            // the weight of the facet
+            weight: Number
         }]
     }],
     // if the position is calculating for longevity
@@ -80,7 +90,17 @@ const positionSchema = mongoose.Schema({
             // best score for longevity for this facet in this position
             score: Number
         }]
-    }]
+    }],
+    // weights of each score in determining overall score
+    weights: {
+        // how comparatively important performance is
+        performance: Number,
+        // etc
+        growth: Number,
+        longevity: Number,
+        culture: Number,
+        gca: Number
+    }
 })
 
 

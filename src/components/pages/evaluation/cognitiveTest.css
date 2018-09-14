@@ -1,0 +1,82 @@
+.error-red {
+    color: #ff4d4d;
+}
+
+.rpmImg {
+    height: 300px;
+}
+
+.answersImg {
+}
+.answersImg > img {
+    height: 90px;
+}
+
+.multipleChoiceAnswer {
+    cursor: pointer;
+    margin: 0 1% auto;
+    display: inline-block;
+    margin-bottom: 10px;
+    position: relative;
+}
+.multipleChoiceAnswer.outOfTime {
+    cursor: not-allowed;
+}
+
+.multipleChoiceCircle {
+    width: 14px;
+    height: 14px;
+    border-radius: 100%;
+    position: relative;
+    background: linear-gradient(to right, #fe256e, #ff5438);
+    left: 39px;
+}
+.multipleChoiceCircle.outOfTime {
+    background: #3a3a3a;
+}
+.multipleChoiceCircle > div {
+    background-color: var(--primary-black-dark);
+    border-radius: 100%;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    display: inline-block;
+}
+.multipleChoiceCircle.selected > div {
+    display: none;
+}
+
+.example-rpm {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+@media only screen and (max-width: 700px) {
+    .rpmImg {
+        height: 200px;
+    }
+
+    .answersImg > img {
+        height: 60px;
+    }
+
+    .multipleChoiceCircle {
+        left: 25px;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .rpmImg {
+        height: 150px;
+    }
+
+    .answersImg > img {
+        height: 50px;
+    }
+    .multipleChoiceCircle {
+        left: 20px;
+    }
+}

@@ -214,6 +214,56 @@ const usersSchema = mongoose.Schema({
         }]
     }],
 
+    cognitiveTest: {
+        // whether the user is currently taking the test
+        inProgress: Boolean,
+        // the date and time the user took the test
+        startDate: Date,
+        // the date and time the user finished the test
+        endDate: Date,
+        // how long it took overall in milliseconds to finish the test (difference between endDate and startDate)
+        totalTime: Number,
+        // the question the user is currently answering, undefined if test not
+        // in progress; will always be for most recent (in progress) test
+        currentQuestion: {
+            // id of the question currently being answered
+            questionId: mongoose.Schema.Types.ObjectId,
+            // the time the question was assigned to the user
+            startDate: Date,
+            // the correct answer so that we don't have to re-find the question
+            // when getting the next question and grading this one
+            correctAnswer: mongoose.Schema.Types.ObjectId,
+            // answer that was automatically submitted for the user because
+            // they ran out of time
+            autoSubmittedAnswerId: mongoose.Schema.Types.ObjectId
+        },
+        // the score the user got on the test; undefined if in progress
+        score: Number,
+        // the gca questions the user answered
+        questions: [{
+            // id of the question
+            questionId: mongoose.Schema.Types.ObjectId,
+            // if the candidate chose the correct answers
+            isCorrect: Boolean,
+            // the id of the answer that the user chose
+            answerId: mongoose.Schema.Types.ObjectId,
+            // the date and time the user started the question
+            startDate: Date,
+            // the date and time the user finished the question
+            endDate: Date,
+            // how long it took overall in milliseconds to finish the
+            // question (difference between endDate and startDate)
+            totalTime: Number,
+            // if they were over the time limit
+            overTime: Boolean,
+            // if the auto-submitted answer was used because the user was late
+            autoSubmittedAnswerUsed: Boolean,
+            // if the question is assumed to be wrong because the user got
+            // too many questions wrong in a row
+            assumedIncorrect: Boolean
+        }]
+    },
+
     // if the user is any type of employer, here is info about the business they work for
     // and their role at that business
     businessInfo: {
@@ -305,7 +355,6 @@ const usersSchema = mongoose.Schema({
         numQuestionsAnswered: Number,
         // current question that the user is on
         currentQuestion: {
-
             /* START DEPRECATED */
             // the index of the factor within the user's factors array
             factorIndex: Number,

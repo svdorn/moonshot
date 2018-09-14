@@ -80,7 +80,6 @@ app.use(session({
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
 
-
 // --->> TEST WEBHOOKS <<--- //
 
 // const WebHooks = require("node-webhooks");
@@ -200,7 +199,10 @@ app.post("/evaluation/start", evaluationApis.POST_start);
 app.post("/evaluation/answerAdminQuestion", evaluationApis.POST_answerAdminQuestion);
 app.post("/evaluation/answerPsychQuestion", evaluationApis.POST_answerPsychQuestion);
 app.post("/evaluation/answerSkillQuestion", evaluationApis.POST_answerSkillQuestion);
+app.post("/evaluation/answerCognitiveQuestion", evaluationApis.POST_answerCognitiveQuestion);
+app.post("/evaluation/answerOutOfTimeCognitive", evaluationApis.POST_answerOutOfTimeCognitive);
 app.post("/evaluation/skipAdminQuestions", evaluationApis.POST_skipAdminQuestions);
+
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
