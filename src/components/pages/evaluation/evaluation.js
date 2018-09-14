@@ -108,7 +108,7 @@ class Evaluation extends Component {
 
     // handle any error returned when getting initial evaluation state
     handleError(error) {
-        console.log("ERROR: ", error);
+        this.setState({ loading: false });
         // if a known error is returned
         if (propertyExists(error, ["response", "data"], "object")) {
             // deal with all errors
@@ -148,6 +148,7 @@ class Evaluation extends Component {
 
     // gets the current state of the evaluation
     getEvalState = () => {
+        this.setState({ loading: true });
         axios.get("/api/evaluation/currentState", this.state.generalApiGetArgs)
         .then(this.setEvalState.bind(this))
         .catch(this.handleError.bind(this));
@@ -183,16 +184,18 @@ class Evaluation extends Component {
     // user is not doing psych test or gca test or anything at this moment, ask
     // them what they want to do now
     createPreTestContent() {
-        // TODO: if the user has already started the eval and is in the middle of a
-        // test component, ask if they're ready to continue
         if (this.state.alreadyInProgress) {
             return (
                 <div>
                     <p>You{"'"}ve already started this evaluation.</p>
                     <p>Ready to get back into it?</p>
-                    <div className={button.purpleBlue} onClick={this.getEvalState}>
-                        Let{"'"}s Go!
-                    </div>
+                    {this.state.loading ?
+                        <CircularProgress color="secondary" />
+                        :
+                        <div className={button.purpleBlue} onClick={this.getEvalState}>
+                            Let{"'"}s Go!
+                        </div>
+                    }
                 </div>
             );
         }
@@ -217,7 +220,7 @@ class Evaluation extends Component {
     startEvalPrompt() {
         return (
             <div>
-                <p>This evaluation consists of some quick administrative questions and a psychometric test.</p>
+                <p>This evaluation consists of some quick administrative questions, a personality evaluation, and a pattern recognition test.</p>
                 <p>Employers cannot see your answers to any of these questions.</p>
                 <p>There will be a progress bar so you can see how much you have completed.</p>
                 <p>Before every section there will be an introduction with instructions. Read them carefully.</p>
@@ -250,6 +253,7 @@ class Evaluation extends Component {
 
     // set the new state of an eval from an api call
     setEvalState(response) {
+        this.setState({ loading: false });
         if (propertyExists(response, ["data", "evaluationState"], "object")) {
             this.props.setEvaluationState(response.data.evaluationState);
             // show eval component

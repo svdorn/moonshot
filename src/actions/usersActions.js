@@ -193,7 +193,6 @@ function updateEvalState(dispatch, data) {
         // add a notification saying they finished the eval
         dispatch({type: "ADD_NOTIFICATION", notification: {message: "Congratulations, you finished the evaluation! We'll be in touch soon.", type: "infoHeader"}})
     }
-    console.log("evaluationState: ", data.evaluationState);
     dispatch({
         type: "UPDATE_EVALUATION_STATE",
         evaluationState: data.evaluationState,
