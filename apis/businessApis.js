@@ -1409,10 +1409,10 @@ function POST_googleJobsLinks(req, res) {
 
     sendEmailPromise({ recipients, subject, content })
     .then(response => { return res.status(200).send({}); })
-    .then(error => {
+    .catch(error => {
         console.log("Error sending email for google jobs post: ", error);
         return res.status(500).send({ message: errors.SERVER_ERROR });
-    })
+    });
 }
 
 
