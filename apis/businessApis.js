@@ -1395,27 +1395,25 @@ async function POST_moveCandidates(req, res) {
 }
 
 function POST_googleJobsLinks(req, res) {
-    // let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let recipients = ["stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+    if (process.env.NODE_ENV === "development") {
+        recipients = [ process.env.DEV_EMAIL ];
+    }
     let subject = 'Moonshot - Google Jobs Form';
 
-    let content = "<div>"
-        + "<h3>Someone filled out google jobs links:</h3>"
-        + "<p>Business Id: "
-        + sanitize(req.body.params.businessId)
-        + "</p>"
-        + "<p>Jobs: "
-        + sanitize(req.body.params.jobs)
-        + "</p>"
-        + "</div>";
+    let content = (
+        `<div>
+            <h3>Someone filled out google jobs links:</h3>
+            <p>Business Id: ${sanitize(req.body.params.businessId)}</p>
+            <p>Jobs: ${sanitize(req.body.params.jobs)}</p>
+        </div>`
+    );
 
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
+    sendEmailPromise({ recipients, subject, content })
+    .then(response => { return res.status(200).send({}); })
+    .then(error => {
+        console.log("Error sending email for google jobs post: ", error);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
     })
 }
 
