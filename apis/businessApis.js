@@ -33,7 +33,7 @@ const errors = require('./errors.js');
 
 const businessApis = {
     POST_addEvaluation,
-    POST_contactUsEmailNotLoggedIn,
+    POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
     POST_googleJobsLinks,
@@ -1442,7 +1442,7 @@ async function POST_addEvaluation(req, res) {
     return res.json(business.positions);
 }
 
-async function POST_contactUsEmailNotLoggedIn(req, res) {
+async function POST_contactUsEmail(req, res) {
     const { phoneNumber, message, name, email, company } = sanitize(req.body);
 
     // email to moonshot with the message the user entered
@@ -2259,7 +2259,6 @@ async function POST_resetApiKey(req, res) {
 async function POST_uploadCandidateCSV(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
-    //const file = sanitize(req.files.file);
     const candidateFile = sanitize(req.body.candidateFile);
     const candidateFileName = sanitize(req.body.candidateFileName);
 
@@ -2279,28 +2278,26 @@ async function POST_uploadCandidateCSV(req, res) {
     }
 
     // set up the email to send
-    let recipients = ["ameyer24@wisc.edu"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io"];
+    if (process.env.NODE_ENV === "development") {
+        recipients = [ process.env.DEV_EMAIL ];
+    }
     let subject = `ACTION NEEDED: Candidates File Uploaded By ${business.name}`;
-    let content =
-        "<div>"
-        +   "<p>File is attached.</p>"
-        + "</div>";
+    let content = "<div><p>File is attached.</p></div>";
     // attach the candidates file to the email
     const fileString = candidateFile.substring(candidateFile.indexOf(",") + 1);
     let attachments = [{
         filename: candidateFileName,
         content: new Buffer(fileString, "base64")
     }];
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {
-        // on failure
-        if (!success) {
-            console.log("Error sending email with candidates file: ", msg);
-            return res.status(500).send("Error uploading candidates file.");
-        }
-        // on success
-        return res.status(200).json({});
-    })
+
+    // send the email with the attachment
+    sendEmailPromise({ recipients, subject, content, attachments })
+    .then(response => { return res.status(200).send({}); })
+    .catch(error => {
+        console.log("Error sending email with candidates file: ", error);
+        return res.status(500).send({ message: "Error uploading candidates file." });
+    });
 }
 
 

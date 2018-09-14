@@ -156,7 +156,7 @@ app.post("/accountAdmin/integrationSuggestion", accountAdminApis.POST_integratio
 app.post("/accountAdmin/languagePreference", accountAdminApis.POST_languagePreference);
 
 app.post('/business/googleJobsLinks', businessApis.POST_googleJobsLinks);
-app.post('/business/contactUsEmailNotLoggedIn', businessApis.POST_contactUsEmailNotLoggedIn);
+app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post('/business/addEvaluation', businessApis.POST_addEvaluation);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);

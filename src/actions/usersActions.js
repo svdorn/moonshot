@@ -70,7 +70,7 @@ export function contactUsEmail(user, callback) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
 
-        axios.post("api/business/contactUsEmailNotLoggedIn", user)
+        axios.post("api/business/contactUsEmail", user)
             .then(function(response) {
                 dispatch({type:"CONTACT_US_EMAIL_SUCCESS"});
                 dispatch({type: "ADD_NOTIFICATION", notification:{message:"Message sent, we'll get back to you soon!", type:"infoHeader"}});
