@@ -888,7 +888,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
 
         // the button linking to the signup page with the signup code in the url
         const createAccountButton =
-              '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="'
+              '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="'
             + moonshotUrl + 'signup?code=' + code
             + '">Create Account</a>';
 
