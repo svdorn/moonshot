@@ -130,10 +130,10 @@ class CognitiveTest extends Component {
                 <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
                     <div className="font24px"><span>Pattern Recognition</span></div>
                     <div>
-                        <p>This is the pattern recognition portion of the evaluation. Here you will be tested on your aptitude in general cognition.</p>
-                        <p><span>TIME IS A FACTOR.</span> You have 60 seconds to complete each question. After this, whatever answer you have will be saved and if you have no answer the question will be marked wrong.</p>
+                        <p>This is the pattern recognition portion of the evaluation. Here you will be tested on your aptitude in problem solving.</p>
+                        <p><span>TIME IS A FACTOR.</span> You have 60 seconds to complete each question. After this, whatever answer you have will be saved. If you have no answer, the question will be marked wrong.</p>
                         <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
-                        <p>The test will take no more than 8 minutes.</p>
+                        <p>The test will take no more than 12 minutes.</p>
                     </div>
                     <br/>
                     <div>
