@@ -828,12 +828,10 @@ function createCode(businessId, positionId, userType, email, open) {
         }
         // we are now guaranteed to have a unique code
         const NOW = new Date();
-        const TWO_WEEKS = 14;
         // create the code
         let code = {
             code: randomChars,
             created: NOW,
-            expirationDate: lastPossibleSecond(NOW, TWO_WEEKS),
             email, businessId, positionId, userType, open
         }
         // make the code in the db
