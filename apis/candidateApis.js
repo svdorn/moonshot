@@ -323,14 +323,6 @@ function POST_candidate(req, res) {
                 return reject({status: 400, message: INVALID_CODE, error: "Signup code not found in the database"});
             }
 
-            // check if the code has expired
-            if ((new Date()).getTime() > dbCode.expirationDate.getTime()) {
-                // if it has expired, delete the code
-                await Signupcodes.deleteOne({ _id: dbCode._id, open: false });
-                // and tell the user that their code expired
-                return reject({status: 400, message: "That code has expired. Ask the employer to send a new one.", error: "code expired"});
-            }
-
             // set the code's id so it can be deleted after user creation
             codeId = dbCode._id;
 
@@ -351,7 +343,10 @@ function POST_candidate(req, res) {
             }
             // otherwise the user is a candidate or employee and will have a
             // start date for their position eval, same as when code was created
-            else { startDate = dbCode.created; }
+            else {
+                const NOW = new Date();
+                startDate = NOW;
+            }
 
             // code is legit and all properties using it are set; resolve
             resolve(true);
@@ -410,7 +405,7 @@ function POST_updateAllOnboarding(req, res) {
             }
 
             if (info) {
-                // if info exists, try to save it
+                // if info exists, try toad save it
                 const fullInfo = removeEmptyFields(info);
 
                 for (const prop in fullInfo) {
@@ -432,7 +427,7 @@ function POST_updateAllOnboarding(req, res) {
             }
 
             user.save(function (saveErr, updatedUser) {
-                if (saveErr) {
+                if (saveErr) {ad
                     console.log("Error saving user information when updating info from onboarding: ", saveErr);
                     res.status(500).send("Server error, couldn't save information.");
                     return;
@@ -492,7 +487,7 @@ async function sendVerificationEmail(user) {
                 <div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>
                 <p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.
                 <br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>
-                <a  style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:8px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;"
+                <a  style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;"
                     href="${moonshotUrl}verifyEmail?token=${user.emailVerificationToken}"
                 >
                     Verify Account

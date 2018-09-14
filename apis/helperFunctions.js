@@ -57,7 +57,7 @@ const FOR_USER = [
     "adminQuestions",
     "referredByCode",
     "currentPosition",
-    "psychometricTest",
+    // "psychometricTest",
     "verificationToken",
     "firstBusinessUser",
     "agreedToSkillTerms",
@@ -165,6 +165,28 @@ function frontEndUser(dbUser, fieldsToInclude) {
 
     // return the updated user, ready for front-end use
     return newUser;
+}
+
+// shuffles a general array, used for shuffling questions around
+function shuffle(arr) {
+    let array = arr.slice();
+    let currentIndex = array.length,
+        temporaryValue,
+        randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
 }
 
 
@@ -701,7 +723,6 @@ async function getAndVerifyUser(userId, verificationToken) {
     })
 }
 
-
 // get and verify user from express request
 async function getUserFromReq(req, requestType) {
     return new Promise(async function(resolve, reject) {
@@ -1008,7 +1029,7 @@ function emailFooter(userEmail) {
 
     return (
         `<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>
-        <div style="text-align:center"><a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px; "src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a></div>
+        <div style="text-align:center"><a href="${moonshotUrl}" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px; "src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a></div>
         <div style="text-align:left;width:100%;display:inline-block;">
             <div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">
                 <i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>
@@ -1028,6 +1049,7 @@ const helperFunctions = {
     getFirstName,
     removeDuplicates,
     randomInt,
+    shuffle,
     frontEndUser,
     getAndVerifyUser,
     getUserFromReq,

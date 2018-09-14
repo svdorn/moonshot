@@ -159,6 +159,16 @@ export function answerEvaluationQuestion(evalComponent, options) {
 }
 
 
+// save a gca answer because time ran out
+export function answerOutOfTimeCognitive(options) {
+    return function(dispatch) {
+        axios.post(`/api/evaluation/answerOutOfTimeCognitive`, options)
+        .then(response => updateEvalState(dispatch, response.data))
+        .catch(error => defaultErrorHandler(dispatch, { error, doNotAlertUser: true }));
+    }
+}
+
+
 // skip all the evaluation admin questions
 export function skipAdminQuestions(options) {
     return function(dispatch) {
@@ -171,6 +181,11 @@ export function skipAdminQuestions(options) {
 
 
 function updateEvalState(dispatch, data) {
+    // if nothing should be made based on the update, do nothing
+    if (typeof data === "object" && data.noChange) { return; }
+    // scroll up if needed
+    const scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    if (scrollTop > 80) { window.scrollTo(0,80); }
     // if the user finished the eval
     if (data.evaluationState.component === "Finished") {
         // go home
@@ -188,9 +203,11 @@ function updateEvalState(dispatch, data) {
 
 // stop the loading bar and show an error message, also log an error if provided
 function defaultErrorHandler(dispatch, options) {
+    // if nothing should be done to shown user there is an error
+    if (options.doNotAlertUser) { return; }
     // log the error if provided
     if (options.error) { console.log(options.error); }
-    // the message to show the user
+    // the message to show the userPositionIndex
     const errorMessage = options.message ? options.message : "Error, try refreshing."
 
     dispatch({
