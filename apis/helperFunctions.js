@@ -57,7 +57,7 @@ const FOR_USER = [
     "adminQuestions",
     "referredByCode",
     "currentPosition",
-    "psychometricTest",
+    // "psychometricTest",
     "verificationToken",
     "firstBusinessUser",
     "agreedToSkillTerms",

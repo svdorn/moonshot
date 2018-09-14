@@ -2211,6 +2211,7 @@ async function addAdminQuestionsInfo(user, evaluationState) {
             // user is on admin question stage but needs to be shown instructions
             evaluationState.component = "Admin Questions";
             evaluationState.showIntro = true;
+            evaluationState.stepProgress = 0;
         }
 
         // if user has not finished admin questions
@@ -2264,7 +2265,10 @@ async function addPsychInfo(user, evaluationState) {
 
             // if the user has not started the psych test, show the intro for it
             const psychStarted = psych && psych.currentQuestion && psych.startDate;
-            if (!psychStarted) { evaluationState.showIntro = true; }
+            if (!psychStarted) {
+                evaluationState.showIntro = true;
+                evaluationState.stepProgress = 0;
+            }
 
             // otherwise give the user their current psych question
             else {
@@ -2278,7 +2282,6 @@ async function addPsychInfo(user, evaluationState) {
                 evaluationState.stepProgress = (numAnsweredQuestions / (psych.questionsPerFacet * totalFacets)) * 100;
             }
         }
-
         resolve(evaluationState);
     });
 }
@@ -2314,7 +2317,10 @@ async function addSkillInfo(user, evaluationState, position) {
                 else {
                     evaluationState.component = "Skill";
                     // if the user has not started, show them the intro to the skill
-                    if (!started) { evaluationState.showIntro = true; }
+                    if (!started) {
+                        evaluationState.showIntro = true;
+                        evaluationState.stepProgress = 0;
+                    }
                     // otherwise give the user the current question to answer
                     else {
                         const currQ = userSkill.currentQuestion;
@@ -2367,7 +2373,10 @@ async function addCognitiveInfo(user, evaluationState) {
 
             // if the user has not started the psych test, show the intro for it
             const cognitiveStarted = cognitive && cognitive.currentQuestion && cognitive.startDate;
-            if (!cognitiveStarted) { evaluationState.showIntro = true; }
+            if (!cognitiveStarted) {
+                evaluationState.showIntro = true;
+                evaluationState.stepProgress = 0;
+            }
             // otherwise give the user their current cognitive question
             else {
                 // get all the questions, don't include whether each question is correct
