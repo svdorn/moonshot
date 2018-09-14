@@ -9,7 +9,6 @@ const errors = require('./errors');
 // get helper functions
 const { sanitize,
         verifyUser,
-        sendEmail,
         sendEmailPromise,
         frontEndUser,
         getAndVerifyUser,
@@ -245,17 +244,6 @@ async function POST_languagePreference(req, res) {
         console.log("Error sending email alerting founders of customer integration suggestion: ", error);
     });
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 // <<----------------------------------------------------------------------->> //
