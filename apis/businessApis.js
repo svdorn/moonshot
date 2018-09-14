@@ -34,7 +34,6 @@ const errors = require('./errors.js');
 const businessApis = {
     POST_addEvaluation,
     POST_contactUsEmailNotLoggedIn,
-    POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
     POST_googleJobsLinks,
@@ -1495,36 +1494,6 @@ async function POST_contactUsEmailNotLoggedIn(req, res) {
     }
 
     return res.status(200).send({success: true});
-}
-
-function POST_contactUsEmail(req, res) {
-    let message = "None";
-    if (req.body.message) {
-        message = sanitize(req.body.message);
-    }
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io"];
-    let subject = 'Moonshot Question -- Contact Us Form';
-    let content = "<div>"
-        + "<h3>Questions:</h3>"
-        + "<p>Name: "
-        + sanitize(req.body.name)
-        + "</p>"
-        + "<p>Email: "
-        + sanitize(req.body.email)
-        + "</p>"
-        + "<p>Message: "
-        + message
-        + "</p>"
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Email sent successfully, our team will be in contact with you shortly!");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
 }
 
 

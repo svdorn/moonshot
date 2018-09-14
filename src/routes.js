@@ -31,7 +31,6 @@ import Apply from './components/pages/apply';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
-import ContactUs from './components/pages/contactUs';
 import Error404 from './components/pages/errors/error404';
 import Unsubscribe from './components/pages/unsubscribe';
 import Admin from './components/pages/admin';
@@ -88,7 +87,6 @@ const routes = (
             <Route path="verifyEmail" component={VerifyEmail} />
             <Route path="forgotPassword" component={ForgotPassword} />
             <Route path="changePassword" component={ChangePassword} />
-            <Route path="contactUs" component={ContactUs} />
             <Route path="unsubscribe" component={Unsubscribe} />
             <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
             <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
