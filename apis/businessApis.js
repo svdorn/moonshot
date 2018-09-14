@@ -1847,7 +1847,7 @@ async function GET_positions(req, res) {
     let positions = [];
     if (Array.isArray(business.positions)) {
         let positionPromises = business.positions.map(position => {
-            return addCompletionsAndInProgress(position);
+            return addCompletionsAndInProgress(position, businessId);
         });
 
         try { positions = await Promise.all(positionPromises); }
@@ -1885,7 +1885,7 @@ async function GET_positionsForApply(req, res) {
 
 // get the number of users who have completed and are in progress for a certain position
 // return the position object but with two additional properties - completions and usersInProgress
-async function addCompletionsAndInProgress(position) {
+async function addCompletionsAndInProgress(position, businessId) {
     return new Promise(async function(resolve, reject) {
         try {
             const positionId = position._id;
@@ -1894,10 +1894,9 @@ async function addCompletionsAndInProgress(position) {
                 "userType": "candidate",
                 "positions": {
                     "$elemMatch": {
-                        "$and": [
-                            { "positionId": mongoose.Types.ObjectId(positionId) },
-                            { "appliedEndDate": { "$exists": true } }
-                        ]
+                        "positionId": mongoose.Types.ObjectId(positionId),
+                        "businessId": mongoose.Types.ObjectId(businessId),
+                        "appliedEndDate": { "$exists": true }
                     }
                 }
             }
@@ -1907,11 +1906,10 @@ async function addCompletionsAndInProgress(position) {
                 "userType": "candidate",
                 "positions": {
                     "$elemMatch": {
-                        "$and": [
-                            { "positionId": mongoose.Types.ObjectId(positionId) },
-                            { "appliedStartDate": { "$exists": true } },
-                            { "appliedEndDate": { "$exists": false } }
-                        ]
+                        "positionId": mongoose.Types.ObjectId(positionId),
+                        "businessId": mongoose.Types.ObjectId(businessId),
+                        "appliedStartDate": { "$exists": true },
+                        "appliedEndDate": { "$exists": false }
                     }
                 }
             }
