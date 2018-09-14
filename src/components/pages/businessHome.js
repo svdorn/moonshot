@@ -367,7 +367,7 @@ class BusinessHome extends Component {
                 text1: "Evaluations for any position",
                 text2: <div>across <div className="home-pink inlineBlock">five position types</div><HoverTip
                     style={{marginTop: "26px", marginLeft: "-70px"}}
-                    text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
+                    text={<div>Developer<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
                 /></div>,
                 icon: "5Icon",
                 alt: "5 Icon",
@@ -543,7 +543,7 @@ class BusinessHome extends Component {
                         <div className="primary-white font18px font16pxUnder700 font12pxUnder450">
                             Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five position types</div><HoverTip
                                 style={{marginTop: "26px", marginLeft: "-70px"}}
-                                text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
+                                text={<div>Developer<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
                             />.
                         </div>
                         <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">

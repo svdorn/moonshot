@@ -46,7 +46,7 @@ async function updateBusinesses() {
                 if (!position.length) { position.length = 25; }
                 if (!position.timeAllotted) { position.timeAllotted = 14; }
 
-                if (position.positionType === "Developer") { position.positionType = "Development"; }
+                if (position.positionType === "Development") { position.positionType = "Developer"; }
                 const positionType = position.positionType ? position.positionType : "General";
 
                 const generalFactorWeights = {
@@ -72,7 +72,7 @@ async function updateBusinesses() {
                             gca: .51
                         }
                         break;
-                    case "Development":
+                    case "Developer":
                         factorWeights = generalFactorWeights;
                         position.weights = {
                             performance: .23,
@@ -1985,7 +1985,7 @@ function gradeGrowth(user, position, gcaScore) {
         const gcaWeights = {
             "Sales": 2.024,
             "Support": 1.889,
-            "Development": 3.174,
+            "Developer": 3.174,
             "Marketing": 2.217,
             "Product": 2.217,
             "General": 2.217

@@ -56,7 +56,7 @@ class MyEvaluations extends Component {
             // whether the new position to add is for a manager
             newPosIsManager: false,
             // list of position Types
-            positionTypes: ["Position Type", "Development", "Sales", "Support", "Marketing", "Product"],
+            positionTypes: ["Position Type", "Developer", "Sales", "Support", "Marketing", "Product"],
             // if user didn't select a position type when making a new position
             mustSelectTypeError: false,
             // error adding a position
