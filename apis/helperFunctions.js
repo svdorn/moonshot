@@ -295,6 +295,12 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
 }
 
 
+// find out if a variable potentially has emails to use
+function hasNoEmails(recipients) {
+    return (!recipients || (Array.isArray(recipients) && recipients.length === 0));
+}
+
+
 // send an email and return a promise - required arg fields are recipients, subject, and content
 async function sendEmailPromise(args) {
     return new Promise(async function(resolve, reject) {
@@ -304,7 +310,9 @@ async function sendEmailPromise(args) {
         }
 
         // addresses that will receive the email
-        const recipients = args.recipients;
+        let recipients = args.recipients;
+        if (hasNoEmails(recipients)) { recipients = args.recipient; }
+        if (hasNoEmails(recipients)) { return reject(new Error("No recipients given.")); }
         // subject of the email
         const subject = args.subject;
         // body of the email

@@ -732,8 +732,6 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
 
         // recipient of the email
         const recipient = [ email ];
-        // sender of the email
-        const sendFrom = "Moonshot";
         // the content of the email
         let content = "";
         // subject of the email
@@ -809,10 +807,9 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         }
 
         // send the email
-        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-            if (!success) { reject(msg); }
-            else { resolve(); }
-        })
+        sendEmailPromise({ recipient, subject, content })
+        .then(response => resolve())
+        .catch(error => reject(error));
     });
 }
 
