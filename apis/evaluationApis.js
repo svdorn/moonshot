@@ -46,7 +46,7 @@ async function updateBusinesses() {
                 if (!position.length) { position.length = 25; }
                 if (!position.timeAllotted) { position.timeAllotted = 14; }
 
-
+                if (position.positionType === "Developer") { position.positionType = "Development"; }
                 const positionType = position.positionType ? position.positionType : "General";
 
                 const generalFactorWeights = {
@@ -72,7 +72,7 @@ async function updateBusinesses() {
                             gca: .51
                         }
                         break;
-                    case "Developer":
+                    case "Development":
                         factorWeights = generalFactorWeights;
                         position.weights = {
                             performance: .23,
@@ -864,9 +864,9 @@ module.exports.POST_start = async function(req, res) {
     user.evalInProgress = { businessId, positionId }
     // mark the position as started
     const NOW = new Date();
-    if (user.positions[positionIndex].appliedStartDate) {
+    if (!user.positions[positionIndex].appliedStartDate) {
         user.positions[positionIndex].appliedStartDate = new Date();
-    } if (user.positions[positionIndex].startDate) {
+    } if (!user.positions[positionIndex].startDate) {
         user.positions[positionIndex].startDate = new Date();
     }
 
@@ -1847,15 +1847,19 @@ async function gradeEval(user, userPosition, position) {
 
 // calculate the overall score based on sub-scores like gca and performance
 function gradeOverall(subscores, weights) {
+    console.log("weights: ", weights);
     let totalValue = 0;
     let totalWeight = 0;
     // go through every score type (gca, performance, etc) and add its weighted value
     for (let scoreType in subscores) {
         if (!subscores.hasOwnProperty(scoreType)) continue;
+        console.log("scoreType: ", scoreType);
+        console.log("subscores[scoreType]: ", subscores[scoreType]);
         // only use the score if it exists as a number
         if (typeof subscores[scoreType] === "number") {
             // get the weight of the type
             let weight = weights ? weights[scoreType] : undefined;
+            console.log("weights[scoreType]: ", weights[scoreType]);
             // if weight not provided, assume weighed at .2
             if (typeof weight !== "number") {
                 console.log("Invalid weight of: ", weight, " for score type: ", scoreType, " in position with id: ", position._id);

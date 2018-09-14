@@ -546,7 +546,7 @@ function createPosition(name, type, businessId, isManager) {
                     gca: .51
                 }
                 break;
-            case "Developer":
+            case "Development":
                 factorWeights = generalFactorWeights;
                 bizPos.weights = {
                     performance: .23,
