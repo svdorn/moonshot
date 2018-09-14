@@ -52,9 +52,13 @@ class MyEvaluations extends Component {
             // name of the business the user works for - doesn't apply for candidates
             businessName: undefined,
             // type of position for adding an evaluation
-            positionType: "Developer",
+            positionType: "Position Type",
+            // whether the new position to add is for a manager
+            newPosIsManager: false,
             // list of position Types
-            positionTypes: ["Developer", "Sales", "Support", "Marketing", "Product"],
+            positionTypes: ["Position Type", "Developer", "Sales", "Support", "Marketing", "Product"],
+            // if user didn't select a position type when making a new position
+            mustSelectTypeError: false,
             // error adding a position
             addPositionError: undefined,
             open: false,
@@ -62,13 +66,16 @@ class MyEvaluations extends Component {
         }
     }
 
-    handleOpen = () => {
-        this.setState({open: true});
-    };
+    handleOpen = () => { this.setState({ open: true }); };
 
 
     handleClose = () => {
-        this.setState({open: false, screen: 1, addPositionError: undefined});
+        this.setState({
+            open: false,
+            screen: 1,
+            addPositionError: undefined,
+            mustSelectTypeError: false
+        });
     };
 
     handleNextScreen = () => {
@@ -80,8 +87,16 @@ class MyEvaluations extends Component {
 
     handlePositionTypeChange = (event, index) => {
         const positionType = this.state.positionTypes[index];
-        this.setState({positionType})
+        let newState = { ...this.state, positionType };
+        if (positionType !== "Position Type") {
+            newState.mustSelectTypeError = false;
+        }
+        this.setState(newState);
     };
+
+    handleClickIsManager = () => {
+        this.setState({ newPosIsManager: !this.state.newPosIsManager });
+    }
 
     handleSubmit(e) {
         try {
@@ -91,9 +106,7 @@ class MyEvaluations extends Component {
 
             // Form validation before submit
             let notValid = false;
-            const requiredFields = [
-                'position',
-            ];
+            const requiredFields = [ 'position' ];
             requiredFields.forEach(field => {
                 if (!vals || !vals[field]) {
                     this.props.touch(field);
@@ -102,6 +115,13 @@ class MyEvaluations extends Component {
             });
             if (notValid) return;
 
+            // if the user didn't select a position type, don't let them move on
+            if (this.state.positionType === "Position Type") {
+                return this.setState({ mustSelectTypeError: true });
+            } else {
+                this.setState({ mustSelectTypeError: false });
+            }
+
             // get all necessary params
             const user = this.props.currentUser;
             const userId = user._id;
@@ -109,14 +129,17 @@ class MyEvaluations extends Component {
             const verificationToken = user.verificationToken;
             const positionName = vals.position;
             const positionType = this.state.positionType;
+            const isManager = this.state.newPosIsManager;
 
             this.props.startLoading();
 
-            axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName, positionType})
+            axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName, positionType, isManager})
             .then(res => {
+                self.setState({ positionType: "Position Type", newPosIsManager: false });
                 self.positionsUpdate(res.data);
                 self.handleNextScreen();
                 self.props.stopLoading();
+                self.props.reset();
             })
             .catch(error => {
                 self.props.stopLoading();
@@ -307,6 +330,7 @@ class MyEvaluations extends Component {
                             attributes.name = position.positionName;
                             attributes.length = position.length;
                             attributes.company = position.businessName;
+                            attributes.length = position.length;
                             attributes.assignedDate = position.assignedDate;
                             attributes.startDate = position.startDate;
                             attributes.completedDate = position.completedDate;
@@ -369,41 +393,56 @@ class MyEvaluations extends Component {
         const screen = this.state.screen;
         let dialogBody = <div></div>;
         if (screen === 1) {
-                    dialogBody = (
-                        <form onSubmit={this.handleSubmit.bind(this)} className="center">
-                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
-                                Add Evaluation
-                            </div>
-                            <div className="primary-white font16px font14pxUnder700 marginTop10px marginBottom10px">
-                                Enter the position name and position type for the evaluation you are adding.
-                            </div>
-                            <Field
-                                name="position"
-                                component={renderTextField}
-                                label="Position Name"
-                                validate={[required]}
-                            /><br/>
-                            <div className="primary-cyan font18px marginTop10px">
-                                Select a position type:
-                                <br/>
-                                <DropDownMenu value={this.state.positionType}
-                                          onChange={this.handlePositionTypeChange}
-                                          labelStyle={style.menuLabelStyle}
-                                          anchorOrigin={style.anchorOrigin}
-                                          style={{fontSize: "16px"}}
-                                >
-                                    {positionTypeItems}
-                                </DropDownMenu>
-                            </div><br/>
-                            <RaisedButton
-                                label="Continue"
-                                type="submit"
-                                className="raisedButtonBusinessHome marginTop10px"
-                                /><br/>
-                            {this.state.addPositionError ? <div className="secondary-red font16px marginTop10px">{this.state.addPositionError}</div> : null }
-                            {this.props.loading ? <CircularProgress color="white" style={{marginTop: "8px"}}/> : null}
-                        </form>
-                    );
+            dialogBody = (
+                <form onSubmit={this.handleSubmit.bind(this)} className="center">
+                    {this.state.mustSelectTypeError ?
+                        <div className="secondary-red" style={{marginBottom:"-23px"}}>Must select a position type.</div>
+                        : null
+                    }
+                    <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
+                        Add Evaluation
+                    </div>
+                    <div className="primary-white font16px font14pxUnder700 marginTop10px marginBottom10px">
+                        Enter the details of your new position.
+                    </div>
+                    <Field
+                        name="position"
+                        component={renderTextField}
+                        label="Position Name"
+                        validate={[required]}
+                    /><br/>
+                    <div className="primary-cyan font16px marginTop10px">
+                        <div style={{display:"inline-block", marginTop:"16px", verticalAlign:"top"}}>Select a position type:</div>
+                        <DropDownMenu value={this.state.positionType}
+                                  onChange={this.handlePositionTypeChange}
+                                  labelStyle={style.menuLabelStyle}
+                                  anchorOrigin={style.anchorOrigin}
+                                  style={{fontSize: "16px"}}
+                        >
+                            {positionTypeItems}
+                        </DropDownMenu>
+                    </div><br/>
+                    <div style={{margin:"-20px auto 10px"}} className="primary-white">
+                        <div className="checkbox smallCheckbox whiteCheckbox"
+                             onClick={this.handleClickIsManager.bind(this)}
+                        >
+                            <img
+                                alt=""
+                                className={"checkMark" + this.state.newPosIsManager}
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                            />
+                        </div>
+                        {"Position is a manager role"}
+                    </div>
+                    <RaisedButton
+                        label="Continue"
+                        type="submit"
+                        className="raisedButtonBusinessHome marginTop10px"
+                        /><br/>
+                    {this.state.addPositionError ? <div className="secondary-red font16px marginTop10px">{this.state.addPositionError}</div> : null }
+                    {this.props.loading ? <CircularProgress color="white" style={{marginTop: "8px"}}/> : null}
+                </form>
+            );
         } else if (screen === 2) {
                     dialogBody = (
                         <div>
@@ -473,7 +512,8 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         currentUser: state.users.currentUser,
-        loading: state.users.loadingSomething
+        loading: state.users.loadingSomething,
+        png: state.users.png
     };
 }
 

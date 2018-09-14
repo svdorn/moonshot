@@ -89,7 +89,7 @@ class AgreeToTerms extends Component {
                         I have read and agree to the Moonshot Insights {this.createAgreementLinks()}.
                         <br/>
                         {this.props.loading ?
-                            <CircularProgress style={{margin: "20px 0"}} color="#FB553A" />
+                            <CircularProgress style={{margin: "20px 0"}} color="white" />
                             : <div style={{margin: "20px 0"}} className="skillContinueButton" onClick={this.agreeToTerms.bind(this)}>Continue</div>
                         }
 

@@ -66,7 +66,7 @@ System is deployed to AWS elastic beanstalk
 ## Authors
 
 * **Stephen Dorn** - *CTO* - [svdorn](https://github.com/svdorn)
-* **Austin Meyer** - *Lead Developer* - [frizzkitten](https://github.com/frizzkitten)
+* **Austin Meyer** - *CIO* - [frizzkitten](https://github.com/frizzkitten)
 
 ## License
 

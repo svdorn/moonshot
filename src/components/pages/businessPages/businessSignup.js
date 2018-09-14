@@ -57,7 +57,7 @@ class BusinessSignup extends Component {
         try {
             // get the parameters from the url
             let urlQuery = this.props.location.query;
-            var { email, name, company, positionTitle, positionType } = urlQuery;
+            var { email, name, company, positionTitle, positionType, isManager } = urlQuery;
             // if the needed parameters don't exist, get the user to go through
             // the chatbot
             if (!email || !name || !company || !positionTitle || !positionType) { return goTo("/chatbot"); }
@@ -65,7 +65,7 @@ class BusinessSignup extends Component {
 
         // save the values receieved in the url into state - will be used during
         // api call later
-        this.setState({ name, company, positionTitle, positionType });
+        this.setState({ name, company, positionTitle, positionType, isManager });
 
         // set the email value in the form
         const initialValues = { email, password: "", password2: "" };
@@ -126,9 +126,9 @@ class BusinessSignup extends Component {
         }
 
         // grab values we need from state (which got its values from the url)
-        const { name, company, positionTitle, positionType } = this.state;
+        const { name, company, positionTitle, positionType, isManager } = this.state;
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positionTitle, positionType };
+        const args = { password, email, name, company, positionTitle, positionType, isManager };
 
         // create the user
         this.props.createBusinessAndUser(args);

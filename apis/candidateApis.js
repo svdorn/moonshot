@@ -410,7 +410,7 @@ function POST_updateAllOnboarding(req, res) {
             }
 
             if (info) {
-                // if info exists, try to save it
+                // if info exists, try toad save it
                 const fullInfo = removeEmptyFields(info);
 
                 for (const prop in fullInfo) {
@@ -432,7 +432,7 @@ function POST_updateAllOnboarding(req, res) {
             }
 
             user.save(function (saveErr, updatedUser) {
-                if (saveErr) {
+                if (saveErr) {ad
                     console.log("Error saving user information when updating info from onboarding: ", saveErr);
                     res.status(500).send("Server error, couldn't save information.");
                     return;
@@ -492,7 +492,7 @@ async function sendVerificationEmail(user) {
                 <div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>
                 <p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.
                 <br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>
-                <a  style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:8px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;"
+                <a  style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;"
                     href="${moonshotUrl}verifyEmail?token=${user.emailVerificationToken}"
                 >
                     Verify Account
