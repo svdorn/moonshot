@@ -343,7 +343,10 @@ function POST_candidate(req, res) {
             }
             // otherwise the user is a candidate or employee and will have a
             // start date for their position eval, same as when code was created
-            else { startDate = dbCode.created; }
+            else {
+                const NOW = new Date();
+                startDate = NOW;
+            }
 
             // code is legit and all properties using it are set; resolve
             resolve(true);
