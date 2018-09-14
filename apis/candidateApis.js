@@ -323,14 +323,6 @@ function POST_candidate(req, res) {
                 return reject({status: 400, message: INVALID_CODE, error: "Signup code not found in the database"});
             }
 
-            // check if the code has expired
-            if ((new Date()).getTime() > dbCode.expirationDate.getTime()) {
-                // if it has expired, delete the code
-                await Signupcodes.deleteOne({ _id: dbCode._id, open: false });
-                // and tell the user that their code expired
-                return reject({status: 400, message: "That code has expired. Ask the employer to send a new one.", error: "code expired"});
-            }
-
             // set the code's id so it can be deleted after user creation
             codeId = dbCode._id;
 
@@ -351,7 +343,10 @@ function POST_candidate(req, res) {
             }
             // otherwise the user is a candidate or employee and will have a
             // start date for their position eval, same as when code was created
-            else { startDate = dbCode.created; }
+            else {
+                const NOW = new Date();
+                startDate = NOW;
+            }
 
             // code is legit and all properties using it are set; resolve
             resolve(true);
