@@ -1029,7 +1029,7 @@ function emailFooter(userEmail) {
 
     return (
         `<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>
-        <div style="text-align:center"><a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px; "src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a></div>
+        <div style="text-align:center"><a href="${moonshotUrl}" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px; "src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a></div>
         <div style="text-align:left;width:100%;display:inline-block;">
             <div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">
                 <i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>

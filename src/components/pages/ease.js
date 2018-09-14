@@ -9,8 +9,6 @@ import {  } from "../../miscFunctions";
 import MetaTags from 'react-meta-tags';
 import { goTo } from "../../miscFunctions";
 
-import "./ease.css";
-
 class Ease extends Component {
     constructor(props) {
         super(props);
