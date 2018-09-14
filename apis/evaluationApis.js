@@ -30,6 +30,303 @@ const { sanitize,
 const { calculatePsychScores } = require("./psychApis");
 
 
+// update all old businesses to have new position information
+//updateBusinesses();
+async function updateBusinesses() {
+    try {
+        let businesses = await Businesses.find({});
+        businesses.forEach(business => {
+            let positions = business.positions;
+
+            for (let posIdx = 0; posIdx < positions.length; posIdx++) {
+                let position = positions[posIdx];
+
+                position.finalized = true;
+                if (typeof position.positionType !== "string") { position.positionType = "General" }
+                if (!position.length) { position.length = 25; }
+                if (!position.timeAllotted) { position.timeAllotted = 14; }
+                console.log("here");
+                if ((!Array.isArray(position.idealFactors) || position.idealFactors.length === 0) || (!Array.isArray(position.growthFactors) || position.growthFactors.length === 0)) {
+                    console.log("adding growth factors");
+                    const positionType = position.positionType ? position.positionType : "General";
+
+                    const generalFactorWeights = {
+                        "emotionality": 1,
+                        "extraversion": 0,
+                        "agreeableness": 0,
+                        "conscientiousness": 1.4375,
+                        "opennessToExperience": 0,
+                        "honestyHumility": 1.125,
+                        "altruism": 0
+                    }
+
+                    switch(positionType) {
+                        case "General":
+                        case "Marketing":
+                        case "Product":
+                            factorWeights = generalFactorWeights;
+                            position.weights = {
+                                performance: .23,
+                                growth: 0,
+                                longevity: 0,
+                                culture: 0,
+                                gca: .51
+                            }
+                            break;
+                        case "Developer":
+                            factorWeights = generalFactorWeights;
+                            position.weights = {
+                                performance: .23,
+                                growth: 0,
+                                longevity: 0,
+                                culture: 0,
+                                gca: .73
+                            }
+                            break;
+                        case "Sales":
+                            factorWeights = {
+                               "emotionality": 1,
+                               "extraversion": 1.5,
+                               "agreeableness": 0,
+                               "conscientiousness": 2.4,
+                               "opennessToExperience": 0,
+                               "honestyHumility": 1.714,
+                               "altruism": 0
+                           };
+                           position.weights = {
+                               performance: .252,
+                               growth: 0,
+                               longevity: 0,
+                               culture: 0,
+                               gca: .51
+                           }
+                           break;
+                        case "Support":
+                            factorWeights = {
+                               "emotionality": 1.18,
+                               "extraversion": 1,
+                               "agreeableness": 1.723,
+                               "conscientiousness": 2.455,
+                               "opennessToExperience": 1.545,
+                               "honestyHumility": 1.636,
+                               "altruism": 0
+                           };
+                           position.weights = {
+                               performance: .27,
+                               growth: 0,
+                               longevity: 0,
+                               culture: 0,
+                               gca: .51
+                           }
+                           break;
+                        default:
+                            factorWeights = generalFactorWeights;
+                            break;
+                    }
+
+                    const factors = {
+                        "idealFactors": [
+                            {
+                                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ff"),
+                                "weight": factorWeights.honestyHumility,
+                                "idealFacets": [
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30f"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30a"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce305"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce300"),
+                                        "score": 5,
+                                        "weight": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ea"),
+                                "weight": factorWeights.emotionality,
+                                "idealFacets": [
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2fa"),
+                                        "score": -5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f5"),
+                                        "score": -5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f0"),
+                                        "score": -5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2eb"),
+                                        "score": -5,
+                                        "weight": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d0"),
+                                "weight": factorWeights.extraversion,
+                                "idealFacets": [
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e5"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e0"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2db"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d6"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d1"),
+                                        "score": 5,
+                                        "weight": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bb"),
+                                "weight": factorWeights.agreeableness,
+                                "idealFacets": [
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2cb"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c6"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c1"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bc"),
+                                        "score": 5,
+                                        "weight": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6"),
+                                "weight": factorWeights.conscientiousness,
+                                "idealFacets": [
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
+                                        "score": 5,
+                                        "weight": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b"),
+                                "weight": factorWeights.opennessToExperience,
+                                "idealFacets": [
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
+                                        "score": 5,
+                                        "weight": 1
+                                    },
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
+                                        "score": 5,
+                                        "weight": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce275"),
+                                "weight": factorWeights.altruism,
+                                "idealFacets": [
+                                    {
+                                        "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce285"),
+                                        "score": 5,
+                                        "weight": 1
+                                    }
+                                ]
+                            }
+                        ]
+                    };
+
+                    // set correct ideal and growth factors
+                    if (!Array.isArray(position.idealFactors) || position.idealFactors.length === 0) {
+                        position.idealFactors = factors.idealFactors;
+                    }
+                    if ((!Array.isArray(position.growthFactors) || position.growthFactors.length === 0)) {
+                        position.growthFactors = factors.idealFactors;
+                    }
+                }
+
+                positions[posIdx] = position;
+            }
+
+            business.positions = positions;
+            business.save();
+        })
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+
 module.exports = {};
 
 
@@ -1692,7 +1989,8 @@ function gradeGrowth(user, position, gcaScore) {
             "Support": 1.889,
             "Development": 3.174,
             "Marketing": 2.217,
-            "Product": 2.217
+            "Product": 2.217,
+            "General": 2.217
         }
         console.log("position.positionType: ", position.positionType);
         let gcaWeight = gcaWeights[position.positionType];
