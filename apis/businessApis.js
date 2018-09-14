@@ -795,7 +795,7 @@ async function createPosition(name, type, businessId, isManager) {
             console.log("error creating link: ", createLinkError)
             return res.status(500).send(errors.SERVER_ERROR);
         }
-        
+
         bizPos.code = code.code;
 
         return resolve(bizPos);
@@ -1833,9 +1833,8 @@ async function GET_positions(req, res) {
 
     // get the business the user works for
     const businessId = user.businessInfo.businessId;
-    let business;
     try {
-        business = await Businesses
+        var business = await Businesses
             .findById(businessId)
             .select("logo name positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.finalized positions.dateCreated");
     } catch (findBizError) {
@@ -1843,15 +1842,19 @@ async function GET_positions(req, res) {
         return res.status(500).send("Server error, couldn't get positions.");
     }
 
-    let positionPromises = business.positions.map(position => {
-        return addCompletionsAndInProgress(position);
-    });
+    if (!business) { return res.status(401).send(errors.PERMISSIONS_ERROR); }
 
-    let positions;
-    try { positions = await Promise.all(positionPromises); }
-    catch (awaitPositionError) {
-        console.log("Error getting completions and inProgress: ", awaitPositionError);
-        res.status(500).send(errors.SERVER_ERROR);
+    let positions = [];
+    if (Array.isArray(business.positions)) {
+        let positionPromises = business.positions.map(position => {
+            return addCompletionsAndInProgress(position, businessId);
+        });
+
+        try { positions = await Promise.all(positionPromises); }
+        catch (awaitPositionError) {
+            console.log("Error getting completions and inProgress: ", awaitPositionError);
+            res.status(500).send(errors.SERVER_ERROR);
+        }
     }
 
     return res.json({ logo: business.logo, businessName: business.name, positions });
@@ -1882,7 +1885,7 @@ async function GET_positionsForApply(req, res) {
 
 // get the number of users who have completed and are in progress for a certain position
 // return the position object but with two additional properties - completions and usersInProgress
-async function addCompletionsAndInProgress(position) {
+async function addCompletionsAndInProgress(position, businessId) {
     return new Promise(async function(resolve, reject) {
         try {
             const positionId = position._id;
@@ -1891,10 +1894,9 @@ async function addCompletionsAndInProgress(position) {
                 "userType": "candidate",
                 "positions": {
                     "$elemMatch": {
-                        "$and": [
-                            { "positionId": mongoose.Types.ObjectId(positionId) },
-                            { "appliedEndDate": { "$exists": true } }
-                        ]
+                        "positionId": mongoose.Types.ObjectId(positionId),
+                        "businessId": mongoose.Types.ObjectId(businessId),
+                        "appliedEndDate": { "$exists": true }
                     }
                 }
             }
@@ -1904,11 +1906,10 @@ async function addCompletionsAndInProgress(position) {
                 "userType": "candidate",
                 "positions": {
                     "$elemMatch": {
-                        "$and": [
-                            { "positionId": mongoose.Types.ObjectId(positionId) },
-                            { "appliedStartDate": { "$exists": true } },
-                            { "appliedEndDate": { "$exists": false } }
-                        ]
+                        "positionId": mongoose.Types.ObjectId(positionId),
+                        "businessId": mongoose.Types.ObjectId(businessId),
+                        "appliedStartDate": { "$exists": true },
+                        "appliedEndDate": { "$exists": false }
                     }
                 }
             }
