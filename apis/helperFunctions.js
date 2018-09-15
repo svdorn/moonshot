@@ -385,17 +385,26 @@ async function sendEmailPromise(args) {
         }
 
         // the default email account to send emails from
-        let from = '"Moonshot" <do-not-reply@moonshotinsights.io>';
-        let authUser = credentials.emailUsername;
-        let authPass = credentials.emailPassword;
+        let from;
+        let authUser;
+        let authPass;
         if (sendFrom) {
             if (sendFrom === "Kyle Treige") {
                 from = '"Kyle Treige" <kyle@moonshotinsights.io>';
                 authUser = credentials.kyleEmailUsername;
                 authPass = credentials.kyleEmailPassword;
-            } else {
-                from = '"' + sendFrom + '" <do-not-reply@moonshotinsights.io>';
             }
+            // else if (sendFrom === "Justin Ye") {
+            //     from = '"Justin Ye" <justin@moonshotinsights.io>';
+            //     authUser = credentials.justinEmailUsername;
+            //     authPass = credentials.justinEmailPassword;
+            // }
+        }
+        // default is to send from Moonshot
+        if (!from || !authUser || !authPass) {
+            from = '"Moonshot" <do-not-reply@moonshotinsights.io>';
+            authUser = credentials.emailUsername;
+            authPass = credentials.emailPassword;
         }
 
         // create reusable transporter object using the default SMTP transport

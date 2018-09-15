@@ -16,6 +16,8 @@ const errors = require('./errors.js');
 const { sanitize,
         verifyUser,
         sendEmail,
+        sendEmailPromise,
+        emailFooter,
         getAndVerifyUser,
         getFirstName,
         getUserFromReq,
@@ -1449,7 +1451,8 @@ async function advance(user, businessId, positionId) {
                 catch (gradeError) { return reject(gradeError); }
                 // Send notification emails
                 if (user.userType === "candidate") {
-                    sendNotificationEmails(businessId, user);
+                    sendNotificationEmails(businessId, user)
+                    .catch(error => { console.log("Error sending notification email: "); });
                 }
             }
         }
@@ -1478,27 +1481,21 @@ async function sendNotificationEmails(businessId, user) {
         let recipient = [user.email];
         console.log("recipient: ", recipient);
         let subject = "You've Finished Your Evaluation!";
-        let content =
+        let content = (
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                 + '<p style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(user.name) + ',</p>'
                 + '<p style="width:95%; display:inline-block; text-align:left;">My name is Justin and I am the Chief Product Officer at Moonshot Insights. I saw that you finished your evaluation for ' + business.name
                 + '. I just wanted to let you know your results have been sent to the employer. Sit tight and we will keep you posted. I wish you the best of luck!</p><br/>'
                 + '<p style="width:95%; display:inline-block; text-align:left;">If you have any questions at all, please feel free to shoot me an email at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. I&#39;m always on call and look forward to hearing from you.</p>'
                 + '<p style="width:95%; display:inline-block; text-align:left;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></p>'
-                + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                + '<div style="text-align:left;width:95%;display:inline-block;">'
-                    + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
-                    + '</div>'
-                + '</div>'
-            + '</div>';
+                + emailFooter(user.email)
+            + '</div>'
+        );
 
-        const sendFrom = "Moonshot";
-        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-
-        })
+        const sendFrom = "Justin Ye";
+        sendEmailPromise({ recipient, subject, content, sendFrom }).catch(error => {
+            console.log("Error sending email to candidate telling them they're done with the eval: ", error);
+        });
 
         const businessUserQuery = {
             "$and": [
@@ -1508,9 +1505,7 @@ async function sendNotificationEmails(businessId, user) {
         }
         try {
             let users  = await Users.find(businessUserQuery).select("name email notifications")
-            if (!users) {
-                resolve("No users found.");
-            }
+            if (!users) { return resolve("No users found."); }
             let recipient = {};
             let promises = [];
             for (let i = 0; i < users.length; i++) {
@@ -1519,9 +1514,7 @@ async function sendNotificationEmails(businessId, user) {
                 let interval = "day";
                 if (notifications) {
                     // If a delayed email has already been sent, don't send another
-                    if (notifications.waiting) {
-                        continue;
-                    }
+                    if (notifications.waiting) { continue; }
 
                     var timeDiff = Math.abs(new Date() - notifications.lastSent);
 

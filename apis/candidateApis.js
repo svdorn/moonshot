@@ -15,7 +15,6 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         isValidEmail,
-        sendEmail,
         sendEmailPromise,
         getFirstName,
         frontEndUser,
@@ -264,9 +263,6 @@ function POST_candidate(req, res) {
         // THESE TWO WILL NOT RUN - there are guaranteed return statements beforehand
         // add the user to the referrer's list of referred users
         //creditReferrer().catch(referralError => { console.log(referralError); });
-
-        // send the moonshot admins an email saying that a user signed up
-        //alertFounders().catch(emailError => { console.log(emailError); });
     }
     // <<-------------------------------------------------------->> //
 
@@ -350,32 +346,6 @@ function POST_candidate(req, res) {
 
             // code is legit and all properties using it are set; resolve
             resolve(true);
-        });
-    }
-
-    function alertFounders() {
-        return new Promise(function(resolve, reject) {
-            // send email to everyone if there's a new sign up (if in production mode)
-            if (process.env.NODE_ENV !== "development") {
-                let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-
-                let subject = 'New Sign Up';
-                let content =
-                      '<div>'
-                    +   '<p>New user signed up.</p>'
-                    +   '<p>Name: ' + user.name + '</p>'
-                    +   '<p>email: ' + user.email + '</p>'
-                    + '</div>';
-
-                const sendFrom = "Moonshot";
-                sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                    if (!success) {
-                        return reject("Error sending sign up alert email");
-                    } else {
-                        return resolve();
-                    }
-                })
-            }
         });
     }
 }

@@ -13,7 +13,6 @@ const crypto = require('crypto');
 // get helper functions
 const { sanitize,
         getFirstName,
-        sendEmail,
         sendEmailPromise,
         getAndVerifyUser,
         getUserAndBusiness,
