@@ -21,14 +21,6 @@ import axios from "axios";
 
 class MyEvaluationsPreview extends Component {
 
-    goTo(route) {
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
-
     // used for candidates and employees only
     continueEval = () => {
         goTo(`/evaluation/${this.props.businessId}/${this.props.positionId}`);
@@ -68,10 +60,10 @@ class MyEvaluationsPreview extends Component {
             clickableArea = (
                 <div className="secondary-gray font16px font14pxUnder800 marginTop10px">
                     <div>
-                        <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className="underline clickable" style={{display: "inline-block"}}>
+                        <div onClick={() => goTo(`/myCandidates?position=${this.props.name}`)} className="underline clickable" style={{display: "inline-block"}}>
                             Candidate Results
                         </div>
-                        <div onClick={() => this.goTo(`/myEmployees?position=${this.props.name}`)} className="underline marginLeft20px clickable" style={{display: "inline-block"}}>
+                        <div onClick={() => goTo(`/myEmployees?position=${this.props.name}`)} className="underline marginLeft20px clickable" style={{display: "inline-block"}}>
                             Grade Employees
                         </div>
                     </div>
