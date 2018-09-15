@@ -64,6 +64,7 @@ const FOR_USER = [
     "termsAndConditions",
     "hasFinishedOnboarding",
     "sawMyCandidatesInfoBox",
+    "intercom"
 ];
 
 // removes information from a db user object so that it can be passed for that
