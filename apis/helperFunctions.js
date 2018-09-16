@@ -328,7 +328,7 @@ async function sendEmailPromise(args) {
     return new Promise(async function(resolve, reject) {
         // if arguments are not provided
         if (!args || typeof args !== "object") {
-            return reject("Invalid arguments. Usage: sendEmail({recipients: ['austin@gmail.com'], subject: 'New Stuff', ...})");
+            return reject("Invalid arguments. Usage: sendEmailPromise({recipients: ['austin@gmail.com'], subject: 'New Stuff', ...})");
         }
 
         // addresses that will receive the email
@@ -1088,7 +1088,9 @@ const helperFunctions = {
     Stack,
 
     FOR_USER,
-    founderEmails
+    founderEmails,
+    devMode: !!(process.env.NODE_ENV === "development"),
+    devEmail: process.env.DEV_EMAIL
 }
 
 

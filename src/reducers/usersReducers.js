@@ -215,13 +215,12 @@ export function usersReducers(state = initialState, action) {
         case "FOR_BUSINESS":
         case "COMPLETE_PATHWAY":
         case "COMPLETE_PATHWAY_REJECTED":
-            let newState = {...state, loadingSomething: false};
-            if (action.notification) {
-                newState.notification = action.notification;
-            }
-            if (action.user) {
-                newState.currentUser = action.user;
-            }
+            let newState = {
+                ...state,
+                ...notificationInfo(action.notification),
+                loadingSomething: false,
+            };
+            if (action.user) { newState.currentUser = action.user; }
             return newState;
             break;
         case "CONTACT_US":
@@ -390,4 +389,28 @@ export function usersReducers(state = initialState, action) {
     }
 
     return state
+}
+
+
+
+function notificationInfo(notification) {
+    let message = undefined;
+    // assume info headers instead of error headers
+    let type = "infoHeader";
+    // if the given notification is the message
+    if (typeof notification === "string") {
+        message = notification;
+    }
+    // if the given notification is a notification object
+    else if (typeof notification === "object") {
+        // add the given message if provided
+        if (typeof notification.message === "string") { message = notification.message; }
+        // add the message type if given
+        if ("errorHeader" === notification.type) { type = notification.type; }
+    }
+    // return the notification information if enough info is given to make one
+    return (typeof message === "string") ? {
+        notification: { message, type },
+        notificationDate: new Date()
+    } : {};
 }

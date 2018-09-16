@@ -903,7 +903,7 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
             // add closing div to counts section
             countsSection += '</div>';
 
-            // Section that introduces purpose of email, is different if it is first time sending notificaiton email
+            // Section that introduces purpose of email, is different if it is first time sending notification email
             let introSection = '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">';
             if (firstTime) {
                 introSection += (

@@ -636,22 +636,55 @@ export function unsubscribe(user, showNotification){
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
         axios.post("api/misc/unsubscribeEmail", user)
-            .then(function(response) {
-                let action = { type:"FOR_BUSINESS" };
-                // only show the notification if the user unsubscribed by typing
-                // in their email address
-                if (showNotification) {
-                    action.notification = { message:response.data, type:"infoHeader" }
-                }
-
-                dispatch(action);
-                window.scrollTo(0, 0);
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
+        .then(function(response) {
+            dispatch({type: "FOR_BUSINESS", ...notification(response)});
+            window.scrollTo(0, 0);
+        })
+        .catch(function(err) {
+            dispatch({type:"FOR_BUSINESS", ...notification(err, "error")})
+        })
     }
 }
+
+
+// adds a notification if given
+function notification(msgInput, type) {
+    let message = msgInput;
+    // various types of message input that could be received
+    if (typeof msgInput === "object") {
+        // GIVEN msgInput is error
+        if (msgInput.response) {
+            if (typeof msgInput.response.data === "string") { message = msgInput.response.data; }
+            else if (msgInput.response.data && typeof msgInput.response.data.message) { message = msgInput.response.data.message; }
+        }
+
+        // GIVEN msgInput is response OR error.response
+        else if (typeof msgInput.data === "string") { message = msgInput.data; }
+        else if (msgInput.data && typeof msgInput.data.message === "string") { message = msgInput.data.message; }
+
+        // GIVEN msgInput is response.data OR error.response.data
+        else if (msgInput.message) { message = msgInput.message; }
+    }
+    // type of notification (changes the colors)
+    const headerType = ["error", "errorHeader"].includes(type) ? "errorHeader" : "infoHeader";
+    // if there is no message
+    if (typeof message !== "string") {
+        // standard error message if it's an error
+        if (headerType === "errorHeader") { message = "Error. Try refreshing."; }
+        // otherwise don't display a notification
+        else { return {}; }
+    }
+    // return an object with a notification object inside it
+    return {
+        notification: {
+            // the text of the notification
+            message,
+            // assume info notification as opposed to error
+            type: headerType
+        }
+    }
+}
+
 
 // Send an email when form filled out on comingSoon page
 export function comingSoon(user, signedIn){
