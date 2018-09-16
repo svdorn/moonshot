@@ -426,28 +426,6 @@ export function postUser(user) {
             }
             dispatch({type: "POST_USER_REJECTED", notification: {message, type: "errorHeader"}});
         });
-
-        // // post user to database
-        // axios.post("/api/candidate/candidate", user)
-        //     // user successfully posted
-        //     .then(function(response) {
-        //         // send verification email
-        //         axios.post("/api/candidate/sendVerificationEmail", {email: user.email})
-        //             // successfully sent verification email
-        //             .then(function(emailResponse) {
-        //                 dispatch({type:"POST_USER"});
-        //                 window.scrollTo(0,0);
-        //             })
-        //             // error sending verification email
-        //             .catch(function(emailError) {
-        //                 dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: emailError.response.data, type: "errorHeader"}});
-        //                 window.scrollTo(0,0);
-        //             });
-        //     })
-        //     // error posting user
-        //     .catch(function(err) {
-        //         dispatch({type: "POST_USER_REJECTED", notification:{message: err.response.data, type: "errorHeader"}});
-        //     });
     }
 }
 
@@ -510,12 +488,12 @@ export function forgotPassword(user) {
         dispatch({type: "FORGOT_PASSWORD_REQUESTED"});
 
         axios.post("/api/user/forgotPassword", user)
-            .then(function(response) {
-                dispatch({type:"FORGOT_PASSWORD", notification:{message: response.data, type:"infoHeader"}})
-            })
-            .catch(function(err) {
-                dispatch({type:"FORGOT_PASSWORD_REJECTED", notification:{message: err.response.data, type:"errorHeader"}})
-            })
+        .then(function(response) {
+            dispatch({ type:"FORGOT_PASSWORD", ...notification(response) });
+        })
+        .catch(function(err) {
+            dispatch({ type:"FORGOT_PASSWORD_REJECTED", ...notification(err, "error") });
+        })
     }
 }
 
@@ -574,13 +552,11 @@ export function changePasswordForgot(user) {
                 axios.post("/api/user/session", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
                 .catch(function(err2) {});
 
-                dispatch({type:"LOGIN", user: foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
-                let nextUrl = "/";
-                let returnedUser = response.data;
-                browserHistory.push(nextUrl);
+                dispatch({ type:"LOGIN", user: foundUser, ...notification("Password changed!") });
+                browserHistory.push("/myEvaluations");
             })
             .catch(function(err) {
-                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
+                dispatch({ type:"CHANGE_PASS_FORGOT_REJECTED", ...notification(err, "error") });
             })
     }
 }

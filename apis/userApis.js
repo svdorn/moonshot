@@ -13,11 +13,12 @@ const mongoose = require("mongoose");
 const { sanitize,
         removeEmptyFields,
         verifyUser,
-        sendEmail,
+        sendEmailPromise,
         getFirstName,
         getAndVerifyUser,
         getUserFromReq,
         frontEndUser,
+        emailFooter,
         getSkillNamesByIds,
         lastPossibleSecond,
         findNestedValue
@@ -705,7 +706,6 @@ async function sendNotificationEmails(businessId, user) {
     return new Promise(async function(resolve, reject) {
         const ONE_DAY = 1000 * 60 * 60 * 24;
         let time = ONE_DAY;
-        console.log("Sending emails rn");
 
         let moonshotUrl = 'https://www.moonshotinsights.io/';
         // if we are in development, links are to localhost
@@ -738,10 +738,8 @@ async function sendNotificationEmails(businessId, user) {
                 + '</div>'
             + '</div>';
 
-        const sendFrom = "Moonshot";
-        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-
-        })
+        sendEmailPromise({ recipient, subject, content })
+        .catch(sendEmailError => console.log("Error sending notification emails: ", sendEmailError));
 
         const businessUserQuery = {
             "$and": [
@@ -946,8 +944,8 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
                 + '</div>';
 
                 const sendFrom = "Moonshot";
-                sendEmail(reciever, subject, content, sendFrom, undefined, function (success, msg) {
-                })
+                sendEmailPromise({ reciever, subject, content })
+                .catch(sendEmailError => console.log("Error sending email update: ", sendEmailError));
                 // Update the lastSent day of the user and the waiting to be false
                 const idQuery = {
                     "_id" : recipient._id
@@ -1735,6 +1733,11 @@ async function POST_changePasswordForgot(req, res) {
     let token = sanitize(req.body.token).toString();
     let password = sanitize(req.body.password);
 
+    // only allow passwords with 8 or more characters
+    if (typeof password !== "string" || password.length < 8) {
+        return res.status(400).send({ message: "Password must be 8 characters or longer." });
+    }
+
     const query = {passwordToken: token};
 
     // get the user from the password token
@@ -1767,7 +1770,7 @@ async function POST_changePasswordForgot(req, res) {
         }
 
         // successfully created new password, log the user in
-        return res.json(frontEndUser(newUser));
+        return res.json(frontEndUser(user));
     });
 }
 
@@ -1862,30 +1865,22 @@ async function POST_forgotPassword(req, res) {
     const recipient = [ email ];
     const subject = 'Change Password';
 
-    const content =
-        '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-            + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
-                + '<div style="text-align:justify;width:80%;margin-left:10%;">'
-                + "<span style='margin-bottom:20px;display:inline-block;'>Hello! We got a request to change your password. If that wasn't from you, you can ignore this email and your password will stay the same. Otherwise click here:</span><br/>"
-                + '</div>'
-            + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:5px 20px 20px;" href="' + moonshotUrl + 'changePassword?token='
-            + newPasswordToken
-            + '">Change Password</a>'
-            + '<div style="text-align:left;width:80%;margin-left:10%;">'
-                + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
-                + '</div>'
-            + '</div>'
-        + '</div>';
+    const content = (`
+        <div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">
+            <div style="text-align:justify;width:80%;margin-left:10%;">
+                <p>Hi ${getFirstName(user.name)}!</p>
+                <span style='margin-bottom:20px;display:inline-block;'>We got a request to change your password. If that wasn't from you, you can ignore this email and your password will stay the same. Otherwise click here:</span><br/>
+            </div>
+            <a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:5px 20px 20px;" href="${moonshotUrl}changePassword?token=${newPasswordToken}">Change Password</a>
+            ${emailFooter(email)}
+        </div>
+    `)
 
-    const sendFrom = "Moonshot";
-    sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) { return res.json(msg); }
-        else {
-            console.log("Error sending reset password email: ", msg);
-            return res.status(500).send(errors.SERVER_ERROR);
-        }
+    sendEmailPromise({ recipient, subject, content })
+    .then(result => { return res.status(200).send({ message: "Email sent!" }); })
+    .catch(error => {
+        console.log("Error sending email to reset password: ", error);
+        return res.status(500).send({ message: "Error sending email. Refresh and try again." });
     });
 }
 
