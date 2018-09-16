@@ -47,7 +47,6 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 const userApis = require("./apis/userApis");
 const miscApis = require("./apis/miscApis");
 const adminApis = require("./apis/adminApis");
-const skillApis = require("./apis/skillApis");
 const psychApis = require("./apis/psychApis");
 const billingApis = require("./apis/billingApis");
 const businessApis = require("./apis/businessApis");
