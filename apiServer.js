@@ -200,7 +200,7 @@ app.post("/evaluation/answerOutOfTimeCognitive", evaluationApis.POST_answerOutOf
 app.post("/evaluation/skipAdminQuestions", evaluationApis.POST_skipAdminQuestions);
 
 
-app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
+//app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 app.post("/misc/resetAlan", miscApis.POST_resetAlan);
 

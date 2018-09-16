@@ -9,6 +9,7 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         sendEmail,
+        sendEmailPromise,
         getFirstName,
         frontEndUser,
         getAndVerifyUser
@@ -16,7 +17,7 @@ const { sanitize,
 
 
 const miscApis = {
-    POST_createReferralCode,
+    // POST_createReferralCode,
     POST_unsubscribeEmail,
     POST_resetAlan
 }
@@ -69,11 +70,10 @@ function POST_createReferralCode(req, res) {
 
         // send email to user who asked for a referral code with the info about the code
         const sendFrom = "Kyle Treige";
-        sendEmail(recipient, subject, emailContent, sendFrom, undefined, function (success, msg) {
-            if (!success) {
-                console.log("Email not sent to user about referral code. Message: ", msg);
-            }
-        })
+        sendEmailPromise({ recipient, subject, content: emailContent })
+        .catch(error => {
+            console.log("Error sending email to user about referral code: ", error);
+        });
     }
 
     const query = {email};
