@@ -8,7 +8,6 @@ const errors = require("./errors");
 const { sanitize,
         removeEmptyFields,
         verifyUser,
-        sendEmail,
         sendEmailPromise,
         devMode,
         devEmail,
