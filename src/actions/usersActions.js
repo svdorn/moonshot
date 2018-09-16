@@ -467,11 +467,7 @@ export function postCreateLink(currentUserInfo) {
 
 export function addNotification(message, notificationType) {
     return function(dispatch) {
-        let noteType = "infoHeader";
-        if (notificationType === "error") {
-            noteType = "errorHeader";
-        }
-        dispatch({type: "ADD_NOTIFICATION", notification:{message, type: noteType}});
+        dispatch({ type: "ADD_NOTIFICATION", ...notification(message, notificationType) });
     }
 }
 
@@ -547,17 +543,17 @@ export function changePasswordForgot(user) {
         dispatch({type: "START_LOADING"});
 
         axios.post("api/user/changePasswordForgot", user)
-            .then(function(response) {
-                const foundUser = response.data;
-                axios.post("/api/user/session", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
-                .catch(function(err2) {});
+        .then(function(response) {
+            const foundUser = response.data;
+            axios.post("/api/user/session", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
+            .catch(function(err2) {});
 
-                dispatch({ type:"LOGIN", user: foundUser, ...notification("Password changed!") });
-                browserHistory.push("/myEvaluations");
-            })
-            .catch(function(err) {
-                dispatch({ type:"CHANGE_PASS_FORGOT_REJECTED", ...notification(err, "error") });
-            })
+            dispatch({ type:"LOGIN", user: foundUser, ...notification("Password changed!") });
+            browserHistory.push("/myEvaluations");
+        })
+        .catch(function(err) {
+            dispatch({ type:"CHANGE_PASS_FORGOT_REJECTED", ...notification(err, "error") });
+        })
     }
 }
 
@@ -619,45 +615,6 @@ export function unsubscribe(user, showNotification){
         .catch(function(err) {
             dispatch({type:"FOR_BUSINESS", ...notification(err, "error")})
         })
-    }
-}
-
-
-// adds a notification if given
-function notification(msgInput, type) {
-    let message = msgInput;
-    // various types of message input that could be received
-    if (typeof msgInput === "object") {
-        // GIVEN msgInput is error
-        if (msgInput.response) {
-            if (typeof msgInput.response.data === "string") { message = msgInput.response.data; }
-            else if (msgInput.response.data && typeof msgInput.response.data.message) { message = msgInput.response.data.message; }
-        }
-
-        // GIVEN msgInput is response OR error.response
-        else if (typeof msgInput.data === "string") { message = msgInput.data; }
-        else if (msgInput.data && typeof msgInput.data.message === "string") { message = msgInput.data.message; }
-
-        // GIVEN msgInput is response.data OR error.response.data
-        else if (msgInput.message) { message = msgInput.message; }
-    }
-    // type of notification (changes the colors)
-    const headerType = ["error", "errorHeader"].includes(type) ? "errorHeader" : "infoHeader";
-    // if there is no message
-    if (typeof message !== "string") {
-        // standard error message if it's an error
-        if (headerType === "errorHeader") { message = "Error. Try refreshing."; }
-        // otherwise don't display a notification
-        else { return {}; }
-    }
-    // return an object with a notification object inside it
-    return {
-        notification: {
-            // the text of the notification
-            message,
-            // assume info notification as opposed to error
-            type: headerType
-        }
     }
 }
 
@@ -783,5 +740,46 @@ export function setEvaluationState(evaluationState) {
 export function formError() {
     return function(dispatch) {
         dispatch({type:"FORM_ERROR", notification: {message: "Fields must all be filled in to submit form.", type: "errorHeader"}})
+    }
+}
+
+
+
+// NOT EXPORTED
+// adds a notification if given
+function notification(msgInput, type) {
+    let message = msgInput;
+    // various types of message input that could be received
+    if (typeof msgInput === "object") {
+        // GIVEN msgInput is error
+        if (msgInput.response) {
+            if (typeof msgInput.response.data === "string") { message = msgInput.response.data; }
+            else if (msgInput.response.data && typeof msgInput.response.data.message) { message = msgInput.response.data.message; }
+        }
+
+        // GIVEN msgInput is response OR error.response
+        else if (typeof msgInput.data === "string") { message = msgInput.data; }
+        else if (msgInput.data && typeof msgInput.data.message === "string") { message = msgInput.data.message; }
+
+        // GIVEN msgInput is response.data OR error.response.data
+        else if (msgInput.message) { message = msgInput.message; }
+    }
+    // type of notification (changes the colors)
+    const headerType = ["error", "errorHeader"].includes(type) ? "errorHeader" : "infoHeader";
+    // if there is no message
+    if (typeof message !== "string") {
+        // standard error message if it's an error
+        if (headerType === "errorHeader") { message = "Error. Try refreshing."; }
+        // otherwise don't display a notification
+        else { return {}; }
+    }
+    // return an object with a notification object inside it
+    return {
+        notification: {
+            // the text of the notification
+            message,
+            // assume info notification as opposed to error
+            type: headerType
+        }
     }
 }
