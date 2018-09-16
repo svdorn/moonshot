@@ -1,5 +1,4 @@
 var Referrals = require('../models/referrals.js');
-var Emailaddresses = require('../models/emailaddresses.js');
 const UnsubscribedEmails = require("../models/unsubscribedEmails.js");
 
 const crypto = require('crypto');

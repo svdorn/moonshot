@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const credentials = require('../credentials');
 
 const Users = require('../models/users.js');
-const Emailaddresses = require('../models/emailaddresses.js');
+const UnsubscribedEmails = require("../models/unsubscribedEmails.js");
 const Businesses = require('../models/businesses.js');
 const Skills = require('../models/skills.js');
 
@@ -214,106 +214,104 @@ function getFirstName(name) {
 // callback needs to be a function of a success boolean and string to return;
 // takes an ARRAY of recipient emails
 function sendEmail(recipients, subject, content, sendFrom, attachments, callback) {
-    // recipientArray is an array of strings while recipientList is one string with commas
-    let recipientArray = [];
-    // if only one recipient was given, in string form, and it is an actual email address
-    if (typeof recipients === "string" && isValidEmail(recipients)) {
-        // add it to the recipients list
-        recipientArray.push(recipients);
-    }
-    // if recipients is an array like it's supposed to be
-    else if (Array.isArray(recipients)) {
-        // set the recipient list to be everyone who was passed in
-        recipientArray = recipients;
-    }
-    // otherwise return unsuccessfully
-    else {
-        return callback(false, "Invalid argument. Recipients should be a list of strings.");
-    }
-
-    if (recipientArray.length === 0) {
-        return callback(false, "Couldn't send email. No recipient.")
-    }
-
-    // get the list of email addresses that have been opted out
-    let recipientList = "";
-    Emailaddresses.findOne({name: "optedOut"}, function(err, optedOut) {
-        const optedOutStudents = optedOut.emails;
-        recipientArray.forEach(recipient => {
-            // make sure the email is a legitimate address
-            if (isValidEmail(recipient)) {
-                emailOptedOut = optedOutStudents.some(function(optedOutEmail) {
-                    return optedOutEmail.toLowerCase() === recipient.toLowerCase();
-                });
-                // add the email to the list of recipients to email if the recipient
-                // has not opted out
-                if (!emailOptedOut) {
-                    if (recipientList === "") {
-                        recipientList = recipient;
-                    } else {
-                        recipientList = recipientList + ", " + recipient;
-                    }
-                }
-            }
-        });
-
-        // don't send an email if it's not going to be sent to anyone
-        if (recipientList === "") {
-            return callback(false, "Couldn't send email. Recipients are on the opt-out list or no valid emails were given.")
-        }
-
-        // the default email account to send emails from
-        let from = '"Moonshot" <do-not-reply@moonshotinsights.io>';
-        let authUser = credentials.emailUsername;
-        let authPass = credentials.emailPassword;
-        if (sendFrom) {
-            if (sendFrom === "Kyle Treige") {
-                from = '"Kyle Treige" <kyle@moonshotinsights.io>';
-                authUser = credentials.kyleEmailUsername;
-                authPass = credentials.kyleEmailPassword;
-            } else {
-                from = '"' + sendFrom + '" <do-not-reply@moonshotinsights.io>';
-            }
-        }
-
-        // create reusable transporter object using the default SMTP transport
-        let transporter = nodemailer.createTransport({
-            // host: 'smtp.ethereal.email',
-            // port: 587,
-            // secure: false, // true for 465, false for other ports
-            // auth: {
-            //     user: 'snabxjzqe3nmg2p7@ethereal.email',
-            //     pass: '5cbJWjTh7YYmz7e2Ce'
-            // }
-            service: 'gmail',
-            auth: {
-                user: authUser,
-                pass: authPass
-            }
-        });
-
-        // setup email data with unicode symbols
-        let mailOptions = {
-            from: from, // sender address
-            to: recipientList, // list of receivers
-            subject: subject, // Subject line
-            html: content // html body
-        };
-
-        // attach attachments, if they exist
-        if (attachments && Array.isArray(attachments) && attachments.length > 0) {
-            mailOptions.attachments = attachments;
-        }
-
-        // send mail with defined transport object
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log(error);
-                return callback(false, "Error sending email to user");
-            }
-            return callback(true, "Email sent! Check your email.");
-        });
-    })
+    // // recipientArray is an array of strings while recipientList is one string with commas
+    // let recipientArray = [];
+    // // if only one recipient was given, in string form, and it is an actual email address
+    // if (typeof recipients === "string" && isValidEmail(recipients)) {
+    //     // add it to the recipients list
+    //     recipientArray.push(recipients);
+    // }
+    // // if recipients is an array like it's supposed to be
+    // else if (Array.isArray(recipients)) {
+    //     // set the recipient list to be everyone who was passed in
+    //     recipientArray = recipients;
+    // }
+    // // otherwise return unsuccessfully
+    // else {
+    //     return callback(false, "Invalid argument. Recipients should be a list of strings.");
+    // }
+    //
+    // if (recipientArray.length === 0) {
+    //     return callback(false, "Couldn't send email. No recipient.")
+    // }
+    //
+    // Emailaddresses.find({name: "optedOut"}, function(err, optedOut) {
+    //     const optedOutStudents = optedOut.emails;
+    //     recipientArray.forEach(recipient => {
+    //         // make sure the email is a legitimate address
+    //         if (isValidEmail(recipient)) {
+    //             emailOptedOut = optedOutStudents.some(function(optedOutEmail) {
+    //                 return optedOutEmail.toLowerCase() === recipient.toLowerCase();
+    //             });
+    //             // add the email to the list of recipients to email if the recipient
+    //             // has not opted out
+    //             if (!emailOptedOut) {
+    //                 if (recipientList === "") {
+    //                     recipientList = recipient;
+    //                 } else {
+    //                     recipientList = recipientList + ", " + recipient;
+    //                 }
+    //             }
+    //         }
+    //     });
+    //
+    //     // don't send an email if it's not going to be sent to anyone
+    //     if (recipientList === "") {
+    //         return callback(false, "Couldn't send email. Recipients are on the opt-out list or no valid emails were given.")
+    //     }
+    //
+    //     // the default email account to send emails from
+    //     let from = '"Moonshot" <do-not-reply@moonshotinsights.io>';
+    //     let authUser = credentials.emailUsername;
+    //     let authPass = credentials.emailPassword;
+    //     if (sendFrom) {
+    //         if (sendFrom === "Kyle Treige") {
+    //             from = '"Kyle Treige" <kyle@moonshotinsights.io>';
+    //             authUser = credentials.kyleEmailUsername;
+    //             authPass = credentials.kyleEmailPassword;
+    //         } else {
+    //             from = '"' + sendFrom + '" <do-not-reply@moonshotinsights.io>';
+    //         }
+    //     }
+    //
+    //     // create reusable transporter object using the default SMTP transport
+    //     let transporter = nodemailer.createTransport({
+    //         // host: 'smtp.ethereal.email',
+    //         // port: 587,
+    //         // secure: false, // true for 465, false for other ports
+    //         // auth: {
+    //         //     user: 'snabxjzqe3nmg2p7@ethereal.email',
+    //         //     pass: '5cbJWjTh7YYmz7e2Ce'
+    //         // }
+    //         service: 'gmail',
+    //         auth: {
+    //             user: authUser,
+    //             pass: authPass
+    //         }
+    //     });
+    //
+    //     // setup email data with unicode symbols
+    //     let mailOptions = {
+    //         from: from, // sender address
+    //         to: recipientList, // list of receivers
+    //         subject: subject, // Subject line
+    //         html: content // html body
+    //     };
+    //
+    //     // attach attachments, if they exist
+    //     if (attachments && Array.isArray(attachments) && attachments.length > 0) {
+    //         mailOptions.attachments = attachments;
+    //     }
+    //
+    //     // send mail with defined transport object
+    //     transporter.sendMail(mailOptions, (error, info) => {
+    //         if (error) {
+    //             console.log(error);
+    //             return callback(false, "Error sending email to user");
+    //         }
+    //         return callback(true, "Email sent! Check your email.");
+    //     });
+    // })
 }
 
 
@@ -369,15 +367,18 @@ async function sendEmailPromise(args) {
             return reject("No email recipients provided.");
         }
 
-        // find the object with all the people who have opted out
-        try { var optedOut = await Emailaddresses.findOne({name: "optedOut"}); }
+        // query to find all email addresses of people who have unsubscribed
+        const findUnsubscribed = { email: { "$in": recipientArray } };
+        try { var optedOutObjects = await UnsubscribedEmails.find(findUnsubscribed); }
         catch (findOptOutError) {
             console.log("Error finding email addresses of those who have opted out.");
             return reject(findOptOutError);
         }
+        // create a list of just the emails, not the full objects
+        const optedOutEmails = optedOutObjects.map(o => o.email);
 
         // get a string of emails to send to that haven't opted out
-        const recipientList = createRecipientList(recipientArray, optedOut.emails);
+        const recipientList = createRecipientList(recipientArray, optedOutEmails);
 
         // don't send an email if it's not going to be sent to anyone
         if (recipientList === "") {
