@@ -1696,9 +1696,9 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
                     + '</div>'
                 + '</div>';
 
-                const sendFrom = "Moonshot";
-                sendEmail(reciever, subject, content, sendFrom, undefined, function (success, msg) {
-                })
+                sendEmailPromise({ reciever, subject, content })
+                .catch(error => { console.log("Error sending delayed email: ", error); });
+
                 // Update the lastSent day of the user and the waiting to be false
                 const idQuery = {
                     "_id" : recipient._id
