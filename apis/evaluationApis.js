@@ -1492,7 +1492,7 @@ async function sendNotificationEmails(businessId, user) {
             + '</div>'
         );
 
-        const sendFrom = "Justin Ye";
+        //const sendFrom = "Justin Ye";
         sendEmailPromise({ recipient, subject, content, sendFrom }).catch(error => {
             console.log("Error sending email to candidate telling them they're done with the eval: ", error);
         });
@@ -1670,7 +1670,7 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
 
             // Create the emails
             let subject = numCandidates + ' Candidates Completed Your Evaluation';
-            if (numCandidates < 2) {
+            if (numCandidates === 1) {
                 subject = numCandidates + ' Candidate Completed Your Evaluation';
             }
             if (multipleEvals) {

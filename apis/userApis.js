@@ -919,7 +919,7 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
 
             // Create the emails
             let subject = numCandidates + ' Candidates Completed Your Evaluation';
-            if (numCandidates < 2) {
+            if (numCandidates === 1) {
                 subject = numCandidates + ' Candidate Completed Your Evaluation';
             }
             if (multipleEvals) {
