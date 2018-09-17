@@ -40,8 +40,6 @@ import ServiceLevelAgreement from './components/policies/serviceLevelAgreement';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
 import Listing from './components/pages/listing';
 
-import EvaluationIntro from "./components/pages/evaluationIntro";
-
 // position evaluation - contains all components (psych, gca, admin questions)
 import Evaluation from "./components/pages/evaluation/evaluation";
 
@@ -94,8 +92,6 @@ const routes = (
                 <IndexRoute component={GeneralApply} />
                 <Route path=":company" component={Apply} />
             </Route>
-
-            <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
 
             <Route path="evaluation/:businessId/:positionId" component={AuthenticatedComponent} page={<Evaluation/>} />
 

@@ -48,7 +48,6 @@ const userApis = {
     GET_adminQuestions,
     GET_notificationPreferences,
     POST_notificationPreferences,
-    POST_sawEvaluationIntro,
     POST_agreeToTerms,
     POST_verifyFromApiKey,
 
@@ -904,40 +903,6 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
             }
         , time);
     });
-}
-
-
-async function POST_sawEvaluationIntro(req, res) {
-    const userId = sanitize(req.body.userId);
-    const verificationToken = sanitize(req.body.verificationToken);
-
-    let user;
-    try { user = await getAndVerifyUser(userId, verificationToken); }
-    catch (getUserError) {
-        console.log("error getting user when agreeing to skill test terms: ", getUserError);
-        return res.status(500).send("Error getting user.");
-    }
-
-    if (!user.positionInProgress) {
-        return res.status(400).send("User is not currently taking a position evaluation.");
-    }
-
-    // get the index of the position for which the user agreed to skill test terms
-    const positionIndex = user.positions.findIndex(pos => {
-        return pos.positionId.toString() === user.positionInProgress.toString();
-    });
-    if (typeof positionIndex !== "number" || positionIndex < 0) {
-        return res.status(500).send("User is not taking a position evaluation.");
-    }
-
-    user.positions[positionIndex].hasSeenIntro = true;
-    try { user = await user.save(); }
-    catch (saveUserError) {
-        console.log("error saving user when trying to mark intro as seen: ", saveUserError);
-        return res.status(500).send("Server error.");
-    }
-
-    res.json(frontEndUser(user));
 }
 
 

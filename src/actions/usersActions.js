@@ -290,47 +290,6 @@ export function agreeToTerms(userId, verificationToken, agreements) {
 }
 
 
-export function sawEvaluationIntro(userId, verificationToken) {
-    return function(dispatch) {
-        dispatch({type: "START_LOADING"});
-        axios.post("/api/user/sawEvaluationIntro", {userId, verificationToken})
-        .then(response => {
-            dispatch({type: "USER_UPDATE", currentUser: response.data});
-
-            const currentUser = response.data;
-            const currentPosition = currentUser.currentPosition;
-
-            // if the user doesn't actually have a test in progress
-            if (!currentPosition) {
-                browswerHistory.push("/myEvaluations");
-            }
-
-            // if the user has not yet dont the admin questions, they're on the first step
-            else if (!currentUser.adminQuestions || !currentUser.adminQuestions.finished) {
-                browserHistory.push("/adminQuestions");
-            }
-            // if user has not yet taken psych test or if they're currently taking it
-            // they're on the second step
-            else if (!currentUser.psychometricTest || (currentUser.psychometricTest && !currentUser.psychometricTest.endDate)) {
-                browserHistory.push("/psychometricAnalysis");
-            }
-            // if they are on a skills test, add 3 to the current skill test index
-            // (one because index 0 would be the first one and another two because of the psych test and admin questions)
-            else if (currentPosition.skillTests && parseInt(currentPosition.testIndex, 10) < currentPosition.skillTests.length) {
-                browserHistory.push(`/skillTest/${currentPosition.skillTests[currentPosition.testIndex]}`);
-            }
-            // otherwise user must be on the free response portion
-            else {
-                browswerHistory.push("/freeResponse");
-            }
-        })
-        .catch(error => {
-            console.log("error: ", error);
-        })
-    }
-}
-
-
 // set the user as posted to show screen saying user should check email
 export function setUserPosted() {
     return function(dispatch) { dispatch({ type: "POST_USER" }); }
