@@ -71,16 +71,16 @@ export function contactUsEmail(user, callback) {
         dispatch({type: "START_LOADING"});
 
         axios.post("api/business/contactUsEmail", user)
-            .then(function(response) {
-                dispatch({type:"CONTACT_US_EMAIL_SUCCESS"});
-                dispatch({type: "ADD_NOTIFICATION", notification:{message:"Message sent, we'll get back to you soon!", type:"infoHeader"}});
-                if (typeof callback === "function") { callback(); }
-            })
-            .catch(function(err) {
-                dispatch({type:"CONTACT_US_EMAIL_FAILURE"});
-                dispatch({type: "ADD_NOTIFICATION", notification:{message:"Something went wrong :( Shoot us an email at support@moonshotinsights.io", type:"errorHeader", closeSelf:false}});
-                if (typeof callback === "function") { callback(); }
-            })
+        .then(function(response) {
+            dispatch({ type:"CONTACT_US_EMAIL_SUCCESS" });
+            dispatch({ type: "ADD_NOTIFICATION", ...notification("Message sent, we'll get back to you soon!") });
+            if (typeof callback === "function") { callback(); }
+        })
+        .catch(function(err) {
+            dispatch({type:"CONTACT_US_EMAIL_FAILURE"});
+            dispatch({type: "ADD_NOTIFICATION", ...notification("Something went wrong :( Shoot us an email at support@moonshotinsights.io", "error", false) });
+            if (typeof callback === "function") { callback(); }
+        })
     }
 }
 
@@ -747,7 +747,7 @@ export function formError() {
 
 // NOT EXPORTED
 // adds a notification if given
-function notification(msgInput, type) {
+function notification(msgInput, type, closeSelf) {
     let message = msgInput;
     // various types of message input that could be received
     if (typeof msgInput === "object") {
@@ -774,12 +774,11 @@ function notification(msgInput, type) {
         else { return {}; }
     }
     // return an object with a notification object inside it
-    return {
-        notification: {
-            // the text of the notification
-            message,
-            // assume info notification as opposed to error
-            type: headerType
-        }
+    let toReturn = {
+        notification: { message, type: headerType }
     }
+    // add the information about closing itself if included
+    if (typeof closeSelf === "boolean") { toReturn.notification.closeSelf = closeSelf; }
+    // return the object with the notification
+    return toReturn;
 }

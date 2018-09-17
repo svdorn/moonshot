@@ -25,7 +25,8 @@ const { sanitize,
         validArgs,
         founderEmails,
         emailFooter,
-        devMode
+        devMode,
+        devEmail
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -1479,7 +1480,7 @@ async function POST_contactUsEmail(req, res) {
 
     try { // sending email to moonshot with the message from the user
         await sendEmailPromise({
-            recipients: founderEmails,
+            recipients: devMode ? devEmail : founderEmails,
             subject: "ACTION REQUIRED - Contact Us Form Filled Out",
             content: toMoonshotContent
         });
