@@ -791,52 +791,58 @@ async function finishCognitive(user) {
             cognitiveTest.totalTime = NOW.getTime() - cognitiveTest.startDate.getTime();
         }
 
-        // ----------------------->> GRADE THE TEST <<----------------------- //
-
-        // get the ids of all the questions the user answered
-        const answeredIds = cognitiveTest.questions.map(q => q.questionId);
-        // query to get all the questions from the db
-        const query = { "_id": { "$in": answeredIds } };
-        // get all the questions in normal object form
-        try { var questions = await GCA.find(query).select("_id difficulty discrimination guessChance").lean(); }
-        catch (getQuestionsError) { return reject(getQuestionsError); }
-        // go through each question
-        questions.forEach((dbQ, index) => {
-            // get the question in the user object correlating to this question
-            const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
-            // add whether the user is correct to the question
-            // if the user went over on time, mark it incorrect for grading
-            questions[index].isCorrect = userQuestion.isCorrect && !userQuestion.overTime;
-        });
-
-        // the value of all sampled points times their weights added up together
-        let totalValue = 0;
-        // all the weights added up
-        let totalWeight = 0;
-
-        // calculate the average theta value
-        // calculate the value of the function at every point from 0 to 200
-        // going up by .1 every iteration
-        for (let theta = 0; theta <= 200; theta += .1) {
-            // calculate the value of the likelihood function times the normal
-            // distribution at this point
-            const value = expectationAPriori(questions, theta);
-            // the weight is equal to the value of the likelihood function * normal distribution
-            totalValue += theta * value;
-            totalWeight += value;
-        }
-
-        cognitiveTest.score = totalValue / totalWeight;
-
+        // grade the test
+        try { cognitiveTest.score = await getCognitiveScore(cognitiveTest); }
+        catch (gradeError) { return reject(gradeError); }
         console.log(`User ${user._id} finished GCA test with score: `, cognitiveTest.score);
 
-        // <<--------------------- FINISH GRADING TEST -------------------->> //
-
+        // save all the new info
         user.cognitiveTest = cognitiveTest;
 
         // return the graded test
         return resolve(user);
     });
+}
+
+
+// get the score for a full cognitive test
+// export it only for internal use
+module.exports.getCognitiveScore = getCognitiveScore;
+async function getCognitiveScore(cognitiveTest) {
+    // get the ids of all the questions the user answered
+    const answeredIds = cognitiveTest.questions.map(q => q.questionId);
+    // query to get all the questions from the db
+    const query = { "_id": { "$in": answeredIds } };
+    // get all the questions in normal object form
+    try { var questions = await GCA.find(query).select("_id difficulty discrimination guessChance").lean(); }
+    catch (getQuestionsError) { return reject(getQuestionsError); }
+    // go through each question
+    questions.forEach((dbQ, index) => {
+        // get the question in the user object correlating to this question
+        const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
+        // add whether the user is correct to the question
+        // if the user went over on time, mark it incorrect for grading
+        questions[index].isCorrect = userQuestion.isCorrect && !userQuestion.overTime;
+    });
+
+    // the value of all sampled points times their weights added up together
+    let totalValue = 0;
+    // all the weights added up
+    let totalWeight = 0;
+
+    // calculate the average theta value
+    // calculate the value of the function at every point from 0 to 200
+    // going up by .1 every iteration
+    for (let theta = 0; theta <= 200; theta += .1) {
+        // calculate the value of the likelihood function times the normal
+        // distribution at this point
+        const value = expectationAPriori(questions, theta);
+        // the weight is equal to the value of the likelihood function * normal distribution
+        totalValue += theta * value;
+        totalWeight += value;
+    }
+
+    return (totalValue / totalWeight);
 }
 
 
@@ -1010,6 +1016,7 @@ async function newPsychTest() {
     });
 }
 
+
 // return a fresh new just-started cognitive eval
 async function newCognitiveTest() {
     return new Promise(async function(resolve, reject) {
@@ -1155,7 +1162,7 @@ async function advance(user, businessId, positionId) {
                 // give it an end date
                 user.positions[positionIndex].appliedEndDate = new Date();
                 // score the user
-                try { user.positions[positionIndex] = await gradeEval(user, user.positions[positionIndex], position); }
+                try { user.positions[positionIndex] = gradeEval(user, user.positions[positionIndex], position); }
                 catch (gradeError) { return reject(gradeError); }
                 // Send notification emails
                 if (user.userType === "candidate") {
@@ -1500,7 +1507,9 @@ async function getEvaluationState(options) {
 
 
 // grades an evaluation based on all the components
-async function gradeEval(user, userPosition, position) {
+// exported for internal use only
+module.exports.gradeEval = gradeEval;
+function gradeEval(user, userPosition, position) {
     // CURRENTLY SCORE IS MADE OF MOSTLY PSYCH AND A TINY BIT OF SKILLS
     // GRADE ALL THE SKILLS
     const overallSkill = gradeAllSkills(user, position);
@@ -1553,7 +1562,6 @@ async function gradeEval(user, userPosition, position) {
     // return the updated user position
     return userPosition;
 }
-
 
 // calculate the overall score based on sub-scores like gca and performance
 function gradeOverall(subscores, weights) {

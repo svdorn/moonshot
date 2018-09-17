@@ -27,11 +27,12 @@ const { sanitize,
         shuffle
 } = require('./helperFunctions');
 
-const { calculatePsychScores } = require("./psychApis");
+const { gradeEval, getCognitiveScore } = require("./evaluationApis");
 
 
 
 // update all users scores to reflect newest grading schemes (new gca difficulties, new psych weights, etc)
+//updatePredictions();
 async function updatePredictions() {
     try {
         // get every business
@@ -54,12 +55,30 @@ async function updatePredictions() {
                 for (userPosIdx = 0; userPosIdx < user.positions.length; userPosIdx++) {
                     // get the user position
                     let userPos = user.positions[userPosIdx];
+                    // don't grade the eval unless the user has finished it
+                    if (!userPos.appliedEndDate) {
+                        console.log("user didn't finish - continuing");
+                        continue;
+                    }
                     // get the actual position from the business object
-                    const realPos = businessObj[userPos.businessId.toString()].find(bizPos => userPos.positionId.toString() === bizPos._id.toString());
-
+                    const realPos = businessObj[userPos.businessId.toString()].positions.find(bizPos => userPos.positionId.toString() === bizPos._id.toString());
+                    // grade gca
+                    try { user.cognitiveTest.score = await getCognitiveScore(user.cognitiveTest); }
+                    catch (gradeGCAerror) {
+                        console.log("Continuing due to error grading gca for user with id: ", user._id, gradeGCAerror);
+                        continue;
+                    }
+                    // grade psycho + skills + overall
+                    user.positions[userPosIdx] = gradeEval(user, userPos, realPos);
+                    console.log("graded");
                 }
             }
+            // save the user
+            user.save();
         }
+    }
+    catch (e) {
+        console.log(e);
     }
 }
 
