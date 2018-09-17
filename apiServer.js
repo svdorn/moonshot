@@ -119,8 +119,6 @@ app.use(session({
 app.post('/user/submitFreeResponse', userApis.POST_submitFreeResponse);
 app.post("/user/addPositionEval", userApis.POST_addPositionEval);
 app.post('/user/startPositionEval', userApis.POST_startPositionEval);
-app.post('/user/startPsychEval', userApis.POST_startPsychEval);
-app.post('/user/answerPsychQuestion', userApis.POST_answerPsychQuestion);
 app.post('/user/signOut', userApis.POST_signOut);
 app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
 app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);

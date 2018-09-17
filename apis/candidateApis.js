@@ -23,7 +23,7 @@ const { sanitize,
 } = require('./helperFunctions.js');
 
 // get function to start position evaluation
-const { internalStartPsychEval, addEvaluation } = require('./userApis.js');
+const { addEvaluation } = require('./userApis.js');
 
 
 const candidateApis = {

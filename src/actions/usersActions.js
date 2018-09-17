@@ -298,21 +298,6 @@ export function positionSignup(userId, verificationToken, positionId, businessId
 }
 
 
-export function startPsychEval(userId, verificationToken) {
-    return function(dispatch) {
-        dispatch({type: "START_LOADING"});
-        axios.post("/api/user/startPsychEval", {userId, verificationToken})
-        .then(response => {
-            dispatch({type: "START_PSYCH_EVAL", currentUser: response.data});
-        })
-        .catch(e => {
-            let message = e.response && e.response.data ? e.response.data : "Error starting psych analysis.";
-            dispatch({type: "START_PSYCH_EVAL_ERROR", ...notification(message, "error") });
-        });
-    }
-}
-
-
 export function agreeToTerms(userId, verificationToken, agreements) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});

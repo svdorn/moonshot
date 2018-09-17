@@ -218,6 +218,7 @@ class MyEvaluations extends Component {
             this.setState({ noPositions: true });
         }
     }
+    
 
     inviteCandidates() {
         let self = this;
@@ -228,9 +229,6 @@ class MyEvaluations extends Component {
         });
     }
 
-    startPsychEval() {
-        goTo("/psychometricAnalysis");
-    }
 
     render() {
         const style = {
