@@ -23,6 +23,7 @@ import axios from 'axios';
 import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import CreatingEvalProgress from '../../miscComponents/creatingEvalProgress';
+import clipboard from "clipboard-polyfill";
 import { goTo } from '../../../miscFunctions';
 
 const required = value => (value ? undefined : 'This field is required.');
@@ -232,6 +233,13 @@ class MyEvaluations extends Component {
         goTo("/psychometricAnalysis");
     }
 
+    copyLink() {
+        let URL = "https://moonshotinsights.io/apply/" + this.state.businessName;
+        URL = encodeURI(URL);
+        clipboard.writeText(URL);
+        this.props.addNotification("Link copied to clipboard.", "info");
+    }
+
     render() {
         const style = {
             separator: {
@@ -359,6 +367,13 @@ class MyEvaluations extends Component {
         }
 
         if (currentUser && currentUser.userType == "accountAdmin" && this.state.positions.length !== 0) {
+            var link =
+                (<div className="marginTop20px marginBottom20px secondary-gray">
+                    Get a custom link to send to your candidates so that they can sign up for any position:&nbsp;
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={this.copyLink.bind(this)} style={{padding: "5px 17px"}}>
+                        {"Copy Link"}
+                    </button>
+                </div>);
             let attributes = {};
             attributes.variation = "edit";
             attributes.name = "Web Developer";
@@ -490,6 +505,9 @@ class MyEvaluations extends Component {
                     <div style={style.separatorText}>
                         My Evaluations
                     </div>
+                </div>
+                <div className="center">
+                    {link}
                 </div>
                 <div className="marginBottom60px">
                     {evaluations}
