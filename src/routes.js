@@ -40,8 +40,6 @@ import ServiceLevelAgreement from './components/policies/serviceLevelAgreement';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
 import Listing from './components/pages/listing';
 
-import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
-
 import SkillTest from './components/pages/skillTest/skillTest';
 import FreeResponse from "./components/pages/freeResponse";
 import EvaluationIntro from "./components/pages/evaluationIntro";
@@ -97,8 +95,6 @@ const routes = (
                 <IndexRoute component={GeneralApply} />
                 <Route path=":company" component={Apply} />
             </Route>
-
-            <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
 
             <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
             <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />

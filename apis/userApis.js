@@ -41,7 +41,6 @@ const userApis = {
     POST_changePassword,
     POST_changeSettings,
     POST_login,
-    POST_startPositionEval,
     POST_addPositionEval,
     GET_influencerResults,
     GET_checkUserVerified,
