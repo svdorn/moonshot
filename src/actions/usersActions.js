@@ -433,32 +433,32 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
         dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
 
         axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, adminEmails, ...currentUserInfo})
-            // email invites success
-            .then(function(res) {
-                const waitingForFinalization = !!res && !!res.data && res.data.waitingForFinalization === true;
-                dispatch({type: "POST_EMAIL_INVITES_SUCCESS", waitingForFinalization});
-            })
-            // error posting email invites
-            .catch(function(err) {
-                dispatch({type: "POST_EMAIL_INVITES_REJECTED", ...notification(err, "error") });
-            });
+        // email invites success
+        .then(function(res) {
+            const waitingForFinalization = !!res && !!res.data && res.data.waitingForFinalization === true;
+            dispatch({type: "POST_EMAIL_INVITES_SUCCESS", waitingForFinalization});
+        })
+        // error posting email invites
+        .catch(function(err) {
+            dispatch({type: "POST_EMAIL_INVITES_REJECTED", ...notification(err, "error") });
+        });
     }
 }
 
 // POST CREATE LINK
-export function postCreateLink(currentUserInfo) {
+export function postCreateLink(currentUserInfo, closeDialog) {
     return function(dispatch) {
         dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
 
         axios.post("/api/business/postCreateLink", {currentUserInfo})
             // email invites success
             .then(function(res) {
-                console.log(res)
                 dispatch({type: "POST_LINK_SUCCESS", payload:res.data[0].code});
             })
             // error posting email invites
             .catch(function(err) {
-                dispatch({ type: "POST_LINK_REJECTED", ...notification(err, "error") });
+                if (typeof closeDialog === "function") { closeDialog(); }
+                dispatch({ type: "NOTIFICATION_AND_STOP_LOADING", ...notification("Error creating link, please refresh and try again.", "error") });
             });
     }
 }
