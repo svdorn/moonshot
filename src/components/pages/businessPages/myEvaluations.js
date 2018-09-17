@@ -368,10 +368,10 @@ class MyEvaluations extends Component {
 
         if (currentUser && currentUser.userType == "accountAdmin" && this.state.positions.length !== 0) {
             var link =
-                (<div className="marginTop20px marginBottom20px secondary-gray">
-                    Get a custom link to send to your candidates so that they can sign up for any position:&nbsp;
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={this.copyLink.bind(this)} style={{padding: "5px 17px"}}>
-                        {"Copy Link"}
+                (<div className="secondary-gray font16px font14pxUnder900 font12pxUnder500" style={{width:"95%", margin:"20px auto 20px"}}>
+                    {this.state.businessName}&#39;s custom link that you can share with all of your candidates and embed in your hiring workflow:&nbsp;
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink.bind(this)} style={{padding: "3px 10px"}}>
+                        {"Get Link"}
                     </button>
                 </div>);
             let attributes = {};
