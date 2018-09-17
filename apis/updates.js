@@ -63,10 +63,12 @@ async function updatePredictions() {
                     // get the actual position from the business object
                     const realPos = businessObj[userPos.businessId.toString()].positions.find(bizPos => userPos.positionId.toString() === bizPos._id.toString());
                     // grade gca
-                    try { user.cognitiveTest.score = await getCognitiveScore(user.cognitiveTest); }
-                    catch (gradeGCAerror) {
-                        console.log("Continuing due to error grading gca for user with id: ", user._id, gradeGCAerror);
-                        continue;
+                    if (user.cognitiveTest && typeof user.cognitiveTest.score === "number") {
+                        try {  user.cognitiveTest.score = await getCognitiveScore(user.cognitiveTest); }
+                        catch (gradeGCAerror) {
+                            console.log("Continuing due to error grading gca for user with id: ", user._id, gradeGCAerror);
+                            continue;
+                        }
                     }
                     // grade psycho + skills + overall
                     user.positions[userPosIdx] = gradeEval(user, userPos, realPos);
