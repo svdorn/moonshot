@@ -126,7 +126,7 @@ export function usersReducers(state = initialState, action) {
         case "UPDATE_ONBOARDING_REJECTED":
         case "CHANGE_PASSWORD":
         case "POST_EMAIL_INVITES_REJECTED":
-            return {...state, loadingSomething:false, userPostedFailed: true}
+            return {...state, loadingSomething:false, userPostedFailed: true, ...notificationInfo(action.notification)}
             break;
         case "SIGNOUT":
             return {...state, currentUser: undefined};
