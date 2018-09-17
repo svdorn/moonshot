@@ -40,7 +40,6 @@ import ServiceLevelAgreement from './components/policies/serviceLevelAgreement';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
 import Listing from './components/pages/listing';
 
-import SkillTest from './components/pages/skillTest/skillTest';
 import EvaluationIntro from "./components/pages/evaluationIntro";
 
 // position evaluation - contains all components (psych, gca, admin questions)
@@ -96,7 +95,6 @@ const routes = (
                 <Route path=":company" component={Apply} />
             </Route>
 
-            <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
             <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
 
             <Route path="evaluation/:businessId/:positionId" component={AuthenticatedComponent} page={<Evaluation/>} />
