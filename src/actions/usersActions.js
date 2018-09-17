@@ -524,7 +524,7 @@ export function changePassword(user) {
 
         axios.post('/api/user/changePassword', user)
         .then(function(response) {
-            dispatch({type:"CHANGE_PASSWORD", payload:response.data, ...notification("Password changed!") });
+            dispatch({type:"CHANGE_PASSWORD", ...notification("Password changed!") });
             // reset the form
             dispatch(reset("changePassword"));
         })
