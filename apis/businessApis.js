@@ -24,7 +24,8 @@ const { sanitize,
         isValidPassword,
         validArgs,
         founderEmails,
-        emailFooter
+        emailFooter,
+        devMode
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -76,6 +77,13 @@ async function POST_createBusinessAndUser(req, res) {
 
     // validate email
     if (!isValidEmail(email)) { return res.status(400).send("Invalid email format."); }
+
+    // make sure the email is a work email, not a gmail or hotmail or whatever
+    if (!devMode) {
+        const popularProviders = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com", "inbox.com", "icloud.com", "mail.com", "aol.com", "zoho.com", "yandex.com"];
+        const provider = email.split("@").pop().toLowerCase();
+        if (popularProviders.includes(provider)) { return res.status(400).send("Please use your work email address."); }
+    }
 
     // validate password
     if (!isValidPassword(password)) { return res.status(400).send("Password needs to be at least 8 characters long."); }
