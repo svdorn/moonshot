@@ -95,20 +95,18 @@ export function login(user, saveSession, navigateBackUrl) {
         dispatch({type: "START_LOADING"});
 
         axios.post("/api/user/login", {user, saveSession})
-            .then(function(response) {
-                const returnedUser = response.data;
-                dispatch({type:"LOGIN", user: returnedUser});
-                let nextUrl = '/myEvaluations';
-                if (navigateBackUrl) {
-                    nextUrl = navigateBackUrl;
-                }
-                // go to the next screen
-                browserHistory.push(nextUrl);
-                window.scrollTo(0, 0);
-            })
-            .catch(function(err) {
-                dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
-            });
+        .then(function(response) {
+            const returnedUser = response.data;
+            dispatch({type:"LOGIN", user: returnedUser});
+            let nextUrl = '/myEvaluations';
+            if (navigateBackUrl) { nextUrl = navigateBackUrl; }
+            // go to the next screen
+            browserHistory.push(nextUrl);
+            window.scrollTo(0, 0);
+        })
+        .catch(function(err) {
+            dispatch({ type: "LOGIN_REJECTED", ...notification(err, "error") });
+        });
     }
 }
 
@@ -129,7 +127,7 @@ export function updateOnboarding(onboarding, verificationToken, userId, extraArg
                 dispatch({type:"UPDATE_ONBOARDING", payload: returnedUser});
             })
             .catch(function(err) {
-                dispatch({type: "UPDATE_ONBOARDING_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
+                dispatch({ type: "UPDATE_ONBOARDING_REJECTED", ...notification(err, "error") });
             });
     }
 }
@@ -191,7 +189,7 @@ function updateEvalState(dispatch, data) {
         // go home
         goTo("/myEvaluations");
         // add a notification saying they finished the eval
-        dispatch({type: "ADD_NOTIFICATION", notification: {message: "Congratulations, you finished the evaluation! We'll be in touch soon.", type: "infoHeader"}})
+        dispatch({ type: "ADD_NOTIFICATION", ...notification("Congratulations, you finished the evaluation! We'll be in touch soon.") })
     }
     dispatch({
         type: "UPDATE_EVALUATION_STATE",
@@ -212,7 +210,7 @@ function defaultErrorHandler(dispatch, options) {
 
     dispatch({
         type: "NOTIFICATION_AND_STOP_LOADING",
-        notification: {message: errorMessage, type: "errorHeader"}
+        ...notification(errorMessage, "error")
     });
 }
 
@@ -235,11 +233,11 @@ export function setupBillingCustomer(source, email, userId, verificationToken) {
     return function(dispatch) {
         axios.post("/api/billing/customer", {source, email, userId, verificationToken})
         .then(response => {
-            dispatch({type: "SUCCESS_BILLING_CUSTOMER", notification: {message: "Success adding credit card to company.", type: "infoHeader"}});
+            dispatch({type: "SUCCESS_BILLING_CUSTOMER", ...notification("Success adding credit card to company.") });
         })
         .catch(error => {
             console.log(error);
-            dispatch({type: "FAILURE_BILLING_CUSTOMER", notification: {message: error, type: "errorHeader"}});
+            dispatch({type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
         })
     }
 }
@@ -268,11 +266,11 @@ export function createBusinessAndUser(userInfo) {
         dispatch({type: "START_LOADING"});
         axios.post("/api/business/createBusinessAndUser", userInfo)
         .then(response => {
-            dispatch({ type: "LOGIN", user: response.data, notification: { message: "Your account has been activated! Thanks for signing up!", type: "infoHeader"} });
+            dispatch({ type: "LOGIN", user: response.data, ...notification("Your account has been activated! Thanks for signing up!") });
             goTo("/onboarding");
         })
         .catch(error => {
-            dispatch({type: "NOTIFICATION_AND_STOP_LOADING", notification: {message: error.response.data, type: "errorHeader"}});
+            dispatch({ type: "NOTIFICATION_AND_STOP_LOADING", ...notification(error, "error") });
         })
     }
 }
@@ -309,7 +307,7 @@ export function startPsychEval(userId, verificationToken) {
         })
         .catch(e => {
             let message = e.response && e.response.data ? e.response.data : "Error starting psych analysis.";
-            dispatch({type: "START_PSYCH_EVAL_ERROR", notification: {message, type: "errorHeader"}});
+            dispatch({type: "START_PSYCH_EVAL_ERROR", ...notification(message, "error") });
         });
     }
 }
@@ -378,7 +376,7 @@ export function submitFreeResponse(userId, verificationToken, frqs) {
             dispatch({
                 type: "SUBMIT_FREE_RESPONSE",
                 currentUser: response.data.updatedUser,
-                notification: {message: "Position evaluation complete!", type: "infoHeader"}
+                ...notification("Position evaluation complete!")
             });
 
             if (response.data.positionId === "5b2952445635d4c1b9ed7b04" && response.data.businessId === "5b29597efb6fc033f887fda0") {
@@ -424,7 +422,7 @@ export function postUser(user) {
                 // if no user created, see if there is an error message
                 else if (typeof data.message === "string") { message = data.message; }
             }
-            dispatch({type: "POST_USER_REJECTED", notification: {message, type: "errorHeader"}});
+            dispatch({type: "POST_USER_REJECTED", ...notification(message, "error") });
         });
     }
 }
@@ -442,7 +440,7 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
             })
             // error posting email invites
             .catch(function(err) {
-                dispatch({type: "POST_EMAIL_INVITES_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
+                dispatch({type: "POST_EMAIL_INVITES_REJECTED", ...notification(err, "error") });
             });
     }
 }
@@ -460,7 +458,7 @@ export function postCreateLink(currentUserInfo) {
             })
             // error posting email invites
             .catch(function(err) {
-                dispatch({type: "POST_LINK_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
+                dispatch({ type: "POST_LINK_REJECTED", ...notification(err, "error") });
             });
     }
 }
@@ -509,11 +507,11 @@ export function updateUserSettings(user) {
         // update user on the database
         axios.post("/api/user/changeSettings", user)
         .then(function(response) {
-            dispatch({type:"UPDATE_USER_SETTINGS", user: response.data, notification:{message: "Settings updated!", type: "infoHeader"}});
+            dispatch({ type:"UPDATE_USER_SETTINGS", user: response.data, ...notification("Settings updated!") });
             window.scrollTo(0, 0);
         })
         .catch(function(err) {
-            dispatch({type:"UPDATE_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
+            dispatch({ type:"UPDATE_USER_REJECTED", ...notification(err, "error") });
             window.scrollTo(0, 0);
         });
     }
@@ -526,12 +524,12 @@ export function changePassword(user) {
 
         axios.post('/api/user/changePassword', user)
         .then(function(response) {
-            dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
+            dispatch({type:"CHANGE_PASSWORD", payload:response.data, ...notification("Password changed!") });
             // reset the form
             dispatch(reset("changePassword"));
         })
         .catch(function(err){
-            dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: err.response.data, type: "errorHeader"}})
+            dispatch({type:"CHANGE_PASSWORD_REJECTED", ...notification(err, "error") });
         });
     }
 }
@@ -560,34 +558,34 @@ export function changePasswordForgot(user) {
 // Send an email when somebody completes a pathway
 export function completePathway(user){
     return function(dispatch) {
-        dispatch({type: "COMPLETE_PATHWAY_REQUESTED"});
-
-        axios.post("api/candidate/completePathway", user)
-            .then(function(response) {
-                dispatch({type:"COMPLETE_PATHWAY", user: response.data.user, notification: {message:response.data.message, type:"infoHeader"}});
-                browserHistory.push('/');
-                window.scrollTo(0, 0);
-            })
-            .catch(function(err) {
-                // info we get back from the error
-                const errData = err.response.data;
-                // if the error is due to the user not having all steps complete
-                if (typeof errData === "object" && errData.incompleteSteps) {
-                    dispatch({type: "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS", incompleteSteps: errData.incompleteSteps});
-                    return;
-                }
-
-                // if there is a notification message, show that
-                let notification = undefined;
-                if (typeof errData === "string") {
-                    notification = {
-                        message: errData,
-                        type: "errorHeader"
-                    }
-                }
-
-                dispatch({ type:"COMPLETE_PATHWAY_REJECTED", notification })
-            })
+        // dispatch({type: "COMPLETE_PATHWAY_REQUESTED"});
+        //
+        // axios.post("api/candidate/completePathway", user)
+        //     .then(function(response) {
+        //         dispatch({ type:"COMPLETE_PATHWAY", user: response.data.user, ...notification(response) });
+        //         browserHistory.push('/');
+        //         window.scrollTo(0, 0);
+        //     })
+        //     .catch(function(err) {
+        //         // info we get back from the error
+        //         const errData = err.response.data;
+        //         // if the error is due to the user not having all steps complete
+        //         if (typeof errData === "object" && errData.incompleteSteps) {
+        //             dispatch({type: "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS", incompleteSteps: errData.incompleteSteps});
+        //             return;
+        //         }
+        //
+        //         // if there is a notification message, show that
+        //         let notification = undefined;
+        //         if (typeof errData === "string") {
+        //             notification = {
+        //                 message: errData,
+        //                 type: "errorHeader"
+        //             }
+        //         }
+        //
+        //         dispatch({ type:"COMPLETE_PATHWAY_REJECTED", notification })
+        //     })
     }
 }
 
@@ -609,7 +607,9 @@ export function unsubscribe(user, showNotification){
 
         axios.post("api/misc/unsubscribeEmail", user)
         .then(function(response) {
-            dispatch({type: "FOR_BUSINESS", ...notification(response)});
+            let toDispatch = { type: "FOR_BUSINESS" };
+            if (showNotification) { toDispatch = { ...toDispatch, ...notification(response) }}
+            dispatch(toDispatch);
             window.scrollTo(0, 0);
         })
         .catch(function(err) {
@@ -627,16 +627,16 @@ export function comingSoon(user, signedIn){
         axios.post("api/candidate/comingSoonEmail", user)
             .then(function(response) {
                 if (!signedIn) {
-                    dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
+                    dispatch({ type:"FOR_BUSINESS", ...notification(response) });
                     browserHistory.push('/login')
-                    dispatch({type:"CHANGE_CURRENT_ROUTE", payload:'/login'})
+                    dispatch({ type:"CHANGE_CURRENT_ROUTE", payload:'/login' })
                     window.scrollTo(0, 0);
                 } else {
-                    dispatch({type:"FOR_BUSINESS", notification: undefined});
+                    dispatch({ type:"FOR_BUSINESS", notification: undefined });
                 }
             })
             .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+                dispatch({ type:"FOR_BUSINESS", ...notification("Error sending email", "error") })
             })
     }
 }
@@ -739,7 +739,7 @@ export function setEvaluationState(evaluationState) {
 
 export function formError() {
     return function(dispatch) {
-        dispatch({type:"FORM_ERROR", notification: {message: "Fields must all be filled in to submit form.", type: "errorHeader"}})
+        dispatch({type:"FORM_ERROR", ...notification("Fields must all be filled in to submit form.", "error") })
     }
 }
 

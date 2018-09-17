@@ -104,11 +104,17 @@ function POST_candidate(req, res) {
     }
     // <<-------------------------------------------------------->> //
 
+    // whether an error already happened so shouldn't return another
+    let errored = false;
+
     // --->>       VERIFY THAT USER HAS UNIQUE EMAIL          <<--- //
     Users.find({ email })
     .then(foundUsers => {
         if (foundUsers.length > 0) {
-            return res.status(400).send({message: "An account with that email address already exists."});
+            if (!errored) {
+                errored = true;
+                return res.status(400).send({message: "An account with that email address already exists."});
+            }
         } else {
             // mark that we are good to make this user, then try to do it
             verifiedUniqueEmail = true;
@@ -117,7 +123,10 @@ function POST_candidate(req, res) {
     })
     .catch(findUserError => {
         console.log("error finding user by email: ", findUserError);
-        return res.status(500).send({message: errors.SERVER_ERROR});
+        if (!errored) {
+            errored = true;
+            return res.status(500).send({message: errors.SERVER_ERROR});
+        }
     });
     // <<-------------------------------------------------------->> //
 
@@ -128,10 +137,16 @@ function POST_candidate(req, res) {
     }).catch(verifyCodeError => {
         if (typeof verifyCodeError === "object" && verifyCodeError.status && verifyCodeError.message) {
             console.log(verifyCodeError.error);
-            return res.status(verifyCodeError.status).send({message: verifyCodeError.message});
+            if (!errored) {
+                errored = true;
+                return res.status(verifyCodeError.status).send({message: verifyCodeError.message});
+            }
         } else {
             console.log("Error verifying position code: ", verifyCodeError);
-            return res.status(500).send({message: errors.SERVER_ERROR});
+            if (!errored) {
+                errored = true;
+                return res.status(500).send({message: errors.SERVER_ERROR});
+            }
         }
     });
     // <<-------------------------------------------------------->> //
@@ -146,7 +161,10 @@ function POST_candidate(req, res) {
         makeUser();
     }).catch (countError => {
         console.log("Couldn't count the number of users: ", countError);
-        return res.status(500).send({message: errors.SERVER_ERROR});
+        if (!errored) {
+            errored = true;
+            return res.status(500).send({message: errors.SERVER_ERROR});
+        }
     })
     // <<-------------------------------------------------------->> //
 
@@ -155,7 +173,10 @@ function POST_candidate(req, res) {
     bcrypt.hash(password, saltRounds, function(hashError, hash) {
         if (hashError) {
             console.log("hash error: ", hashError);
-            return res.status(500).send({ message: errors.SERVER_ERROR });
+            if (!errored) {
+                errored = true;
+                return res.status(500).send({ message: errors.SERVER_ERROR });
+            }
         }
 
         // change the stored password to be the hash
@@ -169,7 +190,7 @@ function POST_candidate(req, res) {
     // --->>           CREATE AND UPDATE THE USER             <<--- //
     async function makeUser() {
         // make sure all pre-reqs to creating user are met
-        if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
+        if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl || errored) { return; }
 
         if (process.env.NODE_ENV === "production") {
             // Add companies to user list for intercom
