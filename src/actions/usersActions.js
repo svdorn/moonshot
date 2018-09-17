@@ -331,32 +331,6 @@ export function sawEvaluationIntro(userId, verificationToken) {
 }
 
 
-export function submitFreeResponse(userId, verificationToken, frqs) {
-    return function(dispatch) {
-        dispatch({type: "START_LOADING"});
-        axios.post("/api/user/submitFreeResponse", {userId, verificationToken, frqs})
-        .then(response => {
-            dispatch({
-                type: "SUBMIT_FREE_RESPONSE",
-                currentUser: response.data.updatedUser,
-                ...notification("Position evaluation complete!")
-            });
-
-            if (response.data.positionId === "5b2952445635d4c1b9ed7b04" && response.data.businessId === "5b29597efb6fc033f887fda0") {
-                let url = "/influencer?user=" + response.data.updatedUser._id + "&businessId=" + response.data.businessId + "&positionId=" + response.data.positionId;
-                browserHistory.push(url);
-            } else {
-                browserHistory.push("/myEvaluations");
-            }
-            window.scrollTo(0, 0);
-        })
-        .catch(error => {
-            // console.log("Error submitting free response answers: ", error);
-        });
-    }
-}
-
-
 // set the user as posted to show screen saying user should check email
 export function setUserPosted() {
     return function(dispatch) { dispatch({ type: "POST_USER" }); }

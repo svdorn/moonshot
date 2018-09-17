@@ -44,7 +44,6 @@ const userApis = {
     POST_addPositionEval,
     GET_influencerResults,
     GET_checkUserVerified,
-    POST_submitFreeResponse,
     GET_positions,
     GET_adminQuestions,
     GET_notificationPreferences,
@@ -219,62 +218,6 @@ async function POST_notificationPreferences(req, res) {
     try {
         user = await user.save();
         return res.json({updatedUser: frontEndUser(user)})
-    } catch (saveError) {
-        console.log("error saving user or business after submitting frq: ", saveError);
-        return res.status(500).send("Server error.");
-    }
-}
-
-
-async function POST_submitFreeResponse(req, res) {
-    const userId = sanitize(req.body.userId);
-    const verificationToken = sanitize(req.body.verificationToken);
-    const frqs = sanitize(req.body.frqs);
-
-    let user;
-    let business;
-
-    try { user = await getAndVerifyUser(userId, verificationToken); }
-    catch(getUserError) {
-        console.log("Error getting user when trying to start position eval: ", getUserError.error);
-        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
-    }
-
-    // make sure the user is in the middle of an eval
-    if (!user.positionInProgress) {
-        return res.status(400).send("You are not currently in the middle of a position evaluation.");
-    }
-
-    // get the id and actual position for the position in progress
-    const positionId = user.positionInProgress.toString();
-    const userPositionIndex = user.positions.findIndex(pos => {
-        return pos.positionId.toString() === positionId;
-    });
-    if (typeof userPositionIndex !== "number" || userPositionIndex < 0) {
-        console.log("Position not found in user from position id.");
-        return res.status(500).send("Server error.");
-    }
-    let userPosition = user.positions[userPositionIndex];
-
-    const now = new Date();
-
-    // update the position with the answered frqs
-    userPosition.freeResponseQuestions = frqs;
-
-    // make sure the updated position is saved to the user
-    user.positions[userPositionIndex] = userPosition;
-
-    // mark the position as complete, as answering frqs is always the last step
-    try {
-        user = await finishPositionEvaluation(user, userPosition.positionId, userPosition.businessId);
-    } catch (finishEvalError) {
-        console.log("error finish position evaluation: ", finishEvalError);
-        return res.status(500).send("Server error.");
-    }
-
-    try {
-        user = await user.save();
-        return res.json({updatedUser: frontEndUser(user), positionId: userPosition.positionId, businessId: userPosition.businessId})
     } catch (saveError) {
         console.log("error saving user or business after submitting frq: ", saveError);
         return res.status(500).send("Server error.");

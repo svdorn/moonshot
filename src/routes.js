@@ -41,8 +41,8 @@ import AffiliateAgreement from './components/policies/affiliateAgreement';
 import Listing from './components/pages/listing';
 
 import SkillTest from './components/pages/skillTest/skillTest';
-import FreeResponse from "./components/pages/freeResponse";
 import EvaluationIntro from "./components/pages/evaluationIntro";
+
 // position evaluation - contains all components (psych, gca, admin questions)
 import Evaluation from "./components/pages/evaluation/evaluation";
 
@@ -97,7 +97,6 @@ const routes = (
             </Route>
 
             <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
-            <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
             <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
 
             <Route path="evaluation/:businessId/:positionId" component={AuthenticatedComponent} page={<Evaluation/>} />
