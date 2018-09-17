@@ -25,7 +25,8 @@ const { sanitize,
         logArgs,
         logError,
         randomInt,
-        shuffle
+        shuffle,
+        lastPossibleSecond
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require("./psychApis");
@@ -942,6 +943,117 @@ module.exports.GET_initialState = async function(req, res) {
 }
 
 
+// only to be called from other apis, adds an eval to a user object
+module.exports.addEvaluation = async function(user, businessId, positionId, startDate) {
+    return new Promise(async function(resolve, reject) {
+        if (!user) { return reject("Invalid user."); }
+        if (!Array.isArray(user.positions)) { user.positions = []; }
+
+        // check if the user already has the position
+        const alreadyHasPosition = user.positions.some(userPosition => {
+            return userPosition.businessId.toString() === businessId.toString && userPosition.positionId.toString() === positionId.toString();
+        });
+        if (alreadyHasPosition) {
+            return reject(`user already had position with id ${positionId} in their positions array`);
+        }
+
+        // get the position object
+        try { var position = await getPosition(businessId, positionId); }
+        catch (getPositionError) { return reject(getPositionError); }
+
+        // TODO - look at this and see if anything needs re-doing or can be gotten rid of
+
+        // go through the user's skills to see which they have completed already;
+        // this assumes the user won't have any in-progress skill tests when they
+        // start a position evaluation
+        let testIndex = 0;
+        let skillTestIds = [];
+        let userSkillTests = user.skillTests;
+        position.skills.forEach(skillId => {
+            // if the user has already completed this skill test ...
+            if (userSkillTests.some(completedSkill => {
+                return completedSkill.skillId.toString() === skillId.toString();
+            })) {
+                // ... add it to the front of the list and increase test index so we
+                // know to skip it
+                skillTestIds.unshift(skillId);
+                testIndex++;
+            }
+
+            // if the user hasn't already completed this skill test, just add it
+            // to the end of the array
+            else { skillTestIds.push(skillId); }
+        });
+
+        // see if the user has already finished the psych analysis
+        const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.endDate;
+
+        // if we're trying to take a test that is past the number of tests we
+        // have, we must be done with all the skill tests
+        const doneWithSkillTests = testIndex >= skillTestIds.length;
+
+        // if the user has finished the psych test and all skill tests
+        // and there are no frqs, the user has finished already
+        const finished = hasTakenPsychTest && doneWithSkillTests;
+        const now = new Date();
+        const appliedEndDate = finished ? now : undefined;
+
+        // get the assigned date from the function call
+        const assignedDate = startDate;
+        let deadline = undefined;
+        // if a start date was assigned, figure out the deadline
+        if (assignedDate) {
+            const daysAllowed = position.timeAllotted;
+            if (daysAllowed != undefined) {
+                deadline = lastPossibleSecond(assignedDate, daysAllowed);
+            }
+        }
+
+        // this information will change depending on whether it's a candidate or employee
+        let userTypeSpecificInfo = {};
+        if (user.userType === "candidate") {
+            userTypeSpecificInfo = {
+                isDismissed: false,
+                hiringStage: "Not Contacted",
+                hiringStageChanges: [{
+                    hiringStage: "Not Contacted",
+                    isDismissed: false,
+                    // status changed to Not Contacted just now
+                    dateChanged: now
+                }]
+            }
+        } else if (user.userType === "employee") {
+            userTypeSpecificInfo.gradingComplete = false
+        }
+
+        // starting info about the position
+        const typeAgnosticInfo = {
+            businessId: businessId,
+            positionId: position._id,
+            name: position.name,
+            appliedStartDate: now,
+            appliedEndDate,
+            assignedDate,
+            deadline,
+            // no scores have been calculated yet
+            scores: undefined,
+            skillTestIds,
+            testIndex
+        }
+
+        const newPosition = Object.assign(userTypeSpecificInfo, typeAgnosticInfo);
+
+        // add the starting info to the user
+        user.positions.push(newPosition);
+        // position must be last in the array
+        posIndex = user.positions.length - 1;
+
+        // return successfully
+        return resolve({ user, finished, userPositionIndex: posIndex });
+    });
+}
+
+
 // start the next skill in an eval
 async function startNewSkill(user) {
     return new Promise(async function(resolve, reject) {
@@ -1492,7 +1604,7 @@ async function sendNotificationEmails(businessId, user) {
         );
 
         //const sendFrom = "Justin Ye";
-        sendEmailPromise({ recipient, subject, content, sendFrom }).catch(error => {
+        sendEmailPromise({ recipient, subject, content }).catch(error => {
             console.log("Error sending email to candidate telling them they're done with the eval: ", error);
         });
 
