@@ -107,8 +107,9 @@ class Landbot extends Component {
         function advance() {
             let positionTitle = data.title;
             // capitalize the first letter of the position title
-            if (typeof data.title === "string" && data.title.length > 1) {
-                positionTitle = data.title.charAt(0).toUpperCase() + data.title.substring(1);
+            if (typeof data.title === "string" && data.title.length > 0) {
+                positionTitle = data.title.charAt(0).toUpperCase();
+                if (data.title.length > 1) { positionTitle += data.title.substring(1); }
             }
             goTo(`/businessSignup?name=${data.name}&company=${data.company}&email=${data.email}&positionTitle=${positionTitle}&positionType=${data.positionType}&isManager=${data.isManager}`);
         }
