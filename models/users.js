@@ -375,7 +375,9 @@ const usersSchema = mongoose.Schema({
             // the right response
             rightOption: String,
             // if the score should be inverted after answering
-            invertScore: Boolean
+            invertScore: Boolean,
+            // whether the right and left option were flipped for the front end
+            frontEndFlipped: Boolean
         },
         // the overall factors the questions test for
         factors: [{
@@ -408,8 +410,10 @@ const usersSchema = mongoose.Schema({
                 responses: [{
                     // the question id of the question that was actually answered
                     answeredId: mongoose.Schema.Types.ObjectId,
-                    // whether the answer for this question should be flipped (e.g. 3 => -3)
+                    // whether the answer for this question should be flipped during grading (e.g. 3 => -3)
                     invertScore: Boolean,
+                    // whether the question was flipped in the front end (does not affect grading)
+                    frontEndFlipped: Boolean,
                     // the answer (-5 to 5) that the user chose
                     answer: Number,
                     // exact date/time the user started the first phrasing of this question

@@ -1221,8 +1221,14 @@ function addPsychAnswer(psych, answer) {
     // save the meta-data
     response.endDate = new Date();
     response.totalTime = response.endDate.getTime() - new Date(response.startDate).getTime();
+    // if the answer was flipped in the front end, invert the answer
+    const flipper = currQuestion.frontEndFlipped ? -1 : 1;
+    console.log("flipper: ", flipper);
+    // save whether the front end was flipped
+    response.frontEndFlipped = currQuestion.frontEndFlipped;
     // save the actual answer
-    response.answer = answer;
+    response.answer = answer * flipper;
+    console.log("response.answer: ", response.answer);
 
     // mark the question as no longer available for use
     psych.usedQuestions.push(questionId);
@@ -2455,6 +2461,17 @@ async function getNewPsychQuestion(psych) {
         psych.currentQuestion = question;
         psych.currentQuestion.questionId = question._id
         psych.currentQuestion._id = undefined;
+
+        // 50% chance of flipping the question's right and left options
+        if (randomInt(0,1) === 1) {
+            console.log("flipping!");
+            const oldRight = question.rightOption;
+            psych.currentQuestion.rightOption = question.leftOption;
+            psych.currentQuestion.leftOption = oldRight;
+            psych.currentQuestion.frontEndFlipped = true
+        } else {
+            psych.currentQuestion.frontEndFlipped = false;
+        }
 
         // update everything that was changed
         factor.facets[facetIdx] = facet;
