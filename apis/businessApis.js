@@ -13,7 +13,7 @@ const crypto = require('crypto');
 // get helper functions
 const { sanitize,
         getFirstName,
-        sendEmailPromise,
+        sendEmail,
         getAndVerifyUser,
         getUserAndBusiness,
         frontEndUser,
@@ -163,7 +163,7 @@ async function POST_createBusinessAndUser(req, res) {
         +   `<p>Position name: ${business.positions[0].name}</p>`
         +   `<p>Position type: ${business.positions[0].positionType}</p>`
         + '</div>';
-    try { await sendEmailPromise({recipients, subject, content}); }
+    try { await sendEmail({recipients, subject, content}); }
     catch (alertEmailError) {
         console.log("Error sending alert email about new user: ", alertEmailError);
     }
@@ -968,7 +968,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         }
 
         // send the email
-        sendEmailPromise({ recipient, subject, content })
+        sendEmail({ recipient, subject, content })
         .then(response => resolve())
         .catch(error => reject(error));
     });
@@ -1414,7 +1414,7 @@ function POST_googleJobsLinks(req, res) {
         </div>`
     );
 
-    sendEmailPromise({ recipients, subject, content })
+    sendEmail({ recipients, subject, content })
     .then(response => { return res.status(200).send({}); })
     .catch(error => {
         console.log("Error sending email for google jobs post: ", error);
@@ -1479,7 +1479,7 @@ async function POST_contactUsEmail(req, res) {
 
 
     try { // sending email to moonshot with the message from the user
-        await sendEmailPromise({
+        await sendEmail({
             recipients: devMode ? devEmail : founderEmails,
             subject: "ACTION REQUIRED - Contact Us Form Filled Out",
             content: toMoonshotContent
@@ -1490,7 +1490,7 @@ async function POST_contactUsEmail(req, res) {
     }
 
     try { // sending the "email received" message
-        await sendEmailPromise({
+        await sendEmail({
             recipients: [email],
             subject: "We Got Your Message!",
             content: messageReceivedContent
@@ -2300,7 +2300,7 @@ async function POST_uploadCandidateCSV(req, res) {
     }];
 
     // send the email with the attachment
-    sendEmailPromise({ recipients, subject, content, attachments })
+    sendEmail({ recipients, subject, content, attachments })
     .then(response => { return res.status(200).send({}); })
     .catch(error => {
         console.log("Error sending email with candidates file: ", error);
@@ -2335,7 +2335,7 @@ async function POST_chatbotData(req, res) {
     );
 
     // send Kyle the email
-    try { await sendEmailPromise({ recipients, subject, content }); }
+    try { await sendEmail({ recipients, subject, content }); }
     catch (sendEmailError) {
         console.log("Error sending email on chatbot signup: ", sendEmailError);
         return res.status(500).send(errors.SERVER_ERROR);

@@ -229,11 +229,11 @@ function hasNoEmails(recipients) {
 // fields:
 // REQUIRED: recipients (or recipient), subject, content
 // OPTIONAL: attachments, senderName ("Kyle Treige"), senderAddress ("kyle")
-async function sendEmailPromise(args) {
+async function sendEmail(args) {
     return new Promise(async function(resolve, reject) {
         // if arguments are not provided
         if (!args || typeof args !== "object") {
-            return reject("Invalid arguments. Usage: sendEmailPromise({recipients: ['austin@gmail.com'], subject: 'New Stuff', ...})");
+            return reject("Invalid arguments. Usage: sendEmail({recipients: ['austin@gmail.com'], subject: 'New Stuff', ...})");
         }
 
         // addresses that will receive the email
@@ -938,7 +938,7 @@ const helperFunctions = {
     sanitize,
     removeEmptyFields,
     verifyUser,
-    sendEmailPromise,
+    sendEmail,
     getFirstName,
     removeDuplicates,
     randomInt,

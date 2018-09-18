@@ -8,7 +8,7 @@ const errors = require("./errors");
 const { sanitize,
         removeEmptyFields,
         verifyUser,
-        sendEmailPromise,
+        sendEmail,
         devMode,
         devEmail,
         isValidEmail,
@@ -73,7 +73,7 @@ function POST_createReferralCode(req, res) {
         // send email to user who asked for a referral code with the info about the code
         const senderName = "Kyle Treige";
         const senderAddress = "kyle";
-        sendEmailPromise({ recipient, subject, content: emailContent, senderName, senderAddress })
+        sendEmail({ recipient, subject, content: emailContent, senderName, senderAddress })
         .catch(error => {
             console.log("Error sending email to user about referral code: ", error);
         });
@@ -157,7 +157,7 @@ async function POST_unsubscribeEmail(req, res) {
     }
 
     // send the email letting us know someone unsubscribed
-    sendEmailPromise({ recipients, subject, content })
+    sendEmail({ recipients, subject, content })
     .then(result => {
         return res.status(200).send({ message: "You have successfully unsubscribed." });
     }).catch(error => {

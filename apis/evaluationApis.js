@@ -15,7 +15,7 @@ const errors = require('./errors.js');
 // get helper functions
 const { sanitize,
         verifyUser,
-        sendEmailPromise,
+        sendEmail,
         emailFooter,
         getAndVerifyUser,
         getFirstName,
@@ -1607,7 +1607,7 @@ async function sendNotificationEmails(businessId, user) {
 
         const senderName = "Justin Ye";
         const senderAddress = "justin";
-        sendEmailPromise({ recipient, subject, content, senderName, senderAddress }).catch(error => {
+        sendEmail({ recipient, subject, content, senderName, senderAddress }).catch(error => {
             console.log("Error sending email to candidate telling them they're done with the eval: ", error);
         });
 
@@ -1810,7 +1810,7 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
 
             const senderName = "Justin Ye";
             const senderAddress = "justin";
-            sendEmailPromise({ recipients, subject, content, senderName, senderAddress })
+            sendEmail({ recipients, subject, content, senderName, senderAddress })
             .catch(error => { console.log("Error sending delayed email: ", error); });
 
             // Update the lastSent day of the user and the waiting to be false

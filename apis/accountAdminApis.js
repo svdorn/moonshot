@@ -9,7 +9,7 @@ const errors = require('./errors');
 // get helper functions
 const { sanitize,
         verifyUser,
-        sendEmailPromise,
+        sendEmail,
         frontEndUser,
         getAndVerifyUser,
         validArgs
@@ -87,7 +87,7 @@ async function POST_sendVerificationEmail(req, res) {
             + '</div>'
         + '</div>';
 
-    try { await sendEmailPromise({ recipients, subject, content }); }
+    try { await sendEmail({ recipients, subject, content }); }
     catch (sendEmailError) {
         console.log("Error sending email to account admin trying to verify account: ", sendEmailError);
         return res.status(500).send(errors.SERVER_ERROR);
@@ -138,7 +138,7 @@ async function POST_identifyATS(req, res) {
         </div>`
     )
     // send the email
-    sendEmailPromise({ recipients, subject, content }).then().catch(error => {
+    sendEmail({ recipients, subject, content }).then().catch(error => {
         console.log("Error sending email alerting founders of ats used by customer: ", error);
     });
 }
@@ -186,7 +186,7 @@ async function POST_integrationSuggestion(req, res) {
         </div>`
     )
     // send the email
-    sendEmailPromise({ recipients, subject, content }).then().catch(error => {
+    sendEmail({ recipients, subject, content }).then().catch(error => {
         console.log("Error sending email alerting founders of customer integration suggestion: ", error);
     });
 }
@@ -238,7 +238,7 @@ async function POST_languagePreference(req, res) {
         </div>`
     )
     // send the email
-    sendEmailPromise({ recipients, subject, content }).then().catch(error => {
+    sendEmail({ recipients, subject, content }).then().catch(error => {
         console.log("Error sending email alerting founders of customer integration suggestion: ", error);
     });
 }

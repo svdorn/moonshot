@@ -15,7 +15,7 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         isValidEmail,
-        sendEmailPromise,
+        sendEmail,
         getFirstName,
         frontEndUser,
         emailFooter,
@@ -488,7 +488,7 @@ async function sendVerificationEmail(user) {
             </div>`;
 
         try {
-            await sendEmailPromise({recipients, subject, content});
+            await sendEmail({recipients, subject, content});
             return resolve();
         }
         // send email error
