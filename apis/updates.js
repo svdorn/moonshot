@@ -32,7 +32,6 @@ const { gradeEval, getCognitiveScore } = require("./evaluationApis");
 
 
 // update all users scores to reflect newest grading schemes (new gca difficulties, new psych weights, etc)
-//updatePredictions();
 async function updatePredictions() {
     try {
         // get every business
@@ -50,6 +49,12 @@ async function updatePredictions() {
         for (let userIdx = 0; userIdx < users.length; userIdx++) {
             // get the candidate
             let user = users[userIdx];
+            // if the user has never done the psych test, they're either an old
+            // user or have never taken an eval
+            if (!user.psychometricTest) {
+                console.log("user doesn't have psych - continuing");
+                continue;
+            }
             // go through each of his or her positions
             if (Array.isArray(user.positions) && user.positions.length > 0) {
                 for (userPosIdx = 0; userPosIdx < user.positions.length; userPosIdx++) {
@@ -62,6 +67,11 @@ async function updatePredictions() {
                     }
                     // get the actual position from the business object
                     const realPos = businessObj[userPos.businessId.toString()].positions.find(bizPos => userPos.positionId.toString() === bizPos._id.toString());
+                    // if position not found, skip this iteration
+                    if (!realPos) {
+                        console.log("position not found - continuing");
+                        continue;
+                    }
                     // grade gca
                     if (user.cognitiveTest && typeof user.cognitiveTest.score === "number") {
                         try {  user.cognitiveTest.score = await getCognitiveScore(user.cognitiveTest); }
