@@ -9,6 +9,14 @@ const Skills = require('../models/skills.js');
 
 const errors = require("./errors");
 
+// info for sending out emails through mailgun
+const mailDomain = "mail.moonshotinsights.io";
+const mailgun = require("mailgun-js")({
+    apiKey: credentials.mailgunApiKey,
+    publicApiKey: credentials.mailgunPublicApiKey,
+    domain: mailDomain
+});
+
 
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
@@ -217,7 +225,10 @@ function hasNoEmails(recipients) {
 }
 
 
-// send an email and return a promise - required arg fields are recipients, subject, and content
+// send an email and return a promise
+// fields:
+// REQUIRED: recipients (or recipient), subject, content
+// OPTIONAL: attachments, sendFrom (name of sender)
 async function sendEmailPromise(args) {
     return new Promise(async function(resolve, reject) {
         // if arguments are not provided
@@ -234,7 +245,9 @@ async function sendEmailPromise(args) {
         // body of the email
         const content = args.content;
         // OPTIONAL: who the email is being sent from (the sender) - default is Moonshot
-        const sendFrom = args.sendFrom;
+        const sendFrom = args.sendFrom ? args.sendFrom : "Moonshot";
+        // OPTIONAL: the sender (sender@moonshotinsights.io)
+        const senderAddress = args.senderAddress ? args.senderAddress : "no-reply";
         // OPTIONAL: attachments files
         const attachments = args.attachments;
 
@@ -281,62 +294,79 @@ async function sendEmailPromise(args) {
             return reject("Couldn't send email. Recipients are on the opt-out list or no valid emails were given.");
         }
 
-        // the default email account to send emails from
-        let from;
-        let authUser;
-        let authPass;
-        if (sendFrom) {
-            if (sendFrom === "Kyle Treige") {
-                from = '"Kyle Treige" <kyle@moonshotinsights.io>';
-                authUser = credentials.kyleEmailUsername;
-                authPass = credentials.kyleEmailPassword;
-            }
-            // else if (sendFrom === "Justin Ye") {
-            //     from = '"Justin Ye" <justin@moonshotinsights.io>';
-            //     authUser = credentials.justinEmailUsername;
-            //     authPass = credentials.justinEmailPassword;
-            // }
-        }
-        // default is to send from Moonshot
-        if (!from || !authUser || !authPass) {
-            from = '"Moonshot" <do-not-reply@moonshotinsights.io>';
-            authUser = credentials.emailUsername;
-            authPass = credentials.emailPassword;
-        }
 
-        // create reusable transporter object using the default SMTP transport
-        let transporter = nodemailer.createTransport({
-            // host: 'smtp.ethereal.email',
-            // port: 587,
-            // secure: false, // true for 465, false for other ports
-            // auth: {
-            //     user: 'snabxjzqe3nmg2p7@ethereal.email',
-            //     pass: '5cbJWjTh7YYmz7e2Ce'
-            // }
-            service: 'gmail',
-            auth: {
-                user: authUser,
-                pass: authPass
-            }
-        });
 
-        // setup email data with unicode symbols
-        let mailOptions = {
-            from: from, // sender address
-            to: recipientList, // list of receivers
-            subject: subject, // Subject line
-            html: content // html body
+
+
+
+        // // the default email account to send emails from
+        // let from;
+        // let authUser;
+        // let authPass;
+        // if (sendFrom) {
+        //     if (sendFrom === "Kyle Treige") {
+        //         from = '"Kyle Treige" <kyle@moonshotinsights.io>';
+        //         authUser = credentials.kyleEmailUsername;
+        //         authPass = credentials.kyleEmailPassword;
+        //     }
+        //     // else if (sendFrom === "Justin Ye") {
+        //     //     from = '"Justin Ye" <justin@moonshotinsights.io>';
+        //     //     authUser = credentials.justinEmailUsername;
+        //     //     authPass = credentials.justinEmailPassword;
+        //     // }
+        // }
+        // // default is to send from Moonshot
+        // if (!from || !authUser || !authPass) {
+        //     from = '"Moonshot" <do-not-reply@moonshotinsights.io>';
+        //     authUser = credentials.emailUsername;
+        //     authPass = credentials.emailPassword;
+        // }
+        //
+        // // create reusable transporter object using the default SMTP transport
+        // let transporter = nodemailer.createTransport({
+        //     // host: 'smtp.ethereal.email',
+        //     // port: 587,
+        //     // secure: false, // true for 465, false for other ports
+        //     // auth: {
+        //     //     user: 'snabxjzqe3nmg2p7@ethereal.email',
+        //     //     pass: '5cbJWjTh7YYmz7e2Ce'
+        //     // }
+        //     service: 'gmail',
+        //     auth: {
+        //         user: authUser,
+        //         pass: authPass
+        //     }
+        // });
+        //
+        // // setup email data with unicode symbols
+        // let mailOptions = {
+        //     from: from, // sender address
+        //     to: recipientList, // list of receivers
+        //     subject: subject, // Subject line
+        //     html: content // html body
+        // };
+        //
+        // // attach attachments, if they exist
+        // if (attachments && Array.isArray(attachments) && attachments.length > 0) {
+        //     mailOptions.attachments = attachments;
+        // }
+        //
+        // // send mail with defined transport object
+        // transporter.sendMail(mailOptions, (error, info) => {
+        //     if (error) { return reject(error); }
+        //     return resolve();
+        // });
+
+        const data = {
+            from: `${sendFrom} <${senderAddress}@mail.moonshotinsights.io>`,
+            to: recipientList,
+            subject,
+            html: content
         };
 
-        // attach attachments, if they exist
-        if (attachments && Array.isArray(attachments) && attachments.length > 0) {
-            mailOptions.attachments = attachments;
-        }
-
-        // send mail with defined transport object
-        transporter.sendMail(mailOptions, (error, info) => {
+        mailgun.messages().send(data, function(error, body) {
             if (error) { return reject(error); }
-            return resolve();
+            else { return resolve(); }
         });
     });
 }
