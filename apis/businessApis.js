@@ -2296,7 +2296,7 @@ async function POST_uploadCandidateCSV(req, res) {
     const fileString = candidateFile.substring(candidateFile.indexOf(",") + 1);
     let attachments = [{
         filename: candidateFileName,
-        content: new Buffer(fileString, "base64")
+        data: new Buffer(fileString, "base64")
     }];
 
     // send the email with the attachment
