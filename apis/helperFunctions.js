@@ -228,7 +228,7 @@ function hasNoEmails(recipients) {
 // send an email and return a promise
 // fields:
 // REQUIRED: recipients (or recipient), subject, content
-// OPTIONAL: attachments, sendFrom (name of sender)
+// OPTIONAL: attachments, senderName ("Kyle Treige"), senderAddress ("kyle")
 async function sendEmailPromise(args) {
     return new Promise(async function(resolve, reject) {
         // if arguments are not provided
@@ -245,7 +245,7 @@ async function sendEmailPromise(args) {
         // body of the email
         const content = args.content;
         // OPTIONAL: who the email is being sent from (the sender) - default is Moonshot
-        const sendFrom = args.sendFrom ? args.sendFrom : "Moonshot";
+        const senderName = args.senderName ? args.senderName : "Moonshot";
         // OPTIONAL: the sender (sender@moonshotinsights.io)
         const senderAddress = args.senderAddress ? args.senderAddress : "no-reply";
         // OPTIONAL: attachments files
@@ -307,7 +307,7 @@ async function sendEmailPromise(args) {
         catch (makeAttachmentsError) { console.log("error making attachments: ", makeAttachmentsError); }
 
         let data = {
-            from: `${sendFrom} <${senderAddress}@mail.moonshotinsights.io>`,
+            from: `${senderName} <${senderAddress}@mail.moonshotinsights.io>`,
             to: recipientList,
             subject,
             html: content,

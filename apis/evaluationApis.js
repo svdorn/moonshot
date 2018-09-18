@@ -1589,22 +1589,25 @@ async function sendNotificationEmails(businessId, user) {
         const business = await Businesses.findOne(findById).select("name positions");
 
         // send email to candidate
-        let recipient = [user.email];
-        console.log("recipient: ", recipient);
+        let recipient = [ user.email ];
         let subject = "You've Finished Your Evaluation!";
-        let content = (
-            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                + '<p style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(user.name) + ',</p>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">My name is Justin and I am the Chief Product Officer at Moonshot Insights. I saw that you finished your evaluation for ' + business.name
-                + '. I just wanted to let you know your results have been sent to the employer. Sit tight and we will keep you posted. I wish you the best of luck!</p><br/>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">If you have any questions at all, please feel free to shoot me an email at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. I&#39;m always on call and look forward to hearing from you.</p>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></p>'
-                + emailFooter(user.email)
-            + '</div>'
-        );
+        let content = (`
+            <div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
+                <p style="width:95%; display:inline-block; text-align:left; margin:6px auto;">Hi ${getFirstName(user.name)},</p>
+                <p style="width:95%; display:inline-block; text-align:left; margin:12px auto 6px;">
+                    My name is Justin and I am the Chief Product Officer at Moonshot Insights. I saw that you finished your evaluation for ${business.name}.
+                    I just wanted to let you know your results have been sent to the employer. Sit tight and we will keep you posted. I wish you the best of luck!
+                </p>
+                <p style="width:95%; display:inline-block; text-align:left; margin:6px auto 12px;">If you have any questions at all, please feel free to shoot me an email at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. I'm always on call and look forward to hearing from you.</p>
+                <p style="width:95%; display:inline-block; text-align:left; margin:6px auto;">Sincerely,</p>
+                <p style="width:95%; display:inline-block; text-align:left; margin:6px auto;">Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></p>
+                ${emailFooter(user.email)}
+            </div>
+        `);
 
-        //const sendFrom = "Justin Ye";
-        sendEmailPromise({ recipient, subject, content }).catch(error => {
+        const senderName = "Justin Ye";
+        const senderAddress = "justin";
+        sendEmailPromise({ recipient, subject, content, senderName, senderAddress }).catch(error => {
             console.log("Error sending email to candidate telling them they're done with the eval: ", error);
         });
 
@@ -1711,8 +1714,8 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
             }
 
             // Set the reciever of the email
-            let reciever = [];
-            reciever.push(recipient.email);
+            let recipients = [];
+            recipients.push(recipient.email);
 
             let positionCounts = [];
 
@@ -1807,7 +1810,7 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
                     + '</div>'
                 + '</div>';
 
-                sendEmailPromise({ reciever, subject, content })
+                sendEmailPromise({ recipients, subject, content })
                 .catch(error => { console.log("Error sending delayed email: ", error); });
 
                 // Update the lastSent day of the user and the waiting to be false

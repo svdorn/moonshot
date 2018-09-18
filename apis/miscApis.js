@@ -71,8 +71,9 @@ function POST_createReferralCode(req, res) {
             + "</div>";
 
         // send email to user who asked for a referral code with the info about the code
-        const sendFrom = "Kyle Treige";
-        sendEmailPromise({ recipient, subject, content: emailContent })
+        const senderName = "Kyle Treige";
+        const senderAddress = "kyle";
+        sendEmailPromise({ recipient, subject, content: emailContent, senderName, senderAddress })
         .catch(error => {
             console.log("Error sending email to user about referral code: ", error);
         });

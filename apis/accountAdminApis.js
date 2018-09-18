@@ -87,9 +87,7 @@ async function POST_sendVerificationEmail(req, res) {
             + '</div>'
         + '</div>';
 
-    const sendFrom = "Moonshot";
-
-    try { await sendEmailPromise({ recipients, subject, content, sendFrom }); }
+    try { await sendEmailPromise({ recipients, subject, content }); }
     catch (sendEmailError) {
         console.log("Error sending email to account admin trying to verify account: ", sendEmailError);
         return res.status(500).send(errors.SERVER_ERROR);
