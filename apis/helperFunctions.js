@@ -1040,6 +1040,14 @@ function emailFooter(userEmail) {
 }
 
 
+// create a new object from the properties of another
+// e.g. const cat = { weight: 26, name: "Mitsy", height: 8 }
+// const slimCat = newObjectFromProps(cat, "name", "height")
+function newObjectFromProps(o, ...props) {
+    return Object.assign({}, ...props.map(prop => ({[prop]: o[prop]})));
+}
+
+
 const helperFunctions = {
     sanitize,
     removeEmptyFields,
@@ -1066,6 +1074,7 @@ const helperFunctions = {
     truthy,
     propertyExists,
     emailFooter,
+    newObjectFromProps,
 
     Queue,
     Stack,

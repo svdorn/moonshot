@@ -24,7 +24,8 @@ const { sanitize,
         logArgs,
         logError,
         randomInt,
-        shuffle
+        shuffle,
+        newObjectFromProps
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require("./psychApis");
@@ -473,10 +474,14 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
     else {
         // save the question as the current question for the user
         user.psychometricTest = updatedPsych.psychTest;
+        // get only the needed info on the current question
+        const currentQuestion = newObjectFromProps(
+            updatedPsych.psychTest.currentQuestion, "body", "leftOption", "rightOption", "questionId"
+        );
         // return the new question to answer
         toReturn = {
             evaluationState: {
-                componentInfo: updatedPsych.psychTest.currentQuestion,
+                componentInfo: currentQuestion,
                 showIntro: false,
                 stepProgress: updatedPsych.stepProgress
             },
@@ -1221,8 +1226,12 @@ function addPsychAnswer(psych, answer) {
     // save the meta-data
     response.endDate = new Date();
     response.totalTime = response.endDate.getTime() - new Date(response.startDate).getTime();
+    // if the answer was flipped in the front end, invert the answer
+    const flipper = currQuestion.frontEndFlipped ? -1 : 1;
+    // save whether the front end was flipped
+    response.frontEndFlipped = currQuestion.frontEndFlipped;
     // save the actual answer
-    response.answer = answer;
+    response.answer = answer * flipper;
 
     // mark the question as no longer available for use
     psych.usedQuestions.push(questionId);
@@ -2455,6 +2464,16 @@ async function getNewPsychQuestion(psych) {
         psych.currentQuestion = question;
         psych.currentQuestion.questionId = question._id
         psych.currentQuestion._id = undefined;
+
+        // 50% chance of flipping the question's right and left options
+        if (randomInt(0,1) === 1) {
+            const oldRight = question.rightOption;
+            psych.currentQuestion.rightOption = question.leftOption;
+            psych.currentQuestion.leftOption = oldRight;
+            psych.currentQuestion.frontEndFlipped = true
+        } else {
+            psych.currentQuestion.frontEndFlipped = false;
+        }
 
         // update everything that was changed
         factor.facets[facetIdx] = facet;

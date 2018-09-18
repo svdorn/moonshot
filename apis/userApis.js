@@ -29,8 +29,8 @@ const errors = require('./errors.js');
 
 const userApis = {
     POST_signOut,
-    POST_keepMeLoggedIn,
-    GET_keepMeLoggedIn,
+    POST_stayLoggedIn,
+    GET_stayLoggedIn,
     GET_session,
     POST_session,
     POST_updateOnboarding,
@@ -1648,31 +1648,31 @@ function POST_signOut(req, res) {
 
 // change session to store whether user wants default of "Keep Me Logged In"
 // to be checked or unchecked
-function POST_keepMeLoggedIn(req, res) {
-    if (typeof req.body.stayLoggedIn === "boolean") {
-        req.session.stayLoggedIn = req.body.stayLoggedIn;
-    } else {
-        req.session.stayLoggedIn = false;
-    }
+function POST_stayLoggedIn(req, res) {
+    // get the wanted setting
+    const stayLoggedIn = sanitize(req.body.stayLoggedIn);
+    // if a valid argument was provided, set the session to be the argument provided
+    req.session.stayLoggedIn = typeof stayLoggedIn === "boolean" ? stayLoggedIn : false;
+    // save the session
     req.session.save(function (saveSessionError) {
         if (saveSessionError) {
             console.log("error saving 'keep me logged in' setting: ", saveSessionError);
-            return res.status(500).send("Error saving 'keep me logged in' setting.");
+            return res.status(500).send({ message: "Error saving 'keep me logged in' setting." });
         } else {
-            return res.json("success");
+            return res.status(200).send({});
         }
-    })
+    });
 }
 
 
 // get the setting to stay logged in or out
-function GET_keepMeLoggedIn(req, res) {
+function GET_stayLoggedIn(req, res) {
     // get the setting
-    let setting = sanitize(req.session.stayLoggedIn);
+    let stayLoggedIn = sanitize(req.session.stayLoggedIn);
     // if it's not of the right form, assume you shouldn't stay logged in
-    if (typeof setting !== "boolean") { setting = false; }
+    if (typeof stayLoggedIn !== "boolean") { stayLoggedIn = false; }
     // return the found setting
-    return res.json(setting);
+    return res.status(200).send({ stayLoggedIn });
 }
 
 
