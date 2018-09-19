@@ -91,7 +91,8 @@ export function usersReducers(state = initialState, action) {
                 Intercom('update', {
                     email: intercom.email,
                     user_id: intercom.id,
-                    name: action.user.name
+                    name: action.user.name,
+                    user_hash: action.user.hmac
                 });
             }
             return {

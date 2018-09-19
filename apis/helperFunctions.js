@@ -54,6 +54,7 @@ const FOR_USER = [
     "dateSignedUp",
     "businessInfo",
     "emailToContact",
+    "hmac",
     "adminQuestions",
     "referredByCode",
     "currentPosition",
