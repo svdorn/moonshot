@@ -931,7 +931,7 @@ function emailFooter(userEmail, extraInfo) {
             <div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">
                 <i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>
                 <a style="color:#C8C8C8; margin-top:20px;" href="${moonshotUrl}unsubscribe?email=${userEmail}">Opt-out of future messages.</a></i>
-                ${extraInfo}
+                ${extraInfo ? extraInfo : ""}
             </div>
         </div>`
     );

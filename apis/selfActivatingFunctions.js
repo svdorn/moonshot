@@ -165,18 +165,24 @@ async function sendUpdateEmails() {
 
             // wait for all the counts to complete
             try { var userCounts = await Promise.all(countUserPromises); }
-            catch (countUsersError) { return reject(countUsersError); }
+            catch (countUsersError) {
+                console.log("Error counting users for email update for :", admin.email, countUsersError);
+                return resolve();
+            }
 
             console.log("about to call sendUpdateEmail for email: ", admin.email);
             // send email to the user with the counts
             try { await sendUpdateEmail(admin.email, admin.name, allPositions.map(p => p.name), userCounts, timeIntervals[notificationInfo.time], admin.notifications.firstTime); }
-            catch (sendEmailError) { return reject(sendEmailError); }
+            catch (sendEmailError) {
+                console.log("Error sending update email to ", admin.email, sendEmailError);
+                return resolve();
+            }
 
             // update user to contain info about when this email was sent
             admin.notifications.lastSent = now;
             admin.notifications.firstTime = false;
             try { await admin.save(); }
-            catch (saveUserError) { return reject(saveUserError); }
+            catch (saveUserError) { console.log("Error saving user with email: ", admin.email, " after sending update email: ", saveUserError); }
 
             return resolve();
         });
@@ -220,10 +226,10 @@ async function sendUpdateEmails() {
                 const firstName = getFirstName(recipientName);
                 const content = (`
                     <div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
-                        <div style="width:95%; display:inline-block; text-align:left;">Hi${firstName ? ` ${firstName},` : ","},</div>
+                        <div style="width:95%; display:inline-block; text-align:left;">Hi${firstName ? ` ${firstName},` : ","}</div>
                         ${introSection}
                         ${countsSection}<br/>
-                        <a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="${moonshotUrl}myCandidates">See Results</a>
+                        <a style="display:inline-block;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:6px 30px;text-decoration:none;margin:20px;background:#494b4d;" href="${moonshotUrl}myCandidates">See Results</a>
                         <div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go <b style="color:#C8C8C8;" ><a href="${moonshotUrl}myEvaluations?open=true">here</a></b>.</div>
                         <div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></div>
                         ${emailFooter(recipient, changeFrequencyNote)}

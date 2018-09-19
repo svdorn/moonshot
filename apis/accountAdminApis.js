@@ -12,7 +12,9 @@ const { sanitize,
         sendEmail,
         frontEndUser,
         getAndVerifyUser,
-        validArgs
+        validArgs,
+        moonshotUrl,
+        emailFooter
 } = require('./helperFunctions.js');
 
 // import random functions from other apis
@@ -59,33 +61,19 @@ async function POST_sendVerificationEmail(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    let moonshotUrl = 'https://moonshotinsights.io/';
-    // if we are in development, links are to localhost
-    if (process.env.NODE_ENV === "development") {
-        moonshotUrl = 'http://localhost:8081/';
-    }
-
     // send email with that info to the user
     let recipients = [ user.email ];
     let subject = 'Verify email';
-    let content =
-        '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-            + '<div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>'
-            + '<p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.'
-            + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>'
-            + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'verifyEmail?token='
-            + user.emailVerificationToken
-            + '">Verify Account</a>'
-            + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
-            + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-            + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-            + '<div style="text-align:left;width:95%;display:inline-block;">'
-                + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
-                + '</div>'
-            + '</div>'
-        + '</div>';
+    let content = (`
+        <div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
+            <div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>
+            <p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.</p><br/>
+            <p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>
+            <a style="display:inline-block;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:6px 30px;text-decoration:none;margin:20px;background:#494b4d;" href="${moonshotUrl}verifyEmail?token=${user.emailVerificationToken}">Verify Account</a>
+            <p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>
+            ${emailFooter(user.email)}
+        </div>
+    `);
 
     try { await sendEmail({ recipients, subject, content }); }
     catch (sendEmailError) {
