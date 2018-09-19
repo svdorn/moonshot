@@ -2,15 +2,28 @@ const Users = require('../models/users.js');
 const Businesses = require('../models/businesses.js');
 
 const mongoose = require("mongoose");
+var CronJob = require("cron").CronJob;
 
 // get helper functions
 const { sendEmail,
         emailFooter,
         getFirstName,
         devEmail,
-        devMode
+        devMode,
+        moonshotUrl,
+        isValidEmail
 } = require('./helperFunctions');
 
+
+// run the function to send email updates once a day at 8am LA time
+// const onComplete = null;
+// const onStart = true;
+// const timezone = "America/Los_Angeles";
+// new CronJob("* * * * * *", function() {
+//     console.log("WAZZAAAA");
+// }, onComplete, onStart, timezone);
+
+sendUpdateEmails();
 
 // global time constants
 const ONE_HOUR = 1000 * 60 * 60;
@@ -22,6 +35,12 @@ const minimumTimes = {
     "Daily": ONE_DAY,
     "never": 0
 };
+const timeIntervals = {
+    "Weekly": "week",
+    "Every 5 Days": "five days",
+    "Every 2 Days": "two days",
+    "Daily": "day"
+}
 
 // function that runs once a day and updates every account admin with the number
 // of users that have gone through their evaluations
@@ -36,16 +55,12 @@ async function sendUpdateEmails() {
     catch (getBusinessesError) { return handleError(getBusinessesError) }
 
     // create hash table for businesses/positions
-    // positions can be accessed via positions[businessId][positionId]
+    // positions can be accessed via positions[businessId]
     let positions = {};
     businesses.forEach(business => {
+        const businessIdString = business._id.toString();
         // hash table for the positions
-        positions[business._id] = {};
-        // positions[businessId]["all"] = list of all positions
-        positions[business._id]["all"] = business.positions;
-        business.positions.forEach(position => {
-            positions[business._id][position._id] = position.name;
-        });
+        positions[businessIdString] = business.positions;
     })
 
     // get every account admin
@@ -68,6 +83,8 @@ async function sendUpdateEmails() {
     try { await Promise.all(emailPromises); }
     catch (emailPromisesError) { return handleError(emailPromisesError); }
 
+    console.log("Email updates sent!");
+
     // end the function
     return;
 
@@ -76,6 +93,11 @@ async function sendUpdateEmails() {
     // figure out if an email should be sent, and if so, do it
     async function emailIfEnoughTimeElapsed(admin) {
         return new Promise(async function(resolve, reject) {
+            if (!isValidEmail(admin.email)) {
+                console.log(`User with id: ${admin._id} had invalid email: ${admin.email}`);
+                return resolve();
+            }
+
             // if the admin does not have notification preferences, create the preferences object
             if (!admin.notifications) { admin.notifications = {}; }
             // if the admin has not marked their preference on time delays between
@@ -89,9 +111,13 @@ async function sendUpdateEmails() {
             // SENDING NEW UPDATES, DON'T SEND AN UPDATE
             let notificationInfo = admin.notifications;
             // if user never wants notifications, skip them
-            if (notificationInfo.time === "never") { continue; }
-            // millis for approximate time last date email was sent
-            const lastSent = new Date(notificationInfo.lastSent);
+            if (notificationInfo.time === "never") {
+                console.log(admin.email, " never wants email updates.");
+                return resolve();
+            }
+            // millis for approximate time last date email was sent;
+            // if an email has never been sent, say one was sent in 1970
+            const lastSent = new Date(notificationInfo.lastSent ? notificationInfo.lastSent : 0);
             const lastSentMillis = lastSent.getTime();
             // millis since last email was sent
             const timeSinceLastSent = now - lastSentMillis;
@@ -100,13 +126,24 @@ async function sendUpdateEmails() {
             // if invalid setting for sending emails, assume should send them daily
             if (!minimumTime) { minimumTime = ONE_DAY; }
             // check for minimum time minus an hour to account for email send delays
-            if (timeSinceLastSent < minimumTime - ONE_HOUR) { continue; }
+            if (timeSinceLastSent < minimumTime - ONE_HOUR) {
+                console.log("Not enough time elapsed for: ", admin.email);
+                return resolve();
+            }
 
             // id of the business the user works for
-            const businessId = admin.businessInfo.businessId;
+            if (!admin.businessInfo || !admin.businessInfo.businessId) {
+                console.log(`Admin with id ${admin._id} id not have business id.`);
+                return resolve();
+            }
+            const businessId = admin.businessInfo.businessId.toString();
             const businessMongoId = mongoose.Types.ObjectId(businessId);
             // list of all the positions the business offers
-            const allPositions = positions[businessId]["all"];
+            const allPositions = positions[businessId.toString()];
+            if (!allPositions) {
+                console.log("No positions for business id: ", businessId.toString());
+                return resolve();
+            }
 
             // contains all the promises that are counting numbers of users
             let countUserPromises = [];
@@ -128,15 +165,25 @@ async function sendUpdateEmails() {
 
             // wait for all the counts to complete
             try { var userCounts = await Promise.all(countUserPromises); }
-            catch (countUsersError) { console.log(`Error counting users for email update for user with id ${admin._id}:`, countUsersError); }
+            catch (countUsersError) { return reject(countUsersError); }
 
+            console.log("about to call sendUpdateEmail for email: ", admin.email);
             // send email to the user with the counts
-            try { await sendUpdateEmail(admin.email, allPositions.map(p => p.name), userCounts); }
+            try { await sendUpdateEmail(admin.email, admin.name, allPositions.map(p => p.name), userCounts, timeIntervals[notificationInfo.time], admin.notifications.firstTime); }
+            catch (sendEmailError) { return reject(sendEmailError); }
+
+            // update user to contain info about when this email was sent
+            admin.notifications.lastSent = now;
+            admin.notifications.firstTime = false;
+            try { await admin.save(); }
+            catch (saveUserError) { return reject(saveUserError); }
+
+            return resolve();
         });
     }
 
     // creates content then sends the update email
-    async function sendUpdateEmail(recipient, positionNames, counts, timeInterval) {
+    async function sendUpdateEmail(recipient, recipientName, positionNames, counts, timeInterval, firstTime) {
         return new Promise(async function(resolve, reject) {
             try {
                 let totalCompletions = 0;
@@ -168,22 +215,18 @@ async function sendUpdateEmails() {
                     </div>
                 `);
 
-                let content = (`
+                const changeFrequencyNote = `<a style="color:#C8C8C8; margin-top:20px;" href="${moonshotUrl}settings">Change the frequency of your notifications.</a></i><br/>`;
+
+                const firstName = getFirstName(recipientName);
+                const content = (`
                     <div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
-                        <div style="width:95%; display:inline-block; text-align:left;">Hi ${getFirstName(recipient.name)},</div>
+                        <div style="width:95%; display:inline-block; text-align:left;">Hi${firstName ? ` ${firstName},` : ","},</div>
                         ${introSection}
                         ${countsSection}<br/>
-                        <a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="${moonshotUrl}myCandidates'">See Results</a>
-                        <div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go <b style="color:#C8C8C8;" ><a href="' + moonshotUrl + 'myEvaluations?open=true">here</a></b>.</div>
+                        <a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="${moonshotUrl}myCandidates">See Results</a>
+                        <div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go <b style="color:#C8C8C8;" ><a href="${moonshotUrl}myEvaluations?open=true">here</a></b>.</div>
                         <div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></div>
-                        <div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>
-                        <a href="${moonshotUrl}" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>
-                        <div style="text-align:left;width:95%;display:inline-block;">
-                            <div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">
-                            <i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>
-                            <a style="color:#C8C8C8; margin-top:20px;" href="${moonshotUrl}settings">Change the frequency of your notifications.</a></i><br/>
-                            <a style="color:#C8C8C8; margin-top:20px;" href="${moonshotUrl}unsubscribe">Opt-out of future messages.</a></i></div>
-                        </div>
+                        ${emailFooter(recipient, changeFrequencyNote)}
                     </div>
                 `);
 
@@ -195,6 +238,8 @@ async function sendUpdateEmails() {
                     senderName: "Justin Ye",
                     senderAddress: "justin"
                 });
+
+                console.log("email sent to ", recipient);
                 return resolve();
             }
             // simply reject any error that comes up
@@ -203,7 +248,7 @@ async function sendUpdateEmails() {
     }
 
     // handles generic errors
-    function handleError(error) {
+    async function handleError(error) {
         console.log("Error sending update emails: ", error);
         const failSubject = "MOONSHOT - IMPORTANT - Error sending email updates to Account Admins";
         const failContent = "Check logs for specific error.";
@@ -425,7 +470,7 @@ async function sendDelayedEmail(recipient, time, lastSent, positions, interval, 
                     <div style="width:95%; display:inline-block; text-align:left;">Hi ${getFirstName(recipient.name)},</div>
                     ${introSection}
                     ${countsSection}<br/>
-                    <a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="${moonshotUrl}myCandidates'">See Results</a>
+                    <a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="${moonshotUrl}myCandidates">See Results</a>
                     <div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go <b style="color:#C8C8C8;" ><a href="' + moonshotUrl + 'myEvaluations?open=true">here</a></b>.</div>
                     <div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></div>
                     <div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>

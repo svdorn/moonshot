@@ -24,6 +24,11 @@ const sanitizeOptions = {
     allowedAttributes: []
 }
 
+// constants to export
+const devMode = !!(process.env.NODE_ENV === "development");
+const devEmail = process.env.DEV_EMAIL;
+const moonshotUrl = devMode ? "http://localhost:8081/" : "https://moonshotinsights.io/";
+
 
 // Queue implementation
 function Queue() { this.data = []; }
@@ -918,9 +923,7 @@ const founderEmails = process.env.NODE_ENV === "production" ? ["kyle@moonshotins
 
 
 // standard email footer
-function emailFooter(userEmail) {
-    let moonshotUrl = process.env.NODE_ENV === "development" ? 'http://localhost:8081/' : 'https://moonshotinsights.io/';
-
+function emailFooter(userEmail, extraInfo) {
     return (
         `<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>
         <div style="text-align:center"><a href="${moonshotUrl}" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px; "src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a></div>
@@ -928,6 +931,7 @@ function emailFooter(userEmail) {
             <div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">
                 <i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>
                 <a style="color:#C8C8C8; margin-top:20px;" href="${moonshotUrl}unsubscribe?email=${userEmail}">Opt-out of future messages.</a></i>
+                ${extraInfo}
             </div>
         </div>`
     );
@@ -965,8 +969,9 @@ const helperFunctions = {
 
     FOR_USER,
     founderEmails,
-    devMode: !!(process.env.NODE_ENV === "development"),
-    devEmail: process.env.DEV_EMAIL
+    devMode,
+    devEmail,
+    moonshotUrl,
 }
 
 

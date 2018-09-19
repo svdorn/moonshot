@@ -58,6 +58,9 @@ const webhooks = require("./apis/webhooks");
 const mlFunctions = require("./apis/mlFunctions");
 const helperFunctions = require("./apis/helperFunctions");
 
+// make self activating functions run
+require("./apis/selfActivatingFunctions");
+
 
 // set up the session
 app.use(session({
