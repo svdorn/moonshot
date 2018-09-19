@@ -33,6 +33,8 @@ const usersSchema = mongoose.Schema({
     userType: String,
     // has admin rights on the site, able to create business accounts and see all results
     admin: Boolean,
+    // the hmac for the user to verify their identification
+    hmac: String,
     // there are various terms that can be agreed to, depending on the user type
     termsAndConditions: [{
         // the name of the terms [e.g. Privacy Policy, Terms of Use, etc...]

@@ -3,6 +3,7 @@ const Psychtests = require('../models/psychtests.js');
 const Skills = require('../models/skills.js');
 const Businesses = require('../models/businesses.js');
 const Adminquestions = require("../models/adminquestions");
+const credentials = require('../credentials');
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -1550,8 +1551,16 @@ async function GET_session(req, res) {
         }
 
         // otherwise return the user that is logged in
-        else { res.json(frontEndUser(user)); }
-    }
+        else {
+            // generate an hmac for the user so intercom can verify identity
+            if (user.intercom && user.intercom.id) {
+                const hash = crypto.createHmac('sha256', credentials.hmacKey)
+                           .update(user.intercom.id)
+                           .digest('hex');
+                user.hmac = hash;
+            }
+            res.json(frontEndUser(user)); }
+        }
 
     // on error, print the error and return as if there was no user in the session
     catch (getUserError) {
@@ -2056,6 +2065,14 @@ async function POST_login(req, res) {
 
     // if no user with that email is found
     if (!user) { return res.status(401).send(INVALID_EMAIL); }
+
+    // generate an hmac for the user so intercom can verify identity
+    if (user.intercom && user.intercom.id) {
+        const hash = crypto.createHmac('sha256', credentials.hmacKey)
+                   .update(user.intercom.id)
+                   .digest('hex');
+        user.hmac = hash;
+    }
 
     // see if the given password is correct
     bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {

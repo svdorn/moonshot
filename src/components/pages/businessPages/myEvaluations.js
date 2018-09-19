@@ -23,6 +23,7 @@ import axios from 'axios';
 import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import CreatingEvalProgress from '../../miscComponents/creatingEvalProgress';
+import clipboard from "clipboard-polyfill";
 import { goTo } from '../../../miscFunctions';
 
 const required = value => (value ? undefined : 'This field is required.');
@@ -232,6 +233,13 @@ class MyEvaluations extends Component {
         goTo("/psychometricAnalysis");
     }
 
+    copyLink() {
+        let URL = "https://moonshotinsights.io/apply/" + this.state.businessName;
+        URL = encodeURI(URL);
+        clipboard.writeText(URL);
+        this.props.addNotification("Link copied to clipboard.", "info");
+    }
+
     render() {
         const style = {
             separator: {
@@ -359,6 +367,13 @@ class MyEvaluations extends Component {
         }
 
         if (currentUser && currentUser.userType == "accountAdmin" && this.state.positions.length !== 0) {
+            var link =
+                (<div className="secondary-gray font16px font14pxUnder900 font12pxUnder500" style={{width:"95%", margin:"20px auto 20px"}}>
+                    {this.state.businessName}&#39;s custom link that you can share with all of your candidates and embed in your hiring workflow:&nbsp;
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink.bind(this)} style={{padding: "3px 10px"}}>
+                        {"Get Link"}
+                    </button>
+                </div>);
             let attributes = {};
             attributes.variation = "edit";
             attributes.name = "Web Developer";
@@ -490,6 +505,9 @@ class MyEvaluations extends Component {
                     <div style={style.separatorText}>
                         My Evaluations
                     </div>
+                </div>
+                <div className="center">
+                    {link}
                 </div>
                 <div className="marginBottom60px">
                     {evaluations}

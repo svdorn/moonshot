@@ -64,7 +64,21 @@ class Main extends Component {
         // get the user from the session - if there is no user, just marks screen ready to display
         this.props.getUserFromSession(function (work) {
             if (work) {
-                self.setState({ loadedUser: true });
+                self.setState({ loadedUser: true }, () => {
+                    if (self.props.currentUser && self.props.currentUser.intercom) {
+                        var email = self.props.currentUser.intercom.email;
+                        var user_id = self.props.currentUser.intercom.id;
+                        var user_hash = self.props.currentUser.hmac;
+                    }
+                    console.log("user hash: ", user_hash);
+                    window.Intercom('boot', {
+                      app_id: "xki3jtkg",
+                      email,
+                      user_id,
+                      user_hash,
+                      created_at: (new Date().getTime() / 1000),
+                    });
+                });
             }
         });
 

@@ -36,14 +36,7 @@ class EmployeePreview extends Component {
         }
         this.setState({questionAnswer: questionAnswer});
     }
-
-    goTo(route) {
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
+    
     handleOpen() {
         this.setState({
             ...this.state,
