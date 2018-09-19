@@ -15,8 +15,6 @@ const errors = require('./errors.js');
 // get helper functions
 const { sanitize,
         verifyUser,
-        sendEmail,
-        emailFooter,
         getAndVerifyUser,
         getFirstName,
         getUserFromReq,
