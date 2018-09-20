@@ -33,6 +33,8 @@ const usersSchema = mongoose.Schema({
     userType: String,
     // has admin rights on the site, able to create business accounts and see all results
     admin: Boolean,
+    // the hmac for the user to verify their identification
+    hmac: String,
     // there are various terms that can be agreed to, depending on the user type
     termsAndConditions: [{
         // the name of the terms [e.g. Privacy Policy, Terms of Use, etc...]
@@ -375,7 +377,9 @@ const usersSchema = mongoose.Schema({
             // the right response
             rightOption: String,
             // if the score should be inverted after answering
-            invertScore: Boolean
+            invertScore: Boolean,
+            // whether the right and left option were flipped for the front end
+            frontEndFlipped: Boolean
         },
         // the overall factors the questions test for
         factors: [{
@@ -408,8 +412,10 @@ const usersSchema = mongoose.Schema({
                 responses: [{
                     // the question id of the question that was actually answered
                     answeredId: mongoose.Schema.Types.ObjectId,
-                    // whether the answer for this question should be flipped (e.g. 3 => -3)
+                    // whether the answer for this question should be flipped during grading (e.g. 3 => -3)
                     invertScore: Boolean,
+                    // whether the question was flipped in the front end (does not affect grading)
+                    frontEndFlipped: Boolean,
                     // the answer (-5 to 5) that the user chose
                     answer: Number,
                     // exact date/time the user started the first phrasing of this question

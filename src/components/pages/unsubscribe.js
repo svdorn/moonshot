@@ -139,7 +139,6 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
         formData: state.form,
         loadingUnsubscribe: state.users.loadingSomething,
     };

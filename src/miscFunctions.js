@@ -142,6 +142,7 @@ function isValidPassword(password) {
 
 // goes to a different page within moonshot insights; passing "/onboarding" would go to moonshotinsights.io/onboarding
 function goTo(route) {
+    window.Intercom('update');
     // go to the wanted page
     browserHistory.push(route);
     // scroll to the top of the new page

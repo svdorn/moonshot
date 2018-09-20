@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { TextField, CircularProgress, RaisedButton } from 'material-ui';
-import { login, closeNotification } from '../../actions/usersActions';
+import { login, closeNotification, addNotification } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -36,7 +36,7 @@ class Login extends Component {
         this.bound_handleKeyPress = this.handleKeyPress.bind(this);
         this.state = {
             showErrors: true,
-            keepMeLoggedIn: false
+            stayLoggedIn: false
         };
     }
 
@@ -64,21 +64,18 @@ class Login extends Component {
 
 
         else {
+            const self = this;
             // get the setting for if the user wants to stay logged in from the cookie
-            axios.get("/api/user/keepMeLoggedIn")
-            .then(function (res) {
-                let keepMeLoggedIn = res.data;
-                if (typeof keepMeLoggedIn != "boolean") {
-                    keepMeLoggedIn = false;
-                }
-                self.setState({
-                    ...self.state,
-                    keepMeLoggedIn
-                })
+            axios.get("/api/user/stayLoggedIn")
+            .then(res => {
+                const setting = res.data.stayLoggedIn;
+                // stay logged in by default
+                const stayLoggedIn = typeof setting === "boolean" ? setting : true;
+                self.setState({ stayLoggedIn });
             })
-            .catch(function (err) {
-                // console.log("error getting 'keep me logged in' option")
-            });
+            // if there's an error getting this setting, don't do anything,
+            // as that will keep the setting as false
+            .catch(error => {});
         }
     }
 
@@ -125,7 +122,7 @@ class Login extends Component {
             password: this.props.formData.login.values.password
         };
 
-        let saveSession = this.state.keepMeLoggedIn;
+        let saveSession = this.state.stayLoggedIn;
 
         let navigateBackUrl = undefined;
         let location = this.props.location;
@@ -149,15 +146,15 @@ class Login extends Component {
     }
 
     handleCheckMarkClick() {
-
-        axios.post("/api/user/keepMeLoggedIn", { stayLoggedIn: !this.state.keepMeLoggedIn })
-        .catch(function(err) {
-            // console.log("error posting 'keep me logged in' option: ", err);
-        });
-        this.setState({
-            ...this.state,
-            keepMeLoggedIn: !this.state.keepMeLoggedIn
-        })
+        const stayLoggedIn = !this.state.stayLoggedIn;
+        // save the setting in the session
+        axios.post("/api/user/stayLoggedIn", { stayLoggedIn: stayLoggedIn })
+        // won't be seeing this page until logging in again, and at that point
+        // user can just re-check the checkmark, so not a big deal if this
+        // setting doesn't save
+        .catch(function(err) {});
+        // uncheck the checkmark
+        this.setState({ ...this.state, stayLoggedIn });
     }
 
     render() {
@@ -196,7 +193,7 @@ class Login extends Component {
                         <div className="checkbox smallCheckbox whiteCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
                                 alt="Checkmark icon"
-                                className={"checkMark" + this.state.keepMeLoggedIn}
+                                className={"checkMark" + this.state.stayLoggedIn}
                                 src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             />
                         </div>
@@ -227,6 +224,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         login,
         closeNotification,
+        addNotification
     }, dispatch);
 }
 

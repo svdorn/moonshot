@@ -67,6 +67,7 @@ const FOR_USER = [
     "dateSignedUp",
     "businessInfo",
     "emailToContact",
+    "hmac",
     "adminQuestions",
     "referredByCode",
     "currentPosition",
@@ -77,6 +78,7 @@ const FOR_USER = [
     "termsAndConditions",
     "hasFinishedOnboarding",
     "sawMyCandidatesInfoBox",
+    "intercom"
 ];
 
 // removes information from a db user object so that it can be passed for that
@@ -938,6 +940,14 @@ function emailFooter(userEmail, extraInfo) {
 }
 
 
+// create a new object from the properties of another
+// e.g. const cat = { weight: 26, name: "Mitsy", height: 8 }
+// const slimCat = newObjectFromProps(cat, "name", "height")
+function newObjectFromProps(o, ...props) {
+    return Object.assign({}, ...props.map(prop => ({[prop]: o[prop]})));
+}
+
+
 const helperFunctions = {
     sanitize,
     removeEmptyFields,
@@ -963,6 +973,7 @@ const helperFunctions = {
     truthy,
     propertyExists,
     emailFooter,
+    newObjectFromProps,
 
     Queue,
     Stack,

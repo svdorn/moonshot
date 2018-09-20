@@ -86,6 +86,15 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "LOGIN":
+            if (action.user && action.user.intercom) {
+                const intercom = action.user.intercom;
+                Intercom('update', {
+                    email: intercom.email,
+                    user_id: intercom.id,
+                    name: action.user.name,
+                    user_hash: action.user.hmac
+                });
+            }
             return {
                 ...state,
                 notification: action.notification,
@@ -129,6 +138,10 @@ export function usersReducers(state = initialState, action) {
             return {...state, loadingSomething:false, userPostedFailed: true, ...notificationInfo(action.notification)}
             break;
         case "SIGNOUT":
+            Intercom('shutdown');
+            Intercom('boot', {
+                app_id: 'xki3jtkg'
+            });
             return {...state, currentUser: undefined};
             break;
         case "FORGOT_PASSWORD_REQUESTED":

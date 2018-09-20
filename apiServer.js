@@ -121,8 +121,8 @@ app.use(session({
 
 app.post("/user/addPositionEval", userApis.POST_addPositionEval);
 app.post('/user/signOut', userApis.POST_signOut);
-app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
-app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
+app.post("/user/stayLoggedIn", userApis.POST_stayLoggedIn);
+app.get("/user/stayLoggedIn", userApis.GET_stayLoggedIn);
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
 app.post('/user/updateOnboarding', userApis.POST_updateOnboarding);

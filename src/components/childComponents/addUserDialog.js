@@ -308,13 +308,6 @@ class AddUserDialog extends Component {
         this.props.emailFailureExitPage();
     }
 
-    goTo(route) {
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
     handleTabChange = (tab) => {
         this.setState({tab})
     }
