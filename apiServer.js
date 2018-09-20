@@ -186,8 +186,8 @@ app.get("/admin/blankPosition", adminApis.GET_blankPosition);
 
 app.post('/billing/customer', billingApis.POST_customer);
 
-app.get("/evaluation/initialState", evaluationApis.GET_initialState);
 app.get("/evaluation/currentState", evaluationApis.GET_currentState);
+app.post("/evaluation/getInitialState", evaluationApis.POST_getInitialState);
 app.post("/evaluation/start", evaluationApis.POST_start);
 app.post("/evaluation/answerAdminQuestion", evaluationApis.POST_answerAdminQuestion);
 app.post("/evaluation/answerPsychQuestion", evaluationApis.POST_answerPsychQuestion);

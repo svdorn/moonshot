@@ -71,7 +71,7 @@ class Evaluation extends Component {
     // are in their evaluation
     componentWillMount() {
         // get the current stage so we can see what user wants to do
-        axios.get("/api/evaluation/initialState", this.state.generalApiGetArgs)
+        axios.post("/api/evaluation/getInitialState", this.state.generalApiPostArgs)
         .then(this.handleInitialState.bind(this))
         .catch(this.handleError.bind(this));
     }

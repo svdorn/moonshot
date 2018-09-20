@@ -604,9 +604,9 @@ module.exports.POST_start = async function(req, res) {
 
 
 // gets results for a user and influencers
-module.exports.GET_initialState = async function(req, res) {
+module.exports.POST_getInitialState = async function(req, res) {
     // get everything needed from request
-    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
     // if the ids are not strings, return bad request error
     if (!validArgs({ stringArgs: [businessId, positionId] })) {
         logArgs(req.query, ["businessId", "positionId"]);
@@ -632,9 +632,22 @@ module.exports.GET_initialState = async function(req, res) {
         return res.status(500).send({ serverError: true });
     }
 
-    // check if they have finished the eval already
+    // check if they have finished the eval
     if (user.positions[positionIndex].appliedEndDate) {
         return res.status(200).send({ finished: true });
+    }
+
+    // check if the user has finished all the components already
+    if (finishedPosition(user, position)) {
+        console.log("finished position is true");
+        // finish the position
+        try {
+            const { user: updatedUser } = await advance(user, businessId, positionId);
+            user = updatedUser;
+            await user.save();
+            return res.status(200).send({ finished: true });
+        }
+        catch (finishPositionError) { console.log("Error finishing position from getting initial state: ", finishPositionError); }
     }
 
     // if user is in-progress on any position
@@ -766,6 +779,39 @@ module.exports.addEvaluation = async function(user, businessId, positionId, star
     });
 }
 
+
+// checks if a position's components are all completed
+function finishedPosition(user, position) {
+    // check if admin qs are done
+    if (!user.adminQuestions || !user.adminQuestions.endDate) { return false; }
+    // check if psych is done
+    if (!user.psychometricTest || !user.psychometricTest.endDate) { return false; }
+    // check if gca is done
+    if (!user.cognitiveTest || !user.cognitiveTest.endDate) { return false; }
+    // check if skills are done
+    if (position.skills && position.skills.length > 0) {
+        console.log("there are skills to do");
+        // if there are skills to be done and the user has done none, not done with eval
+        if (!user.skillTests || user.skillTests.length === 0) { return false; }
+        console.log("user has started at least one skill");
+        // see if each test is done
+        for (let posIdx = 0; posIdx < position.skills.length; posIdx++) {
+            const skillIdString = position.skills[posIdx].toString();
+            // see if the user has the skill
+            const userSkill = user.skillTests.find(uSkill => uSkill.skillId.toString() === skillIdString);
+            console.log("user skill: ", userSkill);
+            console.log();
+            // if the user doesn't have it or it's not done, not done with eval
+            if (!userSkill || typeof userSkill.mostRecentScore !== "number") {
+                console.log("returning false");
+                return false;
+            }
+        }
+    }
+    console.log("finished everything");
+    // user finished everything
+    return true;
+}
 
 // start the next skill in an eval
 async function startNewSkill(user) {
@@ -1340,7 +1386,7 @@ async function getEvaluationState(options) {
         catch (getStateError) { reject(getStateError); }
 
 
-        // if the user finished all the componens, they're done
+        // if the user finished all the components, they're done
         if (!evaluationState.component) {
             evaluationState.component = "Finished";
             // return the position too since they'll probably have to get graded now
@@ -1842,8 +1888,8 @@ async function addSkillInfo(user, evaluationState, position) {
                             // give this question to eval state so user can see it
                             evaluationState.componentInfo = question;
                             // update the step progress
-                            const numAnswered = userSkill.attempts && userSkill.attempts.levels && userSkill.attempts.levels.length > 0 && userSkill.attempts.levels[0].questions ? userSkill.attempts.levels[0].questions.length : 0;
-                            evaluationState.stepProgress = (numAnswered / questions) * 100;
+                            const numAnswered = Array.isArray(userSkill.attempts) && userSkill.attempts.length > 0 && userSkill.attempts[0].levels && userSkill.attempts[0].levels.length > 0 && userSkill.attempts[0].levels[0].questions ? userSkill.attempts[0].levels[0].questions.length : 0;
+                            evaluationState.stepProgress = (numAnswered / questions.length) * 100;
                         }
                         catch (getSkillError) { reject(getSkillError); }
                     }
