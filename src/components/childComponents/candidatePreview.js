@@ -15,6 +15,7 @@ import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import HoverTip from "../miscComponents/hoverTip";
+import { goTo } from "../../miscFunctions";
 
 class CandidatePreview extends Component {
     constructor(props) {
@@ -86,15 +87,6 @@ class CandidatePreview extends Component {
             lastEdited
         });
     }
-
-
-    goTo(route) {
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
 
     // when Dismiss button is clicked
     handleClick() {
@@ -349,7 +341,7 @@ class CandidatePreview extends Component {
         }
 
         const seeResults = finishedEval ?
-                <div style={{...style.redLink, ...style.seeResults, cursor: "pointer"}} onClick={() => this.goTo(resultsUrl)}>
+                <div style={{...style.redLink, ...style.seeResults, cursor: "pointer"}} onClick={() => goTo(resultsUrl)}>
                     See Results
                 </div>
             :

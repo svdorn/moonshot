@@ -5,10 +5,6 @@ const logger = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const credentials = require('./credentials');
-const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-const sanitizeHtml = require('sanitize-html');
 const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 const prerenderNode = require('prerender-node');
@@ -51,17 +47,20 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 const userApis = require("./apis/userApis");
 const miscApis = require("./apis/miscApis");
 const adminApis = require("./apis/adminApis");
-const skillApis = require("./apis/skillApis");
 const psychApis = require("./apis/psychApis");
 const billingApis = require("./apis/billingApis");
 const businessApis = require("./apis/businessApis");
 const candidateApis = require("./apis/candidateApis");
 const evaluationApis = require("./apis/evaluationApis");
 const accountAdminApis = require("./apis/accountAdminApis");
+const updates = require("./apis/updates");
 
 const webhooks = require("./apis/webhooks");
 const mlFunctions = require("./apis/mlFunctions");
 const helperFunctions = require("./apis/helperFunctions");
+
+// make self activating functions run
+require("./apis/selfActivatingFunctions");
 
 
 // set up the session
@@ -121,14 +120,10 @@ app.use(session({
 // ----->> START APIS <<----- //
 
 
-app.post('/user/submitFreeResponse', userApis.POST_submitFreeResponse);
 app.post("/user/addPositionEval", userApis.POST_addPositionEval);
-app.post('/user/startPositionEval', userApis.POST_startPositionEval);
-app.post('/user/startPsychEval', userApis.POST_startPsychEval);
-app.post('/user/answerPsychQuestion', userApis.POST_answerPsychQuestion);
 app.post('/user/signOut', userApis.POST_signOut);
-app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
-app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
+app.post("/user/stayLoggedIn", userApis.POST_stayLoggedIn);
+app.get("/user/stayLoggedIn", userApis.GET_stayLoggedIn);
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
 app.post('/user/updateOnboarding', userApis.POST_updateOnboarding);
@@ -144,8 +139,6 @@ app.get("/user/influencerResults", userApis.GET_influencerResults);
 app.get("/user/checkEmailVerified", userApis.GET_checkUserVerified);
 app.get("/user/notificationPreferences", userApis.GET_notificationPreferences);
 app.post("/user/postNotificationPreferences", userApis.POST_notificationPreferences);
-
-app.post("/user/sawEvaluationIntro", userApis.POST_sawEvaluationIntro);
 app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
 app.post("/user/verifyFromApiKey", userApis.POST_verifyFromApiKey);
 
@@ -160,9 +153,8 @@ app.post("/accountAdmin/integrationSuggestion", accountAdminApis.POST_integratio
 app.post("/accountAdmin/languagePreference", accountAdminApis.POST_languagePreference);
 
 app.post('/business/googleJobsLinks', businessApis.POST_googleJobsLinks);
-app.post('/business/contactUsEmailNotLoggedIn', businessApis.POST_contactUsEmailNotLoggedIn);
-app.post('/business/addEvaluation', businessApis.POST_addEvaluation);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
+app.post('/business/addEvaluation', businessApis.POST_addEvaluation);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
@@ -205,7 +197,7 @@ app.post("/evaluation/answerOutOfTimeCognitive", evaluationApis.POST_answerOutOf
 app.post("/evaluation/skipAdminQuestions", evaluationApis.POST_skipAdminQuestions);
 
 
-app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
+//app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 app.post("/misc/resetAlan", miscApis.POST_resetAlan);
 

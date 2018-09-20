@@ -86,6 +86,15 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "LOGIN":
+            if (action.user && action.user.intercom) {
+                const intercom = action.user.intercom;
+                Intercom('update', {
+                    email: intercom.email,
+                    user_id: intercom.id,
+                    name: action.user.name,
+                    user_hash: action.user.hmac
+                });
+            }
             return {
                 ...state,
                 notification: action.notification,
@@ -126,9 +135,13 @@ export function usersReducers(state = initialState, action) {
         case "UPDATE_ONBOARDING_REJECTED":
         case "CHANGE_PASSWORD":
         case "POST_EMAIL_INVITES_REJECTED":
-            return {...state, loadingSomething:false, userPostedFailed: true}
+            return {...state, loadingSomething:false, userPostedFailed: true, ...notificationInfo(action.notification)}
             break;
         case "SIGNOUT":
+            Intercom('shutdown');
+            Intercom('boot', {
+                app_id: 'xki3jtkg'
+            });
             return {...state, currentUser: undefined};
             break;
         case "FORGOT_PASSWORD_REQUESTED":
@@ -215,13 +228,12 @@ export function usersReducers(state = initialState, action) {
         case "FOR_BUSINESS":
         case "COMPLETE_PATHWAY":
         case "COMPLETE_PATHWAY_REJECTED":
-            let newState = {...state, loadingSomething: false};
-            if (action.notification) {
-                newState.notification = action.notification;
-            }
-            if (action.user) {
-                newState.currentUser = action.user;
-            }
+            let newState = {
+                ...state,
+                ...notificationInfo(action.notification),
+                loadingSomething: false,
+            };
+            if (action.user) { newState.currentUser = action.user; }
             return newState;
             break;
         case "CONTACT_US":
@@ -236,8 +248,7 @@ export function usersReducers(state = initialState, action) {
         case "FAILURE_BILLING_CUSTOMER":
             return {
                 ...state,
-                notification: action.notification,
-                notificationDate: new Date(),
+                ...notificationInfo(action.notification),
                 loadingSomething: false
             };
             break;
@@ -390,4 +401,31 @@ export function usersReducers(state = initialState, action) {
     }
 
     return state
+}
+
+
+
+// type is optional as it should be included within the notification object
+function notificationInfo(notification, givenType) {
+    const errorTypes = ["error", "errorHeader"];
+    let message = undefined;
+    // assume info headers instead of error headers
+    let type = "infoHeader";
+    // if the given notification is the message
+    if (typeof notification === "string") {
+        message = notification;
+        if (errorTypes.includes(givenType)) { type = "errorHeader"; }
+    }
+    // if the given notification is a notification object
+    else if (typeof notification === "object") {
+        // add the given message if provided
+        if (typeof notification.message === "string") { message = notification.message; }
+        // add the message type if given
+        if (errorTypes.includes(notification.type) || errorTypes.includes(givenType)) { type = "errorHeader"; }
+    }
+    // return the notification information if enough info is given to make one
+    return (typeof message === "string") ? {
+        notification: { message, type },
+        notificationDate: new Date()
+    } : {};
 }

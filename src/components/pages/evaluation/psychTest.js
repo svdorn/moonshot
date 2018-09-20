@@ -6,7 +6,7 @@ import { bindActionCreators } from "redux";
 import { closeNotification, addNotification, answerEvaluationQuestion } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
-import PsychSlider from "../psychAnalysis/psychSlider";
+import PsychSlider from "./psychSlider";
 import { CircularProgress } from "material-ui";
 
 

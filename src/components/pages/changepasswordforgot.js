@@ -1,11 +1,13 @@
 "use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {changePasswordForgot} from '../../actions/usersActions';
-import {TextField, CircularProgress, RaisedButton} from 'material-ui';
-import {Field, reduxForm} from 'redux-form';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { changePasswordForgot, addNotification } from '../../actions/usersActions';
+import { TextField, CircularProgress, RaisedButton } from 'material-ui';
+import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
+
+import { isValidPassword } from "../../miscFunctions";
 
 const style = {
     // the hint that shows up when search bar is in focus
@@ -39,6 +41,9 @@ const validate = values => {
         'password',
         'password2',
     ];
+    if (!isValidPassword(values.password)) {
+        errors.password = 'Password must be at least 8 characters long';
+    }
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'This field is required'
@@ -47,7 +52,7 @@ const validate = values => {
     if (values.password && values.password2 && (values.password != values.password2)) {
         errors.password2 = 'Passwords must match';
     }
-    return errors
+    return errors;
 };
 
 class PasswordChange extends Component {
@@ -71,6 +76,10 @@ class PasswordChange extends Component {
         });
         if (notValid) return;
         if (vals.password != vals.password2) return;
+
+        if (!isValidPassword(vals.password)) {
+            return this.props.addNotification("Password must be at least 8 characters long", "error");
+        }
 
         const token = this.props.location.query.token;
         const user = {
@@ -126,6 +135,7 @@ class PasswordChange extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         changePasswordForgot,
+        addNotification
     }, dispatch);
 }
 

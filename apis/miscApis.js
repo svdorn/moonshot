@@ -1,5 +1,5 @@
 var Referrals = require('../models/referrals.js');
-var Emailaddresses = require('../models/emailaddresses.js');
+const UnsubscribedEmails = require("../models/unsubscribedEmails.js");
 
 const crypto = require('crypto');
 const errors = require("./errors");
@@ -9,6 +9,9 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         sendEmail,
+        devMode,
+        devEmail,
+        isValidEmail,
         getFirstName,
         frontEndUser,
         getAndVerifyUser
@@ -16,7 +19,7 @@ const { sanitize,
 
 
 const miscApis = {
-    POST_createReferralCode,
+    // POST_createReferralCode,
     POST_unsubscribeEmail,
     POST_resetAlan
 }
@@ -68,12 +71,12 @@ function POST_createReferralCode(req, res) {
             + "</div>";
 
         // send email to user who asked for a referral code with the info about the code
-        const sendFrom = "Kyle Treige";
-        sendEmail(recipient, subject, emailContent, sendFrom, undefined, function (success, msg) {
-            if (!success) {
-                console.log("Email not sent to user about referral code. Message: ", msg);
-            }
-        })
+        const senderName = "Kyle Treige";
+        const senderAddress = "kyle";
+        sendEmail({ recipient, subject, content: emailContent, senderName, senderAddress })
+        .catch(error => {
+            console.log("Error sending email to user about referral code: ", error);
+        });
     }
 
     const query = {email};
@@ -114,52 +117,52 @@ function POST_createReferralCode(req, res) {
 }
 
 
-function POST_unsubscribeEmail(req, res) {
-    let recipient = ["kyle@moonshotinsights.io"];
-    let subject = 'URGENT ACTION - User Unsubscribe from Moonshot';
-    let content = "<div>"
-        + "<h3>This email is Unsubscribing from Moonshot Emails:</h3>"
-        + "<p>Email: "
-        + sanitize(req.body.email)
-        + "</p>"
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("You have successfully unsubscribed.");
-        } else {
-            res.status(500).send(msg);
-        }
-    });
-
-    const optOutError = function(error) {
-        console.log("ERROR ADDING EMAIL TO OPT OUT LIST: " + req.body.email);
-        console.log("The error was: ", error);
-        let recipient = ["kyle@moonshotinsights.io"];
-        let subject = "MOONSHOT - URGENT ACTION - User was not unsubscribed"
-        let content = "<div>"
-            + "<h3>This email could not be added to the optOut list:</h3>"
-            + "<p>Email: "
-            + sanitize(req.body.email)
-            + "</p>"
-            + "</div>";
-        sendEmail(recipient, subject, content, sendFrom, undefined, function(){});
+async function POST_unsubscribeEmail(req, res) {
+    const email = sanitize(req.body.email);
+    if (!isValidEmail(email)) {
+        console.log("Invalid email sent to POST_unsubscribeEmail: ", email);
+        return res.status(400).send({ error: "Bad request." });
     }
 
-    // add email to list of unsubscribed emails
-    Emailaddresses.findOne({name: "optedOut"}, function(err, optedOut) {
-        if (err) {
-            optOutError(err);
+    // standard email saying a user unsubscribed
+    let recipients = ["kyle@moonshotinsights.io"];
+    if (devMode) { recipients = devEmail; }
+    let subject = 'URGENT ACTION - User Unsubscribe from Moonshot';
+    let content = (`
+        <div>
+            <h3>This email is Unsubscribing from Moonshot Emails:</h3>
+            <p>Email: ${sanitize(req.body.email)}</p>
+        </div>
+    `);
+
+    const query = { email };
+    const update = { email, dateUnsubscribed: new Date() };
+    const options = { upsert: true, setDefaultsOnInsert: true };
+    // add email to list of unsubscribed emails if they don't already exist there
+    try { await UnsubscribedEmails.findOneAndUpdate(query, update, options); }
+    // if there was an error unsubscribing, send a different email
+    catch (unsubscribeError) {
+        console.log("ERROR ADDING EMAIL TO OPT OUT LIST: " + email, "Error: ", unsubscribeError);
+        subject = "MOONSHOT - URGENT ACTION - User was not unsubscribed"
+        if (!devMode) {
+            recipients = ["kyle@moonshotinsights.io", "ameyer24@wisc.edu", "stevedorn9@gmail.com"];
         }
-        else {
-            optedOut.emails.push(req.body.email);
-            optedOut.save(function(err2, newOptedOut) {
-                if (err2) {
-                    optOutError(err2);
-                }
-            });
-        }
+        content = (`
+            <div>
+                <h3>This email could not be unsubscribed:</h3>
+                <p>Email: ${email}</p>
+                <p>Manually add them to the database of unsubscribed emails.</p>
+            </div>
+        `);
+    }
+
+    // send the email letting us know someone unsubscribed
+    sendEmail({ recipients, subject, content })
+    .then(result => {
+        return res.status(200).send({ message: "You have successfully unsubscribed." });
+    }).catch(error => {
+        console.log("Error sending email about user unsubscribing: ", error);
+        return res.status(500).send({ error: errors.SERVER_ERROR });
     });
 }
 

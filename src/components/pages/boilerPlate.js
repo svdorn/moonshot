@@ -6,7 +6,7 @@ import {  } from "../../actions/usersActions";
 import {  } from "../../miscFunctions";
 
 
-class FreeResponse extends Component {
+class BoilerPlate extends Component {
     constructor(props) {
         super(props);
 
@@ -35,4 +35,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(FreeResponse);
+export default connect(mapStateToProps, mapDispatchToProps)(BoilerPlate);

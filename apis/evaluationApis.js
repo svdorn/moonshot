@@ -15,7 +15,6 @@ const errors = require('./errors.js');
 // get helper functions
 const { sanitize,
         verifyUser,
-        sendEmail,
         getAndVerifyUser,
         getFirstName,
         getUserFromReq,
@@ -24,303 +23,15 @@ const { sanitize,
         logArgs,
         logError,
         randomInt,
-        shuffle
+        shuffle,
+        lastPossibleSecond,
+        newObjectFromProps
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require("./psychApis");
 
 
-// update all old businesses to have new position information
-//updateBusinesses();
-async function updateBusinesses() {
-    try {
-        let businesses = await Businesses.find({});
-        businesses.forEach(business => {
-            let positions = business.positions;
-
-            for (let posIdx = 0; posIdx < positions.length; posIdx++) {
-                let position = positions[posIdx];
-
-                position.finalized = true;
-                if (typeof position.positionType !== "string") { position.positionType = "General" }
-                if (!position.length) { position.length = 25; }
-                if (!position.timeAllotted) { position.timeAllotted = 14; }
-
-                if (position.positionType === "Development") { position.positionType = "Developer"; }
-                const positionType = position.positionType ? position.positionType : "General";
-
-                const generalFactorWeights = {
-                    "emotionality": 1,
-                    "extraversion": 0,
-                    "agreeableness": 0,
-                    "conscientiousness": 1.4375,
-                    "opennessToExperience": 0,
-                    "honestyHumility": 1.125,
-                    "altruism": 0
-                }
-
-                switch(positionType) {
-                    case "General":
-                    case "Marketing":
-                    case "Product":
-                        factorWeights = generalFactorWeights;
-                        position.weights = {
-                            performance: .23,
-                            growth: 0,
-                            longevity: 0,
-                            culture: 0,
-                            gca: .51
-                        }
-                        break;
-                    case "Developer":
-                        factorWeights = generalFactorWeights;
-                        position.weights = {
-                            performance: .23,
-                            growth: 0,
-                            longevity: 0,
-                            culture: 0,
-                            gca: .73
-                        }
-                        break;
-                    case "Sales":
-                        factorWeights = {
-                           "emotionality": 1,
-                           "extraversion": 1.5,
-                           "agreeableness": 0,
-                           "conscientiousness": 2.4,
-                           "opennessToExperience": 0,
-                           "honestyHumility": 1.714,
-                           "altruism": 0
-                       };
-                       position.weights = {
-                           performance: .252,
-                           growth: 0,
-                           longevity: 0,
-                           culture: 0,
-                           gca: .51
-                       }
-                       break;
-                    case "Support":
-                        factorWeights = {
-                           "emotionality": 1.18,
-                           "extraversion": 1,
-                           "agreeableness": 1.723,
-                           "conscientiousness": 2.455,
-                           "opennessToExperience": 1.545,
-                           "honestyHumility": 1.636,
-                           "altruism": 0
-                       };
-                       position.weights = {
-                           performance: .27,
-                           growth: 0,
-                           longevity: 0,
-                           culture: 0,
-                           gca: .51
-                       }
-                       break;
-                    default:
-                        factorWeights = generalFactorWeights;
-                        break;
-                }
-
-                const factors = {
-                    "idealFactors": [
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ff"),
-                            "weight": factorWeights.honestyHumility,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30f"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30a"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce305"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce300"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ea"),
-                            "weight": factorWeights.emotionality,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2fa"),
-                                    "score": -5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f5"),
-                                    "score": -5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f0"),
-                                    "score": -5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2eb"),
-                                    "score": -5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d0"),
-                            "weight": factorWeights.extraversion,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e5"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e0"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2db"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d6"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d1"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bb"),
-                            "weight": factorWeights.agreeableness,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2cb"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c6"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c1"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bc"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6"),
-                            "weight": factorWeights.conscientiousness,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b"),
-                            "weight": factorWeights.opennessToExperience,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce275"),
-                            "weight": factorWeights.altruism,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce285"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        }
-                    ]
-                };
-
-                // set correct ideal and growth factors
-                position.idealFactors = factors.idealFactors;
-                position.growthFactors = factors.idealFactors;
-
-                positions[posIdx] = position;
-            }
-
-            business.positions = positions;
-            business.save();
-        })
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-
+// will contain all the exports
 module.exports = {};
 
 
@@ -473,10 +184,14 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
     else {
         // save the question as the current question for the user
         user.psychometricTest = updatedPsych.psychTest;
+        // get only the needed info on the current question
+        const currentQuestion = newObjectFromProps(
+            updatedPsych.psychTest.currentQuestion, "body", "leftOption", "rightOption", "questionId"
+        );
         // return the new question to answer
         toReturn = {
             evaluationState: {
-                componentInfo: updatedPsych.psychTest.currentQuestion,
+                componentInfo: currentQuestion,
                 showIntro: false,
                 stepProgress: updatedPsych.stepProgress
             },
@@ -941,6 +656,117 @@ module.exports.GET_initialState = async function(req, res) {
 }
 
 
+// only to be called from other apis, adds an eval to a user object
+module.exports.addEvaluation = async function(user, businessId, positionId, startDate) {
+    return new Promise(async function(resolve, reject) {
+        if (!user) { return reject("Invalid user."); }
+        if (!Array.isArray(user.positions)) { user.positions = []; }
+
+        // check if the user already has the position
+        const alreadyHasPosition = user.positions.some(userPosition => {
+            return userPosition.businessId.toString() === businessId.toString && userPosition.positionId.toString() === positionId.toString();
+        });
+        if (alreadyHasPosition) {
+            return reject(`user already had position with id ${positionId} in their positions array`);
+        }
+
+        // get the position object
+        try { var position = await getPosition(businessId, positionId); }
+        catch (getPositionError) { return reject(getPositionError); }
+
+        // TODO - look at this and see if anything needs re-doing or can be gotten rid of
+
+        // go through the user's skills to see which they have completed already;
+        // this assumes the user won't have any in-progress skill tests when they
+        // start a position evaluation
+        let testIndex = 0;
+        let skillTestIds = [];
+        let userSkillTests = user.skillTests;
+        position.skills.forEach(skillId => {
+            // if the user has already completed this skill test ...
+            if (userSkillTests.some(completedSkill => {
+                return completedSkill.skillId.toString() === skillId.toString();
+            })) {
+                // ... add it to the front of the list and increase test index so we
+                // know to skip it
+                skillTestIds.unshift(skillId);
+                testIndex++;
+            }
+
+            // if the user hasn't already completed this skill test, just add it
+            // to the end of the array
+            else { skillTestIds.push(skillId); }
+        });
+
+        // see if the user has already finished the psych analysis
+        const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.endDate;
+
+        // if we're trying to take a test that is past the number of tests we
+        // have, we must be done with all the skill tests
+        const doneWithSkillTests = testIndex >= skillTestIds.length;
+
+        // if the user has finished the psych test and all skill tests
+        // and there are no frqs, the user has finished already
+        const finished = hasTakenPsychTest && doneWithSkillTests;
+        const now = new Date();
+        const appliedEndDate = finished ? now : undefined;
+
+        // get the assigned date from the function call
+        const assignedDate = startDate;
+        let deadline = undefined;
+        // if a start date was assigned, figure out the deadline
+        if (assignedDate) {
+            const daysAllowed = position.timeAllotted;
+            if (daysAllowed != undefined) {
+                deadline = lastPossibleSecond(assignedDate, daysAllowed);
+            }
+        }
+
+        // this information will change depending on whether it's a candidate or employee
+        let userTypeSpecificInfo = {};
+        if (user.userType === "candidate") {
+            userTypeSpecificInfo = {
+                isDismissed: false,
+                hiringStage: "Not Contacted",
+                hiringStageChanges: [{
+                    hiringStage: "Not Contacted",
+                    isDismissed: false,
+                    // status changed to Not Contacted just now
+                    dateChanged: now
+                }]
+            }
+        } else if (user.userType === "employee") {
+            userTypeSpecificInfo.gradingComplete = false
+        }
+
+        // starting info about the position
+        const typeAgnosticInfo = {
+            businessId: businessId,
+            positionId: position._id,
+            name: position.name,
+            appliedStartDate: now,
+            appliedEndDate,
+            assignedDate,
+            deadline,
+            // no scores have been calculated yet
+            scores: undefined,
+            skillTestIds,
+            testIndex
+        }
+
+        const newPosition = Object.assign(userTypeSpecificInfo, typeAgnosticInfo);
+
+        // add the starting info to the user
+        user.positions.push(newPosition);
+        // position must be last in the array
+        posIndex = user.positions.length - 1;
+
+        // return successfully
+        return resolve({ user, finished, userPositionIndex: posIndex });
+    });
+}
+
+
 // start the next skill in an eval
 async function startNewSkill(user) {
     return new Promise(async function(resolve, reject) {
@@ -1081,52 +907,58 @@ async function finishCognitive(user) {
             cognitiveTest.totalTime = NOW.getTime() - cognitiveTest.startDate.getTime();
         }
 
-        // ----------------------->> GRADE THE TEST <<----------------------- //
-
-        // get the ids of all the questions the user answered
-        const answeredIds = cognitiveTest.questions.map(q => q.questionId);
-        // query to get all the questions from the db
-        const query = { "_id": { "$in": answeredIds } };
-        // get all the questions in normal object form
-        try { var questions = await GCA.find(query).select("_id difficulty discrimination guessChance").lean(); }
-        catch (getQuestionsError) { return reject(getQuestionsError); }
-        // go through each question
-        questions.forEach((dbQ, index) => {
-            // get the question in the user object correlating to this question
-            const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
-            // add whether the user is correct to the question
-            // if the user went over on time, mark it incorrect for grading
-            questions[index].isCorrect = userQuestion.isCorrect && !userQuestion.overTime;
-        });
-
-        // the value of all sampled points times their weights added up together
-        let totalValue = 0;
-        // all the weights added up
-        let totalWeight = 0;
-
-        // calculate the average theta value
-        // calculate the value of the function at every point from 0 to 200
-        // going up by .1 every iteration
-        for (let theta = 0; theta <= 200; theta += .1) {
-            // calculate the value of the likelihood function times the normal
-            // distribution at this point
-            const value = expectationAPriori(questions, theta);
-            // the weight is equal to the value of the likelihood function * normal distribution
-            totalValue += theta * value;
-            totalWeight += value;
-        }
-
-        cognitiveTest.score = totalValue / totalWeight;
-
+        // grade the test
+        try { cognitiveTest.score = await getCognitiveScore(cognitiveTest); }
+        catch (gradeError) { return reject(gradeError); }
         console.log(`User ${user._id} finished GCA test with score: `, cognitiveTest.score);
 
-        // <<--------------------- FINISH GRADING TEST -------------------->> //
-
+        // save all the new info
         user.cognitiveTest = cognitiveTest;
 
         // return the graded test
         return resolve(user);
     });
+}
+
+
+// get the score for a full cognitive test
+// export it only for internal use
+module.exports.getCognitiveScore = getCognitiveScore;
+async function getCognitiveScore(cognitiveTest) {
+    // get the ids of all the questions the user answered
+    const answeredIds = cognitiveTest.questions.map(q => q.questionId);
+    // query to get all the questions from the db
+    const query = { "_id": { "$in": answeredIds } };
+    // get all the questions in normal object form
+    try { var questions = await GCA.find(query).select("_id difficulty discrimination guessChance").lean(); }
+    catch (getQuestionsError) { return reject(getQuestionsError); }
+    // go through each question
+    questions.forEach((dbQ, index) => {
+        // get the question in the user object correlating to this question
+        const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
+        // add whether the user is correct to the question
+        // if the user went over on time, mark it incorrect for grading
+        questions[index].isCorrect = userQuestion.isCorrect && !userQuestion.overTime;
+    });
+
+    // the value of all sampled points times their weights added up together
+    let totalValue = 0;
+    // all the weights added up
+    let totalWeight = 0;
+
+    // calculate the average theta value
+    // calculate the value of the function at every point from 0 to 200
+    // going up by .1 every iteration
+    for (let theta = 0; theta <= 200; theta += .1) {
+        // calculate the value of the likelihood function times the normal
+        // distribution at this point
+        const value = expectationAPriori(questions, theta);
+        // the weight is equal to the value of the likelihood function * normal distribution
+        totalValue += theta * value;
+        totalWeight += value;
+    }
+
+    return (totalValue / totalWeight);
 }
 
 
@@ -1221,8 +1053,12 @@ function addPsychAnswer(psych, answer) {
     // save the meta-data
     response.endDate = new Date();
     response.totalTime = response.endDate.getTime() - new Date(response.startDate).getTime();
+    // if the answer was flipped in the front end, invert the answer
+    const flipper = currQuestion.frontEndFlipped ? -1 : 1;
+    // save whether the front end was flipped
+    response.frontEndFlipped = currQuestion.frontEndFlipped;
     // save the actual answer
-    response.answer = answer;
+    response.answer = answer * flipper;
 
     // mark the question as no longer available for use
     psych.usedQuestions.push(questionId);
@@ -1299,6 +1135,7 @@ async function newPsychTest() {
         });
     });
 }
+
 
 // return a fresh new just-started cognitive eval
 async function newCognitiveTest() {
@@ -1445,285 +1282,12 @@ async function advance(user, businessId, positionId) {
                 // give it an end date
                 user.positions[positionIndex].appliedEndDate = new Date();
                 // score the user
-                try { user.positions[positionIndex] = await gradeEval(user, user.positions[positionIndex], position); }
+                try { user.positions[positionIndex] = gradeEval(user, user.positions[positionIndex], position); }
                 catch (gradeError) { return reject(gradeError); }
-                // Send notification emails
-                if (user.userType === "candidate") {
-                    sendNotificationEmails(businessId, user);
-                }
             }
         }
 
         resolve({ user, evaluationState });
-    });
-}
-
-
-async function sendNotificationEmails(businessId, user) {
-    return new Promise(async function(resolve, reject) {
-        const ONE_DAY = 1000 * 60 * 60 * 24;
-        let time = ONE_DAY;
-
-        let moonshotUrl = 'https://www.moonshotinsights.io/';
-        // if we are in development, links are to localhost
-        if (process.env.NODE_ENV === "development") {
-            moonshotUrl = 'http://localhost:8081/';
-        }
-
-        const findById = { _id: businessId };
-
-        const business = await Businesses.findOne(findById).select("name positions");
-
-        // send email to candidate
-        let recipient = [user.email];
-        console.log("recipient: ", recipient);
-        let subject = "You've Finished Your Evaluation!";
-        let content =
-            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                + '<p style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(user.name) + ',</p>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">My name is Justin and I am the Chief Product Officer at Moonshot Insights. I saw that you finished your evaluation for ' + business.name
-                + '. I just wanted to let you know your results have been sent to the employer. Sit tight and we will keep you posted. I wish you the best of luck!</p><br/>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">If you have any questions at all, please feel free to shoot me an email at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. I&#39;m always on call and look forward to hearing from you.</p>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></p>'
-                + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                + '<div style="text-align:left;width:95%;display:inline-block;">'
-                    + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
-                    + '</div>'
-                + '</div>'
-            + '</div>';
-
-        const sendFrom = "Moonshot";
-        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-
-        })
-
-        const businessUserQuery = {
-            "$and": [
-                { "businessInfo.businessId": businessId },
-                { "userType": "accountAdmin" }
-            ]
-        }
-        try {
-            let users  = await Users.find(businessUserQuery).select("name email notifications")
-            if (!users) {
-                resolve("No users found.");
-            }
-            let recipient = {};
-            let promises = [];
-            for (let i = 0; i < users.length; i++) {
-                recipient = users[i];
-                const notifications = users[i].notifications;
-                let interval = "day";
-                if (notifications) {
-                    // If a delayed email has already been sent, don't send another
-                    if (notifications.waiting) {
-                        continue;
-                    }
-
-                    var timeDiff = Math.abs(new Date() - notifications.lastSent);
-
-                    switch(notifications.time) {
-                        case "Weekly":
-                            interval = "week";
-                            time = ONE_DAY * 7;
-                            break;
-                        case "Every 2 Days":
-                            interval = "2 days";
-                            time = ONE_DAY * 2;
-                            break;
-                        case "Every 5 Days":
-                            interval = "5 days";
-                            time = ONE_DAY * 5;
-                            break;
-                        case "Daily":
-                            interval = "day";
-                            time = ONE_DAY;
-                            break;
-                        case "never":
-                            time = 0;
-                            continue;
-                            break;
-                        default:
-                            interval = "day";
-                            time = 0;
-                            break;
-                    }
-                } else {
-                    continue;
-                }
-
-                let timeDelay = 0;
-
-                if (timeDiff < time) {
-                    timeDelay = new Date((notifications.lastSent.getTime() + time)) - (new Date());
-                } else {
-                    timeDelay = 0;
-                }
-
-                promises.push(sendDelayedEmail(recipient, timeDelay, notifications.lastSent, business.positions, interval, notifications.firstTime));
-                recipient = {};
-                time = 0;
-            }
-            try {
-                const sendingEmails = await Promise.all(promises);
-            } catch (err) {
-                console.log("error sending emails to businesses after date: ", err);
-                reject("Error sending emails to businesses after date.")
-            }
-        } catch (getUserError) {
-            console.log("error getting user when sending emails: ", getUserError);
-            return reject("Error getting user.");
-        }
-    });
-}
-
-
-async function sendDelayedEmail(recipient, time, lastSent, positions, interval, firstTime) {
-    return new Promise(async function(resolve, reject) {
-
-        if (time > 0) {
-            const idQuery = {
-                "_id" : recipient._id
-            }
-            const updateQuery = {
-                "notifications.waiting" : true
-            }
-            try {
-                await Users.findOneAndUpdate(idQuery, updateQuery);
-            } catch(err) {
-                console.log("error updating lastSent date for user email notifications: ", err);
-                reject("Error updating lastSent date for user email notifications.")
-            }
-        }
-
-        setTimeout(async function() {
-            let moonshotUrl = 'https://moonshotinsights.io/';
-            // if we are in development, links are to localhost
-            if (process.env.NODE_ENV === "development") {
-                moonshotUrl = 'http://localhost:8081/';
-            }
-
-            // Set the reciever of the email
-            let reciever = [];
-            reciever.push(recipient.email);
-
-            let positionCounts = [];
-
-            let promises = [];
-            let names = [];
-
-            // TODO: get the number of candidates for each position in the correct time
-            for (let i = 0; i < positions.length; i++) {
-                const completionsQuery = {
-                   "userType": "candidate",
-                   "positions": {
-                       "$elemMatch": {
-                           "$and": [
-                               { "positionId": mongoose.Types.ObjectId(positions[i]._id) },
-                               { "appliedEndDate": { "$gte" : lastSent  } }
-                           ]
-                       }
-                   }
-                }
-                names.push(positions[i].name);
-                promises.push(Users.countDocuments(completionsQuery));
-            }
-
-            const counts = await Promise.all(promises);
-            // Number of overall candidates
-            let numCandidates = 0;
-
-            let countsSection = '<div style="margin-top: 20px">';
-            for (let i = 0; i < counts.length; i++) {
-                numCandidates += counts[i];
-                if (counts[i] > 0) {
-                    if (counts[i] === 1) {
-                        countsSection += (
-                            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d; width:95%; display:inline-block; text-align:left;">'
-                                +'<b style="color:#0c0c0c; display:inline-block">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + positions[i].name + ':&nbsp;</b>'
-                                +'<div style="display:inline-block">' + counts[i] + ' candidate completion in the past ' + interval + '</div>'
-                            +'</div>'
-                        );
-                    } else {
-                        countsSection += (
-                            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d; width:95%; display:inline-block; text-align:left;">'
-                                +'<b style="color:#0c0c0c; display:inline-block">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + positions[i].name + ':&nbsp;</b>'
-                                +'<div style="display:inline-block">' + counts[i] + ' candidate completions in the past ' + interval + '</div>'
-                            +'</div>'
-                        );
-                    }
-                }
-            }
-
-            // add closing div to counts section
-            countsSection += '</div>';
-
-            // Section that introduces purpose of email, is different if it is first time sending notificaiton email
-            let introSection = '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">';
-            if (firstTime) {
-                introSection += (
-                    'My name is Justin and I&#39;m the Chief Product Officer at Moonshot Insights. I&#39;ll be sending you emails updating you when candidates complete your evaluations so that you can view their results and move the hiring process along quickly. Here&#39;s your first update:</div>'
-                )
-            } else {
-                introSection += (
-                    'It&#39;s Justin again with a quick update on your evaluations:</div>'
-                )
-            }
-            // If there are multiple position evaluations going on at once
-            const multipleEvals = counts.length > 1;
-
-            // Create the emails
-            let subject = numCandidates + ' Candidates Completed Your Evaluation';
-            if (numCandidates < 2) {
-                subject = numCandidates + ' Candidate Completed Your Evaluation';
-            }
-            if (multipleEvals) {
-                subject = subject.concat("s");
-            }
-
-            let content =
-                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                    + '<div style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(recipient.name) + ',</div>'
-                    + introSection
-                    + countsSection + '<br/>'
-                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'myCandidates'
-                    + '">See Results</a>'
-                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">If you have any questions, please feel free to shoot me a message at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b>. To add your next evaluation, you can go <b style="color:#C8C8C8;" ><a href="' + moonshotUrl + 'myEvaluations?open=true">here</a></b>.</div>'
-                    + '<div style="width:95%; display:inline-block; text-align:left; margin-top:20px;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></div>'
-                    + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                    + '<div style="text-align:left;width:95%;display:inline-block;">'
-                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'settings">Change the frequency of your notifications.</a></i><br/>'
-                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe">Opt-out of future messages.</a></i>'+ '</div>'
-                    + '</div>'
-                + '</div>';
-
-                const sendFrom = "Moonshot";
-                sendEmail(reciever, subject, content, sendFrom, undefined, function (success, msg) {
-                })
-                // Update the lastSent day of the user and the waiting to be false
-                const idQuery = {
-                    "_id" : recipient._id
-                }
-                const updateQuery = {
-                    "notifications.lastSent" : new Date(),
-                    "notifications.waiting" : false,
-                    "notifications.firstTime" : false
-                }
-                try {
-                    await Users.findOneAndUpdate(idQuery, updateQuery);
-                } catch(err) {
-                    console.log("error updating lastSent date for user email notifications: ", err);
-                    reject("Error updating lastSent date for user email notifications.")
-                }
-                resolve(true);
-            }
-        , time);
     });
 }
 
@@ -1790,7 +1354,9 @@ async function getEvaluationState(options) {
 
 
 // grades an evaluation based on all the components
-async function gradeEval(user, userPosition, position) {
+// exported for internal use only
+module.exports.gradeEval = gradeEval;
+function gradeEval(user, userPosition, position) {
     // CURRENTLY SCORE IS MADE OF MOSTLY PSYCH AND A TINY BIT OF SKILLS
     // GRADE ALL THE SKILLS
     const overallSkill = gradeAllSkills(user, position);
@@ -1843,7 +1409,6 @@ async function gradeEval(user, userPosition, position) {
     // return the updated user position
     return userPosition;
 }
-
 
 // calculate the overall score based on sub-scores like gca and performance
 function gradeOverall(subscores, weights) {
@@ -1899,67 +1464,6 @@ function gradeAllSkills(user, position) {
     // return the calculated score (could be undefined)
     return overallSkill;
 }
-
-
-// // get predicted growth for specific position
-// function gradeGrowth(user, position) {
-//     // start at a score of 0, 100 will be added after scaling
-//     let growth = 0;
-//
-//     // how many facets are involved in the growth calculation
-//     let numGrowthFacets = 0;
-//
-//     // go through each factor to get to each facet
-//     const userFactors = user.psychometricTest.factors;
-//     // make sure there are factors used in growth - otherwise growth will be 100
-//     if (Array.isArray(position.growthFactors)) {
-//         // go through each factor that affects growth
-//         position.growthFactors.forEach(growthFactor => {
-//             // find the factor within the user's psych test
-//             const userFactor = userFactors.find(factor => { return factor.factorId.toString() === growthFactor.factorId.toString(); });
-//
-//             // add the number of facets in this factor to the total number of growth facets
-//             numGrowthFacets += growthFactor.idealFacets.length;
-//
-//             // go through each facet to find the score compared to the ideal output
-//             growthFactor.idealFacets.forEach(idealFacet => {
-//                 // find the facet within the user's psych test
-//                 const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
-//
-//                 // the score that the user needs for the max pq
-//                 const idealScore = idealFacet.score;
-//
-//                 // how far off of the ideal score the user got
-//                 const difference = Math.abs(idealScore - userFacet.score);
-//
-//                 // subtract the difference from the predictive score
-//                 growth -= difference;
-//
-//                 // add the absolute value of the facet score, making the
-//                 // potential predictive score higher
-//                 growth += Math.abs(idealScore);
-//             })
-//         });
-//     }
-//
-//     // the max pq for growth in this position
-//     const maxGrowth = position.maxGrowth ? position.maxGrowth : 190;
-//
-//     // growth multiplier is highest growth score divided by number of growth
-//     // facets divided by 5 (since each growth facet has a max score in either direction of 5)
-//     // can only have a growth multiplier if there are growth facets, so if
-//     // there are no growth facets, set multiplier to 1
-//     const growthMultiplier = numGrowthFacets > 0 ? ((maxGrowth - 100) / numGrowthFacets) / 5 : 1;
-//
-//     // to get to the potential max score, multiply by the multiplier
-//     growth *= growthMultiplier;
-//
-//     // add the starting growth pq
-//     growth += 100;
-//
-//     // return the calculated growth score
-//     return growth;
-// }
 
 
 // get predicted growth for specific position
@@ -2062,103 +1566,6 @@ function gradePerformance(user, position, overallSkill) {
     // return the predicted performance
     return performance;
 }
-
-
-
-// get predicted performance for specific position
-// function gradePerformance(user, position, overallSkill) {
-//     // get the function type of the position ("Development", "Support", etc)
-//     const type = position.positionType;
-//     // get the user's psych test
-//     const psych = user.psychometricTest;
-//     // the weights for this position type
-//     let weights = performanceWeights[type];
-//     // if the type isn't valid, just use the general ones
-//     if (!weights) {
-//         console.log(`Position with id ${position._id} had type: `, type, " which was invalid. Using General weights.");
-//         weights = performanceWeights["General"];
-//     }
-//     // the added-up weighted factor score values
-//     let totalValue = 0;
-//     // the total weight of all factors, will divide by this to get the final score
-//     let totalWeight = 0;
-//     // go through every factor,
-//     psych.factors.forEach(factor => {
-//         // get the average of all the facets for the factor
-//         const factorAvg = factor.score;
-//         // get the standardized factor score
-//         const stdFactorScore = (factorAvg * 10) + 94.847;
-//         // get the weight of the factor for this position
-//         const weight = weights[factor.name];
-//         // if the weight is invalid, don't use this factor in calculation
-//         if (typeof weight !== "number") {
-//             console.log("Invalid weight: ", weight, " in factor ", factor, ` of position with id ${position._id}`);
-//         } else {
-//             // add the weighted factor score to the total value
-//             totalValue += stdFactorScore * weight;
-//             // add the weight to the total weight
-//             totalWeight += weight;
-//         }
-//     });
-//     // if the total weight is 0, something has gone terribly wrong
-//     if (totalWeight === 0) { throw new Error("Total factor weight of 0. Invalid psych factors."); }
-//     // otherwise calculate the final weighted average score and return it
-//     return (totalValue / totalWeight);
-// }
-
-
-
-// // OLD VERSION OF GRADING PERFORMANCE USING IDEAL OUTPUTS
-// // get predicted performance for specific position
-// function gradePerformance(user, position, overallSkill) {
-//     // add to the score when a non-zero facet score is ideal
-//     // subtract from the score whatever the differences are between the
-//     // ideal facets and the actual facets
-//     let performance = undefined;
-//
-//     const userFactors = user.psychometricTest.factors;
-//     if (Array.isArray(position.idealFactors) && position.idealFactors.length > 0) {
-//         // start at 100 as the baseline
-//         let psychPerformance = 100;
-//
-//         // go through each factor to get to each facet
-//         position.idealFactors.forEach(idealFactor => {
-//             // find the factor within the user's psych test
-//             const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
-//
-//             // go through each facet to find the score compared to the ideal output
-//             idealFactor.idealFacets.forEach(idealFacet => {
-//                 // find the facet within the user's psych test
-//                 const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
-//
-//                 // the score that the user needs for the max pq
-//                 const idealScore = idealFacet.score;
-//
-//                 // how far off of the ideal score the user got
-//                 const difference = Math.abs(idealScore - userFacet.score);
-//
-//                 // subtract the difference from the predictive score
-//                 psychPerformance -= difference;
-//
-//                 // add the absolute value of the facet score, making the
-//                 // potential predictive score higher
-//                 psychPerformance += Math.abs(idealScore);
-//             });
-//         });
-//
-//         // take skills into account if there were any in the eval
-//         if (typeof overallSkill === "number") {
-//             // psych will account for 80% of prediction, skills 20%
-//             performance = (psychPerformance * .8) + (overallSkill * .2);
-//         }
-//
-//         // otherwise performance is just psych performance
-//         else { performance = psychPerformance; }
-//     }
-//
-//     // return calculated performance
-//     return performance;
-// }
 
 
 // get predicted longevity for specific position
@@ -2455,6 +1862,16 @@ async function getNewPsychQuestion(psych) {
         psych.currentQuestion = question;
         psych.currentQuestion.questionId = question._id
         psych.currentQuestion._id = undefined;
+
+        // 50% chance of flipping the question's right and left options
+        if (randomInt(0,1) === 1) {
+            const oldRight = question.rightOption;
+            psych.currentQuestion.rightOption = question.leftOption;
+            psych.currentQuestion.leftOption = oldRight;
+            psych.currentQuestion.frontEndFlipped = true
+        } else {
+            psych.currentQuestion.frontEndFlipped = false;
+        }
 
         // update everything that was changed
         factor.facets[facetIdx] = facet;
