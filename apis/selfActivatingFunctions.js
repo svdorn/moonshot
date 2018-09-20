@@ -215,7 +215,13 @@ async function sendUpdateEmails() {
                                 `);
                             })}
                         </div>
-                    `)
+                    `);
+
+                    // if there are no completions, don't send the email
+                    if (totalCompletions === 0) {
+                        console.log("No candidates for: ", recipient);
+                        return resolve();
+                    }
 
                     // Section that introduces purpose of email, is different if it is first time sending notification email
                     const introSection = (`
