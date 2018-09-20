@@ -23,7 +23,7 @@ class MyEvaluationsPreview extends Component {
 
     // used for candidates and employees only
     continueEval = () => {
-        if (["candidate", "employee"].includes(this.props.currentUser.userType)) {
+        if (["candidate", "employee"].includes(this.props.currentUser.userType) && !this.props.completedDate) {
             goTo(`/evaluation/${this.props.businessId}/${this.props.positionId}`);
         }
     }
@@ -131,11 +131,11 @@ class MyEvaluationsPreview extends Component {
             );
         }
 
-        const mainClass = ["candidate", "employee"].includes(this.props.currentUser.userType) ? "pointer" : "";
+        const mainClass = (["candidate", "employee"].includes(this.props.currentUser.userType) && !this.props.completedDate) ? "pointer" : "";
 
         return(
-            <div onClick={this.continueEval} className={mainClass}>
-                <div className="myEvalsBox aboutMeLi">
+            <div>
+                <div onClick={this.continueEval} className={`myEvalsBox aboutMeLi ${mainClass}`} >
                     <div className="aboutMeLiIconContainer">
                         <img alt="My Evals Company Logo" src={`/logos/${this.props.logo}`}/>
                     </div>
