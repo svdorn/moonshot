@@ -40,6 +40,8 @@ import ServiceLevelAgreement from './components/policies/serviceLevelAgreement';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
 import Listing from './components/pages/listing';
 
+import Dashboard from "./components/pages/dashboard/dashboard";
+
 // position evaluation - contains all components (psych, gca, admin questions)
 import Evaluation from "./components/pages/evaluation/evaluation";
 
@@ -69,6 +71,7 @@ const routes = (
             <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType={businessAdminUserTypes} />
             <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessAdminUserTypes} />
             <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} />
+            {/* <Route path="dashboard" component={AuthenticatedComponent} page={<Dashboard/>} userType={businessAdminUserTypes} /> */}
             <Route path="employeeResults/:employeeId/:positionId" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
             <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
             <Route path="pricing" component={AuthenticatedComponent} page={<Pricing />} userType={businessAdminUserTypes} />
