@@ -502,7 +502,7 @@ async function createPosition(name, type, businessId, isManager) {
             name: name,
             positionType: type,
             isManager,
-            length: 22,
+            length: type === "Developer" ? 40 : 22,
             dateCreated: Date.now(),
             finalized: true,
             timeAllotted: 60
