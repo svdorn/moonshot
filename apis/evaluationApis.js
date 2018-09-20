@@ -1419,7 +1419,7 @@ function gradeOverall(subscores, weights) {
     const subscoreWeights = [["performance", .6], ["growth", .4]];
 
     // go through each subscore and add it and its weight if wanted
-    susbscoreWeights.forEach(sw => {
+    subscoreWeights.forEach(sw => {
         const subscore = subscores[sw[0]];
         if (typeof subscore === "number") {
             const weight = subscores[sw[1]];
