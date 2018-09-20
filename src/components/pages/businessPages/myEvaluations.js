@@ -219,6 +219,7 @@ class MyEvaluations extends Component {
             this.setState({ noPositions: true });
         }
     }
+    
 
     inviteCandidates() {
         let self = this;
@@ -229,9 +230,6 @@ class MyEvaluations extends Component {
         });
     }
 
-    startPsychEval() {
-        goTo("/psychometricAnalysis");
-    }
 
     copyLink() {
         let URL = "https://moonshotinsights.io/apply/" + this.state.businessName;

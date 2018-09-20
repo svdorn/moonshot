@@ -7,7 +7,6 @@ const stripe = require("stripe")(credentials.stripeSk);
 
 // get helper functions
 const { sanitize,
-        sendEmail,
         getAndVerifyUser,
         frontEndUser
 } = require('./helperFunctions');

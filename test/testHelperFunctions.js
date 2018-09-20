@@ -7,7 +7,6 @@ const {
     removeEmptyFields,
     verifyUser,
     printUsersFromPathway,
-    sendEmail,
     getFirstName,
     removeDuplicates
 } = require('../apis/helperFunctions');

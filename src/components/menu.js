@@ -27,7 +27,7 @@ const styles = {
 // pages that have a header but don't show the header shadow
 const noShadowPages = [];
 // pages where the menu scrolls with the page
-const nonFixedMenuPages = ["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions", "evaluation"];
+const nonFixedMenuPages = ["evaluation"];
 // pages that don't have a header at all
 const noMenuPages = ["chatbot"];
 

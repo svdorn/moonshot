@@ -5,9 +5,7 @@ import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
 import { closeNotification, answerEvaluationQuestion, addNotification } from "../../../actions/usersActions";
 import axios from "axios";
-import StyledContent from "../../childComponents/styledContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import ProgressBar from '../../miscComponents/progressBar';
 import { htmlDecode } from "../../../miscFunctions";
 
 class SkillTest extends Component {

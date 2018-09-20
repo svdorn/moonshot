@@ -259,7 +259,7 @@ class AddUserDialog extends Component {
             positionName: position.name
         }
 
-        this.props.postCreateLink(currentUserInfo);
+        this.props.postCreateLink(currentUserInfo, this.handleClose.bind(this));
         this.handleScreenLinkNext();
     }
 

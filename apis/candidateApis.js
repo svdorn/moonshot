@@ -16,7 +16,6 @@ const { sanitize,
         verifyUser,
         isValidEmail,
         sendEmail,
-        sendEmailPromise,
         getFirstName,
         frontEndUser,
         emailFooter,
@@ -24,7 +23,7 @@ const { sanitize,
 } = require('./helperFunctions.js');
 
 // get function to start position evaluation
-const { internalStartPsychEval, addEvaluation } = require('./userApis.js');
+const { addEvaluation } = require('./evaluationApis.js');
 
 
 const candidateApis = {
@@ -105,11 +104,17 @@ function POST_candidate(req, res) {
     }
     // <<-------------------------------------------------------->> //
 
+    // whether an error already happened so shouldn't return another
+    let errored = false;
+
     // --->>       VERIFY THAT USER HAS UNIQUE EMAIL          <<--- //
     Users.find({ email })
     .then(foundUsers => {
         if (foundUsers.length > 0) {
-            return res.status(400).send({message: "An account with that email address already exists."});
+            if (!errored) {
+                errored = true;
+                return res.status(400).send({message: "An account with that email address already exists."});
+            }
         } else {
             // mark that we are good to make this user, then try to do it
             verifiedUniqueEmail = true;
@@ -118,7 +123,10 @@ function POST_candidate(req, res) {
     })
     .catch(findUserError => {
         console.log("error finding user by email: ", findUserError);
-        return res.status(500).send({message: errors.SERVER_ERROR});
+        if (!errored) {
+            errored = true;
+            return res.status(500).send({message: errors.SERVER_ERROR});
+        }
     });
     // <<-------------------------------------------------------->> //
 
@@ -129,10 +137,16 @@ function POST_candidate(req, res) {
     }).catch(verifyCodeError => {
         if (typeof verifyCodeError === "object" && verifyCodeError.status && verifyCodeError.message) {
             console.log(verifyCodeError.error);
-            return res.status(verifyCodeError.status).send({message: verifyCodeError.message});
+            if (!errored) {
+                errored = true;
+                return res.status(verifyCodeError.status).send({message: verifyCodeError.message});
+            }
         } else {
             console.log("Error verifying position code: ", verifyCodeError);
-            return res.status(500).send({message: errors.SERVER_ERROR});
+            if (!errored) {
+                errored = true;
+                return res.status(500).send({message: errors.SERVER_ERROR});
+            }
         }
     });
     // <<-------------------------------------------------------->> //
@@ -147,7 +161,10 @@ function POST_candidate(req, res) {
         makeUser();
     }).catch (countError => {
         console.log("Couldn't count the number of users: ", countError);
-        return res.status(500).send({message: errors.SERVER_ERROR});
+        if (!errored) {
+            errored = true;
+            return res.status(500).send({message: errors.SERVER_ERROR});
+        }
     })
     // <<-------------------------------------------------------->> //
 
@@ -156,7 +173,10 @@ function POST_candidate(req, res) {
     bcrypt.hash(password, saltRounds, function(hashError, hash) {
         if (hashError) {
             console.log("hash error: ", hashError);
-            return res.status(500).send({ message: errors.SERVER_ERROR });
+            if (!errored) {
+                errored = true;
+                return res.status(500).send({ message: errors.SERVER_ERROR });
+            }
         }
 
         // change the stored password to be the hash
@@ -170,7 +190,7 @@ function POST_candidate(req, res) {
     // --->>           CREATE AND UPDATE THE USER             <<--- //
     async function makeUser() {
         // make sure all pre-reqs to creating user are met
-        if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
+        if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl || errored) { return; }
 
         if (process.env.NODE_ENV === "production") {
             // Add companies to user list for intercom
@@ -264,9 +284,6 @@ function POST_candidate(req, res) {
         // THESE TWO WILL NOT RUN - there are guaranteed return statements beforehand
         // add the user to the referrer's list of referred users
         //creditReferrer().catch(referralError => { console.log(referralError); });
-
-        // send the moonshot admins an email saying that a user signed up
-        //alertFounders().catch(emailError => { console.log(emailError); });
     }
     // <<-------------------------------------------------------->> //
 
@@ -350,32 +367,6 @@ function POST_candidate(req, res) {
 
             // code is legit and all properties using it are set; resolve
             resolve(true);
-        });
-    }
-
-    function alertFounders() {
-        return new Promise(function(resolve, reject) {
-            // send email to everyone if there's a new sign up (if in production mode)
-            if (process.env.NODE_ENV !== "development") {
-                let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-
-                let subject = 'New Sign Up';
-                let content =
-                      '<div>'
-                    +   '<p>New user signed up.</p>'
-                    +   '<p>Name: ' + user.name + '</p>'
-                    +   '<p>email: ' + user.email + '</p>'
-                    + '</div>';
-
-                const sendFrom = "Moonshot";
-                sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                    if (!success) {
-                        return reject("Error sending sign up alert email");
-                    } else {
-                        return resolve();
-                    }
-                })
-            }
         });
     }
 }
@@ -487,7 +478,7 @@ async function sendVerificationEmail(user) {
                 <div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>
                 <p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.
                 <br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>
-                <a  style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;"
+                <a  style="display:inline-block;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:6px 30px;text-decoration:none;margin:20px;background:#494b4d;"
                     href="${moonshotUrl}verifyEmail?token=${user.emailVerificationToken}"
                 >
                     Verify Account
@@ -497,7 +488,7 @@ async function sendVerificationEmail(user) {
             </div>`;
 
         try {
-            await sendEmailPromise({recipients, subject, content});
+            await sendEmail({recipients, subject, content});
             return resolve();
         }
         // send email error

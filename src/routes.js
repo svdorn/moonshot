@@ -31,7 +31,6 @@ import Apply from './components/pages/apply';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
-import ContactUs from './components/pages/contactUs';
 import Error404 from './components/pages/errors/error404';
 import Unsubscribe from './components/pages/unsubscribe';
 import Admin from './components/pages/admin';
@@ -41,11 +40,6 @@ import ServiceLevelAgreement from './components/policies/serviceLevelAgreement';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
 import Listing from './components/pages/listing';
 
-import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
-
-import SkillTest from './components/pages/skillTest/skillTest';
-import FreeResponse from "./components/pages/freeResponse";
-import EvaluationIntro from "./components/pages/evaluationIntro";
 // position evaluation - contains all components (psych, gca, admin questions)
 import Evaluation from "./components/pages/evaluation/evaluation";
 
@@ -88,7 +82,6 @@ const routes = (
             <Route path="verifyEmail" component={VerifyEmail} />
             <Route path="forgotPassword" component={ForgotPassword} />
             <Route path="changePassword" component={ChangePassword} />
-            <Route path="contactUs" component={ContactUs} />
             <Route path="unsubscribe" component={Unsubscribe} />
             <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
             <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
@@ -99,12 +92,6 @@ const routes = (
                 <IndexRoute component={GeneralApply} />
                 <Route path=":company" component={Apply} />
             </Route>
-
-            <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
-
-            <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
-            <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
-            <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
 
             <Route path="evaluation/:businessId/:positionId" component={AuthenticatedComponent} page={<Evaluation/>} />
 

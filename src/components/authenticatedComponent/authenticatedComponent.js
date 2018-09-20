@@ -158,6 +158,7 @@ class AuthenticatedComponent extends Component {
         if (typeof this.props.currentUser !== "object") { goTo("/"); }
         switch (this.props.currentUser.userType) {
             case "accountAdmin": {
+                console.log("redirecting");
                 goTo("/myCandidates");
                 break;
             }

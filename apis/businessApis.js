@@ -14,7 +14,6 @@ const crypto = require('crypto');
 const { sanitize,
         getFirstName,
         sendEmail,
-        sendEmailPromise,
         getAndVerifyUser,
         getUserAndBusiness,
         frontEndUser,
@@ -25,7 +24,9 @@ const { sanitize,
         isValidPassword,
         validArgs,
         founderEmails,
-        emailFooter
+        emailFooter,
+        devMode,
+        devEmail
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -33,7 +34,6 @@ const errors = require('./errors.js');
 
 const businessApis = {
     POST_addEvaluation,
-    POST_contactUsEmailNotLoggedIn,
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
@@ -78,6 +78,13 @@ async function POST_createBusinessAndUser(req, res) {
 
     // validate email
     if (!isValidEmail(email)) { return res.status(400).send("Invalid email format."); }
+
+    // make sure the email is a work email, not a gmail or hotmail or whatever
+    if (!devMode) {
+        const popularProviders = ["gmail.com", "hotmail.com", "yahoo.com", "outlook.com", "inbox.com", "icloud.com", "mail.com", "aol.com", "zoho.com", "yandex.com"];
+        const provider = email.split("@").pop().toLowerCase();
+        if (popularProviders.includes(provider)) { return res.status(400).send("Please use your work email address."); }
+    }
 
     // validate password
     if (!isValidPassword(password)) { return res.status(400).send("Password needs to be at least 8 characters long."); }
@@ -156,7 +163,7 @@ async function POST_createBusinessAndUser(req, res) {
         +   `<p>Position name: ${business.positions[0].name}</p>`
         +   `<p>Position type: ${business.positions[0].positionType}</p>`
         + '</div>';
-    try { await sendEmailPromise({recipients, subject, content}); }
+    try { await sendEmail({recipients, subject, content}); }
     catch (alertEmailError) {
         console.log("Error sending alert email about new user: ", alertEmailError);
     }
@@ -886,8 +893,6 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
 
         // recipient of the email
         const recipient = [ email ];
-        // sender of the email
-        const sendFrom = "Moonshot";
         // the content of the email
         let content = "";
         // subject of the email
@@ -963,10 +968,9 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         }
 
         // send the email
-        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-            if (!success) { reject(msg); }
-            else { resolve(); }
-        })
+        sendEmail({ recipient, subject, content })
+        .then(response => resolve())
+        .catch(error => reject(error));
     });
 }
 
@@ -1396,28 +1400,26 @@ async function POST_moveCandidates(req, res) {
 }
 
 function POST_googleJobsLinks(req, res) {
-    // let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let recipients = ["stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+    if (process.env.NODE_ENV === "development") {
+        recipients = [ process.env.DEV_EMAIL ];
+    }
     let subject = 'Moonshot - Google Jobs Form';
 
-    let content = "<div>"
-        + "<h3>Someone filled out google jobs links:</h3>"
-        + "<p>Business Id: "
-        + sanitize(req.body.params.businessId)
-        + "</p>"
-        + "<p>Jobs: "
-        + sanitize(req.body.params.jobs)
-        + "</p>"
-        + "</div>";
+    let content = (
+        `<div>
+            <h3>Someone filled out google jobs links:</h3>
+            <p>Business Id: ${sanitize(req.body.params.businessId)}</p>
+            <p>Jobs: ${sanitize(req.body.params.jobs)}</p>
+        </div>`
+    );
 
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
+    sendEmail({ recipients, subject, content })
+    .then(response => { return res.status(200).send({}); })
+    .catch(error => {
+        console.log("Error sending email for google jobs post: ", error);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    });
 }
 
 
@@ -1448,7 +1450,7 @@ async function POST_addEvaluation(req, res) {
     return res.json(business.positions);
 }
 
-async function POST_contactUsEmailNotLoggedIn(req, res) {
+async function POST_contactUsEmail(req, res) {
     const { phoneNumber, message, name, email, company } = sanitize(req.body);
 
     // email to moonshot with the message the user entered
@@ -1477,8 +1479,8 @@ async function POST_contactUsEmailNotLoggedIn(req, res) {
 
 
     try { // sending email to moonshot with the message from the user
-        await sendEmailPromise({
-            recipients: founderEmails,
+        await sendEmail({
+            recipients: devMode ? devEmail : founderEmails,
             subject: "ACTION REQUIRED - Contact Us Form Filled Out",
             content: toMoonshotContent
         });
@@ -1488,7 +1490,7 @@ async function POST_contactUsEmailNotLoggedIn(req, res) {
     }
 
     try { // sending the "email received" message
-        await sendEmailPromise({
+        await sendEmail({
             recipients: [email],
             subject: "We Got Your Message!",
             content: messageReceivedContent
@@ -1500,36 +1502,6 @@ async function POST_contactUsEmailNotLoggedIn(req, res) {
     }
 
     return res.status(200).send({success: true});
-}
-
-function POST_contactUsEmail(req, res) {
-    let message = "None";
-    if (req.body.message) {
-        message = sanitize(req.body.message);
-    }
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io"];
-    let subject = 'Moonshot Question -- Contact Us Form';
-    let content = "<div>"
-        + "<h3>Questions:</h3>"
-        + "<p>Name: "
-        + sanitize(req.body.name)
-        + "</p>"
-        + "<p>Email: "
-        + sanitize(req.body.email)
-        + "</p>"
-        + "<p>Message: "
-        + message
-        + "</p>"
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Email sent successfully, our team will be in contact with you shortly!");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
 }
 
 
@@ -2295,7 +2267,6 @@ async function POST_resetApiKey(req, res) {
 async function POST_uploadCandidateCSV(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
-    //const file = sanitize(req.files.file);
     const candidateFile = sanitize(req.body.candidateFile);
     const candidateFileName = sanitize(req.body.candidateFileName);
 
@@ -2315,28 +2286,26 @@ async function POST_uploadCandidateCSV(req, res) {
     }
 
     // set up the email to send
-    let recipients = ["ameyer24@wisc.edu"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io"];
+    if (process.env.NODE_ENV === "development") {
+        recipients = [ process.env.DEV_EMAIL ];
+    }
     let subject = `ACTION NEEDED: Candidates File Uploaded By ${business.name}`;
-    let content =
-        "<div>"
-        +   "<p>File is attached.</p>"
-        + "</div>";
+    let content = "<div><p>File is attached.</p></div>";
     // attach the candidates file to the email
     const fileString = candidateFile.substring(candidateFile.indexOf(",") + 1);
     let attachments = [{
         filename: candidateFileName,
-        content: new Buffer(fileString, "base64")
+        data: new Buffer(fileString, "base64")
     }];
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {
-        // on failure
-        if (!success) {
-            console.log("Error sending email with candidates file: ", msg);
-            return res.status(500).send("Error uploading candidates file.");
-        }
-        // on success
-        return res.status(200).json({});
-    })
+
+    // send the email with the attachment
+    sendEmail({ recipients, subject, content, attachments })
+    .then(response => { return res.status(200).send({}); })
+    .catch(error => {
+        console.log("Error sending email with candidates file: ", error);
+        return res.status(500).send({ message: "Error uploading candidates file." });
+    });
 }
 
 
@@ -2366,7 +2335,7 @@ async function POST_chatbotData(req, res) {
     );
 
     // send Kyle the email
-    try { await sendEmailPromise({ recipients, subject, content }); }
+    try { await sendEmail({ recipients, subject, content }); }
     catch (sendEmailError) {
         console.log("Error sending email on chatbot signup: ", sendEmailError);
         return res.status(500).send(errors.SERVER_ERROR);
