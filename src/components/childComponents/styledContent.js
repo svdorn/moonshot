@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { htmlDecode } from "../../miscFunctions";
 
 class StyledContent extends Component {
     render() {
