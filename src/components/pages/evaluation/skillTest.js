@@ -156,7 +156,7 @@ class SkillTest extends Component {
             );
         });
 
-        const canContinue = !this.props.loading && !!this.state.selectedId;
+        const canContinue = typeof this.state.selectedId !== "undefined" && !this.props.loading;
         const buttonClass = "skillContinueButton" + (canContinue ? "" : " disabled");
 
         // otherwise, good to go - show them the question

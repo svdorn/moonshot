@@ -1422,14 +1422,14 @@ function gradeOverall(subscores, weights) {
     subscoreWeights.forEach(sw => {
         const subscore = subscores[sw[0]];
         if (typeof subscore === "number") {
-            const weight = subscores[sw[1]];
+            const weight = sw[1];
             totalWeight += weight;
             totalValue += weight * subscore;
-            console.log("added ", sw[0]);
         }
     });
 
-    return totalValue / totalWeight;
+    // if there are no contributors to score, score must be 0 bc can't divide by 0
+    return totalWeight === 0 ? 0 : totalValue / totalWeight;
     //
     // console.log("weights: ", weights);
     // let totalValue = 0;

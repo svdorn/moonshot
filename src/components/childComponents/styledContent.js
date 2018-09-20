@@ -127,7 +127,7 @@ class StyledContent extends Component {
                                     // remove the indent symbol
                                     codeCopy = codeCopy.substring(1);
                                 }
-                                code.push(<div className="inlineBlock">{codeCopy}</div>);
+                                code.push(<div className="inlineBlock" style={{padding: "10px 20px"}}>{codeCopy}</div>);
                                 code.push(<br/>)
                             });
                             contentHtml.push (
