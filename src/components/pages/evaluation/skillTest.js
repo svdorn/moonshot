@@ -6,6 +6,7 @@ import { bindActionCreators } from "redux";
 import { closeNotification, answerEvaluationQuestion, addNotification } from "../../../actions/usersActions";
 import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import StyledContent from "../../childComponents/styledContent";
 import { htmlDecode } from "../../../miscFunctions";
 
 class SkillTest extends Component {

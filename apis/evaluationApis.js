@@ -1837,7 +1837,7 @@ async function addSkillInfo(user, evaluationState, position) {
                             evaluationState.componentInfo = question;
                             // update the step progress
                             const numAnswered = userSkill.attempts && userSkill.attempts.levels && userSkill.attempts.levels.length > 0 && userSkill.attempts.levels[0].questions ? userSkill.attempts.levels[0].questions.length : 0;
-                            evaluationState.stepProgress = (userSkill.attempts.levels[0].questions.length / questions) * 100;
+                            evaluationState.stepProgress = (numAnswered / questions) * 100;
                         }
                         catch (getSkillError) { reject(getSkillError); }
                     }
