@@ -1412,33 +1412,51 @@ function gradeEval(user, userPosition, position) {
 
 // calculate the overall score based on sub-scores like gca and performance
 function gradeOverall(subscores, weights) {
-    console.log("weights: ", weights);
-    let totalValue = 0;
     let totalWeight = 0;
-    // go through every score type (gca, performance, etc) and add its weighted value
-    for (let scoreType in subscores) {
-        if (!subscores.hasOwnProperty(scoreType)) continue;
-        console.log("scoreType: ", scoreType);
-        console.log("subscores[scoreType]: ", subscores[scoreType]);
-        // only use the score if it exists as a number
-        if (typeof subscores[scoreType] === "number") {
-            // get the weight of the type
-            let weight = weights ? weights[scoreType] : undefined;
-            console.log("weights[scoreType]: ", weights[scoreType]);
-            // if weight not provided, assume weighed at .2
-            if (typeof weight !== "number") {
-                console.log("Invalid weight of: ", weight, " for score type: ", scoreType, " in position with id: ", position._id);
-                if (scoreType === "gca") { weight = .51; }
-                else if (scoreType === "performance") { weight = .23 }
-                else { weight = 0; }
-            }
-            console.log("weight is: ", weight);
-            totalValue += subscores[scoreType] * weight;
+    let totalValue = 0;
+
+    const subscoreWeights = [["performance", .6], ["growth", .4]];
+
+    // go through each subscore and add it and its weight if wanted
+    susbscoreWeights.forEach(sw => {
+        const subscore = subscores[sw[0]];
+        if (typeof subscore === "number") {
+            const weight = subscores[sw[1]];
             totalWeight += weight;
+            totalValue += weight * subscore;
+            console.log("added ", sw[0]);
         }
-    }
-    console.log("overall score: ", (totalValue/totalWeight));
-    return (totalValue / totalWeight);
+    });
+
+    return totalValue / totalWeight;
+    //
+    // console.log("weights: ", weights);
+    // let totalValue = 0;
+    // let totalWeight = 0;
+    // // go through every score type (gca, performance, etc) and add its weighted value
+    // for (let scoreType in subscores) {
+    //     if (!subscores.hasOwnProperty(scoreType)) continue;
+    //     console.log("scoreType: ", scoreType);
+    //     console.log("subscores[scoreType]: ", subscores[scoreType]);
+    //     // only use the score if it exists as a number
+    //     if (typeof subscores[scoreType] === "number") {
+    //         // get the weight of the type
+    //         let weight = weights ? weights[scoreType] : undefined;
+    //         console.log("weights[scoreType]: ", weights[scoreType]);
+    //         // if weight not provided, assume weighed at .2
+    //         if (typeof weight !== "number") {
+    //             console.log("Invalid weight of: ", weight, " for score type: ", scoreType, " in position with id: ", position._id);
+    //             if (scoreType === "gca") { weight = .51; }
+    //             else if (scoreType === "performance") { weight = .23 }
+    //             else { weight = 0; }
+    //         }
+    //         console.log("weight is: ", weight);
+    //         totalValue += subscores[scoreType] * weight;
+    //         totalWeight += weight;
+    //     }
+    // }
+    // console.log("overall score: ", (totalValue/totalWeight));
+    // return (totalValue / totalWeight);
 }
 
 
