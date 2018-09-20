@@ -53,6 +53,7 @@ const businessApis = require("./apis/businessApis");
 const candidateApis = require("./apis/candidateApis");
 const evaluationApis = require("./apis/evaluationApis");
 const accountAdminApis = require("./apis/accountAdminApis");
+const updates = require("./apis/updates");
 
 const webhooks = require("./apis/webhooks");
 const mlFunctions = require("./apis/mlFunctions");

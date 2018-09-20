@@ -31,297 +31,7 @@ const { sanitize,
 const { calculatePsychScores } = require("./psychApis");
 
 
-// update all old businesses to have new position information
-//updateBusinesses();
-async function updateBusinesses() {
-    try {
-        let businesses = await Businesses.find({});
-        businesses.forEach(business => {
-            let positions = business.positions;
-
-            for (let posIdx = 0; posIdx < positions.length; posIdx++) {
-                let position = positions[posIdx];
-
-                position.finalized = true;
-                if (typeof position.positionType !== "string") { position.positionType = "General" }
-                if (!position.length) { position.length = 25; }
-                if (!position.timeAllotted) { position.timeAllotted = 14; }
-
-                if (position.positionType === "Development") { position.positionType = "Developer"; }
-                const positionType = position.positionType ? position.positionType : "General";
-
-                const generalFactorWeights = {
-                    "emotionality": 1,
-                    "extraversion": 0,
-                    "agreeableness": 0,
-                    "conscientiousness": 1.4375,
-                    "opennessToExperience": 0,
-                    "honestyHumility": 1.125,
-                    "altruism": 0
-                }
-
-                switch(positionType) {
-                    case "General":
-                    case "Marketing":
-                    case "Product":
-                        factorWeights = generalFactorWeights;
-                        position.weights = {
-                            performance: .23,
-                            growth: 0,
-                            longevity: 0,
-                            culture: 0,
-                            gca: .51
-                        }
-                        break;
-                    case "Developer":
-                        factorWeights = generalFactorWeights;
-                        position.weights = {
-                            performance: .23,
-                            growth: 0,
-                            longevity: 0,
-                            culture: 0,
-                            gca: .73
-                        }
-                        break;
-                    case "Sales":
-                        factorWeights = {
-                           "emotionality": 1,
-                           "extraversion": 1.5,
-                           "agreeableness": 0,
-                           "conscientiousness": 2.4,
-                           "opennessToExperience": 0,
-                           "honestyHumility": 1.714,
-                           "altruism": 0
-                       };
-                       position.weights = {
-                           performance: .252,
-                           growth: 0,
-                           longevity: 0,
-                           culture: 0,
-                           gca: .51
-                       }
-                       break;
-                    case "Support":
-                        factorWeights = {
-                           "emotionality": 1.18,
-                           "extraversion": 1,
-                           "agreeableness": 1.723,
-                           "conscientiousness": 2.455,
-                           "opennessToExperience": 1.545,
-                           "honestyHumility": 1.636,
-                           "altruism": 0
-                       };
-                       position.weights = {
-                           performance: .27,
-                           growth: 0,
-                           longevity: 0,
-                           culture: 0,
-                           gca: .51
-                       }
-                       break;
-                    default:
-                        factorWeights = generalFactorWeights;
-                        break;
-                }
-
-                const factors = {
-                    "idealFactors": [
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ff"),
-                            "weight": factorWeights.honestyHumility,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30f"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce30a"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce305"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce300"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ea"),
-                            "weight": factorWeights.emotionality,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2fa"),
-                                    "score": -5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f5"),
-                                    "score": -5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f0"),
-                                    "score": -5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2eb"),
-                                    "score": -5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d0"),
-                            "weight": factorWeights.extraversion,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e5"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e0"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2db"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d6"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d1"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bb"),
-                            "weight": factorWeights.agreeableness,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2cb"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c6"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c1"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bc"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6"),
-                            "weight": factorWeights.conscientiousness,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b"),
-                            "weight": factorWeights.opennessToExperience,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
-                                    "score": 5,
-                                    "weight": 1
-                                },
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        },
-                        {
-                            "factorId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce275"),
-                            "weight": factorWeights.altruism,
-                            "idealFacets": [
-                                {
-                                    "facetId": mongoose.Types.ObjectId("5aff0b612689cb00e45ce285"),
-                                    "score": 5,
-                                    "weight": 1
-                                }
-                            ]
-                        }
-                    ]
-                };
-
-                // set correct ideal and growth factors
-                position.idealFactors = factors.idealFactors;
-                position.growthFactors = factors.idealFactors;
-
-                positions[posIdx] = position;
-            }
-
-            business.positions = positions;
-            business.save();
-        })
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-
+// will contain all the exports
 module.exports = {};
 
 
@@ -1197,52 +907,58 @@ async function finishCognitive(user) {
             cognitiveTest.totalTime = NOW.getTime() - cognitiveTest.startDate.getTime();
         }
 
-        // ----------------------->> GRADE THE TEST <<----------------------- //
-
-        // get the ids of all the questions the user answered
-        const answeredIds = cognitiveTest.questions.map(q => q.questionId);
-        // query to get all the questions from the db
-        const query = { "_id": { "$in": answeredIds } };
-        // get all the questions in normal object form
-        try { var questions = await GCA.find(query).select("_id difficulty discrimination guessChance").lean(); }
-        catch (getQuestionsError) { return reject(getQuestionsError); }
-        // go through each question
-        questions.forEach((dbQ, index) => {
-            // get the question in the user object correlating to this question
-            const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
-            // add whether the user is correct to the question
-            // if the user went over on time, mark it incorrect for grading
-            questions[index].isCorrect = userQuestion.isCorrect && !userQuestion.overTime;
-        });
-
-        // the value of all sampled points times their weights added up together
-        let totalValue = 0;
-        // all the weights added up
-        let totalWeight = 0;
-
-        // calculate the average theta value
-        // calculate the value of the function at every point from 0 to 200
-        // going up by .1 every iteration
-        for (let theta = 0; theta <= 200; theta += .1) {
-            // calculate the value of the likelihood function times the normal
-            // distribution at this point
-            const value = expectationAPriori(questions, theta);
-            // the weight is equal to the value of the likelihood function * normal distribution
-            totalValue += theta * value;
-            totalWeight += value;
-        }
-
-        cognitiveTest.score = totalValue / totalWeight;
-
+        // grade the test
+        try { cognitiveTest.score = await getCognitiveScore(cognitiveTest); }
+        catch (gradeError) { return reject(gradeError); }
         console.log(`User ${user._id} finished GCA test with score: `, cognitiveTest.score);
 
-        // <<--------------------- FINISH GRADING TEST -------------------->> //
-
+        // save all the new info
         user.cognitiveTest = cognitiveTest;
 
         // return the graded test
         return resolve(user);
     });
+}
+
+
+// get the score for a full cognitive test
+// export it only for internal use
+module.exports.getCognitiveScore = getCognitiveScore;
+async function getCognitiveScore(cognitiveTest) {
+    // get the ids of all the questions the user answered
+    const answeredIds = cognitiveTest.questions.map(q => q.questionId);
+    // query to get all the questions from the db
+    const query = { "_id": { "$in": answeredIds } };
+    // get all the questions in normal object form
+    try { var questions = await GCA.find(query).select("_id difficulty discrimination guessChance").lean(); }
+    catch (getQuestionsError) { return reject(getQuestionsError); }
+    // go through each question
+    questions.forEach((dbQ, index) => {
+        // get the question in the user object correlating to this question
+        const userQuestion = cognitiveTest.questions.find(q => q.questionId.toString() === dbQ._id.toString());
+        // add whether the user is correct to the question
+        // if the user went over on time, mark it incorrect for grading
+        questions[index].isCorrect = userQuestion.isCorrect && !userQuestion.overTime;
+    });
+
+    // the value of all sampled points times their weights added up together
+    let totalValue = 0;
+    // all the weights added up
+    let totalWeight = 0;
+
+    // calculate the average theta value
+    // calculate the value of the function at every point from 0 to 200
+    // going up by .1 every iteration
+    for (let theta = 0; theta <= 200; theta += .1) {
+        // calculate the value of the likelihood function times the normal
+        // distribution at this point
+        const value = expectationAPriori(questions, theta);
+        // the weight is equal to the value of the likelihood function * normal distribution
+        totalValue += theta * value;
+        totalWeight += value;
+    }
+
+    return (totalValue / totalWeight);
 }
 
 
@@ -1420,6 +1136,7 @@ async function newPsychTest() {
     });
 }
 
+
 // return a fresh new just-started cognitive eval
 async function newCognitiveTest() {
     return new Promise(async function(resolve, reject) {
@@ -1565,7 +1282,7 @@ async function advance(user, businessId, positionId) {
                 // give it an end date
                 user.positions[positionIndex].appliedEndDate = new Date();
                 // score the user
-                try { user.positions[positionIndex] = await gradeEval(user, user.positions[positionIndex], position); }
+                try { user.positions[positionIndex] = gradeEval(user, user.positions[positionIndex], position); }
                 catch (gradeError) { return reject(gradeError); }
             }
         }
@@ -1637,7 +1354,9 @@ async function getEvaluationState(options) {
 
 
 // grades an evaluation based on all the components
-async function gradeEval(user, userPosition, position) {
+// exported for internal use only
+module.exports.gradeEval = gradeEval;
+function gradeEval(user, userPosition, position) {
     // CURRENTLY SCORE IS MADE OF MOSTLY PSYCH AND A TINY BIT OF SKILLS
     // GRADE ALL THE SKILLS
     const overallSkill = gradeAllSkills(user, position);
@@ -1690,7 +1409,6 @@ async function gradeEval(user, userPosition, position) {
     // return the updated user position
     return userPosition;
 }
-
 
 // calculate the overall score based on sub-scores like gca and performance
 function gradeOverall(subscores, weights) {
@@ -1746,67 +1464,6 @@ function gradeAllSkills(user, position) {
     // return the calculated score (could be undefined)
     return overallSkill;
 }
-
-
-// // get predicted growth for specific position
-// function gradeGrowth(user, position) {
-//     // start at a score of 0, 100 will be added after scaling
-//     let growth = 0;
-//
-//     // how many facets are involved in the growth calculation
-//     let numGrowthFacets = 0;
-//
-//     // go through each factor to get to each facet
-//     const userFactors = user.psychometricTest.factors;
-//     // make sure there are factors used in growth - otherwise growth will be 100
-//     if (Array.isArray(position.growthFactors)) {
-//         // go through each factor that affects growth
-//         position.growthFactors.forEach(growthFactor => {
-//             // find the factor within the user's psych test
-//             const userFactor = userFactors.find(factor => { return factor.factorId.toString() === growthFactor.factorId.toString(); });
-//
-//             // add the number of facets in this factor to the total number of growth facets
-//             numGrowthFacets += growthFactor.idealFacets.length;
-//
-//             // go through each facet to find the score compared to the ideal output
-//             growthFactor.idealFacets.forEach(idealFacet => {
-//                 // find the facet within the user's psych test
-//                 const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
-//
-//                 // the score that the user needs for the max pq
-//                 const idealScore = idealFacet.score;
-//
-//                 // how far off of the ideal score the user got
-//                 const difference = Math.abs(idealScore - userFacet.score);
-//
-//                 // subtract the difference from the predictive score
-//                 growth -= difference;
-//
-//                 // add the absolute value of the facet score, making the
-//                 // potential predictive score higher
-//                 growth += Math.abs(idealScore);
-//             })
-//         });
-//     }
-//
-//     // the max pq for growth in this position
-//     const maxGrowth = position.maxGrowth ? position.maxGrowth : 190;
-//
-//     // growth multiplier is highest growth score divided by number of growth
-//     // facets divided by 5 (since each growth facet has a max score in either direction of 5)
-//     // can only have a growth multiplier if there are growth facets, so if
-//     // there are no growth facets, set multiplier to 1
-//     const growthMultiplier = numGrowthFacets > 0 ? ((maxGrowth - 100) / numGrowthFacets) / 5 : 1;
-//
-//     // to get to the potential max score, multiply by the multiplier
-//     growth *= growthMultiplier;
-//
-//     // add the starting growth pq
-//     growth += 100;
-//
-//     // return the calculated growth score
-//     return growth;
-// }
 
 
 // get predicted growth for specific position
@@ -1909,103 +1566,6 @@ function gradePerformance(user, position, overallSkill) {
     // return the predicted performance
     return performance;
 }
-
-
-
-// get predicted performance for specific position
-// function gradePerformance(user, position, overallSkill) {
-//     // get the function type of the position ("Development", "Support", etc)
-//     const type = position.positionType;
-//     // get the user's psych test
-//     const psych = user.psychometricTest;
-//     // the weights for this position type
-//     let weights = performanceWeights[type];
-//     // if the type isn't valid, just use the general ones
-//     if (!weights) {
-//         console.log(`Position with id ${position._id} had type: `, type, " which was invalid. Using General weights.");
-//         weights = performanceWeights["General"];
-//     }
-//     // the added-up weighted factor score values
-//     let totalValue = 0;
-//     // the total weight of all factors, will divide by this to get the final score
-//     let totalWeight = 0;
-//     // go through every factor,
-//     psych.factors.forEach(factor => {
-//         // get the average of all the facets for the factor
-//         const factorAvg = factor.score;
-//         // get the standardized factor score
-//         const stdFactorScore = (factorAvg * 10) + 94.847;
-//         // get the weight of the factor for this position
-//         const weight = weights[factor.name];
-//         // if the weight is invalid, don't use this factor in calculation
-//         if (typeof weight !== "number") {
-//             console.log("Invalid weight: ", weight, " in factor ", factor, ` of position with id ${position._id}`);
-//         } else {
-//             // add the weighted factor score to the total value
-//             totalValue += stdFactorScore * weight;
-//             // add the weight to the total weight
-//             totalWeight += weight;
-//         }
-//     });
-//     // if the total weight is 0, something has gone terribly wrong
-//     if (totalWeight === 0) { throw new Error("Total factor weight of 0. Invalid psych factors."); }
-//     // otherwise calculate the final weighted average score and return it
-//     return (totalValue / totalWeight);
-// }
-
-
-
-// // OLD VERSION OF GRADING PERFORMANCE USING IDEAL OUTPUTS
-// // get predicted performance for specific position
-// function gradePerformance(user, position, overallSkill) {
-//     // add to the score when a non-zero facet score is ideal
-//     // subtract from the score whatever the differences are between the
-//     // ideal facets and the actual facets
-//     let performance = undefined;
-//
-//     const userFactors = user.psychometricTest.factors;
-//     if (Array.isArray(position.idealFactors) && position.idealFactors.length > 0) {
-//         // start at 100 as the baseline
-//         let psychPerformance = 100;
-//
-//         // go through each factor to get to each facet
-//         position.idealFactors.forEach(idealFactor => {
-//             // find the factor within the user's psych test
-//             const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
-//
-//             // go through each facet to find the score compared to the ideal output
-//             idealFactor.idealFacets.forEach(idealFacet => {
-//                 // find the facet within the user's psych test
-//                 const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
-//
-//                 // the score that the user needs for the max pq
-//                 const idealScore = idealFacet.score;
-//
-//                 // how far off of the ideal score the user got
-//                 const difference = Math.abs(idealScore - userFacet.score);
-//
-//                 // subtract the difference from the predictive score
-//                 psychPerformance -= difference;
-//
-//                 // add the absolute value of the facet score, making the
-//                 // potential predictive score higher
-//                 psychPerformance += Math.abs(idealScore);
-//             });
-//         });
-//
-//         // take skills into account if there were any in the eval
-//         if (typeof overallSkill === "number") {
-//             // psych will account for 80% of prediction, skills 20%
-//             performance = (psychPerformance * .8) + (overallSkill * .2);
-//         }
-//
-//         // otherwise performance is just psych performance
-//         else { performance = psychPerformance; }
-//     }
-//
-//     // return calculated performance
-//     return performance;
-// }
 
 
 // get predicted longevity for specific position
