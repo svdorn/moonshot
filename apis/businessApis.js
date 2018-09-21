@@ -502,7 +502,7 @@ async function createPosition(name, type, businessId, isManager) {
             name: name,
             positionType: type,
             isManager,
-            length: 22,
+            length: type === "Developer" ? 40 : 22,
             dateCreated: Date.now(),
             finalized: true,
             timeAllotted: 60
@@ -790,6 +790,12 @@ async function createPosition(name, type, businessId, isManager) {
         // set correct ideal and growth factors
         bizPos.growthFactors = factors.idealFactors;
         bizPos.idealFactors = factors.idealFactors;
+
+        // include Data Structures and Algorithms skill tests if Dev position
+        if (type === "Developer") {
+            bizPos.skills = [ "5b4d7497fb6fc07d5ad278df", "5b4d7468fb6fc07d5ad278cc" ];
+            bizPos.skillNames = [ "Data Structures", "Algorithms" ];
+        }
 
         // initialize position id string
         let _id = mongoose.Types.ObjectId();

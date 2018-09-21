@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { htmlDecode } from "../../miscFunctions";
 
 class StyledContent extends Component {
     render() {
@@ -34,7 +35,7 @@ class StyledContent extends Component {
                         if (content.length > 0) {
                             contentHtml.push(
                                 <div className={className} key={"contentPart" + keyCounter}>
-                                    {content[0]}
+                                    {htmlDecode(content[0])}
                                 </div>
                             );
                         }
@@ -58,7 +59,7 @@ class StyledContent extends Component {
                                      className="lightBlueChip"
                                 >
                                     <div key={skill} className="primary-cyan">
-                                        {skill}
+                                        {htmlDecode(skill)}
                                     </div>
                                 </div>
                             );
@@ -78,7 +79,7 @@ class StyledContent extends Component {
                                    target={target}
                                    className={className}
                                    href={content[0]}>
-                                    {linkText}
+                                    {htmlDecode(linkText)}
                                 </a>
                             );
                         }
@@ -96,7 +97,7 @@ class StyledContent extends Component {
                             if (typeof itemContent !== "string") { return null; }
                             liKeyCounter++;
                             contentHtml.push(
-                                <li key={"contentPart" + keyCounter + "li" + liKeyCounter}>{itemContent}</li>
+                                <li key={"contentPart" + keyCounter + "li" + liKeyCounter}>{htmlDecode(itemContent)}</li>
                             );
                         });
                         if (part.partType === "ol") {
@@ -127,7 +128,7 @@ class StyledContent extends Component {
                                     // remove the indent symbol
                                     codeCopy = codeCopy.substring(1);
                                 }
-                                code.push(<div className="inlineBlock">{codeCopy}</div>);
+                                code.push(<div className="inlineBlock" style={{padding: "10px 20px"}}>{htmlDecode(codeCopy)}</div>);
                                 code.push(<br/>)
                             });
                             contentHtml.push (

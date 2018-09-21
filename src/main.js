@@ -70,7 +70,6 @@ class Main extends Component {
                         var user_id = self.props.currentUser.intercom.id;
                         var user_hash = self.props.currentUser.hmac;
                     }
-                    console.log("user hash: ", user_hash);
                     window.Intercom('boot', {
                       app_id: "xki3jtkg",
                       email,

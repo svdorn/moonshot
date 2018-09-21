@@ -604,9 +604,9 @@ module.exports.POST_start = async function(req, res) {
 
 
 // gets results for a user and influencers
-module.exports.GET_initialState = async function(req, res) {
+module.exports.POST_getInitialState = async function(req, res) {
     // get everything needed from request
-    const { userId, verificationToken, businessId, positionId } = sanitize(req.query);
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
     // if the ids are not strings, return bad request error
     if (!validArgs({ stringArgs: [businessId, positionId] })) {
         logArgs(req.query, ["businessId", "positionId"]);
@@ -632,9 +632,22 @@ module.exports.GET_initialState = async function(req, res) {
         return res.status(500).send({ serverError: true });
     }
 
-    // check if they have finished the eval already
+    // check if they have finished the eval
     if (user.positions[positionIndex].appliedEndDate) {
         return res.status(200).send({ finished: true });
+    }
+
+    // check if the user has finished all the components already
+    if (finishedPosition(user, position)) {
+        console.log("finished position is true");
+        // finish the position
+        try {
+            const { user: updatedUser } = await advance(user, businessId, positionId);
+            user = updatedUser;
+            await user.save();
+            return res.status(200).send({ finished: true });
+        }
+        catch (finishPositionError) { console.log("Error finishing position from getting initial state: ", finishPositionError); }
     }
 
     // if user is in-progress on any position
@@ -766,6 +779,39 @@ module.exports.addEvaluation = async function(user, businessId, positionId, star
     });
 }
 
+
+// checks if a position's components are all completed
+function finishedPosition(user, position) {
+    // check if admin qs are done
+    if (!user.adminQuestions || !user.adminQuestions.endDate) { return false; }
+    // check if psych is done
+    if (!user.psychometricTest || !user.psychometricTest.endDate) { return false; }
+    // check if gca is done
+    if (!user.cognitiveTest || !user.cognitiveTest.endDate) { return false; }
+    // check if skills are done
+    if (position.skills && position.skills.length > 0) {
+        console.log("there are skills to do");
+        // if there are skills to be done and the user has done none, not done with eval
+        if (!user.skillTests || user.skillTests.length === 0) { return false; }
+        console.log("user has started at least one skill");
+        // see if each test is done
+        for (let posIdx = 0; posIdx < position.skills.length; posIdx++) {
+            const skillIdString = position.skills[posIdx].toString();
+            // see if the user has the skill
+            const userSkill = user.skillTests.find(uSkill => uSkill.skillId.toString() === skillIdString);
+            console.log("user skill: ", userSkill);
+            console.log();
+            // if the user doesn't have it or it's not done, not done with eval
+            if (!userSkill || typeof userSkill.mostRecentScore !== "number") {
+                console.log("returning false");
+                return false;
+            }
+        }
+    }
+    console.log("finished everything");
+    // user finished everything
+    return true;
+}
 
 // start the next skill in an eval
 async function startNewSkill(user) {
@@ -1340,7 +1386,7 @@ async function getEvaluationState(options) {
         catch (getStateError) { reject(getStateError); }
 
 
-        // if the user finished all the componens, they're done
+        // if the user finished all the components, they're done
         if (!evaluationState.component) {
             evaluationState.component = "Finished";
             // return the position too since they'll probably have to get graded now
@@ -1357,6 +1403,7 @@ async function getEvaluationState(options) {
 // exported for internal use only
 module.exports.gradeEval = gradeEval;
 function gradeEval(user, userPosition, position) {
+    console.log("GRADING EVAL FOR USER WITH ID: ", user._id);
     // CURRENTLY SCORE IS MADE OF MOSTLY PSYCH AND A TINY BIT OF SKILLS
     // GRADE ALL THE SKILLS
     const overallSkill = gradeAllSkills(user, position);
@@ -1368,14 +1415,15 @@ function gradeEval(user, userPosition, position) {
     // predict growth
     const growth = gradeGrowth(user, position, gca);
     // predict performance
-    const performance = gradePerformance(user, position, overallSkill);
+    const performance = gradePerformance(user, position, overallSkill, gca);
     // predict longevity
     const longevity = gradeLongevity(user, position);
     /* <<------------------------ END GRADE PSYCH ------------------------->> */
 
     /* ------------------------->> GRADE OVERALL <<-------------------------- */
     // grade the overall score
-    const overallScore = gradeOverall({ gca, growth, performance, longevity }, position.weights);
+    //const overallScore = gradeOverall({ gca, growth, performance, longevity }, position.weights);
+    const overallScore = gradeOverall({ gca, growth, performance, longevity });
 
     // // the components that make up the overall score
     // const overallContributors = [growth, performance, longevity];
@@ -1412,33 +1460,54 @@ function gradeEval(user, userPosition, position) {
 
 // calculate the overall score based on sub-scores like gca and performance
 function gradeOverall(subscores, weights) {
-    console.log("weights: ", weights);
-    let totalValue = 0;
+    console.log("GRADING OVERALL:");
     let totalWeight = 0;
-    // go through every score type (gca, performance, etc) and add its weighted value
-    for (let scoreType in subscores) {
-        if (!subscores.hasOwnProperty(scoreType)) continue;
-        console.log("scoreType: ", scoreType);
-        console.log("subscores[scoreType]: ", subscores[scoreType]);
-        // only use the score if it exists as a number
-        if (typeof subscores[scoreType] === "number") {
-            // get the weight of the type
-            let weight = weights ? weights[scoreType] : undefined;
-            console.log("weights[scoreType]: ", weights[scoreType]);
-            // if weight not provided, assume weighed at .2
-            if (typeof weight !== "number") {
-                console.log("Invalid weight of: ", weight, " for score type: ", scoreType, " in position with id: ", position._id);
-                if (scoreType === "gca") { weight = .51; }
-                else if (scoreType === "performance") { weight = .23 }
-                else { weight = 0; }
-            }
-            console.log("weight is: ", weight);
-            totalValue += subscores[scoreType] * weight;
+    let totalValue = 0;
+
+    const subscoreWeights = [["performance", .6], ["growth", .4]];
+
+    // go through each subscore and add it and its weight if wanted
+    subscoreWeights.forEach(sw => {
+        const subscore = subscores[sw[0]];
+        if (typeof subscore === "number") {
+            console.log(`\t${sw[0]}: ${subscore}, weight: ${sw[1]}`);
+            const weight = sw[1];
             totalWeight += weight;
+            totalValue += weight * subscore;
         }
-    }
-    console.log("overall score: ", (totalValue/totalWeight));
-    return (totalValue / totalWeight);
+    });
+    console.log("\tTotal: ", (totalValue / totalWeight));
+
+    // if there are no contributors to score, score must be 0 bc can't divide by 0
+    return totalWeight === 0 ? 0 : totalValue / totalWeight;
+    //
+    // console.log("weights: ", weights);
+    // let totalValue = 0;
+    // let totalWeight = 0;
+    // // go through every score type (gca, performance, etc) and add its weighted value
+    // for (let scoreType in subscores) {
+    //     if (!subscores.hasOwnProperty(scoreType)) continue;
+    //     console.log("scoreType: ", scoreType);
+    //     console.log("subscores[scoreType]: ", subscores[scoreType]);
+    //     // only use the score if it exists as a number
+    //     if (typeof subscores[scoreType] === "number") {
+    //         // get the weight of the type
+    //         let weight = weights ? weights[scoreType] : undefined;
+    //         console.log("weights[scoreType]: ", weights[scoreType]);
+    //         // if weight not provided, assume weighed at .2
+    //         if (typeof weight !== "number") {
+    //             console.log("Invalid weight of: ", weight, " for score type: ", scoreType, " in position with id: ", position._id);
+    //             if (scoreType === "gca") { weight = .51; }
+    //             else if (scoreType === "performance") { weight = .23 }
+    //             else { weight = 0; }
+    //         }
+    //         console.log("weight is: ", weight);
+    //         totalValue += subscores[scoreType] * weight;
+    //         totalWeight += weight;
+    //     }
+    // }
+    // console.log("overall score: ", (totalValue/totalWeight));
+    // return (totalValue / totalWeight);
 }
 
 
@@ -1468,50 +1537,111 @@ function gradeAllSkills(user, position) {
 
 // get predicted growth for specific position
 function gradeGrowth(user, position, gcaScore) {
+    console.log("GRADING GROWTH:");
     // get the user's psych test scores
     const psych = user.psychometricTest;
-    // find conscientiousness, as that's the only factor that matters for now
-    const conscFactor = psych.factors.find(factor => factor.name === "Conscientiousness");
-    // how many facets are in the factor
-    let numFacets = 0;
-    // total value, can be divided by numFacets later to get average
-    let addedUpFacets = 0;
-    // go through each facet and find its standardized facet score
-    conscFactor.facets.forEach(facet => {
-        // add facet score to the total value
-        addedUpFacets += facet.score;
-        numFacets++;
-    });
-    // the weighted average of the facets
-    let growth = 94.847 + (10 * (addedUpFacets / numFacets));
-    // incorporate gca if it exists
-    if (typeof gcaScore === "number") {
-        const gcaWeights = {
-            "Sales": 2.024,
-            "Support": 1.889,
-            "Developer": 3.174,
-            "Marketing": 2.217,
-            "Product": 2.217,
-            "General": 2.217
+    // get all the ideal factors from the position
+    const growthFactors = position.growthFactors;
+    // the added-up weighted factor score values
+    let totalGrowthValue = 0;
+    // the total weight of all factors, will divide by this to get the final score
+    let totalGrowthWeight = 0;
+    // go through every factor
+    psych.factors.forEach(factor => {
+        let totalFactorValue = 0;
+        let totalFactorWeight = 0;
+        // find the corresponding ideal factor scores within the position
+        const idealFactor = growthFactors.find(iFactor => iFactor.factorId.toString() === factor.factorId.toString());
+        // use this factor if it is has ideal facets and is Conscientiousness or Extraversion
+        if (idealFactor && ["Conscientiousness", "Extraversion"].includes(factor.name)) {
+            // go through each facet and find its standardized facet score
+            factor.facets.forEach(facet => {
+                // find the corresponding ideal facet
+                const idealFacet = idealFactor.idealFacets.find(iFacet => iFacet.facetId.toString() === facet.facetId.toString());
+                // facet multiplier ensures that the scaled facet is score is between 0 and 10
+                const facetMultiplier = 10 / Math.max(Math.abs(idealFacet.score - 5), Math.abs(idealFacet.score + 5));
+                // the distance between the ideal facet score and the actual facet
+                // score, scaled to be min 0 max 10
+                const scaledFacetScore = facetMultiplier * Math.abs(idealFacet.score - facet.score);
+                // get facet weight; default facet weight is 1
+                let facetWeight = typeof idealFacet.weight === "number" ? idealFacet.weight : 1;
+                // add the weighted value to be averaged
+                totalFactorValue += scaledFacetScore * facetWeight;
+                totalFactorWeight += facetWeight;
+            });
+            // the weighted average of the facets
+            const factorScore = 144.847 - (10 * (totalFactorValue / totalFactorWeight));
+            // get factor weight; .5 for Conscientiousness, .19 for Extraversion
+            let factorWeight = factor.name === "Conscientiousness" ? .5 : .19;
+            // add the weighted score so it can be averaged
+            totalGrowthValue += factorScore * factorWeight;
+            totalGrowthWeight += factorWeight;
+            console.log(`\t${factor.name}: ${factorScore}, weight: ${factorWeight}`);
         }
-        console.log("position.positionType: ", position.positionType);
-        let gcaWeight = gcaWeights[position.positionType];
-        // manager positions have different gca weighting
-        if (position.isManager) { gcaWeight = 2.9; }
-        if (!gcaWeight) { gcaWeight = 2.217; }
-        console.log("gcaWeight: ", gcaWeight);
-        // weigh psych to skills 3:1
-        growth = (growth + (gcaWeight * gcaScore)) / (1 + gcaWeight);
+    });
+
+    // include gca in growth score
+    if (typeof gcaScore === "number") {
+        const gcaWeight = .53;
+        totalGrowthValue += gcaScore * gcaWeight;
+        totalGrowthWeight += gcaWeight;
+        console.log(`\tGCA: ${gcaScore}, weight: ${gcaWeight}`);
     }
 
-    console.log("growth: ", growth);
+    // get the weighted average of the factors
+    const growth = totalGrowthValue / totalGrowthWeight;
+
+    console.log("\tGrowth score: ", growth);
+
     // return the predicted performance
     return growth;
+
+
+    // // get the user's psych test scores
+    // const psych = user.psychometricTest;
+    // // find conscientiousness, as that's the only factor that matters for now
+    // const conscFactor = psych.factors.find(factor => factor.name === "Conscientiousness");
+    // // how many facets are in the factor
+    // let numFacets = 0;
+    // // total value, can be divided by numFacets later to get average
+    // let addedUpFacets = 0;
+    // // go through each facet and find its standardized facet score
+    // conscFactor.facets.forEach(facet => {
+    //     // add facet score to the total value
+    //     addedUpFacets += facet.score;
+    //     numFacets++;
+    // });
+    // // the weighted average of the facets
+    // let growth = 94.847 + (10 * (addedUpFacets / numFacets));
+    // // incorporate gca if it exists
+    // if (typeof gcaScore === "number") {
+    //     const gcaWeights = {
+    //         "Sales": 2.024,
+    //         "Support": 1.889,
+    //         "Developer": 3.174,
+    //         "Marketing": 2.217,
+    //         "Product": 2.217,
+    //         "General": 2.217
+    //     }
+    //     console.log("position.positionType: ", position.positionType);
+    //     let gcaWeight = gcaWeights[position.positionType];
+    //     // manager positions have different gca weighting
+    //     if (position.isManager) { gcaWeight = 2.9; }
+    //     if (!gcaWeight) { gcaWeight = 2.217; }
+    //     console.log("gcaWeight: ", gcaWeight);
+    //     // weigh psych to skills 3:1
+    //     growth = (growth + (gcaWeight * gcaScore)) / (1 + gcaWeight);
+    // }
+    //
+    // console.log("growth: ", growth);
+    // // return the predicted performance
+    // return growth;
 }
 
 
 // get predicted performance for specific position
-function gradePerformance(user, position, overallSkill) {
+function gradePerformance(user, position, overallSkill, gca) {
+    console.log("GRADING PERFORMANCE:");
     // get the user's psych test scores
     const psych = user.psychometricTest;
     // get all the ideal factors from the position
@@ -1528,7 +1658,6 @@ function gradePerformance(user, position, overallSkill) {
         const idealFactor = idealFactors.find(iFactor => iFactor.factorId.toString() === factor.factorId.toString());
         // use this factor if it is has ideal facets
         if (idealFactor) {
-            console.log("Ideal factor: ", factor.name);
             // go through each facet and find its standardized facet score
             factor.facets.forEach(facet => {
                 // find the corresponding ideal facet
@@ -1543,9 +1672,6 @@ function gradePerformance(user, position, overallSkill) {
                 // add the weighted value to be averaged
                 totalFactorValue += scaledFacetScore * facetWeight;
                 totalFactorWeight += facetWeight;
-
-                console.log("facet scaled score: ", scaledFacetScore);
-                console.log("facetWeight: ", facetWeight);
             });
             // the weighted average of the facets
             const factorScore = 144.847 - (10 * (totalFactorValue / totalFactorWeight));
@@ -1554,15 +1680,29 @@ function gradePerformance(user, position, overallSkill) {
             // add the weighted score so it can be averaged
             totalPerfValue += factorScore * factorWeight;
             totalPerfWeight += factorWeight;
+            console.log(`\t${factor.name}: ${factorScore}, weight: ${factorWeight}`);
         }
     });
     // get the weighted average of the factors
     let performance = totalPerfValue / totalPerfWeight;
+    console.log(`\tPerformance pre-gca: ${performance}`);
+
+    // now include GCA score
+    let psychWeight = position.weights && typeof position.weights.performance === "number" ? position.weights.performance : .23;
+    let gcaWeight = position.weights && typeof position.weights.performance === "number" ? position.weights.gca : .51;
+    performance = ((performance * psychWeight) + (gca * gcaWeight)) / (psychWeight + gcaWeight);
+    console.log(`\tGCA: ${gca}, weight: ${gcaWeight}`);
+    console.log(`\tPsych weight: ${psychWeight}`);
+    console.log(`\tPerformance pre-skills: ${performance}`);
+
     // incorporate skills if taken
     if (typeof overallSkill === "number") {
+        console.log(`\tSkill: ${overallSkill}, weight: 1/4 of total`);
         // weigh psych to skills 3:1
         performance = (.75 * performance) + (.25 * overallSkill);
     }
+    console.log(`\tFinal Performance: ${performance}`);
+
     // return the predicted performance
     return performance;
 }
@@ -1748,8 +1888,8 @@ async function addSkillInfo(user, evaluationState, position) {
                             // give this question to eval state so user can see it
                             evaluationState.componentInfo = question;
                             // update the step progress
-                            const numAnswered = userSkill.attempts && userSkill.attempts.levels && userSkill.attempts.levels.length > 0 && userSkill.attempts.levels[0].questions ? userSkill.attempts.levels[0].questions.length : 0;
-                            evaluationState.stepProgress = (userSkill.attempts.levels[0].questions.length / questions) * 100;
+                            const numAnswered = Array.isArray(userSkill.attempts) && userSkill.attempts.length > 0 && userSkill.attempts[0].levels && userSkill.attempts[0].levels.length > 0 && userSkill.attempts[0].levels[0].questions ? userSkill.attempts[0].levels[0].questions.length : 0;
+                            evaluationState.stepProgress = (numAnswered / questions.length) * 100;
                         }
                         catch (getSkillError) { reject(getSkillError); }
                     }
