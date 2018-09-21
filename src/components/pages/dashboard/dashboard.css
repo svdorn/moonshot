@@ -130,19 +130,20 @@
 }
 .candidate-view > div:first-child {
     flex: 1;
-    padding: calc(var(--item-margin) * 2);
+    padding: calc(var(--item-margin));
     position: relative;
 }
 .candidate-view > div:nth-child(2) {
     border-left: 1px solid var(--primary-black-dark);
     width: calc(var(--item-width) + 2 * var(--item-margin));
     text-align: center;
-    padding: calc(var(--item-margin)*2) var(--item-margin) 0;
+    padding: var(--item-margin) var(--item-margin) 0;
+    position: relative;
 }
 .got-it-button {
     color: white;
     position: absolute;
-    bottom: calc(var(--item-width) / 15);
+    bottom: calc(var(--item-margin));
     left: 50%;
     transform: translate(-50%);
 }
@@ -157,6 +158,14 @@
 }
 .ex-question-answers > div:nth-child(2) {
     float: right;
+}
+.gca-example {  }
+.gca-image {
+    height: 85%;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
 }
 
 @media screen and (max-width: 1220px) {
