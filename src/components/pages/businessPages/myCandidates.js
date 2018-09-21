@@ -734,6 +734,11 @@ class MyCandidates extends Component {
                 </div>
             );
         }
+        else if (this.state.candidates.length === 0 && this.state.positions.length <= 1) {
+            return (
+                    <div styleName="gif"><iframe src="https://giphy.com/embed/celorKW7qMsqt61npv" width="100%" height="100%" style={{position:"absolute"}} frameBorder="0" className="giphy-embed" allowFullScreen></iframe></div>
+            )
+        }
         else if (this.state.candidates.length === 0) {
             return (
                 <div style={style.noCandidatesMessage} key="no candidates started">
