@@ -123,8 +123,30 @@
 }
 .candidate-view > div:first-child {
     flex: 1;
+    padding: calc(var(--item-margin) * 2);
 }
 .candidate-view > div:nth-child(2) {
     border-left: 1px solid var(--primary-black-dark);
-    width: var(--item-width);
+    width: calc(var(--item-width) + 2 * var(--item-margin));
+    text-align: center;
+    padding: calc(var(--item-margin)*2) var(--item-margin) 0;
+}
+.got-it-button {
+    color: white;
+    position: absolute;
+    bottom: calc(var(--item-width) / 15);
+    left: 50%;
+    transform: translate(-50%);
+}
+.ex-question-answers {
+    width: 100%;
+    position: relative;
+    margin: 10px 0;
+    overflow: auto;
+}
+.ex-question-answers > div:first-child {
+    float: left;
+}
+.ex-question-answers > div:nth-child(2) {
+    float: right;
 }

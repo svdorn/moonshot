@@ -8,6 +8,7 @@ import {  } from "../../../../../miscFunctions";
 import PsychSlider from "../../../evaluation/psychSlider";
 
 import "../../dashboard.css";
+import { button } from "../../../../../classes";
 
 
 class CandidateView extends Component {
@@ -21,9 +22,20 @@ class CandidateView extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
-                    {"Candidates will take a 12 minute quiz that determines their personality. It will involve a series of questions that look like this:"}
+                    <div>{"Candidates will take a 12 minute quiz that determines their personality. It will involve a series of questions that look like this:"}</div>
+                    <div
+                        className={button.purpleBlue}
+                        styleName="got-it-button"
+                    >
+                        Got It
+                    </div>
                 </div>
-                <div>
+                <div className="noselect">
+                    <div>Flattery is important to getting ahead:</div>
+                    <div styleName="ex-question-answers">
+                        <div>Definitely</div>
+                        <div>Nope</div>
+                    </div>
                     <PsychSlider
                         width={200}
                         height={100}
