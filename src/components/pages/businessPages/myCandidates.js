@@ -22,8 +22,10 @@ import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
+import YouTube from 'react-youtube';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
+import Carousel from "../../miscComponents/carousel";
 import HoverTip from "../../miscComponents/hoverTip";
 
 import "./myCandidates.css";
@@ -735,8 +737,24 @@ class MyCandidates extends Component {
             );
         }
         else if (this.state.candidates.length === 0 && this.state.positions.length <= 1) {
+            const opts = {
+                height: '100%',
+                width: '100%',
+                playerVars: { // https://developers.google.com/youtube/player_parameters
+                    autoplay: 1,
+                    iv_load_policy: 3,
+                    loop: 1,
+                    playlist: 'AMfxuYrp9U8'
+                }
+            };
+
             return (
-                    <div styleName="gif"><iframe src="https://giphy.com/embed/celorKW7qMsqt61npv" width="100%" height="100%" style={{position:"absolute"}} frameBorder="0" className="giphy-embed" allowFullScreen></iframe></div>
+                <div style={{height:"100%", width:"100%"}}>
+                    <YouTube
+                        videoId="AMfxuYrp9U8"
+                        opts={opts}
+                    />
+                </div>
             )
         }
         else if (this.state.candidates.length === 0) {
@@ -963,6 +981,36 @@ class MyCandidates extends Component {
                         Click any candidate name to see results.<br/>
                         Hover over any category for a description.
                         <div className="x" onClick={this.seeInfoBox.bind(this)}>x</div>
+                    </div>
+                </div>
+            );
+        } else {
+            return null;
+        }
+    }
+
+    popup() {
+        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.candidates) {
+            const frame1 = (
+                <div>
+                    Click any candidate name to see results.
+                    Hover over any category for a description.
+                </div>
+            );
+            const frame2 = (
+                <div>
+                    Click any candidate name to see results page 2.<br/>
+                    Hover over any category for a description.
+                </div>
+            );
+
+            return (
+                <div className="center" key="popup box">
+                    <div className="popupBox font16px font12pxUnder500">
+                        <Carousel
+                            frames={[frame1, frame2]}
+                        />
+                        <div className="hideMessage" onClick={this.seeInfoBox.bind(this)}>-Hide Message</div>
                     </div>
                 </div>
             );
@@ -1245,6 +1293,8 @@ class MyCandidates extends Component {
                     <title>My Candidates | Moonshot</title>
                     <meta name="description" content="View analytical breakdowns and manage your candidates."/>
                 </MetaTags>
+
+                {this.popup()}
 
                 { tabs }
 

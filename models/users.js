@@ -79,6 +79,15 @@ const usersSchema = mongoose.Schema({
         // how many days to wait before inviting candidates to take evaluation
         daysBeforeInvite: Number
     },
+    // popups
+    popups: {
+        // whether the popups should show on the evaluations tab
+        evaluations: Boolean,
+        // whether the popups should show on the candidates tab
+        candidates: Boolean,
+        // whether the popups should show on the employees tab
+        employees: Boolean
+    },
     // info we need to keep to access users on Intercom
     intercom: {
         // The email that they are registered with on intercom

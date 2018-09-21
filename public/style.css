@@ -312,6 +312,8 @@ form > h1 {
 
 
 
+
+
 .freeResponseQuestions {
     width: 70%;
     margin-left: 15%;
@@ -2271,6 +2273,25 @@ button.link {
 .myCandidatesInfoBox > .x {
     position: absolute;
     top: 2px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.popupBox {
+    display: inline-block;
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    padding: 10px;
+    margin-top: 15px;
+    color: var(--primary-cyan);
+    -moz-box-shadow:    0px 2px 20px 0px #00000073;
+    -webkit-box-shadow: 0px 2px 20px 0px #00000073;
+    box-shadow:         0px 2px 20px 0px #00000073;
+}
+.popupBox > .hideMessage {
+    position: absolute;
+    bottom: 2px;
     right: 10px;
     cursor: pointer;
 }
