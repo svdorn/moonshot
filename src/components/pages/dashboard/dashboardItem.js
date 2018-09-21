@@ -26,7 +26,7 @@ class DashboardItem extends Component {
         width = Math.round(width);
 
         return (
-            <div styleName=`dashboard-item width-${width}`>
+            <div styleName={`dashboard-item width-${width}`}>
                 
             </div>
         );

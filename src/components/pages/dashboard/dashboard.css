@@ -13,11 +13,29 @@
 }
 
 .dashboard-item {
-    --item-width: 120px;
+    --item-width: 220px;
+    --item-margin: 20px;
     height: var(--item-width);
+    display: inline-block;
+
+    margin: var(--item-margin);
     background-color: var(--primary-black-light);
+
+    -webkit-box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    -moz-box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    -webkit-transition: -webkit-transition .2s;
+    -moz-transition: -moz-box-shadow .2s;
+    transition: box-shadow .2s;
 }
 
+.dashboard-item:hover {
+    -webkit-box-shadow: 0 0 12px 0px rgba(0,0,0,.5);
+    -moz-box-shadow: 0 0 12px 0px rgba(0,0,0,.5);
+    box-shadow: 0 0 12px 0px rgba(0,0,0,.5);
+}
 
-
-.dashboard-item.width-1 { width: }
+.dashboard-item.width-1 { width: var(--item-width); }
+.dashboard-item.width-2 { width: calc((var(--item-width) * 2) + (var(--item-margin) * 2)); }
+.dashboard-item.width-3 { width: calc((var(--item-width) * 3) + (var(--item-margin) * 4)); }
+.dashboard-item.width-4 { width: calc((var(--item-width) * 4) + (var(--item-margin) * 6)); }
