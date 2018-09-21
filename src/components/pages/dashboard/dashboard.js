@@ -17,11 +17,12 @@ class Dashboard extends Component {
     render() {
         return (
             <div>
-                <DashboardItem name="Activity" width={3} />
-                <DashboardItem name="Candidates" width={1} />
-                <DashboardItem name="Employees" width={1} />
-                <DashboardItem name="Evaluations" width={1} />
-                <DashboardItem name="Account" width={1} />
+                <DashboardItem type="Onboarding" width={3} />
+                <DashboardItem type="Activity" width={1} />
+                <DashboardItem type="Candidates" width={1} />
+                <DashboardItem type="Employees" width={1} />
+                <DashboardItem type="Evaluations" width={1} />
+                <DashboardItem type="Account" width={1} />
             </div>
         );
     }

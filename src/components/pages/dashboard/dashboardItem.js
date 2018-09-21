@@ -5,6 +5,8 @@ import { bindActionCreators } from "redux";
 import {  } from "../../../actions/usersActions";
 import {  } from "../../../miscFunctions";
 
+import Onboarding from "./dashboardItems/onboarding";
+
 import "./dashboard.css";
 
 
@@ -25,9 +27,18 @@ class DashboardItem extends Component {
         }
         width = Math.round(width);
 
+        let content = null;
+        switch (this.props.type) {
+            case "Onboarding":
+                content = <Onboarding/>;
+                break;
+            default:
+                content = null;
+        }
+
         return (
-            <div styleName={`dashboard-item width-${width}`}>
-                
+            <div styleName={`dashboard-item-container width-${width}`}>
+                { content }
             </div>
         );
     }
