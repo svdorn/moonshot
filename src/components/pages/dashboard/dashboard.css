@@ -1,3 +1,23 @@
-.dashboard-item {
-    
+:root {
+    --primary-orange: #ff582d;
+    --primary-pink: #fd0d8b;
+    --primary-cyan: #76defe;
+    --primary-peach: #ff6a6f;
+    --primary-white: #ffffff;
+    --primary-purple-light: #b17dfe;
+    --primary-purple-dark: #731ae8;
+    --primary-black-light: #393939;
+    --primary-black-dark: #2e2e2e;
+    --secondary-gray: #d7d7d7;
+    --secondary-red: #eb394f;
 }
+
+.dashboard-item {
+    --item-width: 120px;
+    height: var(--item-width);
+    background-color: var(--primary-black-light);
+}
+
+
+
+.dashboard-item.width-1 { width: }

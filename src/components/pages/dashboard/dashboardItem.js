@@ -16,8 +16,17 @@ class DashboardItem extends Component {
     }
 
     render() {
+        // get the relative width of the dashboard item
+        let width = this.props.width;
+        if (typeof this.props.width === "string") {
+            width = parseInt(this.props.width, 10);
+        } if (typeof width !== "number" || width === NaN || width < 1 || width > 4) {
+            width = 1;
+        }
+        width = Math.round(width);
+
         return (
-            <div styleName="dashboard-item">
+            <div styleName=`dashboard-item width-${width}`>
                 
             </div>
         );
