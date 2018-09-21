@@ -6,6 +6,8 @@ import {  } from "../../../actions/usersActions";
 import {  } from "../../../miscFunctions";
 import DashboardItem from "./dashboardItem";
 
+import "./dashboard.css";
+
 
 class Dashboard extends Component {
     constructor(props) {
@@ -16,13 +18,15 @@ class Dashboard extends Component {
 
     render() {
         return (
-            <div>
-                <DashboardItem type="Onboarding" width={3} />
-                <DashboardItem type="Activity" width={1} />
-                <DashboardItem type="Candidates" width={1} />
-                <DashboardItem type="Employees" width={1} />
-                <DashboardItem type="Evaluations" width={1} />
-                <DashboardItem type="Account" width={1} />
+            <div className="center">
+                <div styleName="dashboard">
+                    <DashboardItem type="Onboarding" width={3} />
+                    <DashboardItem type="Activity" width={1} />
+                    <DashboardItem type="Candidates" width={1} />
+                    <DashboardItem type="Employees" width={1} />
+                    <DashboardItem type="Evaluations" width={1} />
+                    <DashboardItem type="Account" width={1} />
+                </div>
             </div>
         );
     }
