@@ -2,10 +2,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {  } from "../../../../actions/usersActions";
-import {  } from "../../../../miscFunctions";
+import {  } from "../../../../../actions/usersActions";
+import {  } from "../../../../../miscFunctions";
 
-import "../dashboard.css";
+import CandidateView from "./candidateView";
+
+import "../../dashboard.css";
 
 
 class Onboarding extends Component {
@@ -19,7 +21,7 @@ class Onboarding extends Component {
         const checklistInfo = [
             {
                 title: "What Candidates See",
-                //body: <CandidateView/>
+                body: <CandidateView/>
             },
             {
                 title: "What You'll See",
@@ -45,9 +47,14 @@ class Onboarding extends Component {
         })
 
         return (
-            <div styleName="dashboard-item">
-                <div styleName="checklist">
-                    { checklistItems }
+            <div styleName="dashboard-item" style={{display: "flex"}}>
+                <div styleName="checklist-container">
+                    <div styleName="checklist">
+                        { checklistItems }
+                    </div>
+                </div>
+                <div styleName="onboarding-content">
+                    { checklistInfo[0].body }
                 </div>
             </div>
         );

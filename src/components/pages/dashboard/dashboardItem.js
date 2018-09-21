@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import {  } from "../../../actions/usersActions";
 import {  } from "../../../miscFunctions";
 
-import Onboarding from "./dashboardItems/onboarding";
+import Onboarding from "./dashboardItems/onboarding/onboarding";
 
 import "./dashboard.css";
 
