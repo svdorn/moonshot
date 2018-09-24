@@ -4219,7 +4219,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .popup-frame {
-        width: 620px;
+        width: 600px;
     }
 
     .popup-frame > div:first-child {
@@ -4459,7 +4459,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .popup-frame {
-        width: 100%;
+        width: 90%;
     }
 
     .popup-frame > div:first-child {
