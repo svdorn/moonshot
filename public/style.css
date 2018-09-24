@@ -2303,7 +2303,10 @@ button.link {
 
 .popup-frame > div:first-child {
     display: inline-block;
-    width: 33%;
+    width: 20%;
+    height: 100%;
+    margin-top: 20px;
+    vertical-align: middle;
 }
 
 .popup-frame > div:first-child > img {
@@ -2313,8 +2316,11 @@ button.link {
 
 .popup-frame > div:nth-child(2) {
     display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    height: 100%;
     top: 5px;
-    width: 67%;
+    width: 80%;
 }
 
 .myCandidates .candidatesAndOptions {

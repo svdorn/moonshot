@@ -1015,22 +1015,29 @@ class MyCandidates extends Component {
                         />
                     </div>
                     <div style={{marginTop:"20px"}}>
-                        Click any candidate name to see results.
-                        Hover over any category for a description.
+                        <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
+                        <div>
+                            This is your dashboard, where you can see all the most recent activity across every
+                            project in this workspace. It is the perfect place to start your day.
+                        </div>
                     </div>
                 </div>
             );
             const frame2 = (
                 <div className="popup-frame">
+                <div>
+                    <img
+                        alt="Alt"
+                        src={"/icons/Cube" + this.props.png}
+                    />
+                </div>
+                <div style={{marginTop:"20px"}}>
+                    <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
                     <div>
-                        <img
-                            alt="Alt"
-                            src={"/icons/Cube" + this.props.png}
-                        />
+                        Frame 2 this is your dashboard, where you can see all the most recent activity across every
+                        project in this workspace. It is the perfect place to start your day.
                     </div>
-                    <div style={{marginTop:"20px"}}>
-                        Blah blah blah words on frame 2 these are words and descriptions of things I want you to know.
-                    </div>
+                </div>
                 </div>
             );
 

@@ -192,8 +192,11 @@ class MyEmployees extends Component {
                         />
                     </div>
                     <div style={{marginTop:"20px"}}>
-                        Click any candidate name to see results.
-                        Hover over any category for a description.
+                        <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
+                        <div>
+                            This is your dashboard, where you can see all the most recent activity across every
+                            project in this workspace. It is the perfect place to start your day.
+                        </div>
                     </div>
                 </div>
             );
@@ -206,7 +209,11 @@ class MyEmployees extends Component {
                         />
                     </div>
                     <div style={{marginTop:"20px"}}>
-                        Blah blah blah words on frame 2 these are words and descriptions of things I want you to know.
+                        <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
+                        <div>
+                            Frame 2 this is your dashboard, where you can see all the most recent activity across every
+                            project in this workspace. It is the perfect place to start your day.
+                        </div>
                     </div>
                 </div>
             );

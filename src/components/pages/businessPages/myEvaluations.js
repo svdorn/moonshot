@@ -258,16 +258,19 @@ class MyEvaluations extends Component {
             return (
                 <div className="center" key="popup box">
                     <div className="popup-box font16px font12pxUnder500">
-                        <div className="popup-frame">
-                            <div style={{paddingBottom:"20px"}}>
+                        <div className="popup-frame" style={{paddingBottom:"20px"}}>
+                            <div>
                                 <img
                                     alt="Alt"
                                     src={"/icons/Cube" + this.props.png}
                                 />
                             </div>
                             <div style={{marginTop:"20px"}}>
-                                Click any candidate name to see results.
-                                Hover over any category for a description.
+                                <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
+                                <div>
+                                    This is your dashboard, where you can see all the most recent activity across every
+                                    project in this workspace. It is the perfect place to start your day.
+                                </div>
                             </div>
                         </div>
                         <div className="hide-message" onClick={this.hideMessage.bind(this)}>Hide Message</div>
