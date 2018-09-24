@@ -22,7 +22,10 @@ import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import EmployeePreview from '../../childComponents/employeePreview';
 import Carousel from "./carousel";
+import YouTube from 'react-youtube';
 import AddUserDialog from '../../childComponents/addUserDialog';
+
+import './myEmployees.css';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -450,6 +453,28 @@ class MyEmployees extends Component {
                 return pos.name === this.state.position;
             })._id;
         } catch (getPosIdErr) { /* probably just haven't chosen a position yet */ }
+
+        if (this.state.employees.length === 0 && this.state.positions.length <= 1) {
+            const opts = {
+                height: '100%',
+                width: '100%',
+                playerVars: { // https://developers.google.com/youtube/player_parameters
+                    autoplay: 1,
+                    iv_load_policy: 3,
+                    loop: 1,
+                    playlist: 'E43IIWgaH7Y'
+                }
+            };
+
+            employeePreviews = (
+                <div styleName="youtube-video">
+                    <YouTube
+                        videoId="E43IIWgaH7Y"
+                        opts={opts}
+                    />
+                </div>
+            )
+        }
 
         // create the employee previews
         let key = 0;

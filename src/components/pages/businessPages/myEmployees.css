@@ -1,0 +1,17 @@
+.youtube-video {
+    height: 500px;
+    width: 90%;
+    margin: auto;
+}
+
+@media only screen and (max-width: 700px) {
+    .youtube-video {
+        height: 300px;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .youtube-video {
+        height: 200px;
+    }
+}
