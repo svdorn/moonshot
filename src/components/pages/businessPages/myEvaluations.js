@@ -16,7 +16,7 @@ import {
 import {connect} from 'react-redux';
 import { browserHistory } from "react-router";
 import {bindActionCreators} from 'redux';
-import { addNotification, startLoading, stopLoading, openAddUserModal } from '../../../actions/usersActions';
+import { addNotification, startLoading, stopLoading, openAddUserModal, hidePopups } from '../../../actions/usersActions';
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -219,7 +219,7 @@ class MyEvaluations extends Component {
             this.setState({ noPositions: true });
         }
     }
-    
+
 
     inviteCandidates() {
         let self = this;
@@ -236,6 +236,47 @@ class MyEvaluations extends Component {
         URL = encodeURI(URL);
         clipboard.writeText(URL);
         this.props.addNotification("Link copied to clipboard.", "info");
+    }
+
+    hideMessage() {
+        let popups = this.props.currentUser.popups;
+        if (popups) {
+            popups.evaluations = false;
+        } else {
+            popups = {};
+            popups.evaluations = false;
+        }
+
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+
+        this.props.hidePopups(userId, verificationToken, popups);
+    }
+
+    popup() {
+        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.evaluations) {
+            return (
+                <div className="center" key="popup box">
+                    <div className="popup-box font16px font12pxUnder500">
+                        <div className="popup-frame">
+                            <div style={{paddingBottom:"20px"}}>
+                                <img
+                                    alt="Alt"
+                                    src={"/icons/Cube" + this.props.png}
+                                />
+                            </div>
+                            <div style={{marginTop:"20px"}}>
+                                Click any candidate name to see results.
+                                Hover over any category for a description.
+                            </div>
+                        </div>
+                        <div className="hide-message" onClick={this.hideMessage.bind(this)}>Hide Message</div>
+                    </div>
+                </div>
+            );
+        } else {
+            return null;
+        }
     }
 
     render() {
@@ -496,6 +537,9 @@ class MyEvaluations extends Component {
                     <meta name="description" content="View the evaluations your company is running."/>
                 </MetaTags>
                 {dialog}
+
+                { this.popup() }
+
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                 </div>
@@ -520,7 +564,8 @@ function mapDispatchToProps(dispatch) {
         addNotification,
         startLoading,
         stopLoading,
-        openAddUserModal
+        openAddUserModal,
+        hidePopups
     }, dispatch);
 }
 

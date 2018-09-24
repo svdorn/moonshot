@@ -16,11 +16,12 @@ import SelectMenuItem from '@material-ui/core/MenuItem';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
-import {openAddUserModal} from "../../../actions/usersActions";
+import {openAddUserModal, hidePopups} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import EmployeePreview from '../../childComponents/employeePreview';
+import Carousel from "./carousel";
 import AddUserDialog from '../../childComponents/addUserDialog';
 
 const renderTextField = ({input, label, ...custom}) => (
@@ -160,6 +161,67 @@ class MyEmployees extends Component {
 
     openAddUserModal() {
         this.props.openAddUserModal();
+    }
+
+    hideMessage() {
+        let popups = this.props.currentUser.popups;
+        if (popups) {
+            popups.employees = false;
+        } else {
+            popups = {};
+            popups.employees = false;
+        }
+
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+
+        this.props.hidePopups(userId, verificationToken, popups);
+    }
+
+    popup() {
+        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.employees) {
+            const frame1 = (
+                <div className="popup-frame">
+                    <div>
+                        <img
+                            alt="Alt"
+                            src={"/icons/Cube" + this.props.png}
+                        />
+                    </div>
+                    <div style={{marginTop:"20px"}}>
+                        Click any candidate name to see results.
+                        Hover over any category for a description.
+                    </div>
+                </div>
+            );
+            const frame2 = (
+                <div className="popup-frame">
+                    <div>
+                        <img
+                            alt="Alt"
+                            src={"/icons/Cube" + this.props.png}
+                        />
+                    </div>
+                    <div style={{marginTop:"20px"}}>
+                        Blah blah blah words on frame 2 these are words and descriptions of things I want you to know.
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className="center" key="popup box">
+                    <div className="popup-box font16px font12pxUnder500">
+                        <Carousel
+                            frames={[frame1, frame2]}
+                            transitionDuration={1000}
+                        />
+                        <div className="hide-message" onClick={this.hideMessage.bind(this)}>Hide Message</div>
+                    </div>
+                </div>
+            );
+        } else {
+            return null;
+        }
     }
 
     render() {
@@ -428,6 +490,9 @@ class MyEmployees extends Component {
                     <title>My Employees | Moonshot</title>
                     <meta name="description" content="Grade your employees and see their results."/>
                 </MetaTags>
+
+                { this.popup() }
+
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>
@@ -450,13 +515,16 @@ class MyEmployees extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openAddUserModal
+        openAddUserModal,
+        hidePopups
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        loading: state.users.loadingSomething,
+        png: state.users.png,
     };
 }
 
