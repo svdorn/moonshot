@@ -209,7 +209,7 @@ class MyEmployees extends Component {
                         />
                     </div>
                     <div style={{marginTop:"20px"}}>
-                        <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
+                        <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to your Dashboard!</div>
                         <div>
                             Frame 2 this is your dashboard, where you can see all the most recent activity across every
                             project in this workspace. It is the perfect place to start your day.
@@ -220,7 +220,7 @@ class MyEmployees extends Component {
 
             return (
                 <div className="center" key="popup box">
-                    <div className="popup-box font16px font12pxUnder500">
+                    <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
                         <Carousel
                             frames={[frame1, frame2]}
                             transitionDuration={1000}

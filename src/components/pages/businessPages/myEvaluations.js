@@ -257,7 +257,7 @@ class MyEvaluations extends Component {
         if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.evaluations) {
             return (
                 <div className="center" key="popup box">
-                    <div className="popup-box font16px font12pxUnder500">
+                    <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
                         <div className="popup-frame" style={{paddingBottom:"20px"}}>
                             <div>
                                 <img
@@ -266,7 +266,7 @@ class MyEvaluations extends Component {
                                 />
                             </div>
                             <div style={{marginTop:"20px"}}>
-                                <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
+                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to your Dashboard!</div>
                                 <div>
                                     This is your dashboard, where you can see all the most recent activity across every
                                     project in this workspace. It is the perfect place to start your day.

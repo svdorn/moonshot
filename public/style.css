@@ -4218,6 +4218,23 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-left: 25px;
     }
 
+    .popup-frame {
+        width: 620px;
+    }
+
+    .popup-frame > div:first-child {
+        width: 15%;
+    }
+
+    .popup-frame > div:first-child > img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .popup-frame > div:nth-child(2) {
+        width: 85%;
+    }
+
 
     .font40pxUnder900 { font-size: 40px; }
     .font38pxUnder900 { font-size: 38px; }
@@ -4439,6 +4456,22 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         float: right;
         right: inherit;
         bottom: inherit;
+    }
+
+    .popup-frame {
+        width: 100%;
+    }
+
+    .popup-frame > div:first-child {
+        width: 0;
+    }
+
+    .popup-frame > div:first-child > img {
+        display: none;
+    }
+
+    .popup-frame > div:nth-child(2) {
+        width: 100%;
     }
 
     .results > .statsAndDescription > div {
