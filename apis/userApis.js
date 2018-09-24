@@ -369,7 +369,7 @@ async function POST_session(req, res) {
 async function POST_popups(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
-    const popups = sanitize(req.body.popup);
+    const popups = sanitize(req.body.popups);
 
     // get the user who is asking for their evaluations page
     try {

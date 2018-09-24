@@ -2277,23 +2277,44 @@ button.link {
     cursor: pointer;
 }
 
-.popupBox {
+.popup-box {
     display: inline-block;
     position: relative;
     width: 90%;
     max-width: 1200px;
     padding: 10px;
     margin-top: 15px;
-    color: var(--primary-cyan);
+    color: var(--secondary-gray);
     -moz-box-shadow:    0px 2px 20px 0px #00000073;
     -webkit-box-shadow: 0px 2px 20px 0px #00000073;
     box-shadow:         0px 2px 20px 0px #00000073;
 }
-.popupBox > .hideMessage {
+.popup-box > .hide-message {
     position: absolute;
     bottom: 2px;
     right: 10px;
     cursor: pointer;
+}
+
+.popup-frame {
+    margin: auto;
+    width: 800px;
+}
+
+.popup-frame > div:first-child {
+    display: inline-block;
+    width: 33%;
+}
+
+.popup-frame > div:first-child > img {
+    height: 50px;
+    width: 50px;
+}
+
+.popup-frame > div:nth-child(2) {
+    display: inline-block;
+    top: 5px;
+    width: 67%;
 }
 
 .myCandidates .candidatesAndOptions {

@@ -16,7 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox } from "../../../actions/usersActions";
+import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox, hidePopups } from "../../../actions/usersActions";
 import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -25,7 +25,7 @@ import CandidateResults from "./candidateResults";
 import YouTube from 'react-youtube';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
-import Carousel from "../../miscComponents/carousel";
+import Carousel from "./carousel";
 import HoverTip from "../../miscComponents/hoverTip";
 
 import "./myCandidates.css";
@@ -921,6 +921,21 @@ class MyCandidates extends Component {
         });
     }
 
+    hideMessage() {
+        let popups = this.props.currentUser.popups;
+        if (popups) {
+            popups.candidates = false;
+        } else {
+            popups = {};
+            popups.candidates = false;
+        }
+
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+
+        this.props.hidePopups(userId, verificationToken, popups);
+    }
+
 
     // the tabs at the top that say All, Favorites, etc...
     tabParts() {
@@ -992,25 +1007,41 @@ class MyCandidates extends Component {
     popup() {
         if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.candidates) {
             const frame1 = (
-                <div>
-                    Click any candidate name to see results.
-                    Hover over any category for a description.
+                <div className="popup-frame">
+                    <div>
+                        <img
+                            alt="Alt"
+                            src={"/icons/Cube" + this.props.png}
+                        />
+                    </div>
+                    <div style={{marginTop:"20px"}}>
+                        Click any candidate name to see results.
+                        Hover over any category for a description.
+                    </div>
                 </div>
             );
             const frame2 = (
-                <div>
-                    Click any candidate name to see results page 2.<br/>
-                    Hover over any category for a description.
+                <div className="popup-frame">
+                    <div>
+                        <img
+                            alt="Alt"
+                            src={"/icons/Cube" + this.props.png}
+                        />
+                    </div>
+                    <div style={{marginTop:"20px"}}>
+                        Blah blah blah words on frame 2 these are words and descriptions of things I want you to know.
+                    </div>
                 </div>
             );
 
             return (
                 <div className="center" key="popup box">
-                    <div className="popupBox font16px font12pxUnder500">
+                    <div className="popup-box font16px font12pxUnder500">
                         <Carousel
                             frames={[frame1, frame2]}
+                            transitionDuration={1000}
                         />
-                        <div className="hideMessage" onClick={this.seeInfoBox.bind(this)}>-Hide Message</div>
+                        <div className="hide-message" onClick={this.hideMessage.bind(this)}>Hide Message</div>
                     </div>
                 </div>
             );
@@ -1382,7 +1413,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
         openAddUserModal,
-        sawMyCandidatesInfoBox
+        sawMyCandidatesInfoBox,
+        hidePopups
     }, dispatch);
 }
 
@@ -1391,7 +1423,8 @@ function mapStateToProps(state) {
         formData: state.form,
         notification: state.users.notification,
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        loading: state.users.loadingSomething
     };
 }
 

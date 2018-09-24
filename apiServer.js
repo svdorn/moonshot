@@ -141,6 +141,7 @@ app.get("/user/notificationPreferences", userApis.GET_notificationPreferences);
 app.post("/user/postNotificationPreferences", userApis.POST_notificationPreferences);
 app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
 app.post("/user/verifyFromApiKey", userApis.POST_verifyFromApiKey);
+app.post("/user/popups", userApis.POST_popups);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
