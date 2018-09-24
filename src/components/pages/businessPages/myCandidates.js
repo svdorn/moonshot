@@ -22,7 +22,6 @@ import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
-import YouTube from 'react-youtube';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
 import Carousel from "./carousel";
@@ -735,27 +734,6 @@ class MyCandidates extends Component {
                     Select a position.
                 </div>
             );
-        }
-        else if (this.state.candidates.length === 0 && this.state.positions.length <= 1) {
-            const opts = {
-                height: '100%',
-                width: '100%',
-                playerVars: { // https://developers.google.com/youtube/player_parameters
-                    autoplay: 1,
-                    iv_load_policy: 3,
-                    loop: 1,
-                    playlist: 'AMfxuYrp9U8'
-                }
-            };
-
-            return (
-                <div style={{height:"100%", width:"100%"}}>
-                    <YouTube
-                        videoId="AMfxuYrp9U8"
-                        opts={opts}
-                    />
-                </div>
-            )
         }
         else if (this.state.candidates.length === 0) {
             return (
