@@ -215,6 +215,14 @@ function defaultErrorHandler(dispatch, options) {
 }
 
 
+// change the current step within onboarding
+export function changeOnboardingStep(newStep) {
+    return function(dispatch) {
+        dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
+    }
+}
+
+
 // generally used to bring up the loading spinner
 export function startLoading() {
     return function(dispatch) {

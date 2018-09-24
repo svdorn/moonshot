@@ -6,45 +6,67 @@ import {  } from "../../../../../actions/usersActions";
 import {  } from "../../../../../miscFunctions";
 
 import CandidateView from "./candidateView";
+import AdminView from "./adminView";
+import WhyItWorks from "./whyItWorks";
+import WhatToDo from "./whatToDo";
 
 import "../../dashboard.css";
+
+
+// the steps within onboarding
+const checklistInfo = [
+    {
+        title: "What Candidates See",
+        body: <CandidateView/>,
+        step: 1
+    },
+    {
+        title: "What You'll See",
+        body: <AdminView/>,
+        step: 2
+    },
+    {
+        title: "Why It Works",
+        body: <WhyItWorks/>,
+        step: 3
+    },
+    {
+        title: "What To Do",
+        body: <WhatToDo/>,
+        step: 4
+    }
+];
 
 
 class Onboarding extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = { };
     }
 
-    render() {
-        const checklistInfo = [
-            {
-                title: "What Candidates See",
-                body: <CandidateView/>
-            },
-            {
-                title: "What You'll See",
-                //body: <AdminView/>
-            },
-            {
-                title: "Why It Works",
-                //body: <WhyItWorks/>
-            },
-            {
-                title: "What To Do",
-                //body: <WhatToDo/>
-            }
-        ];
 
+    render() {
+        const step = this.props.onboardingStep;
+
+        // create the item list shown on the left
         const checklistItems = checklistInfo.map(info => {
             return (
-                <div styleName={`checklist-item ${info.title === "What You'll See" ? "selected" : ""}`} key={info.title}>
-                    <div styleName={`complete-mark ${info.title === "What Candidates See" ? "complete" : "incomplete"}`}><div/></div>
+                <div styleName={`checklist-item ${info.step === step ? "selected" : ""}`} key={info.title}>
+                    <div styleName={`complete-mark ${info.step < step ? "complete" : "incomplete"}`}><div/></div>
                     <div>{info.title}</div>
                 </div>
             );
-        })
+        });
+
+        // get the content that goes on the right side (the actual info)
+        let content = <div>Invalid step</div>;
+        if (step >= 1 && step <= 4) { // make sure idx is valid
+            content = checklistInfo[Math.round(step) - 1].body;
+        } else {
+            // show the first step if step is invalid
+            content = checklistInfo[0];
+        }
 
         return (
             <div styleName="dashboard-item" style={{display: "flex"}}>
@@ -54,7 +76,7 @@ class Onboarding extends Component {
                     </div>
                 </div>
                 <div styleName="onboarding-content">
-                    { checklistInfo[0].body }
+                    { content }
                 </div>
             </div>
         );
@@ -64,7 +86,8 @@ class Onboarding extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        onboardingStep: state.users.onboardingStep
     };
 }
 

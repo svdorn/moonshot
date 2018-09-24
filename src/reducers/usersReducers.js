@@ -39,6 +39,10 @@ export function usersReducers(state = initialState, action) {
                 message: undefined
             };
             break;
+        case "UPDATE_ONBOARDING_STEP" {
+            return { ...state, onboardingStep: action.newStep };
+            break;
+        }
         case "CREATED_NO_VERIFY_EMAIL_SENT": {
             return {
                 ...state,

@@ -63,7 +63,7 @@ class CandidateView extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
-                    <div>{"Candidates will then take a 12-minute pattern recognition test. Results on this type of test are highly correlated with ability to:"}</div>
+                    <div>{"Candidates will then take a 10-minute pattern recognition test. Results on this type of test are highly correlated with ability to:"}</div>
                     <ul>
                         <li>Solve Problems</li>
                         <li>Learn Quickly</li>
