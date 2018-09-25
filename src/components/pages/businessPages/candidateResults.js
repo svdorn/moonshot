@@ -70,88 +70,108 @@ class CandidateResults extends Component {
         const userId = this.props.currentUser._id;
         const positionId = this.props.positionId;
         const candidateId = this.props.candidateId;
+        const mockData = this.props.mockData;
 
-        // backend call to get results info
-        axios.get("/api/business/evaluationResults", {
-            params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken,
-                positionId, candidateId
-            }
-        })
-        .then(res => {
-            const candidate = {
-                name: res.data.name,
-                title: res.data.title ? res.data.title : "",
-                email: res.data.email,
-                endDate: res.data.endDate,
-                interest: res.data.interest,
-                hiringStage: res.data.hiringStage,
-                isDismissed: res.data.isDismissed
-            }
-            const hardSkillPoints = res.data.skillScores.map(skill => {
+        if (!mockData) {
+            // backend call to get results info
+            axios.get("/api/business/evaluationResults", {
+                params: {
+                    userId: this.props.currentUser._id,
+                    verificationToken: this.props.currentUser.verificationToken,
+                    positionId, candidateId
+                }
+            })
+            .then(res => {
+                this.candidateData(res.data);
+            })
+            .catch(error => {
+                this.setState({
+                    error: true,
+                    loading: false
+                });
+            });
+        } else {
+            const candidateIndex = this.props.candidates.findIndex(candidate => {
+                return candidate._id.toString() === candidateId.toString();
+            });
+            this.candidateData(this.props.candidates[candidateIndex]);
+        }
+    }
+
+    candidateData(data) {
+        const candidate = {
+            name: data.name,
+            title: data.title ? data.title : "",
+            email: data.email,
+            endDate: data.endDate,
+            interest: data.interest,
+            hiringStage: data.hiringStage,
+            isDismissed: data.isDismissed
+        }
+        if (data.skillScores) {
+            var hardSkillPoints = data.skillScores.map(skill => {
                 return {
                     x: skill.name,
                     y: this.round(skill.mostRecentScore),
                     confidenceInterval: 16
                 }
             });
-            const scores = res.data.performanceScores;
-            const overallScore = scores.overall;
-            const gca = res.data.gca;
-            // they all have a confidence interval of 16 for now
-            const predictivePoints = [
-                {
-                    x: "Growth",
-                    y: this.round(scores.growth),
-                    confidenceInterval: this.isInProgress(scores.growth) ? 0 : 16,
-                    inProgress: this.isInProgress(scores.growth)
-                },
-                {
-                    x: "Performance",
-                    y: this.round(scores.performance),
-                    confidenceInterval: this.isInProgress(scores.performance) ? 0 : 16,
-                    inProgress: this.isInProgress(scores.performance)
-                },
-                {
-                    x: "Longevity",
-                    y: this.round(scores.longevity),
-                    confidenceInterval: scores.longevity ? 32 : 0,
-                    unavailable: !scores.longevity,
-                    inProgress: this.isInProgress(scores.longevity)
-                },
-                {
-                    x: "Culture",
-                    y: this.round(scores.culture),
-                    confidenceInterval: 0,
-                    unavailable: true,
-                    inProgress: this.isInProgress(scores.culture)
-                }
-            ];
+        } else {
+            var hardSkillPoints = [];
+        }
 
-            const performance = this.round(scores.performance);
+        let scores = data.performanceScores;
+        if (!data.performanceScores) {
+            scores = data.scores;
+        }
+        const overallScore = scores.overall;
+        const gca = data.gca;
+        // they all have a confidence interval of 16 for now
+        const predictivePoints = [
+            {
+                x: "Growth",
+                y: this.round(scores.growth),
+                confidenceInterval: this.isInProgress(scores.growth) ? 0 : 16,
+                inProgress: this.isInProgress(scores.growth)
+            },
+            {
+                x: "Performance",
+                y: this.round(scores.performance),
+                confidenceInterval: this.isInProgress(scores.performance) ? 0 : 16,
+                inProgress: this.isInProgress(scores.performance)
+            },
+            {
+                x: "Longevity",
+                y: this.round(scores.longevity),
+                confidenceInterval: scores.longevity ? 16 : 0,
+                unavailable: !scores.longevity,
+                inProgress: this.isInProgress(scores.longevity)
+            },
+            {
+                x: "Culture",
+                y: this.round(scores.culture),
+                confidenceInterval: scores.culture ? 16 : 0,
+                unavailable: !scores.culture,
+                inProgress: this.isInProgress(scores.culture)
+            }
+        ];
 
-            let self = this;
-            self.setState({
-                ...self.state,
-                loading: false,
-                psychScores: res.data.psychScores,
-                candidate,
-                overallScore,
-                gca,
-                performance,
-                predicted: scores.predicted,
-                skill: scores.skill,
-                hardSkillPoints,
-                predictivePoints,
-                windowWidth: window.innerWidth
-            });
-        })
-        .catch(error => {
-            this.setState({
-                error: true,
-                loading: false
-            });
+        const performance = this.round(scores.performance);
+
+        let self = this;
+        self.setState({
+            ...self.state,
+            loading: false,
+            psychScores: data.psychScores,
+            candidate,
+            overallScore,
+            gca,
+            performance,
+            predicted: scores.predicted,
+            skill: scores.skill,
+            hardSkillPoints,
+            predictivePoints,
+            windowWidth: window.innerWidth
         });
     }
 
@@ -234,6 +254,7 @@ class CandidateResults extends Component {
         const overallScore = this.round(this.state.overallScore);
         const gca = this.state.gca ? this.round(this.state.gca) : undefined;
 
+        console.log("candidate: ", candidate);
         return (
             !candidate.endDate ?
                 <div className="analysis center aboutMeSection blackBackground" style={{paddingTop:"20px"}}>
