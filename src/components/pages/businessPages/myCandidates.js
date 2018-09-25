@@ -1397,7 +1397,7 @@ class MyCandidates extends Component {
                                         mobile={this.state.mobile}
                                         interest={this.state.interest}
                                         mockData={this.state.mockData}
-                                        candidates={this.state.candidates}
+                                        candidates={this.state.mockData ? this.state.candidates : null}
                                     />
                                     <div className={leftArrowContainerClass} onClick={() => this.nextPreviousResults(false)}>
                                         <div className={leftArrowClass} />
