@@ -15,6 +15,8 @@ const mockusersSchema = mongoose.Schema({
     isDismissed: Boolean,
     // the gca score
     gca: Number,
+    // the amount of interest the business has in the candidate
+    interest: Number,
     // the predictive scores the user got for the position
     scores: {
         // weighted combination of all the scores

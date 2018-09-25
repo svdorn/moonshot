@@ -2296,6 +2296,21 @@ button.link {
     cursor: pointer;
 }
 
+.myCandidatesOverlay {
+    display: inline-block;
+    width: 60%;
+    max-width: 900px;
+    padding: 10px;
+    margin-top: 10px;
+    -moz-box-shadow:    0px 2px 20px 0px #00000073;
+    -webkit-box-shadow: 0px 2px 20px 0px #00000073;
+    box-shadow:         0px 2px 20px 0px #00000073;
+}
+
+.myCandidatesOverlay:hover{
+    cursor: pointer;
+}
+
 .popup-frame {
     margin: auto;
     width: 800px;

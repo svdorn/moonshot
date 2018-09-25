@@ -16,7 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox, hidePopups } from "../../../actions/usersActions";
+import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox, hidePopups, addNotification } from "../../../actions/usersActions";
 import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -25,6 +25,7 @@ import CandidateResults from "./candidateResults";
 import AddUserDialog from '../../childComponents/addUserDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
 import Carousel from "./carousel";
+import clipboard from "clipboard-polyfill";
 import HoverTip from "../../miscComponents/hoverTip";
 
 import "./myCandidates.css";
@@ -55,6 +56,8 @@ class MyCandidates extends Component {
             searchTerm: "",
             // which position we should see candidates for
             position: "",
+            // the name of the business
+            businessName: "",
             // can sort by Name, Score, Hiring Stage, etc...
             sortBy: "stage",
             // the direction to sort in
@@ -113,6 +116,7 @@ class MyCandidates extends Component {
         })
         .then(function (res) {
             let positions = res.data.positions;
+            const businessName = res.data.businessName;
             if (Array.isArray(positions) && positions.length > 0) {
                 // if the url gave us a position to select first, select that one
                 // otherwise, select the first one available
@@ -138,6 +142,7 @@ class MyCandidates extends Component {
                     positions,
                     position: firstPositionName,
                     positionId,
+                    businessName,
                     loadingPositions: false,
                     loadingCandidates: true
                 },
@@ -1175,6 +1180,12 @@ class MyCandidates extends Component {
         );
     }
 
+    copyLink() {
+        let URL = "https://moonshotinsights.io/apply/" + this.state.businessName;
+        URL = encodeURI(URL);
+        clipboard.writeText(URL);
+        this.props.addNotification("Link copied to clipboard.", "info");
+    }
 
     mobileTopOptions() {
         return (
@@ -1363,6 +1374,14 @@ class MyCandidates extends Component {
                         <div className="candidatesContainer">
                             <div>
                                 { this.createCandidatesTable(positionId) }
+                                <div>
+                                    { !this.state.mobile && this.state.mockData ?
+                                        <div className="myCandidatesOverlay primary-cyan" onClick={this.copyLink.bind(this)}>
+                                            Share your custom link with your candidates
+                                        </div>
+                                         : null
+                                    }
+                                </div>
                             </div>
                             { this.state.showResults ?
                                 <div>
@@ -1430,7 +1449,8 @@ function mapDispatchToProps(dispatch) {
         closeNotification,
         openAddUserModal,
         sawMyCandidatesInfoBox,
-        hidePopups
+        hidePopups,
+        addNotification
     }, dispatch);
 }
 
