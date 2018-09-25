@@ -1374,7 +1374,7 @@ class MyCandidates extends Component {
                         <div className="candidatesContainer">
                             <div>
                                 { this.createCandidatesTable(positionId) }
-                                <div>
+                                <div className="myCandidatesOverlayContainer">
                                     { !this.state.mobile && this.state.mockData ?
                                         <div className="myCandidatesOverlay primary-cyan" onClick={this.copyLink.bind(this)}>
                                             Share your custom link with your candidates

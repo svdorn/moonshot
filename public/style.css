@@ -2296,10 +2296,16 @@ button.link {
     cursor: pointer;
 }
 
+.myCandidatesOverlayContainer {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 68%;
+    z-index: 1000;
+    background-color: var(--primary-black-dark);
+}
 .myCandidatesOverlay {
     display: inline-block;
-    width: 60%;
-    max-width: 900px;
     padding: 10px;
     margin-top: 10px;
     -moz-box-shadow:    0px 2px 20px 0px #00000073;
