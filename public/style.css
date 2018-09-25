@@ -2300,7 +2300,7 @@ button.link {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 68%;
+    top: 100%;
     z-index: 1000;
     background-color: var(--primary-black-dark);
 }
