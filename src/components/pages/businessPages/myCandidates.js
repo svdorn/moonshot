@@ -75,6 +75,8 @@ class MyCandidates extends Component {
             positionNameFromUrl,
             // true if the business has no positions associated with it
             noPositions: false,
+            // true if displaying mock data
+            mockData: false,
             // if we are currently loading the positions
             loadingPositions: true,
             // if we are currently loading candidates
@@ -260,15 +262,36 @@ class MyCandidates extends Component {
                 if (res.data && res.data.length > 0) {
                     this.setState({
                         candidates: res.data,
-                        loadingCandidates: false
+                        loadingCandidates: false,
+                        mockData: false
                     }, () => {
                         this.reorder()
                     });
                 } else {
-                    this.setState({
-                        candidates: [],
-                        loadingCandidates: false
-                    })
+                    if (this.state.positions.length === 1) {
+                        axios.get("/api/mockusers/all", {
+                            params: {
+                                userId: this.props.currentUser._id,
+                                verificationToken: this.props.currentUser.verificationToken,
+                                businessId: this.props.currentUser.businessInfo.businessId
+                            }
+                        }).then(res => {
+                            this.setState({
+                                candidates: res.data.mockusers,
+                                loadingCandidates: false,
+                                mockData: true
+                            }, () => {
+                                this.reorder()
+                            });
+                        }).catch(function (err) {
+                            console.log("ERROR: ", err);
+                        })
+                    } else {
+                        this.setState({
+                            candidates: [],
+                            loadingCandidates: false
+                        })
+                    }
                 }
             }).catch(function (err) {
                 console.log("ERROR: ", err);
