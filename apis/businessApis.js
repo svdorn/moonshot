@@ -23,6 +23,7 @@ const { sanitize,
         isValidEmail,
         isValidPassword,
         validArgs,
+        randomInt,
         founderEmails,
         emailFooter,
         devMode,
@@ -355,10 +356,15 @@ async function createBusiness(info) {
             return reject(findIdError);
         }
 
+        // get a unique name to identify business on their application page
+        try { var uniqueName = await createUniqueName(name); }
+        catch (getUniqueNameError) { return reject(getUniqueNameError); }
+
         // initialize mostly empty business
         let business = {
             _id,
             name,
+            uniqueName,
             positions: [],
             logo: "hr.png",
             dateCreated: NOW
@@ -493,6 +499,33 @@ async function createBusiness(info) {
         return resolve(business);
     });
 }
+
+
+// creates a unique identifier for a business to use on their application page
+async function createUniqueName(name) {
+    return new Promise(async function(resolve, reject) {
+        try {
+            // count the number of businesses who have this name
+            const countPromise = Businesses.countDocuments({ name });
+
+            // make a random number and make sure it doesn't include 420, 69, or 666
+            let randomNumber;
+            do { randomNumber = randomInt(0, 9999).toString(); }
+            while (["420", "69", "666"].some(badNumber => randomNumber.includes(badNumber)));
+            // make sure there are 4 digits in the number
+            while (randomNumber.length < 4) { randomNumber = "0" + randomNumber; }
+
+            // wait for the count of the businesses with the same name
+            const count = await countPromise;
+
+            // combine the count with the random number to get the unique name
+            return resolve(`${name}-${count + 1}-${randomNumber}`);
+        }
+        // move any error up the chain
+        catch (e) { return reject(e); }
+    });
+}
+
 
 async function createPosition(name, type, businessId, isManager) {
    return new Promise(async function(resolve, reject) {
