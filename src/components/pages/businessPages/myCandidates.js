@@ -506,8 +506,10 @@ class MyCandidates extends Component {
             positionId: this.state.positionId,
             candidateId, interest
         }
-        axios.post("/api/business/rateInterest", params)
-        .catch(error => { console.log("error: ", error); });
+        if (!this.state.mockData) {
+            axios.post("/api/business/rateInterest", params)
+            .catch(error => { console.log("error: ", error); });
+        }
 
         // set the state so that the result is immediately visible
         let candidates = this.state.candidates.slice(0);
@@ -567,8 +569,10 @@ class MyCandidates extends Component {
             positionId: this.state.positionId,
             candidateId, hiringStage
         }
-        axios.post("/api/business/changeHiringStage", params)
-        .catch(error => { console.log("error: ", error); });
+        if (!this.state.mockData) {
+            axios.post("/api/business/changeHiringStage", params)
+            .catch(error => { console.log("error: ", error); });
+        }
 
         // CHANGE HIRING STAGE IN FRONT END
         let candidates = this.state.candidates.slice(0);
@@ -618,8 +622,10 @@ class MyCandidates extends Component {
             positionId: this.state.positionId,
             candidateIds, moveTo
         }
-        axios.post("/api/business/moveCandidates", params)
-        .catch(error => { console.log(error); });
+        if (!this.state.mockData) {
+            axios.post("/api/business/moveCandidates", params)
+            .catch(error => { console.log(error); });
+        }
 
         // MOVE THE CANDIDATES IN THE FRONT END
         // get a shallow editable copy of the candidates array
