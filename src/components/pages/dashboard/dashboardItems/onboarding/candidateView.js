@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {  } from "../../../../../actions/usersActions";
+import { updateOnboardingStep } from "../../../../../actions/usersActions";
 import {  } from "../../../../../miscFunctions";
 
 import PsychSlider from "../../../evaluation/psychSlider";
@@ -22,7 +22,10 @@ class CandidateView extends Component {
 
 
     next = () => {
-        this.setState({ step: "gca" });
+        // if currently seeing the psych info, show the gca info
+        if (this.state.step === "psych") { this.setState({ step: "gca" }); }
+        // otherwise go to the next onboarding step
+        else { this.props.updateOnboardingStep(2); }
     }
 
 
@@ -108,7 +111,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        updateOnboardingStep
     }, dispatch);
 }
 

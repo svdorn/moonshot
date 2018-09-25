@@ -60,7 +60,24 @@ const usersSchema = mongoose.Schema({
     signUpReferralCode: String,
     // if false, should route user to onboarding on login
     hasFinishedOnboarding: Boolean,
-    // Employer onboarding
+    // employer onboarding
+    onboard: {
+        // the current step the user is on in onboarding
+        step: Number,
+        // furthest step you've gotten to (so if you're on step 3 and that's the
+        // furthest you've ever been, this will be 3)
+        highestStep: Number,
+        // list of actions the user took
+        actions: [{
+            // date/time the action was taken
+            time: Date,
+            // the new step that the user is on
+            newStep: Number
+        }],
+        // the date/time the user finished onboarding
+        timeFinished: Date
+    },
+    // Employer onboarding - DEPRECATED
     onboarding: {
         // The current step the employer is on in onboarding
         step: Number,

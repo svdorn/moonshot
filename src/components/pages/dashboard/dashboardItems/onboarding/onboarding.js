@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {  } from "../../../../../actions/usersActions";
+import { updateOnboardingStep } from "../../../../../actions/usersActions";
 import {  } from "../../../../../miscFunctions";
 
 import CandidateView from "./candidateView";
@@ -65,7 +65,7 @@ class Onboarding extends Component {
             content = checklistInfo[Math.round(step) - 1].body;
         } else {
             // show the first step if step is invalid
-            content = checklistInfo[0];
+            content = checklistInfo[0].body;
         }
 
         return (
@@ -93,7 +93,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        updateOnboardingStep
     }, dispatch);
 }
 

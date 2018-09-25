@@ -14,7 +14,7 @@
 
 .dashboard {
     text-align: left;
-    --item-width: 220px;
+    --item-width: 240px;
     --item-margin: 10px;
     --items-per-row: 5;
     width: calc(var(--items-per-row) * (var(--item-width) + 2 * var(--item-margin)));
@@ -168,15 +168,15 @@
     transform: translate(-50%);
 }
 
-@media screen and (max-width: 1220px) {
+@media screen and (max-width: 1280px) {
     .dashboard { --items-per-row: 4 }
 }
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 1120px) {
     .dashboard { --items-per-row: 3 }
 }
-@media screen and (max-width: 740px) {
+@media screen and (max-width: 780px) {
     .dashboard { --items-per-row: 2 }
 }
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 540px) {
     .dashboard { --items-per-row: 1 }
 }

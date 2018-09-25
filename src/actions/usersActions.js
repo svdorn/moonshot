@@ -216,9 +216,17 @@ function defaultErrorHandler(dispatch, options) {
 
 
 // change the current step within onboarding
-export function changeOnboardingStep(newStep) {
+export function updateOnboardingStep(newStep) {
     return function(dispatch) {
         dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
+
+        axios.post("/api/user/updateOnboardingStep", { newStep })
+        .then(result => {
+
+        })
+        .catch(error => {
+
+        });
     }
 }
 
