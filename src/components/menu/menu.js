@@ -5,10 +5,11 @@ import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal } from "../actions/usersActions";
-import { isValidEmail, goTo } from "../miscFunctions";
+import { signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal } from "../../actions/usersActions";
+import { isValidEmail, goTo } from "../../miscFunctions";
 import { axios } from 'axios';
 import { animateScroll } from "react-scroll";
+import AccountAdminMenu from "./accountAdminMenu";
 
 const styles = {
     title: {
@@ -247,9 +248,14 @@ class Menu extends Component {
 
     render() {
         let self = this;
+        let currentUser = this.props.currentUser;
+
+        // if screen is large enough and user is account admin, give them the side-menu
+        if (window.innerWidth > 700 && currentUser && currentUser.userType === "accountAdmin") {
+            return <AccountAdminMenu/>;
+        }
 
         let isEmployer = false;
-        let currentUser = this.props.currentUser;
 
         if (currentUser && (currentUser.userType === "accountAdmin" || currentUser.userType === "manager" || currentUser.userType === "employee")) {
             isEmployer = true;
@@ -412,21 +418,6 @@ class Menu extends Component {
                 ]}
             ];
         }
-        // if the current user is a manager for a business
-        // else if (currentUser.userType === "manager") {
-        //     menuOptions = [
-        //         {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
-        //         {optionType: "url", title: "Employees", url: "/myEmployees"},
-        //         {optionType: "separator"},
-        //         {optionType: "dropDown", components: [
-        //             {optionType: "url", title: "Profile", url: "/"},
-        //             {optionType: "divider"},
-        //             {optionType: "url", title: "Settings", url: "/settings"},
-        //             {optionType: "url", title: "Add User", url: "/addUser"},
-        //             {optionType: "signOut"}
-        //         ]}
-        //     ];
-        // }
         // if the current user is an employee for a business
         else if (currentUser.userType === "employee") {
             menuOptions = [
@@ -693,7 +684,6 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
-        blueHeader: state.users.blueHeader,
         png: state.users.png
     };
 }

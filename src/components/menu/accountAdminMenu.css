@@ -1,0 +1,37 @@
+.menu {
+    width: 150px;
+    height: 100%;
+    position: fixed;
+    background-color: #2a2a2a;
+    text-align: center;
+    color: white;
+}
+
+.moonshot-logo {
+    width: 120px;
+    margin: 16px auto;
+    cursor: pointer;
+}
+
+.menu-option {
+    padding: 8px 0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* .current {} */
+.menu-option.current { background-color: #76defe; }
+
+.menu-top {
+    margin-top: 10px;
+}
+
+.menu-bottom {
+    bottom: 10px;
+    position: absolute;
+    width: 100%;
+}
+
+@media screen and (max-width: 700px) {
+
+}

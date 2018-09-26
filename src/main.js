@@ -16,11 +16,13 @@ import { bindActionCreators } from 'redux';
 // so that axios works in IE < 11
 require('es6-promise').polyfill();
 
-import Menu from './components/menu';
+import Menu from './components/menu/menu';
 import Footer from './components/footer';
 import Notification from './components/notification'
 //import FixedOnboardingProgress from "./components/miscComponents/fixedOnboardingProgress";
 import ContactUsDialog from './components/childComponents/contactUsDialog';
+
+import "./main.css";
 
 let theme = {
     // this messes with the slider colors
@@ -111,6 +113,7 @@ class Main extends Component {
 
     render() {
         let content = null;
+        const isAccountAdmin = !!(this.props.currentUser && this.props.currentUser.userType === "accountAdmin");
         if (!this.state.loadedUser || !this.props.webpSupportChecked) {
             content = <div className="fillScreen"/>
         }
@@ -118,11 +121,13 @@ class Main extends Component {
             content = (
                 <div>
                     <Menu/>
-                    <Notification/>
-                    <ContactUsDialog/>
-                    { this.props.children }
-                    { /* <FixedOnboardingProgress/> */ }
-                    <Footer/>
+                    <div styleName={isAccountAdmin ? "admin-content" : ""}>
+                        <Notification/>
+                        <ContactUsDialog/>
+                        { this.props.children }
+                        { /* <FixedOnboardingProgress/> */ }
+                        <Footer/>
+                    </div>
                 </div>
             );
         }
