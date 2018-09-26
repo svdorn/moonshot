@@ -32,7 +32,6 @@ const { gradeEval, getCognitiveScore } = require("./evaluationApis");
 
 
 // give all businesses unique names for their application pages
-//giveUniqueNames();
 async function giveUniqueNames() {
     try {
         let businesses = await Businesses.find({});

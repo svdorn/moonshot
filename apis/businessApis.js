@@ -1911,7 +1911,8 @@ async function GET_positionsForApply(req, res) {
     // get the business the user works for
     try {
         var business = await Businesses
-            .findOne({ "uniqueNameLowerCase": name.toLowerCase() })
+            //.findOne({ "uniqueNameLowerCase": name.toLowerCase() })
+            .findOne({ name })
             .select("logo name positions positions.name positions.code");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
