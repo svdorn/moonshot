@@ -28,6 +28,7 @@ const sanitizeOptions = {
 const devMode = !!(process.env.NODE_ENV === "development");
 const devEmail = process.env.DEV_EMAIL;
 const moonshotUrl = devMode ? "http://localhost:8081/" : "https://moonshotinsights.io/";
+const liveSite = !!process.env.SITE_NAME && process.env.SITE_NAME === "moonshotinsights.io";
 
 
 // Queue implementation
@@ -983,6 +984,7 @@ const helperFunctions = {
     founderEmails,
     devMode,
     devEmail,
+    liveSite,
     moonshotUrl,
 }
 

@@ -11,15 +11,18 @@ const { sendEmail,
         devEmail,
         devMode,
         moonshotUrl,
+        liveSite,
         isValidEmail
 } = require('./helperFunctions');
 
-
 // run the function to send email updates once a day at 8am LA time
-const onComplete = null;
-const onStart = true;
-const timezone = "America/Los_Angeles";
-new CronJob("0 0 8 * * *", safeSendUpdateEmails, onComplete, onStart, timezone);
+// only do this if in production and on the real site (not the testing site)
+if (liveSite) {
+    const onComplete = null;
+    const onStart = true;
+    const timezone = "America/Los_Angeles";
+    new CronJob("0 0 8 * * *", safeSendUpdateEmails, onComplete, onStart, timezone);
+}
 
 async function safeSendUpdateEmails() {
     try { await sendUpdateEmails(); }

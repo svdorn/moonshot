@@ -353,7 +353,7 @@ function POST_candidate(req, res) {
             if (user.userType === "accountAdmin") {
                 user.businessInfo = { businessId, title: "Account Admin" };
                 user.notifications = {};
-                user.notifications.lastSent = new Date();
+                user.notifications.lastSent = new Date(0);
                 user.notifications.time = "Daily";
                 user.notifications.waiting = false;
                 user.notifications.firstTime = true;
