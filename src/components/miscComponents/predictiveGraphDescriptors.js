@@ -53,7 +53,7 @@ class PredictiveGraphDescriptors extends Component {
         const tab = this.state.tab;
 
         return (
-            <div className="center marginTop20px" style={{color:"#d0d0d0"}}>
+            <div className="center marginTop30px" style={{color:"#d0d0d0"}}>
                 <div className="primary-cyan font20px font18pxUnder800 font16pxUnder600">
                     { tab.replace(/_/g," ") }
                 </div>
