@@ -23,6 +23,7 @@ const { sanitize,
         isValidEmail,
         isValidPassword,
         validArgs,
+        randomInt,
         founderEmails,
         emailFooter,
         devMode,
@@ -220,7 +221,7 @@ async function createAccountAdmin(info) {
         user.dateSignedUp = NOW;
         // user notification preferences set to default
         user.notifications = {};
-        user.notifications.lastSent = NOW;
+        user.notifications.lastSent = new Date(0);
         user.notifications.time = "Daily";
         user.notifications.waiting = false;
         user.notifications.firstTime = true;
@@ -334,31 +335,20 @@ async function createBusiness(info) {
         // create NOW variable for easy reference
         const NOW = new Date();
 
-        // initialize id string
-        let _id;
-        // see if this id already exists
-        try {
-            // will contain any code that has the same random characters
-            let foundId;
-            // if this gets up to 8 something is super weird
-            let counter = 0;
-            do {
-                if (counter >= 8) { throw "Too many ids found that had already been used." }
-                counter++;
-                // assign randomChars 10 random hex characters
-                _id = mongoose.Types.ObjectId();
-                // try to find another code with the same random characters
-                const foundId = await Businesses.findOne({ _id: _id });
-            } while (foundId);
-        } catch (findIdError) {
-            console.log("Error looking for business id with same characters.");
-            return reject(findIdError);
-        }
+        // create an id for the business
+        try { var _id = await createBusinessId(); }
+        catch (createIdError) { return reject(createIdError); }
+
+        // get a unique name to identify business on their application page
+        try { var uniqueName = await createUniqueName(name); }
+        catch (getUniqueNameError) { return reject(getUniqueNameError); }
 
         // initialize mostly empty business
         let business = {
             _id,
             name,
+            uniqueName,
+            uniqueNameLowerCase: uniqueName.toLowerCase(),
             positions: [],
             logo: "hr.png",
             dateCreated: NOW
@@ -493,6 +483,82 @@ async function createBusiness(info) {
         return resolve(business);
     });
 }
+
+
+// create a uniqued id for a business
+async function createBusinessId() {
+    return new Promise(async function(resolve, reject) {
+        try {
+            // initialize id string, then check if the id already exists
+            let _id;
+            // will contain any code that has the same random characters
+            let foundId;
+            // if this gets up to 8 something is super weird
+            let counter = 0;
+            // loop until _id is unique
+            do {
+                if (counter >= 8) { throw "Too many ids found that had already been used." }
+                counter++;
+                // make _id a new mongoose id
+                _id = mongoose.Types.ObjectId();
+                // try to find another business with the same id
+                foundId = await Businesses.findOne({ _id });
+            } while (foundId);
+            // return the unique _id
+            return resolve(_id);
+        } catch (findIdError) {
+            console.log("Error looking for business with same _id.");
+            return reject(findIdError);
+        }
+    });
+}
+
+
+// creates a unique identifier for a business to use on their application page
+async function createUniqueName(name) {
+    return new Promise(async function(resolve, reject) {
+        // check if the name is a string
+        if (typeof name !== "string") { reject(new Error("Business name not a string")); }
+        try {
+            // count the number of businesses who have this name
+            const count = await Businesses.countDocuments({ name });
+            // how many times the loop has run
+            let loops = 0;
+            // will contain the unique name for the company
+            let uniqueName;
+            // loop until a unique name that is actually unique has been created
+            while (!uniqueName) {
+                // make a random number and make sure it doesn't include 420, 69, or 666
+                let randomNumber;
+                do { randomNumber = randomInt(0, 9999).toString(); }
+                while (["420", "69", "666"].some(badNumber => randomNumber.includes(badNumber)));
+                // make sure there are 4 digits in the number
+                while (randomNumber.length < 4) { randomNumber = "0" + randomNumber; }
+
+                // create the unique name, replacing spaces with dashes
+                uniqueName = `${name.replace(/ /g, "-")}-${count + 1}-${randomNumber}`;
+
+                // find out if there are any businesses that already have this unique name
+                const business = await Businesses.findOne({ uniqueNameLowerCase: uniqueName.toLowerCase() });
+                // if so, make the unique name undefined so the loop starts over
+                if (business) { uniqueName = undefined; }
+
+                // loop ran
+                loops++;
+                // if the loop ran too many times, someone is probably messing with the system
+                if (loops > 10) {
+                    throw new Error("Tried too many times to create a unique name.");
+                }
+            }
+
+            // combine the count with the random number to get the unique name
+            return resolve(uniqueName);
+        }
+        // move any error up the chain
+        catch (e) { return reject(e); }
+    });
+}
+
 
 async function createPosition(name, type, businessId, isManager) {
    return new Promise(async function(resolve, reject) {
@@ -833,7 +899,7 @@ function createCode(businessId, positionId, userType, email, open) {
                 // assign randomChars 10 random hex characters
                 randomChars = crypto.randomBytes(5).toString('hex');
                 // try to find another code with the same random characters
-                const foundCode = await Signupcodes.findOne({ code: randomChars });
+                foundCode = await Signupcodes.findOne({ code: randomChars });
             } while (foundCode);
         } catch (findCodeError) {
             console.log("Error looking for code with same characters.");
@@ -1840,15 +1906,13 @@ async function GET_positions(req, res) {
 async function GET_positionsForApply(req, res) {
     const name = sanitize(req.query.name);
 
-    if (!name) {
-        return res.status(400).send("Bad request.");
-    }
+    if (!name) { return res.status(400).send("Bad request."); }
 
     // get the business the user works for
-    let business;
     try {
-        business = await Businesses
-            .findOne({"name": name})
+        var business = await Businesses
+            //.findOne({ "uniqueNameLowerCase": name.toLowerCase() })
+            .findOne({ name })
             .select("logo name positions positions.name positions.code");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
