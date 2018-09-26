@@ -418,6 +418,21 @@ form > h1 {
     margin: 0 auto;
 }
 
+.tab-position-circle {
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(to bottom right, var(--secondary-gray), var(--primary-black-light));
+    border-radius: 5px;
+    display: inline-block;
+    margin: auto 15px;
+}
+.tab-position-circle:hover {
+    cursor: pointer;
+}
+.tab-position-circle.selected {
+    background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
+}
+
 
 .carousel .frame-position-circle {
     width: 8px;

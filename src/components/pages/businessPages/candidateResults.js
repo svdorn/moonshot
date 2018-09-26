@@ -9,6 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
 import axios from 'axios';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
+import PredictiveGraphDescriptors from '../../miscComponents/predictiveGraphDescriptors';
 import PsychBreakdown from '../../childComponents/psychBreakdown';
 import HoverTip from "../../miscComponents/hoverTip";
 import { qualifierFromScore, getFirstName } from "../../../miscFunctions";
@@ -314,7 +315,7 @@ class CandidateResults extends Component {
                                         />
                                     </div>
                                     <div className="description lightBlackBackground">
-                                        <div className="center font12px" style={{color:"#d0d0d0"}}>{"Select an area to see its description"}</div>
+                                        <PredictiveGraphDescriptors />
                                     </div>
                                 </div>
                             </div>
