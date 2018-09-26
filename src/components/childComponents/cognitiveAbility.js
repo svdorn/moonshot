@@ -26,7 +26,7 @@ class CognitiveAbility extends Component {
                         </div>
                     </div>
                     <div className="description lightBlackBackground">
-                        <div className="center font16px font14pxUnder800 font12pxUnder600" style={{color:"#d0d0d0"}}>
+                        <div className="center font16px marginTop10px font14pxUnder800 font12pxUnder600" style={{color:"#d0d0d0"}}>
                             Cognitive ability is an umbrella term that encompasses an individual’s ability to learn, problem solve, and adapt to novel situations. The graph shows where the individual lies in comparison to the general population.
                         </div>
                     </div>
