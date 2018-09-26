@@ -335,26 +335,9 @@ async function createBusiness(info) {
         // create NOW variable for easy reference
         const NOW = new Date();
 
-        // initialize id string
-        let _id;
-        // see if this id already exists
-        try {
-            // will contain any code that has the same random characters
-            let foundId;
-            // if this gets up to 8 something is super weird
-            let counter = 0;
-            do {
-                if (counter >= 8) { throw "Too many ids found that had already been used." }
-                counter++;
-                // assign randomChars 10 random hex characters
-                _id = mongoose.Types.ObjectId();
-                // try to find another code with the same random characters
-                const foundId = await Businesses.findOne({ _id: _id });
-            } while (foundId);
-        } catch (findIdError) {
-            console.log("Error looking for business id with same characters.");
-            return reject(findIdError);
-        }
+        // create an id for the business
+        try { var _id = await createBusinessId(); }
+        catch (createIdError) { return reject(createIdError); }
 
         // get a unique name to identify business on their application page
         try { var uniqueName = await createUniqueName(name); }
@@ -497,6 +480,33 @@ async function createBusiness(info) {
 
         // return the new business
         return resolve(business);
+    });
+}
+
+
+// create a uniqued id for a business
+async function createBusinessId() {
+    return new Promise(async function(resolve, reject) {
+        try {
+            // initialize id string, then check if the id already exists
+            let _id;
+            // will contain any code that has the same random characters
+            let foundId;
+            // if this gets up to 8 something is super weird
+            let counter = 0;
+            // loop until _id is unique
+            do {
+                if (counter >= 8) { throw "Too many ids found that had already been used." }
+                counter++;
+                // make _id a new mongoose id
+                _id = mongoose.Types.ObjectId();
+                // try to find another business with the same id
+                foundId = await Businesses.findOne({ _id });
+            } while (foundId);
+        } catch (findIdError) {
+            console.log("Error looking for business with same _id.");
+            return reject(findIdError);
+        }
     });
 }
 
@@ -866,7 +876,7 @@ function createCode(businessId, positionId, userType, email, open) {
                 // assign randomChars 10 random hex characters
                 randomChars = crypto.randomBytes(5).toString('hex');
                 // try to find another code with the same random characters
-                const foundCode = await Signupcodes.findOne({ code: randomChars });
+                foundCode = await Signupcodes.findOne({ code: randomChars });
             } while (foundCode);
         } catch (findCodeError) {
             console.log("Error looking for code with same characters.");
