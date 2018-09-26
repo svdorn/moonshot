@@ -52,6 +52,8 @@ class MyEvaluations extends Component {
             logo: undefined,
             // name of the business the user works for - doesn't apply for candidates
             businessName: undefined,
+            // unique name used for /apply page
+            uniqueName: undefined,
             // type of position for adding an evaluation
             positionType: "Position Type",
             // whether the new position to add is for a manager
@@ -173,10 +175,10 @@ class MyEvaluations extends Component {
             .then(res => {
                 self.positionsFound(res.data.positions);
             })
-            .catch(error => {
-                // console.log("error getting positions: ", error);
-                // if (error.response) { console.log(error.response.data); }
-            })
+            // .catch(error => {
+            //     console.log("error getting positions: ", error);
+            //     if (error.response) { console.log(error.response.data); }
+            // })
         }
 
         // if user is an employer, get all the positions they're evaluating for
@@ -188,19 +190,19 @@ class MyEvaluations extends Component {
                 }
             })
             .then(function (res) {
-                self.positionsFound(res.data.positions, res.data.logo, res.data.businessName);
+                self.positionsFound(res.data.positions, res.data.logo, res.data.businessName, res.data.uniqueName);
             })
             .catch(function (err) {
-                // console.log("error getting positions: ", err);
-                // if (err.response && err.response.data) { console.log(err.response.data); }
+                console.log("error getting positions: ", err);
+                if (err.response && err.response.data) { console.log(err.response.data); }
             });
         }
     }
 
     // call this after positions are found from back end
-    positionsFound(positions, logo, businessName) {
+    positionsFound(positions, logo, businessName, uniqueName) {
         if (Array.isArray(positions) && positions.length > 0) {
-            this.setState({ positions, logo, businessName });
+            this.setState({ positions, logo, businessName, uniqueName });
         } else {
             this.setState({ noPositions: true });
         }
@@ -219,7 +221,7 @@ class MyEvaluations extends Component {
             this.setState({ noPositions: true });
         }
     }
-    
+
 
     inviteCandidates() {
         let self = this;
@@ -232,7 +234,7 @@ class MyEvaluations extends Component {
 
 
     copyLink() {
-        let URL = "https://moonshotinsights.io/apply/" + this.state.businessName;
+        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
         URL = encodeURI(URL);
         clipboard.writeText(URL);
         this.props.addNotification("Link copied to clipboard.", "info");

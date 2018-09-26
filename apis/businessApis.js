@@ -1878,7 +1878,7 @@ async function GET_positions(req, res) {
     try {
         var business = await Businesses
             .findById(businessId)
-            .select("logo name positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.finalized positions.dateCreated");
+            .select("logo name uniqueName positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.finalized positions.dateCreated");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
         return res.status(500).send("Server error, couldn't get positions.");
@@ -1899,25 +1899,47 @@ async function GET_positions(req, res) {
         }
     }
 
-    return res.json({ logo: business.logo, businessName: business.name, positions });
+    return res.status(200).send({
+        logo: business.logo,
+        businessName: business.name,
+        positions,
+        uniqueName: business.uniqueName
+    });
 }
 
 // get all positions for a business
 async function GET_positionsForApply(req, res) {
     const name = sanitize(req.query.name);
 
-    if (!name) { return res.status(400).send("Bad request."); }
+    if (!name) { return res.status(400).send({ message: "Bad request." }); }
+
+    console.log("name: ", name);
 
     // get the business the user works for
     try {
+        const query = {
+            "$or": [
+                { "uniqueNameLowerCase": name.toLowerCase() },
+                { "$and": [
+                    // if searching by name, company has to have been made
+                    // before searching by unique name was possible
+                    { "name": name },
+                    { "$or": [
+                        { "dateCreated": { "$lte": new Date("2018-09-27") } },
+                        { "dateCreated": { "$exists": false } }
+                    ] }
+                ] }
+            ]
+        }
         var business = await Businesses
-            //.findOne({ "uniqueNameLowerCase": name.toLowerCase() })
-            .findOne({ name })
+            .findOne(query)
             .select("logo name positions positions.name positions.code");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
-        return res.status(500).send("Server error, couldn't get positions.");
+        return res.status(500).send({ message: "Server error, couldn't get positions." });
     }
+
+    if (!business) { return res.status(404).send({ message: "Invalid url" }); }
 
     return res.json({ logo: business.logo, businessName: business.name, positions: business.positions });
 }

@@ -27,15 +27,14 @@ class Apply extends Component {
 
     /* fetch the positions and codes and set the position field to be the first position in the array */
     componentDidMount() {
+        let self = this;
         // get the company name from the url
-        try {
-            var company = this.props.params.company;
-        } catch (e) {
+        try { var company = this.props.params.company; }
+        catch (e) {
             goTo("/");
-            this.props.addNotification("Couldn't get the company you're trying to apply for.", "error");
+            self.props.addNotification("Couldn't get the company you're trying to apply for.", "error");
         }
 
-        let self = this;
         // get the positions from the database with the name and signup code
         axios.get("/api/business/positionsForApply", {
             params: {
@@ -47,7 +46,7 @@ class Apply extends Component {
         })
         .catch(function (err) {
             goTo("/");
-            this.props.addNotification("Couldn't get the company you're trying to apply for.", "error");
+            self.props.addNotification(err, "error");
         });
     }
 
