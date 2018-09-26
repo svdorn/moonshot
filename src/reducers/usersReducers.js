@@ -40,10 +40,12 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "UPDATE_ONBOARDING_STEP": {
+            if (!state.currentUser) { return state; }
             // create onboarding object if it doesn't exist
-            if (typeof state.onboard !== "object") { state.onboard = {}; }
-            // update current step
-            let onboard = { ...state.onboard, step: action.newStep };
+            let onboard = { step: action.newStep };
+            if (typeof state.currentUser.onboard === "object") {
+                onboard = { ...state.currentUser.onboard, ...onboard };
+            }
             // update highest step user has been to
             if (typeof onboard.highestStep !== "number" || onboard.highestStep < action.newStep) {
                 onboard.highestStep = action.newStep;
@@ -115,12 +117,12 @@ export function usersReducers(state = initialState, action) {
                 loadingSomething: false
             };
             break;
-        case "UPDATE_ONBOARDING":
-            return {
-                ...state,
-                currentUser: action.payload
-            }
-            break;
+        // case "UPDATE_ONBOARDING":
+        //     return {
+        //         ...state,
+        //         currentUser: action.payload
+        //     }
+        //     break;
         case "NOTIFICATION":
         case "VERIFY_EMAIL_REJECTED":
         case "CHANGE_TEMP_PASS_REJECTED":
@@ -144,7 +146,7 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "UPDATE_USER_REJECTED":
-        case "UPDATE_ONBOARDING_REJECTED":
+        //case "UPDATE_ONBOARDING_REJECTED":
         case "CHANGE_PASSWORD":
         case "POST_EMAIL_INVITES_REJECTED":
             return {...state, loadingSomething:false, userPostedFailed: true, ...notificationInfo(action.notification)}
@@ -269,31 +271,31 @@ export function usersReducers(state = initialState, action) {
                 ...state, notification: undefined, notificationDate: new Date()
             }
             break;
-        case "START_ONBOARDING":
-            return {
-                ...state, isOnboarding: true
-            }
-            break;
-        case "END_ONBOARDING":
-            // update the user if an update was sent
-            if (action.user) {
-                return {
-                    ...state,
-                    isOnboarding: false,
-                    currentUser: action.user
-                }
-            } else {
-                return {
-                    ...state,
-                    isOnboarding: false
-                }
-            }
-            break;
-        case "UPDATE_USER_ONBOARDING":
-            return {
-                ...state, currentUser: action.user
-            };
-            break;
+        // case "START_ONBOARDING":
+        //     return {
+        //         ...state, isOnboarding: true
+        //     }
+        //     break;
+        // case "END_ONBOARDING":
+        //     // update the user if an update was sent
+        //     if (action.user) {
+        //         return {
+        //             ...state,
+        //             isOnboarding: false,
+        //             currentUser: action.user
+        //         }
+        //     } else {
+        //         return {
+        //             ...state,
+        //             isOnboarding: false
+        //         }
+        //     }
+        //     break;
+        // case "UPDATE_USER_ONBOARDING":
+        //     return {
+        //         ...state, currentUser: action.user
+        //     };
+        //     break;
         case "START_PSYCH_EVAL":
         case "USER_UPDATE":
             return {

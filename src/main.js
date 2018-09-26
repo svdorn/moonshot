@@ -19,7 +19,7 @@ require('es6-promise').polyfill();
 import Menu from './components/menu';
 import Footer from './components/footer';
 import Notification from './components/notification'
-import FixedOnboardingProgress from "./components/miscComponents/fixedOnboardingProgress";
+//import FixedOnboardingProgress from "./components/miscComponents/fixedOnboardingProgress";
 import ContactUsDialog from './components/childComponents/contactUsDialog';
 
 let theme = {
@@ -121,7 +121,7 @@ class Main extends Component {
                     <Notification/>
                     <ContactUsDialog/>
                     { this.props.children }
-                    <FixedOnboardingProgress/>
+                    { /* <FixedOnboardingProgress/> */ }
                     <Footer/>
                 </div>
             );

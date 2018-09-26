@@ -126,7 +126,7 @@ app.post("/user/stayLoggedIn", userApis.POST_stayLoggedIn);
 app.get("/user/stayLoggedIn", userApis.GET_stayLoggedIn);
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
-app.post('/user/updateOnboarding', userApis.POST_updateOnboarding);
+//app.post('/user/updateOnboarding', userApis.POST_updateOnboarding);
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
 app.post('/user/login', userApis.POST_login);
@@ -143,14 +143,14 @@ app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
 app.post("/user/verifyFromApiKey", userApis.POST_verifyFromApiKey);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
-app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
+//app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
-app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
+//app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 
 app.post("/accountAdmin/sendVerificationEmail", accountAdminApis.POST_sendVerificationEmail);
-app.post("/accountAdmin/identifyATS", accountAdminApis.POST_identifyATS);
-app.post("/accountAdmin/integrationSuggestion", accountAdminApis.POST_integrationSuggestion);
-app.post("/accountAdmin/languagePreference", accountAdminApis.POST_languagePreference);
+//app.post("/accountAdmin/identifyATS", accountAdminApis.POST_identifyATS);
+//app.post("/accountAdmin/integrationSuggestion", accountAdminApis.POST_integrationSuggestion);
+//app.post("/accountAdmin/languagePreference", accountAdminApis.POST_languagePreference);
 
 app.post('/business/googleJobsLinks', businessApis.POST_googleJobsLinks);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);

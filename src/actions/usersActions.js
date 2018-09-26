@@ -119,18 +119,18 @@ export function updateUser(user) {
 }
 
 
-export function updateOnboarding(onboarding, verificationToken, userId, extraArgs) {
-    return function(dispatch) {
-        axios.post("/api/user/updateOnboarding", {onboarding, verificationToken, userId})
-            .then(function(response) {
-                const returnedUser = response.data;
-                dispatch({type:"UPDATE_ONBOARDING", payload: returnedUser});
-            })
-            .catch(function(err) {
-                dispatch({ type: "UPDATE_ONBOARDING_REJECTED", ...notification(err, "error") });
-            });
-    }
-}
+// export function updateOnboarding(onboarding, verificationToken, userId, extraArgs) {
+//     return function(dispatch) {
+//         axios.post("/api/user/updateOnboarding", {onboarding, verificationToken, userId})
+//             .then(function(response) {
+//                 const returnedUser = response.data;
+//                 dispatch({type:"UPDATE_ONBOARDING", payload: returnedUser});
+//             })
+//             .catch(function(err) {
+//                 dispatch({ type: "UPDATE_ONBOARDING_REJECTED", ...notification(err, "error") });
+//             });
+//     }
+// }
 
 
 export function sawMyCandidatesInfoBox(userId, verificationToken) {
@@ -584,61 +584,61 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
 }
 
 
-export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
-    return function(dispatch) {
-        axios.post("/api/candidate/updateAllOnboarding", {
-            params: { userId, verificationToken, interests, goals, info }
-        })
-        .then(function(response) {
-            dispatch({type: "UPDATE_USER_ONBOARDING", user: response.data});
-        })
-        .catch(function(err) {
-            // console.log("Error updating onboarding info: ", err);
-        })
-    }
-}
+// export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
+//     return function(dispatch) {
+//         axios.post("/api/candidate/updateAllOnboarding", {
+//             params: { userId, verificationToken, interests, goals, info }
+//         })
+//         .then(function(response) {
+//             dispatch({type: "UPDATE_USER_ONBOARDING", user: response.data});
+//         })
+//         .catch(function(err) {
+//             // console.log("Error updating onboarding info: ", err);
+//         })
+//     }
+// }
 
 
-export function startOnboarding(){
-    return function(dispatch) {
-        dispatch({type: "START_ONBOARDING"});
-    }
-}
+// export function startOnboarding(){
+//     return function(dispatch) {
+//         dispatch({type: "START_ONBOARDING"});
+//     }
+// }
 
-export function endOnboarding(user, markOnboardingComplete, removeRedirectField){
-    return function(dispatch) {
-        if (markOnboardingComplete) {
-            axios.post("/api/candidate/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
-            .then(function(response) {
-                dispatch({type: "END_ONBOARDING", user: response.data});
-            })
-            .catch(function(err) {
-                // onboarding setting not able to be turned off for some reason
-                // console.log("onboarding mark complete error: ", err);
-                dispatch({type: "END_ONBOARDING_REJECTED"});
-            })
-        } else {
-            dispatch({type: "END_ONBOARDING"});
-        }
-
-    }
-}
-
-
-// change info during onboarding for automating candidate emails
-export function changeAutomateInvites(args) {
-    return function (dispatch) {
-        dispatch({ type: "CHANGE_AUTOMATE_INVITES", args });
-    }
-}
+// export function endOnboarding(user, markOnboardingComplete, removeRedirectField){
+//     return function(dispatch) {
+//         if (markOnboardingComplete) {
+//             axios.post("/api/candidate/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
+//             .then(function(response) {
+//                 dispatch({type: "END_ONBOARDING", user: response.data});
+//             })
+//             .catch(function(err) {
+//                 // onboarding setting not able to be turned off for some reason
+//                 // console.log("onboarding mark complete error: ", err);
+//                 dispatch({type: "END_ONBOARDING_REJECTED"});
+//             })
+//         } else {
+//             dispatch({type: "END_ONBOARDING"});
+//         }
+//
+//     }
+// }
 
 
-// removes the top step for going back from the stack of Back options
-export function popGoBackStack() {
-    return function(dispatch) {
-        dispatch({ type: "POP_GO_BACK_STACK" });
-    }
-}
+// // change info during onboarding for automating candidate emails
+// export function changeAutomateInvites(args) {
+//     return function (dispatch) {
+//         dispatch({ type: "CHANGE_AUTOMATE_INVITES", args });
+//     }
+// }
+
+
+// // removes the top step for going back from the stack of Back options
+// export function popGoBackStack() {
+//     return function(dispatch) {
+//         dispatch({ type: "POP_GO_BACK_STACK" });
+//     }
+// }
 
 
 // set the state of the current position evaluation

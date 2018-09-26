@@ -78,24 +78,24 @@ const usersSchema = mongoose.Schema({
         timeFinished: Date
     },
     // Employer onboarding - DEPRECATED
-    onboarding: {
-        // The current step the employer is on in onboarding
-        step: Number,
-        // If the employer is done with onboarding
-        complete: Boolean,
-        // the furthest step the employer has gotten to
-        furthestStep: Number,
-        // the ats the user said they use during onboarding
-        ats: String,
-        // suggestion for candidate application integration method
-        integrationSuggestion: String,
-        // the language the user would like to use to integrate with Moonshot
-        languagePreference: String,
-        // if the user wants a language for site integration that wasn't included by default
-        customLanguage: String,
-        // how many days to wait before inviting candidates to take evaluation
-        daysBeforeInvite: Number
-    },
+    // onboarding: {
+    //     // The current step the employer is on in onboarding
+    //     step: Number,
+    //     // If the employer is done with onboarding
+    //     complete: Boolean,
+    //     // the furthest step the employer has gotten to
+    //     furthestStep: Number,
+    //     // the ats the user said they use during onboarding
+    //     ats: String,
+    //     // suggestion for candidate application integration method
+    //     integrationSuggestion: String,
+    //     // the language the user would like to use to integrate with Moonshot
+    //     languagePreference: String,
+    //     // if the user wants a language for site integration that wasn't included by default
+    //     customLanguage: String,
+    //     // how many days to wait before inviting candidates to take evaluation
+    //     daysBeforeInvite: Number
+    // },
     // info we need to keep to access users on Intercom
     intercom: {
         // The email that they are registered with on intercom

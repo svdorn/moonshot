@@ -226,11 +226,16 @@ async function createAccountAdmin(info) {
         user.notifications.firstTime = true;
         // user will have to do business onboarding
         user.hasFinishedOnboarding = false;
-        user.onboarding = {
-            step: 0,
-            complete: false,
-            furthestStep: 0
+        user.onboard = {
+            step: 1,
+            highestStep: 1,
+            actions: []
         }
+        // user.onboarding = {
+        //     step: 0,
+        //     complete: false,
+        //     furthestStep: 0
+        // }
         // infinite use, used to verify identify when making calls to backend
         user.verificationToken = crypto.randomBytes(64).toString('hex');
         // one-time use, used to verify email address before initial login

@@ -161,10 +161,10 @@ class Menu extends Component {
     }
 
     signOut() {
-        if (this.props.location.pathname === '/onboarding') {
-            const markOnboardingComplete = false;
-            this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
-        }
+        // if (this.props.location.pathname === '/onboarding') {
+        //     const markOnboardingComplete = false;
+        //     this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
+        // }
         this.props.signout();
         goTo('/');
     }

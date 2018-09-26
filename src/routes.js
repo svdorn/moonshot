@@ -16,7 +16,7 @@ import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import Billing from './components/pages/businessPages/billing';
 import Pricing from './components/pages/businessPages/pricing';
-import Onboarding from './components/pages/businessPages/onboarding/onboarding';
+//import Onboarding from './components/pages/businessPages/onboarding/onboarding';
 import BusinessSignup from "./components/pages/businessPages/businessSignup";
 import Chatbot from "./components/pages/businessPages/landbot";
 import BusinessHome from './components/pages/businessHome';
@@ -75,7 +75,7 @@ const routes = (
             <Route path="employeeResults/:employeeId/:positionId" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
             <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
             <Route path="pricing" component={AuthenticatedComponent} page={<Pricing />} userType={businessAdminUserTypes} />
-            <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={businessAdminUserTypes} firstBusinessUser={true} />
+            {/*<Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={businessAdminUserTypes} firstBusinessUser={true} /> */}
             <Route path="businessSignup" component={BusinessSignup} />
             <Route path="ease" component={Ease} />
             <Route path="chatbot" component={Chatbot} />
