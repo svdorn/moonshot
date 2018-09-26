@@ -270,33 +270,16 @@ class CandidateResults extends Component {
                         <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
                         <div styleName="results-slider-container">
                             <div>
-                                {gca ? <div>Performance: {this.state.performance}</div> : null}
                                 <div className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                    <p style={style.lightBlue}>{qualifierFromScore(gca ? this.state.performance : overallScore)}</p>
+                                    <p style={style.lightBlue}>{qualifierFromScore(overallScore)}</p>
                                 </div>
                                 <Slider disabled={true}
-                                        value={this.getSliderValue(gca ? this.state.performance : overallScore)}
+                                        value={this.getSliderValue(overallScore)}
                                         min={50}
                                         max={150}
                                         styleName="results-slider"
                                 />
                             </div>
-                            {gca ?
-                                <div>
-                                    <div>Complex Thinking: {gca}</div>
-                                    <div
-                                        className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                        <p style={style.lightBlue}>{qualifierFromScore(gca)}</p>
-                                    </div>
-                                    <Slider disabled={true}
-                                            value={gca}
-                                            min={70}
-                                            max={130}
-                                            styleName="results-slider"
-                                    />
-                                </div>
-                                : null
-                            }
                         </div>
                     </div>
 
