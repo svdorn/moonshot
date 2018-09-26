@@ -36,7 +36,7 @@ class CandidateResults extends Component {
             // if there was an error loading in results
             error: false,
             // how tall the predictive graphs should be
-            graphHeight: "200px"
+            graphHeight: 300
         };
     }
 
@@ -49,8 +49,9 @@ class CandidateResults extends Component {
 
 
     componentDidMount() {
+        // TODO: this isn't working, so fix this
         // set the height of the graphs
-        this.setState({ graphHeight: this.getGraphHeight() });
+        this.updateGraphHeight();
         // set resize listener
         window.addEventListener('resize', this.bound_updateGraphHeight);
         // get the candidate's results
@@ -190,13 +191,13 @@ class CandidateResults extends Component {
         const windowWidth = window.innerWidth;
         let graphHeight;
         if (windowWidth > 800) {
-            graphHeight = 270;
-        } else if (windowWidth > 600) {
-            graphHeight = 260;
-        } else if (windowWidth > 400) {
             graphHeight = 250;
-        } else {
+        } else if (windowWidth > 600) {
             graphHeight = 240;
+        } else if (windowWidth > 400) {
+            graphHeight = 230;
+        } else {
+            graphHeight = 220;
         }
         return graphHeight;
     }
@@ -254,7 +255,6 @@ class CandidateResults extends Component {
         const overallScore = this.round(this.state.overallScore);
         const gca = this.state.gca ? this.round(this.state.gca) : undefined;
 
-        console.log("candidate: ", candidate);
         return (
             !candidate.endDate ?
                 <div className="analysis center aboutMeSection blackBackground" style={{paddingTop:"20px"}}>
@@ -302,13 +302,22 @@ class CandidateResults extends Component {
                     {this.state.windowWidth ?
                         <div>
                             <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predictive Insights"}</div>
-                            <PredictiveGraph
-                                dataPoints={this.state.predictivePoints}
-                                height={this.state.graphHeight}
-                                className="graph"
-                                containerName={"candidateResults"}
-                                ref={ instance => { this.child1 = instance; } }
-                            />
+                            <div className="results">
+                                <div className="statsAndDescription">
+                                    <div className="graph lightBlackBackground" id="graph">
+                                        <PredictiveGraph
+                                            dataPoints={this.state.predictivePoints}
+                                            height={this.state.graphHeight}
+                                            className="graph"
+                                            containerName={"graph"}
+                                            ref={ instance => { this.child1 = instance; } }
+                                        />
+                                    </div>
+                                    <div className="description lightBlackBackground">
+                                        <div className="center font12px" style={{color:"#d0d0d0"}}>{"Select an area to see its description"}</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         :
                         <div ref={ instance => { this.child1 = instance; } } />
