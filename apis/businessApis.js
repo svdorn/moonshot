@@ -221,7 +221,7 @@ async function createAccountAdmin(info) {
         user.dateSignedUp = NOW;
         // user notification preferences set to default
         user.notifications = {};
-        user.notifications.lastSent = NOW;
+        user.notifications.lastSent = new Date(0);
         user.notifications.time = "Daily";
         user.notifications.waiting = false;
         user.notifications.firstTime = true;

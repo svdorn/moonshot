@@ -15,7 +15,6 @@ const { sendEmail,
         isValidEmail
 } = require('./helperFunctions');
 
-
 // run the function to send email updates once a day at 8am LA time
 // only do this if in production and on the real site (not the testing site)
 if (liveSite) {
