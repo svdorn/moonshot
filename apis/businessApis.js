@@ -1898,7 +1898,7 @@ async function GET_positions(req, res) {
             res.status(500).send(errors.SERVER_ERROR);
         }
     }
-    
+
     return res.status(200).send({
         logo: business.logo,
         businessName: business.name,
@@ -1911,17 +1911,25 @@ async function GET_positions(req, res) {
 async function GET_positionsForApply(req, res) {
     const name = sanitize(req.query.name);
 
-    if (!name) { return res.status(400).send("Bad request."); }
+    if (!name) { return res.status(400).send({ message: "Bad request." }); }
 
     // get the business the user works for
     try {
+        const query = {
+            "$or": [
+                { "name": name },
+                { "uniqueNameLowerCase": name.toLowerCase() }
+            ]
+        }
         var business = await Businesses
-            .findOne({ "uniqueNameLowerCase": name.toLowerCase() })
+            .findOne(query)
             .select("logo name positions positions.name positions.code");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
-        return res.status(500).send("Server error, couldn't get positions.");
+        return res.status(500).send({ message: "Server error, couldn't get positions." });
     }
+
+    if (!business) { return res.status(404).send({ message: "Invalid url" }); }
 
     return res.json({ logo: business.logo, businessName: business.name, positions: business.positions });
 }
