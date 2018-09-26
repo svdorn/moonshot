@@ -504,6 +504,8 @@ async function createBusinessId() {
                 // try to find another business with the same id
                 foundId = await Businesses.findOne({ _id });
             } while (foundId);
+            // return the unique _id
+            return resolve(_id);
         } catch (findIdError) {
             console.log("Error looking for business with same _id.");
             return reject(findIdError);
@@ -519,20 +521,38 @@ async function createUniqueName(name) {
         if (typeof name !== "string") { reject(new Error("Business name not a string")); }
         try {
             // count the number of businesses who have this name
-            const countPromise = Businesses.countDocuments({ name });
+            const count = await Businesses.countDocuments({ name });
+            // how many times the loop has run
+            let loops = 0;
+            // will contain the unique name for the company
+            let uniqueName;
+            // loop until a unique name that is actually unique has been created
+            while (!uniqueName) {
+                // make a random number and make sure it doesn't include 420, 69, or 666
+                let randomNumber;
+                do { randomNumber = randomInt(0, 9999).toString(); }
+                while (["420", "69", "666"].some(badNumber => randomNumber.includes(badNumber)));
+                // make sure there are 4 digits in the number
+                while (randomNumber.length < 4) { randomNumber = "0" + randomNumber; }
 
-            // make a random number and make sure it doesn't include 420, 69, or 666
-            let randomNumber;
-            do { randomNumber = randomInt(0, 9999).toString(); }
-            while (["420", "69", "666"].some(badNumber => randomNumber.includes(badNumber)));
-            // make sure there are 4 digits in the number
-            while (randomNumber.length < 4) { randomNumber = "0" + randomNumber; }
+                // create the unique name, replacing spaces with dashes
+                uniqueName = `${name.replace(/ /g, "-")}-${count + 1}-${randomNumber}`;
 
-            // wait for the count of the businesses with the same name
-            const count = await countPromise;
+                // find out if there are any businesses that already have this unique name
+                const business = await Businesses.findOne({ uniqueNameLowerCase: uniqueName.toLowerCase() });
+                // if so, make the unique name undefined so the loop starts over
+                if (business) { uniqueName = undefined; }
+
+                // loop ran
+                loops++;
+                // if the loop ran too many times, someone is probably messing with the system
+                if (loops > 10) {
+                    throw new Error("Tried too many times to create a unique name.");
+                }
+            }
 
             // combine the count with the random number to get the unique name
-            return resolve(`${name.replace(/ /g, "-")}-${count + 1}-${randomNumber}`);
+            return resolve(uniqueName);
         }
         // move any error up the chain
         catch (e) { return reject(e); }
