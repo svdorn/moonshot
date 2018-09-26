@@ -1913,12 +1913,22 @@ async function GET_positionsForApply(req, res) {
 
     if (!name) { return res.status(400).send({ message: "Bad request." }); }
 
+    console.log("name: ", name);
+
     // get the business the user works for
     try {
         const query = {
             "$or": [
-                { "name": name },
-                { "uniqueNameLowerCase": name.toLowerCase() }
+                { "uniqueNameLowerCase": name.toLowerCase() },
+                { "$and": [
+                    // if searching by name, company has to have been made
+                    // before searching by unique name was possible
+                    { "name": name },
+                    { "$or": [
+                        { "dateCreated": { "$lte": new Date("2018-09-27") } },
+                        { "dateCreated": { "$exists": false } }
+                    ] }
+                ] }
             ]
         }
         var business = await Businesses
