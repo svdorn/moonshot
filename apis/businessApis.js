@@ -348,6 +348,7 @@ async function createBusiness(info) {
             _id,
             name,
             uniqueName,
+            uniqueNameLowerCase: uniqueName.toLowerCase(),
             positions: [],
             logo: "hr.png",
             dateCreated: NOW
@@ -514,6 +515,8 @@ async function createBusinessId() {
 // creates a unique identifier for a business to use on their application page
 async function createUniqueName(name) {
     return new Promise(async function(resolve, reject) {
+        // check if the name is a string
+        if (typeof name !== "string") { reject(new Error("Business name not a string")); }
         try {
             // count the number of businesses who have this name
             const countPromise = Businesses.countDocuments({ name });
@@ -529,7 +532,7 @@ async function createUniqueName(name) {
             const count = await countPromise;
 
             // combine the count with the random number to get the unique name
-            return resolve(`${name}-${count + 1}-${randomNumber}`);
+            return resolve(`${name.replace(/ /g, "-")}-${count + 1}-${randomNumber}`);
         }
         // move any error up the chain
         catch (e) { return reject(e); }
@@ -1883,15 +1886,12 @@ async function GET_positions(req, res) {
 async function GET_positionsForApply(req, res) {
     const name = sanitize(req.query.name);
 
-    if (!name) {
-        return res.status(400).send("Bad request.");
-    }
+    if (!name) { return res.status(400).send("Bad request."); }
 
     // get the business the user works for
-    let business;
     try {
-        business = await Businesses
-            .findOne({"name": name})
+        var business = await Businesses
+            .findOne({ "uniqueNameLowerCase": name.toLowerCase() })
             .select("logo name positions positions.name positions.code");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);

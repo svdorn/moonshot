@@ -109,6 +109,8 @@ const businessesSchema = mongoose.Schema({
     name: String,
     // unique identifier for their custom application page (/apply/[uniqueName])
     uniqueName: String,
+    // lower case version of the unique name for more efficient search
+    uniqueNameLowerCase: String,
     // logo image name within /images/logos/
     logo: String,
     // the exact time the business object was created

@@ -31,6 +31,25 @@ const { gradeEval, getCognitiveScore } = require("./evaluationApis");
 
 
 
+// give all businesses unique names for their application pages
+//giveUniqueNames();
+async function giveUniqueNames() {
+    try {
+        let businesses = await Businesses.find({});
+        businesses.forEach(business => {
+            if (!business.uniqueName || business.uniqueName.includes(" ")) {
+                business.uniqueName = business.name.replace(/ /g, "-");
+            }
+            if (!business.uniqueNameLowerCase) {
+                business.uniqueNameLowerCase = business.uniqueName.toLowerCase();
+            }
+            business.save().then(() => { console.log(business); })
+        });
+    }
+    catch (e) { console.log(e); }
+}
+
+
 // update all users scores to reflect newest grading schemes (new gca difficulties, new psych weights, etc)
 async function updatePredictions() {
     try {
