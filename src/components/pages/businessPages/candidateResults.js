@@ -10,6 +10,7 @@ import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
 import axios from 'axios';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
 import PredictiveGraphDescriptors from '../../miscComponents/predictiveGraphDescriptors';
+import CognitiveAbility from '../../childComponents/cognitiveAbility';
 import PsychBreakdown from '../../childComponents/psychBreakdown';
 import HoverTip from "../../miscComponents/hoverTip";
 import { qualifierFromScore, getFirstName } from "../../../miscFunctions";
@@ -285,7 +286,7 @@ class CandidateResults extends Component {
 
                     {this.state.windowWidth ?
                         <div>
-                            <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predictive Insights"}</div>
+                        <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predictive Insights"}</div>
                             <div className="results">
                                 <div className="statsAndDescription">
                                     <div className="graph lightBlackBackground" id="graph">
@@ -305,6 +306,12 @@ class CandidateResults extends Component {
                         </div>
                         :
                         <div ref={ instance => { this.child1 = instance; } } />
+                    }
+
+                    {this.state.gca ?
+                        <CognitiveAbility
+                            score={this.state.gca}
+                        /> : null
                     }
 
                     <PsychBreakdown
