@@ -5,6 +5,7 @@
     background-color: #2a2a2a;
     text-align: center;
     color: white;
+    min-height: 300px;
 }
 
 .moonshot-logo {
@@ -18,9 +19,13 @@
     font-size: 14px;
     cursor: pointer;
 }
-
-/* .current {} */
+.menu-bottom > .menu-option { padding: 0; }
 .menu-option.current { background-color: #76defe; }
+
+.menu-bottom > .menu-option > .user-name { padding: 8px 0; }
+.menu-top > .menu-option:hover, .menu-bottom > .menu-option > .user-name:hover { background-color: #393939; }
+.account-popup > .menu-option:hover:not(:last-child) { background-color: #525252; }
+.account-popup > .menu-option:last-child { cursor: initial; }
 
 .menu-top {
     margin-top: 10px;
@@ -30,6 +35,30 @@
     bottom: 10px;
     position: absolute;
     width: 100%;
+}
+
+.account-popup {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background-color: #393939;
+    width: 90%;
+    transform: translateY(150%) translateX(-50%);
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+.account-popup.visible {
+    transform: translateY(-110%) translateX(-50%);
+}
+
+.sign-out {
+    background-color: #eb394f;
+    display: inline-block;
+    padding: 2px 12px;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 700px) {

@@ -363,7 +363,7 @@ class AddUserDialog extends Component {
         ];
 
         // if the user isn't verified, prompt them to verify their email
-        if (!this.props.currentUser.verified) {
+        if (!this.props.currentUser || !this.props.currentUser.verified) {
             return (
                 <Dialog
                     actions={actions}

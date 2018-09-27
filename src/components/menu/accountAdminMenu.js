@@ -17,9 +17,11 @@ class Menu extends Component {
     constructor(props) {
         super(props);
 
+        this.bound_handleAnyClick = this.handleAnyClick.bind(this);
+
         // set the initial state
         this.state = {
-
+            accountPopupOpen: false
         };
     }
 
@@ -31,7 +33,17 @@ class Menu extends Component {
 
 
     openAccountBox = () => {
-        console.log("opening account box!");
+        this.setState({ accountPopupOpen: true });
+        document.addEventListener('click', this.bound_handleAnyClick);
+    }
+
+
+    handleAnyClick(e) {
+        console.log("here");
+        //if (not within div) {
+            this.setState({ accountPopupOpen: false });
+            document.removeEventListener('click', this.bound_handleAnyClick);
+        //}
     }
 
 
@@ -58,6 +70,12 @@ class Menu extends Component {
             {title: "Employees", url: "/myEmployees"}
         ];
 
+        const popupOptions = [
+            {title: "Settings", url: "/settings"},
+            {title: "Billing", url: "/billing"},
+            {title: "Pricing", url: "/pricing"}
+        ]
+
         const topItems = topOptions.map(menuOption => {
             const isCurrentPath = pathFirstPart === menuOption.url.substring(1).toLowerCase();
             return (
@@ -71,10 +89,33 @@ class Menu extends Component {
             );
         });
 
+        let popupItems = popupOptions.map(popupOption => {
+            return (
+                <div
+                    styleName="menu-option"
+                    onClick={() => goTo(popupOption.url)}
+                    key={`popup-option ${popupOption.title}`}
+                >
+                    { popupOption.title }
+                </div>
+            );
+        });
+        popupItems.push(
+            <div
+                styleName="menu-option"
+                key="sign-out"
+            >
+                <div styleName="sign-out" onClick={() => this.props.signout()}>Sign Out</div>
+            </div>
+        );
+
         const bottomItems = [(
             <div styleName="menu-option" onClick={this.openAccountBox}>
-                { user.name }
-            </div>
+                <div styleName="user-name">{ user.name }</div>
+                <div styleName={"account-popup " + (this.state.accountPopupOpen ? "visible" : "")}>
+                    { popupItems }
+                </div>
+            </div> 
         )];
 
         // moonshot logo
