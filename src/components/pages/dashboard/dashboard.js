@@ -19,7 +19,7 @@ class Dashboard extends Component {
 
     render() {
         return (
-            <div className="center">
+            <div className="center full-height">
                 <MetaTags>
                     <title>Dashboard | Moonshot</title>
                     <meta name="description" content="Your home base for checking in on your candidates, employees, evaluations, and more."/>

@@ -10,3 +10,15 @@
 .social-icons img {
     vertical-align: sub;
 }
+
+.footer-moonshot-logo {
+    width: 130px;
+}
+.footer {
+    background-color: #3c3c3c;
+    padding-top: 20px;
+}
+.footer-container {
+    z-index: 1000;
+    position: relative;
+}

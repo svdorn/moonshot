@@ -25,13 +25,13 @@ class Footer extends Component {
         const hidden = hideFooterLocations.includes(this.props.location.pathname.toLowerCase());
 
         return (
-            <div className="footer-container" style={ hidden ? {display: "none"} : {} }>
-                <div className="tabsShadow" style={{position:"absolute", zIndex: "100"}}><div/></div>
-                <footer className={"footer"}>
+            <div styleName="footer-container" style={ hidden ? {display: "none"} : {} }>
+                <div className="top-shadow" style={{position:"absolute", zIndex: "100"}}><div/></div>
+                <footer styleName="footer">
                     <ul className="horizCenteredList">
                         <li className="center">
                             <img
-                                className="footerMoonshotLogo"
+                                styleName="footer-moonshot-logo"
                                 alt="Moonshot Logo"
                                 title="Moonshot Logo"
                                 src={"/logos/MoonshotWhite" + this.props.png}/>
@@ -39,7 +39,6 @@ class Footer extends Component {
                                 &copy; 2018 Moonshot Learning Inc. All rights reserved.
                             </div>
                             <div styleName="social-icons">
-
                                 <img
                                     alt="Mail Icon"
                                     className="pointer"
