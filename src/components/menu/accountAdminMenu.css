@@ -1,5 +1,20 @@
+:root {
+    --primary-orange: #ff582d;
+    --primary-pink: #fd0d8b;
+    --primary-cyan: #76defe;
+    --primary-peach: #ff6a6f;
+    --primary-white: #ffffff;
+    --primary-purple-light: #b17dfe;
+    --primary-purple-dark: #731ae8;
+    --primary-black-light: #393939;
+    --primary-black-dark: #2e2e2e;
+    --secondary-gray: #d7d7d7;
+    --secondary-red: #eb394f;
+}
+
+
 .menu {
-    width: 150px;
+    width: 125px;
     height: 100%;
     position: fixed;
     background-color: #2a2a2a;
@@ -9,7 +24,7 @@
 }
 
 .moonshot-logo {
-    width: 120px;
+    width: 110px;
     margin: 16px auto;
     cursor: pointer;
 }
@@ -20,10 +35,11 @@
     cursor: pointer;
 }
 .menu-bottom > .menu-option { padding: 0; }
-.menu-option.current { background-color: #76defe; }
+.menu-option.current { background-color: var(--primary-cyan); }
+.menu-top > .menu-option.current:hover { background-color: var(--primary-cyan); }
 
 .menu-bottom > .menu-option > .user-name { padding: 8px 0; }
-.menu-top > .menu-option:hover, .menu-bottom > .menu-option > .user-name:hover { background-color: #393939; }
+.menu-top > .menu-option:hover, .menu-bottom > .menu-option > .user-name:hover { background-color: var(--primary-black-light); }
 .account-popup > .menu-option:hover:not(:last-child) { background-color: #525252; }
 .account-popup > .menu-option:last-child { cursor: initial; }
 
@@ -42,7 +58,7 @@
     position: absolute;
     top: 0;
     left: 50%;
-    background-color: #393939;
+    background-color: var(--primary-black-light);
     width: 90%;
     transform: translateY(150%) translateX(-50%);
 
@@ -50,12 +66,10 @@
     -ms-transition: transform 0.5s ease;
     transition: transform 0.5s ease;
 }
-.account-popup.visible {
-    transform: translateY(-110%) translateX(-50%);
-}
+.account-popup.visible { transform: translateY(-110%) translateX(-50%); }
 
 .sign-out {
-    background-color: #eb394f;
+    background-color: var(--secondary-red);
     display: inline-block;
     padding: 2px 12px;
     cursor: pointer;

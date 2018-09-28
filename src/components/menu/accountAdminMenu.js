@@ -6,44 +6,72 @@ import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { signout, closeNotification, openAddUserModal, openContactUsModal } from "../../actions/usersActions";
-import { goTo } from "../../miscFunctions";
+import { goTo, getFirstName } from "../../miscFunctions";
 import { axios } from 'axios';
 import { animateScroll } from "react-scroll";
 
 import "./accountAdminMenu.css";
 
 
-class Menu extends Component {
+class AccountAdminMenu extends Component {
     constructor(props) {
         super(props);
 
-        this.bound_handleAnyClick = this.handleAnyClick.bind(this);
+        // set the account popup as closed initially
+        this.state = { accountPopupOpen: false };
 
-        // set the initial state
-        this.state = {
-            accountPopupOpen: false
-        };
+        // bind necessary functions
+        this.bound_handleAnyClick = this.handleAnyClick.bind(this);
     }
 
 
-    signOut() {
+    // sign out of user's account
+    signOut = () => {
+        this.removePopup();
         this.props.signout();
         goTo('/');
     }
 
 
+    // open the box that has the options to sign out and go to other account pages
     openAccountBox = () => {
         this.setState({ accountPopupOpen: true });
         document.addEventListener('click', this.bound_handleAnyClick);
     }
 
 
-    handleAnyClick(e) {
-        console.log("here");
-        //if (not within div) {
-            this.setState({ accountPopupOpen: false });
-            document.removeEventListener('click', this.bound_handleAnyClick);
-        //}
+    // handles clicks, is only activated when the account popup is open
+    handleAnyClick = (e) => {
+        console.log("handling click");
+        // get the account popup element
+        const popup = document.querySelector("#account-popup");
+        // if the click is outside of the target, get rid of the popup
+        if (!popup.contains(e.target)) {
+            this.removePopup();
+        }
+    }
+
+
+    // remove the account popup from the menu
+    removePopup = () => {
+        console.log("(removePopup) this.state: ", this.state);
+        console.log("(removePopup) removing event listener");
+        document.removeEventListener('click', this.bound_handleAnyClick);
+        console.log("(removePopup) about to remove popup from state");
+        this.setState({ accountPopupOpen: false }, () => {
+            console.log("(removePopup) removed popup from state, this.state:", this.state);
+        });
+    }
+
+
+    // navigate to an account place (billing, settings, etc)
+    navigateAccount = (url) => {
+        console.log("(navigateAccount) start");
+        console.log("(navigateAccount) this.state: ", this.state);
+        console.log("(navigateAccount) entering this.removePopup()");
+        this.removePopup();
+        console.log("(navigateAccount) entering goTo(url)");
+        goTo(url);
     }
 
 
@@ -93,7 +121,7 @@ class Menu extends Component {
             return (
                 <div
                     styleName="menu-option"
-                    onClick={() => goTo(popupOption.url)}
+                    onClick={this.navigateAccount.bind(this, popupOption.url)}
                     key={`popup-option ${popupOption.title}`}
                 >
                     { popupOption.title }
@@ -105,18 +133,18 @@ class Menu extends Component {
                 styleName="menu-option"
                 key="sign-out"
             >
-                <div styleName="sign-out" onClick={() => this.props.signout()}>Sign Out</div>
+                <div styleName="sign-out" onClick={this.signOut}>Sign Out</div>
             </div>
         );
 
-        const bottomItems = [(
+        const bottomItem = (
             <div styleName="menu-option" onClick={this.openAccountBox}>
-                <div styleName="user-name">{ user.name }</div>
-                <div styleName={"account-popup " + (this.state.accountPopupOpen ? "visible" : "")}>
+                <div styleName="user-name">{ getFirstName(user.name) }</div>
+                <div id="account-popup" styleName={"account-popup " + (this.state.accountPopupOpen ? "visible" : "")}>
                     { popupItems }
                 </div>
-            </div> 
-        )];
+            </div>
+        );
 
         // moonshot logo
         let logo = (
@@ -135,7 +163,7 @@ class Menu extends Component {
                     { topItems }
                 </div>
                 <div styleName="menu-bottom">
-                    { bottomItems }
+                    { bottomItem }
                 </div>
             </div>
         );
@@ -160,6 +188,6 @@ function mapStateToProps(state) {
     };
 }
 
-Menu = withRouter(Menu);
+AccountAdminMenu = withRouter(AccountAdminMenu);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Menu);
+export default connect(mapStateToProps, mapDispatchToProps)(AccountAdminMenu);

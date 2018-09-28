@@ -1,6 +1,7 @@
 .admin-content {
-    width: calc(100% - 150px);
-    margin-left: 150px;
+    width: calc(100% - 125px);
+    margin-left: 125px;
+    display: inline-block;
 }
 
 @media screen and (max-width: 700px) {
