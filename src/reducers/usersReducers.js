@@ -41,8 +41,9 @@ export function usersReducers(state = initialState, action) {
             break;
         case "UPDATE_ONBOARDING_STEP": {
             if (!state.currentUser) { return state; }
-            // create onboarding object if it doesn't exist
+            // create onboarding object with new step
             let onboard = { step: action.newStep };
+            // fill in onboarding info with any that already exists from user
             if (typeof state.currentUser.onboard === "object") {
                 onboard = { ...state.currentUser.onboard, ...onboard };
             }
@@ -50,7 +51,10 @@ export function usersReducers(state = initialState, action) {
             if (typeof onboard.highestStep !== "number" || onboard.highestStep < action.newStep) {
                 onboard.highestStep = action.newStep;
             }
-            return { ...state, onboard };
+            // throw the onboarding stuff back into the user
+            const currentUser = { ...state.currentUser, onboard }
+            // save the state with the new current user
+            return { ...state, currentUser };
             break;
         }
         case "CREATED_NO_VERIFY_EMAIL_SENT": {
