@@ -51,7 +51,8 @@ const userApis = {
     GET_notificationPreferences,
     POST_notificationPreferences,
     POST_agreeToTerms,
-    POST_verifyFromApiKey
+    POST_verifyFromApiKey,
+    POST_updateOnboardingStep
 }
 
 
@@ -364,6 +365,44 @@ async function POST_session(req, res) {
         }
     });
 }
+
+
+async function POST_updateOnboardingStep(req, res) {
+    try { var user = await getUserFromReq(req); }
+    catch (getUserError) {
+        console.log("Error getting user while trying to update onboarding step: ", getUserError);
+        const status = getUserError.status ? getUserError.status : 500;
+        const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
+        return res.status(status).send(message);
+    }
+
+    const { newStep } = sanitize(req.body);
+
+    // initialize onboard object if it doesn't exist
+    if (!user.onboard) {
+        user.onboard = {
+            step: 1,
+            highestStep: 1,
+            actions: []
+        }
+    }
+
+    // record that the user took this step
+    actions.push({ time: new Date(), newStep });
+    // mark the new step as their current one
+    user.onboard.step = newStep;
+    // if this is the farthest the user has been, mark this as highest step
+    if (newStep > user.onboard.highestStep) { user.onboard.highestStep = newStep; }
+
+    try { await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user when updating onboarding step: ", saveUserError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({});
+}
+
 
 // async function POST_updateOnboarding(req, res) {
 //     const userId = sanitize(req.body.userId);

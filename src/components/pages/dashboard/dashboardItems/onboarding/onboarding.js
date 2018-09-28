@@ -64,7 +64,7 @@ class Onboarding extends Component {
         if (step >= 1 && step <= 4) { // make sure idx is valid
             content = checklistInfo[Math.round(step) - 1].body;
         } else {
-            // show the first step if step is invalid
+            // show the first step if given step is invalid
             content = checklistInfo[0].body;
         }
 

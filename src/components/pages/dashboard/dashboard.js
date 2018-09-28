@@ -24,6 +24,7 @@ class Dashboard extends Component {
                     <title>Dashboard | Moonshot</title>
                     <meta name="description" content="Your home base for checking in on your candidates, employees, evaluations, and more."/>
                 </MetaTags>
+                <div className="page-header">Dashboard</div>
                 <div styleName="dashboard">
                     <DashboardItem type="Onboarding" width={3} />
                     <DashboardItem type="Activity" width={1} />

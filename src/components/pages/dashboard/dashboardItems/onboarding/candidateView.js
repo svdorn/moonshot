@@ -22,10 +22,11 @@ class CandidateView extends Component {
 
 
     next = () => {
+        const { _id, verificationToken } = this.props.currentUser;
         // if currently seeing the psych info, show the gca info
         if (this.state.step === "psych") { this.setState({ step: "gca" }); }
         // otherwise go to the next onboarding step
-        else { this.props.updateOnboardingStep(2); }
+        else { this.props.updateOnboardingStep(_id, verificationToken, 2); }
     }
 
 

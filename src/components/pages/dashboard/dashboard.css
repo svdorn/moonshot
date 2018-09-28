@@ -16,9 +16,9 @@
     text-align: left;
     --item-width: 240px;
     --item-margin: 10px;
-    --items-per-row: 5;
+    --items-per-row: 3;
     width: calc(var(--items-per-row) * (var(--item-width) + 2 * var(--item-margin)));
-    margin: auto;
+    margin: 0 auto 80px;
 }
 
 .dashboard-item-container {
@@ -168,12 +168,7 @@
     transform: translate(-50%);
 }
 
-@media screen and (max-width: 1280px) {
-    .dashboard { --items-per-row: 4 }
-}
-@media screen and (max-width: 1120px) {
-    .dashboard { --items-per-row: 3 }
-}
+
 @media screen and (max-width: 780px) {
     .dashboard { --items-per-row: 2 }
 }

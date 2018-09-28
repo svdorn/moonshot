@@ -2048,6 +2048,12 @@ button.link {
 
 .employerDiv { background-color: var(--primary-black-dark); }
 
+.page-header {
+    color: var(--primary-white);
+    font-size: 20px;
+    text-align: left;
+    margin: 15px 30px;
+}
 
 .top-shadow {
     width: 100%;
