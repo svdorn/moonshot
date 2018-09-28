@@ -47,7 +47,13 @@ class Onboarding extends Component {
 
 
     render() {
-        const step = this.props.onboardingStep;
+        const user = this.props.currentUser;
+        const onboard = user.onboard;
+        console.log("onboard: ", onboard);
+        const step = onboard && typeof onboard.step === "number" ? onboard.step : 1;
+        const highestStep = onboard && typeof onboard.highestStep === "number" ? onboard.highestStep : 1;
+
+        console.log("step: ", step);
 
         // create the item list shown on the left
         const checklistItems = checklistInfo.map(info => {
@@ -86,8 +92,7 @@ class Onboarding extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
-        onboardingStep: state.users.onboardingStep
+        currentUser: state.users.currentUser
     };
 }
 

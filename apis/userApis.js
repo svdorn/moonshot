@@ -388,7 +388,7 @@ async function POST_updateOnboardingStep(req, res) {
     }
 
     // record that the user took this step
-    actions.push({ time: new Date(), newStep });
+    user.onboard.actions.push({ time: new Date(), newStep });
     // mark the new step as their current one
     user.onboard.step = newStep;
     // if this is the farthest the user has been, mark this as highest step
