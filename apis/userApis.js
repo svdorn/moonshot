@@ -392,7 +392,7 @@ async function POST_updateOnboardingStep(req, res) {
     // mark the new step as their current one
     user.onboard.step = newStep;
     // if this is the farthest the user has been, mark this as highest step
-    if (newStep > user.onboard.highestStep) { user.onboard.highestStep = newStep; }
+    if (!user.onboard.highestStep || newStep > user.onboard.highestStep) { user.onboard.highestStep = newStep; }
 
     try { await user.save(); }
     catch (saveUserError) {

@@ -46,20 +46,36 @@ class Onboarding extends Component {
     }
 
 
+    handleChecklistItemClick(step) {
+        console.log("HERE");
+        const onboard = this.props.currentUser.onboard
+        if (onboard &&
+            typeof onboard.step === "number" &&
+            typeof onboard.highestStep === "number" &&
+            step <= onboard.highestStep
+        ) {
+            const { _id, verificationToken } = this.props.currentUser;
+            this.props.updateOnboardingStep(_id, verificationToken, step)
+        }
+    }
+
+
     render() {
         const user = this.props.currentUser;
         const onboard = user.onboard;
-        console.log("onboard: ", onboard);
         const step = onboard && typeof onboard.step === "number" ? onboard.step : 1;
         const highestStep = onboard && typeof onboard.highestStep === "number" ? onboard.highestStep : 1;
-
-        console.log("step: ", step);
 
         // create the item list shown on the left
         const checklistItems = checklistInfo.map(info => {
             return (
-                <div styleName={`checklist-item ${info.step === step ? "selected" : ""}`} key={info.title}>
-                    <div styleName={`complete-mark ${info.step < step ? "complete" : "incomplete"}`}><div/></div>
+                <div
+                    styleName={`checklist-item ${info.step === step ? "selected" : ""}`}
+                    key={info.title}
+                    onClick={this.handleChecklistItemClick.bind(this, info.step)}
+                    className={info.step <= highestStep ? "pointer" : ""}
+                >
+                    <div styleName={`complete-mark ${info.step < highestStep ? "complete" : "incomplete"}`}><div/></div>
                     <div>{info.title}</div>
                 </div>
             );
