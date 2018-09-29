@@ -128,7 +128,13 @@ async function POST_createBusinessAndUser(req, res) {
         try {
             var companies = [];
             companies.push({id: business.intercomId});
-            var intercom = await client.users.update({id: user.intercom.id, companies})
+            var intercom = await client.users.update({
+                id: user.intercom.id,
+                companies,
+                custom_attributes: {
+                    first_business_user: true
+                }
+            })
         } catch (updateIntercomError) {
             console.log("error updating an intercom user: ", updateIntercomError);
             return res.status(500).send("Server error.");
@@ -288,7 +294,7 @@ async function createAccountAdmin(info) {
             if (process.env.NODE_ENV === "production") {
                 try {
                     var intercom = await client.users.create({
-                        email: email,
+                         email: email,
                          name: name,
                          custom_attributes: {
                              user_type: user.userType
@@ -459,21 +465,26 @@ async function createBusiness(info) {
                 }
             }
         ];
-        if (process.env.NODE_ENV === "production") {
+        //if (process.env.NODE_ENV === "production") {
             business.intercomId = crypto.randomBytes(16).toString('hex');
 
             // create a user on intercom and add intercom information to the user
             try {
                 var intercom = await client.companies.create({
                      name: name,
-                     company_id: business.intercomId
+                     company_id: business.intercomId,
+                     custom_attributes: {
+                         first_position: business.positions[0] ? business.positions[0].name : null,
+                         unique_name: uniqueName,
+                         candidates: 0
+                     }
                  });
             }
             catch (createIntercomError) {
                 console.log("error creating an intercom company: ", createIntercomError);
                 return res.status(500).send("Server error.");
             }
-        }
+        //}
 
         // create the business in the db
         try { business = await Businesses.create(business); }
