@@ -465,7 +465,7 @@ async function createBusiness(info) {
                 }
             }
         ];
-        //if (process.env.NODE_ENV === "production") {
+        if (process.env.NODE_ENV === "production") {
             business.intercomId = crypto.randomBytes(16).toString('hex');
 
             // create a user on intercom and add intercom information to the user
@@ -484,7 +484,7 @@ async function createBusiness(info) {
                 console.log("error creating an intercom company: ", createIntercomError);
                 return res.status(500).send("Server error.");
             }
-        //}
+        }
 
         // create the business in the db
         try { business = await Businesses.create(business); }
