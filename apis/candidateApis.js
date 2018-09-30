@@ -357,6 +357,11 @@ function POST_candidate(req, res) {
                 user.notifications.time = "Daily";
                 user.notifications.waiting = false;
                 user.notifications.firstTime = true;
+                user.popups = {
+                    candidates: true,
+                    employees: true,
+                    evaluations: true
+                };
             }
             // otherwise the user is a candidate or employee and will have a
             // start date for their position eval, same as when code was created

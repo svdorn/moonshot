@@ -16,12 +16,15 @@ import SelectMenuItem from '@material-ui/core/MenuItem';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
-import {openAddUserModal} from "../../../actions/usersActions";
+import {openAddUserModal, hidePopups} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import EmployeePreview from '../../childComponents/employeePreview';
+import Carousel from "./carousel";
 import AddUserDialog from '../../childComponents/addUserDialog';
+
+import './myEmployees.css';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -160,6 +163,74 @@ class MyEmployees extends Component {
 
     openAddUserModal() {
         this.props.openAddUserModal();
+    }
+
+    hideMessage() {
+        let popups = this.props.currentUser.popups;
+        if (popups) {
+            popups.employees = false;
+        } else {
+            popups = {};
+            popups.employees = false;
+        }
+
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+
+        this.props.hidePopups(userId, verificationToken, popups);
+    }
+
+    popup() {
+        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.employees) {
+            const frame1 = (
+                <div className="popup-frame">
+                    <div>
+                        <img
+                            alt="Alt"
+                            src={"/icons/Cube" + this.props.png}
+                        />
+                    </div>
+                    <div style={{marginTop:"20px"}}>
+                        <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
+                        <div>
+                            This is your dashboard, where you can see all the most recent activity across every
+                            project in this workspace. It is the perfect place to start your day.
+                        </div>
+                    </div>
+                </div>
+            );
+            const frame2 = (
+                <div className="popup-frame">
+                    <div>
+                        <img
+                            alt="Alt"
+                            src={"/icons/Cube" + this.props.png}
+                        />
+                    </div>
+                    <div style={{marginTop:"20px"}}>
+                        <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to your Dashboard!</div>
+                        <div>
+                            Frame 2 this is your dashboard, where you can see all the most recent activity across every
+                            project in this workspace. It is the perfect place to start your day.
+                        </div>
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className="center" key="popup box">
+                    <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
+                        <Carousel
+                            frames={[frame1, frame2]}
+                            transitionDuration={1000}
+                        />
+                        <div className="hide-message" onClick={this.hideMessage.bind(this)}>Hide Message</div>
+                    </div>
+                </div>
+            );
+        } else {
+            return null;
+        }
     }
 
     render() {
@@ -428,6 +499,9 @@ class MyEmployees extends Component {
                     <title>My Employees | Moonshot</title>
                     <meta name="description" content="Grade your employees and see their results."/>
                 </MetaTags>
+
+                { this.popup() }
+
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>
@@ -450,13 +524,16 @@ class MyEmployees extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openAddUserModal
+        openAddUserModal,
+        hidePopups
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        loading: state.users.loadingSomething,
+        png: state.users.png,
     };
 }
 

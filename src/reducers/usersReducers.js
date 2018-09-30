@@ -122,15 +122,23 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         // case "UPDATE_ONBOARDING":
-        //     return {
-        //         ...state,
-        //         currentUser: action.payload
-        //     }
-        //     break;
+        case "HIDE_POPUPS":
+            return {
+                ...state,
+                currentUser: action.payload
+            }
+            break;
+        case "HIDE_POPUPS":
+            return {
+                ...state,
+                currentUser: action.payload,
+            }
+            break;
         case "NOTIFICATION":
         case "VERIFY_EMAIL_REJECTED":
         case "CHANGE_TEMP_PASS_REJECTED":
         case "ADD_PATHWAY_REJECTED":
+        case "HIDE_POPUPS_REJECTED":
         case "ADD_NOTIFICATION":
             return {
                 ...state,

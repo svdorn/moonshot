@@ -199,6 +199,12 @@ async function createAccountAdmin(info) {
         user.userType = "accountAdmin";
         // user has not yet verified email
         user.verified = false;
+        // user needs to see popups
+        user.popups = {
+            candidates: true,
+            employees: true,
+            evaluations: true
+        };
         // had to select that they agreed to the terms to sign up so must be true
         user.termsAndConditions = [
             {

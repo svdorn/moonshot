@@ -315,6 +315,8 @@ form > h1 {
 
 
 
+
+
 .freeResponseQuestions {
     width: 70%;
     margin-left: 15%;
@@ -417,6 +419,21 @@ form > h1 {
     width: 90%;
     font-size: 12px;
     margin: 0 auto;
+}
+
+.tab-position-circle {
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(to bottom right, var(--secondary-gray), var(--primary-black-light));
+    border-radius: 5px;
+    display: inline-block;
+    margin: auto 15px;
+}
+.tab-position-circle:hover {
+    cursor: pointer;
+}
+.tab-position-circle.selected {
+    background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
 }
 
 
@@ -1180,7 +1197,7 @@ form > h1 {
     justify-content: space-around;
 }
 .results > .statsAndDescription > div {
-    width: 530px;
+    width: 450px;
     position: relative;
     display: inline-block;
     vertical-align: top;
@@ -1192,6 +1209,7 @@ form > h1 {
     transition:         all 0.5s ease;
 }
 .results > .statsAndDescription > .stats { padding: 15px 20px 25px; }
+.results > .statsAndDescription > .graph{  }
 .results > .statsAndDescription > .description { padding: 10px 15px; }
 .results > .statsAndDescription > .description > div > div,
 .results > .statsAndDescription > .description > div > div > div {
@@ -2282,6 +2300,73 @@ button.link {
     top: 2px;
     right: 10px;
     cursor: pointer;
+}
+
+.popup-box {
+    display: inline-block;
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    padding: 10px;
+    margin-top: 15px;
+    color: var(--secondary-gray);
+    -moz-box-shadow:    0px 2px 20px 0px #00000073;
+    -webkit-box-shadow: 0px 2px 20px 0px #00000073;
+    box-shadow:         0px 2px 20px 0px #00000073;
+}
+.popup-box > .hide-message {
+    position: absolute;
+    bottom: 2px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.myCandidatesOverlayContainer {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+    z-index: 1000;
+    background-color: var(--primary-black-dark);
+}
+.myCandidatesOverlay {
+    display: inline-block;
+    padding: 10px;
+    margin-top: 10px;
+    -moz-box-shadow:    0px 2px 20px 0px #00000073;
+    -webkit-box-shadow: 0px 2px 20px 0px #00000073;
+    box-shadow:         0px 2px 20px 0px #00000073;
+}
+
+.myCandidatesOverlay:hover{
+    cursor: pointer;
+}
+
+.popup-frame {
+    margin: auto;
+    width: 800px;
+}
+
+.popup-frame > div:first-child {
+    display: inline-block;
+    width: 20%;
+    height: 100%;
+    margin-top: 20px;
+    vertical-align: middle;
+}
+
+.popup-frame > div:first-child > img {
+    height: 50px;
+    width: 50px;
+}
+
+.popup-frame > div:nth-child(2) {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    height: 100%;
+    top: 5px;
+    width: 80%;
 }
 
 .myCandidates .candidatesAndOptions {
@@ -4166,6 +4251,23 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-left: 25px;
     }
 
+    .popup-frame {
+        width: 600px;
+    }
+
+    .popup-frame > div:first-child {
+        width: 15%;
+    }
+
+    .popup-frame > div:first-child > img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .popup-frame > div:nth-child(2) {
+        width: 85%;
+    }
+
 
     .font40pxUnder900 { font-size: 40px; }
     .font38pxUnder900 { font-size: 38px; }
@@ -4387,6 +4489,22 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         float: right;
         right: inherit;
         bottom: inherit;
+    }
+
+    .popup-frame {
+        width: 90%;
+    }
+
+    .popup-frame > div:first-child {
+        width: 0;
+    }
+
+    .popup-frame > div:first-child > img {
+        display: none;
+    }
+
+    .popup-frame > div:nth-child(2) {
+        width: 100%;
     }
 
     .results > .statsAndDescription > div {

@@ -110,6 +110,21 @@ export function login(user, saveSession, navigateBackUrl) {
     }
 }
 
+export function hidePopups(userId, verificationToken, popups) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        axios.post("/api/user/popups", {userId, verificationToken, popups})
+        .then(function(response) {
+            const returnedUser = response.data;
+            dispatch({type:"HIDE_POPUPS", payload: returnedUser});
+        })
+        .catch(function(err) {
+            dispatch({ type: "HIDE_POPUPS_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
+
 
 // update user object in redux store
 export function updateUser(user) {

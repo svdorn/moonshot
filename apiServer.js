@@ -53,6 +53,7 @@ const businessApis = require("./apis/businessApis");
 const candidateApis = require("./apis/candidateApis");
 const evaluationApis = require("./apis/evaluationApis");
 const accountAdminApis = require("./apis/accountAdminApis");
+const mockusersApis = require("./apis/mockusersApis");
 const updates = require("./apis/updates");
 
 const webhooks = require("./apis/webhooks");
@@ -142,6 +143,7 @@ app.post("/user/postNotificationPreferences", userApis.POST_notificationPreferen
 app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
 app.post("/user/verifyFromApiKey", userApis.POST_verifyFromApiKey);
 app.post("/user/updateOnboardingStep", userApis.POST_updateOnboardingStep);
+app.post("/user/popups", userApis.POST_popups);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 //app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
@@ -197,6 +199,7 @@ app.post("/evaluation/answerCognitiveQuestion", evaluationApis.POST_answerCognit
 app.post("/evaluation/answerOutOfTimeCognitive", evaluationApis.POST_answerOutOfTimeCognitive);
 app.post("/evaluation/skipAdminQuestions", evaluationApis.POST_skipAdminQuestions);
 
+app.get("/mockusers/all", mockusersApis.GET_allMockusers);
 
 //app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);

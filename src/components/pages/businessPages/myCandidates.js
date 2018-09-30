@@ -16,7 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox } from "../../../actions/usersActions";
+import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox, hidePopups, addNotification } from "../../../actions/usersActions";
 import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -24,6 +24,8 @@ import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
 import AddUserDialog from '../../childComponents/addUserDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
+import Carousel from "./carousel";
+import clipboard from "clipboard-polyfill";
 import HoverTip from "../../miscComponents/hoverTip";
 
 import "./myCandidates.css";
@@ -54,6 +56,8 @@ class MyCandidates extends Component {
             searchTerm: "",
             // which position we should see candidates for
             position: "",
+            // the name of the business
+            businessName: "",
             // can sort by Name, Score, Hiring Stage, etc...
             sortBy: "stage",
             // the direction to sort in
@@ -74,6 +78,8 @@ class MyCandidates extends Component {
             positionNameFromUrl,
             // true if the business has no positions associated with it
             noPositions: false,
+            // true if displaying mock data
+            mockData: false,
             // if we are currently loading the positions
             loadingPositions: true,
             // if we are currently loading candidates
@@ -110,6 +116,7 @@ class MyCandidates extends Component {
         })
         .then(function (res) {
             let positions = res.data.positions;
+            const businessName = res.data.businessName;
             if (Array.isArray(positions) && positions.length > 0) {
                 // if the url gave us a position to select first, select that one
                 // otherwise, select the first one available
@@ -135,6 +142,7 @@ class MyCandidates extends Component {
                     positions,
                     position: firstPositionName,
                     positionId,
+                    businessName,
                     loadingPositions: false,
                     loadingCandidates: true
                 },
@@ -259,15 +267,36 @@ class MyCandidates extends Component {
                 if (res.data && res.data.length > 0) {
                     this.setState({
                         candidates: res.data,
-                        loadingCandidates: false
+                        loadingCandidates: false,
+                        mockData: false
                     }, () => {
                         this.reorder()
                     });
                 } else {
-                    this.setState({
-                        candidates: [],
-                        loadingCandidates: false
-                    })
+                    if (this.state.positions.length === 1) {
+                        axios.get("/api/mockusers/all", {
+                            params: {
+                                userId: this.props.currentUser._id,
+                                verificationToken: this.props.currentUser.verificationToken,
+                                businessId: this.props.currentUser.businessInfo.businessId
+                            }
+                        }).then(res => {
+                            this.setState({
+                                candidates: res.data.mockusers,
+                                loadingCandidates: false,
+                                mockData: true
+                            }, () => {
+                                this.reorder()
+                            });
+                        }).catch(function (err) {
+                            console.log("ERROR: ", err);
+                        })
+                    } else {
+                        this.setState({
+                            candidates: [],
+                            loadingCandidates: false
+                        })
+                    }
                 }
             }).catch(function (err) {
                 console.log("ERROR: ", err);
@@ -482,8 +511,10 @@ class MyCandidates extends Component {
             positionId: this.state.positionId,
             candidateId, interest
         }
-        axios.post("/api/business/rateInterest", params)
-        .catch(error => { console.log("error: ", error); });
+        if (!this.state.mockData) {
+            axios.post("/api/business/rateInterest", params)
+            .catch(error => { console.log("error: ", error); });
+        }
 
         // set the state so that the result is immediately visible
         let candidates = this.state.candidates.slice(0);
@@ -543,8 +574,10 @@ class MyCandidates extends Component {
             positionId: this.state.positionId,
             candidateId, hiringStage
         }
-        axios.post("/api/business/changeHiringStage", params)
-        .catch(error => { console.log("error: ", error); });
+        if (!this.state.mockData) {
+            axios.post("/api/business/changeHiringStage", params)
+            .catch(error => { console.log("error: ", error); });
+        }
 
         // CHANGE HIRING STAGE IN FRONT END
         let candidates = this.state.candidates.slice(0);
@@ -594,8 +627,10 @@ class MyCandidates extends Component {
             positionId: this.state.positionId,
             candidateIds, moveTo
         }
-        axios.post("/api/business/moveCandidates", params)
-        .catch(error => { console.log(error); });
+        if (!this.state.mockData) {
+            axios.post("/api/business/moveCandidates", params)
+            .catch(error => { console.log(error); });
+        }
 
         // MOVE THE CANDIDATES IN THE FRONT END
         // get a shallow editable copy of the candidates array
@@ -898,6 +933,21 @@ class MyCandidates extends Component {
         });
     }
 
+    hideMessage() {
+        let popups = this.props.currentUser.popups;
+        if (popups) {
+            popups.candidates = false;
+        } else {
+            popups = {};
+            popups.candidates = false;
+        }
+
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+
+        this.props.hidePopups(userId, verificationToken, popups);
+    }
+
 
     // the tabs at the top that say All, Favorites, etc...
     tabParts() {
@@ -958,6 +1008,59 @@ class MyCandidates extends Component {
                         Click any candidate name to see results.<br/>
                         Hover over any category for a description.
                         <div className="x" onClick={this.seeInfoBox.bind(this)}>x</div>
+                    </div>
+                </div>
+            );
+        } else {
+            return null;
+        }
+    }
+
+    popup() {
+        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.candidates) {
+            const frame1 = (
+                <div className="popup-frame">
+                    <div>
+                        <img
+                            alt="Alt"
+                            src={"/icons/Cube" + this.props.png}
+                        />
+                    </div>
+                    <div style={{marginTop:"20px"}}>
+                        <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to your Dashboard!</div>
+                        <div>
+                            This is your dashboard, where you can see all the most recent activity across every
+                            project in this workspace. It is the perfect place to start your day.
+                        </div>
+                    </div>
+                </div>
+            );
+            const frame2 = (
+                <div className="popup-frame">
+                <div>
+                    <img
+                        alt="Alt"
+                        src={"/icons/Cube" + this.props.png}
+                    />
+                </div>
+                <div style={{marginTop:"20px"}}>
+                    <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
+                    <div>
+                        Frame 2 this is your dashboard, where you can see all the most recent activity across every
+                        project in this workspace. It is the perfect place to start your day.
+                    </div>
+                </div>
+                </div>
+            );
+
+            return (
+                <div className="center" key="popup box">
+                    <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
+                        <Carousel
+                            frames={[frame1, frame2]}
+                            transitionDuration={1000}
+                        />
+                        <div className="hide-message" onClick={this.hideMessage.bind(this)}>Hide Message</div>
                     </div>
                 </div>
             );
@@ -1077,6 +1180,12 @@ class MyCandidates extends Component {
         );
     }
 
+    copyLink() {
+        let URL = "https://moonshotinsights.io/apply/" + this.state.businessName;
+        URL = encodeURI(URL);
+        clipboard.writeText(URL);
+        this.props.addNotification("Link copied to clipboard.", "info");
+    }
 
     mobileTopOptions() {
         return (
@@ -1241,6 +1350,8 @@ class MyCandidates extends Component {
                     <meta name="description" content="View analytical breakdowns and manage your candidates."/>
                 </MetaTags>
 
+                {this.popup()}
+
                 { tabs }
 
                 { this.infoBox() }
@@ -1263,6 +1374,14 @@ class MyCandidates extends Component {
                         <div className="candidatesContainer">
                             <div>
                                 { this.createCandidatesTable(positionId) }
+                                <div className="myCandidatesOverlayContainer">
+                                    { !this.state.mobile && this.state.mockData ?
+                                        <div className="myCandidatesOverlay primary-cyan" onClick={this.copyLink.bind(this)}>
+                                            Share your custom link with your candidates
+                                        </div>
+                                         : null
+                                    }
+                                </div>
                             </div>
                             { this.state.showResults ?
                                 <div>
@@ -1277,6 +1396,8 @@ class MyCandidates extends Component {
                                         fullScreen={this.state.fullScreenResults}
                                         mobile={this.state.mobile}
                                         interest={this.state.interest}
+                                        mockData={this.state.mockData}
+                                        candidates={this.state.mockData ? this.state.candidates : null}
                                     />
                                     <div className={leftArrowContainerClass} onClick={() => this.nextPreviousResults(false)}>
                                         <div className={leftArrowClass} />
@@ -1327,7 +1448,9 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
         openAddUserModal,
-        sawMyCandidatesInfoBox
+        sawMyCandidatesInfoBox,
+        hidePopups,
+        addNotification
     }, dispatch);
 }
 
@@ -1336,7 +1459,8 @@ function mapStateToProps(state) {
         formData: state.form,
         notification: state.users.notification,
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        loading: state.users.loadingSomething
     };
 }
 
