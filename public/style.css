@@ -339,8 +339,25 @@ form > h1 {
     filter: blur(3px);
 }
 
+.build-team-container {
+    height: 300px;
+    width: 760px;
+    display: inline-block;
+    position: relative;
+    margin: 10px;
+    background-color: var(--primary-black-light);
+    vertical-align: top;
+    color: var(--secondary-gray);
+    font-size: 14px;
+
+    -webkit-box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    -moz-box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    -webkit-transition: -webkit-transition .2s;
+    -moz-transition: -moz-box-shadow .2s;
+    transition: box-shadow .2s;
+}
 .build-team {
-    height: 100%;
     position: relative;
     padding: 10px 20px;
 }

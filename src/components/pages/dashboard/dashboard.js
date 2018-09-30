@@ -8,6 +8,7 @@ import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
 
 import WelcomeMessage from "./dashboardItems/welcomeMessage";
+import BuildTeam from "./dashboardItems/buildTeam";
 
 import "./dashboard.css";
 
@@ -28,8 +29,8 @@ class Dashboard extends Component {
                 </MetaTags>
                 <div className="page-header">Dashboard</div>
                 <WelcomeMessage />
+                <BuildTeam />
                 <div styleName="dashboard">
-                    <DashboardItem type="BuildTeam" width={3} />
                     <DashboardItem type="Onboarding" width={3} />
                     <DashboardItem type="Activity" width={1} />
                     <DashboardItem type="Candidates" width={1} />

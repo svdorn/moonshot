@@ -6,7 +6,6 @@ import {  } from "../../../actions/usersActions";
 import {  } from "../../../miscFunctions";
 
 import Onboarding from "./dashboardItems/onboarding/onboarding";
-import BuildTeam from "./dashboardItems/buildTeam";
 
 import "./dashboard.css";
 
@@ -30,9 +29,6 @@ class DashboardItem extends Component {
 
         let content = null;
         switch (this.props.type) {
-            case "BuildTeam":
-                content = <BuildTeam />;
-                break;
             case "Onboarding":
                 content = <Onboarding/>;
                 break;
