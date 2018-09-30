@@ -203,7 +203,8 @@ async function createAccountAdmin(info) {
         user.popups = {
             candidates: true,
             employees: true,
-            evaluations: true
+            evaluations: true,
+            dashboard: true
         };
         // had to select that they agreed to the terms to sign up so must be true
         user.termsAndConditions = [
