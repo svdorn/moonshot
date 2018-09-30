@@ -29,6 +29,7 @@ class Dashboard extends Component {
                 <div className="page-header">Dashboard</div>
                 <WelcomeMessage />
                 <div styleName="dashboard">
+                    <DashboardItem type="BuildTeam" width={3} />
                     <DashboardItem type="Onboarding" width={3} />
                     <DashboardItem type="Activity" width={1} />
                     <DashboardItem type="Candidates" width={1} />

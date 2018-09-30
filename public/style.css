@@ -339,31 +339,31 @@ form > h1 {
     filter: blur(3px);
 }
 
-.automate-invites {
+.build-team {
     height: 100%;
     position: relative;
     padding: 10px 20px;
 }
 
-.automate-invites > div {
+.build-team > div {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     height: 100%;
 }
 
-.automate-invites .method-boxes {
+.build-team .method-boxes {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
 }
 
-.automate-invites .method-box {
+.build-team .method-box {
     display: flex;
     max-width: 28%;
     min-width: 100px;
-    padding: 10px;
-    margin: 5px;
+    padding: 5px;
+    margin: 10px 5px;
     border: 1px solid white;
     border-radius: 4px;
     justify-content: center;
@@ -371,9 +371,13 @@ form > h1 {
     flex-direction: column;
     cursor: pointer;
 }
+.build-team .method-box:hover {
+    background-color: var(--primary-black-dark);
+}
 
-.automate-invites .method-box:hover {
-    background-color: var(--primary-black-light);
+.build-team .method-box.selected {
+    border: 1px solid var(--primary-cyan);
+    background-color: var(--primary-black-dark);
 }
 
 
