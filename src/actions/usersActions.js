@@ -125,6 +125,20 @@ export function hidePopups(userId, verificationToken, popups) {
     }
 }
 
+export function postBusinessInterests(userId, verificationToken, interests, popups) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        axios.post("/api/business/interests", {userId, verificationToken, interests})
+        .then(function(response) {
+            hidePopups(userId, verificationToken, popups);
+        })
+        .catch(function(err) {
+            dispatch({ type: "POST_BUSINESS_INTERESTS_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
+
 
 // update user object in redux store
 export function updateUser(user) {

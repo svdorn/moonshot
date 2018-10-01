@@ -86,7 +86,9 @@ const usersSchema = mongoose.Schema({
         // whether the popups should show on the employees tab
         employees: Boolean,
         // whether the popups should show on the dashboard
-        dashboard: Boolean
+        dashboard: Boolean,
+        // where the business interests should pop up or not
+        businessInterests: Boolean
     },
     // info we need to keep to access users on Intercom
     intercom: {

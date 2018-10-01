@@ -29,15 +29,18 @@ class Dashboard extends Component {
                 </MetaTags>
                 <div className="page-header">Dashboard</div>
                 <WelcomeMessage />
-                <BuildTeam />
-                <div styleName="dashboard">
-                    <DashboardItem type="Onboarding" width={3} />
-                    <DashboardItem type="Activity" width={1} />
-                    <DashboardItem type="Candidates" width={1} />
-                    <DashboardItem type="Employees" width={1} />
-                    <DashboardItem type="Evaluations" width={1} />
-                    <DashboardItem type="Account" width={1} />
-                </div>
+                {this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.businessInterests ?
+                    <BuildTeam />
+                    :
+                    <div styleName="dashboard">
+                        <DashboardItem type="Onboarding" width={3} />
+                        <DashboardItem type="Activity" width={1} />
+                        <DashboardItem type="Candidates" width={1} />
+                        <DashboardItem type="Employees" width={1} />
+                        <DashboardItem type="Evaluations" width={1} />
+                        <DashboardItem type="Account" width={1} />
+                    </div>
+                }
             </div>
         );
     }
@@ -46,7 +49,7 @@ class Dashboard extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
     };
 }
 

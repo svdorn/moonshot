@@ -130,6 +130,8 @@ const businessesSchema = mongoose.Schema({
     intercomId: String,
     // the positions that the company is (or was) hiring for
     positions: [ positionSchema ],
+    // the interests a business has, their reason for using our product
+    interests: [ String ],
 
     // the questions that managers have to answer about each employee
     employeeQuestions: [{
