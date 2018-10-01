@@ -500,16 +500,11 @@ class MyEmployees extends Component {
                     <meta name="description" content="Grade your employees and see their results."/>
                 </MetaTags>
 
+                <div className="page-header">Employees</div>
+
                 { this.popup() }
 
-                <div style={style.separator}>
-                    <div style={style.separatorLine}/>
-                    <div style={style.separatorText}>
-                        My Employees
-                    </div>
-                </div>
-
-                {searchBar}
+                { searchBar }
 
                 <div>
                     <ul className="horizCenteredList myEmployeesWidth">

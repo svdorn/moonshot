@@ -1350,6 +1350,8 @@ class MyCandidates extends Component {
                     <meta name="description" content="View analytical breakdowns and manage your candidates."/>
                 </MetaTags>
 
+                <div className="page-header">Candidates</div>
+
                 {this.popup()}
 
                 { tabs }
