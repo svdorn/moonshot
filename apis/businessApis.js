@@ -49,6 +49,7 @@ const businessApis = {
     POST_uploadCandidateCSV,
     POST_chatbotData,
     POST_createBusinessAndUser,
+    POST_interests,
     GET_candidateSearch,
     GET_business,
     GET_employeeSearch,
@@ -1173,7 +1174,6 @@ async function POST_emailInvites(req, res) {
 
 // create link that people can sign up as
 async function POST_createLink(req, res) {
-    console.log("start");
     const body = req.body;
     const userId = sanitize(body.currentUserInfo.userId);
     const userName = sanitize(body.currentUserInfo.userName);
@@ -1533,6 +1533,28 @@ async function POST_addEvaluation(req, res) {
      }
 
     return res.json(business.positions);
+}
+
+// add an evaluation to the business on request
+async function POST_interests(req, res) {
+    const { userId, verificationToken, businessId, interests } = sanitize(req.body);
+
+    try {
+        var business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId);
+    } catch (verifyAccountAdminError) {
+        console.log("Error verifying business account admin: ", verifyAccountAdminError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+     business.interests = interests;
+
+     try { await business.save(); }
+     catch (saveBizError) {
+         console.log("Error saving business when trying to add interests: ", saveBizError);
+         return res.status(500).send("Error adding users. Contact support or try again.");
+     }
+
+    return res.json(business.interests);
 }
 
 async function POST_contactUsEmail(req, res) {

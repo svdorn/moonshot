@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification, postBusinessInterests } from "../../../../actions/usersActions";
+import { CircularProgress } from "material-ui";
 import { button } from "../../../../classes";
 
 import "../dashboard.css";
@@ -74,6 +75,7 @@ class BuildTeam extends Component {
 
         const userId = this.props.currentUser._id;
         const verificationToken = this.props.currentUser.verificationToken;
+        const businessId = this.props.currentUser.businessInfo.businessId;
         let popups = this.props.currentUser.popups;
         if (popups) {
             popups.businessInterests = false;
@@ -82,7 +84,7 @@ class BuildTeam extends Component {
             popups.businessInterests = false;
         }
 
-        this.props.postBusinessInterests(userId, verificationToken, choiceArr, popups);
+        this.props.postBusinessInterests(userId, verificationToken, businessId, choiceArr, popups);
     }
 
     makeChoices() {
@@ -115,13 +117,19 @@ class BuildTeam extends Component {
                     <div className="build-team">
                         <div>{ this.makeChoices() }</div>
                     </div>
-                    <div
-                        className={button.cyan}
-                        styleName="got-it-button"
-                        onClick={this.handleClick}
-                    >
-                        Continue
-                    </div>
+                    {this.props.loading ?
+                        <div className="center">
+                            <CircularProgress color="#76defe" />
+                        </div>
+                        :
+                        <div
+                            className={button.cyan}
+                            styleName="got-it-button"
+                            onClick={this.handleClick}
+                        >
+                            Continue
+                        </div>
+                    }
                 </div>
             </div>
         );
@@ -131,7 +139,8 @@ class BuildTeam extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        loading: state.users.loadingSomething
     };
 }
 

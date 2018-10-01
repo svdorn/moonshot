@@ -170,6 +170,7 @@ app.post("/business/resetApiKey", businessApis.POST_resetApiKey);
 app.post("/business/uploadCandidateCSV", businessApis.POST_uploadCandidateCSV);
 app.post("/business/chatbotData", businessApis.POST_chatbotData);
 app.post("/business/createBusinessAndUser", businessApis.POST_createBusinessAndUser);
+app.post("/business/interests", businessApis.POST_interests);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/business", businessApis.GET_business);

@@ -139,6 +139,7 @@ export function usersReducers(state = initialState, action) {
         case "CHANGE_TEMP_PASS_REJECTED":
         case "ADD_PATHWAY_REJECTED":
         case "HIDE_POPUPS_REJECTED":
+        case "POST_BUSINESS_INTERESTS_REJECTED":
         case "ADD_NOTIFICATION":
             return {
                 ...state,
