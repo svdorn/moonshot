@@ -5,6 +5,10 @@ const GCA = require('../models/cognitivequestions.js');
 const Skills = require('../models/skills.js');
 const Businesses = require('../models/businesses.js');
 const Adminqs = require("../models/adminqs");
+const Intercom = require('intercom-client');
+const credentials = require('../credentials');
+
+const client = new Intercom.Client({ token: credentials.intercomToken });
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -638,7 +642,7 @@ module.exports.POST_getInitialState = async function(req, res) {
     }
 
     // check if the user has finished all the components already
-    if (finishedPosition(user, position)) {
+    if (await finishedPosition(user, position)) {
         console.log("finished position is true");
         // finish the position
         try {
@@ -781,7 +785,7 @@ module.exports.addEvaluation = async function(user, businessId, positionId, star
 
 
 // checks if a position's components are all completed
-function finishedPosition(user, position) {
+async function finishedPosition(user, position) {
     // check if admin qs are done
     if (!user.adminQuestions || !user.adminQuestions.endDate) { return false; }
     // check if psych is done
@@ -1327,6 +1331,32 @@ async function advance(user, businessId, positionId) {
             if (!user.positions[positionIndex].appliedEndDate) {
                 // give it an end date
                 user.positions[positionIndex].appliedEndDate = new Date();
+                // get business from position and then update that business in intercom
+                // TODO: update candidates to be the correct # of candidates, 1 works for now
+                // TODO: in future, track each position seperately and the number of candidates in each position so that we can have all necessary data in intercom
+                if (process.env.NODE_ENV === "production") {
+                    try {
+                        // get business from position
+                        var business = await Businesses.findById(businessId);
+
+                        // update business candidate count in intercom
+                        try {
+                            var intercom = await client.companies.update({
+                                 company_id: business.intercomId,
+                                 custom_attributes: {
+                                     candidates: 1
+                                 }
+                             });
+                        }
+                        catch (createIntercomError) {
+                            console.log("error updating an intercom company: ", createIntercomError);
+                            return res.status(500).send("Server error.");
+                        }
+                    } catch (getBusinessError) {
+                        console.log("error getting a business when trying to update business in intercom: ", getBusinessError);
+                        return res.status(500).send("Server error.");
+                    }
+                }
                 // score the user
                 try { user.positions[positionIndex] = gradeEval(user, user.positions[positionIndex], position); }
                 catch (gradeError) { return reject(gradeError); }

@@ -3,9 +3,10 @@ const Users = require("../models/users.js");
 const Psychtests = require("../models/psychtests.js");
 const Signupcodes = require("../models/signupcodes.js");
 const mongoose = require("mongoose");
+const credentials = require('../credentials');
 const Intercom = require('intercom-client');
 
-const client = new Intercom.Client({ token: 'dG9rOjRhYTE3ZjgzX2IyYmRfNDQyY184YjUwX2JjMjk4OWU3MDhmYjoxOjA=' });
+const client = new Intercom.Client({ token: credentials.intercomToken });
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -124,16 +125,28 @@ async function POST_createBusinessAndUser(req, res) {
     // user is the first at their company (so they have to do onboarding)
     user.firstBusinessUser = true;
 
-    if (process.env.NODE_ENV === "production") {
     // add the company to the user on intercom
-        try {
-            var companies = [];
-            companies.push({id: business.intercomId});
-            var intercom = await client.users.update({id: user.intercom.id, companies})
-        } catch (updateIntercomError) {
-            console.log("error updating an intercom user: ", updateIntercomError);
-            return res.status(500).send("Server error.");
-        }
+    try {
+        var companies = [];
+        companies.push({id: business.intercomId});
+        var intercom = await client.users.update({
+            id: user.intercom.id,
+            companies,
+            custom_attributes: {
+                first_business_user: true
+            }
+        })
+    } catch (updateIntercomError) {
+        console.log("error updating an intercom user: ", updateIntercomError);
+        return res.status(500).send("Server error.");
+    }
+
+    // generate an hmac for the user so intercom can verify identity
+    if (user.intercom && user.intercom.id) {
+        const hash = crypto.createHmac('sha256', credentials.hmacKey)
+                   .update(user.intercom.id)
+                   .digest('hex');
+        user.hmac = hash;
     }
 
     try { user = await user.save(); }
@@ -299,30 +312,28 @@ async function createAccountAdmin(info) {
             if (!verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
 
             // create a user on intercom and add intercom information to the user
-            if (process.env.NODE_ENV === "production") {
-                try {
-                    var intercom = await client.users.create({
-                        email: email,
-                         name: name,
-                         custom_attributes: {
-                             user_type: user.userType
-                         }
-                     });
-                }
-                catch (createIntercomError) {
-                    console.log("error creating an intercom user: ", createIntercomError);
-                    return res.status(500).send("Server error.");
-                }
+            try {
+                var intercom = await client.users.create({
+                     email: email,
+                     name: name,
+                     custom_attributes: {
+                         user_type: user.userType
+                     }
+                 });
+            }
+            catch (createIntercomError) {
+                console.log("error creating an intercom user: ", createIntercomError);
+                return res.status(500).send("Server error.");
+            }
 
-                // Add the intercom info to the user
-                if (intercom.body) {
-                    user.intercom = {};
-                    user.intercom.email = intercom.body.email;
-                    user.intercom.id = intercom.body.id;
-                } else {
-                    console.log("error creating an intercom user: ", createIntercomError);
-                    return res.status(500).send("Server error.");
-                }
+            // Add the intercom info to the user
+            if (intercom.body) {
+                user.intercom = {};
+                user.intercom.email = intercom.body.email;
+                user.intercom.id = intercom.body.id;
+            } else {
+                console.log("error creating an intercom user: ", createIntercomError);
+                return res.status(500).send("Server error.");
             }
 
             // make the user db object
@@ -473,20 +484,25 @@ async function createBusiness(info) {
                 }
             }
         ];
-        if (process.env.NODE_ENV === "production") {
-            business.intercomId = crypto.randomBytes(16).toString('hex');
 
-            // create a user on intercom and add intercom information to the user
-            try {
-                var intercom = await client.companies.create({
-                     name: name,
-                     company_id: business.intercomId
-                 });
-            }
-            catch (createIntercomError) {
-                console.log("error creating an intercom company: ", createIntercomError);
-                return res.status(500).send("Server error.");
-            }
+        // Create a business intercomId
+        business.intercomId = crypto.randomBytes(16).toString('hex');
+
+        // create a user on intercom and add intercom information to the user
+        try {
+            var intercom = await client.companies.create({
+                 name: name,
+                 company_id: business.intercomId,
+                 custom_attributes: {
+                     first_position: business.positions[0] ? business.positions[0].name : null,
+                     unique_name: uniqueName,
+                     candidates: 0
+                 }
+             });
+        }
+        catch (createIntercomError) {
+            console.log("error creating an intercom company: ", createIntercomError);
+            return res.status(500).send("Server error.");
         }
 
         // create the business in the db
