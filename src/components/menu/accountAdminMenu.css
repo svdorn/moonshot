@@ -8,19 +8,33 @@
     --primary-purple-dark: #731ae8;
     --primary-black-light: #393939;
     --primary-black-dark: #2e2e2e;
+    --black-deep-dark: #2a2a2a;
     --secondary-gray: #d7d7d7;
     --secondary-red: #eb394f;
 }
 
 
-.menu {
-    width: 125px;
+.top-menu-activator { display: none; }
+.top-menu-activator + .top-menu-activator-space { display: none; }
+
+
+.menu, .drawer-menu {
     height: 100%;
-    position: fixed;
-    background-color: #2a2a2a;
+    background-color: var(--black-deep-dark);
     text-align: center;
     color: white;
     min-height: 300px;
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+.menu {
+    width: 125px;
+    position: fixed;
+}
+.drawer-menu {
+    width: 200px;
 }
 
 .moonshot-logo {
@@ -36,14 +50,14 @@
 }
 .menu-bottom > .menu-option { padding: 0; }
 .menu-option.current { background-color: var(--primary-cyan); }
-.menu-top > .menu-option.current:hover { background-color: var(--primary-cyan); }
+.main-menu-items > .menu-option.current:hover { background-color: var(--primary-cyan); }
 
 .menu-bottom > .menu-option > .user-name { padding: 8px 0; }
-.menu-top > .menu-option:hover, .menu-bottom > .menu-option > .user-name:hover { background-color: var(--primary-black-light); }
+.main-menu-items > .menu-option:hover, .menu-bottom > .menu-option > .user-name:hover { background-color: var(--primary-black-light); }
 .account-popup > .menu-option:hover:not(:last-child) { background-color: #525252; }
 .account-popup > .menu-option:last-child { cursor: initial; }
 
-.menu-top {
+.main-menu-items {
     margin-top: 10px;
 }
 
@@ -75,6 +89,25 @@
     cursor: pointer;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 1000px) {
+    :root {
+        --top-menu-activator-height: 40px;
+    }
 
+    .menu { transform: translateX(-100%); }
+
+    .top-menu-activator {
+        display: flex;
+        position: fixed;
+        align-items: center;
+        height: var(--top-menu-activator-height);
+        width: 100%;
+        padding: 0 10px;
+        background-color: var(--black-deep-dark);
+    }
+    .top-menu-activator + .top-menu-activator-space {
+        display: inline-block;
+        width: 100%;
+        height: var(--top-menu-activator-height);
+    }
 }

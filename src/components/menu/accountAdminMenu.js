@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, IconMenu, IconButton } from 'material-ui';
+import { IconButton } from 'material-ui';
 import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';
@@ -10,6 +10,8 @@ import { goTo, getFirstName } from "../../miscFunctions";
 import { axios } from 'axios';
 import { animateScroll } from "react-scroll";
 
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+
 import "./accountAdminMenu.css";
 
 
@@ -18,7 +20,10 @@ class AccountAdminMenu extends Component {
         super(props);
 
         // set the account popup as closed initially
-        this.state = { accountPopupOpen: false };
+        this.state = {
+            accountPopupOpen: false,
+            drawerOpen: false
+        };
 
         // bind necessary functions
         this.bound_handleAnyClick = this.handleAnyClick.bind(this);
@@ -72,6 +77,11 @@ class AccountAdminMenu extends Component {
         this.removePopup();
         console.log("(navigateAccount) entering goTo(url)");
         goTo(url);
+    }
+
+
+    toggleDrawer = (open) => () => {
+        this.setState({ drawerOpen: open });
     }
 
 
@@ -156,14 +166,40 @@ class AccountAdminMenu extends Component {
             />
         );
 
-        return (
-            <div styleName="menu">
+        const menuContent = (
+            <div>
                 { logo }
-                <div styleName="menu-top">
+                <div styleName="main-menu-items">
                     { topItems }
                 </div>
                 <div styleName="menu-bottom">
                     { bottomItem }
+                </div>
+            </div>
+        );
+
+        return (
+            <div>
+                <div styleName="top-menu-activator">
+                    <IconButton
+                        onClick={this.toggleDrawer(true)}
+                        style={{padding: "0", width: "32px", height: "32px"}}
+                    >
+                        <MoreHorizIcon color="white"/>
+                    </IconButton>
+                </div>
+                <div styleName="top-menu-activator-space" />
+                <SwipeableDrawer
+                    open={this.state.drawerOpen}
+                    onClose={this.toggleDrawer(false)}
+                    onOpen={this.toggleDrawer(true)}
+                >
+                    <div styleName="drawer-menu">
+                        { menuContent }
+                    </div>
+                </SwipeableDrawer>
+                <div styleName="menu">
+                    { menuContent }
                 </div>
             </div>
         );
