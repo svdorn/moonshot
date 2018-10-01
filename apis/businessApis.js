@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const credentials = require('../credentials');
 const Intercom = require('intercom-client');
 
-const client = new Intercom.Client({ token: 'dG9rOjRhYTE3ZjgzX2IyYmRfNDQyY184YjUwX2JjMjk4OWU3MDhmYjoxOjA=' });
+const client = new Intercom.Client({ token: credentials.intercomToken });
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');

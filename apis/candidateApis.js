@@ -3,8 +3,9 @@ const Referrals = require('../models/referrals.js');
 const Businesses = require('../models/businesses.js');
 const Signupcodes = require('../models/signupcodes.js');
 const Intercom = require('intercom-client');
+const credentials = require('../credentials');
 
-const client = new Intercom.Client({ token: 'dG9rOjRhYTE3ZjgzX2IyYmRfNDQyY184YjUwX2JjMjk4OWU3MDhmYjoxOjA=' });
+const client = new Intercom.Client({ token: credentials.intercomToken });
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
