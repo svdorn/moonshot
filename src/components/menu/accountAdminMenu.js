@@ -75,6 +75,8 @@ class AccountAdminMenu extends Component {
         console.log("(navigateAccount) this.state: ", this.state);
         console.log("(navigateAccount) entering this.removePopup()");
         this.removePopup();
+        console.log("(navigateAccount) hiding drawer");
+        if (this.state.drawerOpen) { this.setState({ drawerOpen: false }); }
         console.log("(navigateAccount) entering goTo(url)");
         goTo(url);
     }
@@ -82,6 +84,13 @@ class AccountAdminMenu extends Component {
 
     toggleDrawer = (open) => () => {
         this.setState({ drawerOpen: open });
+    }
+
+
+    // navigate somewhere from the menu
+    navigate = (url) => () => {
+        if (this.state.drawerOpen) { this.setState({ drawerOpen: false }); }
+        goTo(url);
     }
 
 
@@ -119,7 +128,7 @@ class AccountAdminMenu extends Component {
             return (
                 <div
                     styleName={"menu-option" + (isCurrentPath ? " current" : "")}
-                    onClick={() => goTo(menuOption.url)}
+                    onClick={this.navigate(menuOption.url)}
                     key={`top-menu-option ${menuOption.title}`}
                 >
                     { menuOption.title }
