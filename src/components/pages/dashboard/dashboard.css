@@ -168,6 +168,38 @@
     transform: translate(-50%);
 }
 
+.box-header {
+    padding: 3px 4px 0 10px;
+}
+.box-title {
+    font-size: 18px;
+    color: var(--primary-white);
+    float: left;
+}
+.time-selector {
+    float: right;
+    margin-top: 3px;
+    font-size: 12px !important;
+    font-family: inherit !important;
+}
+.box-cta {
+    position: absolute;
+    bottom: 3px;
+    right: 5px;
+}
+.box-cta::after {
+    content: "→";
+    padding: 0 5px 0 3px;
+
+    -webkit-transition: padding 0.5s ease;
+    -ms-transition: padding 0.5s ease;
+    transition: padding 0.5s ease;
+}
+.box-cta:hover::after {
+    content: "→";
+    padding: 0 0 0 8px;
+}
+
 
 @media screen and (max-width: 780px) {
     .dashboard { --items-per-row: 2 }

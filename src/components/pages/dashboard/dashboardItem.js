@@ -6,6 +6,7 @@ import {  } from "../../../actions/usersActions";
 import {  } from "../../../miscFunctions";
 
 import Onboarding from "./dashboardItems/onboarding/onboarding";
+import Candidates from "./dashboardItems/candidates.js";
 
 import "./dashboard.css";
 
@@ -29,9 +30,8 @@ class DashboardItem extends Component {
 
         let content = null;
         switch (this.props.type) {
-            case "Onboarding":
-                content = <Onboarding/>;
-                break;
+            case "Onboarding": { content = <Onboarding/>; break; }
+            case "Candidates": { content = <Candidates/>; break; }
             default:
                 content = null;
         }

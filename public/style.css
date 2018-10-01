@@ -86,7 +86,7 @@ body {
 .hover-secondary-red:hover { color: var(--secondary-red); }
 
 /* ensures the element takes up at least one full screen height */
-.full-height { min-height: 100%; }
+.full-height { min-height: 100vh; }
 
 .anchor {
     position: absolute;
@@ -2101,9 +2101,9 @@ button.link {
 }
 .top-shadow > div {
     width: 100%;
-    box-shadow:         0px 0px 3px 3px #00000073;
-    -moz-box-shadow:    0px 0px 3px 3px #00000073;
-    -webkit-box-shadow: 0px 0px 3px 3px #00000073;
+    box-shadow:         0px 0px 6px 3px #00000073;
+    -moz-box-shadow:    0px 0px 6px 3px #00000073;
+    -webkit-box-shadow: 0px 0px 6px 3px #00000073;
 }
 
 .freeResponse {
@@ -2628,6 +2628,7 @@ button.link {
 .selectRootWhite { color: white; }
 .selectRootBlue { color: #76defe; }
 .myCandidates .position-select-root { max-width: 180px; }
+.no-focus-change-important:focus { background-color: inherit !important; }
 .selectIconWhiteImportant { color: white !important; }
 .selectIconGrayImportant { color: #5E5E5E !important; }
 .selectIconMargin { margin-top: -5px; }

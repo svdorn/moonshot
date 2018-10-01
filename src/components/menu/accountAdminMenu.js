@@ -189,14 +189,14 @@ class AccountAdminMenu extends Component {
 
         return (
             <div>
-                <div styleName="top-menu-activator">
+                <header styleName="top-menu-activator">
                     <IconButton
                         onClick={this.toggleDrawer(true)}
                         style={{padding: "0", width: "32px", height: "32px"}}
                     >
                         <MoreHorizIcon color="white"/>
                     </IconButton>
-                </div>
+                </header>
                 <div styleName="top-menu-activator-space" />
                 <SwipeableDrawer
                     open={this.state.drawerOpen}

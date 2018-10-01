@@ -104,6 +104,7 @@
         width: 100%;
         padding: 0 10px;
         background-color: var(--black-deep-dark);
+        z-index: 100;
     }
     .top-menu-activator + .top-menu-activator-space {
         display: inline-block;
