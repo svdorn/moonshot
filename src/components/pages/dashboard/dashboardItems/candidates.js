@@ -66,6 +66,7 @@ class Candidates extends Component {
 
 
     render() {
+        // return progress bar if not ready yet
         if (this.state.newCandidates === undefined) {
             return (
                 <div className="fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>
@@ -76,27 +77,34 @@ class Candidates extends Component {
             return <MenuItem value={time} key={time}>{ time }</MenuItem>;
         });
 
+        // standard dashboard box header
+        const header = (
+            <div styleName="box-header">
+                <div styleName="box-title">Candidates</div>
+                <Select
+                    styleName="time-selector"
+                    disableUnderline={true}
+                    classes={{
+                        root: "position-select-root selectRootWhite myCandidatesSelect",
+                        icon: "selectIconWhiteImportant",
+                        select: "no-focus-change-important"
+                    }}
+                    value={this.state.timeToGraph}
+                    onChange={this.handleTimeChange()}
+                >
+                    { timeOptions }
+                </Select>
+            </div>
+        );
+
         return (
             <div>
-                <div styleName="box-header">
-                    <div styleName="box-title">Candidates</div>
-                    <Select
-                        styleName="time-selector"
-                        disableUnderline={true}
-                        classes={{
-                            root: "position-select-root selectRootWhite myCandidatesSelect",
-                            icon: "selectIconWhiteImportant",
-                            select: "no-focus-change-important"
-                        }}
-                        value={this.state.timeToGraph}
-                        onChange={this.handleTimeChange()}
-                    >
-                        { timeOptions }
-                    </Select>
+                { header }
+                <div styleName="important-stat">
+                    <div styleName="important-number">{ this.state.newCandidates }</div> awaiting review
                 </div>
-                <div>{ this.state.newCandidates } awaiting review</div>
                 <div styleName="box-cta">Review Candidates</div>
-            </div>
+            </div> 
         );
     }
 }

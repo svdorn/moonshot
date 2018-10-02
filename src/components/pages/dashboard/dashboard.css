@@ -170,6 +170,7 @@
 
 .box-header {
     padding: 3px 4px 0 10px;
+    height: 35px;
 }
 .box-title {
     font-size: 18px;
@@ -198,6 +199,18 @@
 .box-cta:hover::after {
     content: "→";
     padding: 0 0 0 8px;
+}
+
+
+.important-stat {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+}
+.important-number {
+    font-size: 30px;
+    display: inline-block;
+    margin-right: 10px;
 }
 
 
