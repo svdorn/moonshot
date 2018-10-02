@@ -10,6 +10,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { primaryCyan } from "../../../../colors";
 
+import { LineChart, XAxis, YAxis, Line } from "recharts";
+
 import "../dashboard.css";
 
 
@@ -55,6 +57,14 @@ class Candidates extends Component {
             console.log(error);
             self.setState({ fetchDataError: true });
         });
+
+
+        axios.get("/api/business/newCandidateGraphData", query)
+        .then(response => {
+            console.log("response: ", response);
+        }).catch(error => {
+            console.log("error: ", error);
+        })
     }
 
 
@@ -97,14 +107,38 @@ class Candidates extends Component {
             </div>
         );
 
+        let days = ["S", "M", "T", "W", "Th", "F", "Sa"];
+        let currDay = (new Date).getDay();
+
+        const data = [3, 5, 1, 6, 2, 4, 1].map(n => {
+            currDay += 1;
+            if (currDay > 6) { currDay = 0; }
+            return { day: days[currDay], users: n };
+        });
+
+        const chartStyle = {
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+            marginLeft: "-22px",
+            marginTop: "10px"
+        }
+
         return (
             <div>
                 { header }
                 <div styleName="important-stat">
                     <div styleName="important-number">{ this.state.newCandidates }</div> awaiting review
                 </div>
+
+                <LineChart style={chartStyle} width={250} height={120} data={data}>
+                    <XAxis dataKey="day" padding={{right:10,left:10}}/>
+                    <YAxis />
+                    <Line type="monotone" dataKey="users" stroke={primaryCyan} />
+                </LineChart>
+
                 <div styleName="box-cta">Review Candidates</div>
-            </div> 
+            </div>
         );
     }
 }

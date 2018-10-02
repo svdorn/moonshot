@@ -59,6 +59,7 @@ const businessApis = {
     GET_evaluationResults,
     GET_apiKey,
     GET_candidatesAwaitingReview,
+    GET_newCandidateGraphData,
 
     generateApiKey,
     createEmailInfo,
@@ -1860,7 +1861,7 @@ async function GET_candidatesAwaitingReview(req, res) {
 
     // count all the users with this position
     const positionIds = business.positions.map(p => p._id);
-    try { var count = await newCandidateCount(business._id, positionIds); }
+    try { var count = await unReviewedCandidateCount(business._id, positionIds); }
     catch (countError) {
         console.log(`Error counting all the new candidates for ${business.name} (id ${business._id}): `, countError);
         return res.status(500).send({ message: errors.SERVER_ERROR });
@@ -1871,14 +1872,14 @@ async function GET_candidatesAwaitingReview(req, res) {
 
 
 // return a count of all unreviewed users in all positions for a specific business
-async function newCandidateCount(businessId, positionIds) {
+async function unReviewedCandidateCount(businessId, positionIds) {
     return new Promise(async function(resolve, reject) {
         const query = {
            "userType": "candidate",
            "positions": {
                "$elemMatch": {
                    "businessId": businessId,
-                   "reviewed": false,
+                   "reviewed": { "$ne": true },
                    "positionId": { "$in": positionIds }
                }
            }
@@ -1889,6 +1890,81 @@ async function newCandidateCount(businessId, positionIds) {
 
         return resolve({ newCandidates: count });
     });
+}
+
+
+async function newCandidateCountByDate(businessId, positionIds, earliestDate, groupBy) {
+    return new Promise(async function(resolve, reject) {
+        // default grouping is by days
+        if (!["months", "weeks", "days"].includes(groupBy)) { groupBy = "days"; }
+        // group the counts by the wanted interval
+        let _id = { "year": { "$year": "$positions.appliedEndDate" } };
+        if (groupBy === "weeks") { _id["week"] = { "$week": "$positions.appliedEndDate" }; }
+        if (groupBy === "months" || groupBy === "days") { _id["month"] = { "$month": "$positions.appliedEndDate" }; }
+        if (groupBy === "days") { _id["day"] = { "$dayOfMonth": "$positions.appliedEndDate" } }
+
+        const countsByDate = await Users.aggregate([
+            // put each position application into its own object
+            { "$unwind": "$positions" },
+            // // filter out every position that was applied to before the earliest date wanted
+            { "$match": { "$and": [
+                { "positions.appliedEndDate": { "$gte": earliestDate } },
+                { "positions.positionId": { "$in": positionIds } },
+                { "positions.businessId": mongoose.Types.ObjectId(businessId) }
+            ] } },
+            // group these objects by date and count them
+            { "$group": {
+                "_id": _id,
+                "count": { "$sum": 1 }
+            } }
+        ]);
+
+        console.log("counts by date: ", countsByDate);
+
+        return countsByDate;
+    });
+}
+
+
+// gets the count of new candidates within 5 of the last {interval}, which could
+// be days, weeks, or months
+async function GET_newCandidateGraphData(req, res) {
+    const { userId, verificationToken, businessId, interval } = sanitize(req.query);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // earliest date to get new candidates count from
+    const now = new Date();
+    const numDataPoints = 5;
+    let month = now.getMonth();
+    let date = now.getDate();
+    // if granularity is month, get full month of data
+    if (interval === "months") { month -= numDataPoints; date = 1; }
+    else if (interval === "weeks") { date -= numDataPoints * 7; }
+    // assume only want days of data
+    else { date -= numDataPoints; }
+    const earliestDate = new Date(now.getFullYear(), month, date);
+
+    // count all the users with this position
+    const positionIds = business.positions.map(p => mongoose.Types.ObjectId(p._id));
+    try { var counts = await newCandidateCountByDate(business._id, positionIds, earliestDate, interval); }
+    catch (countError) {
+        console.log(`Error counting all the new candidates for ${business.name} (id ${business._id}): `, countError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // where the final data will reside
+    let countsByInterval = [];
+
+    // group the counts together by the interval
+
+
+
+    return res.status(200).send(counts);
 }
 
 
