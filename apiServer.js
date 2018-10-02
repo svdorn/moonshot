@@ -179,6 +179,7 @@ app.get("/business/positions", businessApis.GET_positions);
 app.get("/business/positionsForApply", businessApis.GET_positionsForApply);
 app.get("/business/evaluationResults", businessApis.GET_evaluationResults);
 app.get("/business/apiKey", businessApis.GET_apiKey);
+app.get("/business/candidatesAwaitingReview", businessApis.GET_candidatesAwaitingReview);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);

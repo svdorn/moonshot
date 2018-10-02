@@ -178,8 +178,8 @@ function propertyExists(object, propertyTree, type) {
         if (typeof parent !== "object") { return false; }
         // name of the object property
         const propName = propertyTree[treePropIndex];
-        // if the property is not truthy (does not exist), fail
-        if (!parent[propName]) { return false; }
+        // if the property does not exist, fail
+        if (parent[propName] === undefined) { return false; }
         // the property is legit, so set the parent to be the value of the child prop
         parent = parent[propName];
         // move to the next property

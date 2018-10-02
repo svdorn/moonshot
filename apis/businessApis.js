@@ -58,6 +58,7 @@ const businessApis = {
     GET_positionsForApply,
     GET_evaluationResults,
     GET_apiKey,
+    GET_candidatesAwaitingReview,
 
     generateApiKey,
     createEmailInfo,
@@ -1844,6 +1845,50 @@ async function verifyAccountAdminAndReturnBusinessAndUser(userId, verificationTo
 
         catch (error) { reject(error); }
     })
+}
+
+
+// get a count of how many candidates need to be reviewed
+async function GET_candidatesAwaitingReview(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // count all the users with this position
+    const positionIds = business.positions.map(p => p._id);
+    try { var count = await newCandidateCount(business._id, positionIds); }
+    catch (countError) {
+        console.log(`Error counting all the new candidates for ${business.name} (id ${business._id}): `, countError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send(count);
+}
+
+
+// return a count of all unreviewed users in all positions for a specific business
+async function newCandidateCount(businessId, positionIds) {
+    return new Promise(async function(resolve, reject) {
+        const query = {
+           "userType": "candidate",
+           "positions": {
+               "$elemMatch": {
+                   "businessId": businessId,
+                   "reviewed": false,
+                   "positionId": { "$in": positionIds }
+               }
+           }
+        }
+        // count the users in the position that haven't been reviewed
+        try { var count = await Users.countDocuments(query); }
+        catch (countError) { return reject(countError); }
+
+        return resolve({ newCandidates: count });
+    });
 }
 
 
