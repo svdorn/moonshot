@@ -3551,17 +3551,24 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin: 55px 20px 0;
 }
 
+.fully-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .flex-center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  resize: none;
-  overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    resize: none;
+    overflow: auto;
 }
 .flex-center p {
-  margin: 0;
-  padding: 20px;
+    margin: 0;
+    padding: 20px;
 }
 
 

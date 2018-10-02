@@ -5,8 +5,10 @@ import { bindActionCreators } from "redux";
 import axios from "axios";
 import {  } from "../../../../actions/usersActions";
 import { propertyExists } from "../../../../miscFunctions";
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { primaryCyan } from "../../../../colors";
 
 import "../dashboard.css";
 
@@ -64,6 +66,12 @@ class Candidates extends Component {
 
 
     render() {
+        if (this.state.newCandidates === undefined) {
+            return (
+                <div className="fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>
+            );
+        }
+
         const timeOptions = times.map(time => {
             return <MenuItem value={time} key={time}>{ time }</MenuItem>;
         });
