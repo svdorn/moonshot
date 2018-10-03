@@ -65,6 +65,12 @@ export function closeContactUsModal() {
     }
 }
 
+
+// general action to just call a reducer that has no additional arguments
+export function generalAction(type) {
+    return function(dispatch) { dispatch({ type }); }
+}
+
 // Send an email when form filled out on forBusiness page
 export function contactUsEmail(user, callback) {
     return function(dispatch) {

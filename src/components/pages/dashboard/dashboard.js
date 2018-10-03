@@ -6,6 +6,7 @@ import {  } from "../../../actions/usersActions";
 import {  } from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
+import InviteCandidatesModal from "./inviteCandidatesModal";
 
 import WelcomeMessage from "./dashboardItems/welcomeMessage";
 import BuildTeam from "./dashboardItems/buildTeam";
@@ -27,6 +28,7 @@ class Dashboard extends Component {
                     <title>Dashboard | Moonshot</title>
                     <meta name="description" content="Your home base for checking in on your candidates, employees, evaluations, and more."/>
                 </MetaTags>
+                <InviteCandidatesModal />
                 <div className="page-header">Dashboard</div>
                 <WelcomeMessage />
                 {this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.businessInterests ?
@@ -34,8 +36,8 @@ class Dashboard extends Component {
                     :
                     <div styleName="dashboard">
                         <DashboardItem type="Onboarding" width={3} />
-                        <DashboardItem type="Activity" width={1} />
                         <DashboardItem type="Candidates" width={1} />
+                        <DashboardItem type="Activity" width={1} />
                         <DashboardItem type="Employees" width={1} />
                         <DashboardItem type="Evaluations" width={1} />
                         <DashboardItem type="Account" width={1} />

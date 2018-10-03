@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import {  } from "../../../../actions/usersActions";
+import { generalAction } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -156,7 +156,7 @@ class Candidates extends Component {
         let onClick = () => goTo("/myCandidates");
         if (this.state.newCandidates === 0) {
             candidateAction = "Invite";
-
+            onClick = () => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
         }
         let smallCTA = <div styleName="box-cta" onClick={onClick}>{ candidateAction } Candidates</div>
 
@@ -189,7 +189,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        generalAction
     }, dispatch);
 }
 
