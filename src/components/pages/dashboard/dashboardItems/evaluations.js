@@ -139,16 +139,16 @@ class Evaluations extends Component {
 
         let smallCTA = <div styleName="box-cta" onClick={() => goTo("/myEvaluations")}>See Evaluations</div>
 
-        // const graphData = [
-        //     {name: "iOS Developer", candidates: 10},
-        //     {name: "CEO", candidates: 4},
-        //     {name: "Marketer", candidates: 2},
-        //     {name: "Dude", candidates: 6},
-        //     {name: "iOS Developer 2", candidates: 10},
-        //     {name: "CEO 2", candidates: 4},
-        //     {name: "Marketer 2", candidates: 2},
-        //     {name: "Dude 2", candidates: 6}
-        // ];
+        const graphData = [
+            {name: "iOS Developer", candidates: 10},
+            {name: "CEO", candidates: 4},
+            {name: "Marketer", candidates: 2},
+            {name: "Dude", candidates: 6},
+            {name: "iOS Developer 2", candidates: 10},
+            {name: "CEO 2", candidates: 4},
+            {name: "Marketer 2", candidates: 2},
+            {name: "Dude 2", candidates: 6}
+        ];
 
         let content = null;
         // if there are no candidate completions, tell the user
@@ -163,8 +163,18 @@ class Evaluations extends Component {
         else {
             content = (
                 <PieChart style={chartStyle} width={200} height={200}>
-                    <Pie data={this.state.graphData} dataKey="candidates" nameKey="name" cx={100} cy={100} innerRadius={40} outerRadius={80} fill="#82ca9d">
-                        { this.state.graphData.map((entry, index) => <Cell fill={ colors[index % colors.length] } />) }
+                    <Pie
+                        data={graphData}
+                        dataKey="candidates"
+                        nameKey="name"
+                        cx={100}
+                        cy={100}
+                        innerRadius={50}
+                        outerRadius={80}
+                        paddingAngle={3}
+                        stroke="none"
+                    >
+                        { graphData.map((entry, index) => <Cell fill={ colors[index % colors.length] } />) }
                     </Pie>
                     <Tooltip />
                 </PieChart>
