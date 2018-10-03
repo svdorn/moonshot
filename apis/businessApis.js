@@ -1892,7 +1892,7 @@ async function GET_employeesAwaitingReview(req, res) {
 async function unReviewedEmployeeCount(businessId, positionIds) {
     return new Promise(async function(resolve, reject) {
         const query = {
-           "userType": "employees",
+           "userType": "employee",
            "positions": {
                "$elemMatch": {
                    "businessId": businessId,
