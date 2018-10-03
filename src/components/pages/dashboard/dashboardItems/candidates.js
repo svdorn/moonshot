@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
 import {  } from "../../../../actions/usersActions";
-import { propertyExists } from "../../../../miscFunctions";
+import { propertyExists, goTo } from "../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -106,6 +106,11 @@ class Candidates extends Component {
 
 
     render() {
+        // return error message if errored out
+        if (this.state.fetchDataError) {
+            return <div className="fully-center" style={{width:"100%"}}>Error fetching data.</div>;
+        }
+
         // return progress bar if not ready yet
         if (this.state.newCandidates === undefined || !Array.isArray(this.state.graphData)) {
             return (
@@ -147,6 +152,14 @@ class Candidates extends Component {
             marginTop: "10px"
         }
 
+        let candidateAction = "Review";
+        let onClick = () => goTo("/myCandidates");
+        if (this.state.newCandidates === 0) {
+            candidateAction = "Invite";
+
+        }
+        let smallCTA = <div styleName="box-cta" onClick={onClick}>{ candidateAction } Candidates</div>
+
         return (
             <div>
                 { header }
@@ -161,7 +174,7 @@ class Candidates extends Component {
                 </LineChart>
                 <div className="center" styleName="graph-x-label">{this.state.timeToGraph} Ago</div>
 
-                <div styleName="box-cta">Review Candidates</div>
+                { smallCTA }
             </div>
         );
     }
