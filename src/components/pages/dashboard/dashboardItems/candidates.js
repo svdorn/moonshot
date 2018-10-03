@@ -24,7 +24,7 @@ class Candidates extends Component {
 
         this.state = {
             // how far back to graph new candidate data
-            timeToGraph: "Days",
+            timeToGraph: times[0],
             // the number of candidates that have not yet been reviewed
             newCandidates: undefined,
             // if there was an error getting any candidates data
@@ -60,36 +60,30 @@ class Candidates extends Component {
             self.setState({ fetchDataError: true });
         });
 
-
-        axios.get("/api/business/newCandidateGraphData", query)
-        .then(response => {
-            console.log("response: ", response);
-            if (propertyExists(response, ["data", "counts"])) {
-                console.log(response.data.counts);
-                self.setState({ graphData: response.data.counts });
-            } else {
-                self.setState({ fetchDataError: true });
-            }
-        }).catch(error => {
-            console.log("error: ", error);
-            self.setState({ fetchDataError: true });
-        })
+        this.getGraphData();
     }
 
 
     // change the amount of time being graphed
     handleTimeChange = () => event => {
-        this.setState({ timeToGraph: event.target.value });
+        const self = this;
+        self.setState({ timeToGraph: event.target.value }, self.getGraphData.bind(self));
+    }
 
+
+    getGraphData() {
         const user = this.props.currentUser;
         const self = this;
 
-        axios.get("/api/business/newCandidateGraphData", { params: {
+        const params = { params: {
             userId: user._id,
             verificationToken: user.verificationToken,
             businessId: user.businessInfo.businessId,
-            interval: event.target.value.toLowerCase()
-        } })
+            interval: this.state.timeToGraph
+        } };
+        console.log("params: ", params);
+
+        axios.get("/api/business/newCandidateGraphData", params)
         .then(response => {
             if (propertyExists(response, ["data", "counts"])) {
                 console.log(response.data.counts);

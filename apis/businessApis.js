@@ -2045,6 +2045,7 @@ async function newCandidateCountByDate(businessId, positionIds, groupBy, numData
 // be days, weeks, or months
 async function GET_newCandidateGraphData(req, res) {
     let { userId, verificationToken, businessId, interval } = sanitize(req.query);
+    if (typeof interval === "string") { interval = interval.toLowerCase(); }
 
     try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
     catch (verifyError) {
@@ -2053,6 +2054,8 @@ async function GET_newCandidateGraphData(req, res) {
     }
 
     const numDataPoints = 5;
+
+    console.log("interval: ", interval);
 
     // count all the users with this position
     const positionIds = business.positions.map(p => mongoose.Types.ObjectId(p._id));
