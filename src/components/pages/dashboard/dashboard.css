@@ -192,7 +192,7 @@
 }
 .box-cta::after {
     content: "→";
-    padding: 0 5px 0 3px;
+    padding: 0 5px 0 5px;
 
     -webkit-transition: padding 0.5s ease;
     -ms-transition: padding 0.5s ease;
@@ -200,7 +200,7 @@
 }
 .box-cta:hover::after {
     content: "→";
-    padding: 0 0 0 8px;
+    padding: 0 0 0 10px;
 }
 
 
