@@ -1893,35 +1893,91 @@ async function unReviewedCandidateCount(businessId, positionIds) {
 }
 
 
-async function newCandidateCountByDate(businessId, positionIds, earliestDate, groupBy) {
+async function newCandidateCountByDate(businessId, positionIds, groupBy, numDataPoints) {
     return new Promise(async function(resolve, reject) {
-        // default grouping is by days
-        if (!["months", "weeks", "days"].includes(groupBy)) { groupBy = "days"; }
-        // group the counts by the wanted interval
-        let _id = { "year": { "$year": "$positions.appliedEndDate" } };
-        if (groupBy === "weeks") { _id["week"] = { "$week": "$positions.appliedEndDate" }; }
-        if (groupBy === "months" || groupBy === "days") { _id["month"] = { "$month": "$positions.appliedEndDate" }; }
-        if (groupBy === "days") { _id["day"] = { "$dayOfMonth": "$positions.appliedEndDate" } }
+        try {
+            // // default grouping is by days
+            // if (!["months", "weeks", "days"].includes(groupBy)) { groupBy = "days"; }
+            // // group the counts by the wanted interval
+            // let _id = { "year": { "$year": "$positions.appliedEndDate" } };
+            // if (groupBy === "weeks") { _id["week"] = { "$week": "$positions.appliedEndDate" }; }
+            // if (groupBy === "months" || groupBy === "days") { _id["month"] = { "$month": "$positions.appliedEndDate" }; }
+            // if (groupBy === "days") { _id["day"] = { "$dayOfMonth": "$positions.appliedEndDate" } }
+            //
+            // const now = new Date();
+            // let currentIntervalDay = now.getDate();
+            // // if grouping by months, don't get any data after the first of this month
+            // if (groupBy === "months") { currentIntervalDay = 1; }
+            // // if grouping by weeks, don't get any data from after Sunday (first day of the week)
+            // else if (groupBy === "weeks") { currentIntervalDay -= now.getDay(); }
+            // // we can have data before this date
+            // const startOfCurrentInterval = new Date(now.getFullYear(), now.getMonth(), currentIntervalDay);
+            //
+            // const countsByDate = await Users.aggregate([
+            //     // put each position application into its own object
+            //     { "$unwind": "$positions" },
+            //     // // filter out every position that was applied to before the earliest date wanted
+            //     { "$match": { "$and": [
+            //         { "positions.appliedEndDate": { "$lt": startOfCurrentInterval } },
+            //         { "positions.appliedEndDate": { "$gte": earliestDate } },
+            //         { "positions.positionId": { "$in": positionIds } },
+            //         { "positions.businessId": mongoose.Types.ObjectId(businessId) }
+            //     ] } },
+            //     // group these objects by date and count them
+            //     { "$group": {
+            //         "_id": _id,
+            //         "count": { "$sum": 1 }
+            //     } }
+            // ]);
+            //
+            // return resolve(countsByDate);
 
-        const countsByDate = await Users.aggregate([
-            // put each position application into its own object
-            { "$unwind": "$positions" },
-            // // filter out every position that was applied to before the earliest date wanted
-            { "$match": { "$and": [
-                { "positions.appliedEndDate": { "$gte": earliestDate } },
-                { "positions.positionId": { "$in": positionIds } },
-                { "positions.businessId": mongoose.Types.ObjectId(businessId) }
-            ] } },
-            // group these objects by date and count them
-            { "$group": {
-                "_id": _id,
-                "count": { "$sum": 1 }
-            } }
-        ]);
 
-        console.log("counts by date: ", countsByDate);
+            // the difference between the dates in each data point
+            let monthDifference = 0;
+            let dayDifference = 0;
+            if (groupBy === "months") { monthDifference = 1; }
+            else if (groupBy === "weeks") { dayDifference = 7; }
+            else { dayDifference = 1; }
 
-        return countsByDate;
+            // get the date to end data collection at
+            const now = new Date();
+            let mostRecentDay = now.getDate();
+            // if grouping by months, don't get any data after the first of this month
+            if (groupBy === "months") { mostRecentDay = 1; }
+            // if grouping by weeks, don't get any data from after Sunday (first day of the week)
+            else if (groupBy === "weeks") { mostRecentDay -= now.getDay(); }
+            let before = new Date(now.getFullYear(), now.getMonth(), mostRecentDay);
+            let after = new Date(before.getFullYear(), before.getMonth() - monthDifference, before.getDate() - dayDifference);
+
+            // holds the promises for getting each data point
+            let dataPromises = [];
+            for (let i = 0; i < numDataPoints; i++) {
+                const query = {
+                    "userType": "candidate",
+                    "positions": {
+                        "$elemMatch": {
+                            // "positionId": { "$in": positionIds },
+                            // "businessId": mongoose.Types.ObjectId(businessId),
+                            "appliedEndDate": { "$lt": before, "$gte": after }
+                        }
+                    }
+                };
+                console.log("query: ", query);
+                console.log("query['positions']: ", query["positions"]);
+                dataPromises.push(Users.countDocuments(query));
+                // move back the dates we're getting data for
+                before = after;
+                after = new Date(after.getFullYear(), after.getMonth() - monthDifference, after.getDate() - dayDifference);
+            }
+
+            // get all the data points, then flip them around so they're in chronological order
+            const dataPoints = (await Promise.all(dataPromises)).reverse();
+
+            return resolve(dataPoints);
+        }
+        // just reject any error that is thrown
+        catch (e) { return reject(e); }
     });
 }
 
@@ -1937,32 +1993,17 @@ async function GET_newCandidateGraphData(req, res) {
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
-    // earliest date to get new candidates count from
-    const now = new Date();
     const numDataPoints = 5;
-    let month = now.getMonth();
-    let date = now.getDate();
-    // if granularity is month, get full month of data
-    if (interval === "months") { month -= numDataPoints; date = 1; }
-    else if (interval === "weeks") { date -= numDataPoints * 7; }
-    // assume only want days of data
-    else { date -= numDataPoints; }
-    const earliestDate = new Date(now.getFullYear(), month, date);
 
     // count all the users with this position
     const positionIds = business.positions.map(p => mongoose.Types.ObjectId(p._id));
-    try { var counts = await newCandidateCountByDate(business._id, positionIds, earliestDate, interval); }
+    try { var counts = await newCandidateCountByDate(business._id, positionIds, interval, numDataPoints); }
     catch (countError) {
         console.log(`Error counting all the new candidates for ${business.name} (id ${business._id}): `, countError);
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
-    // where the final data will reside
-    let countsByInterval = [];
-
-    // group the counts together by the interval
-
-
+    console.log("counts: ", counts);
 
     return res.status(200).send(counts);
 }
