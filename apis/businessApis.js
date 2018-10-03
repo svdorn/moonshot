@@ -1957,8 +1957,8 @@ async function newCandidateCountByDate(businessId, positionIds, groupBy, numData
                     "userType": "candidate",
                     "positions": {
                         "$elemMatch": {
-                            // "positionId": { "$in": positionIds },
-                            // "businessId": mongoose.Types.ObjectId(businessId),
+                            "positionId": { "$in": positionIds },
+                            "businessId": mongoose.Types.ObjectId(businessId),
                             "appliedEndDate": { "$lt": before, "$gte": after }
                         }
                     }
@@ -1985,7 +1985,7 @@ async function newCandidateCountByDate(businessId, positionIds, groupBy, numData
 // gets the count of new candidates within 5 of the last {interval}, which could
 // be days, weeks, or months
 async function GET_newCandidateGraphData(req, res) {
-    const { userId, verificationToken, businessId, interval } = sanitize(req.query);
+    let { userId, verificationToken, businessId, interval } = sanitize(req.query);
 
     try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
     catch (verifyError) {
@@ -2003,9 +2003,13 @@ async function GET_newCandidateGraphData(req, res) {
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
-    console.log("counts: ", counts);
+    let agoCounter = numDataPoints + 1;
+    const formattedData = counts.map(c => {
+        agoCounter--;
+        return { users: c, ago: agoCounter };
+    });
 
-    return res.status(200).send(counts);
+    return res.status(200).send({ counts: formattedData });
 }
 
 

@@ -187,6 +187,8 @@
     position: absolute;
     bottom: 3px;
     right: 5px;
+    font-size: 12px;
+    cursor: pointer;
 }
 .box-cta::after {
     content: "→";
@@ -211,6 +213,12 @@
     font-size: 30px;
     display: inline-block;
     margin-right: 10px;
+    color: var(--primary-cyan);
+}
+.graph-x-label {
+    margin-top: 114px;
+    font-size: 10px;
+    color: #666663;
 }
 
 

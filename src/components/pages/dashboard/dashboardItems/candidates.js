@@ -15,7 +15,7 @@ import { LineChart, XAxis, YAxis, Line } from "recharts";
 import "../dashboard.css";
 
 
-const times = [ "7 Days", "2 Weeks", "1 Month", "3 Months" ];
+const times = [ "Days", "Weeks", "Months" ];
 
 
 class Candidates extends Component {
@@ -24,11 +24,13 @@ class Candidates extends Component {
 
         this.state = {
             // how far back to graph new candidate data
-            timeToGraph: "7 Days",
+            timeToGraph: "Days",
             // the number of candidates that have not yet been reviewed
             newCandidates: undefined,
             // if there was an error getting any candidates data
-            fetchDataError: false
+            fetchDataError: false,
+            // data that will be shown in the graph
+            graphData: undefined
         };
     }
 
@@ -62,29 +64,59 @@ class Candidates extends Component {
         axios.get("/api/business/newCandidateGraphData", query)
         .then(response => {
             console.log("response: ", response);
+            if (propertyExists(response, ["data", "counts"])) {
+                console.log(response.data.counts);
+                self.setState({ graphData: response.data.counts });
+            } else {
+                self.setState({ fetchDataError: true });
+            }
         }).catch(error => {
             console.log("error: ", error);
+            self.setState({ fetchDataError: true });
         })
     }
 
 
     // change the amount of time being graphed
     handleTimeChange = () => event => {
-        console.log("here");
         this.setState({ timeToGraph: event.target.value });
+
+        const user = this.props.currentUser;
+        const self = this;
+
+        axios.get("/api/business/newCandidateGraphData", { params: {
+            userId: user._id,
+            verificationToken: user.verificationToken,
+            businessId: user.businessInfo.businessId,
+            interval: event.target.value.toLowerCase()
+        } })
+        .then(response => {
+            if (propertyExists(response, ["data", "counts"])) {
+                console.log(response.data.counts);
+                self.setState({ graphData: response.data.counts });
+            } else {
+                self.setState({ fetchDataError: true });
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            this.setState({ fetchDataError: true });
+        });
     }
 
 
     render() {
         // return progress bar if not ready yet
-        if (this.state.newCandidates === undefined) {
+        if (this.state.newCandidates === undefined || !Array.isArray(this.state.graphData)) {
             return (
-                <div className="fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>
+                <div className="fully-center">
+                    <CircularProgress style={{ color: primaryCyan }} />
+                </div>
             );
         }
 
         const timeOptions = times.map(time => {
-            return <MenuItem value={time} key={time}>{ time }</MenuItem>;
+            return <MenuItem value={time} key={time}>5 { time }</MenuItem>;
         });
 
         // standard dashboard box header
@@ -107,15 +139,6 @@ class Candidates extends Component {
             </div>
         );
 
-        let days = ["S", "M", "T", "W", "Th", "F", "Sa"];
-        let currDay = (new Date).getDay();
-
-        const data = [3, 5, 1, 6, 2, 4, 1].map(n => {
-            currDay += 1;
-            if (currDay > 6) { currDay = 0; }
-            return { day: days[currDay], users: n };
-        });
-
         const chartStyle = {
             position: "absolute",
             left: "50%",
@@ -131,11 +154,12 @@ class Candidates extends Component {
                     <div styleName="important-number">{ this.state.newCandidates }</div> awaiting review
                 </div>
 
-                <LineChart style={chartStyle} width={250} height={120} data={data}>
-                    <XAxis dataKey="day" padding={{right:10,left:10}}/>
+                <LineChart style={chartStyle} width={250} height={120} data={this.state.graphData}>
+                    <XAxis dataKey="ago" padding={{right:10,left:10}}/>
                     <YAxis />
                     <Line type="monotone" dataKey="users" stroke={primaryCyan} />
                 </LineChart>
+                <div className="center" styleName="graph-x-label">{this.state.timeToGraph} Ago</div>
 
                 <div styleName="box-cta">Review Candidates</div>
             </div>
