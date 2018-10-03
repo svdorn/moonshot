@@ -182,6 +182,7 @@ app.get("/business/apiKey", businessApis.GET_apiKey);
 app.get("/business/employeesAwaitingReview", businessApis.GET_employeesAwaitingReview);
 app.get("/business/candidatesAwaitingReview", businessApis.GET_candidatesAwaitingReview);
 app.get("/business/newCandidateGraphData", businessApis.GET_newCandidateGraphData);
+app.get("/business/evaluationsGraphData", businessApis.GET_evaluationsGraphData)
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);

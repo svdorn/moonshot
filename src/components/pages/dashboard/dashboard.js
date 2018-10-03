@@ -37,9 +37,9 @@ class Dashboard extends Component {
                     <div styleName="dashboard">
                         <DashboardItem type="Onboarding" width={3} />
                         <DashboardItem type="Candidates" width={1} />
-                        <DashboardItem type="Activity" width={1} />
-                        <DashboardItem type="Employees" width={1} />
                         <DashboardItem type="Evaluations" width={1} />
+                        <DashboardItem type="Employees" width={1} />
+                        <DashboardItem type="Activity" width={1} />
                         <DashboardItem type="Account" width={1} />
                     </div>
                 }

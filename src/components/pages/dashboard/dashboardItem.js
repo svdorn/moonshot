@@ -8,6 +8,7 @@ import {  } from "../../../miscFunctions";
 import Onboarding from "./dashboardItems/onboarding/onboarding";
 import Candidates from "./dashboardItems/candidates.js";
 import Employees from "./dashboardItems/employees.js";
+import Evaluations from "./dashboardItems/evaluations.js";
 
 import "./dashboard.css";
 
@@ -34,8 +35,8 @@ class DashboardItem extends Component {
             case "Onboarding": { content = <Onboarding/>; break; }
             case "Candidates": { content = <Candidates/>; break; }
             case "Employees": { content = <Employees/>; break; }
-            default:
-                content = null;
+            case "Evaluations": { content = <Evaluations/>; break; }
+            default: { content = null; break; }
         }
 
         return (

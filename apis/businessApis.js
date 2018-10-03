@@ -62,6 +62,7 @@ const businessApis = {
     GET_employeesAwaitingReview,
     GET_candidatesAwaitingReview,
     GET_newCandidateGraphData,
+    GET_evaluationsGraphData,
 
     generateApiKey,
     createEmailInfo,
@@ -2075,6 +2076,72 @@ async function GET_newCandidateGraphData(req, res) {
 }
 
 
+// gets the count of new candidates within 5 of the last {interval}, which could
+// be days, weeks, or months
+async function GET_evaluationsGraphData(req, res) {
+    let { userId, verificationToken, businessId, interval } = sanitize(req.query);
+    if (typeof interval === "string") { interval = interval.toLowerCase(); }
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // count all the users with this position
+    const positionIds = business.positions.map(p => mongoose.Types.ObjectId(p._id));
+    // get only completions within wanted time range
+    const now = new Date();
+    let month = now.getMonth();
+    let date = now.getDate();
+    if (interval === "last 6 months") { month -= 6; }
+    else if (interval === "last month") { month--; }
+    else { date -= 7; }
+    const earliestDate = new Date(now.getFullYear(), month, date);
+    const latestDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    // get counts of evaluation completions
+    try { var counts = await countEvaluationCompletions(business._id, positionIds, earliestDate, latestDate); }
+    catch (countError) {
+        console.log(`Error getting evaluation counts data for ${business.name} (id ${business._id}): `, countError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    const formattedData = counts.map(c => {
+        return { name: c._id.name, candidates: c.count }
+    });
+
+    return res.status(200).send({ counts: formattedData });
+}
+
+
+async function countEvaluationCompletions(businessId, positionIds, earliestDate, latestDate) {
+    return new Promise(async function(resolve, reject) {
+        try {
+            const counts = await Users.aggregate([
+                // put each position application into its own object
+                { "$unwind": "$positions" },
+                // // filter out every position that was applied to before the earliest date wanted
+                { "$match": { "$and": [
+                    { "positions.appliedEndDate": { "$gte": earliestDate, "$lt": latestDate } },
+                    { "positions.positionId": { "$in": positionIds } },
+                    { "positions.businessId": mongoose.Types.ObjectId(businessId) }
+                ] } },
+                // group these objects by position name and count them
+                { "$group": {
+                    "_id": { "positionId": "$positions._id", "name": "$positions.name" },
+                    "count": { "$sum": 1 }
+                } }
+            ]);
+
+            return resolve(counts);
+        }
+        // just reject any error
+        catch (e) { return reject(e); }
+    });
+}
+
+
 function GET_employeeQuestions(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
@@ -2262,7 +2329,6 @@ async function GET_evaluationResults(req, res) {
     const userId = sanitize(req.query.candidateId);
     const positionId = sanitize(req.query.positionId);
     const positionIdString = positionId.toString();
-    console.log("userId", userId);
 
     // verify biz user, get candidate/employee, find and verify candidate's/employee's position
     let bizUser, user, userPositionIndex, psychTest;
