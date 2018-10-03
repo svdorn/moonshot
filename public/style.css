@@ -3559,6 +3559,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     text-align: center;
 }
 
+.overflow-visible-1.overflow-visible-2 {
+    overflow-y: visible;
+}
+
 .flex-center {
     display: flex;
     flex-direction: column;

@@ -202,6 +202,8 @@ class AccountAdminMenu extends Component {
                     open={this.state.drawerOpen}
                     onClose={this.toggleDrawer(false)}
                     onOpen={this.toggleDrawer(true)}
+                    style={{overflowY: "hidden"}}
+                    classes={{ paper: "overflow-visible-1 overflow-visible-2" }}
                 >
                     <div styleName="drawer-menu">
                         { menuContent }
