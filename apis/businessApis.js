@@ -59,6 +59,7 @@ const businessApis = {
     GET_positionsForApply,
     GET_evaluationResults,
     GET_apiKey,
+    GET_employeesAwaitingReview,
     GET_candidatesAwaitingReview,
     GET_newCandidateGraphData,
 
@@ -1866,6 +1867,50 @@ async function verifyAccountAdminAndReturnBusinessAndUser(userId, verificationTo
 
 
 // get a count of how many candidates need to be reviewed
+async function GET_employeesAwaitingReview(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // count all the users with this position
+    const positionIds = business.positions.map(p => p._id);
+    try { var newEmployees = await unReviewedEmployeeCount(business._id, positionIds); }
+    catch (countError) {
+        console.log(`Error counting all the new employees for ${business.name} (id ${business._id}): `, countError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({ newEmployees });
+}
+
+
+// return a count of all unreviewed employees in all positions for a specific business
+async function unReviewedEmployeeCount(businessId, positionIds) {
+    return new Promise(async function(resolve, reject) {
+        const query = {
+           "userType": "employees",
+           "positions": {
+               "$elemMatch": {
+                   "businessId": businessId,
+                   "gradingComplete": { "$ne": true },
+                   "positionId": { "$in": positionIds }
+               }
+           }
+        }
+        // count the users in the position that haven't been reviewed
+        try { var count = await Users.countDocuments(query); }
+        catch (countError) { return reject(countError); }
+
+        return resolve(count);
+    });
+}
+
+
+// get a count of how many candidates need to be reviewed
 async function GET_candidatesAwaitingReview(req, res) {
     const { userId, verificationToken, businessId } = sanitize(req.query);
 
@@ -1877,13 +1922,13 @@ async function GET_candidatesAwaitingReview(req, res) {
 
     // count all the users with this position
     const positionIds = business.positions.map(p => p._id);
-    try { var count = await unReviewedCandidateCount(business._id, positionIds); }
+    try { var newCandidates = await unReviewedCandidateCount(business._id, positionIds); }
     catch (countError) {
         console.log(`Error counting all the new candidates for ${business.name} (id ${business._id}): `, countError);
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
-    return res.status(200).send(count);
+    return res.status(200).send({ newCandidates });
 }
 
 
@@ -1904,7 +1949,7 @@ async function unReviewedCandidateCount(businessId, positionIds) {
         try { var count = await Users.countDocuments(query); }
         catch (countError) { return reject(countError); }
 
-        return resolve({ newCandidates: count });
+        return resolve(count);
     });
 }
 
@@ -1979,8 +2024,6 @@ async function newCandidateCountByDate(businessId, positionIds, groupBy, numData
                         }
                     }
                 };
-                console.log("query: ", query);
-                console.log("query['positions']: ", query["positions"]);
                 dataPromises.push(Users.countDocuments(query));
                 // move back the dates we're getting data for
                 before = after;
