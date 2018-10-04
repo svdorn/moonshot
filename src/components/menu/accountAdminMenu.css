@@ -48,9 +48,13 @@
     font-size: 14px;
     cursor: pointer;
     position: relative;
+    color: var(--secondary-gray);
 }
 .menu-bottom > .menu-option { padding: 0; }
-.menu-option.current { background-color: var(--primary-black-light); }
+.menu-option.current {
+    background-color: var(--primary-black-light);
+    color: var(--primary-white)
+}
 .main-menu-items > .menu-option.current:hover { background-color: var(--primary-black-light); }
 .menu-option.current::after {
     content: "";
