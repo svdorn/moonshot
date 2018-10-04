@@ -91,7 +91,7 @@ class Onboarding extends Component {
         }
 
         return (
-            <div styleName="dashboard-item" style={{display: "flex"}}>
+            <div styleName="dashboard-item" styleName="onboarding-dashboard-item">
                 <div styleName="checklist-container">
                     <div styleName="checklist">
                         { checklistItems }

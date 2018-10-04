@@ -48,7 +48,6 @@
 .dashboard-item-container.width-1 { width: var(--item-width); }
 .dashboard-item-container.width-2 { width: calc((var(--item-width) * 2) + (var(--item-margin) * 2)); }
 .dashboard-item-container.width-3 { width: calc((var(--item-width) * 3) + (var(--item-margin) * 4)); }
-.dashboard-item-container.width-4 { width: calc((var(--item-width) * 4) + (var(--item-margin) * 6)); }
 
 
 
@@ -62,6 +61,9 @@
 
 
 /* ONBOARDING */
+.onboarding-dashboard-item {
+    display: flex;
+}
 .checklist-container {
     width: var(--item-width);
     height: 100%;
@@ -255,20 +257,6 @@
     transform: translateX(50%);
 }
 
-/* .box-cta::after {
-    content: "→";
-    padding: 0 5px 0 5px;
-
-    -webkit-transition: padding 0.5s ease;
-    -ms-transition: padding 0.5s ease;
-    transition: padding 0.5s ease;
-}
-.box-cta:hover::after {
-    content: "→";
-    padding: 0 0 0 10px;
-} */
-
-
 .important-stat {
     padding: 0 10px;
     display: flex;
@@ -302,8 +290,24 @@
 }
 
 
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 820px) {
     .dashboard { --items-per-row: 2 }
+
+    .dashboard-item-container.width-3 {
+        width: calc((var(--item-width) * 2) + (var(--item-margin) * 2));
+        height: calc(var(--item-width) * 1.5);
+    }
+    .checklist-container {
+        height: calc(100% / 3);
+        width: 100%;
+    }
+    .onboarding-content {
+        height: calc(100% * (2/3));
+        width: 100%;
+    }
+    .onboarding-dashboard-item { display: inline-block; }
+    .checklist-item { border-bottom: 1px solid var(--primary-black-dark); }
+
 }
 @media screen and (max-width: 540px) {
     .dashboard { --items-per-row: 1 }
