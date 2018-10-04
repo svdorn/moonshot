@@ -500,7 +500,7 @@ class MyEmployees extends Component {
                     <meta name="description" content="Grade your employees and see their results."/>
                 </MetaTags>
 
-                <div className="page-header">Employees</div>
+                <div className="page-line-header"><div/><div>Employees</div></div>
 
                 { this.popup() }
 

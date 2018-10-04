@@ -14,32 +14,6 @@ import BuildTeam from "./dashboardItems/buildTeam";
 import "./dashboard.css";
 
 
-const style = {
-    separator: {
-        width: "70%",
-        margin: "25px auto 0px",
-        position: "relative",
-        height: "40px",
-        textAlign: "center"
-    },
-    separatorText: {
-        padding: "0px 40px",
-        backgroundColor: "#2e2e2e",
-        display: "inline-block",
-        position: "relative",
-        fontSize: "23px",
-        color: "white"
-    },
-    separatorLine: {
-        width: "100%",
-        height: "3px",
-        backgroundColor: "white",
-        position: "absolute",
-        top: "12px"
-    },
-}
-
-
 class Dashboard extends Component {
     constructor(props) {
         super(props);
@@ -55,9 +29,7 @@ class Dashboard extends Component {
                     <meta name="description" content="Your home base for checking in on your candidates, employees, evaluations, and more."/>
                 </MetaTags>
                 <InviteCandidatesModal />
-                <div className="page-line-header">
-                    <div/><div>Dashboard</div>
-                </div>
+                <div className="page-line-header"><div/><div>Dashboard</div></div>
                 <WelcomeMessage />
                 {this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.businessInterests ?
                     <BuildTeam />
