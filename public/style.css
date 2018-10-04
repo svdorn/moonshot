@@ -124,7 +124,17 @@ section {
     display: block;
 }
 
-
+.info-hoverable {
+    display: inline-block;
+    border-radius: 20px;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    font-size: 10px;
+    vertical-align: top;
+    cursor: pointer;
+    margin-left: 4px;
+}
 
 .extraHeaderSpace {
     height: 200px;
@@ -2597,6 +2607,10 @@ button.link {
 .topOptionGray { color: #5E5E5E; }
 .mobile .myCandidatesSelect > div { margin-bottom: 0; }
 .myCandidatesSelect > div { margin-bottom: -4px; }
+.dashboard-select > div {
+    margin-bottom: -4px;
+    padding-right: 24px;
+}
 
 .home-pricing-select {
     margin: 0 -10px -4px 0;

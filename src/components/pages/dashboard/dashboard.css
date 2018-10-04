@@ -243,7 +243,7 @@
 }
 
 .box-header {
-    padding: 3px 4px 0 10px;
+    padding: 3px 4px 0 14px;
     height: 35px;
 }
 .box-title {
@@ -282,6 +282,7 @@
     padding: 0 10px;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 .important-number {
     font-size: 30px;

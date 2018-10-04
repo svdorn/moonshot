@@ -7,6 +7,7 @@ import {  } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { primaryCyan } from "../../../../colors";
+import HoverTip from "../../../miscComponents/hoverTip";
 
 import "../dashboard.css";
 
@@ -70,7 +71,11 @@ class Employees extends Component {
         // standard dashboard box header
         const header = (
             <div styleName="box-header">
-                <div styleName="box-title">Employees</div>
+                <div styleName="box-title">
+                    Employees
+                    <div className="info-hoverable background-primary-black-dark secondary-gray">i</div>
+                    <HoverTip className="font10px secondary-gray" text="If you invite employees to take your evaluation and then grade them, we can improve our candidate predictions."/>
+                </div>
             </div>
         );
 
@@ -82,7 +87,7 @@ class Employees extends Component {
 
                 <div className="fully-center" style={{width:"100%"}}>
                     <div styleName="important-number" style={{marginRight: "0", fontSize: "60px"}}>{ this.state.newEmployees }</div><br/>
-                    <div>awaiting review</div>
+                    <div>Awaiting Grading</div>
                 </div>
 
                 { smallCTA }

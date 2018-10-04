@@ -126,7 +126,7 @@ class Candidates extends Component {
                     styleName="time-selector"
                     disableUnderline={true}
                     classes={{
-                        root: "position-select-root selectRootWhite myCandidatesSelect",
+                        root: "position-select-root selectRootWhite dashboard-select",
                         icon: "selectIconWhiteImportant",
                         select: "no-focus-change-important"
                     }}
@@ -158,7 +158,7 @@ class Candidates extends Component {
             <div>
                 { header }
                 <div styleName="important-stat">
-                    <div styleName="important-number">{ this.state.newCandidates }</div> awaiting review
+                    <div styleName="important-number">{ this.state.newCandidates }</div> Awaiting Review
                 </div>
 
                 <LineChart style={chartStyle} width={250} height={120} data={this.state.graphData}>
