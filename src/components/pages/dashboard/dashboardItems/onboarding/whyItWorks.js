@@ -31,7 +31,12 @@ class WhyItWorks extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info ml-step">
                 <div>
-                    <div>{"Why gamble on your hires? We use machine learning, predictive data, and decades of psychology research to find the candidates who can take your company to the next level. Leave the data-sifting to us so you can focus on shooting for the stars."}</div>
+                    <div className="primary-cyan font20px">
+                        {"Team of Data Scientists"}
+                    </div>
+                    <div>
+                        {"Why gamble on your hires? We use machine learning, predictive data, and decades of psychology research to find the candidates who can take your company to the next level."}
+                    </div>
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>
                             <img
