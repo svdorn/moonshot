@@ -80,8 +80,9 @@ class Employees extends Component {
             <div>
                 { header }
 
-                <div className="fully-center flex-center">
-                    <div styleName="important-number">{ this.state.newEmployees }</div> awaiting review
+                <div className="fully-center" style={{width:"100%"}}>
+                    <div styleName="important-number" style={{marginRight: "0", fontSize: "60px"}}>{ this.state.newEmployees }</div><br/>
+                    <div>awaiting review</div>
                 </div>
 
                 { smallCTA }
