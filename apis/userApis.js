@@ -416,7 +416,7 @@ async function POST_intercomEvent(req, res) {
     }
 
     // if user doesn't have correct info, throw error
-    if (!user || !eventName || !metadata || !user.intercom || !user.intercom.id || !user.intercom.email) { return res.status(404).send("Error getting information"); }
+    if (!user || !event_name || !user.intercom || !user.intercom.id || !user.intercom.email) { return res.status(404).send("Error getting information"); }
 
     const created_at = Math.floor(Date.now() / 1000);
 
@@ -427,7 +427,7 @@ async function POST_intercomEvent(req, res) {
       user_id: user.intercom.id,
       email: user.intercom.email,
       metadata
-  }, function (res) {
+  }, function (d) {
         return res.status(200).send({});
     });
 }
