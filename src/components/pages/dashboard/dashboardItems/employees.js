@@ -81,7 +81,11 @@ class Employees extends Component {
             </div>
         );
 
-        const smallCTA = <div styleName="box-cta" onClick={() => goTo("/myEmployees")}>View Employees</div>
+        const smallCTA = (
+            <div styleName="box-cta" onClick={() => goTo("/myEmployees")}>
+                View Employees <img src={`/icons/LineArrow${this.props.png}`}/>
+            </div>
+        );
 
         return (
             <div>
@@ -101,7 +105,8 @@ class Employees extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 

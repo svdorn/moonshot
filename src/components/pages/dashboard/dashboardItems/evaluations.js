@@ -134,7 +134,11 @@ class Evaluations extends Component {
             margin: "4px 0 0 -6px"
         }
 
-        let smallCTA = <div styleName="box-cta" onClick={() => goTo("/myEvaluations")}>See Evaluations</div>
+        let smallCTA = (
+            <div styleName="box-cta" onClick={() => goTo("/myEvaluations")}>
+                See Evaluations <img src={`/icons/LineArrow${this.props.png}`}/>
+            </div>
+        );
 
         const { graphData } = this.state;
         // const graphData = [
@@ -203,7 +207,8 @@ class Evaluations extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 

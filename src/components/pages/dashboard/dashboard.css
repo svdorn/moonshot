@@ -241,7 +241,21 @@
     font-size: 12px;
     cursor: pointer;
 }
-.box-cta::after {
+.box-cta > img {
+    width: 10px;
+    margin: 0 5px 2px 2px;
+    margin-bottom: 4px;
+    transform: translateX(0%);
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+.box-cta:hover > img {
+    transform: translateX(50%);
+}
+
+/* .box-cta::after {
     content: "→";
     padding: 0 5px 0 5px;
 
@@ -252,7 +266,7 @@
 .box-cta:hover::after {
     content: "→";
     padding: 0 0 0 10px;
-}
+} */
 
 
 .important-stat {

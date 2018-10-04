@@ -43,10 +43,7 @@
     cursor: pointer;
 }
 
-.user-icon {
-    width: 50px;
-    margin-bottom: 5px;
-}
+.user-icon { width: 50px; }
 
 .menu-option {
     padding: 8px 0;
