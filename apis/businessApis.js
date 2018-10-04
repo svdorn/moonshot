@@ -2635,7 +2635,7 @@ async function GET_uniqueName(req, res) {
         return res.status(403).send(errors.PERMISSIONS_ERROR);
     }
 
-    return res.status(200).json(business.uniqueName);
+    return res.status(200).json({ name: business.name, uniqueName:business.uniqueName });
 }
 
 

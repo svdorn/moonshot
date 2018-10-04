@@ -148,6 +148,29 @@ footer {
     padding: 10px;
 }
 
+.copy-link-footer-container {
+    width: 100%;
+    height: 60px;
+    bottom: 0%;
+    position: fixed;
+    background: var(--primary-black-light);
+    vertical-align: top;
+    text-align: center;
+    display: initial;
+    -webkit-animation: fadein .2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein .2s; /* Firefox < 16 */
+        -ms-animation: fadein .2s; /* Internet Explorer */
+         -o-animation: fadein .2s; /* Opera < 12.1 */
+            animation: fadein .2s;
+}
+.copy-link-footer {
+    position: absolute;
+    left: 45%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
 
 .noDisplay { display: none; }
 
