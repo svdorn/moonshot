@@ -122,7 +122,7 @@ export function intercomEvent(eventName, userId, verificationToken, metadata) {
 
         axios.post("/api/user/intercomEvent", {eventName, userId, verificationToken, metadata})
         .then(function(response) {
-            dispatch({type:"INTERCOM_EVENT", user: returnedUser});
+            dispatch({type:"INTERCOM_EVENT"});
         })
         .catch(function(err) {
             dispatch({ type: "INTERCOM_EVENT_REJECTED", ...notification(err, "error") });
@@ -332,7 +332,7 @@ export function createBusinessAndUser(userInfo) {
         axios.post("/api/business/createBusinessAndUser", userInfo)
         .then(response => {
             dispatch({ type: "LOGIN", user: response.data, ...notification("Your account has been activated! Thanks for signing up!") });
-            goTo("/onboarding");
+            goTo("/dashboard");
         })
         .catch(error => {
             dispatch({ type: "NOTIFICATION_AND_STOP_LOADING", ...notification(error, "error") });
