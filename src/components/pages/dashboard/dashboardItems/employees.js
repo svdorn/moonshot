@@ -39,7 +39,6 @@ class Employees extends Component {
 
         axios.get("/api/business/employeesAwaitingReview", query )
         .then(response => {
-            console.log("response: ", response);
             if (propertyExists(response, ["data", "newEmployees"]), "number") {
                 self.setState({ newEmployees: response.data.newEmployees });
             } else {
@@ -47,7 +46,6 @@ class Employees extends Component {
             }
         })
         .catch(error => {
-            console.log(error);
             self.setState({ fetchDataError: true });
         });
     }

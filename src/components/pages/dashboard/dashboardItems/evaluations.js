@@ -76,15 +76,12 @@ class Evaluations extends Component {
 
         axios.get("/api/business/evaluationsGraphData", query)
         .then(response => {
-            console.log("response: ", response);
             if (propertyExists(response, ["data", "counts"])) {
-                console.log(response.data.counts);
                 self.setState({ graphData: response.data.counts });
             } else {
                 self.setState({ fetchDataError: true });
             }
         }).catch(error => {
-            console.log("error: ", error);
             self.setState({ fetchDataError: true });
         })
     }
@@ -166,6 +163,9 @@ class Evaluations extends Component {
             let count = 0;
             graphData.forEach(d => count += d.candidates);
 
+            // to make keys for the pie slices
+            let keyCounter = 0;
+
             content = (
                 <div>
                     <div style={{marginTop:"9px"}} className="fully-center font32px primary-cyan">{ count }</div>
@@ -182,7 +182,7 @@ class Evaluations extends Component {
                             paddingAngle={3}
                             stroke="none"
                         >
-                            { graphData.map((entry, index) => <Cell fill={ colors[index % colors.length] } />) }
+                            { graphData.map((entry, index) => <Cell key={`${entry.name} ${keyCounter++}`} fill={ colors[index % colors.length] } />) }
                         </Pie>
                         <Tooltip />
                     </PieChart>

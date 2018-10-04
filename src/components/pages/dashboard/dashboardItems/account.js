@@ -49,7 +49,6 @@ class Evaluations extends Component {
         // find out whether billing is set up, if error assume not
         axios.get("/api/business/billingIsSetUp", query)
         .then(response => {
-            console.log("response: ", response);
             if (propertyExists(response, ["data", "billingIsSetUp"])) {
                 self.setState({ billingIsSetUp: response.data.billingIsSetUp });
             } else {
