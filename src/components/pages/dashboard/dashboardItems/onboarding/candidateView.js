@@ -18,6 +18,9 @@ class CandidateView extends Component {
         this.state = {
             step: "psych"
         };
+
+        this.next = this.next.bind(this);
+        this.intercomMsg = this.intercomMsg.bind(this);
     }
 
 
@@ -29,19 +32,36 @@ class CandidateView extends Component {
         else { this.props.updateOnboardingStep(_id, verificationToken, 2); }
     }
 
+    intercomMsg = () => {
+        console.log("here");
+    }
+
+    emojiButtons() {
+        return (
+            <div styleName="emoji-buttons">
+                <div onClick={this.next}>
+                    <img
+                        src={`/icons/Cube${this.props.png}`}
+                    />
+                    <div>Got it</div>
+                </div>
+                <div onClick={this.intercomMsg}>
+                    <img
+                        src={`/icons/Cube${this.props.png}`}
+                    />
+                    <div>More info</div>
+                </div>
+            </div>
+        );
+    }
+
 
     psychView() {
         return (
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
                     <div>{"Candidates will take a 12-minute quiz that determines their personality. It will involve a series of questions that look like this:"}</div>
-                    <div
-                        className={button.cyan}
-                        styleName="got-it-button"
-                        onClick={this.next.bind(this)}
-                    >
-                        Got It
-                    </div>
+                    { this.emojiButtons() }
                 </div>
                 <div className="noselect">
                     <div>Flattery is important to getting ahead:</div>
@@ -73,13 +93,7 @@ class CandidateView extends Component {
                         <li>Learn Quickly</li>
                         <li>Adapt to Complex Situations</li>
                     </ul>
-                    <div
-                        className={button.cyan}
-                        styleName="got-it-button"
-                        onClick={this.next.bind(this)}
-                    >
-                        Got It
-                    </div>
+                    { this.emojiButtons() }
                 </div>
                 <div className="gca-example">
                     <div>Select the image that completes the pattern:</div>

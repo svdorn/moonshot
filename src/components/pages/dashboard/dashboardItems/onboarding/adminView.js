@@ -15,8 +15,8 @@ class AdminView extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-        };
+        this.next = this.next.bind(this);
+        this.intercomMsg = this.intercomMsg.bind(this);
     }
 
     next = () => {
@@ -25,18 +25,28 @@ class AdminView extends Component {
         this.props.updateOnboardingStep(_id, verificationToken, 3);
     }
 
+    intercomMsg = () => {
+        console.log("here");
+    }
 
     render() {
         return (
             <div className="inline-block" styleName="onboarding-info admin-view">
                 <div>
                     <div>{"Once a candidate finishes your evaluation, we'll make a report with our predictions, including an overall score and a breakdown of their results. You can see all of these in the 'Candidates' tab."}</div>
-                    <div
-                        className={button.cyan}
-                        styleName="got-it-button"
-                        onClick={this.next.bind(this)}
-                    >
-                        Got It
+                    <div styleName="emoji-buttons">
+                        <div onClick={this.next}>
+                            <img
+                                src={`/icons/Cube${this.props.png}`}
+                            />
+                            <div>Got it</div>
+                        </div>
+                        <div onClick={this.intercomMsg}>
+                            <img
+                                src={`/icons/Cube${this.props.png}`}
+                            />
+                            <div>More info</div>
+                        </div>
                     </div>
                 </div>
                 <div>
