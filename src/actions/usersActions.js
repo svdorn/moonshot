@@ -116,6 +116,20 @@ export function login(user, saveSession, navigateBackUrl) {
     }
 }
 
+export function intercomEvent(eventName, userId, verificationToken, metadata) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        axios.post("/api/user/intercomEvent", {eventName, userId, verificationToken, metadata})
+        .then(function(response) {
+            dispatch({type:"INTERCOM_EVENT", user: returnedUser});
+        })
+        .catch(function(err) {
+            dispatch({ type: "INTERCOM_EVENT_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
+
 export function hidePopups(userId, verificationToken, popups) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});

@@ -144,6 +144,7 @@ app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
 app.post("/user/verifyFromApiKey", userApis.POST_verifyFromApiKey);
 app.post("/user/updateOnboardingStep", userApis.POST_updateOnboardingStep);
 app.post("/user/popups", userApis.POST_popups);
+app.post("/user/intercomEvent", userApis.POST_intercomEvent);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 //app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
