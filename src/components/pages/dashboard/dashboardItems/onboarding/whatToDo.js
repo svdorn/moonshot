@@ -2,10 +2,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { updateOnboardingStep } from "../../../../../actions/usersActions";
-import {  } from "../../../../../miscFunctions";
-
-import PsychSlider from "../../../evaluation/psychSlider";
+import { updateOnboardingStep, addNotification } from "../../../../../actions/usersActions";
+import { goTo } from "../../../../../miscFunctions";
+import axios from 'axios';
 
 import "../../dashboard.css";
 
@@ -15,6 +14,7 @@ class WhatToDo extends Component {
 
         this.next = this.next.bind(this);
         this.intercomMsg = this.intercomMsg.bind(this);
+        this.handleCustomPage = this.handleCustomPage.bind(this);
     }
 
     next = () => {
@@ -27,12 +27,29 @@ class WhatToDo extends Component {
         console.log("here");
     }
 
+    handleCustomPage = () => {
+        let self = this;
+        // get the business' unique name
+        axios.get("/api/business/uniqueName", {
+            params: {
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken
+            }
+        })
+        .then(function (res) {
+            goTo(`/apply/${res.data}`);
+        })
+        .catch(function (err) {
+            self.props.addNotification(err, "error");
+        });
+    }
+
     render() {
         return (
             <div className="inline-block" styleName="onboarding-info ml-step">
                 <div>
-                    <div className="primary-cyan font20px">
-                        {"Your Custom Page"}
+                    <div className="primary-cyan font18px">
+                        {"A Custom Page Just for You"}
                     </div>
                     <div>
                         {"Why gamble on your hires? We use machine learning, predictive data, and decades of psychology research to find the candidates who can take your company to the next level."}
@@ -53,10 +70,17 @@ class WhatToDo extends Component {
                     </div>
                 </div>
                 <div>
-                    <img
-                        src={`/images/ReportsPage${this.props.png}`}
-                        styleName="admin-image"
-                    />
+                    <div>
+                        <img
+                            src={`/images/ApplyPage${this.props.png}`}
+                            styleName="apply-image"
+                        />
+                    </div>
+                    <div>
+                        <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" styleName="onboarding-button apply-button" onClick={this.handleCustomPage} style={{padding: "3px 10px"}}>
+                            <span>See my Page &#8594;</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -73,7 +97,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateOnboardingStep
+        updateOnboardingStep,
+        addNotification
     }, dispatch);
 }
 

@@ -64,6 +64,7 @@ const businessApis = {
     GET_newCandidateGraphData,
     GET_evaluationsGraphData,
     GET_billingIsSetUp,
+    GET_uniqueName,
 
     generateApiKey,
     createEmailInfo,
@@ -2597,8 +2598,7 @@ async function POST_sawMyCandidatesInfoBox(req, res) {
 // get the api key for the api key settings page
 async function GET_apiKey(req, res) {
     // get user credentials
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
+    const { userId, verificationToken } = sanitize(req.query);
 
     // get the user and business
     try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
@@ -2613,6 +2613,26 @@ async function GET_apiKey(req, res) {
     }
 
     return res.status(200).json(business.API_Key);
+}
+
+// get the api key for the api key settings page
+async function GET_uniqueName(req, res) {
+    // get user credentials
+    const { userId, verificationToken } = sanitize(req.query);
+
+    // get the user and business
+    try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
+    catch (error) {
+        console.log("Error finding user/business trying to get business name: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    // user has to be an account admin with right credentials to see the unique business name
+    if (user.userType !== "accountAdmin" || !user.businessInfo || user.businessInfo.businessId.toString() !== business._id.toString()) {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    return res.status(200).json(business.uniqueName);
 }
 
 

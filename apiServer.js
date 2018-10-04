@@ -185,6 +185,7 @@ app.get("/business/candidatesAwaitingReview", businessApis.GET_candidatesAwaitin
 app.get("/business/newCandidateGraphData", businessApis.GET_newCandidateGraphData);
 app.get("/business/evaluationsGraphData", businessApis.GET_evaluationsGraphData)
 app.get("/business/billingIsSetUp", businessApis.GET_billingIsSetUp);
+app.get("/business/uniqueName", businessApis.GET_uniqueName);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);

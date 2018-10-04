@@ -118,6 +118,17 @@
 .complete-mark.incomplete { background-color: #525252; }
 .complete-mark.complete > div { border-color: white; }
 
+.onboarding-button > span {
+    margin-right: 0;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition:    all 0.3s ease;
+    -ms-transition:     all 0.3s ease;
+    transition:         all 0.3s ease;
+}
+.onboarding-button:hover > span {
+    margin:5px;
+}
+
 .onboarding-content {
     display: inline-block;
     vertical-align: top;
@@ -208,6 +219,18 @@
     height: 95%;
     position: absolute;
     bottom: 5px;
+    left: 50%;
+    transform: translate(-50%);
+}
+.apply-image {
+    height: 70%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+.apply-button {
+    bottom: 15px;
+    position: absolute;
     left: 50%;
     transform: translate(-50%);
 }
