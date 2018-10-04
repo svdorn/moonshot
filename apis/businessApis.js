@@ -2226,11 +2226,9 @@ async function GET_positions(req, res) {
 
 // get all positions for a business
 async function GET_positionsForApply(req, res) {
-    const name = sanitize(req.query.name);
+    const { name, businessId } = req.query;
 
     if (!name) { return res.status(400).send({ message: "Bad request." }); }
-
-    console.log("name: ", name);
 
     // get the business the user works for
     try {
@@ -2258,7 +2256,12 @@ async function GET_positionsForApply(req, res) {
 
     if (!business) { return res.status(404).send({ message: "Invalid url" }); }
 
-    return res.json({ logo: business.logo, businessName: business.name, positions: business.positions });
+    let admin = false;
+    if (businessId && business._id.toString() === businessId.toString()) {
+        admin = true;
+    }
+
+    return res.json({ logo: business.logo, businessName: business.name, positions: business.positions, admin });
 }
 
 

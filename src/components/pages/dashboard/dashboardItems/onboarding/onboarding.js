@@ -45,10 +45,8 @@ class Onboarding extends Component {
         this.state = { };
     }
 
-
     handleChecklistItemClick(step) {
-        console.log("HERE");
-        const onboard = this.props.currentUser.onboard
+        const onboard = this.props.currentUser.onboard;
         if (onboard &&
             typeof onboard.step === "number" &&
             typeof onboard.highestStep === "number" &&
@@ -58,7 +56,6 @@ class Onboarding extends Component {
             this.props.updateOnboardingStep(_id, verificationToken, step)
         }
     }
-
 
     render() {
         const user = this.props.currentUser;
