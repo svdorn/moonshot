@@ -117,7 +117,7 @@ class Evaluations extends Component {
                     styleName="time-selector"
                     disableUnderline={true}
                     classes={{
-                        root: "position-select-root selectRootWhite myCandidatesSelect",
+                        root: "position-select-root selectRootWhite dashboard-select",
                         icon: "selectIconWhiteImportant",
                         select: "no-focus-change-important"
                     }}

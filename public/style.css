@@ -2607,6 +2607,10 @@ button.link {
 .topOptionGray { color: #5E5E5E; }
 .mobile .myCandidatesSelect > div { margin-bottom: 0; }
 .myCandidatesSelect > div { margin-bottom: -4px; }
+.dashboard-select > div {
+    margin-bottom: -4px;
+    padding-right: 24px;
+}
 
 .home-pricing-select {
     margin: 0 -10px -4px 0;

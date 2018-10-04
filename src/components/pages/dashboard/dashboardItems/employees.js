@@ -74,7 +74,7 @@ class Employees extends Component {
                 <div styleName="box-title">
                     Employees
                     <div className="info-hoverable background-primary-black-dark secondary-gray">i</div>
-                    <HoverTip className="font10px" text="If you invite employees to take your evaluation and then grade them, we can improve our candidate predictions."/>
+                    <HoverTip className="font10px secondary-gray" text="If you invite employees to take your evaluation and then grade them, we can improve our candidate predictions."/>
                 </div>
             </div>
         );
