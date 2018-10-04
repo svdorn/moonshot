@@ -47,10 +47,20 @@
     padding: 8px 0;
     font-size: 14px;
     cursor: pointer;
+    position: relative;
 }
 .menu-bottom > .menu-option { padding: 0; }
-.menu-option.current { background-color: var(--primary-cyan); }
-.main-menu-items > .menu-option.current:hover { background-color: var(--primary-cyan); }
+.menu-option.current { background-color: var(--primary-black-light); }
+.main-menu-items > .menu-option.current:hover { background-color: var(--primary-black-light); }
+.menu-option.current::after {
+    content: "";
+    background-color: var(--primary-cyan);
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
 
 .menu-bottom > .menu-option > .user-name { padding: 8px 0; }
 .main-menu-items > .menu-option:hover, .menu-bottom > .menu-option > .user-name:hover { background-color: var(--primary-black-light); }
