@@ -86,7 +86,7 @@ class Employees extends Component {
                 { header }
 
                 <div className="fully-center" style={{width:"100%"}}>
-                    <div styleName="important-number" style={{marginRight: "0", fontSize: "60px"}}>{ this.state.newEmployees }</div><br/>
+                    <div styleName="important-number" style={{marginRight: "0", fontSize: "64px"}}>{ this.state.newEmployees }</div><br/>
                     <div>Awaiting Grading</div>
                 </div>
 

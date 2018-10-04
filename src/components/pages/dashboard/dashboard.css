@@ -266,6 +266,7 @@
     display: inline-block;
     margin-right: 10px;
     color: var(--primary-cyan);
+    font-weight: bold;
 }
 .graph-x-label {
     margin-top: 114px;
