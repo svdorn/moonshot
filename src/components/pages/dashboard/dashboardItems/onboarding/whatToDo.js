@@ -127,7 +127,7 @@ class WhatToDo extends Component {
         return (
             <div styleName="full-step-container">
                 <div styleName="copy-link-view">
-                    <div className="primary-cyan font22px">
+                    <div className="font22px">
                         {"Copy Link View"}
                     </div>
                     <div>
@@ -163,7 +163,34 @@ class WhatToDo extends Component {
 
     addPositionsView() {
         return (
-            <div>
+            <div styleName="full-step-container">
+                <div styleName="add-positions-view">
+                    <div className="font22px">
+                        {"Add Positions Header"}
+                    </div>
+                    <div>
+                        {"Why gamble on your hires? We use machine learning, predictive data, and decades of psychology research to find the candidates who can take your company to the next level."}
+                    </div>
+                    <div>
+                        <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" styleName="onboarding-button" onClick={this.handleCustomPage} style={{padding: "3px 10px"}}>
+                            <span>Add Position</span>
+                        </button>
+                    </div>
+                    <div styleName="emoji-buttons-full">
+                        <div onClick={this.next}>
+                            <img
+                                src={`/icons/Cube${this.props.png}`}
+                            />
+                            <div>Finish</div>
+                        </div>
+                        <div onClick={this.intercomMsg}>
+                            <img
+                                src={`/icons/Cube${this.props.png}`}
+                            />
+                            <div>More info</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

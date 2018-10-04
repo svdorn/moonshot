@@ -188,7 +188,28 @@
     transform: translate(-50%);
 }
 .copy-link-view > div:first-child {
+    color: var(--primary-cyan);
     text-align: center;
+}
+.copy-link-view > div:nth-child(4) {
+    margin-top: 10px;
+}
+.add-positions-view {
+    width: calc(var(--item-width) * 2);
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+.add-positions-view > div:first-child {
+    color: var(--primary-cyan);
+    text-align: center;
+}
+.add-positions-view > div:nth-child(3) {
+    margin-top: 5px;
+    text-align: center;
+}
+.add-positions-view > div:nth-child(4) {
+    margin-top: 20px;
 }
 .got-it-button {
     color: white;
@@ -199,7 +220,6 @@
 }
 .emoji-buttons-full {
     text-align: center;
-    margin-top: 10px;
 }
 .emoji-buttons-full > div {
     display: inline-block;
