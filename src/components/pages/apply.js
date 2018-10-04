@@ -8,6 +8,7 @@ import { addNotification } from "../../actions/usersActions";
 import {  } from "../../miscFunctions";
 import MetaTags from 'react-meta-tags';
 import { goTo } from "../../miscFunctions";
+import HoverTip from "../miscComponents/hoverTip";
 import axios from 'axios';
 
 import "./apply.css";
@@ -80,6 +81,9 @@ class Apply extends Component {
     positionsFound(positions, logo, company, admin) {
         if (Array.isArray(positions) && positions.length > 0) {
             const position = positions[0].name;
+            if (admin) {
+                positions.push({ name: "Add more positions later" })
+            }
             this.setState({ positions, position, logo, company, admin });
         } else {
             this.setState({ noPositions: true });
@@ -89,7 +93,6 @@ class Apply extends Component {
 
     // create the dropdown for the different positions
     makeDropdown(position) {
-        // create the stage name menu items
         const positions = this.state.positions.map(pos => {
             return (
                 <MenuItem
@@ -136,6 +139,7 @@ class Apply extends Component {
 
     makeChecklist() {
         const user = this.props.currentUser;
+        if (!user || !user.onboard) { return null; }
         const onboard = user.onboard;
         const step = onboard && typeof onboard.step === "number" ? onboard.step : 1;
         const highestStep = onboard && typeof onboard.highestStep === "number" ? onboard.highestStep : 1;
@@ -182,10 +186,28 @@ class Apply extends Component {
                         <div className="font30px font16pxUnder400 marginBottom30px">
                             {this.makeDropdown(this.state.position)}
                         </div>
-                        <button className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="next-button" onClick={this.handleSignUp.bind(this)} style={{padding: "6px 20px"}}>
-                            <span>Next &#8594;</span>
-                        </button>
-                        {this.state.admin ? <div>{ this.makeChecklist() }</div> : null}
+                        {this.state.admin ?
+                            <div>
+                                <div>
+                                    <button className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="next-button" style={{padding: "6px 20px"}}>
+                                        <span>Next &#8594;</span>
+                                    </button>
+                                    <HoverTip
+                                        className="font14px secondary-gray"
+                                        style={{marginTop: "40px", marginLeft: "-6px"}}
+                                        text="After candidates press next, they sign up to complete your evaluation."
+                                        />
+                                </div>
+                                <div className="clickableNoUnderline marginTop20px secondary-gray" onClick={() => goTo("/dashboard")}>
+                                    <u>Continue to setup your page.</u>
+                                </div>
+                                <div>{ this.makeChecklist() }</div>
+                            </div>
+                            :
+                            <button className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="next-button" onClick={this.handleSignUp.bind(this)} style={{padding: "6px 20px"}}>
+                                <span>Next &#8594;</span>
+                            </button>
+                        }
                     </div>
                     :
                     <div>
