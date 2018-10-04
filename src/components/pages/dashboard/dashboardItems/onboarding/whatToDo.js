@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { updateOnboardingStep, addNotification } from "../../../../../actions/usersActions";
 import { goTo } from "../../../../../miscFunctions";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { primaryCyan } from "../../../../../colors";
 import axios from 'axios';
 
 import "../../dashboard.css";
@@ -12,12 +14,21 @@ class WhatToDo extends Component {
     constructor(props) {
         super(props);
 
+        this.state = { };
+
         this.next = this.next.bind(this);
         this.intercomMsg = this.intercomMsg.bind(this);
         this.handleCustomPage = this.handleCustomPage.bind(this);
     }
 
+    componentDidMount() {
+        this.setState({ step: 1 })
+    }
+
     next = () => {
+        // check if need to go to next step in sequence
+        if (this.state.step < 3) { this.setState({ step: ++this.state.step }); }
+        // get credentials
         const { _id, verificationToken } = this.props.currentUser;
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, 4);
@@ -44,7 +55,7 @@ class WhatToDo extends Component {
         });
     }
 
-    render() {
+    customPageView() {
         return (
             <div className="inline-block" styleName="onboarding-info ml-step">
                 <div>
@@ -84,6 +95,15 @@ class WhatToDo extends Component {
                 </div>
             </div>
         );
+    }
+
+    render() {
+        switch (this.state.step) {
+            case 1: return this.customPageView();
+            case 2: return this.customPageView();
+            case 3: return this.customPageView();
+            default: return <div className="fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>;
+        }
     }
 }
 
