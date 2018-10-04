@@ -15,7 +15,7 @@
 .dashboard {
     text-align: left;
     --item-width: 240px;
-    --item-margin: 10px;
+    --item-margin: 14px;
     --items-per-row: 3;
     width: calc(var(--items-per-row) * (var(--item-width) + 2 * var(--item-margin)));
     margin: 0 auto 80px;
@@ -134,7 +134,28 @@
     position: relative;
 }
 .candidate-view > div:nth-child(2) {
-    border-left: 1px solid var(--primary-black-dark);
+    width: calc(var(--item-width) + 2 * var(--item-margin));
+    text-align: center;
+    padding: var(--item-margin) var(--item-margin) 0;
+    position: relative;
+}
+.admin-view > div:first-child {
+    flex: 1;
+    padding: calc(var(--item-margin));
+    position: relative;
+}
+.admin-view > div:nth-child(2) {
+    width: calc(var(--item-width) + 2 * var(--item-margin));
+    text-align: center;
+    padding: var(--item-margin) var(--item-margin) 0;
+    position: relative;
+}
+.ml-step > div:first-child {
+    flex: 1;
+    padding: calc(var(--item-margin));
+    position: relative;
+}
+.ml-step > div:nth-child(2) {
     width: calc(var(--item-width) + 2 * var(--item-margin));
     text-align: center;
     padding: var(--item-margin) var(--item-margin) 0;
@@ -146,6 +167,22 @@
     bottom: calc(var(--item-margin));
     left: 50%;
     transform: translate(-50%);
+}
+.emoji-buttons {
+    position: absolute;
+    bottom: calc(var(--item-margin));
+    left: 50%;
+    transform: translate(-50%);
+}
+.emoji-buttons > div {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+.emoji-buttons > div > img {
+    height: 30px;
 }
 .ex-question-answers {
     width: 100%;
@@ -164,6 +201,20 @@
     height: 85%;
     position: absolute;
     bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+}
+.admin-image {
+    height: 95%;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translate(-50%);
+}
+.astrobot-image {
+    height: 95%;
+    position: absolute;
+    bottom: 5px;
     left: 50%;
     transform: translate(-50%);
 }

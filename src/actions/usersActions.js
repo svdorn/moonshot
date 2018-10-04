@@ -1,6 +1,5 @@
 "use strict"
 import axios from 'axios';
-import { browserHistory } from 'react-router'
 import { reset } from 'redux-form';
 import { goTo, propertyExists } from "../miscFunctions";
 
@@ -105,13 +104,27 @@ export function login(user, saveSession, navigateBackUrl) {
             const returnedUser = response.data;
             dispatch({type:"LOGIN", user: returnedUser});
             let nextUrl = '/myEvaluations';
+            if (returnedUser && returnedUser.userType === "accountAdmin") { nextUrl = "/dashboard"; }
             if (navigateBackUrl) { nextUrl = navigateBackUrl; }
             // go to the next screen
-            browserHistory.push(nextUrl);
-            window.scrollTo(0, 0);
+            goTo(nextUrl);
         })
         .catch(function(err) {
             dispatch({ type: "LOGIN_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
+
+export function intercomEvent(eventName, userId, verificationToken, metadata) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        axios.post("/api/user/intercomEvent", {eventName, userId, verificationToken, metadata})
+        .then(function(response) {
+            dispatch({type:"INTERCOM_EVENT"});
+        })
+        .catch(function(err) {
+            dispatch({ type: "INTERCOM_EVENT_REJECTED", ...notification(err, "error") });
         });
     }
 }
@@ -318,7 +331,7 @@ export function createBusinessAndUser(userInfo) {
         axios.post("/api/business/createBusinessAndUser", userInfo)
         .then(response => {
             dispatch({ type: "LOGIN", user: response.data, ...notification("Your account has been activated! Thanks for signing up!") });
-            goTo("/onboarding");
+            goTo("/dashboard");
         })
         .catch(error => {
             dispatch({ type: "NOTIFICATION_AND_STOP_LOADING", ...notification(error, "error") });
@@ -494,7 +507,7 @@ export function changePasswordForgot(user) {
             .catch(function(err2) {});
 
             dispatch({ type:"LOGIN", user: foundUser, ...notification("Password changed!") });
-            browserHistory.push("/myEvaluations");
+            goTo("/myEvaluations");
         })
         .catch(function(err) {
             dispatch({ type:"CHANGE_PASS_FORGOT_REJECTED", ...notification(err, "error") });
@@ -575,9 +588,8 @@ export function comingSoon(user, signedIn){
             .then(function(response) {
                 if (!signedIn) {
                     dispatch({ type:"FOR_BUSINESS", ...notification(response) });
-                    browserHistory.push('/login')
+                    goTo('/login')
                     dispatch({ type:"CHANGE_CURRENT_ROUTE", payload:'/login' })
-                    window.scrollTo(0, 0);
                 } else {
                     dispatch({ type:"FOR_BUSINESS", notification: undefined });
                 }

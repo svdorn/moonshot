@@ -109,6 +109,10 @@ export function usersReducers(state = initialState, action) {
                 errorMessage: undefined
             };
             break;
+        case "INTERCOM_EVENT":
+            Intercom('update');
+            return { ...state };
+            break;
         case "LOGIN":
             if (action.user && action.user.intercom) {
                 const intercom = action.user.intercom;

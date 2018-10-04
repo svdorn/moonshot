@@ -4,6 +4,9 @@ const Skills = require('../models/skills.js');
 const Businesses = require('../models/businesses.js');
 const Adminquestions = require("../models/adminquestions");
 const credentials = require('../credentials');
+const Intercom = require('intercom-client');
+
+const client = new Intercom.Client({ token: credentials.intercomToken });
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -53,7 +56,8 @@ const userApis = {
     POST_agreeToTerms,
     POST_verifyFromApiKey,
     POST_updateOnboardingStep,
-    POST_popups
+    POST_popups,
+    POST_intercomEvent
 }
 
 
@@ -397,6 +401,35 @@ async function POST_popups(req, res) {
     }
 
     res.json(frontEndUser(returnedUser));
+}
+
+async function POST_intercomEvent(req, res) {
+    const event_name = sanitize(req.body.eventName);
+    const metadata = sanitize(req.body.metadata);
+
+    try { var user = await getUserFromReq(req); }
+    catch (getUserError) {
+        console.log("Error getting user while trying to update onboarding step: ", getUserError);
+        const status = getUserError.status ? getUserError.status : 500;
+        const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
+        return res.status(status).send(message);
+    }
+
+    // if user doesn't have correct info, throw error
+    if (!user || !event_name || !user.intercom || !user.intercom.id || !user.intercom.email) { return res.status(404).send("Error getting information"); }
+
+    const created_at = Math.floor(Date.now() / 1000);
+
+    // create event
+    client.events.create({
+      event_name,
+      created_at,
+      user_id: user.intercom.id,
+      email: user.intercom.email,
+      metadata
+  }, function (d) {
+        return res.status(200).send({});
+    });
 }
 
 async function POST_updateOnboardingStep(req, res) {
