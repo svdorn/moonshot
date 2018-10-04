@@ -104,6 +104,7 @@ export function login(user, saveSession, navigateBackUrl) {
             const returnedUser = response.data;
             dispatch({type:"LOGIN", user: returnedUser});
             let nextUrl = '/myEvaluations';
+            if (returnedUser && returnedUser.userType === "accountAdmin") { nextUrl = "dashboard"; }
             if (navigateBackUrl) { nextUrl = navigateBackUrl; }
             // go to the next screen
             goTo(nextUrl);
