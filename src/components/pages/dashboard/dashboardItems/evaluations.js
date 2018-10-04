@@ -139,20 +139,21 @@ class Evaluations extends Component {
 
         let smallCTA = <div styleName="box-cta" onClick={() => goTo("/myEvaluations")}>See Evaluations</div>
 
-        const graphData = [
-            {name: "iOS Developer", candidates: 10},
-            {name: "CEO", candidates: 4},
-            {name: "Marketer", candidates: 2},
-            {name: "Dude", candidates: 6},
-            {name: "iOS Developer 2", candidates: 10},
-            {name: "CEO 2", candidates: 4},
-            {name: "Marketer 2", candidates: 2},
-            {name: "Dude 2", candidates: 6}
-        ];
+        const { graphData } = this.state;
+        // const graphData = [
+        //     {name: "iOS Developer", candidates: 10},
+        //     {name: "CEO", candidates: 4},
+        //     {name: "Marketer", candidates: 2},
+        //     {name: "Dude", candidates: 6},
+        //     {name: "iOS Developer 2", candidates: 10},
+        //     {name: "CEO 2", candidates: 4},
+        //     {name: "Marketer 2", candidates: 2},
+        //     {name: "Dude 2", candidates: 6}
+        // ];
 
         let content = null;
         // if there are no candidate completions, tell the user
-        if (this.state.graphData.length === 0) {
+        if (graphData.length === 0) {
             content = (
                 <div className="fully-center" style={{ width: "80%" }}>
                     No evaluations completed in the { this.state.timeToGraph.toLowerCase() }.
@@ -161,23 +162,31 @@ class Evaluations extends Component {
         }
         // if there are candidate completions, show the graph
         else {
+            // get a count of the total number of completions
+            let count = 0;
+            graphData.forEach(d => count += d.candidates);
+
             content = (
-                <PieChart style={chartStyle} width={200} height={200}>
-                    <Pie
-                        data={graphData}
-                        dataKey="candidates"
-                        nameKey="name"
-                        cx={100}
-                        cy={100}
-                        innerRadius={45}
-                        outerRadius={70}
-                        paddingAngle={3}
-                        stroke="none"
-                    >
-                        { graphData.map((entry, index) => <Cell fill={ colors[index % colors.length] } />) }
-                    </Pie>
-                    <Tooltip />
-                </PieChart>
+                <div>
+                    <div style={{marginTop:"9px"}} className="fully-center font32px primary-cyan">{ count }</div>
+                    <div className="center font12px">Candidate Completions</div>
+                    <PieChart style={chartStyle} width={200} height={200}>
+                        <Pie
+                            data={graphData}
+                            dataKey="candidates"
+                            nameKey="name"
+                            cx={100}
+                            cy={100}
+                            innerRadius={45}
+                            outerRadius={70}
+                            paddingAngle={3}
+                            stroke="none"
+                        >
+                            { graphData.map((entry, index) => <Cell fill={ colors[index % colors.length] } />) }
+                        </Pie>
+                        <Tooltip />
+                    </PieChart>
+                </div>
             );
         }
 

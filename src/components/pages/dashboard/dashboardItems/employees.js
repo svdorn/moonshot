@@ -73,8 +73,12 @@ class Employees extends Component {
             <div styleName="box-header">
                 <div styleName="box-title">
                     Employees
-                    <div className="info-hoverable background-primary-black-dark secondary-gray">i</div>
-                    <HoverTip className="font10px secondary-gray" text="If you invite employees to take your evaluation and then grade them, we can improve our candidate predictions."/>
+                    <div className="info-hoverable">i</div>
+                    <HoverTip
+                        className="font10px secondary-gray"
+                        style={{marginTop: "18px", marginLeft: "-6px"}}
+                        text="If you invite employees to take your evaluation and then grade them, we can improve our candidate predictions."
+                    />
                 </div>
             </div>
         );
