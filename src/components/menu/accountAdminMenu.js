@@ -99,6 +99,8 @@ class AccountAdminMenu extends Component {
         const self = this;
         const user = this.props.currentUser;
 
+        const { png } = this.props;
+
         // get the current path from the url
         let pathname = undefined;
         // try to get the path; lowercased because capitalization will vary
@@ -158,10 +160,13 @@ class AccountAdminMenu extends Component {
         );
 
         const bottomItem = (
-            <div styleName="menu-option" onClick={this.openAccountBox}>
-                <div styleName="user-name">{ getFirstName(user.name) }</div>
-                <div id="account-popup" styleName={"account-popup " + (this.state.accountPopupOpen ? "visible" : "")}>
-                    { popupItems }
+            <div> 
+                <img src={`/icons/User${png}`} styleName="user-icon" />
+                <div styleName="menu-option" onClick={this.openAccountBox}>
+                    <div styleName="user-name">{ getFirstName(user.name) }</div>
+                    <div id="account-popup" styleName={"account-popup " + (this.state.accountPopupOpen ? "visible" : "")}>
+                        { popupItems }
+                    </div>
                 </div>
             </div>
         );
@@ -171,7 +176,7 @@ class AccountAdminMenu extends Component {
             <img
                 alt="Moonshot Logo"
                 styleName="moonshot-logo"
-                src={`/logos/MoonshotWhite${this.props.png}`}
+                src={`/logos/MoonshotWhite${png}`}
                 onClick={() => goTo("/dashboard")}
             />
         );

@@ -29,7 +29,7 @@ class Dashboard extends Component {
                     <meta name="description" content="Your home base for checking in on your candidates, employees, evaluations, and more."/>
                 </MetaTags>
                 <InviteCandidatesModal />
-                <div className="page-header">Dashboard</div>
+                <div className="page-line-header"><div/><div>Dashboard</div></div>
                 <WelcomeMessage />
                 {this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.businessInterests ?
                     <BuildTeam />

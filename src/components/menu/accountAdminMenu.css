@@ -43,6 +43,8 @@
     cursor: pointer;
 }
 
+.user-icon { width: 50px; }
+
 .menu-option {
     padding: 8px 0;
     font-size: 14px;
@@ -55,7 +57,7 @@
     background-color: var(--primary-black-light);
     color: var(--primary-white)
 }
-.main-menu-items > .menu-option.current:hover { background-color: var(--primary-black-light); }
+/* .main-menu-items > .menu-option.current:hover { background-color: var(--primary-black-light); } */
 .menu-option.current::after {
     content: "";
     background-color: var(--primary-cyan);
@@ -66,8 +68,8 @@
     top: 0;
 }
 
-.menu-bottom > .menu-option > .user-name { padding: 8px 0; }
-.main-menu-items > .menu-option:hover, .menu-bottom > .menu-option > .user-name:hover { background-color: var(--primary-black-light); }
+.menu-bottom .menu-option .user-name { padding: 8px 0; }
+.main-menu-items > .menu-option:hover, .menu-bottom .menu-option .user-name:hover { background-color: var(--primary-black-light); }
 .account-popup > .menu-option:hover:not(:last-child) { background-color: #525252; }
 .account-popup > .menu-option:last-child { cursor: initial; }
 
@@ -94,7 +96,7 @@
     -ms-transition: transform 0.5s ease;
     transition: transform 0.5s ease;
 }
-.account-popup.visible { transform: translateY(-110%) translateX(-50%); }
+.account-popup.visible { transform: translateY(-100%) translateX(-50%); }
 
 .sign-out {
     background-color: var(--secondary-red);
@@ -102,6 +104,12 @@
     padding: 2px 12px;
     cursor: pointer;
 }
+
+
+@media screen and (max-height: 400px) {
+    .user-icon { display: none; }
+}
+
 
 @media screen and (max-width: 1000px) {
     :root {

@@ -94,7 +94,11 @@ class Evaluations extends Component {
             </div>
         );
 
-        let smallCTA = <div styleName="box-cta" onClick={() => goTo("/billing")}>{ billingAction } Billing Info</div>
+        const smallCTA = (
+            <div styleName="box-cta" onClick={() => goTo("/billing")}>
+                { billingAction } Billing Info <img src={`/icons/LineArrow${this.props.png}`} />
+            </div>
+        );
 
         return (
             <div>
@@ -109,7 +113,8 @@ class Evaluations extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 

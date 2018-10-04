@@ -1350,7 +1350,7 @@ class MyCandidates extends Component {
                     <meta name="description" content="View analytical breakdowns and manage your candidates."/>
                 </MetaTags>
 
-                <div className="page-header">Candidates</div>
+                <div className="page-line-header"><div/><div>Candidates</div></div>
 
                 { this.popup() }
 

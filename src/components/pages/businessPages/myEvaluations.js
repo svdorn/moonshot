@@ -545,14 +545,8 @@ class MyEvaluations extends Component {
 
                 { this.popup() }
 
-                <div style={style.separator}>
-                    <div style={style.separatorLine}/>
-                </div>
-                <div className="center" style={{margin: "-42px auto 20px"}}>
-                    <div style={style.separatorText}>
-                        My Evaluations
-                    </div>
-                </div>
+                <div className="page-line-header"><div/><div>Evaluations</div></div>
+
                 <div className="center">
                     {link}
                 </div>

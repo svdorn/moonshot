@@ -148,7 +148,11 @@ class Candidates extends Component {
             candidateAction = "Invite";
             onClick = () => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
         }
-        let smallCTA = <div styleName="box-cta" onClick={onClick}>{ candidateAction } Candidates</div>
+        const smallCTA = (
+            <div styleName="box-cta" onClick={onClick}>
+                { candidateAction } Candidates <img src={`/icons/LineArrow${this.props.png}`} />
+            </div>
+        );
 
         return (
             <div>
@@ -173,7 +177,8 @@ class Candidates extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 
