@@ -63,6 +63,7 @@ const businessApis = {
     GET_candidatesAwaitingReview,
     GET_newCandidateGraphData,
     GET_evaluationsGraphData,
+    GET_billingIsSetUp,
 
     generateApiKey,
     createEmailInfo,
@@ -71,6 +72,28 @@ const businessApis = {
 
 
 // ----->> START APIS <<----- //
+
+
+// find out if billing has been set up for the company
+async function GET_billingIsSetUp(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    console.log("userId: ", userId);
+    console.log("verificationToken: ", verificationToken);
+    console.log("businessId: ", businessId);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    const billingIsSetUp = !!(business && typeof business.billingCustomerId === "string");
+
+    console.log("billing is set up: ", billingIsSetUp);
+
+    return res.status(200).send({ billingIsSetUp });
+}
 
 
 // create a business and the first account admin for that business
@@ -1958,43 +1981,6 @@ async function unReviewedCandidateCount(businessId, positionIds) {
 async function newCandidateCountByDate(businessId, positionIds, groupBy, numDataPoints) {
     return new Promise(async function(resolve, reject) {
         try {
-            // // default grouping is by days
-            // if (!["months", "weeks", "days"].includes(groupBy)) { groupBy = "days"; }
-            // // group the counts by the wanted interval
-            // let _id = { "year": { "$year": "$positions.appliedEndDate" } };
-            // if (groupBy === "weeks") { _id["week"] = { "$week": "$positions.appliedEndDate" }; }
-            // if (groupBy === "months" || groupBy === "days") { _id["month"] = { "$month": "$positions.appliedEndDate" }; }
-            // if (groupBy === "days") { _id["day"] = { "$dayOfMonth": "$positions.appliedEndDate" } }
-            //
-            // const now = new Date();
-            // let currentIntervalDay = now.getDate();
-            // // if grouping by months, don't get any data after the first of this month
-            // if (groupBy === "months") { currentIntervalDay = 1; }
-            // // if grouping by weeks, don't get any data from after Sunday (first day of the week)
-            // else if (groupBy === "weeks") { currentIntervalDay -= now.getDay(); }
-            // // we can have data before this date
-            // const startOfCurrentInterval = new Date(now.getFullYear(), now.getMonth(), currentIntervalDay);
-            //
-            // const countsByDate = await Users.aggregate([
-            //     // put each position application into its own object
-            //     { "$unwind": "$positions" },
-            //     // // filter out every position that was applied to before the earliest date wanted
-            //     { "$match": { "$and": [
-            //         { "positions.appliedEndDate": { "$lt": startOfCurrentInterval } },
-            //         { "positions.appliedEndDate": { "$gte": earliestDate } },
-            //         { "positions.positionId": { "$in": positionIds } },
-            //         { "positions.businessId": mongoose.Types.ObjectId(businessId) }
-            //     ] } },
-            //     // group these objects by date and count them
-            //     { "$group": {
-            //         "_id": _id,
-            //         "count": { "$sum": 1 }
-            //     } }
-            // ]);
-            //
-            // return resolve(countsByDate);
-
-
             // the difference between the dates in each data point
             let monthDifference = 0;
             let dayDifference = 0;

@@ -9,6 +9,7 @@ import Onboarding from "./dashboardItems/onboarding/onboarding";
 import Candidates from "./dashboardItems/candidates.js";
 import Employees from "./dashboardItems/employees.js";
 import Evaluations from "./dashboardItems/evaluations.js";
+import Account from "./dashboardItems/account.js";
 
 import "./dashboard.css";
 
@@ -36,6 +37,7 @@ class DashboardItem extends Component {
             case "Candidates": { content = <Candidates/>; break; }
             case "Employees": { content = <Employees/>; break; }
             case "Evaluations": { content = <Evaluations/>; break; }
+            case "Account": { content = <Account/>; break; }
             default: { content = null; break; }
         }
 
