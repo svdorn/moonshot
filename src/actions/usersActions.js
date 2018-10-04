@@ -1,6 +1,5 @@
 "use strict"
 import axios from 'axios';
-import { browserHistory } from 'react-router'
 import { reset } from 'redux-form';
 import { goTo, propertyExists } from "../miscFunctions";
 
@@ -107,8 +106,7 @@ export function login(user, saveSession, navigateBackUrl) {
             let nextUrl = '/myEvaluations';
             if (navigateBackUrl) { nextUrl = navigateBackUrl; }
             // go to the next screen
-            browserHistory.push(nextUrl);
-            window.scrollTo(0, 0);
+            goTo(nextUrl);
         })
         .catch(function(err) {
             dispatch({ type: "LOGIN_REJECTED", ...notification(err, "error") });
@@ -508,7 +506,7 @@ export function changePasswordForgot(user) {
             .catch(function(err2) {});
 
             dispatch({ type:"LOGIN", user: foundUser, ...notification("Password changed!") });
-            browserHistory.push("/myEvaluations");
+            goTo("/myEvaluations");
         })
         .catch(function(err) {
             dispatch({ type:"CHANGE_PASS_FORGOT_REJECTED", ...notification(err, "error") });
@@ -589,9 +587,8 @@ export function comingSoon(user, signedIn){
             .then(function(response) {
                 if (!signedIn) {
                     dispatch({ type:"FOR_BUSINESS", ...notification(response) });
-                    browserHistory.push('/login')
+                    goTo('/login')
                     dispatch({ type:"CHANGE_CURRENT_ROUTE", payload:'/login' })
-                    window.scrollTo(0, 0);
                 } else {
                     dispatch({ type:"FOR_BUSINESS", notification: undefined });
                 }
