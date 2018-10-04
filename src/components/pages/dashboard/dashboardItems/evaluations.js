@@ -169,8 +169,8 @@ class Evaluations extends Component {
                         nameKey="name"
                         cx={100}
                         cy={100}
-                        innerRadius={50}
-                        outerRadius={80}
+                        innerRadius={45}
+                        outerRadius={70}
                         paddingAngle={3}
                         stroke="none"
                     >
