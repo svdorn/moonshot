@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {  } from "../../../../../actions/usersActions";
+import { updateOnboardingStep } from "../../../../../actions/usersActions";
 import {  } from "../../../../../miscFunctions";
 
 import PsychSlider from "../../../evaluation/psychSlider";
@@ -16,13 +16,37 @@ class AdminView extends Component {
         super(props);
 
         this.state = {
-            step: "psych"
         };
+    }
+
+    next = () => {
+        const { _id, verificationToken } = this.props.currentUser;
+        // go to the next onboarding step
+        this.props.updateOnboardingStep(_id, verificationToken, 3);
     }
 
 
     render() {
-        return <div>Admin View</div>
+        return (
+            <div className="inline-block" styleName="onboarding-info admin-view">
+                <div>
+                    <div>{"Once a candidate finishes your evaluation, we'll make a report with our predictions, including an overall score and a breakdown of their results. You can see all of these in the 'Candidates' tab."}</div>
+                    <div
+                        className={button.cyan}
+                        styleName="got-it-button"
+                        onClick={this.next.bind(this)}
+                    >
+                        Got It
+                    </div>
+                </div>
+                <div>
+                    <img
+                        src={`/images/ReportsPage${this.props.png}`}
+                        styleName="admin-image"
+                    />
+                </div>
+            </div>
+        );
     }
 }
 
@@ -36,7 +60,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        updateOnboardingStep
     }, dispatch);
 }
 

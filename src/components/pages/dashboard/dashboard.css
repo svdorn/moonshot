@@ -134,7 +134,17 @@
     position: relative;
 }
 .candidate-view > div:nth-child(2) {
-    border-left: 1px solid var(--primary-black-dark);
+    width: calc(var(--item-width) + 2 * var(--item-margin));
+    text-align: center;
+    padding: var(--item-margin) var(--item-margin) 0;
+    position: relative;
+}
+.admin-view > div:first-child {
+    flex: 1;
+    padding: calc(var(--item-margin));
+    position: relative;
+}
+.admin-view > div:nth-child(2) {
     width: calc(var(--item-width) + 2 * var(--item-margin));
     text-align: center;
     padding: var(--item-margin) var(--item-margin) 0;
@@ -164,6 +174,13 @@
     height: 85%;
     position: absolute;
     bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+}
+.admin-image {
+    height: 95%;
+    position: absolute;
+    bottom: 5px;
     left: 50%;
     transform: translate(-50%);
 }
