@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { withRouter } from 'react-router';
 import { updateOnboardingStep, addNotification } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo } from "../../../../../miscFunctions";
@@ -32,7 +33,11 @@ class WhatToDo extends Component {
             }
         })
         .then(function (res) {
-            self.setState({ step: 1, uniqueName: res.data })
+            let step = 1;
+            if (self.props.location && self.props.location.query && self.props.location.query.onboarding && self.props.location.query.onboarding === "copyLink") {
+                step = 2;
+            }
+            self.setState({ step, uniqueName: res.data })
         })
         .catch(function (err) {
             self.props.addNotification("Error loading page.", "error");
@@ -220,5 +225,6 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
+WhatToDo = withRouter(WhatToDo);
 
 export default connect(mapStateToProps, mapDispatchToProps)(WhatToDo);
