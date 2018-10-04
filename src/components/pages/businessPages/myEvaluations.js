@@ -545,7 +545,7 @@ class MyEvaluations extends Component {
 
                 { this.popup() }
 
-                <div className="page-line-header"><div/><div>Dashboard</div></div>
+                <div className="page-line-header"><div/><div>Evaluations</div></div>
 
                 <div className="center">
                     {link}
