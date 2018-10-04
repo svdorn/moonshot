@@ -26,7 +26,7 @@ class WhyItWorks extends Component {
     intercomMsg = () => {
         const { _id, verificationToken } = this.props.currentUser;
         // trigger intercom event
-        this.props.intercomEvent('whyItWorks', _id, verificationToken, null);
+        this.props.intercomEvent('onboardingHelp-whyItWorks', _id, verificationToken, null);
 
     }
 
