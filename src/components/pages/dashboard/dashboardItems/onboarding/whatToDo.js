@@ -94,13 +94,13 @@ class WhatToDo extends Component {
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>
                             <img
-                                src={`/icons/Cube${this.props.png}`}
+                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
                             />
                             <div>Got it</div>
                         </div>
                         <div onClick={this.intercomMsg}>
                             <img
-                                src={`/icons/Cube${this.props.png}`}
+                                src={`/icons/emojis/Face${this.props.png}`}
                             />
                             <div>More info</div>
                         </div>
@@ -145,13 +145,13 @@ class WhatToDo extends Component {
                     <div styleName="emoji-buttons-full">
                         <div onClick={this.next}>
                             <img
-                                src={`/icons/Cube${this.props.png}`}
+                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
                             />
                             <div>Got it</div>
                         </div>
                         <div onClick={this.intercomMsg}>
                             <img
-                                src={`/icons/Cube${this.props.png}`}
+                                src={`/icons/emojis/Face${this.props.png}`}
                             />
                             <div>More info</div>
                         </div>
@@ -179,13 +179,13 @@ class WhatToDo extends Component {
                     <div styleName="emoji-buttons-full">
                         <div onClick={this.next}>
                             <img
-                                src={`/icons/Cube${this.props.png}`}
+                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
                             />
                             <div>Finish</div>
                         </div>
                         <div onClick={this.intercomMsg}>
                             <img
-                                src={`/icons/Cube${this.props.png}`}
+                                src={`/icons/emojis/Face${this.props.png}`}
                             />
                             <div>More info</div>
                         </div>

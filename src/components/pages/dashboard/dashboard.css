@@ -230,6 +230,13 @@
 }
 .emoji-buttons-full > div > img {
     height: 30px;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition:    all 0.3s ease;
+    -ms-transition:     all 0.3s ease;
+    transition:         all 0.3s ease;
+}
+.emoji-buttons-full > div > img:hover {
+    height: 33px;
 }
 .emoji-buttons {
     position: absolute;
@@ -246,6 +253,13 @@
 }
 .emoji-buttons > div > img {
     height: 30px;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition:    all 0.3s ease;
+    -ms-transition:     all 0.3s ease;
+    transition:         all 0.3s ease;
+}
+.emoji-buttons > div > img:hover {
+    height: 33px;
 }
 .ex-question-answers {
     width: 100%;
