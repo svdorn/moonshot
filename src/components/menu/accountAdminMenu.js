@@ -158,10 +158,12 @@ class AccountAdminMenu extends Component {
         );
 
         const bottomItem = (
-            <div styleName="menu-option" onClick={this.openAccountBox}>
-                <div styleName="user-name">{ getFirstName(user.name) }</div>
-                <div id="account-popup" styleName={"account-popup " + (this.state.accountPopupOpen ? "visible" : "")}>
-                    { popupItems }
+            <div>
+                <div styleName="menu-option" onClick={this.openAccountBox}>
+                    <div styleName="user-name">{ getFirstName(user.name) }</div>
+                    <div id="account-popup" styleName={"account-popup " + (this.state.accountPopupOpen ? "visible" : "")}>
+                        { popupItems }
+                    </div>
                 </div>
             </div>
         );
