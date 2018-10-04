@@ -64,6 +64,7 @@ const businessApis = {
     GET_newCandidateGraphData,
     GET_evaluationsGraphData,
     GET_billingIsSetUp,
+    GET_uniqueName,
 
     generateApiKey,
     createEmailInfo,
@@ -2225,11 +2226,9 @@ async function GET_positions(req, res) {
 
 // get all positions for a business
 async function GET_positionsForApply(req, res) {
-    const name = sanitize(req.query.name);
+    const { name, businessId } = req.query;
 
     if (!name) { return res.status(400).send({ message: "Bad request." }); }
-
-    console.log("name: ", name);
 
     // get the business the user works for
     try {
@@ -2257,7 +2256,12 @@ async function GET_positionsForApply(req, res) {
 
     if (!business) { return res.status(404).send({ message: "Invalid url" }); }
 
-    return res.json({ logo: business.logo, businessName: business.name, positions: business.positions });
+    let admin = false;
+    if (businessId && business._id.toString() === businessId.toString()) {
+        admin = true;
+    }
+
+    return res.json({ logo: business.logo, businessName: business.name, positions: business.positions, admin });
 }
 
 
@@ -2597,8 +2601,7 @@ async function POST_sawMyCandidatesInfoBox(req, res) {
 // get the api key for the api key settings page
 async function GET_apiKey(req, res) {
     // get user credentials
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
+    const { userId, verificationToken } = sanitize(req.query);
 
     // get the user and business
     try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
@@ -2613,6 +2616,26 @@ async function GET_apiKey(req, res) {
     }
 
     return res.status(200).json(business.API_Key);
+}
+
+// get the api key for the api key settings page
+async function GET_uniqueName(req, res) {
+    // get user credentials
+    const { userId, verificationToken } = sanitize(req.query);
+
+    // get the user and business
+    try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
+    catch (error) {
+        console.log("Error finding user/business trying to get business name: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    // user has to be an account admin with right credentials to see the unique business name
+    if (user.userType !== "accountAdmin" || !user.businessInfo || user.businessInfo.businessId.toString() !== business._id.toString()) {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    return res.status(200).json(business.uniqueName);
 }
 
 

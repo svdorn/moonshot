@@ -14,6 +14,79 @@
     margin:5px;
 }
 
+.checklist-container {
+    width: 100%;
+    height: 60px;
+    bottom: 0%;
+    position: fixed;
+    vertical-align: top;
+}
+.checklist {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    border-right: 1px solid var(--primary-black-dark);
+    background: var(--primary-black-light);
+}
+.checklist-item {
+    flex: 1;
+    width: 100%;
+    color: var(--secondary-gray);
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid var(--primary-black-dark);
+}
+.complete-mark {
+    --checkmark-width: 20px;
+    width: var(--checkmark-width);
+    height: var(--checkmark-width);
+    border-radius: var(--checkmark-width);
+    margin: 0 12px 0 18px;
+    position: relative;
+}
+.complete-mark > div {
+    position: absolute;
+    --border-width: calc(var(--checkmark-width) / 10);
+    border-style: solid;
+    border-color: var(--secondary-gray);
+    border-left-width: var(--border-width);
+    border-bottom-width: var(--border-width);
+    border-top-width: 0;
+    border-right-width: 0;
+    width: calc(var(--checkmark-width) / 1.5);
+    height: calc(var(--checkmark-width) / 3);
+    transform: rotate(-45deg);
+    top: calc(var(--checkmark-width) / 4);
+    left: calc(var(--checkmark-width) / 8);
+}
+.complete-mark.complete { background-color: #00c3ff; }
+.complete-mark.incomplete { background-color: #525252; }
+.complete-mark.complete > div { border-color: white; }
+
+.box-cta {
+    color: white;
+    position: absolute;
+    bottom: 5px;
+    right: 150px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.box-cta::after {
+    content: "→";
+    padding: 0 5px 0 5px;
+
+    -webkit-transition: padding 0.5s ease;
+    -ms-transition: padding 0.5s ease;
+    transition: padding 0.5s ease;
+}
+.box-cta:hover::after {
+    content: "→";
+    padding: 0 0 0 10px;
+}
+
 
 @media only screen and (max-width: 700px) {
     .powered-by {
