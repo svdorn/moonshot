@@ -51,7 +51,7 @@ class Evaluations extends Component {
         .then(response => {
             console.log("response: ", response);
             if (propertyExists(response, ["data", "billingIsSetUp"])) {
-                self.setState({ billingIsSetUp });
+                self.setState({ billingIsSetUp: response.data.billingIsSetUp });
             } else {
                 self.setState({ billingIsSetUp: false });
             }
