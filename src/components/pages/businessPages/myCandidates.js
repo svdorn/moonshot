@@ -1352,7 +1352,7 @@ class MyCandidates extends Component {
 
                 <div className="page-header">Candidates</div>
 
-                {this.popup()}
+                { this.popup() }
 
                 { tabs }
 

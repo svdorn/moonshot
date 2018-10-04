@@ -39,7 +39,6 @@ class Employees extends Component {
 
         axios.get("/api/business/employeesAwaitingReview", query )
         .then(response => {
-            console.log("response: ", response);
             if (propertyExists(response, ["data", "newEmployees"]), "number") {
                 self.setState({ newEmployees: response.data.newEmployees });
             } else {
@@ -47,7 +46,6 @@ class Employees extends Component {
             }
         })
         .catch(error => {
-            console.log(error);
             self.setState({ fetchDataError: true });
         });
     }
@@ -73,8 +71,12 @@ class Employees extends Component {
             <div styleName="box-header">
                 <div styleName="box-title">
                     Employees
-                    <div className="info-hoverable background-primary-black-dark secondary-gray">i</div>
-                    <HoverTip className="font10px secondary-gray" text="If you invite employees to take your evaluation and then grade them, we can improve our candidate predictions."/>
+                    <div className="info-hoverable">i</div>
+                    <HoverTip
+                        className="font10px secondary-gray"
+                        style={{marginTop: "18px", marginLeft: "-6px"}}
+                        text="If you invite employees to take your evaluation and then grade them, we can improve our candidate predictions."
+                    />
                 </div>
             </div>
         );
@@ -86,7 +88,7 @@ class Employees extends Component {
                 { header }
 
                 <div className="fully-center" style={{width:"100%"}}>
-                    <div styleName="important-number" style={{marginRight: "0", fontSize: "60px"}}>{ this.state.newEmployees }</div><br/>
+                    <div styleName="important-number" style={{marginRight: "0", fontSize: "64px"}}>{ this.state.newEmployees }</div><br/>
                     <div>Awaiting Grading</div>
                 </div>
 

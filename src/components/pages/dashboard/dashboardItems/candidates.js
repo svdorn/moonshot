@@ -56,7 +56,6 @@ class Candidates extends Component {
             }
         })
         .catch(error => {
-            console.log(error);
             self.setState({ fetchDataError: true });
         });
 
@@ -81,19 +80,16 @@ class Candidates extends Component {
             businessId: user.businessInfo.businessId,
             interval: this.state.timeToGraph
         } };
-        console.log("params: ", params);
 
         axios.get("/api/business/newCandidateGraphData", params)
         .then(response => {
             if (propertyExists(response, ["data", "counts"])) {
-                console.log(response.data.counts);
                 self.setState({ graphData: response.data.counts });
             } else {
                 self.setState({ fetchDataError: true });
             }
         })
         .catch(error => {
-            console.log(error);
             this.setState({ fetchDataError: true });
         });
     }
