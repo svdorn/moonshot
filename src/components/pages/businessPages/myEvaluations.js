@@ -543,9 +543,9 @@ class MyEvaluations extends Component {
                 </MetaTags>
                 {dialog}
 
-                { this.popup() }
-
                 <div className="page-line-header"><div/><div>Evaluations</div></div>
+
+                { this.popup() }
 
                 <div className="center">
                     {link}
