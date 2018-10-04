@@ -193,6 +193,18 @@ function propertyExists(object, propertyTree, type) {
 }
 
 
+function withinElement(event, element) {
+    const clickX = event.clientX;
+    const clickY = event.clientY;
+    const elementRect = element.getBoundingClientRect();
+
+    const withinX = elementRect.left <= clickX && clickX <= elementRect.right;
+    const withinY = elementRect.top <= clickY && clickY <= elementRect.bottom;
+
+    return (withinX && withinY);
+}
+
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -205,6 +217,7 @@ const miscFunctions = {
     goTo,
     truthy,
     propertyExists,
+    withinElement,
 
     Queue,
     Stack

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { signout, closeNotification, openAddUserModal, openContactUsModal } from "../../actions/usersActions";
-import { goTo, getFirstName } from "../../miscFunctions";
+import { goTo, getFirstName, withinElement } from "../../miscFunctions";
 import { axios } from 'axios';
 import { animateScroll } from "react-scroll";
 
@@ -47,11 +47,12 @@ class AccountAdminMenu extends Component {
 
     // handles clicks, is only activated when the account popup is open
     handleAnyClick = (e) => {
-        console.log("handling click");
+        console.log("(handleAnyClick) handling click");
         // get the account popup element
         const popup = document.querySelector("#account-popup");
         // if the click is outside of the target, get rid of the popup
-        if (!popup.contains(e.target)) {
+        if (!withinElement(e, popup)) {
+            console.log("(handleAnyClick) popup does not contain target, calling removePopup");
             this.removePopup();
         }
     }
