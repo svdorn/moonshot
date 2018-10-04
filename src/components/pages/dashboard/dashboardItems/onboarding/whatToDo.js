@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { updateOnboardingStep, addNotification } from "../../../../../actions/usersActions";
+import clipboard from "clipboard-polyfill";
 import { goTo } from "../../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { primaryCyan } from "../../../../../colors";
@@ -19,15 +20,32 @@ class WhatToDo extends Component {
         this.next = this.next.bind(this);
         this.intercomMsg = this.intercomMsg.bind(this);
         this.handleCustomPage = this.handleCustomPage.bind(this);
+        this.copyLink = this.copyLink.bind(this);
     }
 
     componentDidMount() {
-        this.setState({ step: 1 })
+        let self = this;
+        axios.get("/api/business/uniqueName", {
+            params: {
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken
+            }
+        })
+        .then(function (res) {
+            self.setState({ step: 1, uniqueName: res.data })
+        })
+        .catch(function (err) {
+            self.props.addNotification("Error loading page.", "error");
+        });
     }
 
     next = () => {
         // check if need to go to next step in sequence
-        if (this.state.step < 3) { this.setState({ step: ++this.state.step }); }
+        if (this.state.step < 3) {
+            this.setState({ step: ++this.state.step }, function(res) {
+                return;
+            });
+         }
         // get credentials
         const { _id, verificationToken } = this.props.currentUser;
         // go to the next onboarding step
@@ -38,7 +56,15 @@ class WhatToDo extends Component {
         console.log("here");
     }
 
+    copyLink = () => {
+        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
+        URL = encodeURI(URL);
+        clipboard.writeText(URL);
+        this.props.addNotification("Link copied to clipboard.", "info");
+    }
+
     handleCustomPage = () => {
+        goTo(`/apply/${this.state.uniqueName}`)
         let self = this;
         // get the business' unique name
         axios.get("/api/business/uniqueName", {
@@ -97,12 +123,40 @@ class WhatToDo extends Component {
         );
     }
 
+    copyLinkView() {
+        return (
+            <div styleName="full-step-container">
+                <div styleName="copy-link-view">
+                    <div className="primary-cyan font22px">
+                        {"Copy Link View"}
+                    </div>
+                    <div>
+                        {"Why gamble on your hires? We use machine learning, predictive data, and decades of psychology research to find the candidates who can take your company to the next level."}
+                    </div>
+                    <div styleName="link-area">
+                        <div>{`https://moonshotinsights.io/apply/${this.state.uniqueName}`}</div>
+                        <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" onClick={this.copyLink} style={{padding: "3px 10px"}}>
+                            <span>Copy Link</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    addPositionsView() {
+        return (
+            <div>
+            </div>
+        );
+    }
+
     render() {
         switch (this.state.step) {
             case 1: return this.customPageView();
-            case 2: return this.customPageView();
-            case 3: return this.customPageView();
-            default: return <div className="fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>;
+            case 2: return this.copyLinkView();
+            case 3: return this.addPositionsView();
+            default: return <div styleName="full-step-container"><div styleName="circular-progress"><CircularProgress style={{ color: primaryCyan }} /></div></div>;
         }
     }
 }
