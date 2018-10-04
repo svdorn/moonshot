@@ -139,6 +139,23 @@ class WhatToDo extends Component {
                             <span>Copy Link</span>
                         </button>
                     </div>
+                    <div styleName="invite-template-text">
+                        <u>{"Invite template for candidates."}</u>
+                    </div>
+                    <div styleName="emoji-buttons-full">
+                        <div onClick={this.next}>
+                            <img
+                                src={`/icons/Cube${this.props.png}`}
+                            />
+                            <div>Got it</div>
+                        </div>
+                        <div onClick={this.intercomMsg}>
+                            <img
+                                src={`/icons/Cube${this.props.png}`}
+                            />
+                            <div>More info</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
