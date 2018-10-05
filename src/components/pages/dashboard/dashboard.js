@@ -22,8 +22,15 @@ class Dashboard extends Component {
     }
 
     render() {
-        let activity = <DashboardItem type="Onboarding" width={3} />;
-        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.businessInterests) {
+        const user = this.props.currentUser;
+
+        let activity = <DashboardItem type="Activity" width={3} />;
+        // if the user is not done with onboarding
+        if (user && user.onboard && !user.onboard.timeFinished) {
+            activity = <DashboardItem type="Onboarding" width={3} />;
+        }
+        // if the user has the popups at onboarding
+        if (user && user.popups && user.popups.businessInterests) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
         }
 
