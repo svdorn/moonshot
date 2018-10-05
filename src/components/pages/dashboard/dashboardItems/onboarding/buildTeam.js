@@ -2,11 +2,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification, postBusinessInterests } from "../../../../actions/usersActions";
+import { addNotification, postBusinessInterests } from "../../../../../actions/usersActions";
 import { CircularProgress } from "material-ui";
-import { button } from "../../../../classes";
+import { button } from "../../../../../classes";
 
-import "../dashboard.css";
+import "../../dashboard.css";
 
 class BuildTeam extends Component {
     constructor(props) {
@@ -108,11 +108,10 @@ class BuildTeam extends Component {
     render() {
         return (
             <div>
-                <div className="build-team-container marginTop10px marginBottom50px">
-                    <div className="center font18px font16pxUnder700 font14pxUnder500">
-                        Which of these is most interesting to you as you build your team?
-                        <div className="font16px font14pxUnder700 font12pxUnder500">We will use this info to tune our ML models to your specific needs.</div>
-                        <div className="primary-cyan font16px font14pxUnder700 font12pxUnder500">Choose at least one.</div>
+                <div>
+                    <div className="center font16px font14pxUnder700 font12pxUnder500">
+                        Which of these is most interesting to you?
+                        <div className="primary-cyan font14px font12pxUnder700">Your choice(s) help us know where to focus</div>
                     </div>
                     <div className="build-team">
                         <div>{ this.makeChoices() }</div>
@@ -127,7 +126,7 @@ class BuildTeam extends Component {
                             styleName="got-it-button"
                             onClick={this.handleClick}
                         >
-                            Continue
+                            See What{"'"}s Next &#8594;
                         </div>
                     }
                 </div>
