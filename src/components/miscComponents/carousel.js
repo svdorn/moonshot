@@ -125,7 +125,7 @@ class Carousel extends Component {
 
         return (
             <div className="carousel">
-                <div style={{position: "relative", display: "inline-block"}}>
+                <div style={{position: "relative"}}>
                     { this.content() }
                     <div
                         className="left circleArrowIcon"

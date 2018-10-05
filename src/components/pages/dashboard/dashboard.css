@@ -400,6 +400,40 @@
     font-size: 18px;
 }
 
+.activity-container {
+    position: relative;
+    flex: 1;
+    padding: calc(var(--item-margin));
+}
+.activity-container > div {
+    text-align: center;
+}
+.tips-for-hiring { }
+.tips-for-hiring > div:first-child {
+    color: var(--secondary-gray);
+}
+.tips-for-hiring > div:nth-child(2) {
+    width: 300px;
+    height: 100%;
+    margin: auto;
+    background-color: var(--primary-black-dark);
+    vertical-align: top;
+    color: var(--secondary-gray);
+    font-size: 14px;
+
+    -webkit-box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    -moz-box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    -webkit-transition: -webkit-transition .2s;
+    -moz-transition: -moz-box-shadow .2s;
+    transition: box-shadow .2s;
+}
+.carousel-frame {
+    margin: auto;
+    width: 250px;
+    height: 100%;
+}
+
 @media screen and (max-width: 820px) {
     .dashboard { --items-per-row: 2 }
 
