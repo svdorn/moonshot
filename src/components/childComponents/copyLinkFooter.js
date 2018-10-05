@@ -6,6 +6,7 @@ import { addNotification } from '../../actions/usersActions';
 import clipboard from "clipboard-polyfill";
 import axios from 'axios';
 
+import './copyLinkFooter.css';
 
 class CopyLinkFooter extends Component {
     constructor(props) {
@@ -41,15 +42,25 @@ class CopyLinkFooter extends Component {
         return (
             <div>
                 {this.state.uniqueName && this.state.name ?
-                    <div className="copy-link-footer-container">
-                        <div className="copy-link-footer">
-                            <img src={`/icons/Astrobot${this.props.png}`} height={50} />
-                            <div className="inlineBlock secondary-gray marginLeft20px">
-                                {`${this.state.name}'s candidate invite link`}
+                    <div styleName="footer-container">
+                        <div styleName="footer">
+                            <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
+                            <div className="secondary-gray" styleName="text">
+                                <div styleName="desktop-text">
+                                    Embed {this.state.name}{"'"}s candidate invite page in your <br/>ATS, automated emails or other communications with candidates.
+                                </div>
+                                <div styleName="mobile-text">
+                                    {this.state.name}{"'"}s<br/> candidate invite link
+                                </div>
                             </div>
-                            <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts inlineBlock marginLeft20px" onClick={this.copyLink} style={{padding: "3px 10px"}}>
-                                <span>Copy Link</span>
-                            </button>
+                            <div styleName="buttons">
+                                <button styleName="button" className="button noselect round-6px background-primary-cyan primary-white" onClick={this.copyLink} style={{padding: "3px 10px"}}>
+                                    <span>Copy Link</span>
+                                </button>
+                                <div className="clickableNoUnderline secondary-gray" styleName="invite-template">
+                                    <u>Invite template for candidates</u>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     : null

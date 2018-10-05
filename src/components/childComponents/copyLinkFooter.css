@@ -1,0 +1,90 @@
+.footer-container {
+    width: 100%;
+    height: 60px;
+    bottom: 0%;
+    position: fixed;
+    background: var(--primary-black-light);
+    vertical-align: top;
+    text-align: center;
+    display: initial;
+    -webkit-animation: fadein .2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein .2s; /* Firefox < 16 */
+        -ms-animation: fadein .2s; /* Internet Explorer */
+         -o-animation: fadein .2s; /* Opera < 12.1 */
+            animation: fadein .2s;
+}
+.footer {
+    position: absolute;
+    left: 45%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+.astrobot-img {
+    height: 50px;
+}
+.buttons {
+    display: inline-block;
+    margin-left: 15px;
+    vertical-align: top;
+}
+.button {
+    font-size: 16px;
+}
+.invite-template {
+    font-size: 12px;
+}
+
+.text {
+    vertical-align: top;
+    margin-left: 15px;
+    display: inline-block;
+    text-align: left;
+}
+.desktop-text {
+    display: block;
+}
+.mobile-text {
+    display: block;
+    font-size: 14px;
+}
+
+@media only screen and (max-width: 900px) {
+    .text {
+        margin-left: 10px;
+    }
+    .desktop-text {
+        font-size: 14px;
+    }
+    .buttons {
+        margin-left: 0;
+    }
+    .button {
+        margin-left: 10px;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+    .invite-template {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 701px) {
+    .mobile-text { display: none; }
+}
+
+@media only screen and (max-width: 700px) {
+    .text { margin-left: 0; }
+    .desktop-text { display: none; }
+    .astrobot-img { display: none; }
+    .button {
+        font-size: 14px;
+        margin-left: 8px;
+        margin-top: 10px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+
+}
