@@ -142,6 +142,8 @@ class Candidates extends Component {
             marginTop: "10px"
         }
 
+        const { graphData } = this.state;
+
         let candidateAction = "Review";
         let onClick = () => goTo("/myCandidates");
         if (this.state.newCandidates === 0) {
@@ -154,6 +156,11 @@ class Candidates extends Component {
             </div>
         );
 
+        const twoOrMoreCandidates = graphData.some(d => d.users > 1);
+        console.log("twoOrMoreCandidates: ", twoOrMoreCandidates);
+
+        const yAxisAttrs = twoOrMoreCandidates ? {} : { ticks: [1,2] };
+
         return (
             <div>
                 { header }
@@ -161,10 +168,16 @@ class Candidates extends Component {
                     <div styleName="important-number">{ this.state.newCandidates }</div> Awaiting Review
                 </div>
 
-                <LineChart style={chartStyle} width={250} height={120} data={this.state.graphData}>
+                <LineChart style={chartStyle} width={250} height={120} data={graphData}>
                     <XAxis dataKey="date" padding={{right:10,left:10}}/>
-                    <YAxis />
-                    <Line type="monotone" dataKey="users" stroke={primaryCyan} strokeWidth={2} dot={false}/>
+                    <YAxis {...yAxisAttrs}/>
+                    <Line
+                        type="monotone"
+                        dataKey="users"
+                        stroke={primaryCyan}
+                        strokeWidth={2}
+                        dot={false}
+                    />
                 </LineChart>
 
                 { smallCTA }
