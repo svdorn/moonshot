@@ -7,6 +7,7 @@ import {  } from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
 import InviteCandidatesModal from "./inviteCandidatesModal";
+import AddPositionDialog from '../../childComponents/addPositionDialog';
 
 import WelcomeMessage from "./dashboardItems/welcomeMessage";
 import BuildTeam from "./dashboardItems/buildTeam";
@@ -29,6 +30,7 @@ class Dashboard extends Component {
                     <meta name="description" content="Your home base for checking in on your candidates, employees, evaluations, and more."/>
                 </MetaTags>
                 <InviteCandidatesModal />
+                <AddPositionDialog />
                 <div className="page-line-header"><div/><div>Dashboard</div></div>
                 <WelcomeMessage />
                 {this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.businessInterests ?
