@@ -21,6 +21,7 @@ import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import MyEvaluationsPreview from '../childComponents/myEvaluationsPreview';
 import { goTo } from '../../miscFunctions';
+import { button } from "../../classes";
 
 
 class MyEvaluations extends Component {
@@ -61,6 +62,16 @@ class MyEvaluations extends Component {
         } else {
             this.setState({ noPositions: true });
         }
+    }
+
+
+    reSendVerification() {
+        console.log("re sending");
+    }
+
+
+    checkStatus() {
+        console.log("checking status");
     }
 
 
@@ -169,9 +180,20 @@ class MyEvaluations extends Component {
                     return null;
                 }
             });
-
         }
 
+        let verifyBanner = null;
+        if (!currentUser.verified) {
+            verifyBanner = (
+                <div>
+                    Verify your email to take your eval! A verification email
+                    was sent to { currentUser.email } -
+                    Wrong email? <div className={button.purpleBlue} onClick={() => goTo("/settings")}>Change email</div>
+                    Didn{"'"}t get our email? <div className={button.purpleBlue} onClick={this.reSendVerification.bind(this)}>Re-send it</div>
+                    Already verified? <div className={button.purpleBlue} onClick={this.reSendVerification.bind(this)}>Check status</div>
+                </div>
+            )
+        }
 
         return(
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEvaluations'>
@@ -179,6 +201,7 @@ class MyEvaluations extends Component {
                     <title>My Evaluations | Moonshot</title>
                     <meta name="description" content="See and take your active evaluations!"/>
                 </MetaTags>
+
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                 </div>
@@ -187,6 +210,9 @@ class MyEvaluations extends Component {
                         My Evaluations
                     </div>
                 </div>
+
+                { verifyBanner }
+
                 <div className="marginBottom60px">
                     {evaluations}
                 </div>
