@@ -19,19 +19,20 @@
     top: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+    width: 100%;
 }
 .astrobot-img {
     height: 50px;
 }
 .button {
     display: inline-block;
-    margin-left: 20px;
+    margin-left: 15px;
     font-size: 14px;
 }
 
 .text {
     vertical-align: top;
-    margin-left: 20px;
+    margin-left: 15px;
     display: inline-block;
     text-align: left;
 }
@@ -40,7 +41,7 @@
 }
 .mobile-text {
     display: block;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 @media only screen and (max-width: 900px) {
@@ -52,6 +53,7 @@
     }
     .button {
         margin-left: 10px;
+        margin-bottom: 5px;
     }
 }
 
@@ -64,7 +66,12 @@
     .desktop-text { display: none; }
     .astrobot-img { display: none; }
     .button {
-        font-size: 12px;
-        margin-left: 5px;
+        font-size: 14px;
+        margin-left: 8px;
+        margin-top: 10px;
     }
+}
+
+@media only screen and (max-width: 500px) {
+
 }
