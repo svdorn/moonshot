@@ -1,0 +1,70 @@
+.footer-container {
+    width: 100%;
+    height: 60px;
+    bottom: 0%;
+    position: fixed;
+    background: var(--primary-black-light);
+    vertical-align: top;
+    text-align: center;
+    display: initial;
+    -webkit-animation: fadein .2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein .2s; /* Firefox < 16 */
+        -ms-animation: fadein .2s; /* Internet Explorer */
+         -o-animation: fadein .2s; /* Opera < 12.1 */
+            animation: fadein .2s;
+}
+.footer {
+    position: absolute;
+    left: 45%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.astrobot-img {
+    height: 50px;
+}
+.button {
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.text {
+    vertical-align: top;
+    margin-left: 20px;
+    display: inline-block;
+    text-align: left;
+}
+.desktop-text {
+    display: block;
+}
+.mobile-text {
+    display: block;
+    font-size: 12px;
+}
+
+@media only screen and (max-width: 900px) {
+    .text {
+        margin-left: 10px;
+    }
+    .desktop-text {
+        font-size: 14px;
+    }
+    .button {
+        margin-left: 10px;
+    }
+}
+
+@media only screen and (min-width: 701px) {
+    .mobile-text { display: none; }
+}
+
+@media only screen and (max-width: 700px) {
+    .text { margin-left: 0; }
+    .desktop-text { display: none; }
+    .astrobot-img { display: none; }
+    .button {
+        font-size: 12px;
+        margin-left: 5px;
+    }
+}
