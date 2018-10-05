@@ -405,18 +405,27 @@
 
     .dashboard-item-container.width-3 {
         width: calc((var(--item-width) * 2) + (var(--item-margin) * 2));
-        height: calc(var(--item-width) * 1.5);
+        height: calc(var(--item-width) * (5/4));
+    }
+    .checklist {
+        display: inline-block;
     }
     .checklist-container {
-        height: calc(100% / 3);
+        height: calc(100% / 5);
         width: 100%;
     }
+    .checklist-item {
+        width: 50%;
+        height: 50%;
+        float: left;
+    }
+
     .onboarding-content {
-        height: calc(100% * (2/3));
+        height: calc(100% * (4/5));
         width: 100%;
     }
     .onboarding-dashboard-item { display: inline-block; }
-    .checklist-item { border-bottom: 1px solid var(--primary-black-dark); }
+    .checklist-item:not(:last-child) { border-bottom: none; }
 
     .candidate-view > div:nth-child(2),
     .ml-step > div:nth-child(2),
@@ -431,14 +440,23 @@
 
     .dashboard-item-container.width-3 {
         width: var(--item-width);
-        height: calc(var(--item-width) * 2.5);
+        height: calc(var(--item-width) * 2.125);
     }
     .checklist-container {
-        height: calc(100% / 5);
+        height: calc(100% / 17);
         width: 100%;
     }
+    .checklist-item {
+        width: 25%;
+        height: 100%;
+    }
+    .checklist-item > div:nth-child(2) {
+        display: none;
+    }
+    .complete-mark { margin: auto; }
+
     .onboarding-content {
-        height: calc(100% * (4/5));
+        height: calc(100% * (16/17));
         width: 100%;
     }
     .candidate-view > div:nth-child(2),
