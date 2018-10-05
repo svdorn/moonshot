@@ -24,10 +24,16 @@
 .astrobot-img {
     height: 50px;
 }
-.button {
+.buttons {
     display: inline-block;
     margin-left: 15px;
-    font-size: 14px;
+    vertical-align: top;
+}
+.button {
+    font-size: 16px;
+}
+.invite-template {
+    font-size: 12px;
 }
 
 .text {
@@ -51,9 +57,16 @@
     .desktop-text {
         font-size: 14px;
     }
+    .buttons {
+        margin-left: 0;
+    }
     .button {
         margin-left: 10px;
-        margin-bottom: 5px;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+    .invite-template {
+        display: none;
     }
 }
 

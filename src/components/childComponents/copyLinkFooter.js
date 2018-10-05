@@ -47,15 +47,20 @@ class CopyLinkFooter extends Component {
                             <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
                             <div className="secondary-gray" styleName="text">
                                 <div styleName="desktop-text">
-                                    Embed {this.state.name}{"'"}s candidate invite page in your <div className="above90only noHeight"><br/></div>ATS, automated emails or other communications with candidates.
+                                    Embed {this.state.name}{"'"}s candidate invite page in your <br/>ATS, automated emails or other communications with candidates.
                                 </div>
                                 <div styleName="mobile-text">
                                     {this.state.name}{"'"}s<br/> candidate invite link
                                 </div>
                             </div>
-                            <button styleName="button" className="button noselect round-6px background-primary-cyan primary-white" onClick={this.copyLink} style={{padding: "3px 10px"}}>
-                                <span>Copy Link</span>
-                            </button>
+                            <div styleName="buttons">
+                                <button styleName="button" className="button noselect round-6px background-primary-cyan primary-white" onClick={this.copyLink} style={{padding: "3px 10px"}}>
+                                    <span>Copy Link</span>
+                                </button>
+                                <div className="clickableNoUnderline secondary-gray" styleName="invite-template">
+                                    <u>Invite template for candidates</u>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     : null
