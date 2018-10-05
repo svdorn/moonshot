@@ -120,7 +120,7 @@
     top: calc(var(--checkmark-width) / 4);
     left: calc(var(--checkmark-width) / 8);
 }
-.complete-mark.complete { background-color: #00c3ff; }
+.complete-mark.complete { background-color: var(--primary-cyan); }
 .complete-mark.incomplete { background-color: #525252; }
 .complete-mark.complete > div { border-color: white; }
 
