@@ -90,7 +90,7 @@ class WhatToDo extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info ml-step">
                 <div>
-                    <div className="primary-cyan font18px">
+                    <div styleName="custom-page-title">
                         {"A Custom Page Just for You"}
                     </div>
                     <div>
@@ -119,7 +119,12 @@ class WhatToDo extends Component {
                         />
                     </div>
                     <div>
-                        <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" styleName="onboarding-button apply-button" onClick={this.handleCustomPage} style={{padding: "3px 10px"}}>
+                        <button
+                            className="button noselect round-6px background-primary-cyan primary-white"
+                            styleName="onboarding-button apply-button"
+                            onClick={this.handleCustomPage}
+                            style={{padding: "3px 10px"}}
+                        >
                             <span>See my Page &#8594;</span>
                         </button>
                     </div>
@@ -132,7 +137,7 @@ class WhatToDo extends Component {
         return (
             <div styleName="full-step-container">
                 <div styleName="copy-link-view">
-                    <div className="font22px">
+                    <div styleName="onboarding-title">
                         {"Copy Link View"}
                     </div>
                     <div>
@@ -170,7 +175,7 @@ class WhatToDo extends Component {
         return (
             <div styleName="full-step-container">
                 <div styleName="add-positions-view">
-                    <div className="font22px">
+                    <div styleName="onboarding-title">
                         {"Add Positions Header"}
                     </div>
                     <div>
