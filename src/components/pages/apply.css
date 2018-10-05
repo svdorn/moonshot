@@ -59,9 +59,9 @@
     border-right-width: 0;
     width: calc(var(--checkmark-width) / 1.5);
     height: calc(var(--checkmark-width) / 3);
-    transform: rotate(-45deg);
+    transform: rotate(-55deg) skew(-10deg);
     top: calc(var(--checkmark-width) / 4);
-    left: calc(var(--checkmark-width) / 8);
+    left: calc(var(--checkmark-width) / 6);
 }
 .complete-mark.complete { background-color: #00c3ff; }
 .complete-mark.incomplete { background-color: #525252; }

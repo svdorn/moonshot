@@ -87,7 +87,7 @@ class Evaluations extends Component {
         }
 
         const content = (
-            <div style={{padding: "5px 10px"}}>
+            <div style={{padding: "5px 14px"}}>
                 <div styleName="payment-plan">Current Plan: <span>{ currentPlan }</span></div>
                 <div>{ planDescriptions[currentPlan] }</div>
                 <div onClick={() => goTo("/pricing")} styleName="pricing-link">See Pricing</div>

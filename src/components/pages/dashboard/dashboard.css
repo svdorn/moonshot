@@ -116,9 +116,9 @@
     border-right-width: 0;
     width: calc(var(--checkmark-width) / 1.5);
     height: calc(var(--checkmark-width) / 3);
-    transform: rotate(-45deg);
+    transform: rotate(-55deg) skew(-10deg);
     top: calc(var(--checkmark-width) / 4);
-    left: calc(var(--checkmark-width) / 8);
+    left: calc(var(--checkmark-width) / 6);
 }
 .complete-mark.complete { background-color: var(--primary-cyan); }
 .complete-mark.incomplete { background-color: #525252; }
@@ -240,8 +240,7 @@
     display: inline-block;
     text-align: center;
     cursor: pointer;
-    margin-left: 8px;
-    margin-right: 8px;
+    margin: 0 15px;
 }
 .emoji-buttons > div > img {
     height: 30px;
@@ -323,7 +322,7 @@
 }
 
 .box-header {
-    padding: 3px 4px 0 14px;
+    padding: 5px 4px 0 14px;
     height: 35px;
 }
 .box-title {
@@ -339,7 +338,7 @@
 }
 .box-cta {
     position: absolute;
-    bottom: 3px;
+    bottom: 4px;
     right: 5px;
     font-size: 12px;
     cursor: pointer;
