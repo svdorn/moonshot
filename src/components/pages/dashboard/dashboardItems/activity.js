@@ -13,7 +13,7 @@ class Activity extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { frame: "TipsForHiring" };
+        this.state = { frame: "NoCandidates" };
     }
 
     componentDidMount() {
