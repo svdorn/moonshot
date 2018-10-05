@@ -7,9 +7,9 @@ import {  } from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
 import InviteCandidatesModal from "./inviteCandidatesModal";
+import AddPositionDialog from '../../childComponents/addPositionDialog';
 
 import WelcomeMessage from "./dashboardItems/welcomeMessage";
-import BuildTeam from "./dashboardItems/buildTeam";
 
 import "./dashboard.css";
 
@@ -22,6 +22,11 @@ class Dashboard extends Component {
     }
 
     render() {
+        let activity = <DashboardItem type="Onboarding" width={3} />;
+        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.businessInterests) {
+            activity = <DashboardItem type="BuildTeam" width={3} />;
+        }
+
         return (
             <div className="center full-height">
                 <MetaTags>
@@ -29,19 +34,16 @@ class Dashboard extends Component {
                     <meta name="description" content="Your home base for checking in on your candidates, employees, evaluations, and more."/>
                 </MetaTags>
                 <InviteCandidatesModal />
+                <AddPositionDialog />
                 <div className="page-line-header"><div/><div>Dashboard</div></div>
                 <WelcomeMessage />
-                {this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.businessInterests ?
-                    <BuildTeam />
-                    :
-                    <div styleName="dashboard">
-                        <DashboardItem type="Onboarding" width={3} />
-                        <DashboardItem type="Candidates" width={1} />
-                        <DashboardItem type="Evaluations" width={1} />
-                        <DashboardItem type="Employees" width={1} />
-                        <DashboardItem type="Account" width={1} />
-                    </div>
-                }
+                <div styleName="dashboard">
+                    { activity }
+                    <DashboardItem type="Candidates" width={1} />
+                    <DashboardItem type="Evaluations" width={1} />
+                    <DashboardItem type="Employees" width={1} />
+                    <DashboardItem type="Account" width={1} />
+                </div>
             </div>
         );
     }

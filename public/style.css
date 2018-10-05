@@ -369,7 +369,7 @@ form > h1 {
 }
 .build-team {
     position: relative;
-    padding: 10px 20px;
+    padding: 5px 20px;
 }
 
 .build-team > div {
@@ -387,9 +387,9 @@ form > h1 {
 
 .build-team .method-box {
     display: flex;
-    max-width: 28%;
-    min-width: 100px;
-    padding: 5px;
+    width: 210px;
+    height: 50px;
+    padding: 1px;
     margin: 10px 5px;
     border: 1px solid white;
     border-radius: 4px;

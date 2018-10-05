@@ -26,6 +26,20 @@ export function usersReducers(state = initialState, action) {
                 userPostedFailed: false
             };
             break;
+        case "OPEN_ADD_POSITION_MODAL":
+            return {
+                ...state,
+                positionModalOpen: true
+            };
+            break;
+        case "CLOSE_ADD_POSITION_MODAL":
+            return {
+                ...state,
+                positionModalOpen: false,
+                positionPosted: false,
+                posiitonPostedFailed: false
+            };
+            break;
         case "OPEN_INVITE_CANDIDATES_MODAL": {
             return { ...state, inviteCandidatesModalOpen: true }; break;
         }

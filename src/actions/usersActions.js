@@ -39,6 +39,17 @@ export function setWebpSupport(webpSupported) {
     }
 }
 
+export function openAddPositionModal() {
+    return function(dispatch) {
+        dispatch({type: "OPEN_ADD_POSITION_MODAL"});
+    }
+}
+
+export function closeAddPositionModal() {
+    return function(dispatch) {
+        dispatch({type: "CLOSE_ADD_POSITION_MODAL"});
+    }
+}
 
 export function openAddUserModal() {
     return function(dispatch) {

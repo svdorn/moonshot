@@ -16,7 +16,7 @@ import {
 import {connect} from 'react-redux';
 import { browserHistory } from "react-router";
 import {bindActionCreators} from 'redux';
-import { addNotification, startLoading, stopLoading, openAddUserModal, hidePopups } from '../../../actions/usersActions';
+import { addNotification, startLoading, stopLoading, openAddUserModal, hidePopups, openAddPositionModal } from '../../../actions/usersActions';
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';

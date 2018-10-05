@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router';
-import { updateOnboardingStep, addNotification } from "../../../../../actions/usersActions";
+import { updateOnboardingStep, addNotification, openAddPositionModal } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo } from "../../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -22,6 +22,7 @@ class WhatToDo extends Component {
         this.intercomMsg = this.intercomMsg.bind(this);
         this.handleCustomPage = this.handleCustomPage.bind(this);
         this.copyLink = this.copyLink.bind(this);
+        this.openAddPositionModal = this.openAddPositionModal.bind(this);
     }
 
     componentDidMount() {
@@ -84,6 +85,10 @@ class WhatToDo extends Component {
         .catch(function (err) {
             self.props.addNotification(err, "error");
         });
+    }
+
+    openAddPositionModal = () => {
+        this.props.openAddPositionModal();
     }
 
     customPageView() {
@@ -182,7 +187,7 @@ class WhatToDo extends Component {
                         {"Why gamble on your hires? We use machine learning, predictive data, and decades of psychology research to find the candidates who can take your company to the next level."}
                     </div>
                     <div>
-                        <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" styleName="onboarding-button" onClick={this.handleCustomPage} style={{padding: "3px 10px"}}>
+                        <button onClick={this.openAddPositionModal} className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" styleName="onboarding-button" style={{padding: "3px 10px"}}>
                             <span>Add Position</span>
                         </button>
                     </div>
@@ -226,7 +231,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateOnboardingStep,
-        addNotification
+        addNotification,
+        openAddPositionModal
     }, dispatch);
 }
 
