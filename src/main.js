@@ -19,8 +19,8 @@ require('es6-promise').polyfill();
 import Menu from './components/menu/menu';
 import Footer from './components/footer';
 import Notification from './components/notification'
-//import FixedOnboardingProgress from "./components/miscComponents/fixedOnboardingProgress";
 import ContactUsDialog from './components/childComponents/contactUsDialog';
+import CopyLinkFooter from './components/childComponents/copyLinkFooter';
 
 import "./main.css";
 
@@ -103,11 +103,22 @@ class Main extends Component {
         img.onload = function () {
             var result = (img.width > 0) && (img.height > 0);
             callback(feature, result);
-        };
+        };<div>
+            </div>
         img.onerror = function () {
             callback(feature, false);
         };
         img.src = "data:image/webp;base64," + kTestImages[feature];
+    }
+
+    copyLinkFooter() {
+        if (this.props.currentUser && this.props.currentUser.userType === "accountAdmin" && this.props.currentUser.onboard && !this.props.currentUser.onboard.timeFinished) {
+            return (
+                <CopyLinkFooter />
+            );
+        }
+
+        return null;
     }
 
 
@@ -125,7 +136,7 @@ class Main extends Component {
                         <Notification/>
                         <ContactUsDialog/>
                         { this.props.children }
-                        { /* <FixedOnboardingProgress/> */ }
+                        { this.copyLinkFooter() }
                         <Footer/>
                     </div>
                 </div>
@@ -152,7 +163,7 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
         notification: state.users.notification,
-        webpSupportChecked: state.users.webpSupportChecked
+        webpSupportChecked: state.users.webpSupportChecked,
     };
 }
 

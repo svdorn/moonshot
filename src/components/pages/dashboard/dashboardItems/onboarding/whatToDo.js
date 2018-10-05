@@ -37,7 +37,7 @@ class WhatToDo extends Component {
             if (self.props.location && self.props.location.query && self.props.location.query.onboarding && self.props.location.query.onboarding === "copyLink") {
                 step = 2;
             }
-            self.setState({ step, uniqueName: res.data })
+            self.setState({ step, uniqueName: res.data.uniqueName })
         })
         .catch(function (err) {
             self.props.addNotification("Error loading page.", "error");
