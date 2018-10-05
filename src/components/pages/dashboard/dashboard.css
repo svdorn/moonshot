@@ -390,14 +390,7 @@
     margin-top: 5px;
 }
 
-.circular-progress {
-    width: calc(var(--item-width) * 2);
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, 50%);
-    text-align: center;
-}
+.circular-progress { text-align: center; }
 
 .onboarding-title {
     color: var(--primary-cyan);
@@ -458,7 +451,8 @@
     .onboarding-content > div > div { height: 50%; }
     .onboarding-content > div > div:first-child { border-bottom: 1px solid var(--primary-black-dark); }
     .onboarding-content > div > div:first-child.copy-link-view,
-    .onboarding-content > div > div:first-child.add-positions-view { border-bottom: none; }
+    .onboarding-content > div > div:first-child.add-positions-view,
+    .onboarding-content > div > div:first-child.circular-progress { border-bottom: none; }
 
     .admin-image {
         height: 85%;

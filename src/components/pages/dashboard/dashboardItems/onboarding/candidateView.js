@@ -60,7 +60,7 @@ class CandidateView extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
-                    <div>{"Candidates will take a 12-minute quiz that determines their personality. It will involve a series of questions that look like this:"}</div>
+                    <div>{"Candidates will take a 12-minute quiz that evaluates their personality. It will involve a series of questions that look like the following:"}</div>
                     { this.emojiButtons() }
                 </div>
                 <div className="noselect">
@@ -87,7 +87,7 @@ class CandidateView extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
-                    <div>{"Candidates will then take a 10-minute pattern recognition test. Results on this type of test are highly correlated with ability to:"}</div>
+                    <div>{"Candidates will then take a short cognitive test that demonstrates their ability to:"}</div>
                     <ul>
                         <li>Solve Problems</li>
                         <li>Learn Quickly</li>
@@ -96,7 +96,7 @@ class CandidateView extends Component {
                     { this.emojiButtons() }
                 </div>
                 <div className="gca-example">
-                    <div>Select the image that completes the pattern:</div>
+                    <div>(Easy example) Select the image that completes the pattern:</div>
                     <img
                         src={`/images/cognitiveTest/RPM-Example${this.props.png}`}
                         styleName="gca-image"
