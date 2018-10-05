@@ -1979,6 +1979,12 @@ async function unReviewedCandidateCount(businessId, positionIds) {
 }
 
 
+// returns a date formatted to have only the month and day (so 10-6, for example)
+function monthAndDayOnly(date) {
+    return `${date.getMonth() + 1}-${date.getDate()}`;
+}
+
+
 async function newCandidateCountByDate(businessId, positionIds, groupBy, numDataPoints) {
     return new Promise(async function(resolve, reject) {
         try {
@@ -1988,6 +1994,9 @@ async function newCandidateCountByDate(businessId, positionIds, groupBy, numData
             if (groupBy === "months") { monthDifference = 1; }
             else if (groupBy === "weeks") { dayDifference = 7; }
             else { dayDifference = 1; }
+
+            // the date that starts each time interval
+            let dates = [];
 
             // get the date to end data collection at
             const now = new Date();
@@ -2002,6 +2011,8 @@ async function newCandidateCountByDate(businessId, positionIds, groupBy, numData
             // holds the promises for getting each data point
             let dataPromises = [];
             for (let i = 0; i < numDataPoints; i++) {
+                dates.push(after);
+
                 const query = {
                     "userType": "candidate",
                     "positions": {
@@ -2019,7 +2030,12 @@ async function newCandidateCountByDate(businessId, positionIds, groupBy, numData
             }
 
             // get all the data points, then flip them around so they're in chronological order
-            const dataPoints = (await Promise.all(dataPromises)).reverse();
+            const dataPoints = (await Promise.all(dataPromises)).map((count, index) => {
+                return {
+                    users: count,
+                    date: monthAndDayOnly(dates[index])
+                }
+            }).reverse();
 
             return resolve(dataPoints);
         }
@@ -2053,13 +2069,7 @@ async function GET_newCandidateGraphData(req, res) {
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
-    let agoCounter = numDataPoints + 1;
-    const formattedData = counts.map(c => {
-        agoCounter--;
-        return { users: c, ago: agoCounter };
-    });
-
-    return res.status(200).send({ counts: formattedData });
+    return res.status(200).send({ counts });
 }
 
 

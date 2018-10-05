@@ -162,11 +162,10 @@ class Candidates extends Component {
                 </div>
 
                 <LineChart style={chartStyle} width={250} height={120} data={this.state.graphData}>
-                    <XAxis dataKey="ago" padding={{right:10,left:10}}/>
+                    <XAxis dataKey="date" padding={{right:10,left:10}}/>
                     <YAxis />
                     <Line type="monotone" dataKey="users" stroke={primaryCyan} strokeWidth={2} dot={false}/>
                 </LineChart>
-                <div className="center" styleName="graph-x-label">{this.state.timeToGraph} Ago</div>
 
                 { smallCTA }
             </div>
