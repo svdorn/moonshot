@@ -66,6 +66,7 @@ const businessApis = {
     GET_evaluationsGraphData,
     GET_billingIsSetUp,
     GET_uniqueName,
+    GET_adminList,
 
     generateApiKey,
     createEmailInfo,
@@ -76,13 +77,33 @@ const businessApis = {
 // ----->> START APIS <<----- //
 
 
+async function GET_adminList(req, res) {
+    const { userId, verificationToken, businessId, includeSelf } = sanitize(req.query);
+
+    try {
+        var [ adminList, { business, user } ] = await Promise.all([
+            Users.find({ "businessInfo.businessId": businessId }).select("name _id"),
+            verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId)
+        ]);
+    }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // remove the user if they don't want to see themselves in the list of admins
+    if (includeSelf === false) {
+        adminList = adminList.filter(u => u._id.toString() !== userId.toString());
+    }
+
+    // return just the names of the users
+    return res.status(200).send({ adminList: adminList.map(u => u.name) });
+}
+
+
 // find out if billing has been set up for the company
 async function GET_billingIsSetUp(req, res) {
     const { userId, verificationToken, businessId } = sanitize(req.query);
-
-    console.log("userId: ", userId);
-    console.log("verificationToken: ", verificationToken);
-    console.log("businessId: ", businessId);
 
     try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
     catch (verifyError) {

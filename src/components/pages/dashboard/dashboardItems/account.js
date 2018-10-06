@@ -18,14 +18,45 @@ class Account extends Component {
         super(props);
 
         this.state = {
-
+            // list of other admins that are in this business
+            adminList: undefined,
+            // if there was an error fetching the data for this box
+            fetchDataError: false
         };
+    }
+
+
+    componentDidMount() {
+        const self = this;
+
+        const { _id, verificationToken, businessInfo } = this.props.currentUser;
+        const query = {
+            params: {
+                userId: _id,
+                verificationToken,
+                businessId: businessInfo.businessId,
+                includeSelf: false
+            }
+        }
+
+        axios.get("/api/business/adminList", query)
+        .then(response => {
+            if (propertyExists(response, ["data", "adminList"]) && Array.isArray(response.data.adminList)) {
+                self.setState({ adminList: response.data.adminList });
+            } else {
+                self.setState({ fetchDataError: true });
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            self.setState({ fetchDataError: true });
+        })
     }
 
 
     render() {
         // return progress bar if not ready yet
-        if (typeof this.state.billingIsSetUp !== "boolean") {
+        if (!Array.isArray(this.state.adminList)) {
             return (
                 <div className="fully-center">
                     <CircularProgress style={{ color: primaryCyan }} />
@@ -57,8 +88,8 @@ class Account extends Component {
         );
 
         const smallCTA = (
-            <div styleName="box-cta" onClick={() => goTo("/billing")}>
-                { billingAction } Billing Info <img src={`/icons/LineArrow${this.props.png}`} />
+            <div styleName="box-cta" onClick={() => goTo("/settings")}>
+                Update Settings <img src={`/icons/LineArrow${this.props.png}`} />
             </div>
         );
 
