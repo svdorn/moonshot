@@ -16,12 +16,14 @@ import {
 import {connect} from 'react-redux';
 import { browserHistory } from "react-router";
 import {bindActionCreators} from 'redux';
-import { addNotification, startLoading, stopLoading } from '../../actions/usersActions';
+import { addNotification, startLoading, stopLoading, updateUser } from '../../actions/usersActions';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import MyEvaluationsPreview from '../childComponents/myEvaluationsPreview';
 import { goTo } from '../../miscFunctions';
 import { button } from "../../classes";
+
+import "./candidateEvaluations.css";
 
 
 class MyEvaluations extends Component {
@@ -51,7 +53,7 @@ class MyEvaluations extends Component {
         .catch(error => {
             // TODO test error
             console.log("error getting positions: ", error);
-            self.addNotification("Error getting evaluations, try refreshing.", "error");
+            self.props.addNotification("Error getting evaluations, try refreshing.", "error");
         });
     }
 
@@ -66,12 +68,23 @@ class MyEvaluations extends Component {
 
 
     reSendVerification() {
-        console.log("re sending");
-    }
-
-
-    checkStatus() {
-        console.log("checking status");
+        const { _id: userId, verificationToken, email } = this.props.currentUser;
+        axios.post("/api/candidate/reSendVerificationEmail", {userId, verificationToken})
+        .then(response => {
+            console.log("response: ", response);
+            if (response.data.alreadyVerified) {
+                if (response.data.user) { this.props.updateUser(response.data.user); }
+                this.props.addNotification("Email already verified, take your evaluation whenever you're ready!", "info");
+            }
+            else if (response.data.emailSent) {
+                const usedEmail = response.data.email ? response.data.email : email;
+                this.props.addNotification(`Email sent to ${usedEmail} - if this is the wrong email, change it in Settings.`, "info");
+            }
+        })
+        .catch(error => {
+            this.props.addNotification("Error sending verification email, try refreshing the page.", "error");
+            console.log(error);
+        })
     }
 
 
@@ -185,12 +198,12 @@ class MyEvaluations extends Component {
         let verifyBanner = null;
         if (!currentUser.verified) {
             verifyBanner = (
-                <div>
-                    Verify your email to take your eval! A verification email
-                    was sent to { currentUser.email } -
-                    Wrong email? <div className={button.purpleBlue} onClick={() => goTo("/settings")}>Change email</div>
-                    Didn{"'"}t get our email? <div className={button.purpleBlue} onClick={this.reSendVerification.bind(this)}>Re-send it</div>
-                    Already verified? <div className={button.purpleBlue} onClick={this.reSendVerification.bind(this)}>Check status</div>
+                <div styleName="unverified-email-banner">
+                    A verification email was sent to { currentUser.email } - verify it to take your evaluation!
+                    <br/>
+                    <span className="primary-cyan clickable" onClick={() => goTo("/settings")}>Change email address</span>
+                    {" or "}
+                    <span className="primary-cyan clickable" onClick={this.reSendVerification.bind(this)}>Re-send verification email</span>
                 </div>
             )
         }
@@ -231,6 +244,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
+        updateUser,
         currentUser: state.users.currentUser,
         loading: state.users.loadingSomething,
         png: state.users.png

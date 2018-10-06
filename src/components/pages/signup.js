@@ -10,7 +10,7 @@ import { browserHistory } from 'react-router';
 import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
 import MetaTags from 'react-meta-tags';
-import { renderTextField, renderPasswordField, isValidEmail } from "../../miscFunctions";
+import { renderTextField, renderPasswordField, isValidEmail, goTo } from "../../miscFunctions";
 import { button } from "../../classes";
 import axios from "axios";
 
@@ -56,7 +56,7 @@ class Signup extends Component {
     componentWillMount() {
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser) {
-            this.goTo("/myEvaluations");
+            goTo("/myEvaluations");
         }
     }
 
@@ -143,15 +143,6 @@ class Signup extends Component {
         })
     }
 
-    goTo(route) {
-        // closes any notification
-        this.props.closeNotification();
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
 
     handleCheckMarkClick() {
         this.setState({
@@ -176,56 +167,56 @@ class Signup extends Component {
     };
 
 
-    sendVerificationEmail = () => {
-        this.setState({ sendingVerificationEmail: true });
-
-        axios.post("/api/candidate/sendVerificationEmail", {email: this.props.sendVerifyEmailTo})
-        .then(response => { this.props.setUserPosted(); })
-        .catch(error => {
-            this.setState({ contactSupport: true, sendingVerificationEmail: false });
-        })
-    }
+    // sendVerificationEmail = () => {
+    //     this.setState({ sendingVerificationEmail: true });
+    //
+    //     axios.post("/api/candidate/sendVerificationEmail", {email: this.props.sendVerifyEmailTo})
+    //     .then(response => { this.props.setUserPosted(); })
+    //     .catch(error => {
+    //         this.setState({ contactSupport: true, sendingVerificationEmail: false });
+    //     })
+    // }
 
 
     // create the main content of the page
     createContent() {
-        if (this.state.contactSupport) {
-            return (
-                <div className="center">
-                    Error sending verification email. Contact us at support@moonshotinsights.io
-                </div>
-            )
-        }
+        // if (this.state.contactSupport) {
+        //     return (
+        //         <div className="center">
+        //             Error sending verification email. Contact us at support@moonshotinsights.io
+        //         </div>
+        //     )
+        // }
 
-        // if the user tried to make an account but verify email couldn't be sent
-        if (this.props.sendVerifyEmailTo) {
-            return (
-                <div className="center">
-                    <h1>Verify your email address</h1>
-                    {this.state.sendingVerificationEmail ?
-                        <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/>
-                        :
-                        <div
-                            className={button.purpleBlue}
-                            onClick={() => this.sendVerificationEmail()}
-                            style={{marginTop: "20px"}}
-                        >
-                            Send Verification Email to {this.props.sendVerifyEmailTo}
-                        </div>
-                    }
-                </div>
-            )
-        }
+        // // if the user tried to make an account but verify email couldn't be sent
+        // if (this.props.sendVerifyEmailTo) {
+        //     return (
+        //         <div className="center">
+        //             <h1>Verify your email address</h1>
+        //             {this.state.sendingVerificationEmail ?
+        //                 <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/>
+        //                 :
+        //                 <div
+        //                     className={button.purpleBlue}
+        //                     onClick={() => this.sendVerificationEmail()}
+        //                     style={{marginTop: "20px"}}
+        //                 >
+        //                     Send Verification Email to {this.props.sendVerifyEmailTo}
+        //                 </div>
+        //             }
+        //         </div>
+        //     )
+        // }
 
-        if (this.state.email != "" && this.props.userPosted) {
-            return (
-                <div className="center">
-                    <h1>Verify your email address</h1>
-                    <p style={{margin: "20px"}}>We sent {this.state.email} a verification link. Check your junk folder if you
-                        can{"'"}t find our email.</p>
-                </div>
-            )
-        }
+        // if (this.state.email != "" && this.props.userPosted) {
+        //     return (
+        //         <div className="center">
+        //             <h1>Verify your email address</h1>
+        //             <p style={{margin: "20px"}}>We sent {this.state.email} a verification link. Check your junk folder if you
+        //                 can{"'"}t find our email.</p>
+        //         </div>
+        //     )
+        // }
 
         return (
             <div>
@@ -282,7 +273,7 @@ class Signup extends Component {
                     />
                     <br/>
                     <div className="clickable"
-                         onClick={() => this.goTo({pathname: '/login', query: urlQuery})}
+                         onClick={() => goTo({pathname: '/login', query: urlQuery})}
                          style={{display: "inline-block"}}>Already have an account?
                     </div>
                 </form>

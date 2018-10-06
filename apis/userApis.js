@@ -475,23 +475,11 @@ async function POST_verifyEmail(req, res) {
     // where the user should be redirected after verification
     const redirect = user.userType === "accountAdmin" ? "onboarding" : "myEvaluations";
 
-    // if the session has the user's id, can immediately log them in
-    sessionUserId = sanitize(req.session.unverifiedUserId);
-    // get rid of the unverified id as it won't be needed anymore
-    req.session.unverifiedUserId = undefined;
     // if the session had the correct user id, log the user in
-    const sessionHadUnverifiedId = sessionUserId && sessionUserId.toString() === user._id.toString();
     const loggedIn = req.session.userId && req.session.userId.toString() === user._id.toString();
-    if (sessionHadUnverifiedId || loggedIn) {
-        req.session.userId = user._id.toString();
-        req.session.verificationToken = user.verificationToken;
-        req.session.save(function(saveSessionError) {
-            if (saveSessionError) {
-                console.log("Error saving user session: ", saveSessionError);
-            }
-            // return the user object even if session saving didn't work
-            return res.status(200).send({user: frontEndUser(user), redirect});
-        });
+    if (loggedIn) {
+        // return the user object even if session saving didn't work
+        return res.status(200).send({user: frontEndUser(user), redirect});
     }
 
     // otherwise bring the user to the default page (which could be preceeded by login page)
@@ -839,10 +827,6 @@ async function POST_login(req, res) {
         // wrong password, don't log in
         if (passwordsMatch !== true) {
             return res.status(400).send("Password is incorrect.");
-        }
-        // user has not yet verified email and is not an account admin, don't log in
-        if (user.verified !== true && user.userType !== "accountAdmin") {
-            return res.status(401).send("Email not yet verified");
         }
         // all login info is correct
         // if user wants to stay logged in, save the session

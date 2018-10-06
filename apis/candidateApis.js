@@ -14,6 +14,7 @@ const errors = require('./errors.js');
 const { sanitize,
         removeEmptyFields,
         verifyUser,
+        getAndVerifyUser,
         isValidEmail,
         sendEmail,
         getFirstName,
@@ -30,7 +31,8 @@ const candidateApis = {
     POST_updateAllOnboarding,
     POST_candidate,
     POST_endOnboarding,
-    POST_sendVerificationEmail
+    POST_sendVerificationEmail,
+    POST_reSendVerificationEmail
 }
 
 
@@ -248,12 +250,12 @@ function POST_candidate(req, res) {
             // don't stop execution since the user has already been created
         }
 
-        // save the user's id so that if they click verify email in the same
-        // browser they can be logged in right away
-        req.session.unverifiedUserId = user._id;
-        req.session.save(function (err) {
-            if (err) { console.log("error saving unverifiedUserId to session: ", err); }
-        })
+        // // save the user's id so that if they click verify email in the same
+        // // browser they can be logged in right away
+        // req.session.unverifiedUserId = user._id;
+        // req.session.save(function (err) {
+        //     if (err) { console.log("error saving unverifiedUserId to session: ", err); }
+        // })
 
         try {
             if (user.userType == "candidate" || user.userType == "employee") {
@@ -279,7 +281,7 @@ function POST_candidate(req, res) {
         }
 
         // user was successfully created
-        return res.status(200).send({ success: true });
+        return res.status(200).send({ user: frontEndUser(user) });
 
         // THESE TWO WILL NOT RUN - there are guaranteed return statements beforehand
         // add the user to the referrer's list of referred users
@@ -500,12 +502,11 @@ async function sendVerificationEmail(user) {
 async function POST_sendVerificationEmail(req, res) {
     const { email } = sanitize(req.body);
 
-    try { var user = await Users.findOne({ email }); }
+    try { var user =  await Users.findOne({ email }); }
     catch (getUserError) {
-        console.log("Error getting user when sending verification email: ", getUserError);
+        console.log("Error getting user when re-sending verification email: ", getUserError);
         return res.status(500).send({message: errors.SERVER_ERROR});
     }
-    if (!user) { return res.status(400).send({ message: "Invalid email." }); }
 
     try { await sendVerificationEmail(user); }
     catch (sendEmailError) {
@@ -514,6 +515,28 @@ async function POST_sendVerificationEmail(req, res) {
     }
 
     return res.status(200).send({success: true});
+}
+
+
+async function POST_reSendVerificationEmail(req, res) {
+    const { userId, verificationToken } = sanitize(req.body);
+
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("Error getting user when sending verification email: ", getUserError);
+        return res.status(500).send({message: errors.SERVER_ERROR});
+    }
+
+    // if user is already verified, don't need to re-send verification email
+    if (user.verified) { return res.status(200).send({ alreadyVerified: true, user: frontEndUser(user) }); }
+
+    try { await sendVerificationEmail(user); }
+    catch (sendEmailError) {
+        console.log("Error sending verification email: ", sendEmailError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({ emailSent: true });
 }
 
 

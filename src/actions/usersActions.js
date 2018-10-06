@@ -303,8 +303,8 @@ export function postUser(user) {
 
         axios.post("/api/candidate/candidate", user)
         .then(response => {
-            dispatch({type: "POST_USER"});
-            window.scrollTo(0,0);
+            dispatch({ type: "POST_USER", user: response.data.user });
+            goTo("/myEvaluations");
         }).catch(error => {
             // standard error message
             let message = "Could not create account. Refresh and try again.";
