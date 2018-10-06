@@ -16,7 +16,7 @@ import { browserHistory } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { goTo } from "../../miscFunctions";
-import { openAddUserModal, addNotification } from "../../actions/usersActions";
+import { openAddUserModal, addNotification, updateUser } from "../../actions/usersActions";
 import axios from "axios";
 
 class MyEvaluationsPreview extends Component {
@@ -186,7 +186,8 @@ class MyEvaluationsPreview extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         openAddUserModal,
-        addNotification
+        addNotification,
+        updateUser
     }, dispatch);
 }
 
