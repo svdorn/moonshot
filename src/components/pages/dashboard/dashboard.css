@@ -404,9 +404,17 @@
     position: relative;
     flex: 1;
     padding: calc(var(--item-margin));
+    color: var(--secondary-gray);
 }
-.activity-container > div {
+.activity-container > div:first-child {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 18px;
+}
+.activity-container > div:not(:first-child) {
     text-align: center;
+    margin-top: 15px;
 }
 .tips-for-hiring { }
 .tips-for-hiring > div:first-child {

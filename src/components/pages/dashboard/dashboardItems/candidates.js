@@ -157,7 +157,6 @@ class Candidates extends Component {
         );
 
         const twoOrMoreCandidates = graphData.some(d => d.users > 1);
-        console.log("twoOrMoreCandidates: ", twoOrMoreCandidates);
 
         const yAxisAttrs = twoOrMoreCandidates ? {} : { ticks: [1,2] };
 

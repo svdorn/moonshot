@@ -61,6 +61,7 @@ const businessApis = {
     GET_apiKey,
     GET_employeesAwaitingReview,
     GET_candidatesAwaitingReview,
+    GET_candidatesTotal,
     GET_newCandidateGraphData,
     GET_evaluationsGraphData,
     GET_billingIsSetUp,
@@ -1934,6 +1935,26 @@ async function unReviewedEmployeeCount(businessId, positionIds) {
     });
 }
 
+// get a count of how many candidates need to be reviewed
+async function GET_candidatesTotal(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // count all the users with this position
+    const positionIds = business.positions.map(p => p._id);
+    try { var totalCandidates = await totalCandidateCount(business._id, positionIds); }
+    catch (countError) {
+        console.log(`Error counting the total candidates for ${business.name} (id ${business._id}): `, countError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({ totalCandidates });
+}
 
 // get a count of how many candidates need to be reviewed
 async function GET_candidatesAwaitingReview(req, res) {
@@ -1956,6 +1977,25 @@ async function GET_candidatesAwaitingReview(req, res) {
     return res.status(200).send({ newCandidates });
 }
 
+// return a count of all unreviewed users in all positions for a specific business
+async function totalCandidateCount(businessId, positionIds) {
+    return new Promise(async function(resolve, reject) {
+        const query = {
+           "userType": "candidate",
+           "positions": {
+               "$elemMatch": {
+                   "businessId": businessId,
+                   "positionId": { "$in": positionIds }
+               }
+           }
+        }
+        // count the users in the position that haven't been reviewed
+        try { var count = await Users.countDocuments(query); }
+        catch (countError) { return reject(countError); }
+
+        return resolve(count);
+    });
+}
 
 // return a count of all unreviewed users in all positions for a specific business
 async function unReviewedCandidateCount(businessId, positionIds) {
