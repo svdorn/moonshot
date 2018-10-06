@@ -16,15 +16,42 @@ import { browserHistory } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { goTo } from "../../miscFunctions";
-import { openAddUserModal } from "../../actions/usersActions";
+import { openAddUserModal, addNotification } from "../../actions/usersActions";
 import axios from "axios";
 
 class MyEvaluationsPreview extends Component {
 
     // used for candidates and employees only
     continueEval = () => {
-        if (["candidate", "employee"].includes(this.props.currentUser.userType) && !this.props.completedDate) {
-            goTo(`/evaluation/${this.props.businessId}/${this.props.positionId}`);
+        const self = this;
+        const user = this.props.currentUser;
+
+        if (["candidate", "employee"].includes(user.userType) && !this.props.completedDate) {
+            // if user is verified, go right to the eval
+            if (user.verified) {
+                console.log("going right to eval");
+                goTo(`/evaluation/${this.props.businessId}/${this.props.positionId}`);
+            }
+            // otherwise have to check if they have verified, and if not, tell
+            // them to verify themselves
+            else {
+                console.log("checking if verified");
+                const query = { params: { userId: user._id, verificationToken: user.verificationToken } };
+                axios.get("/api/user/checkEmailVerified", query)
+                .then(response => {
+                    console.log("verified");
+                    self.props.updateUser(response.data);
+                    goTo(`/evaluation/${self.props.businessId}/${self.props.positionId}`);
+                })
+                .catch(error => {
+                    console.log("error: ", error);
+                    if (error.response && error.response.status === 403) {
+                        return self.props.addNotification("Verify your email first!", "error");
+                    } else {
+                        return self.props.addNotification("Error starting evaluation, try refreshing.", "error");
+                    }
+                })
+            }
         }
     }
 
@@ -158,7 +185,8 @@ class MyEvaluationsPreview extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openAddUserModal
+        openAddUserModal,
+        addNotification
     }, dispatch);
 }
 

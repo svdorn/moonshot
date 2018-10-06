@@ -218,6 +218,10 @@ class Signup extends Component {
         //     )
         // }
 
+        let urlQuery = {};
+        try { urlQuery = this.props.location.query; }
+        catch (e) { /* no query */ }
+
         return (
             <div>
                 <form onSubmit={this.handleSubmit.bind(this)}>
@@ -286,12 +290,6 @@ class Signup extends Component {
     //name, email, password, confirm password, signup button
     render() {
         let content = this.createContent();
-
-        let urlQuery = {};
-        try {
-            urlQuery = this.props.location.query;
-        } catch (e) { /* no query */
-        }
 
         const actionsPP = [
             <FlatButton
