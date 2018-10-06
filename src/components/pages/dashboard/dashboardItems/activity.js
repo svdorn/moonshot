@@ -209,21 +209,20 @@ class Activity extends Component {
     }
 
     makeButtons() {
+        let self = this;
         let buttons = [];
         if (this.state.data === 0) {
-            buttons = [{ name: `Invite ${this.state.tab}`, action: "this.openAddPositionModal" }, { name: "Add Position", action: "this.openAddPositionModal" }]
+            buttons = [{ name: `Invite ${this.state.tab}`, action: "self.openAddPositionModal"}, { name: "Add Position", action: "self.openAddPositionModal" }]
         } else {
-            buttons = [{ name: "Review Candidates", action: "this.reviewCandidates" }]
+            buttons = [{ name: "Review Candidates", action: "self.reviewCandidates" }]
         }
-
-        console.log(buttons);
 
         const displayButtons = buttons.map(button => {
             return (
                 <div styleName="awaiting-review-buttons">
                     <button
                         className="button noselect round-6px background-primary-cyan primary-white"
-                        onClick={button.action}
+                        onClick={eval(button.action)}
                         style={{padding: "3px 10px"}}
                     >
                         <span>{button.name}</span>
