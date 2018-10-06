@@ -1,17 +1,11 @@
 "use strict"
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import MetaTags from 'react-meta-tags';
+import { goTo } from "../../../miscFunctions";
 
 class Error404 extends Component {
-    goTo (route)  {
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
     render () {
         let route = '/';
         if (this.props.currentUser) {
@@ -33,7 +27,7 @@ class Error404 extends Component {
                         /><br/>
                         You seem a little lost,<br/> but we can show you the way!
                         <p  className="clickable primary-cyan underline"
-                            onClick={() => this.goTo(route)}>
+                            onClick={() => goTo(route)}>
                             Follow Me
                         </p>
                     </form>
