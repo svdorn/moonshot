@@ -250,13 +250,6 @@ function POST_candidate(req, res) {
             // don't stop execution since the user has already been created
         }
 
-        // // save the user's id so that if they click verify email in the same
-        // // browser they can be logged in right away
-        // req.session.unverifiedUserId = user._id;
-        // req.session.save(function (err) {
-        //     if (err) { console.log("error saving unverifiedUserId to session: ", err); }
-        // })
-
         // generate an hmac for the user so intercom can verify identity
         if (user.intercom && user.intercom.id) {
             const hash = crypto.createHmac('sha256', credentials.hmacKey)

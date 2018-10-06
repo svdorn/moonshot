@@ -152,7 +152,7 @@ export function answerEvaluationQuestion(evalComponent, options) {
         dispatch({type: "START_LOADING"});
         axios.post(`/api/evaluation/answer${evalComponent}Question`, options)
         .then(response => updateEvalState(dispatch, response.data))
-        .catch(error => (dispatch, { error }));
+        .catch(error => defaultErrorHandler(dispatch, { error }));
     }
 }
 
