@@ -27,7 +27,9 @@ class Activity extends Component {
             // the name of the business
             name: undefined,
             // the uniqueName of the business
-            uniqueName: undefined
+            uniqueName: undefined,
+            // the tab either Candidates or Employees
+            tab: "Candidates"
          };
 
          this.getCandidateData = this.getCandidateData.bind(this);
@@ -158,7 +160,11 @@ class Activity extends Component {
 
     awaitingReview() {
         return (
-            <div>
+            <div styleName="awaiting-review">
+                <div>
+                </div>
+                <div>
+                </div>
             </div>
         );
     }

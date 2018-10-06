@@ -436,6 +436,12 @@
     -moz-transition: -moz-box-shadow .2s;
     transition: box-shadow .2s;
 }
+.awaiting-reveiew { }
+.awaiting-review > div:first-child {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
 .carousel-frame {
     margin: auto;
     width: 250px;
