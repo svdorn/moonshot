@@ -50,6 +50,7 @@ class Dashboard extends Component {
                     <DashboardItem type="Evaluations" width={1} />
                     <DashboardItem type="Employees" width={1} />
                     <DashboardItem type="Account" width={1} />
+                    <DashboardItem type="Billing" width={1} />
                 </div>
             </div>
         );

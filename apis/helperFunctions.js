@@ -81,7 +81,10 @@ const FOR_USER = [
     "hasFinishedOnboarding",
     "sawMyCandidatesInfoBox",
     "intercom",
-    "popups"
+    "popups",
+
+    "businessName",
+    "businessUniqueName"
 ];
 
 // removes information from a db user object so that it can be passed for that

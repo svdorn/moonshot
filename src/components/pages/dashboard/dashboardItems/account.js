@@ -13,51 +13,13 @@ import { primaryCyan } from "../../../../colors";
 import "../dashboard.css";
 
 
-const planDescriptions = {
-    "Free Trial":
-        "With the free trial, you can create as many evaluations and send \
-        through as many candidates as you want, and you can hire one candidate \
-        for free.",
-    "Paid Plan":
-        "Send as many candidates through as many evaluations as you want! \
-        Three-month guarantee when you hire a candidate."
-}
-
-
-class Evaluations extends Component {
+class Account extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            // whether the business has billing set up for their account
-            billingIsSetUp: undefined
+
         };
-    }
-
-
-    // load graph data for the candidate completions over last week
-    componentDidMount() {
-        const self = this;
-        const user = this.props.currentUser;
-
-        const query = { params: {
-            userId: user._id,
-            verificationToken: user.verificationToken,
-            businessId: user.businessInfo.businessId
-        } };
-
-        // find out whether billing is set up, if error assume not
-        axios.get("/api/business/billingIsSetUp", query)
-        .then(response => {
-            if (propertyExists(response, ["data", "billingIsSetUp"])) {
-                self.setState({ billingIsSetUp: response.data.billingIsSetUp });
-            } else {
-                self.setState({ billingIsSetUp: false });
-            }
-        })
-        .catch(error => {
-            self.setState({ billingIsSetUp: false });
-        });
     }
 
 
@@ -78,19 +40,19 @@ class Evaluations extends Component {
             </div>
         );
 
-        // by default show that we're going to be adding billing info
-        let billingAction = "Add";
-        let currentPlan = "Free Trial";
-        if (this.state.billingIsSetUp) {
-            billingAction === "View";
-            currentPlan = "Paid Plan";
-        }
 
         const content = (
             <div style={{padding: "5px 14px"}}>
-                <div styleName="payment-plan">Current Plan: <span>{ currentPlan }</span></div>
-                <div>{ planDescriptions[currentPlan] }</div>
-                <div onClick={() => goTo("/pricing")} styleName="pricing-link">See Pricing</div>
+                <div>Candidate Invite Page</div>
+                <div>
+                    <span>Copy Link</span>
+                    {" "}
+                    <span>Email Template</span>
+                </div>
+                <div>Where to embed</div>
+                <div>Add Admin</div>
+                <div>2 admins</div>
+                <div>Who to add</div>
             </div>
         );
 
@@ -125,4 +87,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Evaluations);
+export default connect(mapStateToProps, mapDispatchToProps)(Account);
