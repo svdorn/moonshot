@@ -61,8 +61,7 @@ class Activity extends Component {
             .then(response => {
                 if (propertyExists(response, ["data", "totalCandidates"]), "number") {
                     let frame = "Tips For Hiring";
-                    if (response.data.totalCandidates === 0) {
-                    //if (response.data.totalCandidates > 0) {
+                    if (response.data.totalCandidates > 0) {
                         frame = "Awaiting Review";
                         self.setState({ frame, name: res.data.name, uniqueName: res.data.uniqueName }, () => {
                             self.getCandidateData();
@@ -175,7 +174,6 @@ class Activity extends Component {
         );
     }
 
-    // change the amount of time being graphed
     handleTabChange = () => event => {
         const tab = event.target.value;
         let getData = this.getCandidateData;
@@ -190,7 +188,6 @@ class Activity extends Component {
             return <MenuItem value={tab} key={tab}>{ tab }</MenuItem>;
         });
 
-        // standard dashboard box header
         return (
             <Select
                 styleName="tab-selector"
