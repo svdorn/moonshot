@@ -49,7 +49,8 @@ class Signup extends Component {
             openPP: false,
             openTOU: false,
             sendingVerificationEmail: false,
-            contactSupport: false
+            contactSupport: false,
+            keepMeLoggedIn: true
         }
     }
 
@@ -121,8 +122,9 @@ class Signup extends Component {
         const name = values.name;
         const password = values.password;
         const email = values.email;
+        const { keepMeLoggedIn } = this.state;
         let user = {
-            name, password, email, signUpReferralCode
+            name, password, email, signUpReferralCode, keepMeLoggedIn
         };
 
         // if the user got here from a link, add those links
@@ -148,6 +150,13 @@ class Signup extends Component {
         this.setState({
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
+        })
+    }
+
+    keepMeLoggedInClick() {
+        this.setState({
+            ...this.state,
+            keepMeLoggedIn: !this.state.keepMeLoggedIn
         })
     }
 
@@ -255,7 +264,18 @@ class Signup extends Component {
                         /><br/>
                     </div>
 
-                    <div style={{margin: "20px 20px 10px"}}>
+                    <div style={{margin: "20px 20px 0"}}>
+                        <div className="checkbox smallCheckbox whiteCheckbox"
+                             onClick={this.keepMeLoggedInClick.bind(this)}>
+                            <img
+                                alt=""
+                                className={"checkMark" + this.state.keepMeLoggedIn}
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                            />
+                        </div>
+                        Keep me logged in
+                    </div>
+                    <div style={{margin: "5px 20px 10px"}}>
                         <div className="checkbox smallCheckbox whiteCheckbox"
                              onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
@@ -264,9 +284,9 @@ class Signup extends Component {
                                 src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             />
                         </div>
-
-                        I have read and agree to the Moonshot Insights <bdi className="clickable primary-cyan" onClick={this.handleOpenPP}>Privacy
-                        Policy</bdi> and <bdi className="clickable primary-cyan" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
+                        I have read and agree to the Moonshot Insights
+                        <br/><span className="clickable primary-cyan" onClick={this.handleOpenPP}>Privacy Policy</span>
+                        {" and "}<span className="clickable primary-cyan" onClick={this.handleOpenTOU}>Terms of Use</span>.
                     </div>
                     <br/>
                     <RaisedButton

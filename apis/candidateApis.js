@@ -37,7 +37,7 @@ const candidateApis = {
 
 
 function POST_candidate(req, res) {
-    const { code, name, email, password } = sanitize(req.body);
+    const { code, name, email, password, keepMeLoggedIn } = sanitize(req.body);
 
     // if invalid password is given, don't let the user create an account
     if (typeof password !== "string" || password.length < 8) {
@@ -256,6 +256,23 @@ function POST_candidate(req, res) {
         // req.session.save(function (err) {
         //     if (err) { console.log("error saving unverifiedUserId to session: ", err); }
         // })
+
+        // generate an hmac for the user so intercom can verify identity
+        if (user.intercom && user.intercom.id) {
+            const hash = crypto.createHmac('sha256', credentials.hmacKey)
+                       .update(user.intercom.id)
+                       .digest('hex');
+            user.hmac = hash;
+        }
+
+        // keep the user saved in the session if they want to stay logged in
+        if (keepMeLoggedIn) {
+            req.session.userId = user._id;
+            req.session.verificationToken = user.verificationToken;
+            req.session.save(function (err) {
+                if (err) { console.log("error saving new user to session: ", err );}
+            });
+        }
 
         try {
             if (user.userType == "candidate" || user.userType == "employee") {
