@@ -2,14 +2,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification } from "../../../../actions/usersActions";
-import { propertyExists } from "../../../../miscFunctions";
+import { addNotification, openAddPositionModal } from "../../../../actions/usersActions";
+import { propertyExists, goTo } from "../../../../miscFunctions";
 import Carousel from "../../../miscComponents/carousel";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 import { primaryCyan } from "../../../../colors";
 import axios from "axios";
 
 import "../dashboard.css";
+
+const tabs = ["Candidates", "Employees"];
 
 class Activity extends Component {
     constructor(props) {
@@ -18,10 +22,8 @@ class Activity extends Component {
         this.state = {
             // the frame the activities box is on
             frame: undefined,
-            // the number of candidates that have not yet been reviewed
-            newCandidates: undefined,
-            // the number of candidates that have not yet been reviewed
-            newEmployees: undefined,
+            // the amount of candidates or employees awaiting review
+            data : undefined,
             // if there was an error getting any candidates or employees data
             fetchDataError: false,
             // the name of the business
@@ -34,6 +36,8 @@ class Activity extends Component {
 
          this.getCandidateData = this.getCandidateData.bind(this);
          this.getEmployeeData = this.getEmployeeData.bind(this);
+         this.openAddPositionModal = this.openAddPositionModal.bind(this);
+         this.reviewCandidates = this.reviewCandidates.bind(this);
     }
 
     componentDidMount() {
@@ -56,11 +60,16 @@ class Activity extends Component {
             axios.get("/api/business/candidatesTotal", countQuery )
             .then(response => {
                 if (propertyExists(response, ["data", "totalCandidates"]), "number") {
-                    let frame = "Awaiting Review";
-                    if (response.data.totalCandidates < 1) {
-                        frame = "Tips For Hiring"
+                    let frame = "Tips For Hiring";
+                    if (response.data.totalCandidates === 0) {
+                    //if (response.data.totalCandidates > 0) {
+                        frame = "Awaiting Review";
+                        self.setState({ frame, name: res.data.name, uniqueName: res.data.uniqueName }, () => {
+                            self.getCandidateData();
+                        });
+                    } else {
+                        self.setState({ frame, name: res.data.name, uniqueName: res.data.uniqueName });
                     }
-                    self.setState({ frame, name: res.data.name, uniqueName: res.data.uniqueName });
                 } else {
                     self.setState({ fetchDataError: true });
                 }
@@ -72,6 +81,14 @@ class Activity extends Component {
         .catch(function (err) {
             self.setState({ fetchDataError: true });
         });
+    }
+
+    openAddPositionModal = () => {
+        this.props.openAddPositionModal();
+    }
+
+    reviewCandidates = () => {
+        goTo("/myCandidates");
     }
 
     getCandidateData() {
@@ -87,7 +104,7 @@ class Activity extends Component {
         axios.get("/api/business/candidatesAwaitingReview", query )
         .then(response => {
             if (propertyExists(response, ["data", "newCandidates"]), "number") {
-                self.setState({ newCandidates: response.data.newCandidates });
+                self.setState({ data: response.data.newCandidates });
             } else {
                 self.setState({ fetchDataError: true });
             }
@@ -110,7 +127,7 @@ class Activity extends Component {
         axios.get("/api/business/employeesAwaitingReview", query )
         .then(response => {
             if (propertyExists(response, ["data", "newEmployees"]), "number") {
-                self.setState({ newEmployees: response.data.newEmployees });
+                self.setState({ data: response.data.newEmployees });
             } else {
                 self.setState({ fetchDataError: true });
             }
@@ -158,12 +175,88 @@ class Activity extends Component {
         );
     }
 
+    // change the amount of time being graphed
+    handleTabChange = () => event => {
+        const tab = event.target.value;
+        let getData = this.getCandidateData;
+        if (tab === "Employees") {
+            getData = this.getEmployeeData;
+        }
+        this.setState({ tab, data: undefined }, getData);
+    }
+
+    makeDropdown() {
+        const tabOptions = tabs.map(tab => {
+            return <MenuItem value={tab} key={tab}>{ tab }</MenuItem>;
+        });
+
+        // standard dashboard box header
+        return (
+            <Select
+                styleName="tab-selector"
+                disableUnderline={true}
+                classes={{
+                    root: "position-select-root selectRootWhite dashboard-select",
+                    icon: "selectIconWhiteImportant",
+                    select: "no-focus-change-important"
+                }}
+                value={this.state.tab}
+                onChange={ this.handleTabChange() }
+            >
+                { tabOptions }
+            </Select>
+        );
+    }
+
+    makeButtons() {
+        let buttons = [];
+        if (this.state.data === 0) {
+            buttons = [{ name: `Invite ${this.state.tab}`, action: "this.openAddPositionModal" }, { name: "Add Position", action: "this.openAddPositionModal" }]
+        } else {
+            buttons = [{ name: "Review Candidates", action: "this.reviewCandidates" }]
+        }
+
+        console.log(buttons);
+
+        const displayButtons = buttons.map(button => {
+            return (
+                <div styleName="awaiting-review-buttons">
+                    <button
+                        className="button noselect round-6px background-primary-cyan primary-white"
+                        onClick={button.action}
+                        style={{padding: "3px 10px"}}
+                    >
+                        <span>{button.name}</span>
+                    </button>
+                </div>
+            );
+        });
+        return (
+            <div>
+                { displayButtons }
+            </div>
+        );
+    }
+
     awaitingReview() {
         return (
             <div styleName="awaiting-review">
                 <div>
+                    { this.makeDropdown() }
                 </div>
                 <div>
+                    {typeof this.state.data === "number" ?
+                        <div>
+                            <div styleName="important-stat">
+                                <div styleName="important-number">{this.state.data}</div> new {this.state.tab.toLowerCase()} to review
+                            </div>
+                            { this.makeButtons() }
+                        </div>
+                        :
+                        <div className="center marginTop50px">
+                            <CircularProgress style={{ color: primaryCyan }} />
+                        </div>
+                    }
                 </div>
             </div>
         );
@@ -205,7 +298,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addNotification
+        addNotification,
+        openAddPositionModal
     }, dispatch);
 }
 

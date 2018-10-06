@@ -336,6 +336,11 @@
     font-size: 12px !important;
     font-family: inherit !important;
 }
+.tab-selector {
+    float: right;
+    font-size: 14px !important;
+    font-family: inherit !important;
+}
 .box-cta {
     position: absolute;
     bottom: 4px;
@@ -441,6 +446,22 @@
     position: absolute;
     top: 5px;
     right: 10px;
+}
+.awaiting-review .important-number {
+    font-size: 50px;
+    display: inline-block;
+    margin-right: 10px;
+    color: var(--primary-cyan);
+    font-weight: bold;
+}
+.awaiting-review .important-stat {
+    margin-top: 40px;
+    font-size: 22px;
+}
+.awaiting-review-buttons {
+    margin: 20px;
+    display: inline-block;
+    font-size: 18px;
 }
 .carousel-frame {
     margin: auto;
