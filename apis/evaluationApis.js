@@ -45,6 +45,8 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
 
+    if (!user.verified) { return res.status(401).send({ message: "Verify your email first!" }); }
+
     // make sure the user has a place to store the response
     if (!user.adminQuestions) { user.adminQuestions = {}; }
     // add a start date if the user hadn't started yet
@@ -133,6 +135,8 @@ module.exports.POST_answerPsychQuestion = async function(req, res) {
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
 
+    if (!user.verified) { return res.status(401).send({ message: "Verify your email first!" }); }
+
     // if the user hasn't started the psych test, start it for them
     if (!user.psychometricTest || !user.psychometricTest.startDate) {
         try { user.psychometricTest = await newPsychTest(); }
@@ -220,6 +224,8 @@ module.exports.POST_answerSkillQuestion = async function(req, res) {
         console.log("Error getting user while trying to get admin questions: ", getUserError);
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
+
+    if (!user.verified) { return res.status(401).send({ message: "Verify your email first!" }); }
 
     // user has to be taking an eval to answer a skill question
     if (!user.evalInProgress) {
@@ -329,6 +335,8 @@ module.exports.POST_skipAdminQuestions = async function(req, res) {
         return res.status(500).send({ serverError: true });
     }
 
+    if (!user.verified) { return res.status(401).send({ message: "Verify your email first!" }); }
+
     // user has to be taking an eval to skip the admin questions
     if (!user.evalInProgress) {
         console.log("No eval in progress when user tried to skip the eval questions.");
@@ -372,6 +380,8 @@ module.exports.POST_answerCognitiveQuestion = async function(req, res) {
         console.log("Error getting user while trying to answer cognitive questions: ", getUserError);
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
+
+    if (!user.verified) { return res.status(401).send({ message: "Verify your email first!" }); }
 
     // whether the user should be returned to the front end
     let returnUser = false;
@@ -476,6 +486,8 @@ module.exports.POST_answerOutOfTimeCognitive = async function(req, res) {
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
 
+    if (!user.verified) { return res.status(401).send({ message: "Verify your email first!" }); }
+
     // if the user doesn't have a current question, can't auto-answer it
     if (!user.cognitiveTest || !user.cognitiveTest.currentQuestion) {
         console.log("User automatically submitted question but had no current question: ", user);
@@ -535,6 +547,8 @@ module.exports.GET_currentState = async function(req, res) {
         return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
     }
 
+    if (!user.verified) { return res.status(401).send({ message: "Verify your email first!" }); }
+
     // get the current state of the evaluation
     try { var { evaluationState } = await getEvaluationState({ user, position }); }
     catch (getStateError) {
@@ -567,6 +581,8 @@ module.exports.POST_start = async function(req, res) {
         logError("Error getting user when trying to get current eval state: ", getUserError);
         return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
     }
+
+    if (!user.verified) { return res.status(401).send({ message: "Verify your email first!" }); }
 
     // make sure the user is enrolled in the position
     const positionIndex = userPositionIndex(user, positionId, businessId);
@@ -619,6 +635,8 @@ module.exports.POST_getInitialState = async function(req, res) {
         console.log("Error getting user when trying to get current eval state: ", getUserError);
         return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
     }
+
+    if (!user.verified) { return res.status(401).send({ message: "Verify your email first!" }); }
 
     // find the index of the position within the user's positions array
     const positionIndex = userPositionIndex(user, positionId, businessId);
