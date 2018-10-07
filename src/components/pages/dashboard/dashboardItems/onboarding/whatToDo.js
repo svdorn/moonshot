@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router';
-import { updateOnboardingStep, addNotification, openAddPositionModal } from "../../../../../actions/usersActions";
+import { updateOnboardingStep, addNotification, openAddPositionModal, generalAction } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo } from "../../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -154,7 +154,7 @@ class WhatToDo extends Component {
                             <span>Copy Link</span>
                         </button>
                     </div>
-                    <div styleName="invite-template-text">
+                    <div styleName="invite-template-text" onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}>
                         <u>{"Invite template for candidates."}</u>
                     </div>
                     <div styleName="emoji-buttons-full">
@@ -232,7 +232,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateOnboardingStep,
         addNotification,
-        openAddPositionModal
+        openAddPositionModal,
+        generalAction
     }, dispatch);
 }
 
