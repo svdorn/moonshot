@@ -27,7 +27,6 @@ export function usersReducers(state = initialState, action) {
             };
             break;
             case "OPEN_ADD_ADMIN_MODAL":
-                console.log("opening admin modal");
                 return {
                     ...state,
                     addAdminModalOpen: true

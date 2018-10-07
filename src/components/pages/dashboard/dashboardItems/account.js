@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import { generalAction } from "../../../../actions/usersActions";
+import { generalAction, addNotification } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -11,6 +11,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { primaryCyan } from "../../../../colors";
 import { button } from "../../../../classes";
 import HoverTip from "../../../miscComponents/hoverTip";
+import clipboard from "clipboard-polyfill";
 
 import "../dashboard.css";
 
@@ -82,6 +83,14 @@ class Account extends Component {
     }
 
 
+    copyLink() {
+        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
+        URL = encodeURI(URL);
+        clipboard.writeText(URL);
+        this.props.addNotification("Link copied to clipboard!", "info");
+    }
+
+
     render() {
         // return error message if errored out
         if (this.state.fetchDataError) {
@@ -121,7 +130,7 @@ class Account extends Component {
                 <div>
                     <span
                         className="primary-cyan clickable"
-                        onClick={this.copyLink}
+                        onClick={this.copyLink.bind(this)}
                     >
                         Copy Link
                     </span>
@@ -193,7 +202,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        generalAction
+        generalAction,
+        addNotification
     }, dispatch);
 }
 
