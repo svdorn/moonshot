@@ -34,11 +34,11 @@ class WhyItWorks extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info ml-step">
                 <div>
-                    <div className="primary-cyan" styleName="onboarding-title">
-                        {"Team of Data Scientists"}
+                    <div className="primary-cyan font16px">
+                        {"We Are Your Data Scientists"}
                     </div>
                     <div>
-                        {"Why gamble on your hires? We use machine learning, predictive data, and decades of psychology research to find the candidates who can take your company to the next level."}
+                        Education and experience provide 1% and 1.1% predictive ability compared to your evaluations with us, which provide more than 50%. We then layer on machine learning to improve your model and identify insights on your company to help you build an intelligent hiring process that rivals Google.
                     </div>
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>
