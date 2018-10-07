@@ -60,7 +60,8 @@ class CandidateView extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
-                    <div>{"Candidates will take a 12-minute quiz that evaluates their personality. It will involve a series of questions that look like the following:"}</div>
+                <div className="primary-cyan font18px center">Understand Personality</div>
+                <div>{"Candidates complete a series of questions so we can form archetypes and predict how they'll behave and fit in your work environment."}</div>
                     { this.emojiButtons() }
                 </div>
                 <div className="noselect">
@@ -87,7 +88,8 @@ class CandidateView extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
-                    <div>{"Candidates will then take a short cognitive test that demonstrates their ability to:"}</div>
+                    <div className="primary-cyan font18px center">Evaluate Intellect</div>
+                    <div>{"Candidates then complete a short quiz highly predictive of job performance and growth potential that demonstates their ability to:"}</div>
                     <ul>
                         <li>Solve Problems</li>
                         <li>Learn Quickly</li>
