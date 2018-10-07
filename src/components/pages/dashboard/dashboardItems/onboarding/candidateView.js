@@ -89,8 +89,17 @@ class CandidateView extends Component {
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
                     <div className="primary-cyan font18px center">Evaluate Intellect</div>
-                    <div>{"Candidates then complete a short quiz highly predictive of job performance and growth potential that demonstates their ability to:"}</div>
-                    <ul>
+                    <div>
+                        Candidates then complete a short quiz highly predictive
+                        of job performance and growth potential that demonstates
+                        their ability to
+                        <span styleName="desktop-only">:</span>
+                        <span styleName="mobile-only">
+                            { " solve problems, learn quickly, and adapt to \
+                            complex situations." }
+                        </span>
+                    </div>
+                    <ul styleName="desktop-only">
                         <li>Solve Problems</li>
                         <li>Learn Quickly</li>
                         <li>Adapt to Complex Situations</li>

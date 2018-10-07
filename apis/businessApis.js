@@ -96,7 +96,6 @@ async function GET_adminList(req, res) {
 
     // remove the user if they don't want to see themselves in the list of admins
     if (excludeSelf) {
-        console.log("here");
         adminList = adminList.filter(u => u._id.toString() !== userId.toString());
     }
 
