@@ -9,6 +9,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { primaryCyan } from "../../../../colors";
+import { button } from "../../../../classes";
 import HoverTip from "../../../miscComponents/hoverTip";
 
 import "../dashboard.css";
@@ -111,7 +112,12 @@ class Account extends Component {
 
         const content = (
             <div style={{padding: "5px 14px"}}>
-                <div onClick={() => goTo(`/apply/${this.state.uniqueName}`)}>Candidate Invite Page</div>
+                <div
+                    className="primary-cyan clickable inline-block"
+                    onClick={() => goTo(`/apply/${this.state.uniqueName}`)}
+                >
+                    Candidate Invite Page
+                </div><br/>
                 <div>
                     <span
                         className="primary-cyan clickable"
@@ -119,7 +125,7 @@ class Account extends Component {
                     >
                         Copy Link
                     </span>
-                    {" "}
+                    <div style={{display:"inline-block", width: "20px"}}/>
                     <span
                         className="primary-cyan clickable"
                         onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}
@@ -127,15 +133,37 @@ class Account extends Component {
                         Email Template
                     </span>
                 </div>
-                <div>Where to embed</div>
-                <HoverTip text="ATS, emails, automated messages, or other communications with candidates" />
-                <div onClick={() => this.props.generalAction("OPEN_ADD_ADMIN_MODAL")}>Add Admin</div>
-                <div>{ this.state.adminList.length } other admins</div>
+                <div className="pointer inline-block">Where to embed</div>
+                <HoverTip
+                    style={{marginTop:"25px", marginLeft:"-110px"}}
+                    text="ATS, emails, automated messages, or other communications with candidates"
+                />
+                <br/>
+
+                <div
+                    className={button.purpleBlue + " primary-white"}
+                    style={{marginTop: "20px"}}
+                    onClick={() => this.props.generalAction("OPEN_ADD_ADMIN_MODAL")}
+                >
+                    Add Admin
+                </div><br/>
+                <div className="pointer inline-block">
+                    { this.state.adminList.length } other admin{this.state.adminList.length === 1 ? "" : "s"}
+                </div>
                 { this.state.adminList.length > 0 ?
-                    <HoverTip text={names} />
+                    <HoverTip
+                        style={{marginLeft:"10px",whiteSpace:"nowrap"}}
+                        text={names}
+                        sourceTriangle={false}
+                    />
                     : null
                 }
-                <div>Who to add</div>
+                <br/>
+                <div className="pointer inline-block">Who to add</div>
+                <HoverTip
+                    style={{marginTop:"25px", marginLeft:"-79px"}}
+                    text="Hiring managers, recruiters, executives, and anyone involved in hiring decisions"
+                />
             </div>
         );
 
