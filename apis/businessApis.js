@@ -81,7 +81,7 @@ const businessApis = {
 
 
 async function GET_adminList(req, res) {
-    const { userId, verificationToken, businessId, includeSelf } = sanitize(req.query);
+    const { userId, verificationToken, businessId, excludeSelf } = sanitize(req.query);
 
     try {
         var [ adminList, { business, user } ] = await Promise.all([
@@ -95,7 +95,8 @@ async function GET_adminList(req, res) {
     }
 
     // remove the user if they don't want to see themselves in the list of admins
-    if (includeSelf === false) {
+    if (excludeSelf) {
+        console.log("here");
         adminList = adminList.filter(u => u._id.toString() !== userId.toString());
     }
 

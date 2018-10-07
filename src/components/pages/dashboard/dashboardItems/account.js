@@ -40,7 +40,7 @@ class Account extends Component {
                 userId: _id,
                 verificationToken,
                 businessId: businessInfo.businessId,
-                includeSelf: false
+                excludeSelf: true
             }
         }
 
