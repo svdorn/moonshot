@@ -63,6 +63,7 @@ export function closeAddUserModal() {
     }
 }
 
+
 export function openContactUsModal() {
     return function(dispatch) {
         dispatch({type: "OPEN_CONTACT_US_MODAL"});
@@ -398,7 +399,7 @@ export function postUser(user) {
     }
 }
 
-// POST EMAIL INVITES
+// INVITE ANY TYPE OF USER VIA EMAIL
 export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo) {
     return function(dispatch) {
         dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
@@ -415,6 +416,25 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
         });
     }
 }
+
+
+// INVITE ACCOUNT ADMINS VIA EMAIL
+export function postAdminInvites(adminEmails, currentUserInfo) {
+    return function(dispatch) {
+        dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
+
+        axios.post("/api/business/inviteAdmins", { adminEmails, ...currentUserInfo })
+        // email invites success
+        .then(function(res) {
+            dispatch({ type: "POST_EMAIL_INVITES_SUCCESS" });
+        })
+        // error posting email invites
+        .catch(function(err) {
+            dispatch({ type: "POST_EMAIL_INVITES_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
+
 
 // POST CREATE LINK
 export function postCreateLink(currentUserInfo, closeDialog) {

@@ -28,7 +28,9 @@ const { sanitize,
         founderEmails,
         emailFooter,
         devMode,
-        devEmail
+        devEmail,
+
+        moonshotUrl
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -41,6 +43,7 @@ const businessApis = {
     POST_answerQuestion,
     POST_googleJobsLinks,
     POST_emailInvites,
+    POST_inviteAdmins,
     POST_createLink,
     POST_rateInterest,
     POST_changeHiringStage,
@@ -995,9 +998,7 @@ function createCode(businessId, positionId, userType, email, open) {
         }
         // make the code in the db
         try { code = await Signupcodes.create(code) }
-        catch (createCodeError) {
-            return reject(createCodeError);
-        }
+        catch (createCodeError) { return reject(createCodeError); }
         // return the code
         return resolve(code);
     });
@@ -1007,9 +1008,7 @@ function createLink(businessId, positionId, userType) {
     return new Promise(async function(resolve, reject) {
         try {
             const codeObj = await createCode(businessId, positionId, userType, null, true);
-            resolve({
-                code: codeObj.code, userType
-            });
+            resolve({ code: codeObj.code, userType });
         }
         // catch whatever random error comes up
         catch (error) {
@@ -1023,21 +1022,16 @@ function createEmailInfo(businessId, positionId, userType, email) {
     return new Promise(async function(resolve, reject) {
         try {
             const codeObj = await createCode(businessId, positionId, userType, email, false);
-            resolve({
-                code: codeObj.code,
-                email, userType
-            });
+            resolve({ code: codeObj.code, email, userType });
         }
         // catch whatever random error comes up
-        catch (error) {
-            reject(error);
-        }
+        catch (error) { reject(error); }
     });
 }
 
 
 // sends email to the user with email info provided
-async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUrl, userName) {
+async function sendEmailInvite(emailInfo, positionName, businessName, userName) {
     return new Promise(async function(resolve, reject) {
         const code = emailInfo.code;
         const email = emailInfo.email;
@@ -1049,12 +1043,6 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         let content = "";
         // subject of the email
         let subject = "";
-
-        // defining it before the call saves a bit of time
-        if (!moonshotUrl) {
-            // this is where all links will go
-            moonshotUrl = process.env.NODE_ENV === "development" ? "http://localhost:8081/" : "https://moonshotinsights.io/";
-        }
 
         // the button linking to the signup page with the signup code in the url
         const createAccountButton =
@@ -1123,6 +1111,54 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         sendEmail({ recipient, subject, content })
         .then(response => resolve())
         .catch(error => reject(error));
+    });
+}
+
+
+// send email invites to account admins
+async function POST_inviteAdmins(req, res) {
+    const { userId, verificationToken, businessId, adminEmails } = sanitize(req.body);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    if (!user.verified) {
+        return res.status(403).send({ message: "Email not yet verified!" });
+    }
+
+    // will contain all the promises for sending emails
+    let emailPromises = [];
+
+    // add a promise to create a code and send an email for each given address
+    adminEmails.forEach(email => {
+        emailPromises.push(makeCodeAndSendAdminInvite(business._id, business.name, email, user.name));
+    })
+
+    // wait for all the emails to send
+    try { await Promise.all(emailPromises); }
+    catch (sendEmailsError) {
+        console.log("Error sending admin invites: ", sendEmailsError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // return successfully
+    return res.status(200).send({});
+}
+
+
+// returns an object with the email, userType, and new code for a user
+async function makeCodeAndSendAdminInvite(businessId, businessName, email, userName) {
+    return new Promise(async function(resolve, reject) {
+        try {
+            const emailInfoObject = await createEmailInfo(businessId, undefined, "accountAdmin", email);
+            await sendEmailInvite(emailInfoObject, "", businessName, userName);
+            return resolve();
+        }
+        // catch whatever random error comes up
+        catch (error) { reject(error); }
     });
 }
 
@@ -1197,7 +1233,7 @@ async function POST_emailInvites(req, res) {
     // send all the emails
     let sendEmailPromises = [];
     emailInfoObjects.forEach(emailInfoObject => {
-        sendEmailPromises.push(sendEmailInvite(emailInfoObject, positionName, businessName, moonshotUrl, userName));
+        sendEmailPromises.push(sendEmailInvite(emailInfoObject, positionName, businessName, userName));
     })
 
     // wait for all the emails to be sent

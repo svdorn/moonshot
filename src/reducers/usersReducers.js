@@ -26,6 +26,21 @@ export function usersReducers(state = initialState, action) {
                 userPostedFailed: false
             };
             break;
+            case "OPEN_ADD_ADMIN_MODAL":
+                console.log("opening admin modal");
+                return {
+                    ...state,
+                    addAdminModalOpen: true
+                };
+                break;
+            case "CLOSE_ADD_ADMIN_MODAL":
+                return {
+                    ...state,
+                    addAdminModalOpen: false,
+                    userPosted: false,
+                    userPostedFailed: false
+                };
+                break;
         case "OPEN_ADD_POSITION_MODAL":
             return {
                 ...state,
@@ -186,7 +201,11 @@ export function usersReducers(state = initialState, action) {
         //case "UPDATE_ONBOARDING_REJECTED":
         case "CHANGE_PASSWORD":
         case "POST_EMAIL_INVITES_REJECTED":
-            return {...state, loadingSomething:false, userPostedFailed: true, ...notificationInfo(action.notification)}
+            return {
+                ...state,
+                loadingSomething: false,
+                userPostedFailed: true,
+                ...notificationInfo(action.notification)}
             break;
         case "SIGNOUT":
             Intercom('shutdown');

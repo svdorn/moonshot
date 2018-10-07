@@ -162,6 +162,7 @@ app.post('/business/addEvaluation', businessApis.POST_addEvaluation);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
+app.post("/business/inviteAdmins", businessApis.POST_inviteAdmins);
 app.post("/business/postCreateLink", businessApis.POST_createLink);
 app.post("/business/rateInterest", businessApis.POST_rateInterest);
 app.post("/business/changeHiringStage", businessApis.POST_changeHiringStage);

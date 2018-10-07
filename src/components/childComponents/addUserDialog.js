@@ -199,14 +199,15 @@ class AddUserDialog extends Component {
         switch(this.state.tab) {
             case "Candidate":
                 const numCandidateEmails = this.state.numCandidateEmails + 1;
-                this.setState({numCandidateEmails})
+                this.setState({ numCandidateEmails });
                 break;
             case "Employee":
                 const numEmployeeEmails = this.state.numEmployeeEmails + 1;
-                this.setState({numEmployeeEmails})
+                this.setState({ numEmployeeEmails });
                 break;
             case "Admin":
                 const numAdminEmails = this.state.numAdminEmails + 1;
+                this.setState({ numAdminEmails });
                 break;
         }
     }
