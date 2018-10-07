@@ -154,8 +154,10 @@ class WhatToDo extends Component {
                             <span>Copy Link</span>
                         </button>
                     </div>
-                    <div styleName="invite-template-text" onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}>
-                        <u>{"Invite template for candidates."}</u>
+                    <div styleName="invite-template-text">
+                        <u className="pointer" onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}>
+                            {"Invite template for candidates."}
+                        </u>
                     </div>
                     <div styleName="emoji-buttons-full">
                         <div onClick={this.next}>
