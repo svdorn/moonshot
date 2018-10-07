@@ -142,7 +142,7 @@ class Account extends Component {
                         Email Template
                     </span>
                 </div>
-                <div className="pointer inline-block">Where to embed</div>
+                <div className="pointer inline-block">Where to embed<div className="info-hoverable primary-white">i</div></div>
                 <HoverTip
                     style={{marginTop:"25px", marginLeft:"-110px"}}
                     text="ATS, emails, automated messages, or other communications with candidates"
@@ -168,7 +168,7 @@ class Account extends Component {
                     : null
                 }
                 <br/>
-                <div className="pointer inline-block">Who to add</div>
+                <div className="pointer inline-block">Who to add<div className="info-hoverable primary-white">i</div></div>
                 <HoverTip
                     style={{marginTop:"25px", marginLeft:"-79px"}}
                     text="Hiring managers, recruiters, executives, and anyone involved in hiring decisions"
