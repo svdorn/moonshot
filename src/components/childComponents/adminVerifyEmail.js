@@ -65,7 +65,7 @@ class AdminVerifyEmail extends Component {
         const self = this;
         axios.get("/api/user/checkEmailVerified", credentials)
         .then(response => {
-            if (response.data.user) { this.props.updateUser(response.data.user); }
+            this.props.updateUser(response.data);
             self.props.addNotification("Awesome, your evaluations are now active!");
         })
         .catch(error => {

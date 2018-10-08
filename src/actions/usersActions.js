@@ -174,23 +174,9 @@ export function postBusinessInterests(userId, verificationToken, businessId, int
 // update user object in redux store
 export function updateUser(user) {
     return function(dispatch) {
-        dispatch({type: "UPDATE_USER", user});
+        dispatch({ type: "UPDATE_USER", user });
     }
 }
-
-
-// export function updateOnboarding(onboarding, verificationToken, userId, extraArgs) {
-//     return function(dispatch) {
-//         axios.post("/api/user/updateOnboarding", {onboarding, verificationToken, userId})
-//             .then(function(response) {
-//                 const returnedUser = response.data;
-//                 dispatch({type:"UPDATE_ONBOARDING", payload: returnedUser});
-//             })
-//             .catch(function(err) {
-//                 dispatch({ type: "UPDATE_ONBOARDING_REJECTED", ...notification(err, "error") });
-//             });
-//     }
-// }
 
 
 export function sawMyCandidatesInfoBox(userId, verificationToken) {
