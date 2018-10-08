@@ -73,7 +73,7 @@ class WhatToDo extends Component {
                     </div>
                     <div>
                         {this.state.name} has an invite link that can be embedded in your ATS, automated emails or other communications with candidates.
-                        We see the best results when companies invite the vast majority, if not all, of their applicants to complete an evaluatio as the highest
+                        We see the best results when companies invite all of their applicants to complete an evaluation as the highest
                         performers are often dismissed based on non-predictive data. Copy and embed your link where you see fit.
                     </div>
                     <div styleName="link-area">

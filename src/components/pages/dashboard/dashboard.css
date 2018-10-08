@@ -146,7 +146,7 @@
 .full-step-container {
     position: relative;
     flex: 1;
-    padding: calc(var(--item-margin));
+    padding: calc(var(--item-margin)/2);
 }
 .candidate-view > div:first-child {
     flex: 1;
@@ -224,7 +224,7 @@
     transition:         all 0.3s ease;
 }
 .emoji-buttons-full > div > img:hover {
-    height: 33px;
+    height: 31px;
 }
 .emoji-buttons {
     position: absolute;
@@ -299,7 +299,7 @@
 }
 .link-area {
     display: flex;
-    margin: 10px 0;
+    margin: 7px 0;
     justify-content: center;
 }
 .link-area > div {
