@@ -195,18 +195,29 @@ function POST_candidate(req, res) {
         // make sure all pre-reqs to creating user are met
         if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl || errored) { return; }
 
+        // get the business that is offering the position
+        try { var business = await Businesses.findById(businessId).select("intercomId name uniqueName"); }
+        catch (findBusinessError) {
+            console.log(findBusinessError);
+            return res.status(500).send({ message: errors.SERVER_ERROR });
+        }
+
+        console.log("making user");
+
+        // if the user is an account admin, add the name and unique name (for
+        // application url) to the user
+        if (user.userType === "accountAdmin") {
+            console.log("adding business info");
+            user.businessInfo.businessName = business.name;
+            user.businessInfo.uniqueName = business.uniqueName;
+        }
+
         if (process.env.NODE_ENV === "production") {
             // Add companies to user list for intercom
             let companies = [];
             if (user.userType === "accountAdmin") {
-                try {
-                    var intercomId = await Businesses.findById(businessId).select("intercomId");
-                } catch (findBusinessError) {
-                    console.log(findBusinessError);
-                    return res.status(500).send({ message: errors.SERVER_ERROR });
-                }
-                if (intercomId && intercomId.intercomId) {
-                    companies.push({id: intercomId.intercomId});
+                if (business && business.intercomId) {
+                    companies.push({ id: business.intercomId });
                 }
             }
 

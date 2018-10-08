@@ -102,6 +102,7 @@
     display: inline-block;
     padding: 2px 12px;
     cursor: pointer;
+    color: var(--primary-white);
 }
 
 

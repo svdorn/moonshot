@@ -282,6 +282,10 @@ const usersSchema = mongoose.Schema({
     businessInfo: {
         // id of the business they work for
         businessId: mongoose.Schema.Types.ObjectId,
+        // name of the business they work for
+        businessName: String,
+        // unique name of the business - used for the business application link
+        uniqueName: String,
         // their title at the company
         title: String
     },
