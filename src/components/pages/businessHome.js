@@ -38,6 +38,14 @@ class BusinessHome extends Component {
 
 
     componentWillMount() {
+        const user = this.props.currentUser;
+        if (user) {
+            if (user.userType === "accountAdmin") {
+                goTo("/dashboard");
+            } else {
+                goTo("/myEvaluations");
+            }
+        }
         const showRectangles = this.cssPropertySupported("gridRowStart")
         this.setState({...this.state, showRectangles});
     }
