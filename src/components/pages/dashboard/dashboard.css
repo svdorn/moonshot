@@ -16,7 +16,7 @@
 
 .dashboard {
     text-align: left;
-    --item-width: 255px;
+    --item-width: 260px;
     --item-margin: 14px;
     --items-per-row: 3;
     width: calc(var(--items-per-row) * (var(--item-width) + 2 * var(--item-margin)));
