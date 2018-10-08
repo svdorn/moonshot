@@ -160,7 +160,7 @@ class AccountAdminMenu extends Component {
         );
 
         const bottomItem = (
-            <div> 
+            <div>
                 <img src={`/icons/User${png}`} styleName="user-icon" />
                 <div styleName="menu-option" onClick={this.openAccountBox}>
                     <div styleName="user-name">{ getFirstName(user.name) }</div>
@@ -204,17 +204,19 @@ class AccountAdminMenu extends Component {
                     </IconButton>
                 </header>
                 <div styleName="top-menu-activator-space" />
-                <SwipeableDrawer
-                    open={this.state.drawerOpen}
-                    onClose={this.toggleDrawer(false)}
-                    onOpen={this.toggleDrawer(true)}
-                    style={{overflowY: "hidden"}}
-                    classes={{ paper: "overflow-visible-1 overflow-visible-2" }}
-                >
-                    <div styleName="drawer-menu">
-                        { menuContent }
-                    </div>
-                </SwipeableDrawer>
+                <div styleName="hide-on-desktop">
+                    <SwipeableDrawer
+                        open={this.state.drawerOpen}
+                        onClose={this.toggleDrawer(false)}
+                        onOpen={this.toggleDrawer(true)}
+                        style={{overflowY: "hidden"}}
+                        classes={{ paper: "overflow-visible-1 overflow-visible-2" }}
+                    >
+                        <div styleName="drawer-menu">
+                            { menuContent }
+                        </div>
+                    </SwipeableDrawer>
+                </div>
                 <div styleName="menu">
                     { menuContent }
                 </div>

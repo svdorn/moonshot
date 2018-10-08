@@ -17,7 +17,6 @@
 .top-menu-activator { display: none; }
 .top-menu-activator + .top-menu-activator-space { display: none; }
 
-
 .menu, .drawer-menu {
     height: 100%;
     background-color: var(--black-deep-dark);
@@ -110,6 +109,10 @@
     .user-icon { display: none; }
 }
 
+
+@media screen and (min-width: 1001px) {
+    .hide-on-desktop { display: none; }
+}
 
 @media screen and (max-width: 1000px) {
     :root {
