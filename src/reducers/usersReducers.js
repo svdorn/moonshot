@@ -75,8 +75,15 @@ export function usersReducers(state = initialState, action) {
             break;
         case "UPDATE_ONBOARDING_STEP": {
             if (!state.currentUser) { return state; }
-            // create onboarding object with new step
-            let onboard = { step: action.newStep };
+            // create onboarding object with new step or with time finished marked
+            let onboard = { };
+            // if the user is finished, update that on the frontend
+            if (action.newStep === -1) {
+                onboard = { timeFinished: new Date() };
+            } else {
+                onboard = { step: action.newStep };
+            }
+
             // fill in onboarding info with any that already exists from user
             if (typeof state.currentUser.onboard === "object") {
                 onboard = { ...state.currentUser.onboard, ...onboard };
@@ -87,6 +94,7 @@ export function usersReducers(state = initialState, action) {
             }
             // throw the onboarding stuff back into the user
             const currentUser = { ...state.currentUser, onboard }
+            console.log("curr user: ", state.currentUser);
             // save the state with the new current user
             return { ...state, currentUser };
             break;

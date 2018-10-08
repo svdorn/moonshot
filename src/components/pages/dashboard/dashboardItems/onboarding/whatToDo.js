@@ -55,7 +55,7 @@ class WhatToDo extends Component {
         }
 
         // go to the next onboarding step
-        this.props.updateOnboardingStep(_id, verificationToken, "finish");
+        this.props.updateOnboardingStep(_id, verificationToken, -1);
     }
 
     intercomMsg = () => {

@@ -198,7 +198,7 @@ class Activity extends Component {
                     select: "no-focus-change-important"
                 }}
                 value={this.state.tab}
-                onChange={ this.handleTabChange() }
+                onChange={ this.handleTabChange }
             >
                 { tabOptions }
             </Select>

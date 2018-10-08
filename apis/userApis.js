@@ -509,12 +509,18 @@ async function POST_updateOnboardingStep(req, res) {
         }
     }
 
-    // record that the user took this step
-    user.onboard.actions.push({ time: new Date(), newStep });
-    // mark the new step as their current one
-    user.onboard.step = newStep;
-    // if this is the farthest the user has been, mark this as highest step
-    if (!user.onboard.highestStep || newStep > user.onboard.highestStep) { user.onboard.highestStep = newStep; }
+    // check if the user is done with onboarding
+    if (newStep === -1) {
+        // user is done with onboarding
+        user.onboard.timeFinished = new Date();
+    } else {
+        // record that the user took this step
+        user.onboard.actions.push({ time: new Date(), newStep });
+        // mark the new step as their current one
+        user.onboard.step = newStep;
+        // if this is the farthest the user has been, mark this as highest step
+        if (!user.onboard.highestStep || newStep > user.onboard.highestStep) { user.onboard.highestStep = newStep; }
+    }
 
     try { await user.save(); }
     catch (saveUserError) {
