@@ -48,7 +48,7 @@ class WhyItWorks extends Component {
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>
                             <img
-                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
+                                src={`/icons/emojis/Sunglass${this.props.png}`}
                             />
                             <div>Got it</div>
                         </div>
