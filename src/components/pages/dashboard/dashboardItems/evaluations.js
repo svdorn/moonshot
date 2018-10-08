@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import { generalAction } from "../../../../actions/usersActions";
+import { generalAction, openAddPositionModal } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -135,8 +135,8 @@ class Evaluations extends Component {
         }
 
         let smallCTA = (
-            <div styleName="box-cta" onClick={() => goTo("/myEvaluations")}>
-                See Evaluations <img src={`/icons/LineArrow${this.props.png}`}/>
+            <div styleName="box-cta" onClick={() => this.props.openAddPositionModal()}>
+                Add Position <img src={`/icons/LineArrow${this.props.png}`}/>
             </div>
         );
 
@@ -214,7 +214,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        generalAction
+        generalAction,
+        openAddPositionModal
     }, dispatch);
 }
 
