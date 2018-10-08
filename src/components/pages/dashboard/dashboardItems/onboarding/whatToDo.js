@@ -99,20 +99,26 @@ class WhatToDo extends Component {
                             {"See Your Page"}
                         </u>
                     </div>
-                    <div styleName="emoji-buttons-full">
-                        <div onClick={this.next}>
-                            <img
-                                src={`/icons/emojis/PartyPopper${this.props.png}`}
-                            />
-                            <div style={{paddingTop: "5px"}}>All set!</div>
+                    {!this.props.loading ?
+                        <div styleName="emoji-buttons-full">
+                            <div onClick={this.next}>
+                                <img
+                                    src={`/icons/emojis/PartyPopper${this.props.png}`}
+                                />
+                                <div style={{paddingTop: "5px"}}>All set!</div>
+                            </div>
+                            <div onClick={this.intercomMsg}>
+                                <img
+                                    src={`/icons/emojis/Face${this.props.png}`}
+                                />
+                                <div style={{paddingTop: "5px"}}>More info</div>
+                            </div>
                         </div>
-                        <div onClick={this.intercomMsg}>
-                            <img
-                                src={`/icons/emojis/Face${this.props.png}`}
-                            />
-                            <div style={{paddingTop: "5px"}}>More info</div>
+                        :
+                        <div styleName="circular-progress">
+                            <CircularProgress style={{ color: primaryCyan }} />
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         );
@@ -141,7 +147,8 @@ class WhatToDo extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        loading: state.users.loadingSomething
     };
 }
 

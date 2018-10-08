@@ -94,9 +94,8 @@ export function usersReducers(state = initialState, action) {
             }
             // throw the onboarding stuff back into the user
             const currentUser = { ...state.currentUser, onboard }
-            console.log("curr user: ", state.currentUser);
             // save the state with the new current user
-            return { ...state, currentUser };
+            return { ...state, currentUser, loadingSomething: false };
             break;
         }
         case "CREATED_NO_VERIFY_EMAIL_SENT": {

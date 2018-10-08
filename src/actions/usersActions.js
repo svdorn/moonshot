@@ -264,14 +264,22 @@ function defaultErrorHandler(dispatch, options) {
 // change the current step within onboarding
 export function updateOnboardingStep(userId, verificationToken, newStep) {
     return function(dispatch) {
-        dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
-
+        if (newStep !== -1) {
+            dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
+        } else {
+            dispatch({type: "START_LOADING"});
+        }
         axios.post("/api/user/updateOnboardingStep", { userId, verificationToken, newStep })
         .then(result => {
-            console.log("here with result: ", result);
+            if (newStep === -1) {
+                dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
+            }
         })
         .catch(error => {
             console.log("ERROR: ", error);
+            if (newStep === -1) {
+                dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
+            }
         });
     }
 }

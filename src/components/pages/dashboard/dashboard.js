@@ -24,7 +24,6 @@ class Dashboard extends Component {
     render() {
         const user = this.props.currentUser;
 
-        console.log("onboard in dashboard: ", user.onboard);
         let activity = <DashboardItem type="Activity" width={3} />;
         // if the user is not done with onboarding
         if (user && user.onboard && !user.onboard.timeFinished) {
