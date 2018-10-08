@@ -159,7 +159,7 @@ class Apply extends Component {
             );
         });
 
-        let CTA = <div styleName="box-cta" onClick={() => goTo("/dashboard?onboarding=copyLink")}>Continue</div>
+        let CTA = <div styleName="box-cta" onClick={() => goTo("/dashboard")}>Continue</div>
 
         return (
             <div styleName="checklist-container">
@@ -198,7 +198,7 @@ class Apply extends Component {
                                         text="After candidates press next, they sign up to complete your evaluation."
                                         />
                                 </div>
-                                <div className="clickableNoUnderline marginTop20px secondary-gray" onClick={() => goTo("/dashboard?onboarding=copyLink")}>
+                                <div className="clickableNoUnderline marginTop20px secondary-gray" onClick={() => goTo("/dashboard")}>
                                     <u>Continue to setup your page.</u>
                                 </div>
                                 <div>{ this.makeChecklist() }</div>

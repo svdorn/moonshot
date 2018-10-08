@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router';
-import { updateOnboardingStep, addNotification, openAddPositionModal, generalAction, updateUser } from "../../../../../actions/usersActions";
+import { updateOnboardingStep, addNotification, generalAction, updateUser } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo } from "../../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -16,13 +16,15 @@ class WhatToDo extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { };
+        this.state = {
+            name: undefined,
+            uniqueName: undefined
+        };
 
         this.next = this.next.bind(this);
         this.intercomMsg = this.intercomMsg.bind(this);
         this.handleCustomPage = this.handleCustomPage.bind(this);
         this.copyLink = this.copyLink.bind(this);
-        this.openAddPositionModal = this.openAddPositionModal.bind(this);
     }
 
     componentDidMount() {
@@ -34,11 +36,7 @@ class WhatToDo extends Component {
             }
         })
         .then(function (res) {
-            let step = 1;
-            if (self.props.location && self.props.location.query && self.props.location.query.onboarding && self.props.location.query.onboarding === "copyLink") {
-                step = 2;
-            }
-            self.setState({ step, uniqueName: res.data.uniqueName })
+            self.setState({ uniqueName: res.data.uniqueName, name: res.data.name })
         })
         .catch(function (err) {
             self.props.addNotification("Error loading page.", "error");
@@ -46,24 +44,18 @@ class WhatToDo extends Component {
     }
 
     next = () => {
-        let { step } = this.state;
+        const { _id, verificationToken, verified } = this.props.currentUser;
 
-        const { _id, verificationToken } = this.props.currentUser;
+        // TODO merge these two into one api call to avoid race conditions
 
-        if (step == 2 && !this.props.currentUser.verified) {
+        if (!verified) {
             axios.post("/api/accountAdmin/showVerifyEmailBanner", { userId: _id, verificationToken })
             .then(response => { this.props.updateUser(response.data.user); })
             .catch(error => { console.log(error); });
         }
 
-        // check if need to go to next step in sequence
-        if (step < 3) {
-            this.setState({ step: ++step }, function(res) {
-                return;
-            });
-         }
         // go to the next onboarding step
-        this.props.updateOnboardingStep(_id, verificationToken, 4);
+        this.props.updateOnboardingStep(_id, verificationToken, "finish");
     }
 
     intercomMsg = () => {
@@ -79,82 +71,19 @@ class WhatToDo extends Component {
 
     handleCustomPage = () => {
         goTo(`/apply/${this.state.uniqueName}`)
-        let self = this;
-        // get the business' unique name
-        axios.get("/api/business/uniqueName", {
-            params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
-            }
-        })
-        .then(function (res) {
-            goTo(`/apply/${res.data}`);
-        })
-        .catch(function (err) {
-            self.props.addNotification(err, "error");
-        });
     }
 
-    openAddPositionModal = () => {
-        this.props.openAddPositionModal();
-    }
-
-    customPageView() {
-        return (
-            <div className="inline-block" styleName="onboarding-info ml-step">
-                <div>
-                    <div styleName="custom-page-title">
-                        {"A Custom Page Just for You"}
-                    </div>
-                    <div>
-                        {"Why gamble on your hires? We use machine learning, predictive data, and decades of psychology research to find the candidates who can take your company to the next level."}
-                    </div>
-                    <div styleName="emoji-buttons">
-                        <div onClick={this.next}>
-                            <img
-                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
-                            />
-                            <div>Got it</div>
-                        </div>
-                        <div onClick={this.intercomMsg}>
-                            <img
-                                src={`/icons/emojis/Face${this.props.png}`}
-                            />
-                            <div>More info</div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <img
-                            src={`/images/ApplyPage${this.props.png}`}
-                            styleName="apply-image"
-                        />
-                    </div>
-                    <div>
-                        <button
-                            className="button noselect round-6px background-primary-cyan primary-white"
-                            styleName="onboarding-button apply-button"
-                            onClick={this.handleCustomPage}
-                            style={{padding: "3px 10px"}}
-                        >
-                            <span>See my Page &#8594;</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    copyLinkView() {
+    makeBody() {
         return (
             <div styleName="full-step-container">
                 <div styleName="copy-link-view">
                     <div styleName="onboarding-title">
-                        {"Copy Link View"}
+                        {"A Candidate Invite Page Just For You"}
                     </div>
                     <div>
-                        {"Why gamble on your hires? We use machine learning, predictive data, and decades of psychology research to find the candidates who can take your company to the next level."}
+                        {this.state.name} has an invite link that can be embedded in your ATS, automated emails or other communications with candidates.
+                        We see the best results when companies invite the vast majority, if not all, of their applicants to complete an evaluatio as the highest
+                        performers are often dismissed based on non-predictive data. Copy and embed your link where you see fit.
                     </div>
                     <div styleName="link-area">
                         <div>{`https://moonshotinsights.io/apply/${this.state.uniqueName}`}</div>
@@ -164,7 +93,10 @@ class WhatToDo extends Component {
                     </div>
                     <div styleName="invite-template-text">
                         <u className="pointer" onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}>
-                            {"Invite template for candidates."}
+                            {"Candidate Invite Template"}
+                        </u>
+                        <u className="pointer marginLeft20px" onClick={this.handleCustomPage}>
+                            {"See Your Page"}
                         </u>
                     </div>
                     <div styleName="emoji-buttons-full">
@@ -172,41 +104,7 @@ class WhatToDo extends Component {
                             <img
                                 src={`/icons/emojis/ThumbsUp${this.props.png}`}
                             />
-                            <div>Got it</div>
-                        </div>
-                        <div onClick={this.intercomMsg}>
-                            <img
-                                src={`/icons/emojis/Face${this.props.png}`}
-                            />
-                            <div>More info</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    addPositionsView() {
-        return (
-            <div styleName="full-step-container">
-                <div styleName="add-positions-view">
-                    <div styleName="onboarding-title">
-                        {"Add Positions Header"}
-                    </div>
-                    <div>
-                        {"Why gamble on your hires? We use machine learning, predictive data, and decades of psychology research to find the candidates who can take your company to the next level."}
-                    </div>
-                    <div>
-                        <button onClick={this.openAddPositionModal} className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" styleName="onboarding-button" style={{padding: "3px 10px"}}>
-                            <span>Add Position</span>
-                        </button>
-                    </div>
-                    <div styleName="emoji-buttons-full">
-                        <div onClick={this.next}>
-                            <img
-                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
-                            />
-                            <div>Finish</div>
+                            <div>All set!</div>
                         </div>
                         <div onClick={this.intercomMsg}>
                             <img
@@ -221,12 +119,21 @@ class WhatToDo extends Component {
     }
 
     render() {
-        switch (this.state.step) {
-            case 1: return this.customPageView();
-            case 2: return this.copyLinkView();
-            case 3: return this.addPositionsView();
-            default: return <div styleName="full-step-container"><div styleName="circular-progress"><CircularProgress style={{ color: primaryCyan }} /></div></div>;
-        }
+        return (
+            <div>
+                {this.state.uniqueName ?
+                    <div>
+                        { this.makeBody() }
+                    </div>
+                :
+                    <div styleName="full-step-container">
+                        <div styleName="circular-progress">
+                            <CircularProgress style={{ color: primaryCyan }} />
+                        </div>
+                    </div>
+                }
+            </div>
+        );
     }
 }
 
@@ -242,7 +149,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateOnboardingStep,
         addNotification,
-        openAddPositionModal,
         generalAction,
         updateUser
     }, dispatch);
