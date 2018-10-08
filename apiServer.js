@@ -149,7 +149,8 @@ app.post("/user/intercomEvent", userApis.POST_intercomEvent);
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 //app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
-//app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
+app.post("/candidate/reSendVerificationEmail", candidateApis.POST_reSendVerificationEmail);
+// app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 
 app.post("/accountAdmin/sendVerificationEmail", accountAdminApis.POST_sendVerificationEmail);
 //app.post("/accountAdmin/identifyATS", accountAdminApis.POST_identifyATS);

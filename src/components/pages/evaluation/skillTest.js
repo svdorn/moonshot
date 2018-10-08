@@ -58,6 +58,17 @@ class SkillTest extends Component {
     }
 
 
+    // when new question is here, set the current answer as nonexistent
+    componentDidUpdate(prevProps, prevState) {
+        try {
+            if (prevProps.questionInfo._id !== this.props.questionInfo._id) {
+                this.setState({ selectedId: undefined });
+            }
+        }
+        catch (e) { /* if this fails it's probably because there is no question info */ }
+    }
+
+
     startTest() {
         // can only start test if have agreed to skill terms now or in past
         if (this.props.currentUser.agreedToSkillTerms || this.state.agreedToTerms) {

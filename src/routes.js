@@ -11,7 +11,7 @@ import Login from './components/pages/login';
 import Signup from './components/pages/signup';
 import MyCandidates from './components/pages/businessPages/myCandidates';
 import MyEmployees from './components/pages/businessPages/myEmployees';
-import MyEvaluations from './components/pages/businessPages/myEvaluations';
+import MyEvaluations from './components/pages/myEvaluations';
 import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import Billing from './components/pages/businessPages/billing';
@@ -19,6 +19,7 @@ import Pricing from './components/pages/businessPages/pricing';
 //import Onboarding from './components/pages/businessPages/onboarding/onboarding';
 import BusinessSignup from "./components/pages/businessPages/businessSignup";
 import Chatbot from "./components/pages/businessPages/landbot";
+
 import BusinessHome from './components/pages/businessHome';
 import Influencer from './components/pages/influencer';
 import Main from './main';
