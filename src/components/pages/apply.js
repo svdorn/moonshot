@@ -159,7 +159,9 @@ class Apply extends Component {
             );
         });
 
-        let CTA = <div styleName="box-cta" onClick={() => goTo("/dashboard")}>Continue</div>
+        let CTA = <div styleName="box-cta" onClick={() => goTo("/dashboard")}>
+            Continue <img src={`/icons/LineArrow${this.props.png}`} />
+        </div>
 
         return (
             <div styleName="checklist-container">

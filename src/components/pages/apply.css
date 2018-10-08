@@ -68,24 +68,25 @@
 .complete-mark.complete > div { border-color: white; }
 
 .box-cta {
-    color: white;
     position: absolute;
-    bottom: 5px;
+    bottom: 4px;
     right: 5px;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
+    color: #d7d7d7;
 }
-.box-cta::after {
-    content: "→";
-    padding: 0 5px 0 5px;
+.box-cta > img {
+    width: 10px;
+    margin: 0 5px 2px 2px;
+    margin-bottom: 4px;
+    transform: translateX(0%);
 
-    -webkit-transition: padding 0.5s ease;
-    -ms-transition: padding 0.5s ease;
-    transition: padding 0.5s ease;
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
 }
-.box-cta:hover::after {
-    content: "→";
-    padding: 0 0 0 10px;
+.box-cta:hover > img {
+    transform: translateX(50%);
 }
 
 @media screen and (max-width: 1000px) {
