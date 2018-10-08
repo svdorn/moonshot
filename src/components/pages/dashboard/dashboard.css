@@ -271,11 +271,12 @@
     transform: translate(-50%);
 }
 .admin-image {
-    height: 95%;
+    height: 90%;
     position: absolute;
-    bottom: 5px;
+    bottom: 5%;
     left: 50%;
     transform: translate(-50%);
+    border: 1px solid var(--primary-black-dark);
 }
 .apply-image {
     height: 70%;
