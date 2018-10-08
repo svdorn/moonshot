@@ -9,7 +9,7 @@ import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
-import { renderTextField, renderPasswordField, isValidEmail } from "../../miscFunctions";
+import { renderTextField, renderPasswordField, isValidEmail, goTo } from "../../miscFunctions";
 
 
 const validate = values => {
@@ -136,14 +136,6 @@ class Login extends Component {
 
     }
 
-    goTo (route)  {
-        // closes any notification
-        this.props.closeNotification();
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
 
     handleCheckMarkClick() {
         const stayLoggedIn = !this.state.stayLoggedIn;
@@ -207,9 +199,9 @@ class Login extends Component {
                             style={{margin: '10px 0'}}
                         />
                         <br/>
-                        <div className="clickable underline" onClick={() => this.goTo({pathname: '/signup', query: signUpQuery})} style={{display:"inline-block"}}>Create Account</div>
+                        <div className="clickable underline" onClick={() => goTo({pathname: '/signup', query: signUpQuery})} style={{display:"inline-block"}}>Create Account</div>
                         <br/>
-                        <div className="clickable" onClick={() => this.goTo('/forgotPassword')} style={{display:"inline-block", marginLeft:"7px"}}>Forgot Password?</div>
+                        <div className="clickable" onClick={() => goTo('/forgotPassword')} style={{display:"inline-block", marginLeft:"7px"}}>Forgot Password?</div>
                         <br/>
                         {this.props.loadingLogin ? <CircularProgress color="white" style={{marginTop: "10px"}}/> : null}
                     </form>

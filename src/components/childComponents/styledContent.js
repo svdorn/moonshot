@@ -65,7 +65,7 @@ class StyledContent extends Component {
                             );
                         });
                         contentHtml.push(
-                            <div id="exampleSkillsContainer">
+                            <div id="exampleSkillsContainer" key={"example skills"}>
                                 {exampleSkills}
                             </div>
                         );
@@ -119,17 +119,17 @@ class StyledContent extends Component {
                     case "code":
                         if (content.length > 0) {
                             let code = [];
-                            content.forEach(function(codeLine) {
+                            content.forEach(function(codeLine, codeIndex) {
                                 let codeCopy = codeLine;
                                 // "^" is the symbol to use for indenting by one tab
                                 while (codeCopy.length > 0 && codeCopy.charAt(0) === "^") {
                                     // add a tab to the beginning of the line
-                                    code.push(<div className="inlineBlock width40px"/>);
+                                    code.push(<div className="inlineBlock width40px" key={"code tab " + codeCopy.length + " " + codeIndex}/>);
                                     // remove the indent symbol
                                     codeCopy = codeCopy.substring(1);
                                 }
-                                code.push(<div className="inlineBlock" style={{padding: "10px 20px"}}>{htmlDecode(codeCopy)}</div>);
-                                code.push(<br/>)
+                                code.push(<div key={"code " + codeIndex} className="inlineBlock" style={{padding: "10px 20px"}}>{htmlDecode(codeCopy)}</div>);
+                                code.push(<br key={"code br " + codeIndex}/>)
                             });
                             contentHtml.push (
                                 <div className={className + " code"} style={{textAlign:"left"}} key={"questionPart" + keyCounter}>

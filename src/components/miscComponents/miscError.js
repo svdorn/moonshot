@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { goTo } from "../../actions/usersActions";
+import { goTo } from "../../miscFunctions";
 
 
 class MiscError extends Component {
@@ -24,7 +24,7 @@ class MiscError extends Component {
                 <div
                     className="button medium round-4px background-primary-cyan"
                     style={{margin: "20px"}}
-                    onClick={() => this.goTo("/myEvaluations")}
+                    onClick={() => goTo("/myEvaluations")}
                 >
                     Take Me Home
                 </div>
@@ -42,7 +42,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        goTo
+
     }, dispatch);
 }
 
