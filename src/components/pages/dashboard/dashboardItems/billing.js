@@ -13,17 +13,6 @@ import { primaryCyan } from "../../../../colors";
 import "../dashboard.css";
 
 
-const planDescriptions = {
-    "Free Trial":
-        "With the free trial, you can create as many evaluations and send \
-        through as many candidates as you want, and you can hire one candidate \
-        for free.",
-    "Paid Plan":
-        "Send as many candidates through as many evaluations as you want! \
-        Three-month guarantee when you hire a candidate."
-}
-
-
 class Billing extends Component {
     constructor(props) {
         super(props);
@@ -71,32 +60,34 @@ class Billing extends Component {
             );
         }
 
+        // by default show that we're going to be adding billing info
+        let currentPlan = "Starter Plan";
+        if (this.state.billingIsSetUp) { currentPlan = "Pro Plan"; }
+
         // standard dashboard box header
         const header = (
             <div styleName="box-header">
-                <div styleName="box-title">Billing</div>
+                <div styleName="box-title">{ currentPlan }</div>
             </div>
         );
 
-        // by default show that we're going to be adding billing info
-        let billingAction = "Add";
-        let currentPlan = "Free Trial";
-        if (this.state.billingIsSetUp) {
-            billingAction === "View";
-            currentPlan = "Paid Plan";
-        }
-
         const content = (
             <div style={{padding: "5px 14px"}}>
-                <div styleName="payment-plan">Current Plan: <span>{ currentPlan }</span></div>
-                <div>{ planDescriptions[currentPlan] }</div>
+                <div styleName="payment-plan">
+                    { this.state.billingIsSetUp ? "Only Pay When You Hire" : "Your First Hire Is Free" }
+                </div>
+                <div>
+                    Unlimited candidates, positions, and employees. Only pay us
+                    when you hire a top performer who stays at your company.
+                </div>
                 <div onClick={() => goTo("/pricing")} styleName="pricing-link">See Pricing</div>
             </div>
         );
 
         const smallCTA = (
             <div styleName="box-cta" onClick={() => goTo("/billing")}>
-                { billingAction } Billing Info <img src={`/icons/LineArrow${this.props.png}`} />
+                { this.state.billingIsSetUp ? "" : "Add" } Billing
+                Info <img src={`/icons/LineArrow${this.props.png}`} />
             </div>
         );
 

@@ -379,9 +379,6 @@
 
 .payment-plan {
     margin-bottom: 5px;
-}
-.payment-plan > span {
-    font-weight: bold;
     color: var(--primary-cyan);
 }
 .pricing-link {
