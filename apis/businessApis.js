@@ -163,7 +163,7 @@ async function POST_createBusinessAndUser(req, res) {
         name: company,
         positions: [{ name: positionTitle, positionType, isManager }]
     }
-    console.log("newBusinessInfo: ", newBusinessInfo);
+
     try { var business = await createBusiness(newBusinessInfo); }
     catch (createBizError) {
         console.log("Error creating business from business signup: ", createBizError);
@@ -173,6 +173,8 @@ async function POST_createBusinessAndUser(req, res) {
     // add the business to the user
     user.businessInfo = {
         businessId: business._id,
+        businessName: business.name,
+        uniqueName: business.uniqueName,
         title: "Account Admin"
     }
     // user is the first at their company (so they have to do onboarding)
