@@ -84,7 +84,7 @@ async function POST_reSendVerificationEmail(req, res) {
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
-    return res.status(200).send({ emailSent: true });
+    return res.status(200).send({ emailSent: true, email: user.email });
 }
 
 
@@ -938,7 +938,7 @@ async function GET_checkUserVerified(req, res) {
     }
 
     // if not verified, return unsuccessfully
-    if (!user.verified) { return res.status(403).send({verified: false}); }
+    if (!user.verified) { return res.status(403).send({ verified: false }); }
 
     // return user object if verified
     return res.status(200).send(frontEndUser(user));
