@@ -71,7 +71,6 @@ class MyEvaluations extends Component {
         const { _id: userId, verificationToken, email } = this.props.currentUser;
         axios.post("/api/candidate/reSendVerificationEmail", {userId, verificationToken})
         .then(response => {
-            console.log("response: ", response);
             if (response.data.alreadyVerified) {
                 if (response.data.user) { this.props.updateUser(response.data.user); }
                 this.props.addNotification("Email already verified, take your evaluation whenever you're ready!", "info");
@@ -238,7 +237,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addNotification,
         startLoading,
-        stopLoading
+        stopLoading,
+        updateUser
     }, dispatch);
 }
 
