@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router';
-import { updateOnboardingStep, addNotification, generalAction } from "../../../../../actions/usersActions";
+import { updateOnboardingStep, addNotification, generalAction, updateUser } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo } from "../../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -44,7 +44,16 @@ class WhatToDo extends Component {
     }
 
     next = () => {
-        const { _id, verificationToken } = this.props.currentUser;
+        const { _id, verificationToken, verified } = this.props.currentUser;
+
+        // TODO merge these two into one api call to avoid race conditions
+
+        if (!verified) {
+            axios.post("/api/accountAdmin/showVerifyEmailBanner", { userId: _id, verificationToken })
+            .then(response => { this.props.updateUser(response.data.user); })
+            .catch(error => { console.log(error); });
+        }
+
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, "finish");
     }
@@ -140,7 +149,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateOnboardingStep,
         addNotification,
-        generalAction
+        generalAction,
+        updateUser
     }, dispatch);
 }
 

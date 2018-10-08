@@ -20,15 +20,12 @@ const { sanitize,
 // import random functions from other apis
 const { sendVerificationEmail } = require("./userApis.js");
 
-const adminApis = {
-    POST_sendVerificationEmail
-}
-
 
 // --------------------------->> API DEFINITIONS <<--------------------------- //
+module.exports = {};
 
 
-async function POST_sendVerificationEmail(req, res) {
+module.exports.POST_sendVerificationEmail = async function (req, res) {
     // get and verify arguments
     const { userId, verificationToken } = sanitize(req.body);
     const stringArgs = [ userId, verificationToken ];
@@ -89,7 +86,26 @@ async function POST_sendVerificationEmail(req, res) {
 }
 
 
-// <<----------------------------------------------------------------------->> //
+module.exports.POST_showVerifyEmailBanner = async function(req, res) {
+    const { userId, verificationToken } = sanitize(req.body);
+    const query = { "_id": userId, "verificationToken": verificationToken };
+    const update = { "showVerifyEmailBanner": true };
+    const options = { "new": true };
 
+    try { var user = await Users.findOneAndUpdate(query, update, options); }
+    catch (updateError) {
+        console.log("Error updating user when showing verify email banner: ", updateError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
 
-module.exports = adminApis;
+    if (user.verified) {
+        const newUpdate = { "showVerifyEmailBanner": false };
+        try { user = await Users.findOneAndUpdate(query, newUpdate, options); }
+        catch (updateError) {
+            console.log("Error re-updating user when showing verify email banner: ", updateError);
+            return res.status(500).send({ message: errors.SERVER_ERROR });
+        }
+    }
+
+    return res.status(200).send({ user });
+}
