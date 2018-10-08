@@ -21,19 +21,17 @@ const { sanitize,
         getFirstName,
         frontEndUser,
         emailFooter,
-        getUserFromReq
+        getUserFromReq,
+        moonshotUrl
 } = require('./helperFunctions.js');
 
 // get function to start position evaluation
 const { addEvaluation } = require('./evaluationApis.js');
+const { sendVerificationEmail } = require("./userApis");
 
 
 const candidateApis = {
-    // POST_updateAllOnboarding,
-    // POST_endOnboarding,
-    POST_candidate,
-    POST_sendVerificationEmail,
-    POST_reSendVerificationEmail
+    POST_candidate
 }
 
 
@@ -202,12 +200,9 @@ function POST_candidate(req, res) {
             return res.status(500).send({ message: errors.SERVER_ERROR });
         }
 
-        console.log("making user");
-
         // if the user is an account admin, add the name and unique name (for
         // application url) to the user
         if (user.userType === "accountAdmin") {
-            console.log("adding business info");
             user.businessInfo.businessName = business.name;
             user.businessInfo.uniqueName = business.uniqueName;
         }
@@ -293,13 +288,13 @@ function POST_candidate(req, res) {
         }
         catch (addEvalOrSaveError) {
             console.log("Couldn't add evaluation to user: ", addEvalOrSaveError);
-            return res.status(500).send({message: errors.SERVER_ERROR});
+            return res.status(500).send({ message: errors.SERVER_ERROR });
         }
 
         try { await sendVerificationEmail(user); }
         catch (sendEmailError) {
             console.log("Error sending verification email: ", sendEmailError);
-            return res.status(500).send({ userCreated: true });
+            // continue execution, user will have to resend verification email
         }
 
         // user was successfully created
@@ -398,172 +393,6 @@ function POST_candidate(req, res) {
             resolve(true);
         });
     }
-}
-
-
-// // saves all three onboarding steps
-// function POST_updateAllOnboarding(req, res) {
-//     const info = sanitize(req.body.params.info);
-//     const goals = sanitize(req.body.params.goals);
-//     const interests = sanitize(req.body.params.interests);
-//     const userId = sanitize(req.body.params.userId);
-//     const verificationToken = sanitize(req.body.params.verificationToken);
-//
-//     if (userId && verificationToken) {
-//         // When true returns the updated document
-//         Users.findById(userId, function (findErr, user) {
-//             if (findErr) {
-//                 console.log("Error finding user when updating info during onboarding: ", findErr);
-//                 res.status(500).send("Server error");
-//                 return;
-//             }
-//
-//             if (!verifyUser(user, verificationToken)) {
-//                 console.log("Couldn't verify user when trying to update onboarding info.");
-//                 res.status(401).send("User does not have valid credentials to update info.");
-//                 return;
-//             }
-//
-//             if (info) {
-//                 // if info exists, try toad save it
-//                 const fullInfo = removeEmptyFields(info);
-//
-//                 for (const prop in fullInfo) {
-//                     // only use properties that are not inherent to all objects
-//                     if (info.hasOwnProperty(prop)) {
-//                         user.info[prop] = fullInfo[prop];
-//                     }
-//                 }
-//             }
-//
-//             // if goals exist, save them
-//             if (goals) {
-//                 user.info.goals = goals
-//             }
-//
-//             // if interests exist, save them
-//             if (interests) {
-//                 user.info.interests = interests;
-//             }
-//
-//             user.save(function (saveErr, updatedUser) {
-//                 if (saveErr) {ad
-//                     console.log("Error saving user information when updating info from onboarding: ", saveErr);
-//                     res.status(500).send("Server error, couldn't save information.");
-//                     return;
-//                 }
-//                 res.send(frontEndUser(updatedUser));
-//             });
-//         })
-//     } else {
-//         console.log("Didn't have info or a user id or both.")
-//         res.status(403).send("Bad request.");
-//     }
-// }
-//
-//
-// // end candidate's onboarding so they can get on to the rest of the site
-// function POST_endOnboarding(req, res) {
-//     const userId = sanitize(req.body.userId);
-//     const verificationToken = sanitize(req.body.verificationToken);
-//     const removeRedirectField = sanitize(req.body.removeRedirectField);
-//
-//     const query = {_id: userId, verificationToken};
-//     let update = {
-//         '$set': {
-//             hasFinishedOnboarding: true
-//         }
-//     };
-//
-//     if (removeRedirectField) {
-//         update['$unset'] = { redirect: "" }
-//     }
-//
-//     // When true returns the updated document
-//     const options = {new: true};
-//
-//     Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
-//         if (!err && updatedUser) {
-//             res.json(frontEndUser(updatedUser));
-//         } else {
-//             res.status(500).send("Error ending onboarding.");
-//         }
-//     });
-// }
-
-
-async function sendVerificationEmail(user) {
-    return new Promise(async function(resolve, reject) {
-        let moonshotUrl = 'https://moonshotinsights.io/';
-        // if we are in development, links are to localhost
-        if (process.env.NODE_ENV === "development") {
-            moonshotUrl = 'http://localhost:8081/';
-        }
-
-        let recipients = [ user.email ];
-        let subject = 'Verify Email';
-        let content =
-            `<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
-                <div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>
-                <p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.
-                <br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>
-                <a  style="display:inline-block;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:6px 30px;text-decoration:none;margin:20px;background:#494b4d;"
-                    href="${moonshotUrl}verifyEmail?token=${user.emailVerificationToken}"
-                >
-                    Verify Account
-                </a>
-                <p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>
-                ${emailFooter(user.email)}
-            </div>`;
-
-        try {
-            await sendEmail({recipients, subject, content});
-            return resolve();
-        }
-        // send email error
-        catch (sendEmailError) { return reject(sendEmailError); }
-    });
-}
-
-
-async function POST_sendVerificationEmail(req, res) {
-    const { email } = sanitize(req.body);
-
-    try { var user =  await Users.findOne({ email }); }
-    catch (getUserError) {
-        console.log("Error getting user when re-sending verification email: ", getUserError);
-        return res.status(500).send({message: errors.SERVER_ERROR});
-    }
-
-    try { await sendVerificationEmail(user); }
-    catch (sendEmailError) {
-        console.log("Error sending verification email: ", sendEmailError);
-        return res.status(500).send({message: errors.SERVER_ERROR});
-    }
-
-    return res.status(200).send({success: true});
-}
-
-
-async function POST_reSendVerificationEmail(req, res) {
-    const { userId, verificationToken } = sanitize(req.body);
-
-    try { var user = await getAndVerifyUser(userId, verificationToken); }
-    catch (getUserError) {
-        console.log("Error getting user when sending verification email: ", getUserError);
-        return res.status(500).send({message: errors.SERVER_ERROR});
-    }
-
-    // if user is already verified, don't need to re-send verification email
-    if (user.verified) { return res.status(200).send({ alreadyVerified: true, user: frontEndUser(user) }); }
-
-    try { await sendVerificationEmail(user); }
-    catch (sendEmailError) {
-        console.log("Error sending verification email: ", sendEmailError);
-        return res.status(500).send({ message: errors.SERVER_ERROR });
-    }
-
-    return res.status(200).send({ emailSent: true });
 }
 
 

@@ -69,7 +69,7 @@ class MyEvaluations extends Component {
 
     reSendVerification() {
         const { _id: userId, verificationToken, email } = this.props.currentUser;
-        axios.post("/api/candidate/reSendVerificationEmail", {userId, verificationToken})
+        axios.post("/api/user/reSendVerificationEmail", {userId, verificationToken})
         .then(response => {
             if (response.data.alreadyVerified) {
                 if (response.data.user) { this.props.updateUser(response.data.user); }

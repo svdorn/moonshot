@@ -25,7 +25,8 @@ const { sanitize,
         emailFooter,
         getSkillNamesByIds,
         lastPossibleSecond,
-        findNestedValue
+        findNestedValue,
+        moonshotUrl
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require('./psychApis');
@@ -39,7 +40,6 @@ const userApis = {
     GET_stayLoggedIn,
     GET_session,
     POST_session,
-    //POST_updateOnboarding,
     POST_verifyEmail,
     POST_changePasswordForgot,
     POST_forgotPassword,
@@ -57,7 +57,64 @@ const userApis = {
     POST_verifyFromApiKey,
     POST_updateOnboardingStep,
     POST_popups,
-    POST_intercomEvent
+    POST_intercomEvent,
+    POST_reSendVerificationEmail,
+
+    // not api endpoints
+    sendVerificationEmail
+}
+
+
+// re-send a verification email (user didn't get the first one for some reason)
+async function POST_reSendVerificationEmail(req, res) {
+    const { userId, verificationToken } = sanitize(req.body);
+
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("Error getting user when sending verification email: ", getUserError);
+        return res.status(500).send({message: errors.SERVER_ERROR});
+    }
+
+    // if user is already verified, don't need to re-send verification email
+    if (user.verified) { return res.status(200).send({ alreadyVerified: true, user: frontEndUser(user) }); }
+
+    try { await sendVerificationEmail(user); }
+    catch (sendEmailError) {
+        console.log("Error sending verification email: ", sendEmailError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({ emailSent: true });
+}
+
+
+// send email to verify user account
+async function sendVerificationEmail(user) {
+    return new Promise(async function(resolve, reject) {
+        let recipients = [ user.email ];
+        let subject = 'Verify Email';
+        const content = (
+            `<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
+                <div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>
+                <p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.
+                <br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>
+                <a  style="display:inline-block;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:6px 30px;text-decoration:none;margin:20px;background:#494b4d;"
+                    href="${moonshotUrl}verifyEmail?token=${user.emailVerificationToken}"
+                >
+                    Verify Account
+                </a>
+                <p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>
+                ${emailFooter(user.email)}
+            </div>`
+        );
+
+        try {
+            await sendEmail({recipients, subject, content});
+            return resolve();
+        }
+        // send email error
+        catch (sendEmailError) { return reject(sendEmailError); }
+    });
 }
 
 

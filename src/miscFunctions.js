@@ -194,6 +194,8 @@ function propertyExists(object, propertyTree, type) {
 
 
 function withinElement(event, element) {
+    if (!element || !event) { return false; }
+
     const clickX = event.clientX;
     const clickY = event.clientY;
     const elementRect = element.getBoundingClientRect();

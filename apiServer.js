@@ -145,17 +145,11 @@ app.post("/user/verifyFromApiKey", userApis.POST_verifyFromApiKey);
 app.post("/user/updateOnboardingStep", userApis.POST_updateOnboardingStep);
 app.post("/user/popups", userApis.POST_popups);
 app.post("/user/intercomEvent", userApis.POST_intercomEvent);
+app.post("/user/reSendVerificationEmail", userApis.POST_reSendVerificationEmail);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
-//app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
-app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
-app.post("/candidate/reSendVerificationEmail", candidateApis.POST_reSendVerificationEmail);
-// app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 
 app.post("/accountAdmin/sendVerificationEmail", accountAdminApis.POST_sendVerificationEmail);
-//app.post("/accountAdmin/identifyATS", accountAdminApis.POST_identifyATS);
-//app.post("/accountAdmin/integrationSuggestion", accountAdminApis.POST_integrationSuggestion);
-//app.post("/accountAdmin/languagePreference", accountAdminApis.POST_languagePreference);
 
 app.post('/business/googleJobsLinks', businessApis.POST_googleJobsLinks);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
