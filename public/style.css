@@ -2229,7 +2229,7 @@ button.link {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-.myCandidates .left.arrowContainer.halfScreen { right: 780px; }
+.myCandidates .left.arrowContainer.halfScreen { right: calc(90% - 196px); }
 .myCandidates .left.arrowContainer.fullScreen { right: calc(100% - 16px); }
 .myCandidates .right.arrowContainer {
     right: -16px;
@@ -2251,7 +2251,7 @@ button.link {
     transition: width 0.5s ease;
 }
 .candidateResults.halfScreen {
-    width: 795px;
+    width: calc(90% - 180px);
     -webkit-transition: width 0.5s ease;
     -ms-transition: width 0.5s ease;
     transition: width 0.5s ease;
@@ -2385,7 +2385,8 @@ button.link {
 }
 
 .myCandidates .candidatesAndOptions {
-    width: 1150px;
+    width: calc(100% - 40px);
+    max-width: 1150px;
     position: relative;
     display: inline-block;
     -webkit-transition: width 0.5s ease;
@@ -4071,17 +4072,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 @media only screen and (max-width: 1200px) {
     .above1200only { display: none; }
 
-    .myCandidates .candidatesAndOptions {
-        width: 950px;
-    }
     .myCandidates .candidateTable td:nth-child(2) {
         max-width: 112px;
     }
     .myCandidates .resultsOpenNoCandidates {
         left: 27px;
     }
-    .myCandidates .left.arrowContainer.halfScreen { right: 635px; }
-    .candidateResults.halfScreen { width: 650px;}
 }
 @media only screen and (max-width: 1175px) {
     .boxStyle {
@@ -4155,15 +4151,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         --device-scale: .2;
     }
 
-    .myCandidates .candidatesAndOptions {
-        width: calc(100% - 40px);
-    }
-    .candidateResults.halfScreen {
-        width: 68%;
-    }
-    .myCandidates .left.arrowContainer.halfScreen {
-        right: calc(68% - 16px);
-    }
     .candidateResults .interestArea {
         left: 4%;
     }
