@@ -45,10 +45,6 @@
 .desktop-text {
     display: block;
 }
-.mobile-text {
-    display: block;
-    font-size: 14px;
-}
 
 @media only screen and (max-width: 900px) {
     .text {
@@ -70,21 +66,6 @@
     }
 }
 
-@media only screen and (min-width: 701px) {
-    .mobile-text { display: none; }
-}
-
 @media only screen and (max-width: 700px) {
-    .text { margin-left: 0; }
-    .desktop-text { display: none; }
-    .astrobot-img { display: none; }
-    .button {
-        font-size: 14px;
-        margin-left: 8px;
-        margin-top: 10px;
-    }
-}
-
-@media only screen and (max-width: 600px) {
- .footer-container { display: none; }
+    .footer-container { display: none }
 }

@@ -15,7 +15,7 @@
 }
 
 .checklist-container {
-    width: 100%;
+    width: calc(100% - 140px);
     height: 60px;
     bottom: 0%;
     position: fixed;
@@ -71,8 +71,8 @@
     color: white;
     position: absolute;
     bottom: 5px;
-    right: 150px;
-    font-size: 16px;
+    right: 5px;
+    font-size: 14px;
     cursor: pointer;
 }
 .box-cta::after {
@@ -88,10 +88,19 @@
     padding: 0 0 0 10px;
 }
 
+@media screen and (max-width: 1000px) {
+    .checklist-container {
+        width: 100%;
+    }
+}
+
 
 @media only screen and (max-width: 700px) {
     .powered-by {
         padding-left: 140px;
+    }
+    .checklist-container {
+        display: none;
     }
 }
 
