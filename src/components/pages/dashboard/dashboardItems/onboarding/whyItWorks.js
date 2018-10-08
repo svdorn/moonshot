@@ -41,9 +41,9 @@ class WhyItWorks extends Component {
                         Education and experience provide 1% and 1.1% predictive
                         ability compared to your evaluations with us, which
                         provide more than 50%. We then layer on machine learning
-                        to improve your model and identify insights on your
-                        company to help you build an intelligent hiring process 
-                        that rivals Google.
+                        to<span styleName="desktop-only"> improve your model and
+                        </span> identify insights on your company to drive
+                        hyperintelligent hiring.
                     </div>
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>

@@ -22,6 +22,7 @@ import Notification from './components/notification'
 import ContactUsDialog from './components/childComponents/contactUsDialog';
 import AddAdminDialog from "./components/childComponents/addAdminDialog";
 import CopyLinkFooter from './components/childComponents/copyLinkFooter';
+import AdminVerifyEmail from "./components/childComponents/adminVerifyEmail";
 
 import "./main.css";
 
@@ -135,6 +136,7 @@ class Main extends Component {
                     <Menu/>
                     <div styleName={isAccountAdmin ? "admin-content" : ""}>
                         <Notification/>
+                        <AdminVerifyEmail/>
                         <AddAdminDialog/>
                         <ContactUsDialog/>
                         { this.props.children }

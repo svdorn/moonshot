@@ -1,0 +1,11 @@
+.banner {
+    font-size: 14px;
+    text-align: center;
+    background-color: var(--primary-black-light);
+    padding: 10px 0;
+    color: white;
+}
+
+.banner > div {
+    margin: 5px 10px;
+}
