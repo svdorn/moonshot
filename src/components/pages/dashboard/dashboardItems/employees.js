@@ -57,8 +57,10 @@ class Employees extends Component {
             return <div className="fully-center" style={{width:"100%"}}>Error fetching data.</div>;
         }
 
+        const { newEmployees } = this.state;
+
         // return progress bar if not ready yet
-        if (this.state.newEmployees === undefined) {
+        if (newEmployees === undefined) {
             return (
                 <div className="fully-center">
                     <CircularProgress style={{ color: primaryCyan }} />
@@ -75,15 +77,16 @@ class Employees extends Component {
                     <HoverTip
                         className="font10px secondary-gray"
                         style={{marginTop: "18px", marginLeft: "-6px"}}
-                        text="If you invite employees to take your evaluation and then grade them, we can improve our candidate predictions."
+                        text="Customize your model and enable culture fit and longevity predictions with employee evaluations."
                     />
                 </div>
             </div>
         );
 
+        const employeeAction = newEmployees > 0 ? "Grade" : "Invite"
         const smallCTA = (
             <div styleName="box-cta" onClick={() => goTo("/myEmployees")}>
-                View Employees <img src={`/icons/LineArrow${this.props.png}`}/>
+                { employeeAction } Employees <img src={`/icons/LineArrow${this.props.png}`}/>
             </div>
         );
 
@@ -92,7 +95,7 @@ class Employees extends Component {
                 { header }
 
                 <div className="fully-center" style={{width:"100%"}}>
-                    <div styleName="important-number" style={{marginRight: "0", fontSize: "64px"}}>{ this.state.newEmployees }</div><br/>
+                    <div styleName="important-number" style={{marginRight: "0", fontSize: "64px"}}>{ newEmployees }</div><br/>
                     <div>Awaiting Grading</div>
                 </div>
 

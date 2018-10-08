@@ -47,16 +47,13 @@ class Account extends Component {
         // get a list of the names of other admins for the account
         axios.get("/api/business/adminList", query)
         .then(response => {
-            console.log("response: ", response);
             if (propertyExists(response, ["data", "adminList"]) && Array.isArray(response.data.adminList)) {
                 self.setState({ adminList: response.data.adminList });
             } else {
-                console.log("didn't have admin list");
                 self.setState({ fetchDataError: true });
             }
         })
         .catch(error => {
-            console.log(error);
             self.setState({ fetchDataError: true });
         });
 
@@ -68,16 +65,13 @@ class Account extends Component {
             }
         })
         .then(response => {
-            console.log("response: ", response);
             if (response && response.data && response.data.uniqueName) {
                 self.setState({ uniqueName: response.data.uniqueName });
             } else {
-                console.log("didn't have unique name");
                 self.setState({ fetchDataError: true });
             }
         })
         .catch(function (err) {
-            console.log(err);
             self.setState({ fetchDataError: true });
         });
     }
