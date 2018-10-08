@@ -8,6 +8,7 @@ import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
 import InviteCandidatesModal from "./inviteCandidatesModal";
 import AddPositionDialog from '../../childComponents/addPositionDialog';
+import AddUserDialog from '../../childComponents/addUserDialog';
 
 import WelcomeMessage from "./dashboardItems/welcomeMessage";
 
@@ -42,6 +43,7 @@ class Dashboard extends Component {
                 </MetaTags>
                 <InviteCandidatesModal />
                 <AddPositionDialog />
+                <AddUserDialog />
                 <div className="page-line-header"><div/><div>Dashboard</div></div>
                 <WelcomeMessage />
                 <div styleName="dashboard">

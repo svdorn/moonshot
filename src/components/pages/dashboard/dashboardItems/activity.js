@@ -2,8 +2,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification, openAddPositionModal } from "../../../../actions/usersActions";
+import { addNotification, openAddPositionModal, openAddUserModal } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
+import clipboard from "clipboard-polyfill";
 import Carousel from "../../../miscComponents/carousel";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Select from "@material-ui/core/Select";
@@ -37,7 +38,9 @@ class Activity extends Component {
          this.getCandidateData = this.getCandidateData.bind(this);
          this.getEmployeeData = this.getEmployeeData.bind(this);
          this.openAddPositionModal = this.openAddPositionModal.bind(this);
+         this.openAddUserModal = this.openAddUserModal.bind(this);
          this.reviewCandidates = this.reviewCandidates.bind(this);
+         this.copyLink = this.copyLink.bind(this);
     }
 
     componentDidMount() {
@@ -80,10 +83,6 @@ class Activity extends Component {
         .catch(function (err) {
             self.setState({ fetchDataError: true });
         });
-    }
-
-    openAddPositionModal = () => {
-        this.props.openAddPositionModal();
     }
 
     reviewCandidates = () => {
@@ -136,14 +135,29 @@ class Activity extends Component {
         });
     }
 
+    copyLink = () => {
+        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
+        URL = encodeURI(URL);
+        clipboard.writeText(URL);
+        this.props.addNotification("Link copied to clipboard.", "info");
+    }
+
+    openAddPositionModal = () => {
+        this.props.openAddPositionModal();
+    }
+
+    openAddUserModal = () => {
+        this.props.openAddUserModal();
+    }
+
     tipsForHiring() {
         const frame1 = (
             <div styleName="carousel-frame">
                 <div>
-                    <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to your</div>
+                    <div className="primary-cyan font18px font16pxUnder700">First Things First</div>
                     <div>
-                        This is your dashboard, where you can see all the most recent activity across every
-                        project in this workspace. It is the perfect place to start your day.
+                        Don{"'"}t forget to embed your candidate invite page in your hiring workflow and communications
+                        with candidates, otherwise all your effort so far will be lost. <u className="primary-cyan clickable" onClick={this.copyLink}>Copy your link.</u>
                     </div>
                 </div>
             </div>
@@ -151,10 +165,38 @@ class Activity extends Component {
         const frame2 = (
             <div styleName="carousel-frame">
                 <div>
-                    <div className="primary-cyan font20px">Welcome to your</div>
+                    <div className="primary-cyan font18px font16pxUnder700">Take Advantage</div>
                     <div>
-                        Frame 2 this is your dashboard, where you can see all the most recent activity across every
-                        project in this workspace. It is the perfect place to start your day.
+                        We align our incentives to your desired outcome, exceptioinal hires, so we only charge when you hire
+                        an awesome employee who stays at your company. This allows you to invite as many candidates, add as many
+                        positions and evaluate as many employees as your want so take advantage; <div className="primary-cyan clickable inlineBlock" onClick={this.openAddPositionModal}>add some more positions</div>.
+                    </div>
+                </div>
+            </div>
+        );
+        const frame3 = (
+            <div styleName="carousel-frame">
+                <div>
+                    <div className="primary-cyan font18px font16pxUnder700">Don{"'"}t Screen Out Great Candidates</div>
+                    <div>
+                        If you screen applicants before inviting them to complete an evaluation, you{"'"}re very likely dismissing your best candidates.
+                        As you know by now, education and experience provide 1% and 1.1% predictive ability; other resume and LinkedIn data are horrible predictors too.
+                        Be sure to invite the vast majority, if not all, of your applicants.
+                    </div>
+                </div>
+            </div>
+        );
+        const frame4 = (
+            <div styleName="carousel-frame">
+                <div>
+                    <div className="primary-cyan font18px font16pxUnder700">Double Down On Your Team</div>
+                    <div>
+                        You{"'"}re sacrificing a huge opportunity if you don{"'"}t invite employees to be evaluated. This data enables us to really
+                        customize {this.state.name}{"'"}s predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
+                        Improve your candidate predictions by <div className="primary-cyan clickable inlineBlock" onClick={this.openAddUserModal}>inviting employees</div> to complete a 22-minute evaluation.
+                    </div>
+                    <div className="font12px">
+                        Do you want <u className="clickable">more info</u>?
                     </div>
                 </div>
             </div>
@@ -166,7 +208,7 @@ class Activity extends Component {
                 </div>
                 <div>
                     <Carousel
-                        frames={[frame1, frame2]}
+                        frames={[frame1, frame2, frame3, frame4]}
                         transitionDuration={1000}
                     />
                 </div>
@@ -295,7 +337,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addNotification,
-        openAddPositionModal
+        openAddPositionModal,
+        openAddUserModal
     }, dispatch);
 }
 

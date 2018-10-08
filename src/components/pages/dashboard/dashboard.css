@@ -424,7 +424,7 @@
     color: var(--secondary-gray);
 }
 .tips-for-hiring > div:nth-child(2) {
-    width: 300px;
+    width: 600px;
     height: 100%;
     margin: auto;
     background-color: var(--primary-black-dark);
@@ -463,8 +463,10 @@
 }
 .carousel-frame {
     margin: auto;
-    width: 250px;
-    height: 100%;
+    width: 550px;
+    height: 140px;
+    text-align: left;
+    font: 14px;
 }
 .invite-candidates-modal {
     color: var(--secondary-gray);

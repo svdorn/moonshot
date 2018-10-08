@@ -50,7 +50,7 @@ class AddPositionDialog extends Component {
             // error adding a position
             addPositionError: undefined,
             open: false,
-            screen: 2
+            screen: 1
         }
     }
 

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router';
-import { updateOnboardingStep, addNotification, generalAction, updateUser } from "../../../../../actions/usersActions";
+import { updateOnboardingStep, addNotification, generalAction, updateUser, openAddPositionModal } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo } from "../../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -157,7 +157,8 @@ function mapDispatchToProps(dispatch) {
         updateOnboardingStep,
         addNotification,
         generalAction,
-        updateUser
+        updateUser,
+        openAddPositionModal
     }, dispatch);
 }
 
