@@ -34,7 +34,7 @@ class WhyItWorks extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info ml-step">
                 <div>
-                    <div className="primary-cyan font16px">
+                    <div className="primary-cyan font16px center">
                         {"We Are Your Data Scientists"}
                     </div>
                     <div>
@@ -48,7 +48,7 @@ class WhyItWorks extends Component {
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>
                             <img
-                                src={`/icons/emojis/FireFinger${this.props.png}`}
+                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
                             />
                             <div>Got it</div>
                         </div>

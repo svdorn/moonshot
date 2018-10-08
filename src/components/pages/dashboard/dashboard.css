@@ -207,14 +207,18 @@
     transform: translate(-50%);
 }
 .emoji-buttons-full {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
     text-align: center;
 }
 .emoji-buttons-full > div {
     display: inline-block;
     text-align: center;
     cursor: pointer;
-    margin-left: 8px;
-    margin-right: 8px;
+    margin: 0 15px;
 }
 .emoji-buttons-full > div > img {
     height: 30px;
@@ -224,7 +228,7 @@
     transition:         all 0.3s ease;
 }
 .emoji-buttons-full > div > img:hover {
-    height: 31px;
+    height: 33px;
 }
 .emoji-buttons {
     position: absolute;

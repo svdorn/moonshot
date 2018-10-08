@@ -93,15 +93,15 @@ class WhatToDo extends Component {
                     <div styleName="emoji-buttons-full">
                         <div onClick={this.next}>
                             <img
-                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
+                                src={`/icons/emojis/PartyPopper${this.props.png}`}
                             />
-                            <div>All set!</div>
+                            <div style={{paddingTop: "5px"}}>All set!</div>
                         </div>
                         <div onClick={this.intercomMsg}>
                             <img
                                 src={`/icons/emojis/Face${this.props.png}`}
                             />
-                            <div>More info</div>
+                            <div style={{paddingTop: "5px"}}>More info</div>
                         </div>
                     </div>
                 </div>
