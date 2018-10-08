@@ -81,7 +81,7 @@ class AdminVerifyEmail extends Component {
     render() {
         const { currentUser } = this.props;
         // if the current user is an unverified admin, show them this message
-        if (currentUser && currentUser.userType === "accountAdmin" && !currentUser.verified) {
+        if (currentUser && currentUser.userType === "accountAdmin" && !currentUser.verified && currentUser.showVerifyEmailBanner) {
             return (
                 <div styleName="banner">
                     <div className="inline-block">Verify your email to activate your evaluations!</div>

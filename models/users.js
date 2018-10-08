@@ -289,7 +289,10 @@ const usersSchema = mongoose.Schema({
         // their title at the company
         title: String
     },
-
+    // if the user should be shown a prompt to verify their email
+    showVerifyEmailBanner: Boolean,
+    
+    // email notification preferences
     notifications: {
         // The time a notification email was last sent
         lastSent: Date,

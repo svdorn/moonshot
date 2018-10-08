@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router';
-import { updateOnboardingStep, addNotification, openAddPositionModal, generalAction } from "../../../../../actions/usersActions";
+import { updateOnboardingStep, addNotification, openAddPositionModal, generalAction, updateUser } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo } from "../../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -46,14 +46,22 @@ class WhatToDo extends Component {
     }
 
     next = () => {
+        let { step } = this.state;
+
+        const { _id, verificationToken } = this.props.currentUser;
+
+        if (step == 2 && !this.props.currentUser.verified) {
+            axios.post("/api/accountAdmin/showVerifyEmailBanner", { userId: _id, verificationToken })
+            .then(response => { this.props.updateUser(response.data.user); })
+            .catch(error => { console.log(error); });
+        }
+
         // check if need to go to next step in sequence
-        if (this.state.step < 3) {
-            this.setState({ step: ++this.state.step }, function(res) {
+        if (step < 3) {
+            this.setState({ step: ++step }, function(res) {
                 return;
             });
          }
-        // get credentials
-        const { _id, verificationToken } = this.props.currentUser;
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, 4);
     }
@@ -235,7 +243,8 @@ function mapDispatchToProps(dispatch) {
         updateOnboardingStep,
         addNotification,
         openAddPositionModal,
-        generalAction
+        generalAction,
+        updateUser
     }, dispatch);
 }
 

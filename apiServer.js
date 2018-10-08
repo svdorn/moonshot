@@ -150,6 +150,7 @@ app.post("/user/reSendVerificationEmail", userApis.POST_reSendVerificationEmail)
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 
 app.post("/accountAdmin/sendVerificationEmail", accountAdminApis.POST_sendVerificationEmail);
+app.post("/accountAdmin/showVerifyEmailBanner", accountAdminApis.POST_showVerifyEmailBanner);
 
 app.post('/business/googleJobsLinks', businessApis.POST_googleJobsLinks);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);

@@ -625,6 +625,7 @@ async function POST_verifyEmail(req, res) {
     // if a user was found from the token, verify them and get rid of the token
     user.verified = true;
     user.emailVerificationToken = undefined;
+    user.showVerifyEmailBanner = false;
 
     // save the verified user
     try { user = await user.save(); }
