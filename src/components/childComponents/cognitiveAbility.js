@@ -6,6 +6,34 @@ import { bindActionCreators } from "redux";
 class CognitiveAbility extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {};
+
+        this.calculateGraph = this.calculateGraph.bind(this);
+    }
+
+    calculateGraph() {
+        const score = this.props.score;
+
+        if (score <= 65) {
+            return 60;
+        } else if (score <= 75) {
+            return 70;
+        } else if (score <= 89) {
+            return 80;
+        } else if (score <= 95) {
+            return 90;
+        } else if (score <= 105) {
+            return 100;
+        } else if (score <= 110) {
+            return 110;
+        } else if (score <= 120) {
+            return 120;
+        } else if (score <= 130) {
+            return 130;
+        } else {
+            return 140;
+        }
     }
 
     render() {
@@ -17,16 +45,16 @@ class CognitiveAbility extends Component {
                         <div className="secondary-gray font20px font18pxUnder700 font16pxUnder500">
                             Score: <div className="primary-cyan inlineBlock">{this.props.score}</div>
                         </div>
-                        <div className="marginTop20px">
+                        <div>
                             <img
-                                alt="Alt"
-                                src={"/icons/Cube" + this.props.png}
-                                height={50}
+                                alt="GCA Graph"
+                                src={`/images/GCAGraph${this.calculateGraph()}` + this.props.png}
+                                height={180}
                             />
                         </div>
                     </div>
                     <div className="description lightBlackBackground">
-                        <div className="center font16px marginTop10px font14pxUnder800 font12pxUnder600" style={{color:"#d0d0d0"}}>
+                        <div className="center marginTop10px font16px font14pxUnder900 font12pxUnder600" style={{color:"#d0d0d0", verticalAlign:"center"}}>
                             Cognitive ability is an umbrella term that encompasses an individual’s ability to learn, problem solve, and adapt to novel situations. The graph shows where the individual lies in comparison to the general population.
                         </div>
                     </div>

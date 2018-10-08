@@ -16,7 +16,7 @@
 
 .dashboard {
     text-align: left;
-    --item-width: 250px;
+    --item-width: 255px;
     --item-margin: 14px;
     --items-per-row: 3;
     width: calc(var(--items-per-row) * (var(--item-width) + 2 * var(--item-margin)));
@@ -186,7 +186,7 @@
     text-align: center;
 }
 .copy-link-view > div:nth-child(4) {
-    margin: 10px auto; 
+    margin: 10px auto;
 }
 .add-positions-view > div:first-child {
     color: var(--primary-cyan);
@@ -474,11 +474,11 @@
     text-align: left;
 }
 
-@media screen and (min-width: 821px) {
+@media screen and (min-width: 851px) {
     .mobile-only { display: none; }
 }
 
-@media screen and (max-width: 840px) {
+@media screen and (max-width: 850px) {
     .dashboard { --items-per-row: 2 }
 
     .small-title { font-size: 14px; }
@@ -517,7 +517,7 @@
 
     .custom-page-title { font-size: 16px; }
 }
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 570px) {
     .dashboard { --items-per-row: 1 }
 
     .dashboard-item-container.width-3 {
