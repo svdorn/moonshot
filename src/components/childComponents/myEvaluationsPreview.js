@@ -29,22 +29,18 @@ class MyEvaluationsPreview extends Component {
         if (["candidate", "employee"].includes(user.userType) && !this.props.completedDate) {
             // if user is verified, go right to the eval
             if (user.verified) {
-                console.log("going right to eval");
                 goTo(`/evaluation/${this.props.businessId}/${this.props.positionId}`);
             }
             // otherwise have to check if they have verified, and if not, tell
             // them to verify themselves
             else {
-                console.log("checking if verified");
                 const query = { params: { userId: user._id, verificationToken: user.verificationToken } };
                 axios.get("/api/user/checkEmailVerified", query)
                 .then(response => {
-                    console.log("verified");
                     self.props.updateUser(response.data);
                     goTo(`/evaluation/${self.props.businessId}/${self.props.positionId}`);
                 })
                 .catch(error => {
-                    console.log("error: ", error);
                     if (error.response && error.response.status === 403) {
                         return self.props.addNotification("Verify your email first!", "error");
                     } else {
