@@ -34,7 +34,7 @@ class WhyItWorks extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info ml-step">
                 <div>
-                    <div className="primary-cyan font16px center">
+                    <div className="primary-cyan font16px" styleName="mobile-center title-margin">
                         {"We Are Your Data Scientists"}
                     </div>
                     <div>

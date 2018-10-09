@@ -53,6 +53,8 @@
 
 .small-title { font-size: 16px; }
 
+.title-margin { margin-bottom: 4px; }
+
 /* DASHBOARD ITEMS */
 
 .dashboard-item {
@@ -486,8 +488,6 @@
 @media screen and (max-width: 850px) {
     .dashboard { --items-per-row: 2 }
 
-    .small-title { font-size: 14px; }
-
     .desktop-only { display: none; }
 
     .dashboard-item-container.width-3 {
@@ -524,6 +524,10 @@
 }
 @media screen and (max-width: 570px) {
     .dashboard { --items-per-row: 1 }
+
+    .mobile-center { text-align: center; }
+
+    .small-title { font-size: 14px; }
 
     .dashboard-item-container.width-3 {
         width: var(--item-width);

@@ -61,7 +61,7 @@ class CandidateView extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
-                <div className="primary-cyan font18px center">Understand Personality</div>
+                <div className="primary-cyan font18px" styleName="mobile-center title-margin">Understand Personality</div>
                 <div>{"Candidates complete a series of questions so we can form archetypes and predict how they'll behave and fit in your work environment."}</div>
                     { this.emojiButtons() }
                 </div>
@@ -91,7 +91,7 @@ class CandidateView extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
-                    <div className="primary-cyan font18px center">Evaluate Intellect</div>
+                    <div className="primary-cyan font18px" styleName="mobile-center title-margin">Evaluate Intellect</div>
                     <div>
                         Candidates then complete a short quiz highly predictive
                         of job performance and growth potential that demonstates
