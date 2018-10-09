@@ -24,7 +24,6 @@ import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
 import AddUserDialog from '../../childComponents/addUserDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
-import Carousel from "./carousel";
 import clipboard from "clipboard-polyfill";
 import HoverTip from "../../miscComponents/hoverTip";
 
@@ -1018,48 +1017,24 @@ class MyCandidates extends Component {
 
     popup() {
         if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.candidates) {
-            const frame1 = (
-                <div className="popup-frame">
-                    <div>
-                        <img
-                            alt="Alt"
-                            src={"/icons/Cube" + this.props.png}
-                        />
-                    </div>
-                    <div style={{marginTop:"20px"}}>
-                        <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to your Dashboard!</div>
-                        <div>
-                            This is your dashboard, where you can see all the most recent activity across every
-                            project in this workspace. It is the perfect place to start your day.
-                        </div>
-                    </div>
-                </div>
-            );
-            const frame2 = (
-                <div className="popup-frame">
-                <div>
-                    <img
-                        alt="Alt"
-                        src={"/icons/Cube" + this.props.png}
-                    />
-                </div>
-                <div style={{marginTop:"20px"}}>
-                    <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
-                    <div>
-                        Frame 2 this is your dashboard, where you can see all the most recent activity across every
-                        project in this workspace. It is the perfect place to start your day.
-                    </div>
-                </div>
-                </div>
-            );
-
             return (
                 <div className="center" key="popup box">
                     <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
-                        <Carousel
-                            frames={[frame1, frame2]}
-                            transitionDuration={1000}
-                        />
+                        <div className="popup-frame" style={{paddingBottom:"20px"}}>
+                            <div>
+                                <img
+                                    alt="Alt"
+                                    src={"/icons/candidatesBanner" + this.props.png}
+                                />
+                            </div>
+                            <div style={{marginTop:"20px"}}>
+                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Improve Your Predictive Model</div>
+                                <div>
+                                    Review candidate reports and predictions, contact candidates to invite them to interviews, track their
+                                    stage or dismiss them from consideration.
+                                </div>
+                            </div>
+                        </div>
                         <div className="hide-message font14px font12pxUnder700" onClick={this.hideMessage.bind(this)}>Hide Message</div>
                     </div>
                 </div>
