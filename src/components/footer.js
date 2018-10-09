@@ -28,8 +28,6 @@ class Footer extends Component {
             const footer = document.querySelector("#footer");
             const windowHeight = (window.innerHeight || document.documentElement.clientHeight);
             const footerDistance = footer.getBoundingClientRect().top;
-            console.log(windowHeight);
-            console.log(footerDistance);
 
             const { footerOnScreen } = this.props;
 
