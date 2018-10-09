@@ -70,9 +70,9 @@ class AdminVerifyEmail extends Component {
         })
         .catch(error => {
             if (error.response && error.response.status === 403) {
-                return self.props.addNotification("Looks like you aren't verified yet, try sending yourself a new email!", "error");
+                return self.props.addNotification("Looks like you aren't verified yet, try sending yourself a new email", "error");
             } else {
-                return self.props.addNotification("Whoops, there was an error. Try refreshing!", "error");
+                return self.props.addNotification("Whoops, there was an error. Try refreshing.", "error");
             }
         })
     }
@@ -83,14 +83,17 @@ class AdminVerifyEmail extends Component {
         // if the current user is an unverified admin, show them this message
         if (currentUser && currentUser.userType === "accountAdmin" && !currentUser.verified && currentUser.showVerifyEmailBanner) {
             return (
-                <div styleName="banner">
-                    <div className="inline-block">Verify your email to activate your evaluations!</div>
-                    <div className={button.cyan} onClick={this.reSend.bind(this)}>
-                        Re-send Verification Email
+                <div>
+                    <div styleName="banner">
+                        <div className="inline-block">Verify your email to activate your evaluations!</div>
+                        <div className={button.cyan} onClick={this.reSend.bind(this)}>
+                            Re-send Verification Email
+                        </div>
+                        <div className="underline primary-white inline-block pointer" onClick={this.checkStatus.bind(this)}>
+                            I Already Did
+                        </div>
                     </div>
-                    <div className="underline primary-white inline-block pointer" onClick={this.checkStatus.bind(this)}>
-                        I Already Did
-                    </div>
+                    <div styleName="banner-space" />
                 </div>
             );
         }
