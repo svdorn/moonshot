@@ -184,13 +184,8 @@ export function usersReducers(state = initialState, action) {
         case "HIDE_POPUPS":
             return {
                 ...state,
-                currentUser: action.payload
-            }
-            break;
-        case "HIDE_POPUPS":
-            return {
-                ...state,
                 currentUser: action.payload,
+                loadingSomething: false
             }
             break;
         case "NOTIFICATION":
