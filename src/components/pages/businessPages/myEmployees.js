@@ -196,7 +196,7 @@ class MyEmployees extends Component {
                                 <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Improve Your Predictive Model</div>
                                 <div>
                                 Invite employees to complete an evaluation and then complete a two-minute evaluation of each employee to
-                                customize your predictive model and enable Longevity and Culture Fit predictions for your candidates.
+                                customize your predictive model and enable Longevity/tenure and Culture Fit predictions for your candidates.
                                 </div>
                             </div>
                         </div>
@@ -389,7 +389,7 @@ class MyEmployees extends Component {
                         Add employees <span className="clickable underline primary-cyan" onClick={this.props.openAddUserModal}>here</span> so they can get started.
                         <div className="info-hoverable">i</div>
                         <HoverTip
-                            className="font10px secondary-gray"
+                            className="font12px secondary-gray"
                             style={{marginTop: "18px", marginLeft: "-6px"}}
                             text="Employees complete a 22-minute evaluation and their manager completes a two-minute evaluation of the employee to improve predictions. Enable Longevity and Culture Fit predictions for candidates after 16 employee evaluations."
                         />
