@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { updateOnboardingStep } from "../../../../../actions/usersActions";
 import {  } from "../../../../../miscFunctions";
+import colors from "../../../../../colors";
 
 import PsychSlider from "../../../evaluation/psychSlider";
 
@@ -74,6 +75,8 @@ class CandidateView extends Component {
                         width={200}
                         height={100}
                         backgroundColor={"#393939"}
+                        color1={colors.primaryCyan}
+                        color2={colors.primaryPurpleLight}
                         className="center"
                         updateAnswer={() => {}}
                         questionId={"1"}
