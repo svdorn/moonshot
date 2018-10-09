@@ -35,7 +35,8 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_CANDIDATES_POPUP_MODAL":
             return {
                 ...state,
-                candidatesPopupModalOpen: false
+                candidatesPopupModalOpen: false,
+                loadingSomething: false
             };
             break;
         case "OPEN_ADD_ADMIN_MODAL":

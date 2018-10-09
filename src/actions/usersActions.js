@@ -51,6 +51,20 @@ export function closeAddPositionModal() {
     }
 }
 
+export function closeCandidatesPopupModal(userId, verificationToken, popups) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        axios.post("/api/user/popups", {userId, verificationToken, popups})
+        .then(function(response) {
+            dispatch({type: "CLOSE_CANDIDATES_POPUP_MODAL"});
+        })
+        .catch(function(err) {
+            dispatch({ type: "HIDE_POPUPS_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
+
 export function openAddUserModal() {
     return function(dispatch) {
         dispatch({type: "OPEN_ADD_USER_MODAL"});
