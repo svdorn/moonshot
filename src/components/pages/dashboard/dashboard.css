@@ -365,6 +365,11 @@
     transform: translateX(50%);
 }
 
+.pricing-list {
+    padding-left: 30px;
+    margin-bottom: 5px;
+}
+
 .important-stat {
     padding: 0 10px;
     display: flex;

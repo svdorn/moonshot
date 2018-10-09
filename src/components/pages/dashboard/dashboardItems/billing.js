@@ -76,10 +76,10 @@ class Billing extends Component {
                 <div styleName="payment-plan">
                     { this.state.billingIsSetUp ? "Only Pay When You Hire" : "Your First Hire Is Free" }
                 </div>
-                <div>
-                    Unlimited candidates, positions, and employees. Only pay us
-                    when you hire a top performer who stays at your company.
-                </div>
+                <ul styleName="pricing-list">
+                    <li>Unlimited candidates, positions, and employees</li>
+                    <li>Only pay us when you hire a top performer who stays at your company</li>
+                </ul>
                 <div onClick={() => goTo("/pricing")} styleName="pricing-link">See Pricing</div>
             </div>
         );
