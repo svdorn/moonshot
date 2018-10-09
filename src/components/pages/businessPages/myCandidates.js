@@ -1060,7 +1060,7 @@ class MyCandidates extends Component {
                             frames={[frame1, frame2]}
                             transitionDuration={1000}
                         />
-                        <div className="hide-message" onClick={this.hideMessage.bind(this)}>Hide Message</div>
+                        <div className="hide-message font14px font12pxUnder700" onClick={this.hideMessage.bind(this)}>Hide Message</div>
                     </div>
                 </div>
             );
