@@ -21,8 +21,8 @@ import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import EmployeePreview from '../../childComponents/employeePreview';
-import Carousel from "./carousel";
 import AddUserDialog from '../../childComponents/addUserDialog';
+import HoverTip from "../../miscComponents/hoverTip";
 
 import './myEmployees.css';
 
@@ -182,48 +182,24 @@ class MyEmployees extends Component {
 
     popup() {
         if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.employees) {
-            const frame1 = (
-                <div className="popup-frame">
-                    <div>
-                        <img
-                            alt="Alt"
-                            src={"/icons/Cube" + this.props.png}
-                        />
-                    </div>
-                    <div style={{marginTop:"20px"}}>
-                        <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
-                        <div>
-                            This is your dashboard, where you can see all the most recent activity across every
-                            project in this workspace. It is the perfect place to start your day.
-                        </div>
-                    </div>
-                </div>
-            );
-            const frame2 = (
-                <div className="popup-frame">
-                    <div>
-                        <img
-                            alt="Alt"
-                            src={"/icons/Cube" + this.props.png}
-                        />
-                    </div>
-                    <div style={{marginTop:"20px"}}>
-                        <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to your Dashboard!</div>
-                        <div>
-                            Frame 2 this is your dashboard, where you can see all the most recent activity across every
-                            project in this workspace. It is the perfect place to start your day.
-                        </div>
-                    </div>
-                </div>
-            );
-
             return (
                 <div className="center" key="popup box">
                     <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
-                        <Carousel
-                            frames={[frame1, frame2]}
-                            transitionDuration={1000}
-                        />
+                        <div className="popup-frame" style={{paddingBottom:"20px"}}>
+                            <div>
+                                <img
+                                    alt="Alt"
+                                    src={"/icons/employeesBanner" + this.props.png}
+                                />
+                            </div>
+                            <div style={{marginTop:"20px"}}>
+                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Improve Your Predictive Model</div>
+                                <div>
+                                Invite employees to complete an evaluation and then complete a two-minute evaluation of each employee to
+                                customize your predictive model and enable Longevity and Culture Fit predictions for your candidates.
+                                </div>
+                            </div>
+                        </div>
                         <div className="hide-message font14px font12pxUnder700" onClick={this.hideMessage.bind(this)}>Hide Message</div>
                     </div>
                 </div>
@@ -388,56 +364,49 @@ class MyEmployees extends Component {
                         {positionItems}
                     </Select>
                 </div>
+            </div>
+        );
 
+        let employeePreviews = (
+            <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
                 <div
                     className="add-employee primary-cyan pointer font16px center"
                     onClick={this.props.openAddUserModal}
                 >
                     + <span className="underline">Add Employees</span>
                 </div>
-            </div>
-        );
-
-        let employeePreviews = (
-            <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
                 Loading employees...
             </div>
         )
         if (this.state.noEmployees) {
-            if (this.state.status == "" && (this.state.term == "" || !this.state.term)) {
             employeePreviews = (
-                <div className="center marginTop50px">
-                    <div className="marginBottom15px font32px font28pxUnder500 clickable primary-cyan" onClick={this.openAddUserModal.bind(this)}>
-                        + <bdi className="underline">Add Employees</bdi>
+                <div className="center secondary-gray">
+                    <div className="marginBottom15px font32px font28pxUnder500 clickable primary-cyan" onClick={this.props.openAddUserModal}>
+                        + <span className="underline">Add Employees</span>
                     </div>
-                    <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                        No employees
-                        {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
-                        {(this.state.status == "Complete" || this.state.status == "Incomplete")
-                        ? <bdi> with {this.state.status.toLowerCase()} status</bdi>
-                        :null}.
-                    </div>
+                    Improve your predictive model with employee data.
                     <div className="marginTop15px" style={{color: "rgba(255,255,255,.8)"}}>
-                        Add them <bdi className="clickable underline primary-cyan" onClick={this.openAddUserModal.bind(this)}>Here</bdi> so they can get started.
+                        Add employees <span className="clickable underline primary-cyan" onClick={this.props.openAddUserModal}>here</span> so they can get started.
+                        <div className="info-hoverable">i</div>
+                        <HoverTip
+                            className="font10px secondary-gray"
+                            style={{marginTop: "18px", marginLeft: "-6px"}}
+                            text="Employees complete a 22-minute evaluation and their manager completes a two-minute evaluation of the employee to improve predictions. Enable Longevity and Culture Fit predictions for candidates after 16 employee evaluations."
+                        />
                     </div>
                 </div>
-            );
-            } else {
-                employeePreviews = (
-                    <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                        No employees
-                        {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
-                        {(this.state.status == "Complete" || this.state.status == "Incomplete")
-                        ? <bdi> with {this.state.status.toLowerCase()} status</bdi>
-                        :null}.
-                    </div>
-                );
-            }
+            )
         }
 
         if (this.state.noPositions) {
             employeePreviews = (
                 <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    <div
+                        className="add-employee primary-cyan pointer font16px center"
+                        onClick={this.props.openAddUserModal}
+                    >
+                        + <span className="underline">Add Employees</span>
+                    </div>
                     Create a position to select.
                 </div>
             );
@@ -445,6 +414,12 @@ class MyEmployees extends Component {
         if (this.state.position == "" && this.state.loadingDone) {
             employeePreviews = (
                 <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    <div
+                        className="add-employee primary-cyan pointer font16px center"
+                        onClick={this.props.openAddUserModal}
+                    >
+                        + <span className="underline">Add Employees</span>
+                    </div>
                     Must select a position.
                 </div>
             );
