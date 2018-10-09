@@ -42,12 +42,11 @@ class Billing extends Component {
         // find out whether billing is set up, if error assume not
         axios.get("/api/business/billingIsSetUp", query)
         .then(response => {
-            self.setState({ billingIsSetUp: false })
-            // if (propertyExists(response, ["data", "billingIsSetUp"])) {
-            //     self.setState({ billingIsSetUp: response.data.billingIsSetUp });
-            // } else {
-            //     self.setState({ billingIsSetUp: false });
-            // }
+            if (propertyExists(response, ["data", "billingIsSetUp"])) {
+                self.setState({ billingIsSetUp: response.data.billingIsSetUp });
+            } else {
+                self.setState({ billingIsSetUp: false });
+            }
         })
         .catch(error => {
             self.setState({ billingIsSetUp: false });
@@ -121,7 +120,9 @@ class Billing extends Component {
         // standard dashboard box header
         const header = (
             <div styleName="box-header">
-                <div styleName="box-title">Current Plan: { currentPlan }</div>
+                <div styleName="box-title">
+                    Current Plan: <span className="primary-cyan">{ currentPlan }</span>
+                </div>
             </div>
         );
 
@@ -152,7 +153,7 @@ class Billing extends Component {
                         </div>
                     </div>
                 }
-                <div onClick={() => goTo("/pricing")} styleName="pricing-link">See Pricing</div>
+                <div style={{marginTop:"10px"}} onClick={() => goTo("/pricing")} styleName="pricing-link">See Pricing</div>
             </div>
         );
 
