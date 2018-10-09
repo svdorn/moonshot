@@ -139,7 +139,7 @@
 .full-step-container {
     position: relative;
     flex: 1;
-    padding: calc(var(--item-margin)/2);
+    padding: calc(var(--item-margin)/2) var(--item-margin);
 }
 .candidate-view > div:first-child {
     flex: 1;
@@ -490,6 +490,9 @@
         width: calc((var(--item-width) * 2) + (var(--item-margin) * 2));
         height: calc(var(--item-width) * (5/4));
     }
+
+    .full-step-container { padding: calc(var(--item-margin)/1.5); }
+
     .checklist {
         display: inline-block;
     }
@@ -518,12 +521,19 @@
 
     .custom-page-title { font-size: 16px; }
 }
+
+@media screen and (min-width: 571px) {
+    .small-mobile-only { display: none; }
+}
+
 @media screen and (max-width: 570px) {
     .dashboard { --items-per-row: 1 }
 
     .mobile-center { text-align: center; }
 
     .small-title { font-size: 14px; }
+
+    .full-step-container { padding: var(--item-margin); }
 
     .dashboard-item-container.width-3 {
         width: var(--item-width);
@@ -554,9 +564,12 @@
     .onboarding-info { display: inline-block; }
     .onboarding-content > div > div { height: 50%; }
     .onboarding-content > div > div:first-child { border-bottom: 1px solid var(--primary-black-dark); }
-    .onboarding-content > div > div:first-child.copy-link-view,
+
     .onboarding-content > div > div:first-child.add-positions-view,
-    .onboarding-content > div > div:first-child.circular-progress { border-bottom: none; }
+    .onboarding-content > div > div:first-child.circular-progress,
+    .onboarding-content > div.full-step-container > div:first-child {
+        border-bottom: none;
+    }
 
     .admin-image {
         height: 85%;

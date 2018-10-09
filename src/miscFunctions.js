@@ -207,6 +207,12 @@ function withinElement(event, element) {
 }
 
 
+function makePossessive(name) {
+    if (name.endsWith("'s")) { return name; }
+    else { return name + "'s"; }
+}
+
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -220,6 +226,7 @@ const miscFunctions = {
     truthy,
     propertyExists,
     withinElement,
+    makePossessive,
 
     Queue,
     Stack
