@@ -271,6 +271,7 @@ async function createAccountAdmin(info) {
         // user needs to see popups
         user.popups = {
             candidates: true,
+            candidateModal: true,
             employees: true,
             evaluations: true,
             dashboard: true,

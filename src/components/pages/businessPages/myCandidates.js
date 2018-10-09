@@ -16,13 +16,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox, hidePopups, addNotification } from "../../../actions/usersActions";
+import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox, hidePopups, addNotification, generalAction } from "../../../actions/usersActions";
 import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
 import AddUserDialog from '../../childComponents/addUserDialog';
+import CandidatesPopupDialog from '../../childComponents/candidatesPopupDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
 import clipboard from "clipboard-polyfill";
 import HoverTip from "../../miscComponents/hoverTip";
@@ -106,6 +107,10 @@ class MyCandidates extends Component {
         // set an event listener for window resizing to see if mobile or desktop
         // view should be shown
         window.addEventListener("resize", this.bound_handleResize);
+        // see if the popup should be open
+        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.candidateModal) {
+            this.props.generalAction("OPEN_CANDIDATES_POPUP_MODAL");
+        }
         // get the open positions that this business has
         axios.get("/api/business/positions", {
             params: {
@@ -1320,6 +1325,7 @@ class MyCandidates extends Component {
                     <AddUserDialog position={this.state.position} tab={"Candidate"}/>
                     : null
                 }
+                <CandidatesPopupDialog />
                 <MetaTags>
                     <title>My Candidates | Moonshot</title>
                     <meta name="description" content="View analytical breakdowns and manage your candidates."/>
@@ -1427,7 +1433,8 @@ function mapDispatchToProps(dispatch) {
         openAddUserModal,
         sawMyCandidatesInfoBox,
         hidePopups,
-        addNotification
+        addNotification,
+        generalAction
     }, dispatch);
 }
 

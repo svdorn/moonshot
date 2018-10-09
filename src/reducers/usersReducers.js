@@ -26,20 +26,32 @@ export function usersReducers(state = initialState, action) {
                 userPostedFailed: false
             };
             break;
-            case "OPEN_ADD_ADMIN_MODAL":
-                return {
-                    ...state,
-                    addAdminModalOpen: true
-                };
-                break;
-            case "CLOSE_ADD_ADMIN_MODAL":
-                return {
-                    ...state,
-                    addAdminModalOpen: false,
-                    userPosted: false,
-                    userPostedFailed: false
-                };
-                break;
+        case "OPEN_CANDIDATES_POPUP_MODAL":
+            return {
+                ...state,
+                candidatesPopupModalOpen: true
+            };
+            break;
+        case "CLOSE_CANDIDATES_POPUP_MODAL":
+            return {
+                ...state,
+                candidatesPopupModalOpen: false
+            };
+            break;
+        case "OPEN_ADD_ADMIN_MODAL":
+            return {
+                ...state,
+                addAdminModalOpen: true
+            };
+            break;
+        case "CLOSE_ADD_ADMIN_MODAL":
+            return {
+                ...state,
+                addAdminModalOpen: false,
+                userPosted: false,
+                userPostedFailed: false
+            };
+            break;
         case "OPEN_ADD_POSITION_MODAL":
             return {
                 ...state,

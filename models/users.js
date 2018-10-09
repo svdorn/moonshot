@@ -83,6 +83,8 @@ const usersSchema = mongoose.Schema({
         evaluations: Boolean,
         // whether the popups should show on the candidates tab
         candidates: Boolean,
+        // whether the candidate modal should show on the candidates tab
+        candidateModal: Boolean,
         // whether the popups should show on the employees tab
         employees: Boolean,
         // whether the popups should show on the dashboard
@@ -291,7 +293,7 @@ const usersSchema = mongoose.Schema({
     },
     // if the user should be shown a prompt to verify their email
     showVerifyEmailBanner: Boolean,
-    
+
     // email notification preferences
     notifications: {
         // The time a notification email was last sent
