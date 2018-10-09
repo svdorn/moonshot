@@ -87,7 +87,7 @@ class AdminVerifyEmail extends Component {
                     <div styleName="banner">
                         <div className="inline-block">
                             {"Verify your email to activate your evaluations!"}
-                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <div styleName="extra-space" />
                             <br styleName="first-break" />
                             {"Didn't get a verification email?"}
                         </div>

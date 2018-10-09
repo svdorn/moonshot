@@ -14,6 +14,11 @@
     margin: 5px 10px;
 }
 
+.extra-space {
+    width: 10px;
+    display: inline-block;
+}
+
 .banner-space {
     position: relative;
     width: 100%;
@@ -23,6 +28,10 @@
 .first-break { display: none; }
 .second-break { display: none; }
 
+@media screen and (max-width: 1000px) {
+    .banner { margin-top: -6px; }
+}
+
 @media screen and (max-width: 800px) {
     .second-break { display: initial; }
     .banner-space { height: 84px; }
@@ -31,4 +40,5 @@
 @media screen and (max-width: 550px) {
     .first-break { display: initial; }
     .banner-space { height: 103px; }
+    .extra-space { display: none; }
 }
