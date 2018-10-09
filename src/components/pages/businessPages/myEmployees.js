@@ -368,9 +368,9 @@ class MyEmployees extends Component {
         );
 
         let employeePreviews = (
-            <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+            <div className="center employeesBox" style={{color: "rgba(255,255,255,.8)"}}>
                 <div
-                    className="add-employee primary-cyan pointer font16px center"
+                    className="add-employee primary-cyan pointer font16px center marginTop20px"
                     onClick={this.props.openAddUserModal}
                 >
                     + <span className="underline">Add Employees</span>
@@ -380,8 +380,8 @@ class MyEmployees extends Component {
         )
         if (this.state.noEmployees) {
             employeePreviews = (
-                <div className="center secondary-gray">
-                    <div className="marginBottom15px font32px font28pxUnder500 clickable primary-cyan" onClick={this.props.openAddUserModal}>
+                <div className="center secondary-gray employeesBox">
+                    <div className="marginTop20px marginBottom15px font32px font28pxUnder500 clickable primary-cyan" onClick={this.props.openAddUserModal}>
                         + <span className="underline">Add Employees</span>
                     </div>
                     Improve your predictive model with employee data.
@@ -400,9 +400,9 @@ class MyEmployees extends Component {
 
         if (this.state.noPositions) {
             employeePreviews = (
-                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                <div className="center employeesBox" style={{color: "rgba(255,255,255,.8)"}}>
                     <div
-                        className="add-employee primary-cyan pointer font16px center"
+                        className="add-employee primary-cyan pointer font16px center marginTop20px"
                         onClick={this.props.openAddUserModal}
                     >
                         + <span className="underline">Add Employees</span>
@@ -413,9 +413,9 @@ class MyEmployees extends Component {
         }
         if (this.state.position == "" && this.state.loadingDone) {
             employeePreviews = (
-                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                <div className="center employeesBox" style={{color: "rgba(255,255,255,.8)"}}>
                     <div
-                        className="add-employee primary-cyan pointer font16px center"
+                        className="add-employee primary-cyan pointer font16px center marginTop20px"
                         onClick={this.props.openAddUserModal}
                     >
                         + <span className="underline">Add Employees</span>

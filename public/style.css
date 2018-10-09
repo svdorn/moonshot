@@ -2385,6 +2385,17 @@ button.link {
     width: 80%;
 }
 
+.employeesBox {
+    height: calc(100vh - 218px);
+    width: calc(100% - 40px);
+    min-height: 300px;
+    display: inline-block;
+    position: relative;
+    -moz-box-shadow:    0px 0px 6px 3px #00000073;
+    -webkit-box-shadow: 0px 0px 6px 3px #00000073;
+    box-shadow:         0px 0px 6px 3px #00000073;
+}
+
 .myCandidates .candidatesAndOptions {
     width: calc(100% - 40px);
     max-width: 1150px;
