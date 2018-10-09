@@ -217,7 +217,7 @@ class AccountAdminMenu extends Component {
                         </div>
                     </SwipeableDrawer>
                 </div>
-                <div styleName="menu">
+                <div styleName={"menu" + (this.props.footerOnScreen ? " absolute" : "")}>
                     { menuContent }
                 </div>
             </div>
@@ -239,7 +239,8 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
-        png: state.users.png
+        png: state.users.png,
+        footerOnScreen: state.users.footerOnScreen
     };
 }
 

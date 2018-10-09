@@ -15,10 +15,24 @@
 .menu {
     width: 140px;
     position: fixed;
+    z-index: 100;
+    -webkit-box-shadow: 0 0 2px 1px #212121;
+       -moz-box-shadow: 0 0 2px 1px #212121;
+            box-shadow: 0 0 2px 1px #212121;
+}
+.menu.absolute {
+    position: absolute;
+    overflow-y: hidden;
 }
 .drawer-menu {
     width: 200px;
 }
+.menu > div {
+    position: relative;
+    height: 100vh;
+    bottom: 0;
+}
+.menu.absolute > div { bottom: -328px; }
 
 .moonshot-logo {
     width: 110px;

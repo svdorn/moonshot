@@ -42,7 +42,7 @@ class CopyLinkFooter extends Component {
         return (
             <div>
                 {this.state.uniqueName && this.state.name ?
-                    <div styleName="footer-container">
+                    <div styleName={"footer-container" + (this.props.footerOnScreen ? " absolute" : "")}>
                         <div styleName="footer">
                             <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
                             <div className="secondary-gray" styleName="text">
@@ -68,13 +68,14 @@ class CopyLinkFooter extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        footerOnScreen: state.users.footerOnScreen
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addNotification
+        addNotification,
     }, dispatch);
 }
 

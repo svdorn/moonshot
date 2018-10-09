@@ -728,6 +728,13 @@ export function formError() {
 }
 
 
+export function markFooterOnScreen(footerOnScreen) {
+    return function(dispatch) {
+        dispatch({ type: "MARK_FOOTER_ON_SCREEN", footerOnScreen });
+    }
+}
+
+
 
 // NOT EXPORTED
 // adds a notification if given

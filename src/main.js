@@ -133,16 +133,18 @@ class Main extends Component {
         else {
             content = (
                 <div>
-                    <Menu/>
-                    <div styleName={isAccountAdmin ? "admin-content" : ""}>
-                        <Notification/>
-                        <AdminVerifyEmail/>
-                        <AddAdminDialog/>
-                        <ContactUsDialog/>
-                        { this.props.children }
-                        { this.copyLinkFooter() }
-                        <Footer/>
+                    <div style={{position:"relative"}}>
+                        <Menu/>
+                        <div styleName={isAccountAdmin ? "admin-content" : ""}>
+                            <Notification/>
+                            <AdminVerifyEmail/>
+                            <AddAdminDialog/>
+                            <ContactUsDialog/>
+                            { this.props.children }
+                            { this.copyLinkFooter() }
+                        </div>
                     </div>
+                    <Footer/>
                 </div>
             );
         }

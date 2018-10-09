@@ -73,6 +73,10 @@ export function usersReducers(state = initialState, action) {
                 message: undefined
             };
             break;
+        case "MARK_FOOTER_ON_SCREEN": {
+            console.log("marking footer on screen: ", action.footerOnScreen);
+            return { ...state, footerOnScreen: action.footerOnScreen };
+        }
         case "UPDATE_ONBOARDING_STEP": {
             if (!state.currentUser) { return state; }
             // create onboarding object with new step or with time finished marked
