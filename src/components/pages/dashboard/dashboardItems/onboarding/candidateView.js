@@ -66,10 +66,10 @@ class CandidateView extends Component {
                     { this.emojiButtons() }
                 </div>
                 <div className="noselect">
-                    <div>Flattery is important to getting ahead:</div>
+                    <div>Your friend offers to take you on a motorcycle ride, but it{"'"}s storming out:</div>
                     <div styleName="ex-question-answers">
-                        <div>Definitely</div>
-                        <div>Nope</div>
+                        <div>I{"'"}ll pass</div>
+                        <div>Let{"'"}s go!</div>
                     </div>
                     <PsychSlider
                         width={200}
