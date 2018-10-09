@@ -55,9 +55,18 @@ export function closeCandidatesPopupModal(userId, verificationToken, popups) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
 
+        const eventName = "candidates_page_first_time";
+        const metadata = null;
+
         axios.post("/api/user/popups", {userId, verificationToken, popups})
         .then(function(response) {
-            dispatch({type: "CLOSE_CANDIDATES_POPUP_MODAL"});
+            axios.post("/api/user/intercomEvent", {eventName, userId, verificationToken, metadata})
+            .then(function(response) {
+                dispatch({type: "CLOSE_CANDIDATES_POPUP_MODAL"});
+            })
+            .catch(function(err) {
+                dispatch({ type: "INTERCOM_EVENT_REJECTED", ...notification(err, "error") });
+            });
         })
         .catch(function(err) {
             dispatch({ type: "HIDE_POPUPS_REJECTED", ...notification(err, "error") });

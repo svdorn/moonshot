@@ -33,6 +33,7 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "CLOSE_CANDIDATES_POPUP_MODAL":
+            Intercom('update');
             return {
                 ...state,
                 candidatesPopupModalOpen: false,

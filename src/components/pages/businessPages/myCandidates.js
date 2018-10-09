@@ -1291,8 +1291,6 @@ class MyCandidates extends Component {
         const currentUser = this.props.currentUser;
         let positionId = this.state.positionId;
 
-        console.log("blur: ", this.props.blurModal)
-
         const tabs = (
             <div className="center" style={{position:"relative", marginTop:"28px"}}>
                 <div className="myCandidatesTabs">
