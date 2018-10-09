@@ -234,7 +234,7 @@
 }
 .emoji-buttons {
     position: absolute;
-    bottom: calc(var(--item-margin));
+    bottom: calc(var(--item-margin) - 5px);
     left: 50%;
     transform: translate(-50%);
     width: 100%;

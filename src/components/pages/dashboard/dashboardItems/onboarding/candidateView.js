@@ -110,7 +110,7 @@ class CandidateView extends Component {
                     { this.emojiButtons() }
                 </div>
                 <div className="gca-example">
-                    <div>(Easy example) Select the image that completes the pattern:</div>
+                    <div className="left-align">Select the image that completes the pattern (easy example):</div>
                     <img
                         src={`/images/cognitiveTest/RPM-Example${this.props.png}`}
                         styleName="gca-image"
