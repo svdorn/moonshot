@@ -25,7 +25,6 @@ import CandidateResults from "./candidateResults";
 import AddUserDialog from '../../childComponents/addUserDialog';
 import CandidatesPopupDialog from '../../childComponents/candidatesPopupDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
-import clipboard from "clipboard-polyfill";
 import HoverTip from "../../miscComponents/hoverTip";
 
 import "./myCandidates.css";
@@ -1160,13 +1159,6 @@ class MyCandidates extends Component {
         );
     }
 
-    copyLink() {
-        let URL = "https://moonshotinsights.io/apply/" + this.state.businessName;
-        URL = encodeURI(URL);
-        clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard.", "info");
-    }
-
     mobileTopOptions() {
         return (
             <div>
@@ -1364,8 +1356,8 @@ class MyCandidates extends Component {
                                     { this.createCandidatesTable(positionId) }
                                     <div className="myCandidatesOverlayContainer">
                                         { !this.state.mobile && this.state.mockData ?
-                                            <div className="myCandidatesOverlay primary-cyan" onClick={this.copyLink.bind(this)}>
-                                                Share your custom link with your candidates
+                                            <div className="myCandidatesOverlay secondary-gray" onClick={this.openAddUserModal.bind(this)}>
+                                                This is mock data. <u className="primary-cyan">Start inviting your candidates.</u>
                                             </div>
                                              : null
                                         }
