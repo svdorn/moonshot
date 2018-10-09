@@ -297,9 +297,9 @@
     transform: translate(-50%);
 }
 .astrobot-image {
-    height: 80%;
+    height: 74%;
     position: absolute;
-    bottom: 9%;
+    bottom: 13%;
     left: 50%;
     transform: translate(-50%);
 }

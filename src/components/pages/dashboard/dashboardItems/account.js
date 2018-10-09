@@ -116,7 +116,7 @@ class Account extends Component {
         const content = (
             <div style={{padding: "5px 14px"}}>
                 <div
-                    className="primary-cyan clickable inline-block"
+                    className="underline inline-block"
                     onClick={() => goTo(`/apply/${this.state.uniqueName}`)}
                 >
                     Candidate Invite Page
@@ -129,44 +129,51 @@ class Account extends Component {
                         Copy Link
                     </span>
                     <div style={{display:"inline-block", width: "20px"}}/>
-                    <span
-                        className="primary-cyan clickable"
-                        onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}
-                    >
-                        Email Template
-                    </span>
+                    <div className="primary-cyan clickable underline inline-block">
+                        Where to Embed?
+                    </div>
+                    <HoverTip
+                        style={{marginTop:"25px", marginLeft:"-110px"}}
+                        text="ATS, emails, automated messages, or other communications with candidates"
+                    />
                 </div>
-                <div className="pointer inline-block">Where to embed<div className="info-hoverable primary-white">i</div></div>
-                <HoverTip
-                    style={{marginTop:"25px", marginLeft:"-110px"}}
-                    text="ATS, emails, automated messages, or other communications with candidates"
-                />
+                <div
+                    className="underline inline-block"
+                    onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}
+                >
+                    Email Template
+                </div>
+
                 <br/>
 
                 <div
-                    className={button.purpleBlue + " primary-white"}
+                    className={button.cyan + " primary-white"}
                     style={{marginTop: "20px"}}
                     onClick={() => this.props.generalAction("OPEN_ADD_ADMIN_MODAL")}
                 >
                     Add Admin
-                </div><br/>
-                <div className="pointer inline-block">
-                    { this.state.adminList.length } other admin{this.state.adminList.length === 1 ? "" : "s"}
                 </div>
-                { this.state.adminList.length > 0 ?
-                    <HoverTip
-                        style={{marginLeft:"10px",whiteSpace:"nowrap"}}
-                        text={names}
-                        sourceTriangle={false}
-                    />
-                    : null
-                }
-                <br/>
-                <div className="pointer inline-block">Who to add<div className="info-hoverable primary-white">i</div></div>
+                <div style={{display:"inline-block", width: "20px"}}/>
+                <div className="inline-block pointer underline primary-cyan">Who to add?</div>
                 <HoverTip
-                    style={{marginTop:"25px", marginLeft:"-79px"}}
+                    sourceTriangle={false}
+                    style={{marginTop:"49px", marginLeft:"-100px"}}
                     text="Hiring managers, recruiters, executives, and anyone involved in hiring decisions"
                 />
+                { /*
+                    <br/>
+                    <div className="pointer inline-block">
+                        { this.state.adminList.length } other admin{this.state.adminList.length === 1 ? "" : "s"}
+                    </div>
+                    { this.state.adminList.length > 0 ?
+                        <HoverTip
+                            style={{marginLeft:"10px",whiteSpace:"nowrap"}}
+                            text={names}
+                            sourceTriangle={false}
+                        />
+                        : null
+                    }
+                */ }
             </div>
         );
 

@@ -85,11 +85,11 @@ class AdminVerifyEmail extends Component {
             return (
                 <div styleName="banner">
                     <div className="inline-block">Verify your email to activate your evaluations!</div>
-                    <div className={button.purpleBlue} onClick={this.reSend.bind(this)}>
+                    <div className={button.cyan} onClick={this.reSend.bind(this)}>
                         Re-send Verification Email
                     </div>
-                    <div className={button.purpleBlue} onClick={this.checkStatus.bind(this)}>
-                        I Already Did!
+                    <div className="underline primary-white inline-block pointer" onClick={this.checkStatus.bind(this)}>
+                        I Already Did
                     </div>
                 </div>
             );
