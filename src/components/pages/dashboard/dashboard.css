@@ -41,6 +41,10 @@
 .small-title { font-size: 16px; }
 
 .title-margin { margin-bottom: 4px; }
+.text-padding {
+    padding-left: 5px;
+    padding-right: 5px;
+}
 
 /* DASHBOARD ITEMS */
 
