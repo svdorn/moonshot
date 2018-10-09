@@ -2457,6 +2457,13 @@ button.link {
     width: calc(100% - 30px);
 }
 
+.myCandidates .candidateTable .name {
+
+}
+.myCandidates .candidateTable .name >span:hover {
+    color: var(--primary-cyan);
+}
+
 .myCandidates .candidateTable tr {
     height: 30px;
 }
