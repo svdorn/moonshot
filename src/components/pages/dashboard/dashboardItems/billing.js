@@ -19,7 +19,11 @@ class Billing extends Component {
 
         this.state = {
             // whether the business has billing set up for their account
-            billingIsSetUp: undefined
+            billingIsSetUp: undefined,
+            // the length of time the user selected to pay for new hires
+            pricing: "24 Months",
+            // what the user will pay per month
+            price: 80
         };
     }
 
@@ -47,6 +51,55 @@ class Billing extends Component {
         .catch(error => {
             self.setState({ billingIsSetUp: false });
         });
+    }
+
+
+    // create the dropdown for a candidate's hiring stage
+    makePricingDropdown(pricingValue) {
+        const monthNumbers = ["24 Months", "18 Months", "12 Months", "6 Months"];
+
+        // create the stage name menu items
+        const monthNumberItems = monthNumbers.map(monthNumber => {
+            return (
+                <MenuItem
+                    value={monthNumber}
+                    key={`pricing ${monthNumber}`}
+                >
+                    { monthNumber }
+                </MenuItem>
+            )
+        });
+
+        return (
+            <Select
+                disableUnderline={true}
+                classes={{
+                    root: "selectRootBlue home-pricing-select underline",
+                    icon: "selectIconWhiteImportant"
+                }}
+                style={{width: "110px"}}
+                value={pricingValue}
+                onChange={this.handleChangePricingValue(pricingValue)}
+                key={`pricingValue`}
+            >
+                { monthNumberItems }
+            </Select>
+        );
+    }
+
+
+    // handle a click on a hiring stage
+    handleChangePricingValue = pricing => event => {
+        const pricingValue = event.target.value;
+        let price = 80;
+        switch (pricingValue) {
+            case "24 Months": { price = 80; break; }
+            case "18 Months": { price = 105; break; }
+            case "12 Months": { price = 150; break; }
+            case "6 Months": { price = 300; break; }
+            default: { break; }
+        }
+        this.setState({pricing: pricingValue, price});
     }
 
 
@@ -78,8 +131,23 @@ class Billing extends Component {
                 </div>
                 <ul styleName="pricing-list">
                     <li>Unlimited candidates, positions, and employees</li>
-                    <li>Only pay us when you hire a top performer who stays at your company</li>
+                    <li>
+                        { this.state.billingIsSetUp ?
+                            "Only pay us when you hire a top performer who stays at your company"
+                            : "Each additional hire:"
+                        }
+                    </li>
                 </ul>
+                { this.state.billingIsSetUp ? null :
+                    <div className="primary-white center">
+                        <span className="font30px font24pxUnder400 home-blue" style={{fontWeight:"bold"}}>${this.state.price}</span>
+                        <span className="font16px font14pxUnder400">&nbsp;/ month</span>
+                        <div className="font16px font14pxUnder400" style={{marginTop:"-10px"}}>
+                            <span>for up to&nbsp;</span>
+                            {this.makePricingDropdown(this.state.pricing)}
+                        </div>
+                    </div>
+                }
                 <div onClick={() => goTo("/pricing")} styleName="pricing-link">See Pricing</div>
             </div>
         );
