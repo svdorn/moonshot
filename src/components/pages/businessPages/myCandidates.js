@@ -1110,7 +1110,7 @@ class MyCandidates extends Component {
         const selectionsExist = this.candidatesSelected();
 
         const colorClass = selectionsExist ? " topOptionWhite" : " topOptionGray";
-        const cursorClass = selectionsExist ? " pointer" : " defaultCursor";
+        const cursorClass = selectionsExist ? " pointer" : " default-cursor";
 
         let selectAttributes = {
             disableUnderline: true,

@@ -116,7 +116,7 @@ class Account extends Component {
         const content = (
             <div style={{padding: "5px 14px"}}>
                 <div
-                    className="underline inline-block"
+                    className="clickable primary-cyan inline-block"
                     onClick={() => goTo(`/apply/${this.state.uniqueName}`)}
                 >
                     Candidate Invite Page
@@ -129,7 +129,7 @@ class Account extends Component {
                         Copy Link
                     </span>
                     <div style={{display:"inline-block", width: "20px"}}/>
-                    <div className="primary-cyan clickable underline inline-block">
+                    <div className="inline-block underline-hover primary-white default-cursor">
                         Where to Embed?
                     </div>
                     <HoverTip
@@ -138,7 +138,7 @@ class Account extends Component {
                     />
                 </div>
                 <div
-                    className="underline inline-block"
+                    className="clickable primary-cyan inline-block"
                     onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}
                 >
                     Email Template
@@ -154,7 +154,9 @@ class Account extends Component {
                     Add Admin
                 </div>
                 <div style={{display:"inline-block", width: "20px"}}/>
-                <div className="inline-block pointer underline primary-cyan">Who to add?</div>
+                <div className="inline-block underline-hover primary-white default-cursor">
+                    Who to add?
+                </div>
                 <HoverTip
                     sourceTriangle={false}
                     style={{marginTop:"49px", marginLeft:"-100px"}}

@@ -1426,7 +1426,7 @@ form > h1 {
     color: white !important;
 }
 .clickable, .clickableNoUnderline, .clickable-no-underline, .borderBottomClickable { cursor: pointer; }
-.clickable:hover { text-decoration: underline; }
+.clickable:hover, .underline-hover:hover { text-decoration: underline; }
 .borderBottomClickable:hover { border-bottom: 2px solid white; }
 .currentRoute {
     /* text-decoration: underline;  */
@@ -3543,8 +3543,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     cursor:         grab;
 }
 .pointer { cursor: pointer; }
-.notAllowed { cursor: not-allowed; }
-.defaultCursor { cursor: default; }
+.not-allowed { cursor: not-allowed; }
+.default-cursor { cursor: default; }
 
 .twoOptionsOr {
     display: inline-block;
