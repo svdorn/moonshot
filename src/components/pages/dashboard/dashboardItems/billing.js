@@ -42,11 +42,12 @@ class Billing extends Component {
         // find out whether billing is set up, if error assume not
         axios.get("/api/business/billingIsSetUp", query)
         .then(response => {
-            if (propertyExists(response, ["data", "billingIsSetUp"])) {
-                self.setState({ billingIsSetUp: response.data.billingIsSetUp });
-            } else {
-                self.setState({ billingIsSetUp: false });
-            }
+            self.setState({ billingIsSetUp: false })
+            // if (propertyExists(response, ["data", "billingIsSetUp"])) {
+            //     self.setState({ billingIsSetUp: response.data.billingIsSetUp });
+            // } else {
+            //     self.setState({ billingIsSetUp: false });
+            // }
         })
         .catch(error => {
             self.setState({ billingIsSetUp: false });
@@ -114,27 +115,30 @@ class Billing extends Component {
         }
 
         // by default show that we're going to be adding billing info
-        let currentPlan = "Starter Plan";
-        if (this.state.billingIsSetUp) { currentPlan = "Pro Plan"; }
+        let currentPlan = "Starter";
+        if (this.state.billingIsSetUp) { currentPlan = "Pro"; }
 
         // standard dashboard box header
         const header = (
             <div styleName="box-header">
-                <div styleName="box-title">{ currentPlan }</div>
+                <div styleName="box-title">Current Plan: { currentPlan }</div>
             </div>
         );
 
         const content = (
             <div style={{padding: "5px 14px"}}>
-                <div styleName="payment-plan">
-                    { this.state.billingIsSetUp ? "Only Pay When You Hire" : "Your First Hire Is Free" }
-                </div>
+                { this.state.billingIsSetUp ?
+                    <div styleName="payment-plan">
+                        Only Pay When You Hire
+                    </div>
+                    : null
+                }
                 <ul styleName="pricing-list">
                     <li>Unlimited candidates, positions, and employees</li>
                     <li>
                         { this.state.billingIsSetUp ?
                             "Only pay us when you hire a top performer who stays at your company"
-                            : "Each additional hire:"
+                            : "Your first hire is free, each additional hire:"
                         }
                     </li>
                 </ul>

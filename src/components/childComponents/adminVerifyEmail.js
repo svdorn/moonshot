@@ -85,12 +85,18 @@ class AdminVerifyEmail extends Component {
             return (
                 <div>
                     <div styleName="banner">
-                        <div className="inline-block">Verify your email to activate your evaluations!</div>
+                        <div className="inline-block">
+                            {"Verify your email to activate your evaluations!"}
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <br styleName="first-break" />
+                            {"Didn't get a verification email?"}
+                        </div>
+                        <br styleName="second-break" />
                         <div className={button.cyan} onClick={this.reSend.bind(this)}>
-                            Re-send Verification Email
+                            Re-send
                         </div>
                         <div className="underline primary-white inline-block pointer" onClick={this.checkStatus.bind(this)}>
-                            I Already Did
+                            I already verified
                         </div>
                     </div>
                     <div styleName="banner-space" />
