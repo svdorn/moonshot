@@ -407,8 +407,8 @@ form > h1 {
 }
 
 .build-team .method-box.selected {
-    border-color: var(--primary-cyan);
-    background-color: var(--primary-black-dark);
+    background-color: var(--primary-white);
+    color: var(--black-deep-dark)
 }
 
 
