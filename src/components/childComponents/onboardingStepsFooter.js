@@ -38,6 +38,7 @@ class OnboardingStepsFooter extends Component {
         const user = this.props.currentUser;
         if (!user || !user.onboard) { return null; }
         const onboard = user.onboard;
+        const popups = user.popups;
         const step = onboard && typeof onboard.step === "number" ? onboard.step : 1;
         const highestStep = onboard && typeof onboard.highestStep === "number" ? onboard.highestStep : 1;
         if (onboard.timeFinished) {
@@ -54,7 +55,7 @@ class OnboardingStepsFooter extends Component {
                     <div>{info.title}</div>
                     {info.step === onboard.highestStep ?
                         <div styleName="box-cta" onClick={() => goTo("/dashboard")}>
-                            {info.step === 1 ? "Start" : "Continue"} <img src={`/icons/LineArrow${this.props.png}`} />
+                            {popups && popups.businessInterests && info.step === 1 ? "Start" : "Continue"} <img src={`/icons/LineArrow${this.props.png}`} />
                         </div>
                          : null
                      }
