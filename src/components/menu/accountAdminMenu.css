@@ -26,10 +26,13 @@
 }
 .drawer-menu {
     width: 200px;
+    position: relative;
+    min-height: var(--min-screen-height);
 }
 .menu > div {
     position: absolute;
     height: 100vh;
+    min-height: var(--min-screen-height);
     width: 100%;
     bottom: 0;
 }

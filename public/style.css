@@ -5,7 +5,7 @@
 
 body {
     font-family: 'Muli', sans-serif;
-    min-width: 300px;
+    min-width: var(--min-screen-width);
     background-color: var(--primary-black-dark);
 }
 
@@ -22,6 +22,9 @@ body {
     --black-deep-dark: #2a2a2a;
     --secondary-gray: #d7d7d7;
     --secondary-red: #eb394f;
+
+    --min-screen-width: 300px;
+    --min-screen-height: 300px;
 }
 
 .primary-orange { color: var(--primary-orange); }
@@ -556,7 +559,7 @@ form > h1 {
     min-height: 70vh;
     width: 90%;
     margin: 30px auto;
-    min-width: 300px;
+    min-width: var(--min-screen-width);
     -webkit-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
     -moz-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
     box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
@@ -668,7 +671,7 @@ form > h1 {
     line-height: 22px;
 }
 .pricingInput .blackInput {
-    min-width: 300px;
+    min-width: var(--min-screen-width);
     left: 50%;
     position: relative;
     transform: translateX(-50%);
