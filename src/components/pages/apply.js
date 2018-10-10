@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { addNotification } from "../../actions/usersActions";
-import {  } from "../../miscFunctions";
+import { makePossessive } from "../../miscFunctions";
 import MetaTags from 'react-meta-tags';
 import { goTo } from "../../miscFunctions";
 import HoverTip from "../miscComponents/hoverTip";
@@ -200,8 +200,13 @@ class Apply extends Component {
                                         text="After candidates press next, they sign up to complete your evaluation."
                                         />
                                 </div>
-                                <div className="clickableNoUnderline marginTop20px secondary-gray" onClick={() => goTo("/dashboard")}>
-                                    <u>Continue to setup your page.</u>
+                                <div styleName="employer-box">
+                                    <div>
+                                        This is {makePossessive(this.state.company)} candidate invite page. When candidates click on your link, they will be taken here. New evaluations will automatically be added to your dropdown list above.
+                                    </div>
+                                    <div onClick={() => goTo("/dashboard")}>
+                                        Continue Setting Up Your Page <img src={`/icons/LineArrow${this.props.png}`} />
+                                    </div>
                                 </div>
                                 <div>{ this.makeChecklist() }</div>
                             </div>

@@ -89,6 +89,45 @@
     transform: translateX(50%);
 }
 
+.employer-box {
+    width: 540px;
+    height: 100%;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: var(--black-deep-dark);
+    vertical-align: top;
+    color: var(--secondary-gray);
+    font-size: 16px;
+    text-align: left;
+    border: 2px solid var(--primary-white);
+    -moz-box-shadow:    0px 1px 2px 2px var(--black-deep-dark);
+    -webkit-box-shadow: 0px 1px 2px 2px var(--black-deep-dark);
+    box-shadow:         0px 1px 2px 2px var(--black-deep-dark);
+
+    -webkit-transition: -webkit-transition .5s;
+    -moz-transition: -moz-box-shadow .5s;
+    transition: box-shadow .5s;
+}
+.employer-box > div:nth-child(2) {
+    font-size: 18px;
+    margin-top: 15px;
+    cursor: pointer;
+    color: var(--primary-cyan);
+}
+.employer-box > div:nth-child(2) > img {
+    width: 10px;
+    margin: 0 5px 2px 2px;
+    margin-bottom: 4px;
+    transform: translateX(0%);
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+.employer-box > div:nth-child(2):hover > img {
+    transform: translateX(50%);
+}
+
 @media screen and (max-width: 1000px) {
     .checklist-container {
         width: 100%;
@@ -103,11 +142,29 @@
     .checklist-container {
         display: none;
     }
+    .employer-box {
+        width: 400px;
+        font-size: 14px;
+        padding: 10px;
+    }
+    .employer-box > div:nth-child(2) {
+        font-size: 16px;
+        margin-top: 10px;
+    }
 }
 
 @media only screen and (max-width: 500px) {
     .powered-by {
         padding-left: 60px;
+    }
+    .employer-box {
+        width: 280px;
+        font-size: 12px;
+        padding: 2px;
+    }
+    .employer-box > div:nth-child(2) {
+        font-size: 12px;
+        margin-top: 5px;
     }
 }
 
