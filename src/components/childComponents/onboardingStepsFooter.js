@@ -43,6 +43,12 @@ class OnboardingStepsFooter extends Component {
         if (onboard.timeFinished) {
             return null;
         }
+        let buttonText = "Continue";
+        let onClick = () => goTo("/dashboard");
+        if (popups && popups.businessInterests && highestStep === 1) {
+            buttonText = "Start";
+            onClick = () => goTo("/dashboard?ROI=open");
+        }
         // create the item list shown on the left
         const checklistItems = checklistInfo.map(info => {
             return (
@@ -53,8 +59,8 @@ class OnboardingStepsFooter extends Component {
                     <div styleName={`complete-mark ${info.step < highestStep ? "complete" : "incomplete"}`}><div/></div>
                     <div>{info.title}</div>
                     {info.step === onboard.highestStep ?
-                        <div styleName="box-cta" onClick={() => goTo("/dashboard")}>
-                            {popups && popups.businessInterests && info.step === 1 ? "Start" : "Continue"} <img src={`/icons/LineArrow${this.props.png}`} />
+                        <div styleName="box-cta" onClick={onClick}>
+                            {buttonText} <img src={`/icons/LineArrow${this.props.png}`} />
                         </div>
                          : null
                      }
@@ -72,6 +78,7 @@ class OnboardingStepsFooter extends Component {
     }
 
     render() {
+        const popups = this.props.currentUser.popups;
         // get the current path from the url
         let pathname = undefined;
         // try to get the path; lowercased because capitalization will vary
@@ -79,9 +86,11 @@ class OnboardingStepsFooter extends Component {
         // if the pathname is not yet defined, don't do anything, this will be executed again later
         catch (e) { pathname = ""; }
 
+        const showFooter = pathname !== "/dashboard" || (popups && popups.businessInterests);
+
         return (
             <div>
-                {pathname !== "/dashboard" ?
+                {showFooter ?
                     <div>
                         { this.makeChecklist() }
                     </div>
