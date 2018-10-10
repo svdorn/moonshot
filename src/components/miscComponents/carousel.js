@@ -123,8 +123,12 @@ class Carousel extends Component {
         const leftArrow = null;
         const rightArrow = null;
 
+        const style = this.props.style ? this.props.style : {};
+        const className = this.props.className ? this.props.className : "";
+        const styleName = this.props.styleName ? this.props.styleName : "";
+
         return (
-            <div className="carousel">
+            <div className={"carousel " + className} styleName={styleName} style={style}>
                 <div style={{position: "relative"}}>
                     { this.content() }
                     <div
