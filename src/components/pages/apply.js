@@ -205,7 +205,7 @@ class Apply extends Component {
                                         This is {makePossessive(this.state.company)} candidate invite page. When candidates click on your link, they will be taken here. New evaluations will automatically be added to your dropdown list above.
                                     </div>
                                     <div onClick={() => goTo("/dashboard")}>
-                                        Continue Setting Up Your Page <img src={`/icons/LineArrow${this.props.png}`} />
+                                        Continue Setting Up Your Page <img src={`/icons/ArrowBlue${this.props.png}`} />
                                     </div>
                                 </div>
                                 <div>{ this.makeChecklist() }</div>
