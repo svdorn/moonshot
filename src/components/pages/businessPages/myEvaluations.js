@@ -237,7 +237,7 @@ class MyEvaluations extends Component {
         let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
         URL = encodeURI(URL);
         clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard.", "info");
+        this.props.addNotification("Link copied to clipboard", "info");
     }
 
     hideMessage() {

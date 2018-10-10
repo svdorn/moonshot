@@ -3,13 +3,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification, openAddPositionModal, openAddUserModal } from "../../../../actions/usersActions";
-import { propertyExists, goTo } from "../../../../miscFunctions";
+import { propertyExists, goTo, makePossessive } from "../../../../miscFunctions";
 import clipboard from "clipboard-polyfill";
 import Carousel from "../../../miscComponents/carousel";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import { primaryCyan } from "../../../../colors";
+import { primaryCyan, primaryWhite } from "../../../../colors";
 import axios from "axios";
 
 import "../dashboard.css";
@@ -139,7 +139,7 @@ class Activity extends Component {
         let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
         URL = encodeURI(URL);
         clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard.", "info");
+        this.props.addNotification("Link copied to clipboard", "info");
     }
 
     openAddPositionModal = () => {
@@ -153,63 +153,63 @@ class Activity extends Component {
     tipsForHiring() {
         const frame1 = (
             <div styleName="carousel-frame">
+                <div>Tip #1: <span className="primary-cyan">First Things First</span></div>
                 <div>
-                    <div className="primary-cyan font18px font16pxUnder700">First Things First</div>
-                    <div>
-                        Don{"'"}t forget to embed your candidate invite page in your hiring workflow and communications
-                        with candidates, otherwise all your effort so far will be lost. <u className="primary-cyan clickable" onClick={this.copyLink}>Copy your link.</u>
-                    </div>
+                    Don{"'"}t forget to embed your candidate invite page in your hiring workflow and communications
+                    with candidates, otherwise all your effort so far will be lost.
+                    <br/>
+                    <u className="primary-cyan clickable" onClick={this.copyLink}>Copy your link</u>
                 </div>
             </div>
         );
         const frame2 = (
             <div styleName="carousel-frame">
+                <div>Tip #2: <span className="primary-cyan">Take Advantage</span></div>
                 <div>
-                    <div className="primary-cyan font18px font16pxUnder700">Take Advantage</div>
-                    <div>
-                        We align our incentives to your desired outcome, exceptional hires, so we only charge when you hire
-                        an awesome employee who stays at your company. This allows you to invite as many candidates, add as many
-                        positions and evaluate as many employees as your want so take advantage and <div className="primary-cyan clickable inlineBlock" onClick={this.openAddPositionModal}>add some more positions</div>.
-                    </div>
+                    We align our incentives to your desired outcome, exceptional hires, so we only charge when you hire
+                    an awesome employee who stays at your company. This allows you to invite as many candidates, add as many
+                    positions and evaluate as many employees as your want so take advantage and <div className="primary-cyan clickable inlineBlock" onClick={this.openAddPositionModal}>add some more positions</div>.
                 </div>
             </div>
         );
         const frame3 = (
             <div styleName="carousel-frame">
+                <div>Tip #3: <span className="primary-cyan">Don{"'"}t Screen Out Great Candidates</span></div>
                 <div>
-                    <div className="primary-cyan font18px font16pxUnder700">Don{"'"}t Screen Out Great Candidates</div>
-                    <div>
-                        If you screen applicants before inviting them to complete an evaluation, you{"'"}re very likely dismissing your best candidates.
-                        As you know by now, education and experience provide 1% and 1.1% predictive ability; other resume and LinkedIn data are horrible predictors too.
-                        Be sure to invite the vast majority, if not all, of your applicants.
-                    </div>
+                    If you screen applicants before inviting them to complete an evaluation, you{"'"}re very likely dismissing your best candidates.
+                    As you know by now, education and experience provide 1% and 1.1% predictive ability; other resume and LinkedIn data are horrible predictors too.
+                    Be sure to invite the vast majority, if not all, of your applicants.
                 </div>
             </div>
         );
         const frame4 = (
             <div styleName="carousel-frame">
+                <div>Tip #4: <span className="primary-cyan">Double Down On Your Team</span></div>
                 <div>
-                    <div className="primary-cyan font18px font16pxUnder700">Double Down On Your Team</div>
-                    <div>
-                        You{"'"}re sacrificing a huge opportunity if you don{"'"}t invite employees to be evaluated. This data enables us to really
-                        customize {this.state.name}{"'"}s predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
-                        Improve your candidate predictions by <div className="primary-cyan clickable inlineBlock" onClick={this.openAddUserModal}>inviting employees</div> to complete a 22-minute evaluation.
-                    </div>
-                    <div className="font12px">
-                        Do you want <u className="clickable">more info</u>?
-                    </div>
+                    You{"'"}re sacrificing a huge opportunity if you don{"'"}t invite employees to be evaluated. This data enables us to really
+                    customize {this.state.name}{"'"}s predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
+                    Improve your candidate predictions by <div className="primary-cyan clickable inlineBlock" onClick={this.openAddUserModal}>inviting employees</div> to complete a 22-minute evaluation.
                 </div>
             </div>
         );
+
         return (
             <div styleName="tips-for-hiring">
-                <div>
-                    Tips for hiring supremacy while you{"'"}re<br/> waiting for candidates to complete your evaluation
+                <div styleName="desktop-only tips-for-hiring-header">
+                    { "While you're waiting for candidates to complete your \
+                    evaluation, here are some hiring tips:" }
                 </div>
-                <div>
+                <div styleName="mobile-only tips-for-hiring-header">
+                    { "A couple tips while you're waiting for candidates to \
+                    complete your evaluation:" }
+                </div>
+                <div styleName="carousel-container">
                     <Carousel
                         frames={[frame1, frame2, frame3, frame4]}
                         transitionDuration={1000}
+                        styleName="activity-carousel"
+                        color1={primaryWhite}
+                        color2={primaryCyan}
                     />
                 </div>
             </div>
@@ -232,7 +232,7 @@ class Activity extends Component {
 
         return (
             <Select
-                styleName="tab-selector"
+                styleName="tab-selector activity-dropdown"
                 disableUnderline={true}
                 classes={{
                     root: "position-select-root selectRootWhite dashboard-select",
@@ -285,9 +285,6 @@ class Activity extends Component {
         return (
             <div styleName="awaiting-review">
                 <div>
-                    { this.makeDropdown() }
-                </div>
-                <div>
                     {typeof data === "number" ?
                         <div>
                             <div styleName="important-stat">
@@ -306,20 +303,28 @@ class Activity extends Component {
     }
 
     render() {
+        const { frame, name, fetchDataError } = this.state;
+
         let content = null;
-        switch (this.state.frame) {
+        let dropdown = null;
+        switch (frame) {
             case "Tips For Hiring": { content = this.tipsForHiring(); break; }
-            case "Awaiting Review": { content = this.awaitingReview(); break; }
+            case "Awaiting Review": {
+                content = this.awaitingReview();
+                dropdown = this.makeDropdown();
+                break;
+            }
             default: { content = null; break; }
         }
 
         return (
             <div>
-                {this.state.name && !this.state.fetchDataError ?
+                { name && !fetchDataError ?
                     <div styleName="activity-container">
-                        <div>
-                            {this.state.name}{"'"}s Activity
+                        <div styleName="activity-title">
+                            <span styleName="not-small-mobile">{ makePossessive(name) } </span>Activity
                         </div>
+                        { dropdown }
                         { content }
                     </div>
                 :

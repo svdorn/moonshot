@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {  } from "../../actions/usersActions";
 import {  } from "../../miscFunctions";
+import { primaryWhite } from "../../colors";
 
 
 class Carousel extends Component {
@@ -63,12 +64,18 @@ class Carousel extends Component {
     }
 
 
-    bottomCircles() {
+    bottomCircles(color1, color2) {
+        const selectedStyle = { background: `linear-gradient(to top, ${color1}, ${color2})` };
+
         let circles = [];
         for (let frameIndex = 0; frameIndex < this.props.frames.length; frameIndex++) {
             const selected = this.state.frameIndex === frameIndex;
             circles.push(
-                <div key={`circle${frameIndex}`} className={`frame-position-circle${selected ? " selected" : ""}`}/>
+                <div
+                    key={`circle${frameIndex}`}
+                    className="frame-position-circle"
+                    style={selected ? selectedStyle : {}}
+                />
             );
         }
         return (
@@ -123,20 +130,29 @@ class Carousel extends Component {
         const leftArrow = null;
         const rightArrow = null;
 
+        const style = this.props.style ? this.props.style : {};
+        const className = this.props.className ? this.props.className : "";
+        const styleName = this.props.styleName ? this.props.styleName : "";
+
+        const color1 = this.props.color1 ? this.props.color1 : primaryWhite;
+        const color2 = this.props.color2 ? this.props.color2 : primaryCyan;
+
+        const arrowStyle = { background: `linear-gradient(to bottom, ${color1}, ${color2})` };
+
         return (
-            <div className="carousel">
+            <div className={"carousel " + className} styleName={styleName} style={style}>
                 <div style={{position: "relative"}}>
                     { this.content() }
                     <div
-                        className="left circleArrowIcon"
+                        className="left circleArrowIcon" style={arrowStyle}
                         onClick={() => this.move("back")}
                     />
                     <div
-                        className="right circleArrowIcon"
+                        className="right circleArrowIcon" style={arrowStyle}
                         onClick={() => this.move("next")}
                     />
                 </div>
-                { this.bottomCircles() }
+                { this.bottomCircles(color1, color2) }
             </div>
         );
     }

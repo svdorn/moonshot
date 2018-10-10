@@ -68,7 +68,7 @@ class WhatToDo extends Component {
         let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
         URL = encodeURI(URL);
         clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard.", "info");
+        this.props.addNotification("Link copied to clipboard", "info");
     }
 
     handleCustomPage = () => {
@@ -82,22 +82,13 @@ class WhatToDo extends Component {
                 <div styleName="onboarding-title title-margin">
                     {"A Candidate Invite Page Just For You"}
                 </div>
-                <div styleName="mobile-only">
+                <div>
                     { `Here's an invite link that can be embedded in your
                     ATS, automated emails or other communications with
                     candidates. We see the best results when companies
                     invite all applicants to complete an evaluation as high
                     performers are often dismissed based on non-predictive
                     data. Copy and embed your link where you see fit.` }
-                </div>
-                <div styleName="desktop-only">
-                    { `${makePossessive(this.state.name)} invite link can be
-                    embedded in your ATS, automated emails or other
-                    communications with candidates. We see the best results
-                    when companies invite all applicants to complete an
-                    evaluation as high performers are often dismissed based
-                    on non-predictive data. Copy and embed your link where
-                    you see fit.` }
                 </div>
                 <div styleName="link-area">
                     <input

@@ -480,9 +480,6 @@ form > h1 {
     display: inline-block;
     margin: auto 10px;
 }
-.carousel .frame-position-circle.selected {
-    background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
-}
 .carousel .content {
     display: inline-block;
     position: relative;
@@ -494,7 +491,7 @@ form > h1 {
 .carousel .content > div:first-child {
     position: absolute;
     left: 0;
-    transform: translateX(-100%);
+    transform: translateX(-101%);
 }
 .carousel .content > div:nth-child(2) {
     position: relative;
@@ -503,7 +500,7 @@ form > h1 {
 .carousel .content > div:last-child {
     position: absolute;
     right: 0;
-    transform: translateX(100%);
+    transform: translateX(101%);
 }
 
 .carousel .content.animate-next > div:nth-child(2) {

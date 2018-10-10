@@ -413,22 +413,24 @@
     padding: calc(var(--item-margin));
     color: var(--secondary-gray);
 }
-.activity-container > div:first-child {
-    position: absolute;
-    top: 5px;
-    left: 10px;
+.activity-container > div.activity-title {
     font-size: 18px;
+    float: left;
+    color: var(--primary-white);
+    margin-left: 12px;
 }
+.activity-container > div.activity-dropdown { float: right; }
 .activity-container > div:not(:first-child) {
     text-align: center;
-    margin-top: 15px;
 }
-.tips-for-hiring { }
-.tips-for-hiring > div:first-child {
+.tips-for-hiring {}
+.tips-for-hiring-header {
     color: var(--secondary-gray);
+    clear: both;
+    padding: 6px 0;
 }
-.tips-for-hiring > div:nth-child(2) {
-    width: 600px;
+.carousel-container {
+    width: 680px;
     height: 100%;
     margin: auto;
     background-color: var(--primary-black-dark);
@@ -436,19 +438,11 @@
     color: var(--secondary-gray);
     font-size: 14px;
 
-    -webkit-box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
-    -moz-box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
-    box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
     -webkit-transition: -webkit-transition .2s;
     -moz-transition: -moz-box-shadow .2s;
     transition: box-shadow .2s;
 }
-.awaiting-reveiew { }
-.awaiting-review > div:first-child {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-}
+
 .awaiting-review .important-number {
     font-size: 50px;
     display: inline-block;
@@ -457,7 +451,7 @@
     font-weight: bold;
 }
 .awaiting-review .important-stat {
-    margin-top: 40px;
+    margin-top: 55px;
     font-size: 22px;
 }
 .awaiting-review-buttons {
@@ -465,13 +459,23 @@
     display: inline-block;
     font-size: 18px;
 }
+.activity-carousel {
+    border: 2px solid var(--primary-white);
+    -moz-box-shadow:    0px 1px 2px 2px var(--black-deep-dark);
+    -webkit-box-shadow: 0px 1px 2px 2px var(--black-deep-dark);
+    box-shadow:         0px 1px 2px 2px var(--black-deep-dark);
+}
 .carousel-frame {
     margin: auto;
-    width: 550px;
+    width: 600px;
     height: 140px;
     text-align: left;
-    font: 14px;
 }
+.carousel-frame > div:first-child {
+    font-size: 18px;
+    padding: 10px 0 4px;
+}
+
 .invite-candidates-modal {
     color: var(--secondary-gray);
 }
@@ -536,6 +540,14 @@
     }
 
     .custom-page-title { font-size: 16px; }
+
+    .tips-for-hiring-header { padding: 10px 0; }
+
+    .carousel-container { width: 480px; }
+    .carousel-frame {
+        width: 415px;
+        height: 188px;
+    }
 }
 
 @media screen and (min-width: 571px) {
@@ -543,6 +555,8 @@
 }
 
 @media screen and (max-width: 570px) {
+    .not-small-mobile { display: none; }
+
     .dashboard { --items-per-row: 1 }
 
     .mobile-center { text-align: center; }
@@ -604,4 +618,17 @@
         width: 230px;
     }
     .link-area > button { margin: 10px 0 0; }
+
+    .tips-for-hiring-header {
+        text-align: left;
+        padding: 12px;
+    }
+
+    .carousel-container { width: 224px; }
+    .carousel-frame {
+        width: 174px;
+        height: 320px;
+        font-size: 12px;
+    }
+    .carousel-frame > div:first-child { font-size: 16px; }
 }
