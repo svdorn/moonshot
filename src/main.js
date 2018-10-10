@@ -122,8 +122,6 @@ class Main extends Component {
         } else {
             return <CopyLinkFooter />
         }
-
-        return null;
     }
 
 

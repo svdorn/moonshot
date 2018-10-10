@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification } from '../../actions/usersActions';
+import { propertyExists } from "../../miscFunctions";
 import clipboard from "clipboard-polyfill";
 import axios from 'axios';
 
@@ -12,22 +13,48 @@ class CopyLinkFooter extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            name: undefined,
+            uniqueName: undefined,
+            candidateCount: undefined,
+            fetchDataError: false,
+        };
     }
 
     componentDidMount() {
+        console.log("in here");
         let self = this;
-        axios.get("/api/business/uniqueName", {
-            params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
-            }
-        })
+        const user = this.props.currentUser;
+
+        const nameQuery = { params: {
+            userId: user._id,
+            verificationToken: user.verificationToken,
+        } };
+
+        const countQuery = { params: {
+            userId: user._id,
+            verificationToken: user.verificationToken,
+            businessId: user.businessInfo.businessId
+        } };
+
+        axios.get("/api/business/uniqueName", nameQuery)
         .then(function (res) {
-            self.setState({ name: res.data.name, uniqueName: res.data.uniqueName })
+            axios.get("/api/business/candidatesTotal", countQuery )
+            .then(response => {
+                if (propertyExists(response, ["data", "totalCandidates"]), "number") {
+                    console.log("res: ", response.data.totalCandidates)
+                    console.log("res: ", response.data);
+                    self.setState({ name: res.data.name, uniqueName: res.data.uniqueName, candidateCount: response.data.totalCandidates })
+                } else {
+                    self.setState({ fetchDataError: true });
+                }
+            })
+            .catch(error => {
+                self.setState({ fetchDataError: true });
+            });
         })
         .catch(function (err) {
-
+            self.setState({ fetchDataError: true });
         });
     }
 
@@ -39,9 +66,10 @@ class CopyLinkFooter extends Component {
     }
 
     render() {
+        console.log("candidate count: ", this.state.candidateCount)
         return (
             <div>
-                {this.state.uniqueName && this.state.name ?
+                {!this.state.fetchDataError && this.state.candidateCount === 0 ?
                     <div styleName={"footer-container" + (this.props.footerOnScreen ? " absolute" : "")}>
                         <div styleName="footer">
                             <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
