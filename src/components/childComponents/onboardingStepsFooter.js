@@ -36,6 +36,7 @@ class OnboardingStepsFooter extends Component {
     }
 
     startOnboarding = () => {
+        goTo("/dashboard");
         const userId = this.props.currentUser._id;
         const verificationToken = this.props.currentUser.verificationToken;
         const businessId = this.props.currentUser.businessInfo.businessId;
@@ -49,7 +50,6 @@ class OnboardingStepsFooter extends Component {
         }
 
         this.props.postBusinessInterests(userId, verificationToken, businessId, choiceArr, popups);
-        goTo("/dashboard");
     }
 
     makeChecklist() {
