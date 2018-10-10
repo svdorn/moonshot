@@ -16,7 +16,7 @@
 
 .checklist-container {
     width: calc(100% - 140px);
-    height: 60px;
+    height: 85px;
     bottom: 0%;
     position: fixed;
     vertical-align: top;

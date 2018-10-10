@@ -22,6 +22,7 @@ import Notification from './components/notification'
 import ContactUsDialog from './components/childComponents/contactUsDialog';
 import AddAdminDialog from "./components/childComponents/addAdminDialog";
 import CopyLinkFooter from './components/childComponents/copyLinkFooter';
+import OnboardingStepsFooter from './components/childComponents/onboardingStepsFooter';
 import AdminVerifyEmail from "./components/childComponents/adminVerifyEmail";
 
 import "./main.css";
@@ -113,11 +114,13 @@ class Main extends Component {
         img.src = "data:image/webp;base64," + kTestImages[feature];
     }
 
-    copyLinkFooter() {
+    popupFooter() {
         if (this.props.currentUser && this.props.currentUser.userType === "accountAdmin" && this.props.currentUser.onboard && !this.props.currentUser.onboard.timeFinished) {
             return (
-                <CopyLinkFooter />
+                <OnboardingStepsFooter />
             );
+        } else {
+            return <CopyLinkFooter />
         }
 
         return null;
@@ -141,7 +144,7 @@ class Main extends Component {
                             <AddAdminDialog/>
                             <ContactUsDialog/>
                             { this.props.children }
-                            { this.copyLinkFooter() }
+                            { this.popupFooter() }
                         </div>
                     </div>
                     <Footer/>
