@@ -306,14 +306,13 @@
     margin: 7px 0;
     justify-content: center;
 }
-.link-area > div {
+.link-area > input {
     border-radius: 6px;
     border: 1px solid white;
     padding: 3px 10px;
     background-color: #222222;
     color: white;
-    max-width: 385px;
-    word-wrap: break-word;
+    width: 385px;
 }
 .link-area > button {
     margin-left: 7px;
@@ -601,9 +600,8 @@
         display: block;
         text-align: center;
     }
-    .link-area > div {
-        max-width: 100%;
-        text-align: left;
+    .link-area > input {
+        width: 230px;
     }
     .link-area > button { margin: 10px 0 0; }
 }

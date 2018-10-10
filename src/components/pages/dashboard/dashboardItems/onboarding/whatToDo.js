@@ -98,7 +98,10 @@ class WhatToDo extends Component {
                     you see fit.` }
                 </div>
                 <div styleName="link-area">
-                    <div>{`https://moonshotinsights.io/apply/${this.state.uniqueName}`}</div>
+                    <input
+                        readOnly={true}
+                        value={`https://moonshotinsights.io/apply/${this.state.uniqueName}`}
+                    />
                     <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" onClick={this.copyLink} style={{padding: "3px 10px"}}>
                         <span>Copy Link</span>
                     </button>
