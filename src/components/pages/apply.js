@@ -23,7 +23,7 @@ const checklistInfo = [
         step: 2
     },
     {
-        title: "Why It Works",
+        title: "How It Works",
         step: 3
     },
     {

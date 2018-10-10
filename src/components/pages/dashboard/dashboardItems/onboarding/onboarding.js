@@ -26,7 +26,7 @@ const checklistInfo = [
         step: 2
     },
     {
-        title: "Why It Works",
+        title: "How It Works",
         body: <WhyItWorks/>,
         step: 3
     },
