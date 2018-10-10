@@ -289,12 +289,16 @@ function defaultErrorHandler(dispatch, options) {
 export function updateOnboardingStep(userId, verificationToken, newStep) {
     return function(dispatch) {
         if (newStep !== -1) {
+            if (newStep === 4) {
+                dispatch({ type: "OPEN_ONBOARDING_4_MODAL" });
+            }
             dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
         } else {
             dispatch({type: "START_LOADING"});
         }
         axios.post("/api/user/updateOnboardingStep", { userId, verificationToken, newStep })
         .then(result => {
+            // if done with onboarding
             if (newStep === -1) {
                 dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
             }

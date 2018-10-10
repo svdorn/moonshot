@@ -79,7 +79,7 @@ class OnboardingStepsFooter extends Component {
                     <div>{info.title}</div>
                     {info.step === onboard.highestStep ?
                         <div styleName="box-cta" onClick={onClick}>
-                            {buttonText} <img src={`/icons/LineArrow${this.props.png}`} />
+                            {buttonText} <img src={`/icons/ArrowBlue${this.props.png}`} />
                         </div>
                          : null
                      }

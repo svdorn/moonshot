@@ -52,6 +52,18 @@ export function usersReducers(state = initialState, action) {
                 roiOnboardingOpen: false
             };
             break;
+        case "OPEN_ONBOARDING_4_MODAL":
+            return {
+                ...state,
+                onboardingStep4Open: true
+            };
+            break;
+        case "CLOSE_ONBOARDING_4_MODAL":
+            return {
+                ...state,
+                onboardingStep4Open: false
+            };
+            break;
         case "OPEN_ADD_ADMIN_MODAL":
             return {
                 ...state,

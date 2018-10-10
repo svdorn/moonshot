@@ -11,6 +11,7 @@ import InviteCandidatesModal from "./inviteCandidatesModal";
 import AddPositionDialog from '../../childComponents/addPositionDialog';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import ROIOnboardingDialog from '../../childComponents/roiOnboardingDialog';
+import OnboardingStep4Dialog from '../../childComponents/onboardingStep4Dialog';
 
 import WelcomeMessage from "./dashboardItems/welcomeMessage";
 
@@ -44,7 +45,7 @@ class Dashboard extends Component {
         }
 
         let blurredClass = '';
-        if (this.props.blurredClass) {
+        if (this.props.roiModal || this.props.onboardingModel) {
             blurredClass = 'dialogForBizOverlay';
         }
 
@@ -58,6 +59,7 @@ class Dashboard extends Component {
                 <AddPositionDialog />
                 <AddUserDialog />
                 <ROIOnboardingDialog />
+                <OnboardingStep4Dialog />
                 <div className="page-line-header"><div/><div>Dashboard</div></div>
                 <WelcomeMessage />
                 <div styleName="dashboard">
@@ -77,7 +79,8 @@ class Dashboard extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        blurredClass: state.users.roiOnboardingOpen,
+        roiModal: state.users.roiOnboardingOpen,
+        onboardingModel: state.users.onboardingStep4Open
     };
 }
 
