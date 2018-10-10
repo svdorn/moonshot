@@ -15,7 +15,15 @@ class BuildTeam extends Component {
         this.state = {
             choices: [
                 {
+                    text: "Scaling your culture",
+                    selected: false
+                },
+                {
                     text: "Identifying top talent before Facebook and Google",
+                    selected: false
+                },
+                {
+                    text: "Increasing diversity",
                     selected: false
                 },
                 {
@@ -23,15 +31,7 @@ class BuildTeam extends Component {
                     selected: false
                 },
                 {
-                    text: "Scaling your culture",
-                    selected: false
-                },
-                {
                     text: "Creating a hiring process that constantly learns and improves",
-                    selected: false
-                },
-                {
-                    text: "Increasing diversity",
                     selected: false
                 },
                 {
