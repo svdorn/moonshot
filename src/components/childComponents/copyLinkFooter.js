@@ -22,9 +22,11 @@ class CopyLinkFooter extends Component {
     }
 
     componentDidMount() {
-        console.log("in here");
         let self = this;
         const user = this.props.currentUser;
+
+        // don't do anything if the user isn't an account admin
+        if (!user || user.userType !== "accountAdmin") { return; }
 
         const nameQuery = { params: {
             userId: user._id,
@@ -66,7 +68,9 @@ class CopyLinkFooter extends Component {
     }
 
     render() {
-        console.log("candidate count: ", this.state.candidateCount)
+        const { currentUser } = this.props;
+        if (!currentUser || currentUser.userType !== "accountAdmin") { return null; }
+
         return (
             <div>
                 {!this.state.fetchDataError && this.state.candidateCount === 0 ?
