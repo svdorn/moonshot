@@ -137,42 +137,6 @@ class Apply extends Component {
         goTo(URL);
     }
 
-    makeChecklist() {
-        const user = this.props.currentUser;
-        if (!user || !user.onboard) { return null; }
-        const onboard = user.onboard;
-        const step = onboard && typeof onboard.step === "number" ? onboard.step : 1;
-        const highestStep = onboard && typeof onboard.highestStep === "number" ? onboard.highestStep : 1;
-        if (onboard.timeFinished) {
-            return null;
-        }
-        // create the item list shown on the left
-        const checklistItems = checklistInfo.map(info => {
-            return (
-                <div
-                    styleName={`checklist-item`}
-                    key={info.title}
-                >
-                    <div styleName={`complete-mark ${info.step < highestStep ? "complete" : "incomplete"}`}><div/></div>
-                    <div>{info.title}</div>
-                </div>
-            );
-        });
-
-        let CTA = <div styleName="box-cta" onClick={() => goTo("/dashboard")}>
-            Continue <img src={`/icons/LineArrow${this.props.png}`} />
-        </div>
-
-        return (
-            <div styleName="checklist-container">
-                <div styleName="checklist">
-                    { checklistItems }
-                </div>
-                { CTA }
-            </div>
-        );
-    }
-
     render() {
         return (
             <div className="jsxWrapper blackBackground fillScreen center">
@@ -208,7 +172,6 @@ class Apply extends Component {
                                         Continue Setting Up Your Page <img src={`/icons/ArrowBlue${this.props.png}`} />
                                     </div>
                                 </div>
-                                <div>{ this.makeChecklist() }</div>
                             </div>
                             :
                             <button className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="next-button" onClick={this.handleSignUp.bind(this)} style={{padding: "6px 20px"}}>
