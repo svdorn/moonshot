@@ -277,16 +277,21 @@ class Activity extends Component {
     }
 
     awaitingReview() {
+        let { tab, data } = this.state;
+        tab = tab.toLowerCase();
+        // if there is only one candidate, make the tab not be plural
+        if (data === 1) { tab = tab.slice(0,-1); }
+
         return (
             <div styleName="awaiting-review">
                 <div>
                     { this.makeDropdown() }
                 </div>
                 <div>
-                    {typeof this.state.data === "number" ?
+                    {typeof data === "number" ?
                         <div>
                             <div styleName="important-stat">
-                                <div styleName="important-number">{this.state.data}</div> new {this.state.tab.toLowerCase()} to review
+                                <div styleName="important-number">{ data }</div> new { tab } to review
                             </div>
                             { this.makeButtons() }
                         </div>
