@@ -114,7 +114,7 @@ class Account extends Component {
         });
 
         const content = (
-            <div style={{padding: "5px 14px"}}>
+            <div style={{padding: "10px 14px"}}>
                 <div
                     className="clickable primary-cyan inline-block"
                     onClick={() => goTo(`/apply/${this.state.uniqueName}`)}
