@@ -541,18 +541,22 @@
 
     .custom-page-title { font-size: 16px; }
 
-    .carousel-container { width: 480px; }
-}
+    .tips-for-hiring-header { padding: 10px 0; }
 
-@media screen and (min-width: 571px) {
-    .small-mobile-only { display: none; }
+    .carousel-container { width: 480px; }
     .carousel-frame {
         width: 415px;
         height: 188px;
     }
 }
 
+@media screen and (min-width: 571px) {
+    .small-mobile-only { display: none; }
+}
+
 @media screen and (max-width: 570px) {
+    .not-small-mobile { display: none; }
+
     .dashboard { --items-per-row: 1 }
 
     .mobile-center { text-align: center; }
@@ -614,4 +618,17 @@
         width: 230px;
     }
     .link-area > button { margin: 10px 0 0; }
+
+    .tips-for-hiring-header {
+        text-align: left;
+        padding: 12px;
+    }
+
+    .carousel-container { width: 224px; }
+    .carousel-frame {
+        width: 174px;
+        height: 320px;
+        font-size: 12px;
+    }
+    .carousel-frame > div:first-child { font-size: 16px; }
 }

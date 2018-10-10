@@ -190,9 +190,6 @@ class Activity extends Component {
                     customize {this.state.name}{"'"}s predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
                     Improve your candidate predictions by <div className="primary-cyan clickable inlineBlock" onClick={this.openAddUserModal}>inviting employees</div> to complete a 22-minute evaluation.
                 </div>
-                <div className="font12px">
-                    Do you want <u className="clickable">more info</u>?
-                </div>
             </div>
         );
 
@@ -325,7 +322,7 @@ class Activity extends Component {
                 { name && !fetchDataError ?
                     <div styleName="activity-container">
                         <div styleName="activity-title">
-                            { makePossessive(name) } Activity
+                            <span styleName="not-small-mobile">{ makePossessive(name) } </span>Activity
                         </div>
                         { dropdown }
                         { content }
