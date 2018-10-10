@@ -46,6 +46,8 @@
     padding-right: 5px;
 }
 
+.item-padding { padding: var(--item-margin); }
+
 /* DASHBOARD ITEMS */
 
 .dashboard-item {

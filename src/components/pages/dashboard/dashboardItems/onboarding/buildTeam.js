@@ -107,7 +107,7 @@ class BuildTeam extends Component {
 
     render() {
         return (
-            <div>
+            <div styleName="item-padding">
                 <div>
                     <div className="center font16px font14pxUnder700 font12pxUnder500">
                         Which of these is most interesting to you?

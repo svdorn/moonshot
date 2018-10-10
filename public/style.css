@@ -395,7 +395,7 @@ form > h1 {
     height: 50px;
     padding: 1px;
     margin: 10px 5px;
-    border: 1px solid white;
+    border: 2px solid white;
     border-radius: 4px;
     justify-content: center;
     text-align: center;
@@ -407,7 +407,7 @@ form > h1 {
 }
 
 .build-team .method-box.selected {
-    border: 1px solid var(--primary-cyan);
+    border-color: var(--primary-cyan);
     background-color: var(--primary-black-dark);
 }
 
