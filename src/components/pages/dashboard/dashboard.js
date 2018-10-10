@@ -10,6 +10,7 @@ import DashboardItem from "./dashboardItem";
 import InviteCandidatesModal from "./inviteCandidatesModal";
 import AddPositionDialog from '../../childComponents/addPositionDialog';
 import AddUserDialog from '../../childComponents/addUserDialog';
+import ROIOnboardingDialog from '../../childComponents/roiOnboardingDialog';
 
 import WelcomeMessage from "./dashboardItems/welcomeMessage";
 
@@ -28,6 +29,7 @@ class Dashboard extends Component {
             if (this.props.location.query.inviteCandidates === "open") {
                 this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
             } else if (this.props.location.query.ROI === "open") {
+                this.props.generalAction("OPEN_ROI_ONBOARDING_MODAL");
             }
         }
     }
@@ -54,6 +56,7 @@ class Dashboard extends Component {
                 <InviteCandidatesModal />
                 <AddPositionDialog />
                 <AddUserDialog />
+                <ROIOnboardingDialog />
                 <div className="page-line-header"><div/><div>Dashboard</div></div>
                 <WelcomeMessage />
                 <div styleName="dashboard">

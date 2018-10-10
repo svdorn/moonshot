@@ -40,6 +40,18 @@ export function usersReducers(state = initialState, action) {
                 loadingSomething: false
             };
             break;
+        case "OPEN_ROI_ONBOARDING_MODAL":
+            return {
+                ...state,
+                roiOnboardingOpen: true
+            };
+            break;
+        case "CLOSE_ROI_ONBOARDING_MODAL":
+            return {
+                ...state,
+                roiOnboardingOpen: false
+            };
+            break;
         case "OPEN_ADD_ADMIN_MODAL":
             return {
                 ...state,
