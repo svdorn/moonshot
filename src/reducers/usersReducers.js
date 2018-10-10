@@ -164,7 +164,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "INTERCOM_EVENT":
             Intercom('update');
-            return { ...state };
+            return { ...state, loadingSomething: false };
             break;
         case "LOGIN":
             if (action.user && action.user.intercom) {
