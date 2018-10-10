@@ -1,8 +1,9 @@
 "use strict"
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from 'react-router';
 import { bindActionCreators } from "redux";
-import {  } from "../../../actions/usersActions";
+import { generalAction } from "../../../actions/usersActions";
 import {  } from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
@@ -20,6 +21,12 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {};
+    }
+
+    componentDidMount() {
+        if (this.props.location && this.props.location.query && this.props.location.query.inviteCandidates === "open") {
+            this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
+        }
     }
 
     render() {
@@ -68,9 +75,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        generalAction
     }, dispatch);
 }
 
+Dashboard = withRouter(Dashboard);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

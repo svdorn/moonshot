@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { updateOnboardingStep } from "../../../../../actions/usersActions";
+import { updateOnboardingStep, intercomEvent } from "../../../../../actions/usersActions";
 import {  } from "../../../../../miscFunctions";
 
 import PsychSlider from "../../../evaluation/psychSlider";
@@ -26,7 +26,9 @@ class AdminView extends Component {
     }
 
     intercomMsg = () => {
-        console.log("here");
+        const { _id, verificationToken } = this.props.currentUser;
+        // trigger intercom event
+        this.props.intercomEvent('onboarding-step-2', _id, verificationToken, null);
     }
 
     render() {
@@ -74,7 +76,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateOnboardingStep
+        updateOnboardingStep,
+        intercomEvent
     }, dispatch);
 }
 

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router';
-import { updateOnboardingStep, addNotification, generalAction, updateUser, openAddPositionModal } from "../../../../../actions/usersActions";
+import { updateOnboardingStep, addNotification, generalAction, updateUser, openAddPositionModal, intercomEvent } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive } from "../../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -59,7 +59,9 @@ class WhatToDo extends Component {
     }
 
     intercomMsg = () => {
-        console.log("here");
+        const { _id, verificationToken } = this.props.currentUser;
+        // trigger intercom event
+        this.props.intercomEvent('onboarding-step-4', _id, verificationToken, null);
     }
 
     copyLink = () => {
@@ -177,7 +179,8 @@ function mapDispatchToProps(dispatch) {
         addNotification,
         generalAction,
         updateUser,
-        openAddPositionModal
+        openAddPositionModal,
+        intercomEvent
     }, dispatch);
 }
 

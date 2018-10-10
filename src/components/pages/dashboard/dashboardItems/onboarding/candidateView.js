@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { updateOnboardingStep } from "../../../../../actions/usersActions";
+import { updateOnboardingStep, intercomEvent } from "../../../../../actions/usersActions";
 import {  } from "../../../../../miscFunctions";
 import colors from "../../../../../colors";
 
@@ -33,11 +33,13 @@ class CandidateView extends Component {
         else { this.props.updateOnboardingStep(_id, verificationToken, 2); }
     }
 
-    intercomMsg = () => {
-        console.log("here");
+    intercomMsg = (instance) => {
+        const { _id, verificationToken } = this.props.currentUser;
+        // trigger intercom event
+        this.props.intercomEvent(`onboarding-step-1${instance}`, _id, verificationToken, null);
     }
 
-    emojiButtons() {
+    emojiButtons(instance) {
         return (
             <div styleName="emoji-buttons">
                 <div onClick={this.next}>
@@ -46,7 +48,7 @@ class CandidateView extends Component {
                     />
                     <div>Got it</div>
                 </div>
-                <div onClick={this.intercomMsg}>
+                <div onClick={() => this.intercomMsg(instance)}>
                     <img
                         src={`/icons/emojis/Face${this.props.png}`}
                     />
@@ -67,7 +69,7 @@ class CandidateView extends Component {
                 <div styleName="text-padding">
                     {"Candidates complete a series of questions so we can form archetypes and predict how they'll behave and fit in your work environment."}
                 </div>
-                    { this.emojiButtons() }
+                    { this.emojiButtons("a") }
                 </div>
                 <div className="noselect">
                     <div>Your friend offers to take you on a motorcycle ride, but it{"'"}s storming out:</div>
@@ -113,7 +115,7 @@ class CandidateView extends Component {
                         <li>Learn Quickly</li>
                         <li>Adapt to Complex Situations</li>
                     </ul>
-                    { this.emojiButtons() }
+                    { this.emojiButtons("b") }
                 </div>
                 <div className="gca-example">
                     <div className="left-align">Select the image that completes the pattern (easy example):</div>
@@ -146,7 +148,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateOnboardingStep
+        updateOnboardingStep,
+        intercomEvent
     }, dispatch);
 }
 
