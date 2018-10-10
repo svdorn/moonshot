@@ -423,12 +423,13 @@
 .activity-container > div:not(:first-child) {
     text-align: center;
 }
-.tips-for-hiring > div:first-child {
+.tips-for-hiring {}
+.tips-for-hiring-header {
     color: var(--secondary-gray);
     clear: both;
     padding: 6px 0;
 }
-.tips-for-hiring > div:nth-child(2) {
+.carousel-container {
     width: 680px;
     height: 100%;
     margin: auto;
@@ -469,7 +470,6 @@
     width: 600px;
     height: 140px;
     text-align: left;
-    font: 14px;
 }
 .carousel-frame > div:first-child {
     font-size: 18px;
@@ -540,10 +540,16 @@
     }
 
     .custom-page-title { font-size: 16px; }
+
+    .carousel-container { width: 480px; }
 }
 
 @media screen and (min-width: 571px) {
     .small-mobile-only { display: none; }
+    .carousel-frame {
+        width: 415px;
+        height: 188px;
+    }
 }
 
 @media screen and (max-width: 570px) {

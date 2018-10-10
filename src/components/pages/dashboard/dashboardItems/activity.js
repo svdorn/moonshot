@@ -198,11 +198,15 @@ class Activity extends Component {
 
         return (
             <div styleName="tips-for-hiring">
-                <div>
-                    While you{"'"}re waiting for candidates to complete your
-                    evaluation, here are some hiring tips:
+                <div styleName="desktop-only tips-for-hiring-header">
+                    { "While you're waiting for candidates to complete your \
+                    evaluation, here are some hiring tips:" }
                 </div>
-                <div>
+                <div styleName="mobile-only tips-for-hiring-header">
+                    { "A couple tips while you're waiting for candidates to \
+                    complete your evaluation:" }
+                </div>
+                <div styleName="carousel-container">
                     <Carousel
                         frames={[frame1, frame2, frame3, frame4]}
                         transitionDuration={1000}
