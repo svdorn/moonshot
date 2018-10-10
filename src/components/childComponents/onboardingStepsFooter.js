@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification } from '../../actions/usersActions';
+import { withRouter } from 'react-router';
 import { goTo } from "../../miscFunctions";
 import axios from 'axios';
 
@@ -30,8 +31,6 @@ const checklistInfo = [
 class OnboardingStepsFooter extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {};
     }
 
     makeChecklist() {
@@ -73,9 +72,21 @@ class OnboardingStepsFooter extends Component {
     }
 
     render() {
+        // get the current path from the url
+        let pathname = undefined;
+        // try to get the path; lowercased because capitalization will vary
+        try { pathname = this.props.location.pathname.toLowerCase(); }
+        // if the pathname is not yet defined, don't do anything, this will be executed again later
+        catch (e) { pathname = ""; }
+
         return (
             <div>
-                { this.makeChecklist() }
+                {pathname !== "/dashboard" ?
+                    <div>
+                        { this.makeChecklist() }
+                    </div>
+                    : null
+                }
             </div>
         );
     }
@@ -96,5 +107,6 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
+OnboardingStepsFooter = withRouter(OnboardingStepsFooter);
 
 export default connect(mapStateToProps, mapDispatchToProps)(OnboardingStepsFooter);
