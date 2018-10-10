@@ -139,7 +139,7 @@ class Activity extends Component {
         let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
         URL = encodeURI(URL);
         clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard.", "info");
+        this.props.addNotification("Link copied to clipboard", "info");
     }
 
     openAddPositionModal = () => {
@@ -153,16 +153,18 @@ class Activity extends Component {
     tipsForHiring() {
         const frame1 = (
             <div styleName="carousel-frame">
-                <div>First Things First</div>
+                <div>Tip #1: <span className="primary-cyan">First Things First</span></div>
                 <div>
                     Don{"'"}t forget to embed your candidate invite page in your hiring workflow and communications
-                    with candidates, otherwise all your effort so far will be lost. <u className="primary-cyan clickable" onClick={this.copyLink}>Copy your link.</u>
+                    with candidates, otherwise all your effort so far will be lost.
+                    <br/>
+                    <u className="primary-cyan clickable" onClick={this.copyLink}>Copy your link</u>
                 </div>
             </div>
         );
         const frame2 = (
             <div styleName="carousel-frame">
-                <div>Take Advantage</div>
+                <div>Tip #2: <span className="primary-cyan">Take Advantage</span></div>
                 <div>
                     We align our incentives to your desired outcome, exceptional hires, so we only charge when you hire
                     an awesome employee who stays at your company. This allows you to invite as many candidates, add as many
@@ -172,7 +174,7 @@ class Activity extends Component {
         );
         const frame3 = (
             <div styleName="carousel-frame">
-                <div>Don{"'"}t Screen Out Great Candidates</div>
+                <div>Tip #3: <span className="primary-cyan">Don{"'"}t Screen Out Great Candidates</span></div>
                 <div>
                     If you screen applicants before inviting them to complete an evaluation, you{"'"}re very likely dismissing your best candidates.
                     As you know by now, education and experience provide 1% and 1.1% predictive ability; other resume and LinkedIn data are horrible predictors too.
@@ -182,7 +184,7 @@ class Activity extends Component {
         );
         const frame4 = (
             <div styleName="carousel-frame">
-                <div>Double Down On Your Team</div>
+                <div>Tip #4: <span className="primary-cyan">Double Down On Your Team</span></div>
                 <div>
                     You{"'"}re sacrificing a huge opportunity if you don{"'"}t invite employees to be evaluated. This data enables us to really
                     customize {this.state.name}{"'"}s predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
