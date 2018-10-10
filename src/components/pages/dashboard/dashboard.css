@@ -57,6 +57,11 @@
 }
 
 
+.build-team-container { font-size: 14px; }
+.build-team-container > div:first-child { font-size: 16px; }
+.build-team-container > div:first-child > div:first-child { font-size: 14px; }
+
+
 /* ONBOARDING */
 .onboarding-dashboard-item {
     display: flex;
@@ -546,6 +551,9 @@
     .small-title { font-size: 14px; }
 
     .full-step-container { padding: var(--item-margin); }
+
+    .build-team-container { font-size: 12px; }
+    .build-team-container > div:first-child > div:first-child { font-size: 11px; }
 
     .dashboard-item-container.width-3 {
         width: var(--item-width);

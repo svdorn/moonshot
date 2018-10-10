@@ -31,11 +31,11 @@ class BuildTeam extends Component {
                     selected: false
                 },
                 {
-                    text: "Creating a hiring process that constantly learns and improves",
+                    text: "Reducing turnover",
                     selected: false
                 },
                 {
-                    text: "Reducing turnover",
+                    text: "Creating a hiring process that constantly learns and improves",
                     selected: false
                 }
             ]
@@ -108,10 +108,10 @@ class BuildTeam extends Component {
     render() {
         return (
             <div styleName="item-padding">
-                <div>
-                    <div className="center font16px font14pxUnder700 font12pxUnder500">
+                <div styleName="build-team-container">
+                    <div className="center">
                         Which of these is most interesting to you?
-                        <div className="primary-cyan font14px font12pxUnder700">Your choice(s) help us know where to focus</div>
+                        <div className="primary-cyan">Your choice(s) help us know where to focus</div>
                     </div>
                     <div className="build-team">
                         <div>{ this.makeChoices() }</div>
