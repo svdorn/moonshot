@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { generalAction, addNotification } from "../../../actions/usersActions";
 import { getFirstName } from "../../../miscFunctions";
-import clipboard from "clipboard-polyfill";
 import { Dialog, FlatButton, CircularProgress } from 'material-ui';
 import { primaryCyan } from "../../../colors";
 import axios from 'axios';
@@ -21,7 +20,6 @@ class InviteCandidatesModal extends Component {
         };
 
         this.handleClose = this.handleClose.bind(this);
-        this.copyLink = this.copyLink.bind(this);
     }
 
     componentDidMount() {
@@ -44,13 +42,6 @@ class InviteCandidatesModal extends Component {
 
     handleClose = () => {
         this.props.generalAction("CLOSE_INVITE_CANDIDATES_MODAL");
-    }
-
-    copyLink() {
-        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
-        URL = encodeURI(URL);
-        clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard.", "info");
     }
 
     makeDialogBody() {
@@ -84,15 +75,6 @@ class InviteCandidatesModal extends Component {
                     </div>
                 </div>
                 <div>
-                </div>
-                <div className="center">
-                    <button
-                        className="button noselect round-6px background-primary-cyan primary-white"
-                        onClick={this.copyLink}
-                        style={{padding: "3px 10px"}}
-                    >
-                        <span>{"Copy Message"}</span>
-                    </button>
                 </div>
             </div>
         );

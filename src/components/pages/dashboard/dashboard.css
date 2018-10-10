@@ -472,6 +472,16 @@
 .invite-candidates-modal > div:not(:first-child) {
     margin-top: 8px;
 }
+.invite-candidates-modal > div:nth-child(3) {
+    margin-top: 15px;
+    height: 100%;
+    display: inline-block;
+    padding: 10px;
+    position: relative;
+    -moz-box-shadow:    0px 0px 6px 3px rgba(0,0,0,.5);
+    -webkit-box-shadow: 0px 0px 6px 3px rgba(0,0,0,.5);
+    box-shadow:         0px 0px 6px 3px rgba(0,0,0,.5);
+}
 .invite-candidates-modal > div > div {
     margin-top: 5px;
     text-align: left;
