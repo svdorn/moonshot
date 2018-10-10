@@ -258,24 +258,24 @@ class MyEvaluations extends Component {
     popup() {
         if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.evaluations) {
             return (
-                <div className="center" key="popup box">
+                <div className="center marginBottom15px" key="popup box">
                     <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
                         <div className="popup-frame" style={{paddingBottom:"20px"}}>
                             <div>
                                 <img
                                     alt="Alt"
-                                    src={"/icons/Cube" + this.props.png}
+                                    src={"/icons/evaluationsBanner" + this.props.png}
                                 />
                             </div>
                             <div style={{marginTop:"20px"}}>
-                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to your Dashboard!</div>
+                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">An Overview of Your Evaluations</div>
                                 <div>
-                                    This is your dashboard, where you can see all the most recent activity across every
-                                    project in this workspace. It is the perfect place to start your day.
+                                    See the activity for each evaluation, invite employees to be evaluated to customize predictions, invite candidates
+                                    and add evaluations for any open position.
                                 </div>
                             </div>
                         </div>
-                        <div className="hide-message" onClick={this.hideMessage.bind(this)}>Hide Message</div>
+                        <div className="hide-message font14px font12pxUnder700" onClick={this.hideMessage.bind(this)}>Hide Message</div>
                     </div>
                 </div>
             );
@@ -413,8 +413,8 @@ class MyEvaluations extends Component {
         if (currentUser && currentUser.userType == "accountAdmin" && this.state.positions.length !== 0) {
             var link =
                 (<div className="secondary-gray font16px font14pxUnder900 font12pxUnder500" style={{width:"95%", margin:"20px auto 20px"}}>
-                    {this.state.businessName}&#39;s custom link that you can share with all of your candidates and embed in your hiring workflow:&nbsp;
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink.bind(this)} style={{padding: "3px 10px"}}>
+                    {this.state.businessName}&#39;s candidate invite page&nbsp;
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink.bind(this)} style={{padding: "2px 4Spx"}}>
                         {"Get Link"}
                     </button>
                 </div>);
@@ -428,6 +428,7 @@ class MyEvaluations extends Component {
             attributes.completions = 0;
             attributes.timeAllotted = 30;
             attributes.usersInProgress = 0;
+            attributes.buttonsNotClickable = true;
             key++;
 
             evaluations.push (
@@ -437,8 +438,13 @@ class MyEvaluations extends Component {
                     <div style={{filter:"blur(5px)"}}>
                         <MyEvaluationsPreview {...attributes} />
                     </div>
-                    <div className="font28px font26pxUnder700 font22pxUnder500 secondary-gray underline clickable center addEval" onClick={this.handleOpen}>
-                        + Add Evaluation
+                    <div className="font24px font22pxUnder700 font18pxUnder500 center addEval" onClick={this.handleOpen}>
+                        <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px primary-white"style={{padding: "2px 4Spx"}}>
+                            {"Add Evaluation"}
+                        </button>
+                        <div className="font16px font14pxUnder700 font12pxUnder500 secondary-gray">
+                            There{"'"}s no cost for adding evaluations
+                        </div>
                     </div>
                 </li>
             );

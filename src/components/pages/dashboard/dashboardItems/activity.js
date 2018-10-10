@@ -167,9 +167,9 @@ class Activity extends Component {
                 <div>
                     <div className="primary-cyan font18px font16pxUnder700">Take Advantage</div>
                     <div>
-                        We align our incentives to your desired outcome, exceptioinal hires, so we only charge when you hire
+                        We align our incentives to your desired outcome, exceptional hires, so we only charge when you hire
                         an awesome employee who stays at your company. This allows you to invite as many candidates, add as many
-                        positions and evaluate as many employees as your want so take advantage; <div className="primary-cyan clickable inlineBlock" onClick={this.openAddPositionModal}>add some more positions</div>.
+                        positions and evaluate as many employees as your want so take advantage and <div className="primary-cyan clickable inlineBlock" onClick={this.openAddPositionModal}>add some more positions</div>.
                     </div>
                 </div>
             </div>

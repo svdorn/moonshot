@@ -2375,8 +2375,8 @@ button.link {
 }
 
 .popup-frame > div:first-child > img {
-    height: 50px;
-    width: 50px;
+    height: 70px;
+    width: 70px;
 }
 
 .popup-frame > div:nth-child(2) {
@@ -2386,6 +2386,18 @@ button.link {
     height: 100%;
     top: 5px;
     width: 80%;
+}
+
+
+.employeesBox {
+    height: calc(100vh - 218px);
+    width: calc(100% - 40px);
+    min-height: 300px;
+    display: inline-block;
+    position: relative;
+    -moz-box-shadow:    0px 0px 6px 3px #00000073;
+    -webkit-box-shadow: 0px 0px 6px 3px #00000073;
+    box-shadow:         0px 0px 6px 3px #00000073;
 }
 
 .myCandidates .candidatesAndOptions {
@@ -2458,6 +2470,13 @@ button.link {
 .myCandidates.mobile .candidateTable {
     margin: 0 15px 15px 15px;
     width: calc(100% - 30px);
+}
+
+.myCandidates .candidateTable .name {
+
+}
+.myCandidates .candidateTable .name >span:hover {
+    color: var(--primary-cyan);
 }
 
 .myCandidates .candidateTable tr {

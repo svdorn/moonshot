@@ -36,18 +36,18 @@ class WelcomeMessage extends Component {
                             <div>
                                 <img
                                     alt="Alt"
-                                    src={"/icons/Cube" + this.props.png}
+                                    src={"/icons/dashboardBanner" + this.props.png}
                                 />
                             </div>
                             <div style={{marginTop:"20px"}}>
-                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to your Dashboard!</div>
+                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to Moonshot Insights!</div>
                                 <div>
-                                    This is your dashboard, where you can see all the most recent activity across every
-                                    project in this workspace. It is the perfect place to start your day.
+                                    We predict the success of your candidates and build a predictive model for your company. You simply share
+                                    your candidate invite page so candidates can complete their evaluations and you can review their results.
                                 </div>
                             </div>
                         </div>
-                        <div className="hide-message" onClick={this.hideMessage.bind(this)}>Hide Message</div>
+                        <div className="hide-message font14px font12pxUnder700" onClick={this.hideMessage.bind(this)}>Hide Message</div>
                     </div>
                 </div>
             );

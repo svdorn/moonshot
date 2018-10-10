@@ -16,16 +16,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox, hidePopups, addNotification } from "../../../actions/usersActions";
+import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox, hidePopups, addNotification, generalAction } from "../../../actions/usersActions";
 import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
 import AddUserDialog from '../../childComponents/addUserDialog';
+import CandidatesPopupDialog from '../../childComponents/candidatesPopupDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
-import Carousel from "./carousel";
-import clipboard from "clipboard-polyfill";
 import HoverTip from "../../miscComponents/hoverTip";
 
 import "./myCandidates.css";
@@ -107,6 +106,10 @@ class MyCandidates extends Component {
         // set an event listener for window resizing to see if mobile or desktop
         // view should be shown
         window.addEventListener("resize", this.bound_handleResize);
+        // see if the popup should be open
+        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.candidateModal) {
+            this.props.generalAction("OPEN_CANDIDATES_POPUP_MODAL");
+        }
         // get the open positions that this business has
         axios.get("/api/business/positions", {
             params: {
@@ -1018,49 +1021,25 @@ class MyCandidates extends Component {
 
     popup() {
         if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.candidates) {
-            const frame1 = (
-                <div className="popup-frame">
-                    <div>
-                        <img
-                            alt="Alt"
-                            src={"/icons/Cube" + this.props.png}
-                        />
-                    </div>
-                    <div style={{marginTop:"20px"}}>
-                        <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Welcome to your Dashboard!</div>
-                        <div>
-                            This is your dashboard, where you can see all the most recent activity across every
-                            project in this workspace. It is the perfect place to start your day.
-                        </div>
-                    </div>
-                </div>
-            );
-            const frame2 = (
-                <div className="popup-frame">
-                <div>
-                    <img
-                        alt="Alt"
-                        src={"/icons/Cube" + this.props.png}
-                    />
-                </div>
-                <div style={{marginTop:"20px"}}>
-                    <div className="primary-cyan font20px">Welcome to your Dashboard!</div>
-                    <div>
-                        Frame 2 this is your dashboard, where you can see all the most recent activity across every
-                        project in this workspace. It is the perfect place to start your day.
-                    </div>
-                </div>
-                </div>
-            );
-
             return (
                 <div className="center" key="popup box">
                     <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
-                        <Carousel
-                            frames={[frame1, frame2]}
-                            transitionDuration={1000}
-                        />
-                        <div className="hide-message" onClick={this.hideMessage.bind(this)}>Hide Message</div>
+                        <div className="popup-frame" style={{paddingBottom:"20px"}}>
+                            <div>
+                                <img
+                                    alt="Alt"
+                                    src={"/icons/candidatesBanner" + this.props.png}
+                                />
+                            </div>
+                            <div style={{marginTop:"20px"}}>
+                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Improve Your Predictive Model</div>
+                                <div>
+                                    Review candidate reports and predictions, contact candidates to invite them to interviews, track their
+                                    stage or dismiss them from consideration.
+                                </div>
+                            </div>
+                        </div>
+                        <div className="hide-message font14px font12pxUnder700" onClick={this.hideMessage.bind(this)}>Hide Message</div>
                     </div>
                 </div>
             );
@@ -1178,13 +1157,6 @@ class MyCandidates extends Component {
                 </div>
             </div>
         );
-    }
-
-    copyLink() {
-        let URL = "https://moonshotinsights.io/apply/" + this.state.businessName;
-        URL = encodeURI(URL);
-        clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard.", "info");
     }
 
     mobileTopOptions() {
@@ -1331,6 +1303,8 @@ class MyCandidates extends Component {
         const candidateResultsClass = "candidateResults " + resultsWidthClass;
         const leftArrowContainerClass = "left arrowContainer " + resultsWidthClass;
         const rightArrowContainerClass = "right arrowContainer " + resultsWidthClass;
+        const blurredClass = this.props.blurModal ? "dialogForBizOverlay" : "";
+
         // if the candidate is at the top of the list or not in the current list, disable the left arrow
         const leftArrowClass = "left circleArrowIcon" + (typeof this.state.resultsCandidateIndex === "number" && this.state.resultsCandidateIndex > 0 ? "" : " disabled");
         // if the candidate is in the list but is the last candidate OR if there
@@ -1340,82 +1314,85 @@ class MyCandidates extends Component {
         const mobileClass = this.state.mobile ? " mobile" : ""
 
         return (
-            <div className={"jsxWrapper blackBackground fillScreen myCandidates primary-white" + mobileClass} style={{paddingBottom: "20px"}} ref='myCandidates'>
-                {this.props.currentUser.userType == "accountAdmin" ?
-                    <AddUserDialog position={this.state.position} tab={"Candidate"}/>
-                    : null
-                }
-                <MetaTags>
-                    <title>My Candidates | Moonshot</title>
-                    <meta name="description" content="View analytical breakdowns and manage your candidates."/>
-                </MetaTags>
+            <div className={"jsxWrapper blackBackground fillScreen myCandidates primary-white " + mobileClass} style={{paddingBottom: "20px"}} ref='myCandidates'>
+                <div className={blurredClass}>
+                    {this.props.currentUser.userType == "accountAdmin" ?
+                        <AddUserDialog position={this.state.position} tab={"Candidate"}/>
+                        : null
+                    }
+                    <CandidatesPopupDialog />
+                    <MetaTags>
+                        <title>My Candidates | Moonshot</title>
+                        <meta name="description" content="View analytical breakdowns and manage your candidates."/>
+                    </MetaTags>
 
-                <div className="page-line-header"><div/><div>Candidates</div></div>
+                    <div className="page-line-header"><div/><div>Candidates</div></div>
 
-                { this.popup() }
+                    { this.popup() }
 
-                { tabs }
+                    { tabs }
 
-                { this.infoBox() }
+                    { this.infoBox() }
 
-                <div className="center">
-                    <div className="candidatesAndOptions">
-                        {this.state.mobile ? null :
-                            <div className="my-candidates-position-selector">
-                                { this.positionSelector() }
-                                <br/>
-                                <div
-                                    className="add-candidate primary-cyan pointer"
-                                    onClick={this.props.openAddUserModal}
-                                >
-                                    + <span className="underline">Add Candidate</span>
-                                </div>
-                            </div>
-                        }
-                        { this.state.mobile ? this.mobileTopOptions() : this.topOptions() }
-                        <div className="candidatesContainer">
-                            <div>
-                                { this.createCandidatesTable(positionId) }
-                                <div className="myCandidatesOverlayContainer">
-                                    { !this.state.mobile && this.state.mockData ?
-                                        <div className="myCandidatesOverlay primary-cyan" onClick={this.copyLink.bind(this)}>
-                                            Share your custom link with your candidates
-                                        </div>
-                                         : null
-                                    }
-                                </div>
-                            </div>
-                            { this.state.showResults ?
-                                <div>
-                                    <CandidateResults
-                                        className={candidateResultsClass}
-                                        candidateId={this.state.resultsCandidateId}
-                                        positionId={this.state.positionId}
-                                        toggleFullScreen={this.toggleFullScreen.bind(this)}
-                                        exitResults={this.exitResults.bind(this)}
-                                        rateInterest={this.rateInterest.bind(this)}
-                                        hiringStageChange={this.hiringStageChange.bind(this)}
-                                        fullScreen={this.state.fullScreenResults}
-                                        mobile={this.state.mobile}
-                                        interest={this.state.interest}
-                                        mockData={this.state.mockData}
-                                        candidates={this.state.mockData ? this.state.candidates : null}
-                                    />
-                                    <div className={leftArrowContainerClass} onClick={() => this.nextPreviousResults(false)}>
-                                        <div className={leftArrowClass} />
+                    <div className="center">
+                        <div className="candidatesAndOptions">
+                            {this.state.mobile ? null :
+                                <div className="my-candidates-position-selector">
+                                    { this.positionSelector() }
+                                    <br/>
+                                    <div
+                                        className="add-candidate primary-cyan pointer"
+                                        onClick={this.props.openAddUserModal}
+                                    >
+                                        + <span className="underline">Add Candidate</span>
                                     </div>
-                                    <div className={rightArrowContainerClass} onClick={() => this.nextPreviousResults(true)}>
-                                        <div className={rightArrowClass} />
-                                    </div>
-
                                 </div>
-                                : null
                             }
+                            { this.state.mobile ? this.mobileTopOptions() : this.topOptions() }
+                            <div className="candidatesContainer">
+                                <div>
+                                    { this.createCandidatesTable(positionId) }
+                                    <div className="myCandidatesOverlayContainer">
+                                        { !this.state.mobile && this.state.mockData ?
+                                            <div className="myCandidatesOverlay secondary-gray" onClick={this.openAddUserModal.bind(this)}>
+                                                This is mock data. <u className="primary-cyan">Start inviting your candidates.</u>
+                                            </div>
+                                             : null
+                                        }
+                                    </div>
+                                </div>
+                                { this.state.showResults ?
+                                    <div>
+                                        <CandidateResults
+                                            className={candidateResultsClass}
+                                            candidateId={this.state.resultsCandidateId}
+                                            positionId={this.state.positionId}
+                                            toggleFullScreen={this.toggleFullScreen.bind(this)}
+                                            exitResults={this.exitResults.bind(this)}
+                                            rateInterest={this.rateInterest.bind(this)}
+                                            hiringStageChange={this.hiringStageChange.bind(this)}
+                                            fullScreen={this.state.fullScreenResults}
+                                            mobile={this.state.mobile}
+                                            interest={this.state.interest}
+                                            mockData={this.state.mockData}
+                                            candidates={this.state.mockData ? this.state.candidates : null}
+                                        />
+                                        <div className={leftArrowContainerClass} onClick={() => this.nextPreviousResults(false)}>
+                                            <div className={leftArrowClass} />
+                                        </div>
+                                        <div className={rightArrowContainerClass} onClick={() => this.nextPreviousResults(true)}>
+                                            <div className={rightArrowClass} />
+                                        </div>
+
+                                    </div>
+                                    : null
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div style={{height: "40px"}} />
+                    <div style={{height: "40px"}} />
+                </div>
             </div>
         );
     }
@@ -1452,7 +1429,8 @@ function mapDispatchToProps(dispatch) {
         openAddUserModal,
         sawMyCandidatesInfoBox,
         hidePopups,
-        addNotification
+        addNotification,
+        generalAction
     }, dispatch);
 }
 
@@ -1462,7 +1440,8 @@ function mapStateToProps(state) {
         notification: state.users.notification,
         currentUser: state.users.currentUser,
         png: state.users.png,
-        loading: state.users.loadingSomething
+        loading: state.users.loadingSomething,
+        blurModal: state.users.candidatesPopupModalOpen,
     };
 }
 
