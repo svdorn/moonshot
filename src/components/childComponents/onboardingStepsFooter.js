@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification } from '../../actions/usersActions';
+import { addNotification, postBusinessInterests } from '../../actions/usersActions';
 import { withRouter } from 'react-router';
 import { goTo } from "../../miscFunctions";
 import axios from 'axios';
@@ -31,6 +31,25 @@ const checklistInfo = [
 class OnboardingStepsFooter extends Component {
     constructor(props) {
         super(props);
+
+        this.startOnboarding = this.startOnboarding.bind(this);
+    }
+
+    startOnboarding = () => {
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+        const businessId = this.props.currentUser.businessInfo.businessId;
+        const choiceArr = [];
+        let popups = this.props.currentUser.popups;
+        if (popups) {
+            popups.businessInterests = false;
+        } else {
+            popups = {};
+            popups.businessInterests = false;
+        }
+
+        this.props.postBusinessInterests(userId, verificationToken, businessId, choiceArr, popups);
+        goTo("/dashboard");
     }
 
     makeChecklist() {
@@ -47,7 +66,7 @@ class OnboardingStepsFooter extends Component {
         let onClick = () => goTo("/dashboard");
         if (popups && popups.businessInterests && highestStep === 1) {
             buttonText = "Start";
-            onClick = () => goTo("/dashboard?ROI=open");
+            onClick = () => this.startOnboarding();
         }
         // create the item list shown on the left
         const checklistItems = checklistInfo.map(info => {
@@ -113,6 +132,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addNotification,
+        postBusinessInterests
     }, dispatch);
 }
 

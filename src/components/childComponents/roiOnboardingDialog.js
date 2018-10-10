@@ -48,15 +48,9 @@ class ROIOnboardingDialog extends Component {
                         anytime in the next 24 hours.
                     </div>
                     <div className="marginTop20px font18px font16pxUnder700">
-                        {!this.props.loading ?
-                            <button className="button noselect round-6px background-primary-cyan primary-white" onClick={this.handleClose} style={{padding: "3px 10px"}}>
-                                <span>{"Let's Do This"}</span>
-                            </button>
-                            :
-                            <div className="center marginTop20px">
-                                <CircularProgress style={{ color: primaryCyan }} />
-                            </div>
-                        }
+                        <button className="button noselect round-6px background-primary-cyan primary-white" onClick={this.handleClose} style={{padding: "3px 10px"}}>
+                            <span>{"Let's Do This"}</span>
+                        </button>
                     </div>
                 </div>
             </Dialog>

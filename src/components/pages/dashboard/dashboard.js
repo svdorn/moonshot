@@ -25,12 +25,8 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        if (this.props.location && this.props.location.query) {
-            if (this.props.location.query.inviteCandidates === "open") {
-                this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
-            } else if (this.props.location.query.ROI === "open") {
-                this.props.generalAction("OPEN_ROI_ONBOARDING_MODAL");
-            }
+        if (this.props.location && this.props.location.query && this.props.location.query.inviteCandidates === "open") {
+            this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
         }
     }
 
@@ -47,8 +43,13 @@ class Dashboard extends Component {
             activity = <DashboardItem type="BuildTeam" width={3} />;
         }
 
+        let blurredClass = '';
+        if (this.props.blurredClass) {
+            blurredClass = 'dialogForBizOverlay';
+        }
+
         return (
-            <div className="center full-height">
+            <div className={"center full-height " + blurredClass}>
                 <MetaTags>
                     <title>Dashboard | Moonshot</title>
                     <meta name="description" content="Your home base for checking in on your candidates, employees, evaluations, and more."/>
@@ -76,6 +77,7 @@ class Dashboard extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        blurredClass: state.users.roiOnboardingOpen,
     };
 }
 
