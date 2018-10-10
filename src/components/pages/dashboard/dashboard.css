@@ -275,10 +275,10 @@
     transform: translate(-50%);
 }
 .admin-image {
-    height: 90%;
+    height: 80%;
     position: absolute;
-    bottom: 5%;
-    left: 50%;
+    bottom: 10%;
+    left: 48%;
     transform: translate(-50%);
     border: 1px solid var(--primary-black-dark);
 }
@@ -605,8 +605,8 @@
     }
 
     .admin-image {
-        height: 85%;
-        bottom: 7%;
+        height: 75%;
+        bottom: 12%;
     }
     .onboarding-title { font-size: 18px; }
 

@@ -70,7 +70,7 @@ class AdminView extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
     };
 }
 
