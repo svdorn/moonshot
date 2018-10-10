@@ -24,8 +24,11 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        if (this.props.location && this.props.location.query && this.props.location.query.inviteCandidates === "open") {
-            this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
+        if (this.props.location && this.props.location.query) {
+            if (this.props.location.query.inviteCandidates === "open") {
+                this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
+            } else if (this.props.location.query.ROI === "open") {
+            }
         }
     }
 
