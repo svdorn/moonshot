@@ -36,13 +36,7 @@ class WhatToDo extends Component {
             }
         })
         .then(function (res) {
-            self.setState(
-                { uniqueName: res.data.uniqueName, name: res.data.name },
-                () => {
-                    try { document.getElementById("unique-link").select(); }
-                    catch (e) { /* not a big deal if can't highlight the link */ }
-                }
-            )
+            self.setState({ uniqueName: res.data.uniqueName, name: res.data.name })
         })
         .catch(function (err) {
             self.props.addNotification("Error loading page.", "error");
@@ -82,6 +76,12 @@ class WhatToDo extends Component {
     }
 
 
+    highlight(event) {
+        try { event.target.select(); }
+        catch (e) { /* not a big deal if can't highlight the link */ }
+    }
+
+
     makeBody() {
         return (
             <div styleName="copy-link-view">
@@ -108,6 +108,7 @@ class WhatToDo extends Component {
                     <input
                         id="unique-link"
                         readOnly={true}
+                        onClick={this.highlight}
                         value={`https://moonshotinsights.io/apply/${this.state.uniqueName}`}
                     />
                     <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" onClick={this.copyLink} style={{padding: "3px 10px"}}>
