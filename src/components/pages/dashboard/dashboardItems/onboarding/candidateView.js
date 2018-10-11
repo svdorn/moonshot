@@ -42,8 +42,8 @@ const psychSliders = questions.map((q, index) => {
                 width={200}
                 height={100}
                 backgroundColor={"#393939"}
-                color1={colors.primaryCyan}
-                color2={colors.primaryPurpleLight}
+                color1={colors.primaryWhite}
+                color2={colors.primaryCyan}
                 className="center"
                 updateAnswer={() => {}}
                 questionId={index + 1}
