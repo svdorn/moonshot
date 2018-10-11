@@ -81,7 +81,6 @@ class Apply extends Component {
 
     // call this after positions are found from back end
     positionsFound(positions, logo, company, admin, pageSetUp) {
-        console.log("pageSetUp: ", pageSetUp);
         if (Array.isArray(positions) && positions.length > 0) {
             const position = positions[0].name;
             if (admin) { positions.push({ name: "Add more positions later" }) }
@@ -139,6 +138,7 @@ class Apply extends Component {
     }
 
 
+    // info for an admin coming to preview this page
     adminInformation() {
         return (
             <div>
@@ -165,41 +165,83 @@ class Apply extends Component {
     }
 
 
+    // returns a button that lets you sign up
+    nextButton() {
+        return (
+            <button
+                className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
+                styleName="next-button"
+                onClick={this.handleSignUp.bind(this)}
+                style={{padding: "6px 20px"}}
+            >
+                <span>Next &#8594;</span>
+            </button>
+        );
+    }
+
+
+    // for a candidate seeing this page before it has been set up
+    pageNotSetUp() {
+        return (
+            <div>
+                <div styleName="employer-box">
+                    <div>
+                        The administrator of this company account has not yet
+                        verified their email to activate this page. If you are
+                        the administrator:
+                    </div>
+                    <div onClick={() => goTo("/dashboard")}>
+                        Verify Your Email <img src={`/icons/ArrowBlue${this.props.png}`} />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+
     render() {
+        let content = null;
+
+        const { pageSetUp, admin, company, position } = this.state;
+
+        // company has loaded
+        if (company) {
+            let actionsToTake = null;
+            if (admin) { actionsToTake = this.adminInformation(); }
+            else if (pageSetUp === false) { actionsToTake = this.pageNotSetUp(); }
+            else { actionsToTake = this.nextButton(); }
+
+            content = (
+                <div>
+                    <div className="marginTop50px marginBottom30px">
+                        <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">{this.state.company} Evaluation</div>
+                        <div className="font16px font14pxUnder700 font12pxUnder500 secondary-gray" styleName="powered-by">Powered by Moonshot Insights</div>
+                    </div>
+                    <div className="font16px font14pxUnder500 primary-cyan" style={{width: "88%", margin:"auto"}}>
+                        Select the position you would like to apply for.
+                    </div>
+                    <div className="font30px font16pxUnder400 marginBottom30px">
+                        {this.makeDropdown(position)}
+                    </div>
+                    { actionsToTake }
+                </div>
+            );
+        }
+
+        // page is still loading
+        else {
+            content = (
+                <div>
+                    <div className="font18px font16pxUnder700 font14pxUnder500 secondary-gray marginTop30px">
+                        Loading...
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div className="jsxWrapper blackBackground fillScreen center">
-                {this.state.company ?
-                    <div>
-                        <div className="marginTop50px marginBottom30px">
-                            <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">{this.state.company} Evaluation</div>
-                            <div className="font16px font14pxUnder700 font12pxUnder500 secondary-gray" styleName="powered-by">Powered by Moonshot Insights</div>
-                        </div>
-                        <div className="font16px font14pxUnder500 primary-cyan" style={{width: "88%", margin:"auto"}}>
-                            Select the position you would like to apply for.
-                        </div>
-                        <div className="font30px font16pxUnder400 marginBottom30px">
-                            {this.makeDropdown(this.state.position)}
-                        </div>
-                        {this.state.admin ?
-                            this.adminInformation()
-                            :
-                            <button
-                                className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
-                                styleName="next-button"
-                                onClick={this.handleSignUp.bind(this)}
-                                style={{padding: "6px 20px"}}
-                            >
-                                <span>Next &#8594;</span>
-                            </button>
-                        }
-                    </div>
-                    :
-                    <div>
-                        <div className="font18px font16pxUnder700 font14pxUnder500 secondary-gray marginTop30px">
-                            Loading...
-                        </div>
-                    </div>
-                }
+                { content }
             </div>
         );
     }

@@ -4,6 +4,7 @@ const Businesses = require('../models/businesses.js');
 const Signupcodes = require('../models/signupcodes.js');
 const Intercom = require('intercom-client');
 const credentials = require("../credentials");
+const mongoose = require("mongoose");
 
 const client = new Intercom.Client({ token: credentials.intercomToken });
 
@@ -352,7 +353,7 @@ function POST_candidate(req, res) {
             let dbCode;
             try { dbCode = await Signupcodes.findOne({ code }); }
             catch (findCodeError) {
-                return reject({status: 500, message: "Error signing up. Try again later or ask employer for a new code.", error: findCodeError});
+                return reject({status: 500, message: "Error signing up. Try again later or contact support.", error: findCodeError});
             }
 
             if (!dbCode) {
@@ -387,6 +388,30 @@ function POST_candidate(req, res) {
             else {
                 const NOW = new Date();
                 startDate = NOW;
+            }
+
+            // make sure the business can be signed up for - business has to
+            // have at least one admin who has verified their email
+            try {
+                const verifiedAdminsQuery = {
+                    "userType": "accountAdmin",
+                    "verified": true,
+                    "businessInfo.businessId": mongoose.Types.ObjectId(businessId)
+                }
+                const verifiedUser = await Users.findOne(verifiedAdminsQuery);
+                if (verifiedUser == null) {
+                    return reject({
+                        status: 401,
+                        message: "This company hasn't finished setting up their account yet",
+                        error: new Error(`No verified admin for business with id ${businessId}`)
+                    });
+                }
+            } catch (findVerifiedError) {
+                return reject({
+                    status: 500,
+                    message: "Error signing up. Try again later or contact support.",
+                    error: findVerifiedError
+                });
             }
 
             // code is legit and all properties using it are set; resolve
