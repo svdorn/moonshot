@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification, openAddPositionModal, openAddUserModal } from "../../../../actions/usersActions";
+import { addNotification, openAddPositionModal, openAddUserModal, generalAction } from "../../../../actions/usersActions";
 import { propertyExists, goTo, makePossessive } from "../../../../miscFunctions";
 import clipboard from "clipboard-polyfill";
 import Carousel from "../../../miscComponents/carousel";
@@ -150,6 +150,10 @@ class Activity extends Component {
         this.props.openAddUserModal();
     }
 
+    openEmailTemplateModal = () => {
+        this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
+    }
+
     tipsForHiring() {
         const frame1 = (
             <div styleName="carousel-frame">
@@ -251,14 +255,17 @@ class Activity extends Component {
         let self = this;
         let buttons = [];
         if (this.state.data === 0) {
-            buttons = [{ name: `Invite ${this.state.tab}`, action: "self.openAddPositionModal"}, { name: "Add Position", action: "self.openAddPositionModal" }]
+            buttons = [
+                { name: `Invite ${this.state.tab}`, action: "self.openEmailTemplateModal"},
+                { name: "Add Position", action: "self.openAddPositionModal" }
+            ]
         } else {
             buttons = [{ name: "Review Candidates", action: "self.reviewCandidates" }]
         }
 
         const displayButtons = buttons.map(button => {
             return (
-                <div styleName="awaiting-review-buttons">
+                <div styleName="awaiting-review-buttons" key={"button " + button.name}>
                     <button
                         className="button noselect round-6px background-primary-cyan primary-white"
                         onClick={eval(button.action)}
@@ -348,7 +355,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addNotification,
         openAddPositionModal,
-        openAddUserModal
+        openAddUserModal,
+        generalAction
     }, dispatch);
 }
 

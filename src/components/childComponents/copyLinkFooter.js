@@ -44,8 +44,6 @@ class CopyLinkFooter extends Component {
             axios.get("/api/business/candidatesTotal", countQuery )
             .then(response => {
                 if (propertyExists(response, ["data", "totalCandidates"]), "number") {
-                    console.log("res: ", response.data.totalCandidates)
-                    console.log("res: ", response.data);
                     self.setState({ name: res.data.name, uniqueName: res.data.uniqueName, candidateCount: response.data.totalCandidates })
                 } else {
                     self.setState({ fetchDataError: true });
