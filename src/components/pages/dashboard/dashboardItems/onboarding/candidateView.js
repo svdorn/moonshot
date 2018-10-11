@@ -30,7 +30,7 @@ const questions = [
         rightOption: "Something new"
     }
 ];
-const psychSliders = questions.map(q => {
+const psychSliders = questions.map((q, index) => {
     return (
         <div>
             <div styleName="ex-question-text">{ q.text }</div>
@@ -46,7 +46,7 @@ const psychSliders = questions.map(q => {
                 color2={colors.primaryPurpleLight}
                 className="center"
                 updateAnswer={() => {}}
-                questionId={"1"}
+                questionId={index + 1}
             />
         </div>
     );
