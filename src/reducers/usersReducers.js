@@ -291,8 +291,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 userPosted: true,
-                loadingSomething: false,
-                waitingForFinalization: action.waitingForFinalization
+                loadingSomething: false
             };
             break;
         case "POST_USER_SUCCESS_EMAIL_FAIL":

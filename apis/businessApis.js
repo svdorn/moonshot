@@ -655,7 +655,6 @@ async function createPosition(name, type, businessId, isManager) {
             isManager,
             length: type === "Developer" ? 40 : 22,
             dateCreated: Date.now(),
-            finalized: true,
             timeAllotted: 60
         }
 
@@ -1167,21 +1166,14 @@ async function makeCodeAndSendAdminInvite(businessId, businessName, email, userN
 
 // send email invites to multiple email addresses with varying user types
 async function POST_emailInvites(req, res) {
-    const { candidateEmails, employeeEmails, adminEmails, userId, userName,
+    const { candidateEmails, employeeEmails, userId, userName,
             verificationToken, businessId, positionId, positionName } = sanitize(req.body);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!Array.isArray(candidateEmails) || !Array.isArray(employeeEmails) || !Array.isArray(adminEmails) || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
-        console.log(candidateEmails, employeeEmails, adminEmails, userId, userName,
+    if (!Array.isArray(candidateEmails) || !Array.isArray(employeeEmails) || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
+        console.log(candidateEmails, employeeEmails, userId, userName,
                 verificationToken, businessId, positionId, positionName);
         return res.status(400).send("Bad request.");
-    }
-
-    // where links in the email will go
-    let moonshotUrl = 'https://moonshotinsights.io/';
-    // if we are in development, links are to localhost
-    if (process.env.NODE_ENV === "development") {
-        moonshotUrl = 'http://localhost:8081/';
     }
 
     // get the business and ensure the user has access to send invite emails
@@ -1205,24 +1197,16 @@ async function POST_emailInvites(req, res) {
     const position = business.positions[positionIndex];
     if (!position) { return res.status(403).send("Not a valid position."); }
     const businessName = business.name;
-    // whether the position is ready for candidates and employees to go through
-    const positionFinalized = position.finalized;
 
     // a list of promises that will resolve to objects containing new codes
     // as well as all user-specific info needed to send the invite email
     let emailPromises = [];
-    adminEmails.forEach(email => {
-        emailPromises.push(createEmailInfo(businessId, positionId, "accountAdmin", email));
+    candidateEmails.forEach(email => {
+        emailPromises.push(createEmailInfo(businessId, positionId, "candidate", email));
     });
-    // only add employee and candidate emails if the eval is ready to be taken
-    if (positionFinalized) {
-        candidateEmails.forEach(email => {
-            emailPromises.push(createEmailInfo(businessId, positionId, "candidate", email));
-        });
-        employeeEmails.forEach(email => {
-            emailPromises.push(createEmailInfo(businessId, positionId, "employee", email));
-        });
-    }
+    employeeEmails.forEach(email => {
+        emailPromises.push(createEmailInfo(businessId, positionId, "employee", email));
+    });
 
     // wait for all the email object promises to resolve
     let emailInfoObjects;
@@ -1245,35 +1229,7 @@ async function POST_emailInvites(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    // if the position has already been finalized OR there are no candidates or
-    // employees to add, business does not need to be saved
-    if (positionFinalized || (candidateEmails.length === 0 && employeeEmails.length === 0)) {
-        // successfully sent all the emails
-        return res.json({success: true, waitingForFinalization: false});
-    }
-    // if the position is not finalized, have to save the emails of the users
-    // who will have to be emailed once the position is live
-    else {
-        try {
-            if (candidateEmails.length > 0) {
-                let oldCandidateEmails = business.positions[positionIndex].preFinalizedCandidates;
-                if (!oldCandidateEmails) { oldCandidateEmails = []; }
-                business.positions[positionIndex].preFinalizedCandidates = oldCandidateEmails.concat(candidateEmails);
-            }
-            if (employeeEmails.length > 0) {
-                let oldEmployeeEmails = business.positions[positionIndex].preFinalizedEmployees;
-                if (!oldEmployeeEmails) { oldEmployeeEmails = []; }
-                business.positions[positionIndex].preFinalizedEmployees = oldEmployeeEmails.concat(employeeEmails);
-            }
-            await business.save();
-            res.status(200).send({success: true, waitingForFinalization: true});
-        }
-        catch (saveBizError) {
-            console.log("Error saving business with a non-finalized position when adding users: ", saveBizError);
-            console.log("Arrays that were not saved into business: ", candidateEmails, employeeEmails);
-            return res.status(500).send("Error adding users. Contact support or try again.");
-        }
-    }
+    res.status(200).send({ success: true });
 }
 
 // create link that people can sign up as
@@ -1289,13 +1245,6 @@ async function POST_createLink(req, res) {
     // if one of the arguments doesn't exist, return with error code
     if (!userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
         return res.status(400).send("Bad request.");
-    }
-
-    // where links in the email will go
-    let moonshotUrl = 'https://moonshotinsights.io/';
-    // if we are in development, links are to localhost
-    if (process.env.NODE_ENV === "development") {
-        moonshotUrl = 'http://localhost:8081/';
     }
 
     // get the business and ensure the user has access to send invite emails
@@ -1631,9 +1580,8 @@ async function POST_addEvaluation(req, res) {
 
      try { await business.save(); }
      catch (saveBizError) {
-         console.log("Error saving business with a non-finalized position when adding users: ", saveBizError);
-         console.log("Arrays that were not saved into business: ", candidateEmails, employeeEmails);
-         return res.status(500).send("Error adding users. Contact support or try again.");
+         console.log("Error saving business when adding new eval: ", saveBizError);
+         return res.status(500).send("Error adding position. Contact support or try again.");
      }
 
     return res.json(business.positions);
@@ -2304,7 +2252,7 @@ async function GET_positions(req, res) {
     try {
         var business = await Businesses
             .findById(businessId)
-            .select("logo name uniqueName positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.finalized positions.dateCreated");
+            .select("logo name uniqueName positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
         return res.status(500).send("Server error, couldn't get positions.");

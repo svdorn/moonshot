@@ -4,17 +4,8 @@ const mongoose = require('mongoose');
 const positionSchema = mongoose.Schema({
     // name of the position (such as "Machine Learning Developer")
     name: String,
-    // if the position evaluation is ready to be taken
-    finalized: Boolean,
-    // a list of emails of candidates who need to be sent an invite email once
-    // position is finalized
-    preFinalizedCandidates: [ String ],
-    // same deal for employees
-    preFinalizedEmployees: [ String ],
-    // the date the position was created (but not necessarily finalized)
+    // the date the position was created
     dateCreated: Date,
-    // the date the position was finalized and opened up to be taken
-    dateFinalized: Date,
     // whether the position can be applied to by anyone or if they need a unique
     // one time code
     open: Boolean,

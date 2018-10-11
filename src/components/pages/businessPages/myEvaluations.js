@@ -361,7 +361,6 @@ class MyEvaluations extends Component {
                     if (["accountAdmin", "manager"].includes(currentUser.userType)) {
                         attributes.variation = "edit";
                         attributes.name = position.name;
-                        attributes.finalized = position.finalized;
                         attributes.logo = self.state.logo;
                         attributes.length = position.length;
                         attributes.positionKey = position._id;

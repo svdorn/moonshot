@@ -409,15 +409,14 @@ export function postUser(user) {
 }
 
 // INVITE ANY TYPE OF USER VIA EMAIL
-export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo) {
+export function postEmailInvites(candidateEmails, employeeEmails, currentUserInfo) {
     return function(dispatch) {
         dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
 
-        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, adminEmails, ...currentUserInfo})
+        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, ...currentUserInfo})
         // email invites success
         .then(function(res) {
-            const waitingForFinalization = !!res && !!res.data && res.data.waitingForFinalization === true;
-            dispatch({type: "POST_EMAIL_INVITES_SUCCESS", waitingForFinalization});
+            dispatch({ type: "POST_EMAIL_INVITES_SUCCESS" });
         })
         // error posting email invites
         .catch(function(err) {
