@@ -209,7 +209,7 @@ class AddAdminDialog extends Component {
                         Success!
                     </div>
                     <div className="primary-white font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
-                            Account admin invitation emails have been sent!
+                            Account admin invitation emails have been sent
                     </div>
                     <RaisedButton
                         label="Done"
@@ -266,7 +266,7 @@ class AddAdminDialog extends Component {
 
                         <div className="center marginTop20px">
                             <div className="center font14px font12pxUnder500 primary-white marginBottom15px">
-                                Administrators can add and remove users, grade employees, and view results.
+                                Administrators can add other admins, invite candidates and employees, grade employees, and view candidate results.
                             </div>
                             <div>
                                 { adminEmailSection }

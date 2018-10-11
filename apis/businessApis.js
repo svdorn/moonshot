@@ -1098,7 +1098,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                         + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
                         + '<p style="width:95%; display:inline-block; text-align:left;">' + userName + ' invited you to be an admin for ' + businessName + '&#39;s predictive candidate evaluations.'
                         + ' Please click the button below to create your account.'
-                        + ' Once you&#39;ve created your account you can begin adding other admins, employees, and candidates, as well as grade employees and review evaluation results.</p>'
+                        + ' Once you&#39;ve created your account you can begin adding other admins, employees, and candidates, as well as grading employees and reviewing evaluation results.</p>'
                         + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights and candidate predictions!</p><br/>'
                         + createAccountButton
                         + emailFooter
