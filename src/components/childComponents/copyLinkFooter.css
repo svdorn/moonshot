@@ -7,6 +7,7 @@
     vertical-align: top;
     text-align: center;
     display: initial;
+    z-index: 100;
     -webkit-box-shadow: 0 0 3px 0px #212121;
        -moz-box-shadow: 0 0 3px 0px #212121;
             box-shadow: 0 0 3px 0px #212121;

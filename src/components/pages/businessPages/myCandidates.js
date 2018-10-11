@@ -1010,8 +1010,12 @@ class MyCandidates extends Component {
                             <div style={{marginTop:"20px"}}>
                                 <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Improve Your Predictive Model</div>
                                 <div>
-                                    Review candidate reports and predictions, contact candidates to invite them to interviews, track their
-                                    stage or dismiss them from consideration.
+                                    Review candidate reports and predictions, 
+                                    contact candidates to invite them to
+                                    interviews, track their stage or dismiss
+                                    them from consideration. You can click any
+                                    candidate name to see their results and
+                                    hover over any category for a description.
                                 </div>
                             </div>
                         </div>
