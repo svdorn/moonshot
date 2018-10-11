@@ -2205,6 +2205,7 @@ button.link {
     background-color: #d6d6d6;
     border-radius: 16px;
     cursor: pointer;
+    --arrow-icon-height: 3px;
 }
 .circleArrowIcon.disabled {
     background-color: #5a5a5a;
@@ -2215,14 +2216,16 @@ button.link {
 .circleArrowIcon:after {
     content: "";
     position: absolute;
-    width: 12px;
-    height: 12px;
+    width: calc(100% * 3 / 8);
+    height: calc(100% * 3 / 8);
     transform: rotate(45deg);
-    border-right: 3px solid var(--primary-black-dark);
-    border-bottom: 3px solid var(--primary-black-dark);
-    top: 8px;
-    left: 10px;
+    border-right: var(--arrow-icon-height) solid var(--primary-black-dark);
+    border-bottom: var(--arrow-icon-height) solid var(--primary-black-dark);
+    top: calc(100% / 4);
+    left: calc(100% * 5 / 16);
 }
+.circleArrowIcon.arrow-2px { --arrow-icon-height: 2px; }
+.circleArrowIcon.arrow-1px { --arrow-icon-height: 1px; }
 .myCandidates .arrowContainer {
     position: absolute;
     top: 53px;

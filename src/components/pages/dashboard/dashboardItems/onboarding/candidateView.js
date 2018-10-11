@@ -104,10 +104,25 @@ class CandidateView extends Component {
 
 
     // choose which example psych question you want to see
-    choosePsychQuestion(index) {
+    choosePsychQuestion = (index) => {
         if (0 <= index && index < questions.length) {
             this.setState({ questionIndex: Math.round(index) });
         }
+    }
+
+
+    // go forward or backward to a different psych question
+    navPsychQuestions = (direction) => {
+        let newIndex = this.state.questionIndex;
+        if (direction === "back") {
+            newIndex--;
+            if (newIndex < 0) { newIndex = questions.length - 1; }
+        } else {
+            newIndex++;
+            if (newIndex >= questions.length) { newIndex = 0; }
+        }
+
+        this.setState({ questionIndex: newIndex });
     }
 
 
@@ -130,8 +145,23 @@ class CandidateView extends Component {
             )
         }
         // add the left and right arrows
-        // navArea.push();
-        // navArea.push();
+        const arrowStyle = { width: "12px", height: "12px", display: "inline-block", margin: "2px 8px" };
+        navArea.unshift(
+            <div
+                className="left circleArrowIcon arrow-2px"
+                style={arrowStyle}
+                onClick={this.navPsychQuestions.bind(this, "back")}
+                key="back arrow"
+            />
+        );
+        navArea.push(
+            <div
+                className="right circleArrowIcon arrow-2px"
+                style={arrowStyle}
+                onClick={this.navPsychQuestions.bind(this, "next")}
+                key="next arrow"
+            />
+        );
 
 
         return (
@@ -147,7 +177,7 @@ class CandidateView extends Component {
                 </div>
                 <div className="noselect">
                     { psychSliders[this.state.questionIndex] }
-                    <div>
+                    <div style={{marginTop: "15px"}}>
                         { navArea }
                     </div>
                 </div>

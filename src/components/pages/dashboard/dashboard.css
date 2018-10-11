@@ -507,6 +507,7 @@
     background: linear-gradient(to bottom right, var(--secondary-gray), var(--primary-black-light));
     display: inline-block;
     margin: auto 10px;
+    cursor: pointer;
 }
 
 
