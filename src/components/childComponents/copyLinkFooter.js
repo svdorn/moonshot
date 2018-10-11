@@ -79,7 +79,7 @@ class CopyLinkFooter extends Component {
                             <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
                             <div className="secondary-gray" styleName="text">
                                 <div styleName="desktop-text">
-                                    Embed {this.state.name}{"'"}s candidate invite page in your <br/>ATS, automated emails or other communications with candidates.
+                                    Embed {this.state.name}{"'"}s candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
                                 </div>
                             </div>
                             <div styleName="buttons">

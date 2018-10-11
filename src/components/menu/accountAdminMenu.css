@@ -1,3 +1,5 @@
+:root { --admin-menu-width: 140px; }
+
 .top-menu-activator { display: none; }
 .top-menu-activator + .top-menu-activator-space { display: none; }
 
@@ -119,6 +121,7 @@
 @media screen and (max-width: 1000px) {
     :root {
         --top-menu-activator-height: 40px;
+        --admin-menu-width: 0px;
     }
 
     .menu { transform: translateX(-100%); }

@@ -25,6 +25,7 @@ body {
 
     --min-screen-width: 300px;
     --min-screen-height: 300px;
+    --admin-menu-width: 0px;
 }
 
 .primary-orange { color: var(--primary-orange); }

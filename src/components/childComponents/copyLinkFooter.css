@@ -1,5 +1,5 @@
 .footer-container {
-    width: 100%;
+    width: calc(100% - var(--admin-menu-width));
     height: 85px;
     bottom: 0;
     position: fixed;
@@ -21,21 +21,19 @@
 }
 
 .footer {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    align-items: center;
     width: 100%;
+    padding: 0 10%;
 }
 .astrobot-img {
     height: 50px;
 }
 .buttons {
     display: inline-block;
-    margin-left: 15px;
     vertical-align: top;
-    margin-top: 10px;
 }
 .button {
     font-size: 16px;
@@ -46,7 +44,6 @@
 
 .text {
     vertical-align: top;
-    margin-left: 15px;
     display: inline-block;
     text-align: left;
 }
@@ -54,24 +51,27 @@
     display: block;
 }
 
+@media only screen and (min-width: 1201px) {
+    .non-big-desktop { display: none; }
+}
+
+@media only screen and (max-width: 1200px) {
+    .big-desktop { display: none; }
+}
+
+@media only screen and (max-width: 1000px) {
+    .footer { padding: 0 15% 0 10%; }
+}
+
 @media only screen and (max-width: 900px) {
-    .text {
-        margin-left: 10px;
-    }
-    .desktop-text {
-        font-size: 14px;
-    }
-    .buttons {
-        margin-left: 0;
-    }
-    .button {
-        margin-left: 10px;
-        margin-top: 10px;
-        font-size: 14px;
-    }
-    .invite-template {
-        display: none;
-    }
+    .desktop-text { font-size: 14px; }
+    .button { font-size: 14px; }
+    .invite-template { display: none; }
+    .footer { padding: 0 15% 0 5%; }
+}
+
+@media only screen and (max-width: 800px) {
+    .astrobot-img { display: none; }
 }
 
 @media only screen and (max-width: 700px) {
