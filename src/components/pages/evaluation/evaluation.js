@@ -271,7 +271,7 @@ class Evaluation extends Component {
             <div className="primary-white">
                 <h3>Congratulations!</h3>
                 <p>You finished the evaluation!</p>
-                <p>We{"'"}ll be in touch soon.</p>
+                <p>You can safely exit this tab.</p>
                 <div className={button.purpleBlue} onClick={() => goTo("/myEvaluations")}>Take Me Home</div>
             </div>
         );

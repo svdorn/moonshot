@@ -246,7 +246,7 @@ function updateEvalState(dispatch, data) {
         // go home
         goTo("/myEvaluations");
         // add a notification saying they finished the eval
-        dispatch({ type: "ADD_NOTIFICATION", ...notification("Congratulations, you finished the evaluation! We'll be in touch soon.") })
+        dispatch({ type: "ADD_NOTIFICATION", ...notification("Congratulations, you finished the evaluation!") })
     }
     dispatch({
         type: "UPDATE_EVALUATION_STATE",

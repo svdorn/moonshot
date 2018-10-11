@@ -428,7 +428,7 @@ class AddUserDialog extends Component {
                     </button>
                 </div>
                 <div className="center font14px font12pxUnder500 primary-white marginBottom15px">
-                    Candidates are incoming applicants that undergo predictive evaluations.
+                    Candidates are incoming applicants who undergo predictive evaluations.
                 </div>
                 <div>
                     {candidateEmailSection}

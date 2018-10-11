@@ -129,7 +129,7 @@ class MyEvaluationsPreview extends Component {
             if (this.props.completedDate) {
                 clickableArea = (
                     <div className="secondary-gray font16px font14pxUnder800 marginTop15px">
-                        Complete - your results are being reviewed
+                        You{"'"}re done! Your results are being reviewed. You can now safely exit this tab.
                     </div>
                 )
             } else {
