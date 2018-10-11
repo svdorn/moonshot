@@ -203,19 +203,6 @@ export function updateUser(user) {
 }
 
 
-export function sawMyCandidatesInfoBox(userId, verificationToken) {
-    return function(dispatch) {
-        axios.post("/api/business/sawMyCandidatesInfoBox", {userId, verificationToken})
-        .then(response => {
-            dispatch({type: "USER_UPDATE", currentUser: response.data});
-        })
-        .catch(error => {
-            console.log("Error seeing my candidates info box: ", error);
-        });
-    }
-}
-
-
 // save an answer for ANY eval component (AdminQuestion, PsychQuestion, GCAQuestion, SkillQuestion)
 export function answerEvaluationQuestion(evalComponent, options) {
     return function(dispatch) {

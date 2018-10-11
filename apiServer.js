@@ -163,7 +163,6 @@ app.post("/business/postCreateLink", businessApis.POST_createLink);
 app.post("/business/rateInterest", businessApis.POST_rateInterest);
 app.post("/business/changeHiringStage", businessApis.POST_changeHiringStage);
 app.post("/business/moveCandidates", businessApis.POST_moveCandidates);
-app.post("/business/sawMyCandidatesInfoBox", businessApis.POST_sawMyCandidatesInfoBox);
 app.post("/business/resetApiKey", businessApis.POST_resetApiKey);
 app.post("/business/uploadCandidateCSV", businessApis.POST_uploadCandidateCSV);
 app.post("/business/chatbotData", businessApis.POST_chatbotData);

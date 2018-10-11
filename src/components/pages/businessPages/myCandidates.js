@@ -16,7 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox, hidePopups, addNotification, generalAction } from "../../../actions/usersActions";
+import { closeNotification, openAddUserModal, hidePopups, addNotification, generalAction } from "../../../actions/usersActions";
 import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -701,12 +701,6 @@ class MyCandidates extends Component {
     }
 
 
-    // record that the user has seen the information box at the top of the screen
-    seeInfoBox() {
-        this.props.sawMyCandidatesInfoBox(this.props.currentUser._id, this.props.currentUser.verificationToken);
-    }
-
-
     // gets the qualifier for a score and tells the user the candidate hasn't finished
     // if that is the case
     getQualifier(score, type) {
@@ -1000,24 +994,6 @@ class MyCandidates extends Component {
         );
     }
 
-
-    // create the box at the top of the screen that shows only for new users
-    // and tells them how to see candidate results
-    infoBox() {
-        if (!this.props.currentUser.sawMyCandidatesInfoBox) {
-            return (
-                <div className="center" key="info box">
-                    <div className="myCandidatesInfoBox font16px font12pxUnder500">
-                        Click any candidate name to see results.<br/>
-                        Hover over any category for a description.
-                        <div className="x" onClick={this.seeInfoBox.bind(this)}>x</div>
-                    </div>
-                </div>
-            );
-        } else {
-            return null;
-        }
-    }
 
     popup() {
         if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.candidates) {
@@ -1332,8 +1308,6 @@ class MyCandidates extends Component {
 
                     { tabs }
 
-                    { this.infoBox() }
-
                     <div className="center">
                         <div className="candidatesAndOptions">
                             {this.state.mobile ? null :
@@ -1427,7 +1401,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
         openAddUserModal,
-        sawMyCandidatesInfoBox,
         hidePopups,
         addNotification,
         generalAction

@@ -562,10 +562,6 @@ const usersSchema = mongoose.Schema({
     }],
     // the position evaluation the user is currently taking
     positionInProgress: mongoose.Schema.Types.ObjectId,
-    // --->>              MANAGERS/ACCOUNT ADMINS ONLY              <<--- //
-    // if the user saw the box that says 'click candidate name for more info'
-    sawMyCandidatesInfoBox: Boolean,
-    // <<-------------------------------------------------------------->> //
 
 
     // ------------------------->> NEW EVAL FLOW <<-------------------------- //

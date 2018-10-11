@@ -48,7 +48,6 @@ const businessApis = {
     POST_rateInterest,
     POST_changeHiringStage,
     POST_moveCandidates,
-    POST_sawMyCandidatesInfoBox,
     POST_resetApiKey,
     POST_uploadCandidateCSV,
     POST_chatbotData,
@@ -2685,26 +2684,6 @@ async function GET_employeeSearch(req, res) {
 
     // successfully return the employees
     return res.json(formattedEmployees);
-}
-
-
-// mark that a user has seen the info box shown at the top of my candidates
-async function POST_sawMyCandidatesInfoBox(req, res) {
-    const find = {
-        "_id": sanitize(req.body.userId),
-        "verificationToken": sanitize(req.body.verificationToken)
-    };
-    const update = { "sawMyCandidatesInfoBox": true };
-    const options = { "upsert": false, "new": true };
-
-    let user;
-    try { user = await Users.findOneAndUpdate(find, update, options) }
-    catch (updateError) {
-        console.log("Error updating user while trying to see my candidates info box: ", updateError);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    return res.json(frontEndUser(user));
 }
 
 

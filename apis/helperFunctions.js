@@ -78,7 +78,6 @@ const FOR_USER = [
     "termsAndConditions",
     "hasFinishedOnboarding",
     "showVerifyEmailBanner",
-    "sawMyCandidatesInfoBox",
     "intercom",
     "popups"
 ];
