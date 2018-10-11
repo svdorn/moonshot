@@ -283,7 +283,7 @@
     bottom: 10%;
     left: 48%;
     transform: translate(-50%);
-    border: 1px solid var(--primary-black-dark);
+    background-color: var(--primary-black-dark);
 }
 .apply-image {
     height: 70%;
