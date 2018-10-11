@@ -12,12 +12,56 @@ import "../../dashboard.css";
 import { button } from "../../../../../classes";
 
 
+// the example psych questions
+const questions = [
+    {
+        text: <span>Your friend offers to take you on a motorcycle ride, but it{"'"}s storming<span styleName="not-small-mobile"> out</span>:</span>,
+        leftOption: "I'll pass",
+        rightOption: "Let's go!"
+    },
+    {
+        text: "Being one with nature:",
+        leftOption: "Not my thing",
+        rightOption: "I am nature"
+    },
+    {
+        text: "At restaurants you order:",
+        leftOption: "Your tried and true",
+        rightOption: "Something new"
+    }
+];
+const psychSliders = questions.map(q => {
+    return (
+        <div>
+            <div styleName="ex-question-text">{ q.text }</div>
+            <div styleName="ex-question-answers">
+                <div>{ q.leftOption }</div>
+                <div>{ q.rightOption }</div>
+            </div>
+            <PsychSlider
+                width={200}
+                height={100}
+                backgroundColor={"#393939"}
+                color1={colors.primaryCyan}
+                color2={colors.primaryPurpleLight}
+                className="center"
+                updateAnswer={() => {}}
+                questionId={"1"}
+            />
+        </div>
+    );
+});
+
+
 class CandidateView extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            step: "psych"
+            // whether we're on psych or gca view
+            step: "psych",
+            // index of the psych question we're currently on
+            questionIndex: 0
         };
 
         this.next = this.next.bind(this);
@@ -59,34 +103,53 @@ class CandidateView extends Component {
     }
 
 
+    // choose which example psych question you want to see
+    choosePsychQuestion(index) {
+        if (0 <= index && index < questions.length) {
+            this.setState({ questionIndex: Math.round(index) });
+        }
+    }
+
+
     psychView() {
+        const { questionIndex } = this.state;
+
+        let navArea = [];
+        const selectedStyle = {
+            background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
+        };
+        // add the circles you can navigate with
+        for (let navCircleIdx = 0; navCircleIdx < psychSliders.length; navCircleIdx++) {
+            navArea.push(
+                <div
+                    styleName="nav-circle"
+                    onClick={this.choosePsychQuestion.bind(this, navCircleIdx)}
+                    style={questionIndex === navCircleIdx ? selectedStyle : {}}
+                    key={`psych question ${navCircleIdx}`}
+                />
+            )
+        }
+        // add the left and right arrows
+        // navArea.push();
+        // navArea.push();
+
+
         return (
             <div className="inline-block" styleName="onboarding-info candidate-view">
                 <div>
-                <div className="primary-cyan font18px" styleName="mobile-center title-margin text-padding">
-                    Understand Personality
-                </div>
-                <div styleName="text-padding">
-                    {"Candidates complete a series of questions so we can form archetypes and predict how they'll behave and fit in your work environment."}
-                </div>
+                    <div className="primary-cyan font18px" styleName="mobile-center title-margin text-padding">
+                        Understand Personality
+                    </div>
+                    <div styleName="text-padding">
+                        {"Candidates complete a series of questions so we can form archetypes and predict how they'll behave and fit in your work environment."}
+                    </div>
                     { this.emojiButtons("a") }
                 </div>
                 <div className="noselect">
-                    <div>Your friend offers to take you on a motorcycle ride, but it{"'"}s storming out:</div>
-                    <div styleName="ex-question-answers">
-                        <div>I{"'"}ll pass</div>
-                        <div>Let{"'"}s go!</div>
+                    { psychSliders[this.state.questionIndex] }
+                    <div>
+                        { navArea }
                     </div>
-                    <PsychSlider
-                        width={200}
-                        height={100}
-                        backgroundColor={"#393939"}
-                        color1={colors.primaryCyan}
-                        color2={colors.primaryPurpleLight}
-                        className="center"
-                        updateAnswer={() => {}}
-                        questionId={"1"}
-                    />
                 </div>
             </div>
         );

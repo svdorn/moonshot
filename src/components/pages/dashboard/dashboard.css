@@ -254,6 +254,9 @@
 .emoji-buttons > div > img:hover {
     height: 33px;
 }
+.ex-question-text {
+    height: 40px;
+}
 .ex-question-answers {
     width: 100%;
     position: relative;
@@ -496,6 +499,16 @@
     margin-top: 5px;
     text-align: left;
 }
+
+.nav-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background: linear-gradient(to bottom right, var(--secondary-gray), var(--primary-black-light));
+    display: inline-block;
+    margin: auto 10px;
+}
+
 
 @media screen and (min-width: 851px) {
     .mobile-only { display: none; }

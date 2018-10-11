@@ -66,6 +66,10 @@ class Carousel extends Component {
 
     bottomCircles(color1, color2) {
         const selectedStyle = { background: `linear-gradient(to top, ${color1}, ${color2})` };
+        let style = {};
+        if (typeof this.props.circleStyle === "object") {
+            style = this.props.circleStyle;
+        }
 
         let circles = [];
         for (let frameIndex = 0; frameIndex < this.props.frames.length; frameIndex++) {
@@ -74,7 +78,7 @@ class Carousel extends Component {
                 <div
                     key={`circle${frameIndex}`}
                     className="frame-position-circle"
-                    style={selected ? selectedStyle : {}}
+                    style={selected ? {...style, ...selectedStyle} : style}
                 />
             );
         }
