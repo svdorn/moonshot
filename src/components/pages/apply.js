@@ -44,6 +44,8 @@ class Apply extends Component {
             noPositons: false,
             // if the user is an accountAdmin of this company
             admin: false,
+            // if the business has set up the page
+            pageSetUp: undefined
         }
     }
 
@@ -69,7 +71,7 @@ class Apply extends Component {
             }
         })
         .then(function (res) {
-            self.positionsFound(res.data.positions, res.data.logo, res.data.businessName, res.data.admin);
+            self.positionsFound(res.data.positions, res.data.logo, res.data.businessName, res.data.admin, res.data.pageSetUp);
         })
         .catch(function (err) {
             goTo("/");
@@ -78,13 +80,12 @@ class Apply extends Component {
     }
 
     // call this after positions are found from back end
-    positionsFound(positions, logo, company, admin) {
+    positionsFound(positions, logo, company, admin, pageSetUp) {
+        console.log("pageSetUp: ", pageSetUp);
         if (Array.isArray(positions) && positions.length > 0) {
             const position = positions[0].name;
-            if (admin) {
-                positions.push({ name: "Add more positions later" })
-            }
-            this.setState({ positions, position, logo, company, admin });
+            if (admin) { positions.push({ name: "Add more positions later" }) }
+            this.setState({ positions, position, logo, company, admin, pageSetUp });
         } else {
             this.setState({ noPositions: true });
         }
@@ -137,6 +138,33 @@ class Apply extends Component {
         goTo(URL);
     }
 
+
+    adminInformation() {
+        return (
+            <div>
+                <div>
+                    <button className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="next-button" style={{padding: "6px 20px"}}>
+                        <span>Next &#8594;</span>
+                    </button>
+                    <HoverTip
+                        className="font14px secondary-gray"
+                        style={{marginTop: "40px", marginLeft: "-6px"}}
+                        text="After candidates press next, they sign up to complete your evaluation."
+                        />
+                </div>
+                <div styleName="employer-box">
+                    <div>
+                        This is { makePossessive(this.state.company) } candidate invite page. When candidates click on your link, they will be taken here. New evaluations will automatically be added to your dropdown list above.
+                    </div>
+                    <div onClick={() => goTo("/dashboard")}>
+                        Continue To Embed Your Link <img src={`/icons/ArrowBlue${this.props.png}`} />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+
     render() {
         return (
             <div className="jsxWrapper blackBackground fillScreen center">
@@ -153,28 +181,14 @@ class Apply extends Component {
                             {this.makeDropdown(this.state.position)}
                         </div>
                         {this.state.admin ?
-                            <div>
-                                <div>
-                                    <button className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="next-button" style={{padding: "6px 20px"}}>
-                                        <span>Next &#8594;</span>
-                                    </button>
-                                    <HoverTip
-                                        className="font14px secondary-gray"
-                                        style={{marginTop: "40px", marginLeft: "-6px"}}
-                                        text="After candidates press next, they sign up to complete your evaluation."
-                                        />
-                                </div>
-                                <div styleName="employer-box">
-                                    <div>
-                                        This is {makePossessive(this.state.company)} candidate invite page. When candidates click on your link, they will be taken here. New evaluations will automatically be added to your dropdown list above.
-                                    </div>
-                                    <div onClick={() => goTo("/dashboard")}>
-                                        Continue To Embed Your Link <img src={`/icons/ArrowBlue${this.props.png}`} />
-                                    </div>
-                                </div>
-                            </div>
+                            this.adminInformation()
                             :
-                            <button className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="next-button" onClick={this.handleSignUp.bind(this)} style={{padding: "6px 20px"}}>
+                            <button
+                                className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
+                                styleName="next-button"
+                                onClick={this.handleSignUp.bind(this)}
+                                style={{padding: "6px 20px"}}
+                            >
                                 <span>Next &#8594;</span>
                             </button>
                         }

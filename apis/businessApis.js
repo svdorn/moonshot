@@ -2370,7 +2370,27 @@ async function GET_positionsForApply(req, res) {
         admin = true;
     }
 
-    return res.json({ logo: business.logo, businessName: business.name, positions: business.positions, admin });
+    // find out if any admins have verified their info
+    try {
+        const verifiedAdminsQuery = {
+            "userType": "accountAdmin",
+            "verified": true,
+            "businessInfo.businessId": mongoose.Types.ObjectId(business._id)
+        }
+        const verifiedUser = await Users.findOne(verifiedAdminsQuery);
+        var verified = verifiedUser != null;
+    } catch (findVerifiedError) {
+        console.log("Error finding verified admin from /apply page: ", findVerifiedError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.json({
+        logo: business.logo,
+        businessName: business.name,
+        positions: business.positions,
+        admin,
+        pageSetUp: verified
+    });
 }
 
 
