@@ -36,11 +36,11 @@ class WhyItWorks extends Component {
                     <div className="primary-cyan font16px" styleName="mobile-center title-margin">
                         {"We Are Your Data Scientists"}
                     </div>
-                    <div>
+                    <div styleName="why-it-works-desc">
                         Education and experience provide 1% and 1.1% predictive
                         ability compared to your evaluations with us, which
                         provide more than 50%. We then layer on machine learning
-                        to<span styleName="desktop-only"> improve your model and
+                        to<span styleName="desktop-only"> improve your predictive model and
                         </span> identify insights on your company to drive
                         hyperintelligent hiring.
                     </div>
@@ -49,7 +49,7 @@ class WhyItWorks extends Component {
                             <img
                                 src={`/icons/emojis/Sunglass${this.props.png}`}
                             />
-                            <div>Got it</div>
+                            <div>Got it!</div>
                         </div>
                         <div onClick={this.intercomMsg}>
                             <img

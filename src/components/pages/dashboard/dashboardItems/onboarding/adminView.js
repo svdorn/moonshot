@@ -38,8 +38,8 @@ class AdminView extends Component {
                     <div className="primary-cyan" styleName="small-title mobile-center title-margin">
                         A Predictive View of Candidates
                     </div>
-                    <div styleName="desktop-only">{"Job Performance and Growth Potential predictions for each candidate along with a Candidate Score and results from their evaluation. We generate Longevity/tenure and Culture Fit predictions after at least 16 of your employees have been entered."}</div>
-                    <div styleName="mobile-only">{"Job Performance and Growth Potential predictions for each candidate along with a Candidate Score and evaluation results. We generate Longevity and Culture Fit predictions after 16+ employees have been graded."}</div>
+                    <div styleName="desktop-only">{"Job Performance and Growth Potential predictions for each candidate along with a Candidate Score and results from their evaluation. We generate Longevity/tenure and Culture Fit predictions after at least 16 of your employees have been evaluated."}</div>
+                    <div styleName="mobile-only">{"Job Performance and Growth Potential predictions for each candidate along with a Candidate Score and evaluation results. We generate Longevity and Culture Fit predictions after 16+ employees have been evaluated."}</div>
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>
                             <img
