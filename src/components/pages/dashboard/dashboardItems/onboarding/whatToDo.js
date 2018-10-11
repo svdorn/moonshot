@@ -36,7 +36,13 @@ class WhatToDo extends Component {
             }
         })
         .then(function (res) {
-            self.setState({ uniqueName: res.data.uniqueName, name: res.data.name })
+            self.setState(
+                { uniqueName: res.data.uniqueName, name: res.data.name },
+                () => {
+                    try { document.getElementById("unique-link").select(); }
+                    catch (e) { /* not a big deal if can't highlight the link */ }
+                }
+            )
         })
         .catch(function (err) {
             self.props.addNotification("Error loading page.", "error");
@@ -83,38 +89,38 @@ class WhatToDo extends Component {
                     {"A Candidate Invite Page Just For You"}
                 </div>
                 <div>
-                    { `Here's an invite link that can be embedded in your
-                    ATS, automated emails or other communications with
-                    candidates. We see the best results when companies
-                    invite all applicants to complete an evaluation as high
-                    performers are often dismissed based on non-predictive
-                    data. Copy and embed your link where you see fit.` }
+                    { `${makePossessive(this.state.name)} invite link is
+                    designed to be embedded in your automated emails or other
+                    messages to candidates. We see the best results when
+                    companies invite all applicants to complete an evaluation,
+                    as their highest performers are often screened out based on
+                    non-predictive data in resumes. Copy and embed your link in
+                    emails you send to candidates after they apply. Here's an ` }
+                    <span
+                        onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}
+                        className="primary-cyan clickable"
+                    >
+                        {"email template"}
+                    </span>
+                    { " you can use." }
                 </div>
                 <div styleName="link-area">
                     <input
+                        id="unique-link"
                         readOnly={true}
                         value={`https://moonshotinsights.io/apply/${this.state.uniqueName}`}
                     />
                     <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" onClick={this.copyLink} style={{padding: "3px 10px"}}>
                         <span>Copy Link</span>
                     </button>
-                </div>
-                <div styleName="invite-template-text">
-                    <u
-                        className="pointer"
-                        style={{margin: "0 10px"}}
-                        onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}
-                    >
-                        {"Candidate Invite Template"}
-                    </u>
-                    <br styleName="small-mobile-only" />
-                    <u
-                        className="pointer"
-                        style={{margin: "0 10px"}}
+                    <br styleName="small-mobile-only"/>
+                    <div
+                        className="pointer underline"
+                        styleName="link-to-custom-page"
                         onClick={this.handleCustomPage}
                     >
-                        {"See Your Page"}
-                    </u>
+                        { "See Your Page" }
+                    </div>
                 </div>
                 {!this.props.loading ?
                     <div styleName="emoji-buttons-full">

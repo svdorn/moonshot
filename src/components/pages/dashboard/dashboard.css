@@ -306,7 +306,7 @@
 }
 .link-area {
     display: flex;
-    margin: 7px 0;
+    margin: 3px 0 12px;
     justify-content: center;
 }
 .link-area > input {
@@ -315,13 +315,10 @@
     padding: 3px 10px;
     background-color: #222222;
     color: white;
-    width: 385px;
+    width: 315px;
 }
 .link-area > button {
     margin-left: 7px;
-}
-.invite-template-text {
-    text-align: center;
 }
 
 .box-header {
@@ -510,6 +507,11 @@
     cursor: pointer;
 }
 
+.link-to-custom-page {
+    margin: 4px 10px 0;
+    display: inline-block;
+}
+
 
 @media screen and (min-width: 851px) {
     .mobile-only { display: none; }
@@ -645,4 +647,6 @@
         font-size: 12px;
     }
     .carousel-frame > div:first-child { font-size: 16px; }
+
+    .link-to-custom-page { margin: 7px 10px 0; }
 }
