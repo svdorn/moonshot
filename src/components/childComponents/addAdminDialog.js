@@ -166,8 +166,9 @@ class AddAdminDialog extends Component {
                     contentClassName="center"
                 >
                     <div className="primary-white">
-                        Verify your email first! Need a new verification email?<br/>
+                        Please verify your email before adding new users.
                         If you{"'"}ve already verified your email, refresh the site.
+                        Need a new verification email?
                         <br/>
                         <div
                             className={this.state.loadingSendVerificationEmail ? button.disabled : button.purpleBlue}

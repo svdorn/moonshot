@@ -252,7 +252,7 @@ class AddPositionDialog extends Component {
                                 Evaluation Added
                             </div>
                             <div className="primary-white-important font16px font14pxUnder700 font12pxUnder400" style={{width:"90%", margin:"10px auto 0"}}>
-                                Thanks for adding an evaluation, embed your link into your hiring workflow to automate your candidate invites.
+                                Congrats on adding an evaluation! Embed your link into your hiring workflow to automate your candidate invites.
                                 <div className="marginTop20px">
                                         <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={this.handleClose} style={{padding: "5px 17px"}}>
                                             {"Close"}

@@ -363,8 +363,9 @@ class AddUserDialog extends Component {
                     contentClassName="center"
                 >
                     <div className="primary-white">
-                        Verify your email first! Need a new verification email?<br/>
+                        Please verify your email before adding new users.
                         If you{"'"}ve already verified your email, refresh the site.
+                        Need a new verification email?
                         <br/>
                         <div
                             className={this.state.loadingSendVerificationEmail ? button.disabled : button.purpleBlue}
@@ -455,10 +456,10 @@ class AddUserDialog extends Component {
         const employeeSection = (
             <div className="center marginTop20px">
                 <div className="center font14px font12pxUnder500 primary-white marginBottom15px">
-                    Employees undergo psychometric and skill evaluations to create a baseline for candidate predictions.
+                    Employees undergo evaluations to create a baseline for candidate predictions.
                 </div>
                 <div>
-                    {employeeEmailSection}
+                    { employeeEmailSection }
                 </div>
                 <div className="marginTop15px">
                     <i className="font14px underline clickable primary-white"
