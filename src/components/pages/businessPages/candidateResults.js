@@ -268,7 +268,7 @@ class CandidateResults extends Component {
                         <div styleName="candidate-score" className="font24px font20pxUnder700 font16pxUnder500 secondary-gray inlineBlock">
                             Candidate Score <b style={style.lightBlue}><u>{overallScore}</u></b>
                         </div>
-                        <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
+                        <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This score dynamically weights candidate data and is based on a normal curve where 100 is average." />
                         <div styleName="results-slider-container">
                             <div>
                                 <div className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
