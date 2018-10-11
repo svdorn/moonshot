@@ -177,7 +177,7 @@ class CandidateView extends Component {
                 </div>
                 <div className="noselect">
                     { psychSliders[this.state.questionIndex] }
-                    <div style={{marginTop: "15px"}}>
+                    <div style={{marginTop: "20px"}}>
                         { navArea }
                     </div>
                 </div>
