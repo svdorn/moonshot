@@ -134,7 +134,7 @@ class Account extends Component {
                     </div>
                     <HoverTip
                         style={{marginTop:"25px", marginLeft:"-110px"}}
-                        text="ATS, emails, automated messages, or other communications with candidates"
+                        text="ATS, automated emails, or other communications with candidates"
                     />
                 </div>
                 <div
