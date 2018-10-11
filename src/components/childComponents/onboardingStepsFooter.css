@@ -6,6 +6,9 @@
     vertical-align: top;
     z-index: 99;
 }
+.checklist-container.absolute {
+    position: absolute;
+}
 .checklist {
     position: relative;
     width: 100%;

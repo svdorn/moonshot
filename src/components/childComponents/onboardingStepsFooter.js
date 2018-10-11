@@ -88,7 +88,7 @@ class OnboardingStepsFooter extends Component {
         });
 
         return (
-            <div styleName="checklist-container">
+            <div styleName={"checklist-container" + (this.props.footerOnScreen ? " absolute" : "")}>
                 <div styleName="checklist">
                     { checklistItems }
                 </div>
@@ -107,16 +107,12 @@ class OnboardingStepsFooter extends Component {
 
         const showFooter = pathname !== "/dashboard" || (popups && popups.businessInterests);
 
-        return (
-            <div>
-                {showFooter ?
-                    <div>
-                        { this.makeChecklist() }
-                    </div>
-                    : null
-                }
-            </div>
-        );
+        if (!showFooter) { return null; }
+        else {
+            return (
+                <div>{ this.makeChecklist() }</div>
+            );
+        }
     }
 }
 
