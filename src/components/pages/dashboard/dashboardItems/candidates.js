@@ -139,7 +139,7 @@ class Candidates extends Component {
             left: "50%",
             transform: "translateX(-50%)",
             marginLeft: "-22px",
-            marginTop: "10px"
+            marginTop: "20px"
         }
 
         const { graphData } = this.state;
