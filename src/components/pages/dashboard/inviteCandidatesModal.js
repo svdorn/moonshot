@@ -55,14 +55,14 @@ class InviteCandidatesModal extends Component {
                 </div>
                 <div className="font14px font12pxUnder700">
                     <div>
-                        Subject: Invitation from {this.state.name}
+                        Subject: Invitation from { this.state.name }
                     </div>
                     <div>
                         Hi,
                     </div>
                     <div>
-                        Congratulations, we would like to invite you to the next round of evaluations. We are excited to learn more about you and see how well you could fit with our team. The next step is
-                        completing a 22 minute evaluation, which you can sign up and take <a style={{color:"#76defe", textDecoration:"underline"}} href={`https://moonshotinsights.io/apply/${this.state.uniqueName}`}>here</a>.
+                        Congratulations, we would like to invite you to the next round of evaluations! We are excited to learn more about you and see how well you could fit with our team. The next step is
+                        completing a 22-minute evaluation, which you can sign up and take <a style={{color:"#76defe", textDecoration:"underline"}} href={`https://moonshotinsights.io/apply/${this.state.uniqueName}`}>here</a>.
                     </div>
                     <div>
                         We look forward to reviewing your results. Please let me know if you have any questions.

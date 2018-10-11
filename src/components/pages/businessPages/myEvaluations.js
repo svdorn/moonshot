@@ -435,7 +435,11 @@ class MyEvaluations extends Component {
                     key={key}
                 >
                     <div style={{filter:"blur(5px)"}}>
-                        <MyEvaluationsPreview {...attributes} />
+                        <MyEvaluationsPreview
+                            {...attributes}
+                            style={{pointerEvents: "none"}}
+                            className="noselect"
+                        />
                     </div>
                     <div className="font24px font22pxUnder700 font18pxUnder500 center addEval" onClick={this.handleOpen}>
                         <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px primary-white"style={{padding: "2px 4Spx"}}>

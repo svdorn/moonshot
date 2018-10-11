@@ -171,8 +171,11 @@ class MyEvaluationsPreview extends Component {
 
         const mainClass = (["candidate", "employee"].includes(this.props.currentUser.userType) && !this.props.completedDate) ? "pointer" : "";
 
-        return(
-            <div>
+        const style = typeof this.props.style === "object" ? this.props.style : {};
+        const className = typeof this.props.className === "string" ? this.props.className : "";
+
+        return (
+            <div style={style} className={className}>
                 <div onClick={this.continueEval} className={`myEvalsBox aboutMeLi ${mainClass}`} >
                     <div className="aboutMeLiIconContainer">
                         <img alt="My Evals Company Logo" src={`/logos/${this.props.logo}`}/>
