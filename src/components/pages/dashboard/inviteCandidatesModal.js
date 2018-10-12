@@ -14,37 +14,20 @@ class InviteCandidatesModal extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            name: undefined,
-            uniqueName: undefined
-        };
+        this.state = { };
 
         this.handleClose = this.handleClose.bind(this);
     }
 
-    componentDidMount() {
-        let self = this;
-        const user = this.props.currentUser;
-
-        const nameQuery = { params: {
-            userId: user._id,
-            verificationToken: user.verificationToken,
-        } };
-
-        axios.get("/api/business/uniqueName", nameQuery )
-        .then(function (res) {
-            self.setState({ name: res.data.name, uniqueName: res.data.uniqueName });
-        })
-        .catch(err => {
-            console.log("error");
-        })
-    }
 
     handleClose = () => {
         this.props.generalAction("CLOSE_INVITE_CANDIDATES_MODAL");
     }
 
     makeDialogBody() {
+        const { currentUser } = this.props;
+        const { businessName, uniqueName } = currentUser.businessInfo;
+
         return (
             <div styleName="invite-candidates-modal">
                 <div className="primary-cyan font22px font18pxUnder700">
@@ -55,14 +38,14 @@ class InviteCandidatesModal extends Component {
                 </div>
                 <div className="font14px font12pxUnder700">
                     <div>
-                        Subject: Invitation from { this.state.name }
+                        Subject: Invitation from { businessName }
                     </div>
                     <div>
                         Hi,
                     </div>
                     <div>
                         Congratulations, we would like to invite you to the next round of evaluations! We are excited to learn more about you and see how well you could fit with our team. The next step is
-                        completing a 22-minute evaluation, which you can sign up and take <a style={{color:"#76defe", textDecoration:"underline"}} href={`https://moonshotinsights.io/apply/${this.state.uniqueName}`}>here</a>.
+                        completing a 22-minute evaluation, which you can sign up and take <a style={{color:"#76defe", textDecoration:"underline"}} href={`https://moonshotinsights.io/apply/${uniqueName}`}>here</a>.
                     </div>
                     <div>
                         We look forward to reviewing your results. Please let me know if you have any questions.
@@ -70,7 +53,7 @@ class InviteCandidatesModal extends Component {
                     <div>
                         All the best,
                         <div>
-                            { getFirstName(this.props.currentUser.name) }
+                            { getFirstName(currentUser.name) }
                         </div>
                     </div>
                 </div>
@@ -82,6 +65,9 @@ class InviteCandidatesModal extends Component {
 
 
     render() {
+        const { currentUser } = this.props;
+        const { businessName, uniqueName } = currentUser.businessInfo;
+
         const actions = [
             <FlatButton
                 label="Close"
@@ -99,13 +85,7 @@ class InviteCandidatesModal extends Component {
                 paperClassName="dialogForBiz"
                 contentClassName="center"
             >
-                {this.state.name ?
-                    <div>{ this.makeDialogBody() }</div>
-                    :
-                    <div className="fully-center">
-                        <CircularProgress style={{ color: primaryCyan }} />
-                    </div>
-                }
+                <div>{ this.makeDialogBody() }</div>
             </Dialog>
         );
     }
