@@ -27,10 +27,6 @@ class Activity extends Component {
             data : undefined,
             // if there was an error getting any candidates or employees data
             fetchDataError: false,
-            // the name of the business
-            name: undefined,
-            // the uniqueName of the business
-            uniqueName: undefined,
             // the tab either Candidates or Employees
             tab: "Candidates"
          };
@@ -47,40 +43,29 @@ class Activity extends Component {
         let self = this;
         const user = this.props.currentUser;
 
-        const nameQuery = { params: {
-            userId: user._id,
-            verificationToken: user.verificationToken,
-        } };
-
         const countQuery = { params: {
             userId: user._id,
             verificationToken: user.verificationToken,
             businessId: user.businessInfo.businessId
         } };
 
-        axios.get("/api/business/uniqueName", nameQuery )
-        .then(function (res) {
-            axios.get("/api/business/candidatesTotal", countQuery )
-            .then(response => {
-                if (propertyExists(response, ["data", "totalCandidates"]), "number") {
-                    let frame = "Tips For Hiring";
-                    if (response.data.totalCandidates > 0) {
-                        frame = "Awaiting Review";
-                        self.setState({ frame, name: res.data.name, uniqueName: res.data.uniqueName }, () => {
-                            self.getCandidateData();
-                        });
-                    } else {
-                        self.setState({ frame, name: res.data.name, uniqueName: res.data.uniqueName });
-                    }
+        axios.get("/api/business/candidatesTotal", countQuery )
+        .then(response => {
+            if (propertyExists(response, ["data", "totalCandidates"]), "number") {
+                let frame = "Tips For Hiring";
+                if (response.data.totalCandidates > 0) {
+                    frame = "Awaiting Review";
+                    self.setState({ frame }, () => {
+                        self.getCandidateData();
+                    });
                 } else {
-                    self.setState({ fetchDataError: true });
+                    self.setState({ frame });
                 }
-            })
-            .catch(error => {
+            } else {
                 self.setState({ fetchDataError: true });
-            });
+            }
         })
-        .catch(function (err) {
+        .catch(error => {
             self.setState({ fetchDataError: true });
         });
     }
@@ -136,7 +121,7 @@ class Activity extends Component {
     }
 
     copyLink = () => {
-        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
+        let URL = "https://moonshotinsights.io/apply/" + this.props.currentUser.businessInfo.uniqueName;
         URL = encodeURI(URL);
         clipboard.writeText(URL);
         this.props.addNotification("Link copied to clipboard", "info");
@@ -191,7 +176,7 @@ class Activity extends Component {
                 <div>Tip #4: <span className="primary-cyan">Double Down On Your Team</span></div>
                 <div>
                     You{"'"}re sacrificing a huge opportunity if you don{"'"}t invite employees to be evaluated. This data enables us to really
-                    customize {this.state.name}{"'"}s predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
+                    customize {this.props.currentUser.businessInfo.businessName}{"'"}s predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
                     Improve your candidate predictions by <div className="primary-cyan clickable inlineBlock" onClick={this.openAddUserModal}>inviting employees</div> to complete a 22-minute evaluation.
                 </div>
             </div>
@@ -310,7 +295,8 @@ class Activity extends Component {
     }
 
     render() {
-        const { frame, name, fetchDataError } = this.state;
+        const { frame, fetchDataError, data } = this.state;
+        const { businessName } = this.props.currentUser.businessInfo;
 
         let content = null;
         let dropdown = null;
@@ -326,10 +312,10 @@ class Activity extends Component {
 
         return (
             <div>
-                { name && !fetchDataError ?
+                { typeof data === "number" && !fetchDataError ?
                     <div styleName="activity-container">
                         <div styleName="activity-title">
-                            <span styleName="not-small-mobile">{ makePossessive(name) } </span>Activity
+                            <span styleName="not-small-mobile">{ makePossessive(businessName) } </span>Activity
                         </div>
                         { dropdown }
                         { content }
