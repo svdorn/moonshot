@@ -68,7 +68,7 @@
         "sanitize-html": "^1.19.1",
         "serve-favicon": "^2.5.0",
         "stripe": "^6.12.1",
-        "style-loader": "^0.22.1",
+        "style-loader": "^0.23.1",
         "webpack": "^4.20.2",
         "webpack-cli": "^3.1.2",
         "webpack-merge": "^4.1.4"
