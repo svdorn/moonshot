@@ -43,7 +43,7 @@ class CognitiveAbility extends Component {
                 <div className="statsAndDescription">
                     <div className="stats lightBlackBackground">
                         <div className="secondary-gray font20px font18pxUnder700 font16pxUnder500">
-                            Score: <div className="primary-cyan inlineBlock">{this.props.score}</div>
+                            Score: <div className="primary-cyan inlineBlock">{Math.round(this.props.score)}</div>
                         </div>
                         <div>
                             <img

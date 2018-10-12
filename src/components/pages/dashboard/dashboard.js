@@ -36,7 +36,7 @@ class Dashboard extends Component {
 
         let activity = <DashboardItem type="Activity" width={3} />;
         // if the user is not done with onboarding
-        if (user && user.onboard && !user.onboard.timeFinished) {
+        if (user && user.onboard && !user.onboard.timeFinished && typeof user.onboard.step === "number") {
             activity = <DashboardItem type="Onboarding" width={3} />;
         }
         // if the user has the popups at onboarding
