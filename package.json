@@ -51,7 +51,7 @@
         "postcss-loader": "^3.0.0",
         "prerender-node": "^3.2.1",
         "react": "^16.5.2",
-        "react-dom": "^16.4.2",
+        "react-dom": "^16.5.2",
         "react-dropzone": "^4.2.13",
         "react-ga": "^2.5.3",
         "react-meta-tags": "^0.7.1",
@@ -65,12 +65,12 @@
         "redux": "^3.7.2",
         "redux-form": "^7.4.2",
         "redux-thunk": "^2.3.0",
-        "sanitize-html": "^1.18.4",
+        "sanitize-html": "^1.19.1",
         "serve-favicon": "^2.5.0",
-        "stripe": "^6.7.0",
+        "stripe": "^6.12.1",
         "style-loader": "^0.22.1",
-        "webpack": "^4.16.5",
-        "webpack-cli": "^3.1.0",
+        "webpack": "^4.20.2",
+        "webpack-cli": "^3.1.2",
         "webpack-merge": "^4.1.4"
     }
 }
