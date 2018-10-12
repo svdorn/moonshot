@@ -110,7 +110,7 @@ class OnboardingStepsFooter extends Component {
         if (!showFooter) { return null; }
         else {
             return (
-                <div>{ this.makeChecklist() }</div>
+                <div style={{zIndex: "100"}}>{ this.makeChecklist() }</div>
             );
         }
     }
