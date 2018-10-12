@@ -14,8 +14,7 @@
         "babel-polyfill": "^6.26.0",
         "babel-preset-stage-0": "^6.24.1",
         "nodemon": "^1.18.3",
-        "redux-logger": "^3.0.6",
-        "sinon": "^6.1.5"
+        "redux-logger": "^3.0.6"
     },
     "dependencies": {
         "@material-ui/core": "^1.5.0",
