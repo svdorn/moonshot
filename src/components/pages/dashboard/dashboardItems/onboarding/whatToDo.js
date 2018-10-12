@@ -16,10 +16,7 @@ class WhatToDo extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            name: undefined,
-            uniqueName: undefined
-        };
+        this.state = { };
 
         this.next = this.next.bind(this);
         this.intercomMsg = this.intercomMsg.bind(this);
@@ -27,21 +24,6 @@ class WhatToDo extends Component {
         this.copyLink = this.copyLink.bind(this);
     }
 
-    componentDidMount() {
-        let self = this;
-        axios.get("/api/business/uniqueName", {
-            params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
-            }
-        })
-        .then(function (res) {
-            self.setState({ uniqueName: res.data.uniqueName, name: res.data.name })
-        })
-        .catch(function (err) {
-            self.props.addNotification("Error loading page.", "error");
-        });
-    }
 
     next = () => {
         const { _id, verificationToken, verified } = this.props.currentUser;
@@ -65,14 +47,14 @@ class WhatToDo extends Component {
     }
 
     copyLink = () => {
-        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
+        let URL = "https://moonshotinsights.io/apply/" + this.props.currentUser.businessInfo.uniqueName;
         URL = encodeURI(URL);
         clipboard.writeText(URL);
         this.props.addNotification("Link copied to clipboard", "info");
     }
 
     handleCustomPage = () => {
-        goTo(`/apply/${this.state.uniqueName}`)
+        goTo(`/apply/${this.props.currentUser.businessInfo.uniqueName}`)
     }
 
 
@@ -83,13 +65,15 @@ class WhatToDo extends Component {
 
 
     makeBody() {
+        const { businessName, uniqueName } = this.props.currentUser.businessInfo;
+
         return (
             <div styleName="copy-link-view">
                 <div styleName="onboarding-title title-margin">
                     {"A Candidate Invite Page Just For You"}
                 </div>
                 <div>
-                    { `${makePossessive(this.state.name)} invite link is
+                    { `${makePossessive(businessName)} invite link is
                     designed to be embedded in your automated emails or other
                     messages to candidates. We see the best results when
                     companies invite all applicants to complete an evaluation,
@@ -109,7 +93,7 @@ class WhatToDo extends Component {
                         id="unique-link"
                         readOnly={true}
                         onClick={this.highlight}
-                        value={`https://moonshotinsights.io/apply/${this.state.uniqueName}`}
+                        value={`https://moonshotinsights.io/apply/${uniqueName}`}
                     />
                     <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" onClick={this.copyLink} style={{padding: "3px 10px"}}>
                         <span>Copy Link</span>
@@ -150,13 +134,7 @@ class WhatToDo extends Component {
     render() {
         return (
             <div styleName="full-step-container">
-                { this.state.uniqueName ?
-                    this.makeBody()
-                :
-                    <div styleName="circular-progress">
-                        <CircularProgress style={{ color: primaryCyan }} />
-                    </div>
-                }
+                { this.makeBody() }
             </div>
         );
     }
