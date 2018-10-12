@@ -34,7 +34,7 @@
         "cookie-parser": "~1.4.3",
         "cron": "^1.4.1",
         "css-loader": "^1.0.0",
-        "debug": "^3.2.6",
+        "debug": "^4.1.0",
         "ejs": "^2.6.1",
         "express": "^4.16.4",
         "express-fileupload": "^0.4.0",
