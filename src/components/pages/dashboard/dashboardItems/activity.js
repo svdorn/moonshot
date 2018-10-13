@@ -55,11 +55,11 @@ class Activity extends Component {
                 let frame = "Tips For Hiring";
                 if (response.data.totalCandidates > 0) {
                     frame = "Awaiting Review";
-                    self.setState({ frame }, () => {
+                    self.setState({ frame, data: response.data.totalCandidates }, () => {
                         self.getCandidateData();
                     });
                 } else {
-                    self.setState({ frame });
+                    self.setState({ frame, data: 0 });
                 }
             } else {
                 self.setState({ fetchDataError: true });
@@ -297,6 +297,8 @@ class Activity extends Component {
     render() {
         const { frame, fetchDataError, data } = this.state;
         const { businessName } = this.props.currentUser.businessInfo;
+
+        console.log("haha");
 
         let content = null;
         let dropdown = null;

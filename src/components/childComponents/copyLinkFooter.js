@@ -14,8 +14,6 @@ class CopyLinkFooter extends Component {
         super(props);
 
         this.state = {
-            name: undefined,
-            uniqueName: undefined,
             candidateCount: undefined,
             fetchDataError: false,
         };
@@ -39,27 +37,21 @@ class CopyLinkFooter extends Component {
             businessId: user.businessInfo.businessId
         } };
 
-        axios.get("/api/business/uniqueName", nameQuery)
-        .then(function (res) {
-            axios.get("/api/business/candidatesTotal", countQuery )
-            .then(response => {
-                if (propertyExists(response, ["data", "totalCandidates"]), "number") {
-                    self.setState({ name: res.data.name, uniqueName: res.data.uniqueName, candidateCount: response.data.totalCandidates })
-                } else {
-                    self.setState({ fetchDataError: true });
-                }
-            })
-            .catch(error => {
+        axios.get("/api/business/candidatesTotal", countQuery )
+        .then(response => {
+            if (propertyExists(response, ["data", "totalCandidates"]), "number") {
+                self.setState({ candidateCount: response.data.totalCandidates })
+            } else {
                 self.setState({ fetchDataError: true });
-            });
+            }
         })
-        .catch(function (err) {
+        .catch(error => {
             self.setState({ fetchDataError: true });
         });
     }
 
     copyLink = () => {
-        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
+        let URL = "https://moonshotinsights.io/apply/" + this.props.currentUser.businessInfo.uniqueName;
         URL = encodeURI(URL);
         clipboard.writeText(URL);
         this.props.addNotification("Link copied to clipboard", "info");
@@ -77,7 +69,7 @@ class CopyLinkFooter extends Component {
                             <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
                             <div className="secondary-gray" styleName="text">
                                 <div styleName="desktop-text">
-                                    Embed {this.state.name}{"'"}s candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
+                                    Embed { currentUser.businessInfo.businessName }{"'"}s candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
                                 </div>
                             </div>
                             <div styleName="buttons">
