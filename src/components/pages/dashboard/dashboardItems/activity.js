@@ -176,7 +176,7 @@ class Activity extends Component {
                 <div>Tip #4: <span className="primary-cyan">Double Down On Your Team</span></div>
                 <div>
                     You{"'"}re sacrificing a huge opportunity if you don{"'"}t invite employees to be evaluated. This data enables us to really
-                    customize {this.props.currentUser.businessInfo.businessName}{"'"}s predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
+                    customize { makePossessive(this.props.currentUser.businessInfo.businessName) } predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
                     Improve your candidate predictions by <div className="primary-cyan clickable inlineBlock" onClick={this.openAddUserModal}>inviting employees</div> to complete a 22-minute evaluation.
                 </div>
             </div>

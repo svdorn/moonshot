@@ -73,7 +73,7 @@ class WhatToDo extends Component {
                     {"A Candidate Invite Page Just For You"}
                 </div>
                 <div>
-                    { `${makePossessive(businessName)} invite link is
+                    { `${makePossessive(businessName) } invite link is
                     designed to be embedded in your automated emails or other
                     messages to candidates. We see the best results when
                     companies invite all applicants to complete an evaluation,
