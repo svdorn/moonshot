@@ -1,6 +1,5 @@
 "use strict"
 import axios from 'axios';
-import { browserHistory } from 'react-router'
 import { reset } from 'redux-form';
 import { goTo, propertyExists } from "../miscFunctions";
 
@@ -40,6 +39,40 @@ export function setWebpSupport(webpSupported) {
     }
 }
 
+export function openAddPositionModal() {
+    return function(dispatch) {
+        dispatch({type: "OPEN_ADD_POSITION_MODAL"});
+    }
+}
+
+export function closeAddPositionModal() {
+    return function(dispatch) {
+        dispatch({type: "CLOSE_ADD_POSITION_MODAL"});
+    }
+}
+
+export function closeCandidatesPopupModal(userId, verificationToken, popups) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        const eventName = "candidates_page_first_time";
+        const metadata = null;
+
+        axios.post("/api/user/popups", {userId, verificationToken, popups})
+        .then(function(response) {
+            axios.post("/api/user/intercomEvent", {eventName, userId, verificationToken, metadata})
+            .then(function(response) {
+                dispatch({type: "CLOSE_CANDIDATES_POPUP_MODAL"});
+            })
+            .catch(function(err) {
+                dispatch({ type: "INTERCOM_EVENT_REJECTED", ...notification(err, "error") });
+            });
+        })
+        .catch(function(err) {
+            dispatch({ type: "HIDE_POPUPS_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
 
 export function openAddUserModal() {
     return function(dispatch) {
@@ -53,6 +86,7 @@ export function closeAddUserModal() {
     }
 }
 
+
 export function openContactUsModal() {
     return function(dispatch) {
         dispatch({type: "OPEN_CONTACT_US_MODAL"});
@@ -63,6 +97,12 @@ export function closeContactUsModal() {
     return function(dispatch) {
         dispatch({type: "CLOSE_CONTACT_US_MODAL"});
     }
+}
+
+
+// general action to just call a reducer that has no additional arguments
+export function generalAction(type) {
+    return function(dispatch) { dispatch({ type }); }
 }
 
 // Send an email when form filled out on forBusiness page
@@ -99,13 +139,57 @@ export function login(user, saveSession, navigateBackUrl) {
             const returnedUser = response.data;
             dispatch({type:"LOGIN", user: returnedUser});
             let nextUrl = '/myEvaluations';
+            if (returnedUser && returnedUser.userType === "accountAdmin") { nextUrl = "/dashboard"; }
             if (navigateBackUrl) { nextUrl = navigateBackUrl; }
             // go to the next screen
-            browserHistory.push(nextUrl);
-            window.scrollTo(0, 0);
+            goTo(nextUrl);
         })
         .catch(function(err) {
             dispatch({ type: "LOGIN_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
+
+export function intercomEvent(eventName, userId, verificationToken, metadata) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        axios.post("/api/user/intercomEvent", {eventName, userId, verificationToken, metadata})
+        .then(function(response) {
+            dispatch({type:"INTERCOM_EVENT"});
+        })
+        .catch(function(err) {
+            dispatch({ type: "INTERCOM_EVENT_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
+
+export function hidePopups(userId, verificationToken, popups) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        axios.post("/api/user/popups", {userId, verificationToken, popups})
+        .then(function(response) {
+            const returnedUser = response.data;
+            dispatch({type:"HIDE_POPUPS", payload: returnedUser});
+        })
+        .catch(function(err) {
+            dispatch({ type: "HIDE_POPUPS_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
+
+export function postBusinessInterests(userId, verificationToken, businessId, interests, popups) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
+        axios.post("/api/business/interests", {userId, verificationToken, businessId, interests})
+        .then(function(response) {
+            dispatch(hidePopups(userId, verificationToken, popups));
+            dispatch({ type: "OPEN_ROI_ONBOARDING_MODAL"});
+        })
+        .catch(function(err) {
+            dispatch({ type: "POST_BUSINESS_INTERESTS_REJECTED", ...notification(err, "error") });
         });
     }
 }
@@ -114,34 +198,7 @@ export function login(user, saveSession, navigateBackUrl) {
 // update user object in redux store
 export function updateUser(user) {
     return function(dispatch) {
-        dispatch({type: "UPDATE_USER", user});
-    }
-}
-
-
-export function updateOnboarding(onboarding, verificationToken, userId, extraArgs) {
-    return function(dispatch) {
-        axios.post("/api/user/updateOnboarding", {onboarding, verificationToken, userId})
-            .then(function(response) {
-                const returnedUser = response.data;
-                dispatch({type:"UPDATE_ONBOARDING", payload: returnedUser});
-            })
-            .catch(function(err) {
-                dispatch({ type: "UPDATE_ONBOARDING_REJECTED", ...notification(err, "error") });
-            });
-    }
-}
-
-
-export function sawMyCandidatesInfoBox(userId, verificationToken) {
-    return function(dispatch) {
-        axios.post("/api/business/sawMyCandidatesInfoBox", {userId, verificationToken})
-        .then(response => {
-            dispatch({type: "USER_UPDATE", currentUser: response.data});
-        })
-        .catch(error => {
-            console.log("Error seeing my candidates info box: ", error);
-        });
+        dispatch({ type: "UPDATE_USER", user });
     }
 }
 
@@ -189,7 +246,7 @@ function updateEvalState(dispatch, data) {
         // go home
         goTo("/myEvaluations");
         // add a notification saying they finished the eval
-        dispatch({ type: "ADD_NOTIFICATION", ...notification("Congratulations, you finished the evaluation! We'll be in touch soon.") })
+        dispatch({ type: "ADD_NOTIFICATION", ...notification("Congratulations, you finished the evaluation!") })
     }
     dispatch({
         type: "UPDATE_EVALUATION_STATE",
@@ -212,6 +269,34 @@ function defaultErrorHandler(dispatch, options) {
         type: "NOTIFICATION_AND_STOP_LOADING",
         ...notification(errorMessage, "error")
     });
+}
+
+
+// change the current step within onboarding
+export function updateOnboardingStep(userId, verificationToken, newStep) {
+    return function(dispatch) {
+        if (newStep !== -1) {
+            if (newStep === 4) {
+                dispatch({ type: "OPEN_ONBOARDING_4_MODAL" });
+            }
+            dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
+        } else {
+            dispatch({type: "START_LOADING"});
+        }
+        axios.post("/api/user/updateOnboardingStep", { userId, verificationToken, newStep })
+        .then(result => {
+            // if done with onboarding
+            if (newStep === -1) {
+                dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
+            }
+        })
+        .catch(error => {
+            console.log("ERROR: ", error);
+            if (newStep === -1) {
+                dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
+            }
+        });
+    }
 }
 
 
@@ -267,7 +352,7 @@ export function createBusinessAndUser(userInfo) {
         axios.post("/api/business/createBusinessAndUser", userInfo)
         .then(response => {
             dispatch({ type: "LOGIN", user: response.data, ...notification("Your account has been activated! Thanks for signing up!") });
-            goTo("/onboarding");
+            goTo("/dashboard");
         })
         .catch(error => {
             dispatch({ type: "NOTIFICATION_AND_STOP_LOADING", ...notification(error, "error") });
@@ -323,16 +408,15 @@ export function postUser(user) {
     }
 }
 
-// POST EMAIL INVITES
-export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo) {
+// INVITE ANY TYPE OF USER VIA EMAIL
+export function postEmailInvites(candidateEmails, employeeEmails, currentUserInfo) {
     return function(dispatch) {
         dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
 
-        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, adminEmails, ...currentUserInfo})
+        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, ...currentUserInfo})
         // email invites success
         .then(function(res) {
-            const waitingForFinalization = !!res && !!res.data && res.data.waitingForFinalization === true;
-            dispatch({type: "POST_EMAIL_INVITES_SUCCESS", waitingForFinalization});
+            dispatch({ type: "POST_EMAIL_INVITES_SUCCESS" });
         })
         // error posting email invites
         .catch(function(err) {
@@ -340,6 +424,25 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
         });
     }
 }
+
+
+// INVITE ACCOUNT ADMINS VIA EMAIL
+export function postAdminInvites(adminEmails, currentUserInfo) {
+    return function(dispatch) {
+        dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
+
+        axios.post("/api/business/inviteAdmins", { adminEmails, ...currentUserInfo })
+        // email invites success
+        .then(function(res) {
+            dispatch({ type: "POST_EMAIL_INVITES_SUCCESS" });
+        })
+        // error posting email invites
+        .catch(function(err) {
+            dispatch({ type: "POST_EMAIL_INVITES_REJECTED", ...notification(err, "error") });
+        });
+    }
+}
+
 
 // POST CREATE LINK
 export function postCreateLink(currentUserInfo, closeDialog) {
@@ -443,7 +546,7 @@ export function changePasswordForgot(user) {
             .catch(function(err2) {});
 
             dispatch({ type:"LOGIN", user: foundUser, ...notification("Password changed!") });
-            browserHistory.push("/myEvaluations");
+            goTo("/myEvaluations");
         })
         .catch(function(err) {
             dispatch({ type:"CHANGE_PASS_FORGOT_REJECTED", ...notification(err, "error") });
@@ -524,9 +627,8 @@ export function comingSoon(user, signedIn){
             .then(function(response) {
                 if (!signedIn) {
                     dispatch({ type:"FOR_BUSINESS", ...notification(response) });
-                    browserHistory.push('/login')
+                    goTo('/login')
                     dispatch({ type:"CHANGE_CURRENT_ROUTE", payload:'/login' })
-                    window.scrollTo(0, 0);
                 } else {
                     dispatch({ type:"FOR_BUSINESS", notification: undefined });
                 }
@@ -568,61 +670,61 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
 }
 
 
-export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
-    return function(dispatch) {
-        axios.post("/api/candidate/updateAllOnboarding", {
-            params: { userId, verificationToken, interests, goals, info }
-        })
-        .then(function(response) {
-            dispatch({type: "UPDATE_USER_ONBOARDING", user: response.data});
-        })
-        .catch(function(err) {
-            // console.log("Error updating onboarding info: ", err);
-        })
-    }
-}
+// export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
+//     return function(dispatch) {
+//         axios.post("/api/candidate/updateAllOnboarding", {
+//             params: { userId, verificationToken, interests, goals, info }
+//         })
+//         .then(function(response) {
+//             dispatch({type: "UPDATE_USER_ONBOARDING", user: response.data});
+//         })
+//         .catch(function(err) {
+//             // console.log("Error updating onboarding info: ", err);
+//         })
+//     }
+// }
 
 
-export function startOnboarding(){
-    return function(dispatch) {
-        dispatch({type: "START_ONBOARDING"});
-    }
-}
+// export function startOnboarding(){
+//     return function(dispatch) {
+//         dispatch({type: "START_ONBOARDING"});
+//     }
+// }
 
-export function endOnboarding(user, markOnboardingComplete, removeRedirectField){
-    return function(dispatch) {
-        if (markOnboardingComplete) {
-            axios.post("/api/candidate/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
-            .then(function(response) {
-                dispatch({type: "END_ONBOARDING", user: response.data});
-            })
-            .catch(function(err) {
-                // onboarding setting not able to be turned off for some reason
-                // console.log("onboarding mark complete error: ", err);
-                dispatch({type: "END_ONBOARDING_REJECTED"});
-            })
-        } else {
-            dispatch({type: "END_ONBOARDING"});
-        }
-
-    }
-}
-
-
-// change info during onboarding for automating candidate emails
-export function changeAutomateInvites(args) {
-    return function (dispatch) {
-        dispatch({ type: "CHANGE_AUTOMATE_INVITES", args });
-    }
-}
+// export function endOnboarding(user, markOnboardingComplete, removeRedirectField){
+//     return function(dispatch) {
+//         if (markOnboardingComplete) {
+//             axios.post("/api/candidate/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
+//             .then(function(response) {
+//                 dispatch({type: "END_ONBOARDING", user: response.data});
+//             })
+//             .catch(function(err) {
+//                 // onboarding setting not able to be turned off for some reason
+//                 // console.log("onboarding mark complete error: ", err);
+//                 dispatch({type: "END_ONBOARDING_REJECTED"});
+//             })
+//         } else {
+//             dispatch({type: "END_ONBOARDING"});
+//         }
+//
+//     }
+// }
 
 
-// removes the top step for going back from the stack of Back options
-export function popGoBackStack() {
-    return function(dispatch) {
-        dispatch({ type: "POP_GO_BACK_STACK" });
-    }
-}
+// // change info during onboarding for automating candidate emails
+// export function changeAutomateInvites(args) {
+//     return function (dispatch) {
+//         dispatch({ type: "CHANGE_AUTOMATE_INVITES", args });
+//     }
+// }
+
+
+// // removes the top step for going back from the stack of Back options
+// export function popGoBackStack() {
+//     return function(dispatch) {
+//         dispatch({ type: "POP_GO_BACK_STACK" });
+//     }
+// }
 
 
 // set the state of the current position evaluation
@@ -636,6 +738,13 @@ export function setEvaluationState(evaluationState) {
 export function formError() {
     return function(dispatch) {
         dispatch({type:"FORM_ERROR", ...notification("Fields must all be filled in to submit form.", "error") })
+    }
+}
+
+
+export function markFooterOnScreen(footerOnScreen) {
+    return function(dispatch) {
+        dispatch({ type: "MARK_FOOTER_ON_SCREEN", footerOnScreen });
     }
 }
 

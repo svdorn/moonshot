@@ -16,7 +16,7 @@ import {
 import {connect} from 'react-redux';
 import { browserHistory } from "react-router";
 import {bindActionCreators} from 'redux';
-import { addNotification, startLoading, stopLoading, openAddUserModal } from '../../../actions/usersActions';
+import { addNotification, startLoading, stopLoading, openAddUserModal, hidePopups, openAddPositionModal } from '../../../actions/usersActions';
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -237,7 +237,51 @@ class MyEvaluations extends Component {
         let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
         URL = encodeURI(URL);
         clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard.", "info");
+        this.props.addNotification("Link copied to clipboard", "info");
+    }
+
+    hideMessage() {
+        let popups = this.props.currentUser.popups;
+        if (popups) {
+            popups.evaluations = false;
+        } else {
+            popups = {};
+            popups.evaluations = false;
+        }
+
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+
+        this.props.hidePopups(userId, verificationToken, popups);
+    }
+
+    popup() {
+        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.evaluations) {
+            return (
+                <div className="center marginBottom15px" key="popup box">
+                    <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
+                        <div className="popup-frame" style={{paddingBottom:"20px"}}>
+                            <div>
+                                <img
+                                    alt="Alt"
+                                    src={"/icons/evaluationsBanner" + this.props.png}
+                                />
+                            </div>
+                            <div style={{marginTop:"20px"}}>
+                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">An Overview of Your Evaluations</div>
+                                <div>
+                                    See the activity for each evaluation, invite employees to be evaluated to customize predictions, invite candidates
+                                    and add evaluations for any open position.
+                                </div>
+                            </div>
+                        </div>
+                        <div className="hide-message font14px font12pxUnder700" onClick={this.hideMessage.bind(this)}>Hide Message</div>
+                    </div>
+                </div>
+            );
+        } else {
+            return null;
+        }
     }
 
     render() {
@@ -317,7 +361,6 @@ class MyEvaluations extends Component {
                     if (["accountAdmin", "manager"].includes(currentUser.userType)) {
                         attributes.variation = "edit";
                         attributes.name = position.name;
-                        attributes.finalized = position.finalized;
                         attributes.logo = self.state.logo;
                         attributes.length = position.length;
                         attributes.positionKey = position._id;
@@ -369,8 +412,8 @@ class MyEvaluations extends Component {
         if (currentUser && currentUser.userType == "accountAdmin" && this.state.positions.length !== 0) {
             var link =
                 (<div className="secondary-gray font16px font14pxUnder900 font12pxUnder500" style={{width:"95%", margin:"20px auto 20px"}}>
-                    {this.state.businessName}&#39;s custom link that you can share with all of your candidates and embed in your hiring workflow:&nbsp;
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink.bind(this)} style={{padding: "3px 10px"}}>
+                    {this.state.businessName}&#39;s candidate invite page&nbsp;
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink.bind(this)} style={{padding: "2px 4Spx"}}>
                         {"Get Link"}
                     </button>
                 </div>);
@@ -384,6 +427,7 @@ class MyEvaluations extends Component {
             attributes.completions = 0;
             attributes.timeAllotted = 30;
             attributes.usersInProgress = 0;
+            attributes.buttonsNotClickable = true;
             key++;
 
             evaluations.push (
@@ -391,10 +435,19 @@ class MyEvaluations extends Component {
                     key={key}
                 >
                     <div style={{filter:"blur(5px)"}}>
-                        <MyEvaluationsPreview {...attributes} />
+                        <MyEvaluationsPreview
+                            {...attributes}
+                            style={{pointerEvents: "none"}}
+                            className="noselect"
+                        />
                     </div>
-                    <div className="font28px font26pxUnder700 font22pxUnder500 secondary-gray underline clickable center addEval" onClick={this.handleOpen}>
-                        + Add Evaluation
+                    <div className="font24px font22pxUnder700 font18pxUnder500 center addEval" onClick={this.handleOpen}>
+                        <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px primary-white"style={{padding: "2px 4Spx"}}>
+                            {"Add Evaluation"}
+                        </button>
+                        <div className="font16px font14pxUnder700 font12pxUnder500 secondary-gray">
+                            There{"'"}s no cost for adding evaluations
+                        </div>
                     </div>
                 </li>
             );
@@ -498,14 +551,11 @@ class MyEvaluations extends Component {
                     <meta name="description" content="View the evaluations your company is running."/>
                 </MetaTags>
                 {dialog}
-                <div style={style.separator}>
-                    <div style={style.separatorLine}/>
-                </div>
-                <div className="center" style={{margin: "-42px auto 20px"}}>
-                    <div style={style.separatorText}>
-                        My Evaluations
-                    </div>
-                </div>
+
+                <div className="page-line-header"><div/><div>Evaluations</div></div>
+
+                { this.popup() }
+
                 <div className="center">
                     {link}
                 </div>
@@ -522,7 +572,8 @@ function mapDispatchToProps(dispatch) {
         addNotification,
         startLoading,
         stopLoading,
-        openAddUserModal
+        openAddUserModal,
+        hidePopups
     }, dispatch);
 }
 

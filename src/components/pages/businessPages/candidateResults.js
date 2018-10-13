@@ -9,6 +9,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
 import axios from 'axios';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
+import PredictiveGraphDescriptors from '../../miscComponents/predictiveGraphDescriptors';
+import CognitiveAbility from '../../childComponents/cognitiveAbility';
 import PsychBreakdown from '../../childComponents/psychBreakdown';
 import HoverTip from "../../miscComponents/hoverTip";
 import { qualifierFromScore, getFirstName } from "../../../miscFunctions";
@@ -36,7 +38,7 @@ class CandidateResults extends Component {
             // if there was an error loading in results
             error: false,
             // how tall the predictive graphs should be
-            graphHeight: "200px"
+            graphHeight: 300
         };
     }
 
@@ -49,8 +51,9 @@ class CandidateResults extends Component {
 
 
     componentDidMount() {
+        // TODO: this isn't working, so fix this
         // set the height of the graphs
-        this.setState({ graphHeight: this.getGraphHeight() });
+        this.updateGraphHeight();
         // set resize listener
         window.addEventListener('resize', this.bound_updateGraphHeight);
         // get the candidate's results
@@ -70,88 +73,108 @@ class CandidateResults extends Component {
         const userId = this.props.currentUser._id;
         const positionId = this.props.positionId;
         const candidateId = this.props.candidateId;
+        const mockData = this.props.mockData;
 
-        // backend call to get results info
-        axios.get("/api/business/evaluationResults", {
-            params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken,
-                positionId, candidateId
-            }
-        })
-        .then(res => {
-            const candidate = {
-                name: res.data.name,
-                title: res.data.title ? res.data.title : "",
-                email: res.data.email,
-                endDate: res.data.endDate,
-                interest: res.data.interest,
-                hiringStage: res.data.hiringStage,
-                isDismissed: res.data.isDismissed
-            }
-            const hardSkillPoints = res.data.skillScores.map(skill => {
+        if (!mockData) {
+            // backend call to get results info
+            axios.get("/api/business/evaluationResults", {
+                params: {
+                    userId: this.props.currentUser._id,
+                    verificationToken: this.props.currentUser.verificationToken,
+                    positionId, candidateId
+                }
+            })
+            .then(res => {
+                this.candidateData(res.data);
+            })
+            .catch(error => {
+                this.setState({
+                    error: true,
+                    loading: false
+                });
+            });
+        } else {
+            const candidateIndex = this.props.candidates.findIndex(candidate => {
+                return candidate._id.toString() === candidateId.toString();
+            });
+            this.candidateData(this.props.candidates[candidateIndex]);
+        }
+    }
+
+    candidateData(data) {
+        const candidate = {
+            name: data.name,
+            title: data.title ? data.title : "",
+            email: data.email,
+            endDate: data.endDate,
+            interest: data.interest,
+            hiringStage: data.hiringStage,
+            isDismissed: data.isDismissed
+        }
+        if (data.skillScores) {
+            var hardSkillPoints = data.skillScores.map(skill => {
                 return {
                     x: skill.name,
                     y: this.round(skill.mostRecentScore),
                     confidenceInterval: 16
                 }
             });
-            const scores = res.data.performanceScores;
-            const overallScore = scores.overall;
-            const gca = res.data.gca;
-            // they all have a confidence interval of 16 for now
-            const predictivePoints = [
-                {
-                    x: "Growth",
-                    y: this.round(scores.growth),
-                    confidenceInterval: this.isInProgress(scores.growth) ? 0 : 16,
-                    inProgress: this.isInProgress(scores.growth)
-                },
-                {
-                    x: "Performance",
-                    y: this.round(scores.performance),
-                    confidenceInterval: this.isInProgress(scores.performance) ? 0 : 16,
-                    inProgress: this.isInProgress(scores.performance)
-                },
-                {
-                    x: "Longevity",
-                    y: this.round(scores.longevity),
-                    confidenceInterval: scores.longevity ? 32 : 0,
-                    unavailable: !scores.longevity,
-                    inProgress: this.isInProgress(scores.longevity)
-                },
-                {
-                    x: "Culture",
-                    y: this.round(scores.culture),
-                    confidenceInterval: 0,
-                    unavailable: true,
-                    inProgress: this.isInProgress(scores.culture)
-                }
-            ];
+        } else {
+            var hardSkillPoints = [];
+        }
 
-            const performance = this.round(scores.performance);
+        let scores = data.performanceScores;
+        if (!data.performanceScores) {
+            scores = data.scores;
+        }
+        const overallScore = scores.overall;
+        const gca = data.gca;
+        // they all have a confidence interval of 16 for now
+        const predictivePoints = [
+            {
+                x: "Growth",
+                y: this.round(scores.growth),
+                confidenceInterval: this.isInProgress(scores.growth) ? 0 : 16,
+                inProgress: this.isInProgress(scores.growth)
+            },
+            {
+                x: "Performance",
+                y: this.round(scores.performance),
+                confidenceInterval: this.isInProgress(scores.performance) ? 0 : 16,
+                inProgress: this.isInProgress(scores.performance)
+            },
+            {
+                x: "Longevity",
+                y: this.round(scores.longevity),
+                confidenceInterval: scores.longevity ? 16 : 0,
+                unavailable: !scores.longevity,
+                inProgress: this.isInProgress(scores.longevity)
+            },
+            {
+                x: "Culture",
+                y: this.round(scores.culture),
+                confidenceInterval: scores.culture ? 16 : 0,
+                unavailable: !scores.culture,
+                inProgress: this.isInProgress(scores.culture)
+            }
+        ];
 
-            let self = this;
-            self.setState({
-                ...self.state,
-                loading: false,
-                psychScores: res.data.psychScores,
-                candidate,
-                overallScore,
-                gca,
-                performance,
-                predicted: scores.predicted,
-                skill: scores.skill,
-                hardSkillPoints,
-                predictivePoints,
-                windowWidth: window.innerWidth
-            });
-        })
-        .catch(error => {
-            this.setState({
-                error: true,
-                loading: false
-            });
+        const performance = this.round(scores.performance);
+
+        let self = this;
+        self.setState({
+            ...self.state,
+            loading: false,
+            psychScores: data.psychScores,
+            candidate,
+            overallScore,
+            gca,
+            performance,
+            predicted: scores.predicted,
+            skill: scores.skill,
+            hardSkillPoints,
+            predictivePoints,
+            windowWidth: window.innerWidth
         });
     }
 
@@ -170,13 +193,13 @@ class CandidateResults extends Component {
         const windowWidth = window.innerWidth;
         let graphHeight;
         if (windowWidth > 800) {
-            graphHeight = 270;
-        } else if (windowWidth > 600) {
-            graphHeight = 260;
-        } else if (windowWidth > 400) {
             graphHeight = 250;
-        } else {
+        } else if (windowWidth > 600) {
             graphHeight = 240;
+        } else if (windowWidth > 400) {
+            graphHeight = 230;
+        } else {
+            graphHeight = 220;
         }
         return graphHeight;
     }
@@ -245,52 +268,50 @@ class CandidateResults extends Component {
                         <div styleName="candidate-score" className="font24px font20pxUnder700 font16pxUnder500 secondary-gray inlineBlock">
                             Candidate Score <b style={style.lightBlue}><u>{overallScore}</u></b>
                         </div>
-                        <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
+                        <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This score dynamically weights candidate data and is based on a normal curve where 100 is average." />
                         <div styleName="results-slider-container">
                             <div>
-                                {gca ? <div>Performance: {this.state.performance}</div> : null}
                                 <div className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                    <p style={style.lightBlue}>{qualifierFromScore(gca ? this.state.performance : overallScore)}</p>
+                                    <p style={style.lightBlue}>{qualifierFromScore(overallScore)}</p>
                                 </div>
                                 <Slider disabled={true}
-                                        value={this.getSliderValue(gca ? this.state.performance : overallScore)}
+                                        value={this.getSliderValue(overallScore)}
                                         min={50}
                                         max={150}
                                         styleName="results-slider"
                                 />
                             </div>
-                            {gca ?
-                                <div>
-                                    <div>Complex Thinking: {gca}</div>
-                                    <div
-                                        className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                        <p style={style.lightBlue}>{qualifierFromScore(gca)}</p>
-                                    </div>
-                                    <Slider disabled={true}
-                                            value={gca}
-                                            min={70}
-                                            max={130}
-                                            styleName="results-slider"
-                                    />
-                                </div>
-                                : null
-                            }
                         </div>
                     </div>
 
                     {this.state.windowWidth ?
                         <div>
-                            <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predictive Insights"}</div>
-                            <PredictiveGraph
-                                dataPoints={this.state.predictivePoints}
-                                height={this.state.graphHeight}
-                                className="graph"
-                                containerName={"candidateResults"}
-                                ref={ instance => { this.child1 = instance; } }
-                            />
+                        <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predictive Insights"}</div>
+                            <div className="results">
+                                <div className="statsAndDescription">
+                                    <div className="graph lightBlackBackground" id="graph">
+                                        <PredictiveGraph
+                                            dataPoints={this.state.predictivePoints}
+                                            height={this.state.graphHeight}
+                                            className="graph"
+                                            containerName={"graph"}
+                                            ref={ instance => { this.child1 = instance; } }
+                                        />
+                                    </div>
+                                    <div className="description lightBlackBackground">
+                                        <PredictiveGraphDescriptors />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         :
                         <div ref={ instance => { this.child1 = instance; } } />
+                    }
+
+                    {this.state.gca ?
+                        <CognitiveAbility
+                            score={this.state.gca}
+                        /> : null
                     }
 
                     <PsychBreakdown

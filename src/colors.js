@@ -9,5 +9,12 @@ module.exports = {
     primaryBlackLight: "#393939",
     primaryBlackDark: "#2e2e2e",
     secondaryGray: "#d7d7d7",
-    secondaryRed: "#eb394f"
+    secondaryRed: "#eb394f",
+
+    // for graphs
+    lightBlue: "#88c3fc",
+    mediumBlue: "#96aafe",
+    magenta: "#a394fe",
+    secondaryCyan: "#29cdff",
+    lightGreen: "#2fffb8"
 }

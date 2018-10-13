@@ -14,14 +14,18 @@ class HoverTip extends Component {
 
         return (
             <div className={className} style={{backgroundColor, color, ...style}}>
-                {this.props.text}
-                <div style={{
-                    borderRight: "4px solid transparent",
-                    borderBottom: `5px solid ${backgroundColor}`,
-                    position: "absolute",
-                    top: "-5px",
-                    left: "0"
-                }}/>
+                { this.props.text }
+                { this.props.sourceTriangle === false ?
+                    null
+                    :
+                    <div style={{
+                        borderRight: "4px solid transparent",
+                        borderBottom: `5px solid ${backgroundColor}`,
+                        position: "absolute",
+                        top: "-5px",
+                        left: "0"
+                    }}/>
+                }
             </div>
         );
     }

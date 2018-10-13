@@ -335,13 +335,13 @@ class Results extends Component {
                                         className="myPathwaysTabs"
                                     >
                                         <Tab label="Analysis" style={style.topTab}>
-                                            <div className="tabsShadow" style={{position:"absolute"}}>
+                                            <div className="top-shadow" style={{position:"absolute"}}>
                                                 <div/>
                                             </div>
                                             {analysisSection}
                                         </Tab>
                                         <Tab label="Responses" style={style.topTab}>
-                                            <div className="tabsShadow">
+                                            <div className="top-shadow">
                                                 <div/>
                                             </div>
                                             {responsesSection}

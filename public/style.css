@@ -5,7 +5,7 @@
 
 body {
     font-family: 'Muli', sans-serif;
-    min-width: 300px;
+    min-width: var(--min-screen-width);
     background-color: var(--primary-black-dark);
 }
 
@@ -19,8 +19,13 @@ body {
     --primary-purple-dark: #731ae8;
     --primary-black-light: #393939;
     --primary-black-dark: #2e2e2e;
+    --black-deep-dark: #2a2a2a;
     --secondary-gray: #d7d7d7;
     --secondary-red: #eb394f;
+
+    --min-screen-width: 300px;
+    --min-screen-height: 300px;
+    --admin-menu-width: 0px;
 }
 
 .primary-orange { color: var(--primary-orange); }
@@ -85,6 +90,9 @@ body {
 .hover-secondary-gray:hover { color: var(--secondary-gray); }
 .hover-secondary-red:hover { color: var(--secondary-red); }
 
+/* ensures the element takes up at least one full screen height */
+.full-height { min-height: 100vh; }
+
 .anchor {
     position: absolute;
     top: -30px;
@@ -121,7 +129,18 @@ section {
     display: block;
 }
 
-
+.info-hoverable {
+    display: inline-block;
+    border-radius: 20px;
+    width: 12px;
+    height: 12px;
+    text-align: center;
+    font-size: 8px;
+    vertical-align: top;
+    cursor: pointer;
+    margin-left: 4px;
+    border: 1px solid white;
+}
 
 .extraHeaderSpace {
     height: 200px;
@@ -133,7 +152,6 @@ footer {
     width: 100%;
     padding: 10px;
 }
-
 
 .noDisplay { display: none; }
 
@@ -312,6 +330,8 @@ form > h1 {
 
 
 
+
+
 .freeResponseQuestions {
     width: 70%;
     margin-left: 15%;
@@ -334,41 +354,62 @@ form > h1 {
     filter: blur(3px);
 }
 
-.automate-invites {
-    height: 100%;
+.build-team-container {
+    height: 310px;
+    width: 760px;
+    display: inline-block;
     position: relative;
-    padding: 10px 20px;
+    margin: 10px;
+    background-color: var(--primary-black-light);
+    vertical-align: top;
+    color: var(--secondary-gray);
+    font-size: 14px;
+
+    -webkit-box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    -moz-box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    box-shadow: 0 0 4px 0px rgba(0,0,0,.5);
+    -webkit-transition: -webkit-transition .2s;
+    -moz-transition: -moz-box-shadow .2s;
+    transition: box-shadow .2s;
+}
+.build-team {
+    position: relative;
+    padding: 5px 20px;
 }
 
-.automate-invites > div {
+.build-team > div {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     height: 100%;
 }
 
-.automate-invites .method-boxes {
+.build-team .method-boxes {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
 }
 
-.automate-invites .method-box {
+.build-team .method-box {
     display: flex;
-    max-width: 28%;
-    min-width: 100px;
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid white;
+    width: 210px;
+    height: 50px;
+    padding: 1px;
+    margin: 10px 5px;
+    border: 2px solid white;
     border-radius: 4px;
     justify-content: center;
     text-align: center;
     flex-direction: column;
     cursor: pointer;
 }
+.build-team .method-box:hover {
+    background-color: var(--primary-black-dark);
+}
 
-.automate-invites .method-box:hover {
-    background-color: var(--primary-black-light);
+.build-team .method-box.selected {
+    background-color: var(--primary-white);
+    color: var(--black-deep-dark)
 }
 
 
@@ -416,6 +457,21 @@ form > h1 {
     margin: 0 auto;
 }
 
+.tab-position-circle {
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(to bottom right, var(--secondary-gray), var(--primary-black-light));
+    border-radius: 5px;
+    display: inline-block;
+    margin: auto 15px;
+}
+.tab-position-circle:hover {
+    cursor: pointer;
+}
+.tab-position-circle.selected {
+    background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
+}
+
 
 .carousel .frame-position-circle {
     width: 8px;
@@ -424,9 +480,6 @@ form > h1 {
     border-radius: 4px;
     display: inline-block;
     margin: auto 10px;
-}
-.carousel .frame-position-circle.selected {
-    background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
 }
 .carousel .content {
     display: inline-block;
@@ -439,7 +492,7 @@ form > h1 {
 .carousel .content > div:first-child {
     position: absolute;
     left: 0;
-    transform: translateX(-100%);
+    transform: translateX(-101%);
 }
 .carousel .content > div:nth-child(2) {
     position: relative;
@@ -448,7 +501,7 @@ form > h1 {
 .carousel .content > div:last-child {
     position: absolute;
     right: 0;
-    transform: translateX(100%);
+    transform: translateX(101%);
 }
 
 .carousel .content.animate-next > div:nth-child(2) {
@@ -504,7 +557,7 @@ form > h1 {
     min-height: 70vh;
     width: 90%;
     margin: 30px auto;
-    min-width: 300px;
+    min-width: var(--min-screen-width);
     -webkit-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
     -moz-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
     box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
@@ -616,7 +669,7 @@ form > h1 {
     line-height: 22px;
 }
 .pricingInput .blackInput {
-    min-width: 300px;
+    min-width: var(--min-screen-width);
     left: 50%;
     position: relative;
     transform: translateX(-50%);
@@ -1177,7 +1230,7 @@ form > h1 {
     justify-content: space-around;
 }
 .results > .statsAndDescription > div {
-    width: 530px;
+    width: 450px;
     position: relative;
     display: inline-block;
     vertical-align: top;
@@ -1189,6 +1242,7 @@ form > h1 {
     transition:         all 0.5s ease;
 }
 .results > .statsAndDescription > .stats { padding: 15px 20px 25px; }
+.results > .statsAndDescription > .graph{  }
 .results > .statsAndDescription > .description { padding: 10px 15px; }
 .results > .statsAndDescription > .description > div > div,
 .results > .statsAndDescription > .description > div > div > div {
@@ -1373,7 +1427,7 @@ form > h1 {
     color: white !important;
 }
 .clickable, .clickableNoUnderline, .clickable-no-underline, .borderBottomClickable { cursor: pointer; }
-.clickable:hover { text-decoration: underline; }
+.clickable:hover, .underline-hover:hover { text-decoration: underline; }
 .borderBottomClickable:hover { border-bottom: 2px solid white; }
 .currentRoute {
     /* text-decoration: underline;  */
@@ -1445,40 +1499,6 @@ form > h1 {
 .blackBackgroundOpacity {
     background: var(--primary-black-dark);
     opacity: 0.85;
-}
-
-
-.messageHeader {
-    margin-top: -20px;
-    text-align: center;
-    position: fixed;
-    padding-bottom: 10px;
-    width: 100%;
-    z-index: 1000;
-    color: white !important;
-}
-
-.errorHeader {
-    background: linear-gradient(to right, #E83C53, #FB553A)
-}
-
-.infoHeader {
-    background: linear-gradient(to right, #72d6f5, #9A73D9)
-}
-#notificationCloseButton {
-    position: absolute !important;
-    right: 0;
-    padding: 3px !important;
-    top: 0px;
-    width: 40px !important;
-    height: 40px !important;
-    transform: scale(.7,.7);
-}
-#notificationCloseButton > div {
-    width: 24px;
-}
-#notificationCloseButton > svg {
-    fill: white !important;
 }
 
 .comingSoonBanner {
@@ -1662,11 +1682,6 @@ button.link {
     top: 0;
     bottom: 0;
     margin: auto -180px auto;
-}
-
-.isolatedHeader {
-    margin: 0px 20px 30px;
-    display: inline-block;
 }
 
 .pathwayHeaderText {
@@ -2045,17 +2060,46 @@ button.link {
 
 .employerDiv { background-color: var(--primary-black-dark); }
 
+.page-header {
+    color: var(--primary-white);
+    font-size: 20px;
+    text-align: left;
+    margin: 15px 30px;
+}
+.page-line-header {
+    width: 70%;
+    margin: 12px auto 0px;
+    position: relative;
+    text-align: center;
+}
+.page-line-header > div:last-child {
+    padding: 0px 40px;
+    background-color: var(--primary-black-dark);
+    display: inline-block;
+    position: relative;
+    font-size: 23px;
+    color: white;
+}
+.page-line-header > div:first-child {
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
 
-.tabsShadow {
+
+.top-shadow {
     width: 100%;
     overflow-y: hidden;
-    padding: 0 0 30px;
+    padding: 0 0 10px;
 }
-.tabsShadow > div {
+.top-shadow > div {
     width: 100%;
-    box-shadow:         0px 0px 20px 12px #00000073;
-    -moz-box-shadow:    0px 0px 20px 12px #00000073;
-    -webkit-box-shadow: 0px 0px 20px 12px #00000073;
+    box-shadow:         0px 0px 6px 3px #00000073;
+    -moz-box-shadow:    0px 0px 6px 3px #00000073;
+    -webkit-box-shadow: 0px 0px 6px 3px #00000073;
 }
 
 .freeResponse {
@@ -2162,6 +2206,7 @@ button.link {
     background-color: #d6d6d6;
     border-radius: 16px;
     cursor: pointer;
+    --arrow-icon-height: 3px;
 }
 .circleArrowIcon.disabled {
     background-color: #5a5a5a;
@@ -2172,14 +2217,16 @@ button.link {
 .circleArrowIcon:after {
     content: "";
     position: absolute;
-    width: 12px;
-    height: 12px;
+    width: calc(100% * 3 / 8);
+    height: calc(100% * 3 / 8);
     transform: rotate(45deg);
-    border-right: 3px solid var(--primary-black-dark);
-    border-bottom: 3px solid var(--primary-black-dark);
-    top: 8px;
-    left: 10px;
+    border-right: var(--arrow-icon-height) solid var(--primary-black-dark);
+    border-bottom: var(--arrow-icon-height) solid var(--primary-black-dark);
+    top: calc(100% / 4);
+    left: calc(100% * 5 / 16);
 }
+.circleArrowIcon.arrow-2px { --arrow-icon-height: 2px; }
+.circleArrowIcon.arrow-1px { --arrow-icon-height: 1px; }
 .myCandidates .arrowContainer {
     position: absolute;
     top: 53px;
@@ -2187,7 +2234,7 @@ button.link {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-.myCandidates .left.arrowContainer.halfScreen { right: 780px; }
+.myCandidates .left.arrowContainer.halfScreen { right: calc(90% - 196px); }
 .myCandidates .left.arrowContainer.fullScreen { right: calc(100% - 16px); }
 .myCandidates .right.arrowContainer {
     right: -16px;
@@ -2209,7 +2256,7 @@ button.link {
     transition: width 0.5s ease;
 }
 .candidateResults.halfScreen {
-    width: 795px;
+    width: calc(90% - 180px);
     -webkit-transition: width 0.5s ease;
     -ms-transition: width 0.5s ease;
     transition: width 0.5s ease;
@@ -2275,8 +2322,88 @@ button.link {
     cursor: pointer;
 }
 
+.popup-box {
+    display: inline-block;
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    padding: 10px;
+    margin-top: 15px;
+    color: var(--secondary-gray);
+    -moz-box-shadow:    0px 2px 20px 0px #00000073;
+    -webkit-box-shadow: 0px 2px 20px 0px #00000073;
+    box-shadow:         0px 2px 20px 0px #00000073;
+}
+.popup-box > .hide-message {
+    position: absolute;
+    bottom: 2px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.myCandidatesOverlayContainer {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+    z-index: 98;
+    background-color: var(--primary-black-dark);
+}
+.myCandidatesOverlay {
+    display: inline-block;
+    padding: 10px;
+    margin-top: 10px;
+    -moz-box-shadow:    0px 2px 20px 0px #00000073;
+    -webkit-box-shadow: 0px 2px 20px 0px #00000073;
+    box-shadow:         0px 2px 20px 0px #00000073;
+}
+
+.myCandidatesOverlay:hover{
+    cursor: pointer;
+}
+
+.popup-frame {
+    margin: auto;
+    width: 800px;
+}
+
+.popup-frame > div:first-child {
+    display: inline-block;
+    width: 20%;
+    height: 100%;
+    margin-top: 20px;
+    vertical-align: middle;
+}
+
+.popup-frame > div:first-child > img {
+    height: 70px;
+    width: 70px;
+}
+
+.popup-frame > div:nth-child(2) {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    height: 100%;
+    top: 5px;
+    width: 80%;
+}
+
+
+.employeesBox {
+    height: calc(100vh - 218px);
+    width: calc(100% - 40px);
+    min-height: 300px;
+    display: inline-block;
+    position: relative;
+    -moz-box-shadow:    0px 0px 6px 3px #00000073;
+    -webkit-box-shadow: 0px 0px 6px 3px #00000073;
+    box-shadow:         0px 0px 6px 3px #00000073;
+}
+
 .myCandidates .candidatesAndOptions {
-    width: 1150px;
+    width: calc(100% - 40px);
+    max-width: 1150px;
     position: relative;
     display: inline-block;
     -webkit-transition: width 0.5s ease;
@@ -2344,6 +2471,13 @@ button.link {
 .myCandidates.mobile .candidateTable {
     margin: 0 15px 15px 15px;
     width: calc(100% - 30px);
+}
+
+.myCandidates .candidateTable .name {
+
+}
+.myCandidates .candidateTable .name >span:hover {
+    color: var(--primary-cyan);
 }
 
 .myCandidates .candidateTable tr {
@@ -2513,6 +2647,7 @@ button.link {
 .selectRootWhite { color: white; }
 .selectRootBlue { color: #76defe; }
 .myCandidates .position-select-root { max-width: 180px; }
+.no-focus-change-important:focus { background-color: inherit !important; }
 .selectIconWhiteImportant { color: white !important; }
 .selectIconGrayImportant { color: #5E5E5E !important; }
 .selectIconMargin { margin-top: -5px; }
@@ -2520,6 +2655,10 @@ button.link {
 .topOptionGray { color: #5E5E5E; }
 .mobile .myCandidatesSelect > div { margin-bottom: 0; }
 .myCandidatesSelect > div { margin-bottom: -4px; }
+.dashboard-select > div {
+    margin-bottom: -4px;
+    padding-right: 24px;
+}
 
 .home-pricing-select {
     margin: 0 -10px -4px 0;
@@ -3134,19 +3273,6 @@ button.link {
     margin: 30px auto;
 }
 
-.footerMoonshotLogo {
-    width: 170px;
-    height: 80px;
-}
-.footer {
-    background-color: #3c3c3c;
-    padding-top: 20px;
-}
-.footer-container {
-    z-index: 1000;
-    position: relative;
-}
-
 .resultsHiringStage {
     padding-left: 32px;
 }
@@ -3359,6 +3485,9 @@ button.link {
     position: relative;
     z-index: 100;
     top: -130px;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .pathwayPreviewLi { vertical-align: top; }
@@ -3440,25 +3569,31 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     cursor:         grab;
 }
 .pointer { cursor: pointer; }
-.notAllowed { cursor: not-allowed; }
-.defaultCursor { cursor: default; }
+.not-allowed { cursor: not-allowed; }
+.default-cursor { cursor: default; }
 
 .twoOptionsOr {
     display: inline-block;
     margin: 55px 20px 0;
 }
 
-.flex-center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  resize: none;
-  overflow: auto;
+.fully-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
-.flex-center p {
-  margin: 0;
-  padding: 20px;
+
+.overflow-visible-1.overflow-visible-2 {
+    overflow-y: visible;
+}
+
+.flex-center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -3964,17 +4099,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 @media only screen and (max-width: 1200px) {
     .above1200only { display: none; }
 
-    .myCandidates .candidatesAndOptions {
-        width: 950px;
-    }
     .myCandidates .candidateTable td:nth-child(2) {
         max-width: 112px;
     }
     .myCandidates .resultsOpenNoCandidates {
         left: 27px;
     }
-    .myCandidates .left.arrowContainer.halfScreen { right: 635px; }
-    .candidateResults.halfScreen { width: 650px;}
 }
 @media only screen and (max-width: 1175px) {
     .boxStyle {
@@ -4048,15 +4178,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         --device-scale: .2;
     }
 
-    .myCandidates .candidatesAndOptions {
-        width: calc(100% - 40px);
-    }
-    .candidateResults.halfScreen {
-        width: 68%;
-    }
-    .myCandidates .left.arrowContainer.halfScreen {
-        right: calc(68% - 16px);
-    }
     .candidateResults .interestArea {
         left: 4%;
     }
@@ -4168,6 +4289,23 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     #ATSIntegrations > div > img {
         margin-left: 25px;
+    }
+
+    .popup-frame {
+        width: 600px;
+    }
+
+    .popup-frame > div:first-child {
+        width: 15%;
+    }
+
+    .popup-frame > div:first-child > img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .popup-frame > div:nth-child(2) {
+        width: 85%;
     }
 
 
@@ -4380,7 +4518,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 100%;
         height: 0px;
     }
-    .messageHeader { margin-top: -70px; }
 
     .automate-invites .manual-invite .manual-add-example {
         --device-scale: .15;
@@ -4391,6 +4528,22 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         float: right;
         right: inherit;
         bottom: inherit;
+    }
+
+    .popup-frame {
+        width: 90%;
+    }
+
+    .popup-frame > div:first-child {
+        width: 0;
+    }
+
+    .popup-frame > div:first-child > img {
+        display: none;
+    }
+
+    .popup-frame > div:nth-child(2) {
+        width: 100%;
     }
 
     .results > .statsAndDescription > div {
@@ -4906,6 +5059,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #ATSIntegrations > div > img {
         margin-left: 15px;
     }
+
+    .page-line-header { width: 85%; }
+    .page-line-header > div:last-child { padding: 0px 20px; }
+
 
     .twoOptionsOr { margin: 55px 10px 0; }
 

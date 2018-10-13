@@ -5,10 +5,11 @@ import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import { connect } from 'react-redux';
 import { browserHistory, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal } from "../actions/usersActions";
-import { isValidEmail, goTo } from "../miscFunctions";
+import { signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal } from "../../actions/usersActions";
+import { isValidEmail, goTo } from "../../miscFunctions";
 import { axios } from 'axios';
 import { animateScroll } from "react-scroll";
+import AccountAdminMenu from "./accountAdminMenu";
 
 const styles = {
     title: {
@@ -82,7 +83,7 @@ class Menu extends Component {
                 this.setState({dropDownSelected: "Pricing"})
             }
         } else {
-            // set dropdown to be on Profile if not on settings or onboarding pages
+            // set dropdown to be on Account if not on settings or onboarding pages
             if (this.state.dropDownSelected !== "Account") {
                 this.setState({dropDownSelected: "Account"});
             }
@@ -113,18 +114,6 @@ class Menu extends Component {
                 // always sign out when sign out clicked
                 this.props.signout();
                 goTo("/");
-                break;
-            case "Profile":
-                if (currentUser) {
-                    // if user is employer, go to business profile
-                    if (currentUser.userType === "manager" || currentUser.userType === "employee" || currentUser.userType === "accountAdmin") {
-                        goTo("/");
-                    }
-                    // otherwise go to normal profile
-                    else {
-                        goTo("/profile");
-                    }
-                }
                 break;
             case "Settings":
                 goTo("/settings");
@@ -161,10 +150,10 @@ class Menu extends Component {
     }
 
     signOut() {
-        if (this.props.location.pathname === '/onboarding') {
-            const markOnboardingComplete = false;
-            this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
-        }
+        // if (this.props.location.pathname === '/onboarding') {
+        //     const markOnboardingComplete = false;
+        //     this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
+        // }
         this.props.signout();
         goTo('/');
     }
@@ -247,11 +236,16 @@ class Menu extends Component {
 
     render() {
         let self = this;
-
-        let isEmployer = false;
         let currentUser = this.props.currentUser;
 
-        if (currentUser && (currentUser.userType === "accountAdmin" || currentUser.userType === "manager" || currentUser.userType === "employee")) {
+        // if screen is large enough and user is account admin, give them the side-menu
+        if (currentUser && currentUser.userType === "accountAdmin") {
+            return <AccountAdminMenu/>;
+        }
+
+        let isEmployer = false;
+
+        if (currentUser && (currentUser.userType === "manager" || currentUser.userType === "employee")) {
             isEmployer = true;
         }
 
@@ -393,40 +387,6 @@ class Menu extends Component {
                 menuOptions.push({optionType: "button", title: "Enter a position"});
             }
         }
-        // if the current user is an account admin for a business
-        else if (currentUser.userType === "accountAdmin") {
-            menuOptions = [
-                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
-                {optionType: "url", title: "Employees", url: "/myEmployees"},
-                {optionType: "url", title: "Candidates", url: "/myCandidates"},
-                //{optionType: "url", title: "Dashboard", url: "/dashboard"},
-                {optionType: "separator"},
-                {optionType: "dropDown", components: [
-                    {optionType: "url", title: "Account", url:"/"},
-                    {optionType: "divider"},
-                    {optionType: "url", title: "Add User", url: "/addUser"},
-                    {optionType: "url", title: "Settings", url: "/settings"},
-                    {optionType: "url", title: "Billing", url: "/billing"},
-                    {optionType: "url", title: "Pricing", url: "/pricing"},
-                    {optionType: "signOut"}
-                ]}
-            ];
-        }
-        // if the current user is a manager for a business
-        // else if (currentUser.userType === "manager") {
-        //     menuOptions = [
-        //         {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
-        //         {optionType: "url", title: "Employees", url: "/myEmployees"},
-        //         {optionType: "separator"},
-        //         {optionType: "dropDown", components: [
-        //             {optionType: "url", title: "Profile", url: "/"},
-        //             {optionType: "divider"},
-        //             {optionType: "url", title: "Settings", url: "/settings"},
-        //             {optionType: "url", title: "Add User", url: "/addUser"},
-        //             {optionType: "signOut"}
-        //         ]}
-        //     ];
-        // }
         // if the current user is an employee for a business
         else if (currentUser.userType === "employee") {
             menuOptions = [
@@ -620,16 +580,17 @@ class Menu extends Component {
                 onClick={logoClickAction}
             />
         );
-        let easeLogoHtml =
-        <img
-            width={100}
-            height={30}
-            alt="Moonshot"
-            style={{verticalAlign: "baseline"}}
-            className="easeLogo"
-            id="easeLogo"
-            src={"/logos/EaseLogo" + this.props.png}
-        />
+        let easeLogoHtml = (
+            <img
+                width={100}
+                height={30}
+                alt="Moonshot"
+                style={{verticalAlign: "baseline"}}
+                className="easeLogo"
+                id="easeLogo"
+                src={"/logos/EaseLogo" + this.props.png}
+            />
+        );
 
         let menu = (
             <header
@@ -693,7 +654,6 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
-        blueHeader: state.users.blueHeader,
         png: state.users.png
     };
 }

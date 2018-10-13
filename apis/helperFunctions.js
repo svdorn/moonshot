@@ -62,7 +62,7 @@ const FOR_USER = [
     "positions",
     "profileUrl",
     "skillTests",
-    "onboarding",
+    "onboard",
     "phoneNumber",
     "hideProfile",
     "dateSignedUp",
@@ -72,14 +72,14 @@ const FOR_USER = [
     "adminQuestions",
     "referredByCode",
     "currentPosition",
-    // "psychometricTest",
     "verificationToken",
     "firstBusinessUser",
     "agreedToSkillTerms",
     "termsAndConditions",
     "hasFinishedOnboarding",
-    "sawMyCandidatesInfoBox",
-    "intercom"
+    "showVerifyEmailBanner",
+    "intercom",
+    "popups"
 ];
 
 // removes information from a db user object so that it can be passed for that

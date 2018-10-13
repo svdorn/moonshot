@@ -26,6 +26,78 @@ export function usersReducers(state = initialState, action) {
                 userPostedFailed: false
             };
             break;
+        case "OPEN_CANDIDATES_POPUP_MODAL":
+            return {
+                ...state,
+                candidatesPopupModalOpen: true
+            };
+            break;
+        case "CLOSE_CANDIDATES_POPUP_MODAL":
+            Intercom('update');
+            return {
+                ...state,
+                candidatesPopupModalOpen: false,
+                loadingSomething: false
+            };
+            break;
+        case "OPEN_ROI_ONBOARDING_MODAL":
+            return {
+                ...state,
+                roiOnboardingOpen: true
+            };
+            break;
+        case "CLOSE_ROI_ONBOARDING_MODAL":
+            return {
+                ...state,
+                roiOnboardingOpen: false
+            };
+            break;
+        case "OPEN_ONBOARDING_4_MODAL":
+            return {
+                ...state,
+                onboardingStep4Open: true
+            };
+            break;
+        case "CLOSE_ONBOARDING_4_MODAL":
+            return {
+                ...state,
+                onboardingStep4Open: false
+            };
+            break;
+        case "OPEN_ADD_ADMIN_MODAL":
+            return {
+                ...state,
+                addAdminModalOpen: true
+            };
+            break;
+        case "CLOSE_ADD_ADMIN_MODAL":
+            return {
+                ...state,
+                addAdminModalOpen: false,
+                userPosted: false,
+                userPostedFailed: false
+            };
+            break;
+        case "OPEN_ADD_POSITION_MODAL":
+            return {
+                ...state,
+                positionModalOpen: true
+            };
+            break;
+        case "CLOSE_ADD_POSITION_MODAL":
+            return {
+                ...state,
+                positionModalOpen: false,
+                positionPosted: false,
+                posiitonPostedFailed: false
+            };
+            break;
+        case "OPEN_INVITE_CANDIDATES_MODAL": {
+            return { ...state, inviteCandidatesModalOpen: true }; break;
+        }
+        case "CLOSE_INVITE_CANDIDATES_MODAL": {
+            return { ...state, inviteCandidatesModalOpen: false }; break;
+        }
         case "OPEN_CONTACT_US_MODAL":
             return {
                 ...state,
@@ -39,6 +111,34 @@ export function usersReducers(state = initialState, action) {
                 message: undefined
             };
             break;
+        case "MARK_FOOTER_ON_SCREEN": {
+            return { ...state, footerOnScreen: action.footerOnScreen };
+        }
+        case "UPDATE_ONBOARDING_STEP": {
+            if (!state.currentUser) { return state; }
+            // create onboarding object with new step or with time finished marked
+            let onboard = { };
+            // if the user is finished, update that on the frontend
+            if (action.newStep === -1) {
+                onboard = { timeFinished: new Date() };
+            } else {
+                onboard = { step: action.newStep };
+            }
+
+            // fill in onboarding info with any that already exists from user
+            if (typeof state.currentUser.onboard === "object") {
+                onboard = { ...state.currentUser.onboard, ...onboard };
+            }
+            // update highest step user has been to
+            if (typeof onboard.highestStep !== "number" || onboard.highestStep < action.newStep) {
+                onboard.highestStep = action.newStep;
+            }
+            // throw the onboarding stuff back into the user
+            const currentUser = { ...state.currentUser, onboard }
+            // save the state with the new current user
+            return { ...state, currentUser, loadingSomething: false };
+            break;
+        }
         case "CREATED_NO_VERIFY_EMAIL_SENT": {
             return {
                 ...state,
@@ -85,6 +185,10 @@ export function usersReducers(state = initialState, action) {
                 errorMessage: undefined
             };
             break;
+        case "INTERCOM_EVENT":
+            Intercom('update');
+            return { ...state, loadingSomething: false };
+            break;
         case "LOGIN":
             if (action.user && action.user.intercom) {
                 const intercom = action.user.intercom;
@@ -103,16 +207,20 @@ export function usersReducers(state = initialState, action) {
                 loadingSomething: false
             };
             break;
-        case "UPDATE_ONBOARDING":
+        // case "UPDATE_ONBOARDING":
+        case "HIDE_POPUPS":
             return {
                 ...state,
-                currentUser: action.payload
+                currentUser: action.payload,
+                loadingSomething: false
             }
             break;
         case "NOTIFICATION":
         case "VERIFY_EMAIL_REJECTED":
         case "CHANGE_TEMP_PASS_REJECTED":
         case "ADD_PATHWAY_REJECTED":
+        case "HIDE_POPUPS_REJECTED":
+        case "POST_BUSINESS_INTERESTS_REJECTED":
         case "ADD_NOTIFICATION":
             return {
                 ...state,
@@ -132,10 +240,14 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "UPDATE_USER_REJECTED":
-        case "UPDATE_ONBOARDING_REJECTED":
+        //case "UPDATE_ONBOARDING_REJECTED":
         case "CHANGE_PASSWORD":
         case "POST_EMAIL_INVITES_REJECTED":
-            return {...state, loadingSomething:false, userPostedFailed: true, ...notificationInfo(action.notification)}
+            return {
+                ...state,
+                loadingSomething: false,
+                userPostedFailed: true,
+                ...notificationInfo(action.notification)}
             break;
         case "SIGNOUT":
             Intercom('shutdown');
@@ -178,8 +290,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 userPosted: true,
-                loadingSomething: false,
-                waitingForFinalization: action.waitingForFinalization
+                loadingSomething: false
             };
             break;
         case "POST_USER_SUCCESS_EMAIL_FAIL":
@@ -263,31 +374,31 @@ export function usersReducers(state = initialState, action) {
                 ...state, notification: undefined, notificationDate: new Date()
             }
             break;
-        case "START_ONBOARDING":
-            return {
-                ...state, isOnboarding: true
-            }
-            break;
-        case "END_ONBOARDING":
-            // update the user if an update was sent
-            if (action.user) {
-                return {
-                    ...state,
-                    isOnboarding: false,
-                    currentUser: action.user
-                }
-            } else {
-                return {
-                    ...state,
-                    isOnboarding: false
-                }
-            }
-            break;
-        case "UPDATE_USER_ONBOARDING":
-            return {
-                ...state, currentUser: action.user
-            };
-            break;
+        // case "START_ONBOARDING":
+        //     return {
+        //         ...state, isOnboarding: true
+        //     }
+        //     break;
+        // case "END_ONBOARDING":
+        //     // update the user if an update was sent
+        //     if (action.user) {
+        //         return {
+        //             ...state,
+        //             isOnboarding: false,
+        //             currentUser: action.user
+        //         }
+        //     } else {
+        //         return {
+        //             ...state,
+        //             isOnboarding: false
+        //         }
+        //     }
+        //     break;
+        // case "UPDATE_USER_ONBOARDING":
+        //     return {
+        //         ...state, currentUser: action.user
+        //     };
+        //     break;
         case "START_PSYCH_EVAL":
         case "USER_UPDATE":
             return {

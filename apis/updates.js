@@ -124,7 +124,6 @@ async function updateBusinesses() {
             for (let posIdx = 0; posIdx < positions.length; posIdx++) {
                 let position = positions[posIdx];
 
-                position.finalized = true;
                 if (typeof position.positionType !== "string") { position.positionType = "General" }
                 if (!position.length) { position.length = 25; }
                 if (!position.timeAllotted) { position.timeAllotted = 14; }

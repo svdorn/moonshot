@@ -53,6 +53,7 @@ const businessApis = require("./apis/businessApis");
 const candidateApis = require("./apis/candidateApis");
 const evaluationApis = require("./apis/evaluationApis");
 const accountAdminApis = require("./apis/accountAdminApis");
+const mockusersApis = require("./apis/mockusersApis");
 const updates = require("./apis/updates");
 
 const webhooks = require("./apis/webhooks");
@@ -126,7 +127,7 @@ app.post("/user/stayLoggedIn", userApis.POST_stayLoggedIn);
 app.get("/user/stayLoggedIn", userApis.GET_stayLoggedIn);
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
-app.post('/user/updateOnboarding', userApis.POST_updateOnboarding);
+//app.post('/user/updateOnboarding', userApis.POST_updateOnboarding);
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
 app.post('/user/login', userApis.POST_login);
@@ -141,17 +142,15 @@ app.get("/user/notificationPreferences", userApis.GET_notificationPreferences);
 app.post("/user/postNotificationPreferences", userApis.POST_notificationPreferences);
 app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
 app.post("/user/verifyFromApiKey", userApis.POST_verifyFromApiKey);
+app.post("/user/updateOnboardingStep", userApis.POST_updateOnboardingStep);
+app.post("/user/popups", userApis.POST_popups);
+app.post("/user/intercomEvent", userApis.POST_intercomEvent);
+app.post("/user/reSendVerificationEmail", userApis.POST_reSendVerificationEmail);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
-app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
-app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
-app.post("/candidate/reSendVerificationEmail", candidateApis.POST_reSendVerificationEmail);
-app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 
 app.post("/accountAdmin/sendVerificationEmail", accountAdminApis.POST_sendVerificationEmail);
-app.post("/accountAdmin/identifyATS", accountAdminApis.POST_identifyATS);
-app.post("/accountAdmin/integrationSuggestion", accountAdminApis.POST_integrationSuggestion);
-app.post("/accountAdmin/languagePreference", accountAdminApis.POST_languagePreference);
+app.post("/accountAdmin/showVerifyEmailBanner", accountAdminApis.POST_showVerifyEmailBanner);
 
 app.post('/business/googleJobsLinks', businessApis.POST_googleJobsLinks);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
@@ -159,15 +158,16 @@ app.post('/business/addEvaluation', businessApis.POST_addEvaluation);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
+app.post("/business/inviteAdmins", businessApis.POST_inviteAdmins);
 app.post("/business/postCreateLink", businessApis.POST_createLink);
 app.post("/business/rateInterest", businessApis.POST_rateInterest);
 app.post("/business/changeHiringStage", businessApis.POST_changeHiringStage);
 app.post("/business/moveCandidates", businessApis.POST_moveCandidates);
-app.post("/business/sawMyCandidatesInfoBox", businessApis.POST_sawMyCandidatesInfoBox);
 app.post("/business/resetApiKey", businessApis.POST_resetApiKey);
 app.post("/business/uploadCandidateCSV", businessApis.POST_uploadCandidateCSV);
 app.post("/business/chatbotData", businessApis.POST_chatbotData);
 app.post("/business/createBusinessAndUser", businessApis.POST_createBusinessAndUser);
+app.post("/business/interests", businessApis.POST_interests);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/business", businessApis.GET_business);
@@ -176,6 +176,14 @@ app.get("/business/positions", businessApis.GET_positions);
 app.get("/business/positionsForApply", businessApis.GET_positionsForApply);
 app.get("/business/evaluationResults", businessApis.GET_evaluationResults);
 app.get("/business/apiKey", businessApis.GET_apiKey);
+app.get("/business/employeesAwaitingReview", businessApis.GET_employeesAwaitingReview);
+app.get("/business/candidatesAwaitingReview", businessApis.GET_candidatesAwaitingReview);
+app.get("/business/candidatesTotal", businessApis.GET_candidatesTotal);
+app.get("/business/newCandidateGraphData", businessApis.GET_newCandidateGraphData);
+app.get("/business/evaluationsGraphData", businessApis.GET_evaluationsGraphData)
+app.get("/business/billingIsSetUp", businessApis.GET_billingIsSetUp);
+app.get("/business/uniqueName", businessApis.GET_uniqueName);
+app.get("/business/adminList", businessApis.GET_adminList);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);
@@ -197,6 +205,7 @@ app.post("/evaluation/answerCognitiveQuestion", evaluationApis.POST_answerCognit
 app.post("/evaluation/answerOutOfTimeCognitive", evaluationApis.POST_answerOutOfTimeCognitive);
 app.post("/evaluation/skipAdminQuestions", evaluationApis.POST_skipAdminQuestions);
 
+app.get("/mockusers/all", mockusersApis.GET_allMockusers);
 
 //app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);

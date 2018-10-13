@@ -16,11 +16,16 @@ import { bindActionCreators } from 'redux';
 // so that axios works in IE < 11
 require('es6-promise').polyfill();
 
-import Menu from './components/menu';
+import Menu from './components/menu/menu';
 import Footer from './components/footer';
 import Notification from './components/notification'
-import FixedOnboardingProgress from "./components/miscComponents/fixedOnboardingProgress";
 import ContactUsDialog from './components/childComponents/contactUsDialog';
+import AddAdminDialog from "./components/childComponents/addAdminDialog";
+import CopyLinkFooter from './components/childComponents/copyLinkFooter';
+import OnboardingStepsFooter from './components/childComponents/onboardingStepsFooter';
+import AdminVerifyEmail from "./components/childComponents/adminVerifyEmail";
+
+import "./main.css";
 
 let theme = {
     // this messes with the slider colors
@@ -101,27 +106,50 @@ class Main extends Component {
         img.onload = function () {
             var result = (img.width > 0) && (img.height > 0);
             callback(feature, result);
-        };
+        };<div>
+            </div>
         img.onerror = function () {
             callback(feature, false);
         };
         img.src = "data:image/webp;base64," + kTestImages[feature];
     }
 
+    popupFooter() {
+        const { currentUser } = this.props;
+
+        if (currentUser && currentUser.userType === "accountAdmin" &&
+            currentUser.onboard && !currentUser.onboard.timeFinished &&
+            typeof currentUser.onboard.step === "number"
+        ) {
+            return (
+                <OnboardingStepsFooter />
+            );
+        } else {
+            return <CopyLinkFooter />
+        }
+    }
+
 
     render() {
         let content = null;
+        const isAccountAdmin = !!(this.props.currentUser && this.props.currentUser.userType === "accountAdmin");
         if (!this.state.loadedUser || !this.props.webpSupportChecked) {
             content = <div className="fillScreen"/>
         }
         else {
             content = (
                 <div>
-                    <Menu/>
-                    <Notification/>
-                    <ContactUsDialog/>
-                    { this.props.children }
-                    <FixedOnboardingProgress/>
+                    <div style={{position:"relative"}}>
+                        <Menu/>
+                        <div styleName={isAccountAdmin ? "admin-content" : ""}>
+                            <Notification/>
+                            <AdminVerifyEmail/>
+                            <AddAdminDialog/>
+                            <ContactUsDialog/>
+                            { this.props.children }
+                            { this.popupFooter() }
+                        </div>
+                    </div>
                     <Footer/>
                 </div>
             );
@@ -147,7 +175,7 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
         notification: state.users.notification,
-        webpSupportChecked: state.users.webpSupportChecked
+        webpSupportChecked: state.users.webpSupportChecked,
     };
 }
 

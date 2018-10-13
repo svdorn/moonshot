@@ -2,10 +2,12 @@ const Businesses = require("../models/businesses.js");
 const Users = require("../models/users.js");
 const Psychtests = require("../models/psychtests.js");
 const Signupcodes = require("../models/signupcodes.js");
+const Mockusers = require("../models/mockusers.js");
 const mongoose = require("mongoose");
+const credentials = require('../credentials');
 const Intercom = require('intercom-client');
 
-const client = new Intercom.Client({ token: 'dG9rOjRhYTE3ZjgzX2IyYmRfNDQyY184YjUwX2JjMjk4OWU3MDhmYjoxOjA=' });
+const client = new Intercom.Client({ token: credentials.intercomToken });
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -27,7 +29,9 @@ const { sanitize,
         founderEmails,
         emailFooter,
         devMode,
-        devEmail
+        devEmail,
+
+        moonshotUrl
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -40,15 +44,16 @@ const businessApis = {
     POST_answerQuestion,
     POST_googleJobsLinks,
     POST_emailInvites,
+    POST_inviteAdmins,
     POST_createLink,
     POST_rateInterest,
     POST_changeHiringStage,
     POST_moveCandidates,
-    POST_sawMyCandidatesInfoBox,
     POST_resetApiKey,
     POST_uploadCandidateCSV,
     POST_chatbotData,
     POST_createBusinessAndUser,
+    POST_interests,
     GET_candidateSearch,
     GET_business,
     GET_employeeSearch,
@@ -57,6 +62,14 @@ const businessApis = {
     GET_positionsForApply,
     GET_evaluationResults,
     GET_apiKey,
+    GET_employeesAwaitingReview,
+    GET_candidatesAwaitingReview,
+    GET_candidatesTotal,
+    GET_newCandidateGraphData,
+    GET_evaluationsGraphData,
+    GET_billingIsSetUp,
+    GET_uniqueName,
+    GET_adminList,
 
     generateApiKey,
     createEmailInfo,
@@ -65,6 +78,48 @@ const businessApis = {
 
 
 // ----->> START APIS <<----- //
+
+
+async function GET_adminList(req, res) {
+    const { userId, verificationToken, businessId, excludeSelf } = sanitize(req.query);
+
+    try {
+        var [ adminList, { business, user } ] = await Promise.all([
+            Users.find({ "businessInfo.businessId": businessId }).select("name _id"),
+            verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId)
+        ]);
+    }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // remove the user if they don't want to see themselves in the list of admins
+    if (excludeSelf) {
+        adminList = adminList.filter(u => u._id.toString() !== userId.toString());
+    }
+
+    // return just the names of the users
+    return res.status(200).send({ adminList: adminList.map(u => u.name) });
+}
+
+
+// find out if billing has been set up for the company
+async function GET_billingIsSetUp(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    const billingIsSetUp = !!(business && typeof business.billingCustomerId === "string");
+
+    console.log("billing is set up: ", billingIsSetUp);
+
+    return res.status(200).send({ billingIsSetUp });
+}
 
 
 // create a business and the first account admin for that business
@@ -108,7 +163,7 @@ async function POST_createBusinessAndUser(req, res) {
         name: company,
         positions: [{ name: positionTitle, positionType, isManager }]
     }
-    console.log("newBusinessInfo: ", newBusinessInfo);
+
     try { var business = await createBusiness(newBusinessInfo); }
     catch (createBizError) {
         console.log("Error creating business from business signup: ", createBizError);
@@ -118,21 +173,35 @@ async function POST_createBusinessAndUser(req, res) {
     // add the business to the user
     user.businessInfo = {
         businessId: business._id,
+        businessName: business.name,
+        uniqueName: business.uniqueName,
         title: "Account Admin"
     }
     // user is the first at their company (so they have to do onboarding)
     user.firstBusinessUser = true;
 
-    if (process.env.NODE_ENV === "production") {
     // add the company to the user on intercom
-        try {
-            var companies = [];
-            companies.push({id: business.intercomId});
-            var intercom = await client.users.update({id: user.intercom.id, companies})
-        } catch (updateIntercomError) {
-            console.log("error updating an intercom user: ", updateIntercomError);
-            return res.status(500).send("Server error.");
-        }
+    try {
+        var companies = [];
+        companies.push({id: business.intercomId});
+        var intercom = await client.users.update({
+            id: user.intercom.id,
+            companies,
+            custom_attributes: {
+                first_business_user: true
+            }
+        })
+    } catch (updateIntercomError) {
+        console.log("error updating an intercom user: ", updateIntercomError);
+        return res.status(500).send("Server error.");
+    }
+
+    // generate an hmac for the user so intercom can verify identity
+    if (user.intercom && user.intercom.id) {
+        const hash = crypto.createHmac('sha256', credentials.hmacKey)
+                   .update(user.intercom.id)
+                   .digest('hex');
+        user.hmac = hash;
     }
 
     try { user = await user.save(); }
@@ -199,6 +268,15 @@ async function createAccountAdmin(info) {
         user.userType = "accountAdmin";
         // user has not yet verified email
         user.verified = false;
+        // user needs to see popups
+        user.popups = {
+            candidates: true,
+            candidateModal: true,
+            employees: true,
+            evaluations: true,
+            dashboard: true,
+            businessInterests: true
+        };
         // had to select that they agreed to the terms to sign up so must be true
         user.termsAndConditions = [
             {
@@ -227,11 +305,16 @@ async function createAccountAdmin(info) {
         user.notifications.firstTime = true;
         // user will have to do business onboarding
         user.hasFinishedOnboarding = false;
-        user.onboarding = {
-            step: 0,
-            complete: false,
-            furthestStep: 0
+        user.onboard = {
+            step: 1,
+            highestStep: 1,
+            actions: []
         }
+        // user.onboarding = {
+        //     step: 0,
+        //     complete: false,
+        //     furthestStep: 0
+        // }
         // infinite use, used to verify identify when making calls to backend
         user.verificationToken = crypto.randomBytes(64).toString('hex');
         // one-time use, used to verify email address before initial login
@@ -285,30 +368,28 @@ async function createAccountAdmin(info) {
             if (!verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
 
             // create a user on intercom and add intercom information to the user
-            if (process.env.NODE_ENV === "production") {
-                try {
-                    var intercom = await client.users.create({
-                        email: email,
-                         name: name,
-                         custom_attributes: {
-                             user_type: user.userType
-                         }
-                     });
-                }
-                catch (createIntercomError) {
-                    console.log("error creating an intercom user: ", createIntercomError);
-                    return res.status(500).send("Server error.");
-                }
+            try {
+                var intercom = await client.users.create({
+                     email: email,
+                     name: name,
+                     custom_attributes: {
+                         user_type: user.userType
+                     }
+                 });
+            }
+            catch (createIntercomError) {
+                console.log("error creating an intercom user: ", createIntercomError);
+                return res.status(500).send("Server error.");
+            }
 
-                // Add the intercom info to the user
-                if (intercom.body) {
-                    user.intercom = {};
-                    user.intercom.email = intercom.body.email;
-                    user.intercom.id = intercom.body.id;
-                } else {
-                    console.log("error creating an intercom user: ", createIntercomError);
-                    return res.status(500).send("Server error.");
-                }
+            // Add the intercom info to the user
+            if (intercom.body) {
+                user.intercom = {};
+                user.intercom.email = intercom.body.email;
+                user.intercom.id = intercom.body.id;
+            } else {
+                console.log("error creating an intercom user: ", createIntercomError);
+                return res.status(500).send("Server error.");
             }
 
             // make the user db object
@@ -459,20 +540,25 @@ async function createBusiness(info) {
                 }
             }
         ];
-        if (process.env.NODE_ENV === "production") {
-            business.intercomId = crypto.randomBytes(16).toString('hex');
 
-            // create a user on intercom and add intercom information to the user
-            try {
-                var intercom = await client.companies.create({
-                     name: name,
-                     company_id: business.intercomId
-                 });
-            }
-            catch (createIntercomError) {
-                console.log("error creating an intercom company: ", createIntercomError);
-                return res.status(500).send("Server error.");
-            }
+        // Create a business intercomId
+        business.intercomId = crypto.randomBytes(16).toString('hex');
+
+        // create a user on intercom and add intercom information to the user
+        try {
+            var intercom = await client.companies.create({
+                 name: name,
+                 company_id: business.intercomId,
+                 custom_attributes: {
+                     first_position: business.positions[0] ? business.positions[0].name : null,
+                     unique_name: uniqueName,
+                     candidates: 0
+                 }
+             });
+        }
+        catch (createIntercomError) {
+            console.log("error creating an intercom company: ", createIntercomError);
+            return res.status(500).send("Server error.");
         }
 
         // create the business in the db
@@ -570,7 +656,6 @@ async function createPosition(name, type, businessId, isManager) {
             isManager,
             length: type === "Developer" ? 40 : 22,
             dateCreated: Date.now(),
-            finalized: true,
             timeAllotted: 60
         }
 
@@ -915,9 +1000,7 @@ function createCode(businessId, positionId, userType, email, open) {
         }
         // make the code in the db
         try { code = await Signupcodes.create(code) }
-        catch (createCodeError) {
-            return reject(createCodeError);
-        }
+        catch (createCodeError) { return reject(createCodeError); }
         // return the code
         return resolve(code);
     });
@@ -927,9 +1010,7 @@ function createLink(businessId, positionId, userType) {
     return new Promise(async function(resolve, reject) {
         try {
             const codeObj = await createCode(businessId, positionId, userType, null, true);
-            resolve({
-                code: codeObj.code, userType
-            });
+            resolve({ code: codeObj.code, userType });
         }
         // catch whatever random error comes up
         catch (error) {
@@ -943,21 +1024,16 @@ function createEmailInfo(businessId, positionId, userType, email) {
     return new Promise(async function(resolve, reject) {
         try {
             const codeObj = await createCode(businessId, positionId, userType, email, false);
-            resolve({
-                code: codeObj.code,
-                email, userType
-            });
+            resolve({ code: codeObj.code, email, userType });
         }
         // catch whatever random error comes up
-        catch (error) {
-            reject(error);
-        }
+        catch (error) { reject(error); }
     });
 }
 
 
 // sends email to the user with email info provided
-async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUrl, userName) {
+async function sendEmailInvite(emailInfo, positionName, businessName, userName) {
     return new Promise(async function(resolve, reject) {
         const code = emailInfo.code;
         const email = emailInfo.email;
@@ -969,12 +1045,6 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         let content = "";
         // subject of the email
         let subject = "";
-
-        // defining it before the call saves a bit of time
-        if (!moonshotUrl) {
-            // this is where all links will go
-            moonshotUrl = process.env.NODE_ENV === "development" ? "http://localhost:8081/" : "https://moonshotinsights.io/";
-        }
 
         // the button linking to the signup page with the signup code in the url
         const createAccountButton =
@@ -1029,7 +1099,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
                         + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
                         + '<p style="width:95%; display:inline-block; text-align:left;">' + userName + ' invited you to be an admin for ' + businessName + '&#39;s predictive candidate evaluations.'
                         + ' Please click the button below to create your account.'
-                        + ' Once you&#39;ve created your account you can begin adding other admins, employees, and candidates, as well as grade employees and review evaluation results.</p>'
+                        + ' Once you&#39;ve created your account you can begin adding other admins, employees, and candidates, as well as grading employees and reviewing evaluation results.</p>'
                         + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights and candidate predictions!</p><br/>'
                         + createAccountButton
                         + emailFooter
@@ -1047,23 +1117,64 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
 }
 
 
+// send email invites to account admins
+async function POST_inviteAdmins(req, res) {
+    const { userId, verificationToken, businessId, adminEmails } = sanitize(req.body);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    if (!user.verified) {
+        return res.status(403).send({ message: "Email not yet verified!" });
+    }
+
+    // will contain all the promises for sending emails
+    let emailPromises = [];
+
+    // add a promise to create a code and send an email for each given address
+    adminEmails.forEach(email => {
+        emailPromises.push(makeCodeAndSendAdminInvite(business._id, business.name, email, user.name));
+    })
+
+    // wait for all the emails to send
+    try { await Promise.all(emailPromises); }
+    catch (sendEmailsError) {
+        console.log("Error sending admin invites: ", sendEmailsError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // return successfully
+    return res.status(200).send({});
+}
+
+
+// returns an object with the email, userType, and new code for a user
+async function makeCodeAndSendAdminInvite(businessId, businessName, email, userName) {
+    return new Promise(async function(resolve, reject) {
+        try {
+            const emailInfoObject = await createEmailInfo(businessId, undefined, "accountAdmin", email);
+            await sendEmailInvite(emailInfoObject, "", businessName, userName);
+            return resolve();
+        }
+        // catch whatever random error comes up
+        catch (error) { reject(error); }
+    });
+}
+
+
 // send email invites to multiple email addresses with varying user types
 async function POST_emailInvites(req, res) {
-    const { candidateEmails, employeeEmails, adminEmails, userId, userName,
+    const { candidateEmails, employeeEmails, userId, userName,
             verificationToken, businessId, positionId, positionName } = sanitize(req.body);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!Array.isArray(candidateEmails) || !Array.isArray(employeeEmails) || !Array.isArray(adminEmails) || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
-        console.log(candidateEmails, employeeEmails, adminEmails, userId, userName,
+    if (!Array.isArray(candidateEmails) || !Array.isArray(employeeEmails) || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
+        console.log(candidateEmails, employeeEmails, userId, userName,
                 verificationToken, businessId, positionId, positionName);
         return res.status(400).send("Bad request.");
-    }
-
-    // where links in the email will go
-    let moonshotUrl = 'https://moonshotinsights.io/';
-    // if we are in development, links are to localhost
-    if (process.env.NODE_ENV === "development") {
-        moonshotUrl = 'http://localhost:8081/';
     }
 
     // get the business and ensure the user has access to send invite emails
@@ -1087,24 +1198,16 @@ async function POST_emailInvites(req, res) {
     const position = business.positions[positionIndex];
     if (!position) { return res.status(403).send("Not a valid position."); }
     const businessName = business.name;
-    // whether the position is ready for candidates and employees to go through
-    const positionFinalized = position.finalized;
 
     // a list of promises that will resolve to objects containing new codes
     // as well as all user-specific info needed to send the invite email
     let emailPromises = [];
-    adminEmails.forEach(email => {
-        emailPromises.push(createEmailInfo(businessId, positionId, "accountAdmin", email));
+    candidateEmails.forEach(email => {
+        emailPromises.push(createEmailInfo(businessId, positionId, "candidate", email));
     });
-    // only add employee and candidate emails if the eval is ready to be taken
-    if (positionFinalized) {
-        candidateEmails.forEach(email => {
-            emailPromises.push(createEmailInfo(businessId, positionId, "candidate", email));
-        });
-        employeeEmails.forEach(email => {
-            emailPromises.push(createEmailInfo(businessId, positionId, "employee", email));
-        });
-    }
+    employeeEmails.forEach(email => {
+        emailPromises.push(createEmailInfo(businessId, positionId, "employee", email));
+    });
 
     // wait for all the email object promises to resolve
     let emailInfoObjects;
@@ -1117,7 +1220,7 @@ async function POST_emailInvites(req, res) {
     // send all the emails
     let sendEmailPromises = [];
     emailInfoObjects.forEach(emailInfoObject => {
-        sendEmailPromises.push(sendEmailInvite(emailInfoObject, positionName, businessName, moonshotUrl, userName));
+        sendEmailPromises.push(sendEmailInvite(emailInfoObject, positionName, businessName, userName));
     })
 
     // wait for all the emails to be sent
@@ -1127,40 +1230,11 @@ async function POST_emailInvites(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    // if the position has already been finalized OR there are no candidates or
-    // employees to add, business does not need to be saved
-    if (positionFinalized || (candidateEmails.length === 0 && employeeEmails.length === 0)) {
-        // successfully sent all the emails
-        return res.json({success: true, waitingForFinalization: false});
-    }
-    // if the position is not finalized, have to save the emails of the users
-    // who will have to be emailed once the position is live
-    else {
-        try {
-            if (candidateEmails.length > 0) {
-                let oldCandidateEmails = business.positions[positionIndex].preFinalizedCandidates;
-                if (!oldCandidateEmails) { oldCandidateEmails = []; }
-                business.positions[positionIndex].preFinalizedCandidates = oldCandidateEmails.concat(candidateEmails);
-            }
-            if (employeeEmails.length > 0) {
-                let oldEmployeeEmails = business.positions[positionIndex].preFinalizedEmployees;
-                if (!oldEmployeeEmails) { oldEmployeeEmails = []; }
-                business.positions[positionIndex].preFinalizedEmployees = oldEmployeeEmails.concat(employeeEmails);
-            }
-            await business.save();
-            res.status(200).send({success: true, waitingForFinalization: true});
-        }
-        catch (saveBizError) {
-            console.log("Error saving business with a non-finalized position when adding users: ", saveBizError);
-            console.log("Arrays that were not saved into business: ", candidateEmails, employeeEmails);
-            return res.status(500).send("Error adding users. Contact support or try again.");
-        }
-    }
+    res.status(200).send({ success: true });
 }
 
 // create link that people can sign up as
 async function POST_createLink(req, res) {
-    console.log("start");
     const body = req.body;
     const userId = sanitize(body.currentUserInfo.userId);
     const userName = sanitize(body.currentUserInfo.userName);
@@ -1172,13 +1246,6 @@ async function POST_createLink(req, res) {
     // if one of the arguments doesn't exist, return with error code
     if (!userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
         return res.status(400).send("Bad request.");
-    }
-
-    // where links in the email will go
-    let moonshotUrl = 'https://moonshotinsights.io/';
-    // if we are in development, links are to localhost
-    if (process.env.NODE_ENV === "development") {
-        moonshotUrl = 'http://localhost:8081/';
     }
 
     // get the business and ensure the user has access to send invite emails
@@ -1514,12 +1581,33 @@ async function POST_addEvaluation(req, res) {
 
      try { await business.save(); }
      catch (saveBizError) {
-         console.log("Error saving business with a non-finalized position when adding users: ", saveBizError);
-         console.log("Arrays that were not saved into business: ", candidateEmails, employeeEmails);
-         return res.status(500).send("Error adding users. Contact support or try again.");
+         console.log("Error saving business when adding new eval: ", saveBizError);
+         return res.status(500).send("Error adding position. Contact support or try again.");
      }
 
     return res.json(business.positions);
+}
+
+// add an evaluation to the business on request
+async function POST_interests(req, res) {
+    const { userId, verificationToken, businessId, interests } = sanitize(req.body);
+
+    try {
+        var business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId);
+    } catch (verifyAccountAdminError) {
+        console.log("Error verifying business account admin: ", verifyAccountAdminError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+     business.interests = interests;
+
+     try { await business.save(); }
+     catch (saveBizError) {
+         console.log("Error saving business when trying to add interests: ", saveBizError);
+         return res.status(500).send("Error adding users. Contact support or try again.");
+     }
+
+    return res.json(business.interests);
 }
 
 async function POST_contactUsEmail(req, res) {
@@ -1812,6 +1900,293 @@ async function verifyAccountAdminAndReturnBusinessAndUser(userId, verificationTo
 }
 
 
+// get a count of how many candidates need to be reviewed
+async function GET_employeesAwaitingReview(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // count all the users with this position
+    const positionIds = business.positions.map(p => p._id);
+    try { var newEmployees = await unReviewedEmployeeCount(business._id, positionIds); }
+    catch (countError) {
+        console.log(`Error counting all the new employees for ${business.name} (id ${business._id}): `, countError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({ newEmployees });
+}
+
+
+// return a count of all unreviewed employees in all positions for a specific business
+async function unReviewedEmployeeCount(businessId, positionIds) {
+    return new Promise(async function(resolve, reject) {
+        const query = {
+           "userType": "employee",
+           "positions": {
+               "$elemMatch": {
+                   "businessId": businessId,
+                   "gradingComplete": { "$ne": true },
+                   "positionId": { "$in": positionIds }
+               }
+           }
+        }
+        // count the users in the position that haven't been reviewed
+        try { var count = await Users.countDocuments(query); }
+        catch (countError) { return reject(countError); }
+
+        return resolve(count);
+    });
+}
+
+// get a count of how many candidates need to be reviewed
+async function GET_candidatesTotal(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // count all the users with this position
+    const positionIds = business.positions.map(p => p._id);
+    try { var totalCandidates = await totalCandidateCount(business._id, positionIds); }
+    catch (countError) {
+        console.log(`Error counting the total candidates for ${business.name} (id ${business._id}): `, countError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({ totalCandidates });
+}
+
+// get a count of how many candidates need to be reviewed
+async function GET_candidatesAwaitingReview(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // count all the users with this position
+    const positionIds = business.positions.map(p => p._id);
+    try { var newCandidates = await unReviewedCandidateCount(business._id, positionIds); }
+    catch (countError) {
+        console.log(`Error counting all the new candidates for ${business.name} (id ${business._id}): `, countError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({ newCandidates });
+}
+
+// return a count of all unreviewed users in all positions for a specific business
+async function totalCandidateCount(businessId, positionIds) {
+    return new Promise(async function(resolve, reject) {
+        const query = {
+           "userType": "candidate",
+           "positions": {
+               "$elemMatch": {
+                   "businessId": businessId,
+                   "positionId": { "$in": positionIds }
+               }
+           }
+        }
+        // count the users in the position that haven't been reviewed
+        try { var count = await Users.countDocuments(query); }
+        catch (countError) { return reject(countError); }
+
+        return resolve(count);
+    });
+}
+
+// return a count of all unreviewed users in all positions for a specific business
+async function unReviewedCandidateCount(businessId, positionIds) {
+    return new Promise(async function(resolve, reject) {
+        const query = {
+           "userType": "candidate",
+           "positions": {
+               "$elemMatch": {
+                   "businessId": businessId,
+                   "reviewed": { "$ne": true },
+                   "positionId": { "$in": positionIds }
+               }
+           }
+        }
+        // count the users in the position that haven't been reviewed
+        try { var count = await Users.countDocuments(query); }
+        catch (countError) { return reject(countError); }
+
+        return resolve(count);
+    });
+}
+
+
+// returns a date formatted to have only the month and day (so 10-6, for example)
+function monthAndDayOnly(date) {
+    return `${date.getMonth() + 1}-${date.getDate()}`;
+}
+
+
+async function newCandidateCountByDate(businessId, positionIds, groupBy, numDataPoints) {
+    return new Promise(async function(resolve, reject) {
+        try {
+            // the difference between the dates in each data point
+            let monthDifference = 0;
+            let dayDifference = 0;
+            if (groupBy === "months") { monthDifference = 1; }
+            else if (groupBy === "weeks") { dayDifference = 7; }
+            else { dayDifference = 1; }
+
+            // the date that starts each time interval
+            let dates = [];
+
+            // get the date to end data collection at
+            const now = new Date();
+            let mostRecentDay = now.getDate();
+            // if grouping by months, don't get any data after the first of this month
+            if (groupBy === "months") { mostRecentDay = 1; }
+            // if grouping by weeks, don't get any data from after Sunday (first day of the week)
+            else if (groupBy === "weeks") { mostRecentDay -= now.getDay(); }
+            let before = new Date(now.getFullYear(), now.getMonth(), mostRecentDay);
+            let after = new Date(before.getFullYear(), before.getMonth() - monthDifference, before.getDate() - dayDifference);
+
+            // holds the promises for getting each data point
+            let dataPromises = [];
+            for (let i = 0; i < numDataPoints; i++) {
+                dates.push(after);
+
+                const query = {
+                    "userType": "candidate",
+                    "positions": {
+                        "$elemMatch": {
+                            "positionId": { "$in": positionIds },
+                            "businessId": mongoose.Types.ObjectId(businessId),
+                            "appliedEndDate": { "$lt": before, "$gte": after }
+                        }
+                    }
+                };
+                dataPromises.push(Users.countDocuments(query));
+                // move back the dates we're getting data for
+                before = after;
+                after = new Date(after.getFullYear(), after.getMonth() - monthDifference, after.getDate() - dayDifference);
+            }
+
+            // get all the data points, then flip them around so they're in chronological order
+            const dataPoints = (await Promise.all(dataPromises)).map((count, index) => {
+                return {
+                    users: count,
+                    date: monthAndDayOnly(dates[index])
+                }
+            }).reverse();
+
+            return resolve(dataPoints);
+        }
+        // just reject any error that is thrown
+        catch (e) { return reject(e); }
+    });
+}
+
+
+// gets the count of new candidates within 5 of the last {interval}, which could
+// be days, weeks, or months
+async function GET_newCandidateGraphData(req, res) {
+    let { userId, verificationToken, businessId, interval } = sanitize(req.query);
+    if (typeof interval === "string") { interval = interval.toLowerCase(); }
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    const numDataPoints = 5;
+
+    console.log("interval: ", interval);
+
+    // count all the users with this position
+    const positionIds = business.positions.map(p => mongoose.Types.ObjectId(p._id));
+    try { var counts = await newCandidateCountByDate(business._id, positionIds, interval, numDataPoints); }
+    catch (countError) {
+        console.log(`Error counting all the new candidates for ${business.name} (id ${business._id}): `, countError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({ counts });
+}
+
+
+// gets the count of new candidates within 5 of the last {interval}, which could
+// be days, weeks, or months
+async function GET_evaluationsGraphData(req, res) {
+    let { userId, verificationToken, businessId, interval } = sanitize(req.query);
+    if (typeof interval === "string") { interval = interval.toLowerCase(); }
+
+    try { var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(userId, verificationToken, businessId); }
+    catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // count all the users with this position
+    const positionIds = business.positions.map(p => mongoose.Types.ObjectId(p._id));
+    // get only completions within wanted time range
+    const now = new Date();
+    let month = now.getMonth();
+    let date = now.getDate();
+    if (interval === "last 6 months") { month -= 6; }
+    else if (interval === "last month") { month--; }
+    else { date -= 7; }
+    const earliestDate = new Date(now.getFullYear(), month, date);
+    const latestDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    // get counts of evaluation completions
+    try { var counts = await countEvaluationCompletions(business._id, positionIds, earliestDate, latestDate); }
+    catch (countError) {
+        console.log(`Error getting evaluation counts data for ${business.name} (id ${business._id}): `, countError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    const formattedData = counts.map(c => {
+        return { name: c._id.name, candidates: c.count }
+    });
+
+    return res.status(200).send({ counts: formattedData });
+}
+
+
+async function countEvaluationCompletions(businessId, positionIds, earliestDate, latestDate) {
+    return new Promise(async function(resolve, reject) {
+        try {
+            const counts = await Users.aggregate([
+                // put each position application into its own object
+                { "$unwind": "$positions" },
+                // // filter out every position that was applied to before the earliest date wanted
+                { "$match": { "$and": [
+                    { "positions.appliedEndDate": { "$gte": earliestDate, "$lt": latestDate } },
+                    { "positions.positionId": { "$in": positionIds } },
+                    { "positions.businessId": mongoose.Types.ObjectId(businessId) }
+                ] } },
+                // group these objects by position name and count them
+                { "$group": {
+                    "_id": { "positionId": "$positions._id", "name": "$positions.name" },
+                    "count": { "$sum": 1 }
+                } }
+            ]);
+
+            return resolve(counts);
+        }
+        // just reject any error
+        catch (e) { return reject(e); }
+    });
+}
+
+
 function GET_employeeQuestions(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
@@ -1878,7 +2253,7 @@ async function GET_positions(req, res) {
     try {
         var business = await Businesses
             .findById(businessId)
-            .select("logo name uniqueName positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.finalized positions.dateCreated");
+            .select("logo name uniqueName positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
         return res.status(500).send("Server error, couldn't get positions.");
@@ -1909,11 +2284,9 @@ async function GET_positions(req, res) {
 
 // get all positions for a business
 async function GET_positionsForApply(req, res) {
-    const name = sanitize(req.query.name);
+    const { name, businessId } = req.query;
 
     if (!name) { return res.status(400).send({ message: "Bad request." }); }
-
-    console.log("name: ", name);
 
     // get the business the user works for
     try {
@@ -1941,7 +2314,32 @@ async function GET_positionsForApply(req, res) {
 
     if (!business) { return res.status(404).send({ message: "Invalid url" }); }
 
-    return res.json({ logo: business.logo, businessName: business.name, positions: business.positions });
+    let admin = false;
+    if (businessId && business._id.toString() === businessId.toString()) {
+        admin = true;
+    }
+
+    // find out if any admins have verified their info
+    try {
+        const verifiedAdminsQuery = {
+            "userType": "accountAdmin",
+            "verified": true,
+            "businessInfo.businessId": mongoose.Types.ObjectId(business._id)
+        }
+        const verifiedUser = await Users.findOne(verifiedAdminsQuery);
+        var verified = verifiedUser != null;
+    } catch (findVerifiedError) {
+        console.log("Error finding verified admin from /apply page: ", findVerifiedError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.json({
+        logo: business.logo,
+        businessName: business.name,
+        positions: business.positions,
+        admin,
+        pageSetUp: verified
+    });
 }
 
 
@@ -1999,7 +2397,6 @@ async function GET_evaluationResults(req, res) {
     const userId = sanitize(req.query.candidateId);
     const positionId = sanitize(req.query.positionId);
     const positionIdString = positionId.toString();
-    console.log("userId", userId);
 
     // verify biz user, get candidate/employee, find and verify candidate's/employee's position
     let bizUser, user, userPositionIndex, psychTest;
@@ -2148,20 +2545,56 @@ async function GET_candidateSearch(req, res) {
         console.log("Error searching for candidates: ", candidateSearchError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
-
-    // format the candidates for the front end
-    const formattedCandidates = candidates.map(candidate => {
-        const candidateObj = candidate.toObject();
-        return {
-            name: candidateObj.name,
-            profileUrl: candidateObj.profileUrl,
-            _id: candidateObj._id,
-            ...(candidateObj.positions[0])
+    
+    // if there are no candidates for this position, check if there are any at all
+    if (candidates.length === 0) {
+        // query to find all candidates
+        const allCandidatesQuery = {
+            "userType": "candidate",
+            "verified": true,
+            "positions": { "businessId": mongoose.Types.ObjectId(businessId) }
         }
-    })
 
-    // successfully return the candidates
-    return res.json(formattedCandidates);
+        try {
+            // count all candidates for the business
+            const candidateCount = await Users.countDocuments(allCandidatesQuery);
+            // if there aren't any, send out the mock users
+            var shouldSendMockUsers = candidateCount === 0;
+        } catch (countUsersError) {
+            console.log("Error counting if there are any candidates for company: ", countUsersError);
+            return res.status(200).send({ candidates: [] });
+        }
+
+        // if there are other candidates at the company
+        if (!shouldSendMockUsers) { return res.status(200).send({ candidates: [] }); }
+
+        // if there are no other candidates at the company, get all mock
+        // candidates and send them to the front end
+        try {
+            const mockusers = await Mockusers.find({});
+            return res.status(200).send({ mockusers });
+        } catch (getMockusersError) {
+            console.log("Error getting mock users: ", getMockusersError);
+            // just pretend on front end like nothing went wrong
+            return res.status(200).send({ candidates: [] })
+        }
+    }
+    // if there are candidates to return for the position, format them and send em out
+    else {
+        // format the candidates for the front end
+        const formattedCandidates = candidates.map(candidate => {
+            const candidateObj = candidate.toObject();
+            return {
+                name: candidateObj.name,
+                profileUrl: candidateObj.profileUrl,
+                _id: candidateObj._id,
+                ...(candidateObj.positions[0])
+            }
+        });
+
+        // successfully return the candidates
+        return res.json({ candidates: formattedCandidates });
+    }
 }
 
 async function GET_employeeSearch(req, res) {
@@ -2259,31 +2692,10 @@ async function GET_employeeSearch(req, res) {
 }
 
 
-// mark that a user has seen the info box shown at the top of my candidates
-async function POST_sawMyCandidatesInfoBox(req, res) {
-    const find = {
-        "_id": sanitize(req.body.userId),
-        "verificationToken": sanitize(req.body.verificationToken)
-    };
-    const update = { "sawMyCandidatesInfoBox": true };
-    const options = { "upsert": false, "new": true };
-
-    let user;
-    try { user = await Users.findOneAndUpdate(find, update, options) }
-    catch (updateError) {
-        console.log("Error updating user while trying to see my candidates info box: ", updateError);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    return res.json(frontEndUser(user));
-}
-
-
 // get the api key for the api key settings page
 async function GET_apiKey(req, res) {
     // get user credentials
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
+    const { userId, verificationToken } = sanitize(req.query);
 
     // get the user and business
     try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
@@ -2298,6 +2710,26 @@ async function GET_apiKey(req, res) {
     }
 
     return res.status(200).json(business.API_Key);
+}
+
+// get the api key for the api key settings page
+async function GET_uniqueName(req, res) {
+    // get user credentials
+    const { userId, verificationToken } = sanitize(req.query);
+
+    // get the user and business
+    try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
+    catch (error) {
+        console.log("Error finding user/business trying to get business name: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    // user has to be an account admin with right credentials to see the unique business name
+    if (user.userType !== "accountAdmin" || !user.businessInfo || user.businessInfo.businessId.toString() !== business._id.toString()) {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    return res.status(200).json({ name: business.name, uniqueName:business.uniqueName });
 }
 
 

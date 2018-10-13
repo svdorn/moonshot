@@ -38,6 +38,14 @@ class BusinessHome extends Component {
 
 
     componentWillMount() {
+        const user = this.props.currentUser;
+        if (user) {
+            if (user.userType === "accountAdmin") {
+                goTo("/dashboard");
+            } else {
+                goTo("/myEvaluations");
+            }
+        }
         const showRectangles = this.cssPropertySupported("gridRowStart")
         this.setState({...this.state, showRectangles});
     }
@@ -456,8 +464,8 @@ class BusinessHome extends Component {
                         style={{marginBottom: '50px'}}
                     >
                         Pay Only When You Hire
-                        <div className="font18px font16pxUnder700 font12pxUnder400 primary-white">
-                            Our incentives are aligned. You only pay when you hire<div className="above700only br"><br/></div> a top performer who stays at your company.
+                        <div className="font18px font16pxUnder700 font12pxUnder400 primary-white" style={{padding: "0 10px"}}>
+                            Our incentives are aligned. You only pay when you hire<div className="above500only br"><br/></div> a top performer who stays at your company.
                         </div>
                     </div>
                     <div styleName="pricing-box box-1">

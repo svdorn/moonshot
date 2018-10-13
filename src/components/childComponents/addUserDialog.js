@@ -42,8 +42,6 @@ class AddUserDialog extends Component {
             tab: "Candidate",
             numCandidateEmails: 1,
             numEmployeeEmails: 1,
-            //numManagerEmails: 1,
-            numAdminEmails: 1,
             formErrors: false,
             duplicateEmails: false,
             loadingSendVerificationEmail: false
@@ -94,7 +92,7 @@ class AddUserDialog extends Component {
             shouldSetState = true;
             newState.position = this.props.position;
         }
-        // if the user sets a tab - Candidate or Employee or Admin - default to adding that user
+        // if the user sets a tab - Candidate or Employee - default to adding that user
         if (!this.props.modalOpen && this.props.tab && this.state.tab !== this.props.tab) {
             shouldSetState = true;
             newState.tab = this.props.tab;
@@ -121,8 +119,6 @@ class AddUserDialog extends Component {
               position: position,
               numCandidateEmails: 1,
               numEmployeeEmails: 1,
-              //numManagerEmails: 1,
-              numAdminEmails: 1,
               formErrors: false,
               duplicateEmails: false,
               loadingSendVerificationEmail: false
@@ -141,8 +137,6 @@ class AddUserDialog extends Component {
         // Get the email address out of the objects and store in an array
         let candidateEmails = [];
         let employeeEmails = [];
-        //let managerEmails = [];
-        let adminEmails = [];
 
         // Find position in positions array
         const positions = this.state.positions;
@@ -173,9 +167,6 @@ class AddUserDialog extends Component {
                 case "employeeEmail":
                     employeeEmails.push(emailAddr);
                     break;
-                case "adminEmail":
-                    adminEmails.push(emailAddr);
-                    break;
                 default:
                     break;
             }
@@ -192,28 +183,25 @@ class AddUserDialog extends Component {
             positionName: position.name
         }
 
-        this.props.postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo);
+        this.props.postEmailInvites(candidateEmails, employeeEmails, currentUserInfo);
     }
 
     addAnotherEmail() {
         switch(this.state.tab) {
             case "Candidate":
                 const numCandidateEmails = this.state.numCandidateEmails + 1;
-                this.setState({numCandidateEmails})
+                this.setState({ numCandidateEmails });
                 break;
             case "Employee":
                 const numEmployeeEmails = this.state.numEmployeeEmails + 1;
-                this.setState({numEmployeeEmails})
-                break;
-            case "Admin":
-                const numAdminEmails = this.state.numAdminEmails + 1;
+                this.setState({ numEmployeeEmails });
                 break;
         }
     }
 
     handlePositionChange = (event, index) => {
         const position = this.state.positions[index].name;
-        this.setState({position})
+        this.setState({ position })
     };
 
 
@@ -264,11 +252,11 @@ class AddUserDialog extends Component {
     }
 
     handleScreenLinkNext() {
-        this.setState({linkScreen:true, formErrors: false})
+        this.setState({ linkScreen:true, formErrors: false })
     }
 
     handleScreenLinkPrevious() {
-        this.setState({linkScreen:false, screen: 2})
+        this.setState({ linkScreen:false, screen: 2 })
     }
 
     handleScreenNext() {
@@ -277,16 +265,16 @@ class AddUserDialog extends Component {
             // check for duplicates
             if (this.duplicatesExist()) {
                 advanceScreen = false;
-                this.setState({duplicateEmails: true});
+                this.setState({ duplicateEmails: true });
                 return;
             } else {
-                this.setState({duplicateEmails: false});
+                this.setState({ duplicateEmails: false });
             }
 
             // check for invalid emails
             if (this.props.formData.addUser.syncErrors) {
                 advanceScreen = false;
-                this.setState({formErrors: true});
+                this.setState({ formErrors: true });
             }
         }
         if (advanceScreen) {
@@ -363,7 +351,7 @@ class AddUserDialog extends Component {
         ];
 
         // if the user isn't verified, prompt them to verify their email
-        if (!this.props.currentUser.verified) {
+        if (!this.props.currentUser || !this.props.currentUser.verified) {
             return (
                 <Dialog
                     actions={actions}
@@ -375,8 +363,9 @@ class AddUserDialog extends Component {
                     contentClassName="center"
                 >
                     <div className="primary-white">
-                        Verify your email first! Need a new verification email?<br/>
+                        Please verify your email before adding new users.
                         If you{"'"}ve already verified your email, refresh the site.
+                        Need a new verification email?
                         <br/>
                         <div
                             className={this.state.loadingSendVerificationEmail ? button.disabled : button.purpleBlue}
@@ -431,40 +420,6 @@ class AddUserDialog extends Component {
             );
         }
 
-        // let managerEmailSection = [];
-        // for (let i = 0; i < this.state.numManagerEmails; i++) {
-        //     managerEmailSection.push(
-        //         <div>
-        //             <Field
-        //                 name={"managerEmail" + i}
-        //                 component={renderTextField}
-        //                 label="Add Manager Email"
-        //                 type="email"
-        //                 validate={emailValidate}
-        //                 id={"managerEmail" + i}
-        //                 autoComplete="new-password"
-        //             /><br/>
-        //         </div>
-        //     );
-        // }
-
-        let adminEmailSection = [];
-        for (let i = 0; i < this.state.numAdminEmails; i++) {
-            adminEmailSection.push(
-                <div key={`adminEmail${i}`}>
-                    <Field
-                        name={"adminEmail" + i}
-                        component={renderTextField}
-                        label="Add Admin Email"
-                        type="email"
-                        validate={emailValidate}
-                        id={"adminEmail" + i}
-                        autoComplete="new-password"
-                    /><br/>
-                </div>
-            );
-        }
-
         const candidateSection = (
             <div className="center marginTop20px">
                 <div className="center marginTop10px marginBottom10px">
@@ -473,7 +428,7 @@ class AddUserDialog extends Component {
                     </button>
                 </div>
                 <div className="center font14px font12pxUnder500 primary-white marginBottom15px">
-                    Candidates are incoming applicants that undergo predictive evaluations.
+                    Candidates are incoming applicants who undergo predictive evaluations.
                 </div>
                 <div>
                     {candidateEmailSection}
@@ -501,63 +456,10 @@ class AddUserDialog extends Component {
         const employeeSection = (
             <div className="center marginTop20px">
                 <div className="center font14px font12pxUnder500 primary-white marginBottom15px">
-                    Employees undergo psychometric and skill evaluations to create a baseline for candidate predictions.
+                    Employees undergo evaluations to create a baseline for candidate predictions.
                 </div>
                 <div>
-                    {employeeEmailSection}
-                </div>
-                <div className="marginTop15px">
-                    <i className="font14px underline clickable primary-white"
-                        onClick={this.addAnotherEmail.bind(this)}>
-                        + Add Another Email
-                        </i>
-                </div>
-                <div className="center marginTop10px">
-                    <i className="font14px underline clickable primary-white"
-                        onClick={this.handleScreenPrevious.bind(this)}>
-                        Back
-                    </i>
-                    <RaisedButton
-                        label="Next"
-                        onClick={this.handleScreenNext.bind(this)}
-                        className="raisedButtonBusinessHome marginLeft40px"
-                    />
-                </div>
-            </div>
-        );
-
-        // const managerSection = (
-        //     <div className="center marginTop10px">
-        //         <div>
-        //             {managerEmailSection}
-        //         </div>
-        //         <div className="marginTop20px">
-        //             <i className="font14px underline clickable primary-white
-        //                 onClick={this.addAnotherEmail.bind(this)}>
-        //                 +Add Another Email
-        //                 </i>
-        //         </div>
-        //         <div className="center marginTop10px">
-        //             <i className="font14px underline clickable primary-white
-        //                 onClick={this.handleScreenPrevious.bind(this)}>
-        //                 Back
-        //             </i>
-        //             <RaisedButton
-        //                 label="Next"
-        //                 onClick={this.handleScreenNext.bind(this)}
-        //                 className="raisedButtonBusinessHome marginLeft40px"
-        //             />
-        //         </div>
-        //     </div>
-        // );
-
-        const adminSection = (
-            <div className="center marginTop20px">
-                <div className="center font14px font12pxUnder500 primary-white marginBottom15px">
-                    Administrators can add and remove users, grade employees, and view results.
-                </div>
-                <div>
-                    {adminEmailSection}
+                    { employeeEmailSection }
                 </div>
                 <div className="marginTop15px">
                     <i className="font14px underline clickable primary-white"
@@ -612,10 +514,7 @@ class AddUserDialog extends Component {
                             Success
                         </div>
                         <div className="primary-white font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
-                            {this.props.waitingForFinalization ?
-                                `Success! As soon as your evaluation is ready, your invites will be sent to the users' emails with sign-up instructions for the ${this.state.position} position.`
-                                : `Success! Your invites have been sent to the users' emails with sign-up instructions for the ${this.state.position} position.`
-                            }
+                            { `Success! Your invites have been sent to the users' emails with sign-up instructions for the ${this.state.position} position.` }
                         </div>
                         <RaisedButton
                             label="Done"
@@ -679,119 +578,116 @@ class AddUserDialog extends Component {
                 </Dialog>
             );
         } else {
-        if (screen === 1) {
-            body = (
+            if (screen === 1) {
+                body = (
 
-                <Dialog
-                    actions={actions}
-                    modal={false}
-                    open={this.state.open}
-                    onRequestClose={this.handleClose}
-                    autoScrollBodyContent={true}
-                    paperClassName="dialogForBiz"
-                    contentClassName="center"
-                >
-
-                    <div className="primary-cyan font24px font20pxUnder500 marginTop20px">
-                        Select a position
-                    </div>
-                    <DropDownMenu value={this.state.position}
-                              onChange={this.handlePositionChange}
-                              labelStyle={style.menuLabelStyle}
-                              anchorOrigin={style.anchorOrigin}
-                              style={{fontSize: "16px"}}
+                    <Dialog
+                        actions={actions}
+                        modal={false}
+                        open={this.state.open}
+                        onRequestClose={this.handleClose}
+                        autoScrollBodyContent={true}
+                        paperClassName="dialogForBiz"
+                        contentClassName="center"
                     >
-                        {positionItems}
-                    </DropDownMenu>
-                    <br/>
-                    <RaisedButton
-                        label="Next"
-                        onClick={this.handleScreenNext.bind(this)}
-                        className="raisedButtonBusinessHome"
-                        style={{marginTop: '20px'}}
-                    />
-                </Dialog>
-            );
-        } else if (screen === 2) {
-            body = (
-                <Dialog
-                    actions={actions}
-                    modal={false}
-                    open={this.state.open}
-                    onRequestClose={this.handleClose}
-                    autoScrollBodyContent={true}
-                    paperClassName="dialogForBiz"
-                    contentClassName="center"
-                >
 
-                    <form className="center">
-                        <div
-                            className="primary-cyan font24px font20pxUnder500 marginTop10px">
-                            Add
+                        <div className="primary-cyan font24px font20pxUnder500 marginTop20px">
+                            Select a position
                         </div>
-                        {this.state.formErrors ?
-                        <div
-                            className="secondary-red font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
-                            Invalid email, please enter valid emails before continuing.
-                        </div>
-                        : null}
-                        {this.state.duplicateEmails ?
-                        <div
-                            className="secondary-red font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
-                            Duplicate emails not allowed.
-                        </div>
-                        : null}
-                        <Tabs
-                            inkBarStyle={{background: 'white'}}
-                            className="addUserTabs"
-                            value={this.state.tab}
-                            onChange={this.handleTabChange}
+                        <DropDownMenu value={this.state.position}
+                                  onChange={this.handlePositionChange}
+                                  labelStyle={style.menuLabelStyle}
+                                  anchorOrigin={style.anchorOrigin}
+                                  style={{fontSize: "16px"}}
                         >
-                            <Tab label="Candidate" value="Candidate" style={style.tab}>
-                                {candidateSection}
-                            </Tab>
-                            <Tab label="Employee" value="Employee" style={style.tab}>
-                                {employeeSection}
-                            </Tab>
-                            <Tab label="Admin" value="Admin" style={style.tab}>
-                                {adminSection}
-                            </Tab>
-                        </Tabs>
-                    </form>
-                </Dialog>
-            );
-        } else {
-            body = (
-                <Dialog
-                    actions={actions}
-                    modal={false}
-                    open={this.state.open}
-                    onRequestClose={this.handleClose}
-                    autoScrollBodyContent={true}
-                    paperClassName="dialogForBiz"
-                    contentClassName="center"
-                >
-                    <div className="primary-cyan font24px font20pxUnder500 marginTop10px">
-                        Last Step
-                    </div>
-                    <div className="primary-white font16px font12pxUnder500" style={{margin:"20px auto", width:"85%"}}>
-                        Wait! You have one more step. Click Finish to send the invites to your candidates, employees and/or admins so they can begin.
-                    </div>
-                    <div className="center marginTop40px">
-                        <i className="font14px underline clickable primary-white"
-                            onClick={this.handleScreenPrevious.bind(this)}>
-                            Back
-                        </i>
+                            {positionItems}
+                        </DropDownMenu>
+                        <br/>
                         <RaisedButton
-                            label="Finish"
-                            onClick={this.handleSubmit.bind(this)}
-                            className="raisedButtonBusinessHome marginLeft40px"
+                            label="Next"
+                            onClick={this.handleScreenNext.bind(this)}
+                            className="raisedButtonBusinessHome"
+                            style={{marginTop: '20px'}}
                         />
-                    </div>
-                    {this.props.loading ? <CircularProgress color="white" style={{marginTop: "20px"}}/> : ""}
-                </Dialog>
-            )
-        }
+                    </Dialog>
+                );
+            } else if (screen === 2) {
+                body = (
+                    <Dialog
+                        actions={actions}
+                        modal={false}
+                        open={this.state.open}
+                        onRequestClose={this.handleClose}
+                        autoScrollBodyContent={true}
+                        paperClassName="dialogForBiz"
+                        contentClassName="center"
+                    >
+
+                        <form className="center">
+                            <div
+                                className="primary-cyan font24px font20pxUnder500 marginTop10px">
+                                Add
+                            </div>
+                            {this.state.formErrors ?
+                            <div
+                                className="secondary-red font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
+                                Invalid email, please enter valid emails before continuing.
+                            </div>
+                            : null}
+                            {this.state.duplicateEmails ?
+                            <div
+                                className="secondary-red font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
+                                Duplicate emails not allowed.
+                            </div>
+                            : null}
+                            <Tabs
+                                inkBarStyle={{background: 'white'}}
+                                className="addUserTabs"
+                                value={this.state.tab}
+                                onChange={this.handleTabChange}
+                            >
+                                <Tab label="Candidate" value="Candidate" style={style.tab}>
+                                    {candidateSection}
+                                </Tab>
+                                <Tab label="Employee" value="Employee" style={style.tab}>
+                                    {employeeSection}
+                                </Tab>
+                            </Tabs>
+                        </form>
+                    </Dialog>
+                );
+            } else {
+                body = (
+                    <Dialog
+                        actions={actions}
+                        modal={false}
+                        open={this.state.open}
+                        onRequestClose={this.handleClose}
+                        autoScrollBodyContent={true}
+                        paperClassName="dialogForBiz"
+                        contentClassName="center"
+                    >
+                        <div className="primary-cyan font24px font20pxUnder500 marginTop10px">
+                            Last Step
+                        </div>
+                        <div className="primary-white font16px font12pxUnder500" style={{margin:"20px auto", width:"85%"}}>
+                            Wait! You have one more step. Click Finish to send the invites to your candidates and/or employees so they can begin.
+                        </div>
+                        <div className="center marginTop40px">
+                            <i className="font14px underline clickable primary-white"
+                                onClick={this.handleScreenPrevious.bind(this)}>
+                                Back
+                            </i>
+                            <RaisedButton
+                                label="Finish"
+                                onClick={this.handleSubmit.bind(this)}
+                                className="raisedButtonBusinessHome marginLeft40px"
+                            />
+                        </div>
+                        {this.props.loading ? <CircularProgress color="white" style={{marginTop: "20px"}}/> : ""}
+                    </Dialog>
+                )
+            }
         }
 
         return (
@@ -816,7 +712,6 @@ function mapStateToProps(state) {
         loading: state.users.loadingSomething,
         userPosted: state.users.userPosted,
         userPostedFailed: state.users.userPostedFailed,
-        waitingForFinalization: state.users.waitingForFinalization,
         currentUser: state.users.currentUser,
         link: state.users.link,
         modalOpen: state.users.userModalOpen

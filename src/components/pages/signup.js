@@ -176,57 +176,8 @@ class Signup extends Component {
     };
 
 
-    // sendVerificationEmail = () => {
-    //     this.setState({ sendingVerificationEmail: true });
-    //
-    //     axios.post("/api/candidate/sendVerificationEmail", {email: this.props.sendVerifyEmailTo})
-    //     .then(response => { this.props.setUserPosted(); })
-    //     .catch(error => {
-    //         this.setState({ contactSupport: true, sendingVerificationEmail: false });
-    //     })
-    // }
-
-
     // create the main content of the page
     createContent() {
-        // if (this.state.contactSupport) {
-        //     return (
-        //         <div className="center">
-        //             Error sending verification email. Contact us at support@moonshotinsights.io
-        //         </div>
-        //     )
-        // }
-
-        // // if the user tried to make an account but verify email couldn't be sent
-        // if (this.props.sendVerifyEmailTo) {
-        //     return (
-        //         <div className="center">
-        //             <h1>Verify your email address</h1>
-        //             {this.state.sendingVerificationEmail ?
-        //                 <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/>
-        //                 :
-        //                 <div
-        //                     className={button.purpleBlue}
-        //                     onClick={() => this.sendVerificationEmail()}
-        //                     style={{marginTop: "20px"}}
-        //                 >
-        //                     Send Verification Email to {this.props.sendVerifyEmailTo}
-        //                 </div>
-        //             }
-        //         </div>
-        //     )
-        // }
-
-        // if (this.state.email != "" && this.props.userPosted) {
-        //     return (
-        //         <div className="center">
-        //             <h1>Verify your email address</h1>
-        //             <p style={{margin: "20px"}}>We sent {this.state.email} a verification link. Check your junk folder if you
-        //                 can{"'"}t find our email.</p>
-        //         </div>
-        //     )
-        // }
-
         let urlQuery = {};
         try { urlQuery = this.props.location.query; }
         catch (e) { /* no query */ }

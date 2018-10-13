@@ -178,8 +178,8 @@ function propertyExists(object, propertyTree, type) {
         if (typeof parent !== "object") { return false; }
         // name of the object property
         const propName = propertyTree[treePropIndex];
-        // if the property is not truthy (does not exist), fail
-        if (!parent[propName]) { return false; }
+        // if the property does not exist, fail
+        if (parent[propName] === undefined) { return false; }
         // the property is legit, so set the parent to be the value of the child prop
         parent = parent[propName];
         // move to the next property
@@ -190,6 +190,26 @@ function propertyExists(object, propertyTree, type) {
     if (truthy(type)) { return typeof parent === type; }
     // otherwise return that the property is valid
     else { return true; }
+}
+
+
+function withinElement(event, element) {
+    if (!element || !event) { return false; }
+
+    const clickX = event.clientX;
+    const clickY = event.clientY;
+    const elementRect = element.getBoundingClientRect();
+
+    const withinX = elementRect.left <= clickX && clickX <= elementRect.right;
+    const withinY = elementRect.top <= clickY && clickY <= elementRect.bottom;
+
+    return (withinX && withinY);
+}
+
+
+function makePossessive(name) {
+    if (name.endsWith("'s")) { return name; }
+    else { return name + "'s"; }
 }
 
 
@@ -205,6 +225,8 @@ const miscFunctions = {
     goTo,
     truthy,
     propertyExists,
+    withinElement,
+    makePossessive,
 
     Queue,
     Stack

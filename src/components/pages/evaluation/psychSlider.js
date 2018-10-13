@@ -236,9 +236,9 @@ class PsychSlider extends Component {
         }
 
         // the gradient color towards the middles of things
-        const gradientNotSelected = "#f25a2b";
+        const gradientNotSelected = this.props.color1 ? this.props.color1 : "#f25a2b";
         // the gradient color when the thing is being selected
-        const gradientSelected = "#ec008c";
+        const gradientSelected = this.props.color2 ? this.props.color2 : "#ec008c";
 
         // the gradients that look like they're on the lines
         let gradientRectRightStyle = {
