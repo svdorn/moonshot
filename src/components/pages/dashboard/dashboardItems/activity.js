@@ -298,8 +298,6 @@ class Activity extends Component {
         const { frame, fetchDataError, data } = this.state;
         const { businessName } = this.props.currentUser.businessInfo;
 
-        console.log("haha");
-
         let content = null;
         let dropdown = null;
         switch (frame) {

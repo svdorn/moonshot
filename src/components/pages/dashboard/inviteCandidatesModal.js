@@ -65,15 +65,12 @@ class InviteCandidatesModal extends Component {
 
 
     render() {
-        const { currentUser } = this.props;
-        const { businessName, uniqueName } = currentUser.businessInfo;
-
         const actions = [
             <FlatButton
                 label="Close"
                 onClick={this.handleClose}
                 className="primary-white-important"
-            />,
+            />
         ];
 
         return (

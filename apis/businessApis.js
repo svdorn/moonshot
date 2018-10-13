@@ -2252,7 +2252,7 @@ async function GET_positions(req, res) {
     try {
         var business = await Businesses
             .findById(businessId)
-            .select("logo name uniqueName positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated");
+            .select("logo positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
         return res.status(500).send("Server error, couldn't get positions.");
@@ -2273,12 +2273,7 @@ async function GET_positions(req, res) {
         }
     }
 
-    return res.status(200).send({
-        logo: business.logo,
-        businessName: business.name,
-        positions,
-        uniqueName: business.uniqueName
-    });
+    return res.status(200).send({ logo: business.logo, positions });
 }
 
 // get all positions for a business
