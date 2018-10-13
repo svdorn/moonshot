@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification } from '../../actions/usersActions';
-import { propertyExists } from "../../miscFunctions";
+import { propertyExists, makePossessive } from "../../miscFunctions";
 import clipboard from "clipboard-polyfill";
 import axios from 'axios';
 
@@ -69,7 +69,7 @@ class CopyLinkFooter extends Component {
                             <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
                             <div className="secondary-gray" styleName="text">
                                 <div styleName="desktop-text">
-                                    Embed { currentUser.businessInfo.businessName }{"'"}s candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
+                                    Embed { makePossessive(currentUser.businessInfo.businessName) } candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
                                 </div>
                             </div>
                             <div styleName="buttons">
