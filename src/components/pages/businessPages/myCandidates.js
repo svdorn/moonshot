@@ -256,6 +256,7 @@ class MyCandidates extends Component {
     findCandidates() {
         // need a position to search for
         if (!this.state.noPositions && this.state.position) {
+            console.log("searching for candidates");
             axios.get("/api/business/candidateSearch", {
                 params: {
                     searchTerm: this.state.term,
@@ -267,7 +268,9 @@ class MyCandidates extends Component {
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
+                console.log("res: ", res);
                 if (res.data && res.data.length > 0) {
+                    console.log("more than one user");
                     this.setState({
                         candidates: res.data,
                         loadingCandidates: false,
@@ -276,16 +279,19 @@ class MyCandidates extends Component {
                         this.reorder()
                     });
                 } else {
+                    console.log("no users");
                     if (this.state.positions.length === 1) {
+                        console.log("one position");
                         axios.get("/api/mockusers/all", {
                             params: {
                                 userId: this.props.currentUser._id,
                                 verificationToken: this.props.currentUser.verificationToken,
                                 businessId: this.props.currentUser.businessInfo.businessId
                             }
-                        }).then(res => {
+                        }).then(mockDataRes => {
+                            console.log("mockDataRes: ", mockDataRes);
                             this.setState({
-                                candidates: res.data.mockusers,
+                                candidates: mockDataRes.data.mockusers,
                                 loadingCandidates: false,
                                 mockData: true
                             }, () => {
@@ -1010,7 +1016,7 @@ class MyCandidates extends Component {
                             <div style={{marginTop:"20px"}}>
                                 <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Improve Your Predictive Model</div>
                                 <div>
-                                    Review candidate reports and predictions, 
+                                    Review candidate reports and predictions,
                                     contact candidates to invite them to
                                     interviews, track their stage or dismiss
                                     them from consideration. You can click any
