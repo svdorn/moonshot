@@ -23,8 +23,6 @@ class Account extends Component {
         this.state = {
             // list of other admins that are in this business
             adminList: undefined,
-            // unique name for the business for the apply page
-            uniqueName: undefined,
             // if there was an error fetching the data for this box
             fetchDataError: false
         };
@@ -56,29 +54,11 @@ class Account extends Component {
         .catch(error => {
             self.setState({ fetchDataError: true });
         });
-
-        // get the business unique name for the apply link
-        axios.get("/api/business/uniqueName", {
-            params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
-            }
-        })
-        .then(response => {
-            if (response && response.data && response.data.uniqueName) {
-                self.setState({ uniqueName: response.data.uniqueName });
-            } else {
-                self.setState({ fetchDataError: true });
-            }
-        })
-        .catch(function (err) {
-            self.setState({ fetchDataError: true });
-        });
     }
 
 
     copyLink() {
-        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
+        let URL = "https://moonshotinsights.io/apply/" + this.props.currentUser.businessInfo.uniqueName;
         URL = encodeURI(URL);
         clipboard.writeText(URL);
         this.props.addNotification("Link copied to clipboard", "info");
@@ -92,7 +72,7 @@ class Account extends Component {
         }
 
         // return progress bar if not ready yet
-        if (!Array.isArray(this.state.adminList) || !this.state.uniqueName) {
+        if (!Array.isArray(this.state.adminList)) {
             return (
                 <div className="fully-center">
                     <CircularProgress style={{ color: primaryCyan }} />
@@ -117,7 +97,7 @@ class Account extends Component {
             <div style={{padding: "10px 14px"}}>
                 <div
                     className="clickable primary-cyan inline-block"
-                    onClick={() => goTo(`/apply/${this.state.uniqueName}`)}
+                    onClick={() => goTo(`/apply/${this.props.currentUser.businessInfo.uniqueName}`)}
                 >
                     Candidate Invite Page
                 </div><br/>
