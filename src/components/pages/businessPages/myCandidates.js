@@ -256,7 +256,6 @@ class MyCandidates extends Component {
     findCandidates() {
         // need a position to search for
         if (!this.state.noPositions && this.state.position) {
-            console.log("searching for candidates");
             axios.get("/api/business/candidateSearch", {
                 params: {
                     searchTerm: this.state.term,
@@ -268,9 +267,7 @@ class MyCandidates extends Component {
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
-                console.log("res: ", res);
                 if (res.data && res.data.length > 0) {
-                    console.log("more than one user");
                     this.setState({
                         candidates: res.data,
                         loadingCandidates: false,
@@ -279,9 +276,7 @@ class MyCandidates extends Component {
                         this.reorder()
                     });
                 } else {
-                    console.log("no users");
                     if (this.state.positions.length === 1) {
-                        console.log("one position");
                         axios.get("/api/mockusers/all", {
                             params: {
                                 userId: this.props.currentUser._id,
@@ -289,7 +284,6 @@ class MyCandidates extends Component {
                                 businessId: this.props.currentUser.businessInfo.businessId
                             }
                         }).then(mockDataRes => {
-                            console.log("mockDataRes: ", mockDataRes);
                             this.setState({
                                 candidates: mockDataRes.data.mockusers,
                                 loadingCandidates: false,
