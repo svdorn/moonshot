@@ -267,39 +267,23 @@ class MyCandidates extends Component {
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
-                if (res.data && res.data.length > 0) {
+                if (res.data && res.data.candidates && res.data.candidates.length > 0) {
                     this.setState({
-                        candidates: res.data,
+                        candidates: res.data.candidates,
                         loadingCandidates: false,
                         mockData: false
-                    }, () => {
-                        this.reorder()
-                    });
+                    }, this.reorder);
+                } else if (res.data && res.data.mockusers) {
+                    this.setState({
+                        candidates: res.data.mockusers,
+                        loadingCandidates: false,
+                        mockData: true
+                    }, this.reorder)
                 } else {
-                    if (this.state.positions.length === 1) {
-                        axios.get("/api/mockusers/all", {
-                            params: {
-                                userId: this.props.currentUser._id,
-                                verificationToken: this.props.currentUser.verificationToken,
-                                businessId: this.props.currentUser.businessInfo.businessId
-                            }
-                        }).then(res => {
-                            this.setState({
-                                candidates: res.data.mockusers,
-                                loadingCandidates: false,
-                                mockData: true
-                            }, () => {
-                                this.reorder()
-                            });
-                        }).catch(function (err) {
-                            console.log("ERROR: ", err);
-                        })
-                    } else {
-                        this.setState({
-                            candidates: [],
-                            loadingCandidates: false
-                        })
-                    }
+                    this.setState({
+                        candidates: [],
+                        loadingCandidates: false
+                    })
                 }
             }).catch(function (err) {
                 console.log("ERROR: ", err);
@@ -1010,7 +994,7 @@ class MyCandidates extends Component {
                             <div style={{marginTop:"20px"}}>
                                 <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Improve Your Predictive Model</div>
                                 <div>
-                                    Review candidate reports and predictions, 
+                                    Review candidate reports and predictions,
                                     contact candidates to invite them to
                                     interviews, track their stage or dismiss
                                     them from consideration. You can click any

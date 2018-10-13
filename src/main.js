@@ -115,7 +115,12 @@ class Main extends Component {
     }
 
     popupFooter() {
-        if (this.props.currentUser && this.props.currentUser.userType === "accountAdmin" && this.props.currentUser.onboard && !this.props.currentUser.onboard.timeFinished) {
+        const { currentUser } = this.props;
+
+        if (currentUser && currentUser.userType === "accountAdmin" &&
+            currentUser.onboard && !currentUser.onboard.timeFinished &&
+            typeof currentUser.onboard.step === "number"
+        ) {
             return (
                 <OnboardingStepsFooter />
             );
