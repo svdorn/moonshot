@@ -24,7 +24,7 @@ class Activity extends Component {
             // the frame the activities box is on
             frame: undefined,
             // the amount of candidates or employees awaiting review
-            data : undefined,
+            numUsers : undefined,
             // if there was an error getting any candidates or employees data
             fetchDataError: false,
             // the tab either Candidates or Employees
@@ -55,11 +55,10 @@ class Activity extends Component {
                 let frame = "Tips For Hiring";
                 if (response.data.totalCandidates > 0) {
                     frame = "Awaiting Review";
-                    self.setState({ frame, data: response.data.totalCandidates }, () => {
-                        self.getCandidateData();
-                    });
+                    this.setState({ frame });
+                    self.getCandidateData();
                 } else {
-                    self.setState({ frame, data: 0 });
+                    self.setState({ frame, numUsers: 0 });
                 }
             } else {
                 self.setState({ fetchDataError: true });
@@ -74,6 +73,8 @@ class Activity extends Component {
         goTo("/myCandidates");
     }
 
+
+    // get the number of candidates who haven't yet been reviewed
     getCandidateData() {
         const self = this;
         const user = this.props.currentUser;
@@ -87,7 +88,7 @@ class Activity extends Component {
         axios.get("/api/business/candidatesAwaitingReview", query )
         .then(response => {
             if (propertyExists(response, ["data", "newCandidates"]), "number") {
-                self.setState({ data: response.data.newCandidates });
+                self.setState({ numUsers: response.data.newCandidates });
             } else {
                 self.setState({ fetchDataError: true });
             }
@@ -97,6 +98,7 @@ class Activity extends Component {
         });
     }
 
+    // get the number of employees who haven't been graded
     getEmployeeData() {
         const self = this;
         const user = this.props.currentUser;
@@ -110,7 +112,7 @@ class Activity extends Component {
         axios.get("/api/business/employeesAwaitingReview", query )
         .then(response => {
             if (propertyExists(response, ["data", "newEmployees"]), "number") {
-                self.setState({ data: response.data.newEmployees });
+                self.setState({ numUsers: response.data.newEmployees });
             } else {
                 self.setState({ fetchDataError: true });
             }
@@ -211,7 +213,7 @@ class Activity extends Component {
         if (tab === "Employees") {
             getData = this.getEmployeeData;
         }
-        this.setState({ tab, data: undefined }, getData);
+        this.setState({ tab, numUsers: undefined }, getData);
     }
 
     makeDropdown() {
@@ -239,7 +241,7 @@ class Activity extends Component {
     makeButtons() {
         let self = this;
         let buttons = [];
-        if (this.state.data === 0) {
+        if (this.state.numUsers === 0) {
             buttons = [
                 { name: `Invite ${this.state.tab}`, action: "self.openEmailTemplateModal"},
                 { name: "Add Position", action: "self.openAddPositionModal" }
@@ -269,18 +271,18 @@ class Activity extends Component {
     }
 
     awaitingReview() {
-        let { tab, data } = this.state;
+        let { tab, numUsers } = this.state;
         tab = tab.toLowerCase();
         // if there is only one candidate, make the tab not be plural
-        if (data === 1) { tab = tab.slice(0,-1); }
+        if (numUsers === 1) { tab = tab.slice(0,-1); }
 
         return (
             <div styleName="awaiting-review">
                 <div>
-                    {typeof data === "number" ?
+                    {typeof numUsers === "number" ?
                         <div>
                             <div styleName="important-stat">
-                                <div styleName="important-number">{ data }</div> new { tab } to review
+                                <div styleName="important-number">{ numUsers }</div> new { tab } to review
                             </div>
                             { this.makeButtons() }
                         </div>
@@ -295,24 +297,35 @@ class Activity extends Component {
     }
 
     render() {
-        const { frame, fetchDataError, data } = this.state;
+        const { frame, fetchDataError, numUsers } = this.state;
         const { businessName } = this.props.currentUser.businessInfo;
+
+        // if false, show the loading circle
+        const doneLoading = typeof numUsers === "number" || fetchDataError;
 
         let content = null;
         let dropdown = null;
-        switch (frame) {
-            case "Tips For Hiring": { content = this.tipsForHiring(); break; }
-            case "Awaiting Review": {
-                content = this.awaitingReview();
-                dropdown = this.makeDropdown();
-                break;
+        // if there was an error getting the number of unreviewed users, show
+        // tips for hiring instead of the number of users
+        if (fetchDataError) {
+            content = this.tipsForHiring();
+        } else {
+            switch (frame) {
+                // if there are no candidates at all, show hiring tips
+                case "Tips For Hiring": { content = this.tipsForHiring(); break; }
+                // if there are any candidates, show number of unreviewed ones
+                case "Awaiting Review": {
+                    content = this.awaitingReview();
+                    dropdown = this.makeDropdown();
+                    break;
+                }
+                default: { content = null; break; }
             }
-            default: { content = null; break; }
         }
 
         return (
             <div>
-                { typeof data === "number" && !fetchDataError ?
+                { doneLoading ?
                     <div styleName="activity-container">
                         <div styleName="activity-title">
                             <span styleName="not-small-mobile">{ makePossessive(businessName) } </span>Activity
