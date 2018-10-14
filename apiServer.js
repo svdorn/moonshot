@@ -14,6 +14,7 @@ var app = express();
 
 // make sure headers are set securely
 app.use(helmet());
+app.use(helmet.hidePoweredBy({ setTo: "NotYoBeeswax" }));
 
 if (process.env.NODE_ENV !== "test") {
     app.use(logger('dev'));
