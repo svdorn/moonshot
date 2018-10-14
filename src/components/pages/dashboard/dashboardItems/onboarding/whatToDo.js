@@ -76,11 +76,11 @@ class WhatToDo extends Component {
 
     makeBody() {
         const { currentUser } = this.props;
-        let businessName = "Your";
+        let possessiveBusinessName = "Your";
         let uniqueName = "";
         if (typeof currentUser.businessInfo === "object") {
             const { businessInfo } = currentUser;
-            businessName = businessInfo.businessName;
+            possessiveBusinessName = makePossessive(businessInfo.businessName);
             uniqueName = businessInfo.uniqueName;
         }
 
@@ -90,7 +90,7 @@ class WhatToDo extends Component {
                     {"A Candidate Invite Page Just For You"}
                 </div>
                 <div>
-                    { `${makePossessive(businessName) } invite link is
+                    { `${ possessiveBusinessName } invite link is
                     designed to be embedded in your automated emails or other
                     messages to candidates. We see the best results when
                     companies invite all applicants to complete an evaluation,
