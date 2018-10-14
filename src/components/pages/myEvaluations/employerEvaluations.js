@@ -24,7 +24,7 @@ import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import AddPositionDialog from '../../childComponents/addPositionDialog';
 import clipboard from "clipboard-polyfill";
-import { goTo, makePossessive } from '../../../miscFunctions';
+import { goTo, makePossessive, propertyExists } from '../../../miscFunctions';
 
 const required = value => (value ? undefined : 'This field is required.');
 
@@ -101,11 +101,16 @@ class MyEvaluations extends Component {
     }
 
 
-    copyLink() {
-        let URL = "https://moonshotinsights.io/apply/" + this.props.currentUser.businessInfo.uniqueName;
-        URL = encodeURI(URL);
-        clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard", "info");
+    copyLink = () => {
+        const { currentUser } = this.props;
+        if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
+            let URL = "https://moonshotinsights.io/apply/" + currentUser.businessInfo.uniqueName;
+            URL = encodeURI(URL);
+            clipboard.writeText(URL);
+            this.props.addNotification("Link copied to clipboard", "info");
+        } else {
+            this.props.addNotification("Error copying link, try refreshing", "error");
+        }
     }
 
     hideMessage() {
@@ -237,7 +242,7 @@ class MyEvaluations extends Component {
             var link = (
                 <div className="secondary-gray font16px font14pxUnder900 font12pxUnder500" style={{width:"95%", margin:"20px auto 20px"}}>
                     { makePossessive(currentUser.businessInfo.businessName) } candidate invite page&nbsp;
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink.bind(this)} style={{padding: "2px 4Spx"}}>
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink} style={{padding: "2px 4Spx"}}>
                         {"Get Link"}
                     </button>
                 </div>

@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router';
 import { updateOnboardingStep, addNotification, generalAction, updateUser, openAddPositionModal, intercomEvent } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
-import { goTo, makePossessive } from "../../../../../miscFunctions";
+import { goTo, makePossessive, propertyExists } from "../../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { primaryCyan } from "../../../../../colors";
 import axios from 'axios';
@@ -47,14 +47,24 @@ class WhatToDo extends Component {
     }
 
     copyLink = () => {
-        let URL = "https://moonshotinsights.io/apply/" + this.props.currentUser.businessInfo.uniqueName;
-        URL = encodeURI(URL);
-        clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard", "info");
+        const { currentUser } = this.props;
+        if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
+            let URL = "https://moonshotinsights.io/apply/" + currentUser.businessInfo.uniqueName;
+            URL = encodeURI(URL);
+            clipboard.writeText(URL);
+            this.props.addNotification("Link copied to clipboard", "info");
+        } else {
+            this.props.addNotification("Error copying link, try refreshing", "error");
+        }
     }
 
     handleCustomPage = () => {
-        goTo(`/apply/${this.props.currentUser.businessInfo.uniqueName}`)
+        const { currentUser } = this.props;
+        if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
+            goTo(`/apply/${currentUser.businessInfo.uniqueName}`);
+        } else {
+            this.props.addNotification("Error getting to your custom page, try refreshing.", "error");
+        }
     }
 
 
@@ -65,7 +75,14 @@ class WhatToDo extends Component {
 
 
     makeBody() {
-        const { businessName, uniqueName } = this.props.currentUser.businessInfo;
+        const { currentUser } = this.props;
+        let businessName = "Your";
+        let uniqueName = "";
+        if (typeof currentUser.businessInfo === "object") {
+            const { businessInfo } = currentUser;
+            businessName = businessInfo.businessName;
+            uniqueName = businessInfo.uniqueName;
+        }
 
         return (
             <div styleName="copy-link-view">

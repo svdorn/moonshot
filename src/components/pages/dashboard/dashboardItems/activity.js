@@ -123,10 +123,15 @@ class Activity extends Component {
     }
 
     copyLink = () => {
-        let URL = "https://moonshotinsights.io/apply/" + this.props.currentUser.businessInfo.uniqueName;
-        URL = encodeURI(URL);
-        clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard", "info");
+        const { currentUser } = this.props;
+        if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
+            let URL = "https://moonshotinsights.io/apply/" + currentUser.businessInfo.uniqueName;
+            URL = encodeURI(URL);
+            clipboard.writeText(URL);
+            this.props.addNotification("Link copied to clipboard", "info");
+        } else {
+            this.props.addNotification("Error copying link, try refreshing", "error");
+        }
     }
 
     openAddPositionModal = () => {

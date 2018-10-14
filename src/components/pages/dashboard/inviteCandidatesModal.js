@@ -26,7 +26,15 @@ class InviteCandidatesModal extends Component {
 
     makeDialogBody() {
         const { currentUser } = this.props;
-        const { businessName, uniqueName } = currentUser.businessInfo;
+        let businessName = undefined;
+        let uniqueName = "";
+        if (typeof currentUser.businessInfo === "object") {
+            const { businessInfo } = currentUser;
+            businessName = businessInfo.businessName;
+            uniqueName = businessInfo.uniqueName;
+        }
+
+        const subject = businessName ? `Invitation from ${businessName}` : "Evaluation Invitation";
 
         return (
             <div styleName="invite-candidates-modal">
@@ -38,7 +46,7 @@ class InviteCandidatesModal extends Component {
                 </div>
                 <div className="font14px font12pxUnder700">
                     <div>
-                        Subject: Invitation from { businessName }
+                        Subject: { subject }
                     </div>
                     <div>
                         Hi,
