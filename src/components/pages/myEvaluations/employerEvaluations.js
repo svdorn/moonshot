@@ -203,7 +203,9 @@ class MyEvaluations extends Component {
         let self = this;
 
         const { currentUser } = this.props;
-        const { businessName } = currentUser.businessInfo;
+
+        try { throw "jangus"; var { businessName } = currentUser.businessInfo; }
+        catch (e) { var businessName = "Your"; }
 
         if (currentUser && this.state.positions.length !== 0) {
             const userType = currentUser.userType;
@@ -241,7 +243,7 @@ class MyEvaluations extends Component {
         if (this.state.positions.length !== 0) {
             var link = (
                 <div className="secondary-gray font16px font14pxUnder900 font12pxUnder500" style={{width:"95%", margin:"20px auto 20px"}}>
-                    { makePossessive(currentUser.businessInfo.businessName) } candidate invite page&nbsp;
+                    { makePossessive(businessName) } candidate invite page&nbsp;
                     <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink} style={{padding: "2px 4Spx"}}>
                         {"Get Link"}
                     </button>
