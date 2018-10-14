@@ -8,8 +8,12 @@ const credentials = require('./credentials');
 const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 const prerenderNode = require('prerender-node');
+const helmet = require("helmet");
 
 var app = express();
+
+// make sure headers are set securely
+app.use(helmet());
 
 if (process.env.NODE_ENV !== "test") {
     app.use(logger('dev'));
@@ -241,21 +245,21 @@ app.post("/webhooks/addCandidate", webhooks.POST_addCandidate);
 // ----->> END APIs <<----- //
 
 
-// use this to wrap around any async function, then if an error is thrown it
-// will be passed along to the standard error handler
-function wrapAsync(fn) {
-    return function(req, res, next) {
-        fn(req, res, next) // run the function
-        .catch(next); // if any error is caught, give it to the next error handler
-    }
-}
-// handles all uncaught errors by printing and returning a generic error message
-function standardErrorHandler(error, req, res, next) {
-    console.log("STANDARD ERROR CAUGHT: ", error);
-    res.status(500).send({ message: "Something went wrong - try refreshing" });
-}
-// use the standard error handler as default, could include other ones too at some point
-app.use(standardErrorHandler);
+// // use this to wrap around any async function, then if an error is thrown it
+// // will be passed along to the standard error handler
+// function wrapAsync(fn) {
+//     return function(req, res, next) {
+//         fn(req, res, next) // run the function
+//         .catch(next); // if any error is caught, give it to the next error handler
+//     }
+// }
+// // handles all uncaught errors by printing and returning a generic error message
+// function standardErrorHandler(error, req, res, next) {
+//     console.log("STANDARD ERROR CAUGHT: ", error);
+//     res.status(500).send({ message: "Something went wrong - try refreshing" });
+// }
+// // use the standard error handler as default, could include other ones too at some point
+// app.use(standardErrorHandler);
 
 
 app.listen(3001, function (err) {
