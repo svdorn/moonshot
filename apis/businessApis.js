@@ -2,6 +2,7 @@ const Businesses = require("../models/businesses.js");
 const Users = require("../models/users.js");
 const Psychtests = require("../models/psychtests.js");
 const Signupcodes = require("../models/signupcodes.js");
+const Mockusers = require("../models/mockusers.js");
 const mongoose = require("mongoose");
 const credentials = require('../credentials');
 const Intercom = require('intercom-client');
@@ -67,7 +68,6 @@ const businessApis = {
     GET_newCandidateGraphData,
     GET_evaluationsGraphData,
     GET_billingIsSetUp,
-    GET_uniqueName,
     GET_adminList,
 
     generateApiKey,
@@ -2252,7 +2252,7 @@ async function GET_positions(req, res) {
     try {
         var business = await Businesses
             .findById(businessId)
-            .select("logo name uniqueName positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated");
+            .select("logo positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
         return res.status(500).send("Server error, couldn't get positions.");
@@ -2273,12 +2273,7 @@ async function GET_positions(req, res) {
         }
     }
 
-    return res.status(200).send({
-        logo: business.logo,
-        businessName: business.name,
-        positions,
-        uniqueName: business.uniqueName
-    });
+    return res.status(200).send({ logo: business.logo, positions });
 }
 
 // get all positions for a business
@@ -2545,19 +2540,55 @@ async function GET_candidateSearch(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    // format the candidates for the front end
-    const formattedCandidates = candidates.map(candidate => {
-        const candidateObj = candidate.toObject();
-        return {
-            name: candidateObj.name,
-            profileUrl: candidateObj.profileUrl,
-            _id: candidateObj._id,
-            ...(candidateObj.positions[0])
+    // if there are no candidates for this position, check if there are any at all
+    if (candidates.length === 0) {
+        // query to find all candidates
+        const allCandidatesQuery = {
+            "userType": "candidate",
+            "verified": true,
+            "positions": { "businessId": mongoose.Types.ObjectId(businessId) }
         }
-    })
 
-    // successfully return the candidates
-    return res.json(formattedCandidates);
+        try {
+            // count all candidates for the business
+            const candidateCount = await Users.countDocuments(allCandidatesQuery);
+            // if there aren't any, send out the mock users
+            var shouldSendMockUsers = candidateCount === 0;
+        } catch (countUsersError) {
+            console.log("Error counting if there are any candidates for company: ", countUsersError);
+            return res.status(200).send({ candidates: [] });
+        }
+
+        // if there are other candidates at the company
+        if (!shouldSendMockUsers) { return res.status(200).send({ candidates: [] }); }
+
+        // if there are no other candidates at the company, get all mock
+        // candidates and send them to the front end
+        try {
+            const mockusers = await Mockusers.find({});
+            return res.status(200).send({ mockusers });
+        } catch (getMockusersError) {
+            console.log("Error getting mock users: ", getMockusersError);
+            // just pretend on front end like nothing went wrong
+            return res.status(200).send({ candidates: [] })
+        }
+    }
+    // if there are candidates to return for the position, format them and send em out
+    else {
+        // format the candidates for the front end
+        const formattedCandidates = candidates.map(candidate => {
+            const candidateObj = candidate.toObject();
+            return {
+                name: candidateObj.name,
+                profileUrl: candidateObj.profileUrl,
+                _id: candidateObj._id,
+                ...(candidateObj.positions[0])
+            }
+        });
+
+        // successfully return the candidates
+        return res.json({ candidates: formattedCandidates });
+    }
 }
 
 async function GET_employeeSearch(req, res) {
@@ -2673,26 +2704,6 @@ async function GET_apiKey(req, res) {
     }
 
     return res.status(200).json(business.API_Key);
-}
-
-// get the api key for the api key settings page
-async function GET_uniqueName(req, res) {
-    // get user credentials
-    const { userId, verificationToken } = sanitize(req.query);
-
-    // get the user and business
-    try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
-    catch (error) {
-        console.log("Error finding user/business trying to get business name: ", error);
-        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
-    }
-
-    // user has to be an account admin with right credentials to see the unique business name
-    if (user.userType !== "accountAdmin" || !user.businessInfo || user.businessInfo.businessId.toString() !== business._id.toString()) {
-        return res.status(403).send(errors.PERMISSIONS_ERROR);
-    }
-
-    return res.status(200).json({ name: business.name, uniqueName:business.uniqueName });
 }
 
 

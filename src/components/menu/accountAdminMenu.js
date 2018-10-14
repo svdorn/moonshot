@@ -47,12 +47,10 @@ class AccountAdminMenu extends Component {
 
     // handles clicks, is only activated when the account popup is open
     handleAnyClick = (e) => {
-        console.log("(handleAnyClick) handling click");
         // get the account popup element
         const popup = document.querySelector("#account-popup");
         // if the click is outside of the target, get rid of the popup
         if (!withinElement(e, popup)) {
-            console.log("(handleAnyClick) popup does not contain target, calling removePopup");
             this.removePopup();
         }
     }
@@ -60,25 +58,15 @@ class AccountAdminMenu extends Component {
 
     // remove the account popup from the menu
     removePopup = () => {
-        console.log("(removePopup) this.state: ", this.state);
-        console.log("(removePopup) removing event listener");
         document.removeEventListener('click', this.bound_handleAnyClick);
-        console.log("(removePopup) about to remove popup from state");
-        this.setState({ accountPopupOpen: false }, () => {
-            console.log("(removePopup) removed popup from state, this.state:", this.state);
-        });
+        this.setState({ accountPopupOpen: false });
     }
 
 
     // navigate to an account place (billing, settings, etc)
     navigateAccount = (url) => {
-        console.log("(navigateAccount) start");
-        console.log("(navigateAccount) this.state: ", this.state);
-        console.log("(navigateAccount) entering this.removePopup()");
         this.removePopup();
-        console.log("(navigateAccount) hiding drawer");
         if (this.state.drawerOpen) { this.setState({ drawerOpen: false }); }
-        console.log("(navigateAccount) entering goTo(url)");
         goTo(url);
     }
 

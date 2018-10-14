@@ -16,12 +16,12 @@ import {
 import {connect} from 'react-redux';
 import { browserHistory } from "react-router";
 import {bindActionCreators} from 'redux';
-import { addNotification, startLoading, stopLoading, updateUser } from '../../actions/usersActions';
+import { addNotification, startLoading, stopLoading, updateUser } from '../../../actions/usersActions';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
-import MyEvaluationsPreview from '../childComponents/myEvaluationsPreview';
-import { goTo } from '../../miscFunctions';
-import { button } from "../../classes";
+import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
+import { goTo } from '../../../miscFunctions';
+import { button } from "../../../classes";
 
 import "./candidateEvaluations.css";
 
@@ -51,16 +51,15 @@ class MyEvaluations extends Component {
             self.positionsFound(res.data.positions);
         })
         .catch(error => {
-            // TODO test error
             console.log("error getting positions: ", error);
             self.props.addNotification("Error getting evaluations, try refreshing.", "error");
         });
     }
 
     // call this after positions are found from back end
-    positionsFound(positions, logo, businessName, uniqueName) {
+    positionsFound(positions, logo, businessName) {
         if (Array.isArray(positions) && positions.length > 0) {
-            this.setState({ positions, logo, businessName, uniqueName });
+            this.setState({ positions, logo, businessName });
         } else {
             this.setState({ noPositions: true });
         }
