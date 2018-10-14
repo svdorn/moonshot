@@ -147,6 +147,9 @@ class Activity extends Component {
     }
 
     tipsForHiring() {
+        try { var possessiveBusinessName = makePossessive(this.props.currentUser.businessInfo.businessName); }
+        catch (e) { var possessiveBusinessName = "your"; }
+
         const frame1 = (
             <div styleName="carousel-frame">
                 <div>Tip #1: <span className="primary-cyan">First Things First</span></div>
@@ -183,7 +186,7 @@ class Activity extends Component {
                 <div>Tip #4: <span className="primary-cyan">Double Down On Your Team</span></div>
                 <div>
                     You{"'"}re sacrificing a huge opportunity if you don{"'"}t invite employees to be evaluated. This data enables us to really
-                    customize { makePossessive(this.props.currentUser.businessInfo.businessName) } predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
+                    customize { possessiveBusinessName } predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
                     Improve your candidate predictions by <div className="primary-cyan clickable inlineBlock" onClick={this.openAddUserModal}>inviting employees</div> to complete a 22-minute evaluation.
                 </div>
             </div>
@@ -303,7 +306,8 @@ class Activity extends Component {
 
     render() {
         const { frame, fetchDataError, numUsers } = this.state;
-        const { businessName } = this.props.currentUser.businessInfo;
+        try { var possessiveBusinessName = makePossessive(this.props.currentUser.businessInfo.businessName); }
+        catch (e) { possessiveBusinessName = "Your"; }
 
         // if false, show the loading circle
         const doneLoading = typeof numUsers === "number" || fetchDataError;
@@ -333,7 +337,7 @@ class Activity extends Component {
                 { doneLoading ?
                     <div styleName="activity-container">
                         <div styleName="activity-title">
-                            <span styleName="not-small-mobile">{ makePossessive(businessName) } </span>Activity
+                            <span styleName="not-small-mobile">{ possessiveBusinessName } </span>Activity
                         </div>
                         { dropdown }
                         { content }
