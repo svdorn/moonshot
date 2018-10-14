@@ -7,6 +7,7 @@ import { TextField, CircularProgress, FlatButton, Dialog, RaisedButton } from 'm
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
+import ReactGA from 'react-ga';
 import { renderTextField, renderPasswordField, isValidEmail, goTo, isValidPassword } from "../../../miscFunctions";
 
 
@@ -129,6 +130,12 @@ class BusinessSignup extends Component {
         const { name, company, positionTitle, positionType, isManager } = this.state;
         // combine all those things to be sent to server
         const args = { password, email, name, company, positionTitle, positionType, isManager };
+
+        // mark a business signup in google analytics
+        ReactGA.event({
+            category: 'Signup',
+            action: 'Business Signup'
+        });
 
         // create the user
         this.props.createBusinessAndUser(args);
