@@ -81,7 +81,8 @@ app.use(session({
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
         // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
-        secure: process.env.NODE_ENV !== "development" // only make the cookie if accessing via https
+        secure: process.env.NODE_ENV !== "development", // only make the cookie if accessing via https
+        httpOnly: true, // cookie can only be sent over http(s), not client js
     },
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
