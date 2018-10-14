@@ -140,7 +140,7 @@ async function dimble(req, res) {
 
 
 
-app.post("/testboi", dimble);
+app.post("/testboi", wrapAsync(dimble));
 
 
 
@@ -240,22 +240,20 @@ app.post("/webhooks/addCandidate", webhooks.POST_addCandidate);
 
 
 // use this to wrap around any async function, then if an error is thrown it
-// will be passed along to the next error handler
+// will be passed along to the standard error handler
 function wrapAsync(fn) {
     return function(req, res, next) {
-        fn(req, res, next).catch(next);
+        fn(req, res, next) // run the function
+        .catch(next); // if any error is caught, give it to the next error handler
     }
 }
-// handles all uncaught errors
+// handles all uncaught errors by printing and returning a generic error message
 function standardErrorHandler(error, req, res, next) {
-    console.log("Error: ", error);
-    req.status(500).send({ message: "Doodled!" });
+    console.log("STANDARD ERROR CAUGHT: ", error);
+    res.status(500).send({ message: "Something went wrong - try refreshing" });
 }
-app.use(function(error, req, res, next) {
-    console.log("ERROR HAHAHAHAHAHAHAHAHA");
-  // Gets called because of `wrapAsync()`
-  res.json({ message: error.message });
-});
+// use the standard error handler as default, could include other ones too at some point
+app.use(standardErrorHandler);
 
 
 app.listen(3001, function (err) {
