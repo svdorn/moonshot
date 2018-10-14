@@ -123,24 +123,26 @@ app.use(session({
 
 
 
-function jangus(req, res, next) {
-    console.log("jangus");
-    next()
-}
-async function krangle(req, res, next) {
-    console.log("krangle");
-    next();
-}
-async function dimble(req, res) {
-    console.log("dimble");
-    throw "PIJ";
-    return res.status(200).send({});
-}
-
-
-
-
-app.post("/testboi", wrapAsync(dimble));
+// function jangus(req, res, next) {
+//     console.log("jangus");
+//     next()
+// }
+// async function krangle(req, res, next) {
+//     console.log("krangle");
+//     next();
+// }
+// async function dimble(req, res) {
+//     console.log("dimble");
+//     throw "PIJ";
+//     return res.status(200).send({});
+// }
+//
+//
+//
+//
+// app.post("/printSession", (req, res) => {
+//     console.log("session: ", req.session);
+// });
 
 
 
