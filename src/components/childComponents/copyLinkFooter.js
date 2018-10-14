@@ -66,6 +66,11 @@ class CopyLinkFooter extends Component {
         const { currentUser } = this.props;
         if (!currentUser || currentUser.userType !== "accountAdmin") { return null; }
 
+        let businessName = "your";
+        if (propertyExists(currentUser, ["businessInfo", "businessName"], "string")) {
+            businessName = currentUser.businessInfo.businessName;
+        }
+
         return (
             <div>
                 { !this.state.fetchDataError && this.state.candidateCount === 0 ?
@@ -74,7 +79,7 @@ class CopyLinkFooter extends Component {
                             <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
                             <div className="secondary-gray" styleName="text">
                                 <div styleName="desktop-text">
-                                    Embed { makePossessive(currentUser.businessInfo.businessName) } candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
+                                    Embed { makePossessive(businessName) } candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
                                 </div>
                             </div>
                             <div styleName="buttons">
