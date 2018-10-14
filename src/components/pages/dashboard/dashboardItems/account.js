@@ -58,10 +58,25 @@ class Account extends Component {
 
 
     copyLink() {
-        let URL = "https://moonshotinsights.io/apply/" + this.props.currentUser.businessInfo.uniqueName;
-        URL = encodeURI(URL);
-        clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard", "info");
+        const { currentUser } = this.props;
+        if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
+            let URL = "https://moonshotinsights.io/apply/" + currentUser.businessInfo.uniqueName;
+            URL = encodeURI(URL);
+            clipboard.writeText(URL);
+            this.props.addNotification("Link copied to clipboard", "info");
+        } else {
+            this.props.addNotification("Error copying link, try refreshing", "error");
+        }
+    }
+
+
+    goToApplyPage = () => {
+        const { currentUser } = this.props;
+        if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
+            goTo(`/apply/${currentUser.businessInfo.uniqueName}`);
+        } else {
+            this.props.addNotification("Error getting to your custom page, try refreshing.", "error");
+        }
     }
 
 
@@ -97,7 +112,7 @@ class Account extends Component {
             <div style={{padding: "10px 14px"}}>
                 <div
                     className="clickable primary-cyan inline-block"
-                    onClick={() => goTo(`/apply/${this.props.currentUser.businessInfo.uniqueName}`)}
+                    onClick={this.goToApplyPage}
                 >
                     Candidate Invite Page
                 </div><br/>
