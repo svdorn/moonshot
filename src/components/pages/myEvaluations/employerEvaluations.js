@@ -204,7 +204,7 @@ class MyEvaluations extends Component {
 
         const { currentUser } = this.props;
 
-        try { throw "jangus"; var { businessName } = currentUser.businessInfo; }
+        try { var { businessName } = currentUser.businessInfo; }
         catch (e) { var businessName = "Your"; }
 
         if (currentUser && this.state.positions.length !== 0) {
