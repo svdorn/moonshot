@@ -41,9 +41,11 @@ async function accountAdminBusinessInfo() {
             console.log("user email: ", user.email);
 
             const businessId = user.businessInfo.businessId;
+            console.log("businessId: ", businessId);
 
             if (businessId) {
-                const business = await Businesses.findOne({ _id: businessId });
+                const bizPromise = Businesses.findById(businessId);
+                const business = await bizPromise;
 
                 if (business) {
                     console.log("business name: ", business.name);
@@ -51,12 +53,15 @@ async function accountAdminBusinessInfo() {
                     user.businessInfo.businessName = business.name;
                     user.businessInfo.uniqueName = business.uniqueName;
 
-                    user.save();
+                    await user.save();
+                } else {
+                    console.log("no business found");
                 }
             }
         }
+        console.log("done!");
     } catch (e) {
-        console.log(e);
+        console.log("Error, ", e);
     }
 }
 
