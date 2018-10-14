@@ -208,7 +208,11 @@ function withinElement(event, element) {
 
 
 function makePossessive(name) {
-    if (name.endsWith("'s")) { return name; }
+    if (typeof name !== "string") { return name; }
+    const possessivePronouns = [ "your", "her", "his", "their", "our" ];
+    if (name.endsWith("'s") || possessivePronouns.includes(name.toLowerCase())) {
+        return name;
+    }
     else { return name + "'s"; }
 }
 

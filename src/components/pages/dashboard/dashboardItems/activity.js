@@ -24,13 +24,9 @@ class Activity extends Component {
             // the frame the activities box is on
             frame: undefined,
             // the amount of candidates or employees awaiting review
-            data : undefined,
+            numUsers : undefined,
             // if there was an error getting any candidates or employees data
             fetchDataError: false,
-            // the name of the business
-            name: undefined,
-            // the uniqueName of the business
-            uniqueName: undefined,
             // the tab either Candidates or Employees
             tab: "Candidates"
          };
@@ -47,40 +43,28 @@ class Activity extends Component {
         let self = this;
         const user = this.props.currentUser;
 
-        const nameQuery = { params: {
-            userId: user._id,
-            verificationToken: user.verificationToken,
-        } };
-
         const countQuery = { params: {
             userId: user._id,
             verificationToken: user.verificationToken,
             businessId: user.businessInfo.businessId
         } };
 
-        axios.get("/api/business/uniqueName", nameQuery )
-        .then(function (res) {
-            axios.get("/api/business/candidatesTotal", countQuery )
-            .then(response => {
-                if (propertyExists(response, ["data", "totalCandidates"]), "number") {
-                    let frame = "Tips For Hiring";
-                    if (response.data.totalCandidates > 0) {
-                        frame = "Awaiting Review";
-                        self.setState({ frame, name: res.data.name, uniqueName: res.data.uniqueName }, () => {
-                            self.getCandidateData();
-                        });
-                    } else {
-                        self.setState({ frame, name: res.data.name, uniqueName: res.data.uniqueName });
-                    }
+        axios.get("/api/business/candidatesTotal", countQuery )
+        .then(response => {
+            if (propertyExists(response, ["data", "totalCandidates"]), "number") {
+                let frame = "Tips For Hiring";
+                if (response.data.totalCandidates > 0) {
+                    frame = "Awaiting Review";
+                    this.setState({ frame });
+                    self.getCandidateData();
                 } else {
-                    self.setState({ fetchDataError: true });
+                    self.setState({ frame, numUsers: 0 });
                 }
-            })
-            .catch(error => {
+            } else {
                 self.setState({ fetchDataError: true });
-            });
+            }
         })
-        .catch(function (err) {
+        .catch(error => {
             self.setState({ fetchDataError: true });
         });
     }
@@ -89,6 +73,8 @@ class Activity extends Component {
         goTo("/myCandidates");
     }
 
+
+    // get the number of candidates who haven't yet been reviewed
     getCandidateData() {
         const self = this;
         const user = this.props.currentUser;
@@ -102,7 +88,7 @@ class Activity extends Component {
         axios.get("/api/business/candidatesAwaitingReview", query )
         .then(response => {
             if (propertyExists(response, ["data", "newCandidates"]), "number") {
-                self.setState({ data: response.data.newCandidates });
+                self.setState({ numUsers: response.data.newCandidates });
             } else {
                 self.setState({ fetchDataError: true });
             }
@@ -112,6 +98,7 @@ class Activity extends Component {
         });
     }
 
+    // get the number of employees who haven't been graded
     getEmployeeData() {
         const self = this;
         const user = this.props.currentUser;
@@ -125,7 +112,7 @@ class Activity extends Component {
         axios.get("/api/business/employeesAwaitingReview", query )
         .then(response => {
             if (propertyExists(response, ["data", "newEmployees"]), "number") {
-                self.setState({ data: response.data.newEmployees });
+                self.setState({ numUsers: response.data.newEmployees });
             } else {
                 self.setState({ fetchDataError: true });
             }
@@ -136,10 +123,15 @@ class Activity extends Component {
     }
 
     copyLink = () => {
-        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
-        URL = encodeURI(URL);
-        clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard", "info");
+        const { currentUser } = this.props;
+        if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
+            let URL = "https://moonshotinsights.io/apply/" + currentUser.businessInfo.uniqueName;
+            URL = encodeURI(URL);
+            clipboard.writeText(URL);
+            this.props.addNotification("Link copied to clipboard", "info");
+        } else {
+            this.props.addNotification("Error copying link, try refreshing", "error");
+        }
     }
 
     openAddPositionModal = () => {
@@ -155,6 +147,9 @@ class Activity extends Component {
     }
 
     tipsForHiring() {
+        try { var possessiveBusinessName = makePossessive(this.props.currentUser.businessInfo.businessName); }
+        catch (e) { var possessiveBusinessName = "your"; }
+
         const frame1 = (
             <div styleName="carousel-frame">
                 <div>Tip #1: <span className="primary-cyan">First Things First</span></div>
@@ -191,7 +186,7 @@ class Activity extends Component {
                 <div>Tip #4: <span className="primary-cyan">Double Down On Your Team</span></div>
                 <div>
                     You{"'"}re sacrificing a huge opportunity if you don{"'"}t invite employees to be evaluated. This data enables us to really
-                    customize {this.state.name}{"'"}s predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
+                    customize { possessiveBusinessName } predictive model and generate Longevity/tenure and Culture Fit predictions for all of your candidates.
                     Improve your candidate predictions by <div className="primary-cyan clickable inlineBlock" onClick={this.openAddUserModal}>inviting employees</div> to complete a 22-minute evaluation.
                 </div>
             </div>
@@ -226,7 +221,7 @@ class Activity extends Component {
         if (tab === "Employees") {
             getData = this.getEmployeeData;
         }
-        this.setState({ tab, data: undefined }, getData);
+        this.setState({ tab, numUsers: undefined }, getData);
     }
 
     makeDropdown() {
@@ -254,7 +249,7 @@ class Activity extends Component {
     makeButtons() {
         let self = this;
         let buttons = [];
-        if (this.state.data === 0) {
+        if (this.state.numUsers === 0) {
             buttons = [
                 { name: `Invite ${this.state.tab}`, action: "self.openEmailTemplateModal"},
                 { name: "Add Position", action: "self.openAddPositionModal" }
@@ -284,18 +279,18 @@ class Activity extends Component {
     }
 
     awaitingReview() {
-        let { tab, data } = this.state;
+        let { tab, numUsers } = this.state;
         tab = tab.toLowerCase();
         // if there is only one candidate, make the tab not be plural
-        if (data === 1) { tab = tab.slice(0,-1); }
+        if (numUsers === 1) { tab = tab.slice(0,-1); }
 
         return (
             <div styleName="awaiting-review">
                 <div>
-                    {typeof data === "number" ?
+                    {typeof numUsers === "number" ?
                         <div>
                             <div styleName="important-stat">
-                                <div styleName="important-number">{ data }</div> new { tab } to review
+                                <div styleName="important-number">{ numUsers }</div> new { tab } to review
                             </div>
                             { this.makeButtons() }
                         </div>
@@ -310,26 +305,39 @@ class Activity extends Component {
     }
 
     render() {
-        const { frame, name, fetchDataError } = this.state;
+        const { frame, fetchDataError, numUsers } = this.state;
+        try { var possessiveBusinessName = makePossessive(this.props.currentUser.businessInfo.businessName); }
+        catch (e) { possessiveBusinessName = "Your"; }
+
+        // if false, show the loading circle
+        const doneLoading = typeof numUsers === "number" || fetchDataError;
 
         let content = null;
         let dropdown = null;
-        switch (frame) {
-            case "Tips For Hiring": { content = this.tipsForHiring(); break; }
-            case "Awaiting Review": {
-                content = this.awaitingReview();
-                dropdown = this.makeDropdown();
-                break;
+        // if there was an error getting the number of unreviewed users, show
+        // tips for hiring instead of the number of users
+        if (fetchDataError) {
+            content = this.tipsForHiring();
+        } else {
+            switch (frame) {
+                // if there are no candidates at all, show hiring tips
+                case "Tips For Hiring": { content = this.tipsForHiring(); break; }
+                // if there are any candidates, show number of unreviewed ones
+                case "Awaiting Review": {
+                    content = this.awaitingReview();
+                    dropdown = this.makeDropdown();
+                    break;
+                }
+                default: { content = null; break; }
             }
-            default: { content = null; break; }
         }
 
         return (
             <div>
-                { name && !fetchDataError ?
+                { doneLoading ?
                     <div styleName="activity-container">
                         <div styleName="activity-title">
-                            <span styleName="not-small-mobile">{ makePossessive(name) } </span>Activity
+                            <span styleName="not-small-mobile">{ possessiveBusinessName } </span>Activity
                         </div>
                         { dropdown }
                         { content }

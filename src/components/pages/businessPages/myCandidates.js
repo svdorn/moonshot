@@ -55,8 +55,6 @@ class MyCandidates extends Component {
             searchTerm: "",
             // which position we should see candidates for
             position: "",
-            // the name of the business
-            businessName: "",
             // can sort by Name, Score, Hiring Stage, etc...
             sortBy: "stage",
             // the direction to sort in
@@ -100,6 +98,7 @@ class MyCandidates extends Component {
     }
 
     componentDidMount() {
+        const { currentUser } = this.props;
         let self = this;
         // set an event listener for key presses
         document.addEventListener('keyup', this.bound_handleKeyPress);
@@ -119,7 +118,6 @@ class MyCandidates extends Component {
         })
         .then(function (res) {
             let positions = res.data.positions;
-            const businessName = res.data.businessName;
             if (Array.isArray(positions) && positions.length > 0) {
                 // if the url gave us a position to select first, select that one
                 // otherwise, select the first one available
@@ -145,7 +143,6 @@ class MyCandidates extends Component {
                     positions,
                     position: firstPositionName,
                     positionId,
-                    businessName,
                     loadingPositions: false,
                     loadingCandidates: true
                 },

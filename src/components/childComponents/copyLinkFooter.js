@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification } from '../../actions/usersActions';
-import { propertyExists } from "../../miscFunctions";
+import { propertyExists, makePossessive } from "../../miscFunctions";
 import clipboard from "clipboard-polyfill";
 import axios from 'axios';
 
@@ -14,8 +14,6 @@ class CopyLinkFooter extends Component {
         super(props);
 
         this.state = {
-            name: undefined,
-            uniqueName: undefined,
             candidateCount: undefined,
             fetchDataError: false,
         };
@@ -39,45 +37,49 @@ class CopyLinkFooter extends Component {
             businessId: user.businessInfo.businessId
         } };
 
-        axios.get("/api/business/uniqueName", nameQuery)
-        .then(function (res) {
-            axios.get("/api/business/candidatesTotal", countQuery )
-            .then(response => {
-                if (propertyExists(response, ["data", "totalCandidates"]), "number") {
-                    self.setState({ name: res.data.name, uniqueName: res.data.uniqueName, candidateCount: response.data.totalCandidates })
-                } else {
-                    self.setState({ fetchDataError: true });
-                }
-            })
-            .catch(error => {
+        axios.get("/api/business/candidatesTotal", countQuery )
+        .then(response => {
+            if (propertyExists(response, ["data", "totalCandidates"]), "number") {
+                self.setState({ candidateCount: response.data.totalCandidates })
+            } else {
                 self.setState({ fetchDataError: true });
-            });
+            }
         })
-        .catch(function (err) {
+        .catch(error => {
             self.setState({ fetchDataError: true });
         });
     }
 
     copyLink = () => {
-        let URL = "https://moonshotinsights.io/apply/" + this.state.uniqueName;
-        URL = encodeURI(URL);
-        clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard", "info");
+        const { currentUser } = this.props;
+        if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
+            let URL = "https://moonshotinsights.io/apply/" + currentUser.businessInfo.uniqueName;
+            URL = encodeURI(URL);
+            clipboard.writeText(URL);
+            this.props.addNotification("Link copied to clipboard", "info");
+        } else {
+            this.props.addNotification("Error copying link, try refreshing", "error");
+        }
     }
 
     render() {
         const { currentUser } = this.props;
         if (!currentUser || currentUser.userType !== "accountAdmin") { return null; }
 
+        let businessName = "your";
+        if (propertyExists(currentUser, ["businessInfo", "businessName"], "string")) {
+            businessName = currentUser.businessInfo.businessName;
+        }
+
         return (
             <div>
-                {!this.state.fetchDataError && this.state.candidateCount === 0 ?
+                { !this.state.fetchDataError && this.state.candidateCount === 0 ?
                     <div styleName={"footer-container" + (this.props.footerOnScreen ? " absolute" : "")}>
                         <div styleName="footer">
                             <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
                             <div className="secondary-gray" styleName="text">
                                 <div styleName="desktop-text">
-                                    Embed {this.state.name}{"'"}s candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
+                                    Embed { makePossessive(businessName) } candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
                                 </div>
                             </div>
                             <div styleName="buttons">

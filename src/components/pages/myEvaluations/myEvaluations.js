@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import axios from 'axios';
 
 import CandidateEvaluations from "./candidateEvaluations";
-import AccountAdminEvaluations from "./businessPages/myEvaluations";
+import AccountAdminEvaluations from "./employerEvaluations";
 
 class MyEvaluations extends Component {
     render() {

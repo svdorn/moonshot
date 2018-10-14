@@ -11,7 +11,7 @@ import Login from './components/pages/login';
 import Signup from './components/pages/signup';
 import MyCandidates from './components/pages/businessPages/myCandidates';
 import MyEmployees from './components/pages/businessPages/myEmployees';
-import MyEvaluations from './components/pages/myEvaluations';
+import MyEvaluations from './components/pages/myEvaluations/myEvaluations';
 import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import Billing from './components/pages/businessPages/billing';
