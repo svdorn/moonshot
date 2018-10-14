@@ -121,6 +121,29 @@ app.use(session({
 // ----->> START APIS <<----- //
 
 
+
+
+function jangus(req, res, next) {
+    console.log("jangus");
+    next()
+}
+async function krangle(req, res, next) {
+    console.log("krangle");
+    next();
+}
+async function dimble(req, res) {
+    console.log("dimble");
+    throw "PIJ";
+    return res.status(200).send({});
+}
+
+
+
+
+app.post("/testboi", dimble);
+
+
+
 app.post("/user/addPositionEval", userApis.POST_addPositionEval);
 app.post('/user/signOut', userApis.POST_signOut);
 app.post("/user/stayLoggedIn", userApis.POST_stayLoggedIn);
@@ -214,6 +237,25 @@ app.post("/webhooks/addCandidate", webhooks.POST_addCandidate);
 
 
 // ----->> END APIs <<----- //
+
+
+// use this to wrap around any async function, then if an error is thrown it
+// will be passed along to the next error handler
+function wrapAsync(fn) {
+    return function(req, res, next) {
+        fn(req, res, next).catch(next);
+    }
+}
+// handles all uncaught errors
+function standardErrorHandler(error, req, res, next) {
+    console.log("Error: ", error);
+    req.status(500).send({ message: "Doodled!" });
+}
+app.use(function(error, req, res, next) {
+    console.log("ERROR HAHAHAHAHAHAHAHAHA");
+  // Gets called because of `wrapAsync()`
+  res.json({ message: error.message });
+});
 
 
 app.listen(3001, function (err) {

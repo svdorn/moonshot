@@ -67,6 +67,10 @@ class Activity extends Component {
         .catch(error => {
             self.setState({ fetchDataError: true });
         });
+
+
+
+        axios.post("/api/testboi").then(res => {}).catch(e => { console.log(e); }); 
     }
 
     reviewCandidates = () => {
