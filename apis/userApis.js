@@ -34,7 +34,7 @@ const errors = require('./errors.js');
 
 const { addEvaluation } = require("./evaluationApis");
 
-const userApis = {
+module.exports = {
     POST_signOut,
     POST_stayLoggedIn,
     GET_stayLoggedIn,
@@ -57,7 +57,6 @@ const userApis = {
     POST_verifyFromApiKey,
     POST_updateOnboardingStep,
     POST_popups,
-    POST_intercomEvent,
     POST_reSendVerificationEmail,
 
     // not api endpoints
@@ -460,7 +459,7 @@ async function POST_popups(req, res) {
     res.json(frontEndUser(returnedUser));
 }
 
-async function POST_intercomEvent(req, res) {
+module.exports.POST_intercomEvent = async function(req, res) {
     const event_name = sanitize(req.body.eventName);
     const metadata = sanitize(req.body.metadata);
 
@@ -473,7 +472,9 @@ async function POST_intercomEvent(req, res) {
     }
 
     // if user doesn't have correct info, throw error
-    if (!user || !event_name || !user.intercom || !user.intercom.id || !user.intercom.email) { return res.status(404).send("Error getting information"); }
+    if (!user || !event_name || !user.intercom || !user.intercom.id || !user.intercom.email) {
+        return res.status(400).send("Error getting information");
+    }
 
     const created_at = Math.floor(Date.now() / 1000);
 
@@ -488,6 +489,7 @@ async function POST_intercomEvent(req, res) {
         return res.status(200).send({});
     });
 }
+
 
 async function POST_updateOnboardingStep(req, res) {
     try { var user = await getUserFromReq(req); }
@@ -1088,8 +1090,6 @@ async function POST_changeSettings(req, res) {
 
 // verify that a user has a legitimate api key
 async function POST_verifyFromApiKey(req, res) {
-    console.log("req.body:", req.body);
-
     // get the api key from the input values
     const API_Key = sanitize(findNestedValue(req.body, "API_Key", 5, true));
     if (!API_Key) { return res.status(401).send({error: "No API_Key provided. Make sure the attribute name is API_Key with that exact capitalization."});}
@@ -1110,6 +1110,3 @@ async function POST_verifyFromApiKey(req, res) {
     // successfully verified that user has correct api key
     return res.json({ success: true });
 }
-
-
-module.exports = userApis;
