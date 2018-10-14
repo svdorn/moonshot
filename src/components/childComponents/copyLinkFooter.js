@@ -51,10 +51,15 @@ class CopyLinkFooter extends Component {
     }
 
     copyLink = () => {
-        let URL = "https://moonshotinsights.io/apply/" + this.props.currentUser.businessInfo.uniqueName;
-        URL = encodeURI(URL);
-        clipboard.writeText(URL);
-        this.props.addNotification("Link copied to clipboard", "info");
+        const { currentUser } = this.props;
+        if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
+            let URL = "https://moonshotinsights.io/apply/" + currentUser.businessInfo.uniqueName;
+            URL = encodeURI(URL);
+            clipboard.writeText(URL);
+            this.props.addNotification("Link copied to clipboard", "info");
+        } else {
+            this.props.addNotification("Error copying link, try refreshing", "error");
+        }
     }
 
     render() {
@@ -63,7 +68,7 @@ class CopyLinkFooter extends Component {
 
         return (
             <div>
-                {!this.state.fetchDataError && this.state.candidateCount === 0 ?
+                { !this.state.fetchDataError && this.state.candidateCount === 0 ?
                     <div styleName={"footer-container" + (this.props.footerOnScreen ? " absolute" : "")}>
                         <div styleName="footer">
                             <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
