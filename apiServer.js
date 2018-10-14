@@ -77,6 +77,7 @@ app.use(session({
     rolling: true, // resets maxAge on session when user uses site again
     proxy: true, // must be true since we are using a reverse proxy
     resave: true, // saves session even if un-modified
+    name: "sessionId",
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
         // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
