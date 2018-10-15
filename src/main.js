@@ -24,6 +24,7 @@ import AddAdminDialog from "./components/childComponents/addAdminDialog";
 import CopyLinkFooter from './components/childComponents/copyLinkFooter';
 import OnboardingStepsFooter from './components/childComponents/onboardingStepsFooter';
 import AdminVerifyEmail from "./components/childComponents/adminVerifyEmail";
+import ReactGA from 'react-ga';
 
 import "./main.css";
 
@@ -70,6 +71,15 @@ class Main extends Component {
         this.props.getUserFromSession(function (work) {
             if (work) {
                 self.setState({ loadedUser: true }, () => {
+                    // get the user type
+                    let userType = "lead";
+                    if (self.props.currentUser) {
+                        userType = self.props.currentUser.userType;
+                    }
+                    console.log("userType: ", userType);
+                    // pass the user type to google analytics
+                    ReactGA.set({ 'dimension1': userType });
+
                     if (self.props.currentUser && self.props.currentUser.intercom) {
                         var email = self.props.currentUser.intercom.email;
                         var user_id = self.props.currentUser.intercom.id;
