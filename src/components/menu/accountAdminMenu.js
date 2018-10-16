@@ -124,12 +124,6 @@ class AccountAdminMenu extends Component {
             { title: "Employees", url: "/myEmployees", adminOnly: true }
         ];
 
-        const popupOptions = [
-            { title: "Settings", url: "/settings" },
-            { title: "Billing", url: "/billing" },
-            { title: "Pricing", url: "/pricing" }
-        ];
-
         const topItems = topOptions.map(menuOption => {
             const isCurrentPath = pathFirstPart === menuOption.url.substring(1).toLowerCase();
             return (
@@ -143,41 +137,64 @@ class AccountAdminMenu extends Component {
             );
         });
 
-        let popupItems = popupOptions.map(popupOption => {
-            return (
-                <div
-                    styleName="menu-option"
-                    onClick={this.navigateAccount.bind(this, popupOption.url)}
-                    key={`popup-option ${popupOption.title}`}
-                >
-                    {popupOption.title}
-                </div>
-            );
-        });
-        popupItems.push(
-            <div styleName="menu-option" key="sign-out">
-                <div styleName="sign-out" onClick={this.signOut}>
-                    Sign Out
-                </div>
-            </div>
-        );
+        let bottomItem = null;
 
-        const bottomItem = (
-            <div>
-                <img src={`/icons/User${png}`} styleName="user-icon" />
-                <div styleName="menu-option" onClick={this.openAccountBox}>
-                    <div styleName="user-name">{getFirstName(user.name)}</div>
+        // if there is a current user, add popup items
+        if (user) {
+            const popupOptions = [
+                { title: "Settings", url: "/settings" },
+                { title: "Billing", url: "/billing" },
+                { title: "Pricing", url: "/pricing" }
+            ];
+
+            let popupItems = popupOptions.map(popupOption => {
+                return (
                     <div
-                        id="account-popup"
-                        styleName={
-                            "account-popup " + (this.state.accountPopupOpen ? "visible" : "")
-                        }
+                        styleName="menu-option"
+                        onClick={this.navigateAccount.bind(this, popupOption.url)}
+                        key={`popup-option ${popupOption.title}`}
                     >
-                        {popupItems}
+                        {popupOption.title}
+                    </div>
+                );
+            });
+
+            popupItems.push(
+                <div styleName="menu-option" key="sign-out">
+                    <div styleName="sign-out" onClick={this.signOut}>
+                        Sign Out
                     </div>
                 </div>
-            </div>
-        );
+            );
+
+            bottomItem = (
+                <div>
+                    <img src={`/icons/User${png}`} styleName="user-icon" />
+                    <div styleName="menu-option" onClick={this.openAccountBox}>
+                        <div styleName="user-name">{getFirstName(user.name)}</div>
+                        <div
+                            id="account-popup"
+                            styleName={
+                                "account-popup " + (this.state.accountPopupOpen ? "visible" : "")
+                            }
+                        >
+                            {popupItems}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        // if there is no current user (we're on explore)
+        else {
+            bottomItem = (
+                <div>
+                    <img src={`/icons/User${png}`} styleName="user-icon" />
+                    <div styleName="menu-option" onClick={this.openSignUpModal}>
+                        <div styleName="user-name">Create Account</div>
+                    </div>
+                </div>
+            );
+        }
 
         // moonshot logo
         const home = user ? "/dashboard" : "/";
