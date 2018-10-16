@@ -7,9 +7,6 @@ import { generalAction } from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
-import InviteCandidatesModal from "./inviteCandidatesModal";
-import AddPositionDialog from "../../childComponents/addPositionDialog";
-import AddUserDialog from "../../childComponents/addUserDialog";
 import ROIOnboardingDialog from "../../childComponents/roiOnboardingDialog";
 import OnboardingStep4Dialog from "../../childComponents/onboardingStep4Dialog";
 
@@ -21,32 +18,18 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
-    }
-
-    componentDidMount() {
-        if (
-            this.props.location &&
-            this.props.location.query &&
-            this.props.location.query.inviteCandidates === "open"
-        ) {
-            this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
-        }
+        this.state = {
+            // show the banner with introduction to the dashboard
+            showWelcomeBanner: true,
+            // show the 6 jobs to be done initially
+            showJobs: true
+        };
     }
 
     render() {
         const user = this.props.currentUser;
 
-        let activity = <DashboardItem type="Activity" width={3} />;
-        // if the user is not done with onboarding
-        if (
-            user &&
-            user.onboard &&
-            !user.onboard.timeFinished &&
-            typeof user.onboard.step === "number"
-        ) {
-            activity = <DashboardItem type="Onboarding" width={3} />;
-        }
+        const activity = <DashboardItem type="Onboarding" width={3} />;
         // if the user has the popups at onboarding
         if (user && user.popups && user.popups.businessInterests) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
