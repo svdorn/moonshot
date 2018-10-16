@@ -1,24 +1,22 @@
-"use strict"
-import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
-import { bindActionCreators } from 'redux';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import { closeNotification, dialogEmail } from '../../actions/usersActions';
-import axios from 'axios';
-import MetaTags from 'react-meta-tags';
-import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
-import AddUserDialog from '../childComponents/addUserDialog';
-import ProgressBarDialog from '../miscComponents/progressBarDialog';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { browserHistory } from "react-router";
+import { bindActionCreators } from "redux";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import { closeNotification, dialogEmail } from "../../actions/usersActions";
+import axios from "axios";
+import MetaTags from "react-meta-tags";
+import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from "material-ui";
+import AddUserDialog from "../childComponents/addUserDialog";
+import ProgressBarDialog from "../miscComponents/progressBarDialog";
 import { isValidEmail, goTo } from "../../miscFunctions";
-import HoverTip from '../miscComponents/hoverTip';
+import HoverTip from "../miscComponents/hoverTip";
 
 import "./businessHome.css";
 
-
 let rectangleKeyIndex = 0;
-
 
 class BusinessHome extends Component {
     constructor(props) {
@@ -26,16 +24,15 @@ class BusinessHome extends Component {
 
         this.state = {
             infoIndex: 0,
-            position: '',
+            position: "",
             pricing: "24 Months",
             price: 80,
             // initially don't show the rectangles in case the user's browser is old
             showRectangles: false,
             agreeingToTerms: false,
-            error: ''
-        }
+            error: ""
+        };
     }
-
 
     componentWillMount() {
         const user = this.props.currentUser;
@@ -46,49 +43,51 @@ class BusinessHome extends Component {
                 goTo("/myEvaluations");
             }
         }
-        const showRectangles = this.cssPropertySupported("gridRowStart")
-        this.setState({...this.state, showRectangles});
+        const showRectangles = this.cssPropertySupported("gridRowStart");
+        this.setState({ ...this.state, showRectangles });
     }
-
 
     cssPropertySupported(prop) {
-        try { return document.body.style[prop] !== undefined; }
-        catch (propertyError) { return false; }
+        try {
+            return document.body.style[prop] !== undefined;
+        } catch (propertyError) {
+            return false;
+        }
     }
-
 
     selectProcess(infoIndex) {
         this.setState({ infoIndex });
     }
 
     handleOpen = () => {
-        this.setState({open: true});
+        this.setState({ open: true });
     };
 
-
     handleClose = () => {
-        this.setState({open: false, dialogScreen: 1});
+        this.setState({ open: false, dialogScreen: 1 });
     };
 
     handleCheckMarkClick() {
         this.setState({
             agreeingToTerms: !this.state.agreeingToTerms,
-            error: ''
-        })
-    };
-
-    onChange(e) {
-        this.setState({
-            position: e.target.value
-        }, () => {
-            this.updatePosition()
+            error: ""
         });
     }
 
+    onChange(e) {
+        this.setState(
+            {
+                position: e.target.value
+            },
+            () => {
+                this.updatePosition();
+            }
+        );
+    }
 
     updatePosition() {
-        const position =  this.state.position;
-        this.setState({position});
+        const position = this.state.position;
+        this.setState({ position });
     }
 
     // create the dropdown for a candidate's hiring stage
@@ -98,13 +97,10 @@ class BusinessHome extends Component {
         // create the stage name menu items
         const stages = stageNames.map(stage => {
             return (
-                <MenuItem
-                    value={stage}
-                    key={`pricingStage${stage}`}
-                >
-                    { stage }
+                <MenuItem value={stage} key={`pricingStage${stage}`}>
+                    {stage}
                 </MenuItem>
-            )
+            );
         });
 
         return (
@@ -118,7 +114,7 @@ class BusinessHome extends Component {
                 onChange={this.handleChangePricingStage(pricingStage)}
                 key={`pricingStage`}
             >
-                { stages }
+                {stages}
             </Select>
         );
     }
@@ -143,9 +139,8 @@ class BusinessHome extends Component {
             default:
                 break;
         }
-        this.setState({pricing: pricingStage, price});
-    }
-
+        this.setState({ pricing: pricingStage, price });
+    };
 
     // create a bunch of empty skewed rectangles that should be modified with css
     skewedRectangles(numRects, options) {
@@ -153,54 +148,73 @@ class BusinessHome extends Component {
         let rectangles = [];
         // add the requested number of rectangles
         for (let i = 0; i < numRects; i++) {
-            rectangles.push(<div styleName="skewed-rectangle" key={`rectangle${rectangleKeyIndex}`} />);
+            rectangles.push(
+                <div styleName="skewed-rectangle" key={`rectangle${rectangleKeyIndex}`} />
+            );
             rectangleKeyIndex++;
         }
 
         // if extra options were passed in
         if (typeof options === "object") {
             // if only the array of rectangles should be returned
-            if (options.rectanglesOnly === true) { return rectangles; }
+            if (options.rectanglesOnly === true) {
+                return rectangles;
+            }
         }
 
         return (
             <div styleName="skewed-container">
                 <div styleName="skewed-rectangles-container">
-                    <div styleName="skewed-rectangles">
-                        { rectangles }
-                    </div>
+                    <div styleName="skewed-rectangles">{rectangles}</div>
                 </div>
             </div>
         );
     }
 
-
     introductionSection() {
-        const positionUrl = this.state.position ? ("?position=" + this.state.position) : "";
+        const positionUrl = this.state.position ? "?position=" + this.state.position : "";
 
         return (
             <section id="introduction" styleName="introduction">
                 <a id="home-top" name="home-top" className="anchor" />
                 <div className="businessHome frontPage">
-                    {this.state.showRectangles ?
+                    {this.state.showRectangles ? (
                         <div styleName="skewed-rectangles-container">
                             <div styleName="skewed-rectangles">
-                                { this.skewedRectangles(11, { rectanglesOnly: true })}
+                                {this.skewedRectangles(11, { rectanglesOnly: true })}
                             </div>
                             <div styleName="skewed-rectangles">
-                                { this.skewedRectangles(7, { rectanglesOnly: true })}
+                                {this.skewedRectangles(7, { rectanglesOnly: true })}
                             </div>
                         </div>
-                        : null
-                    }
+                    ) : null}
                     <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
                         <div className="content">
-                            <h1 className="bigTitle font34px font30pxUnder900 font24pxUnder400" style={{color:"#72d6f5"}}>Know which candidates will be successful before you hire them.</h1>
-                            <p className="infoText notFull font18px font16pxUnder900 font14Under400">Hire the best people for your team with hiring technology that constantly learns and improves as you scale.</p>
+                            <h1
+                                className="bigTitle font34px font30pxUnder900 font24pxUnder400"
+                                style={{ color: "#72d6f5" }}
+                            >
+                                Know which candidates will be successful before you hire them.
+                            </h1>
+                            <p className="infoText notFull font18px font16pxUnder900 font14Under400">
+                                Hire the best people for your team with hiring technology that
+                                constantly learns and improves as you scale.
+                            </p>
                             <div className="buttonArea font18px font14pxUnder900">
-                                <input styleName="get-started-input" className="blackInput secondary-gray-important" type="text" placeholder="Enter a position" name="position"
-                                value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                <div styleName="get-started-button" className="button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={() => goTo("/chatbot" + positionUrl)}>
+                                <input
+                                    styleName="get-started-input"
+                                    className="blackInput secondary-gray-important"
+                                    type="text"
+                                    placeholder="Enter a position"
+                                    name="position"
+                                    value={this.state.position}
+                                    onChange={this.onChange.bind(this)}
+                                />
+                                <div
+                                    styleName="get-started-button"
+                                    className="button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan"
+                                    onClick={() => goTo("/explore")}
+                                >
                                     Try for Free
                                 </div>
                             </div>
@@ -211,10 +225,19 @@ class BusinessHome extends Component {
                         </div>
                         <figure styleName="product-screenshots">
                             <div styleName="my-candidates-screenshot">
-                                <img src={"images/businessHome/CandidatesScreenshotTop" + this.props.jpg} alt="My Candidates Page Screenshot"/>
+                                <img
+                                    src={
+                                        "images/businessHome/CandidatesScreenshotTop" +
+                                        this.props.jpg
+                                    }
+                                    alt="My Candidates Page Screenshot"
+                                />
                             </div>
                             <div styleName="results-screenshot">
-                                <img src={"images/businessHome/ProfileScreenshot" + this.props.jpg} alt="Candidate Results Page Screenshot" />
+                                <img
+                                    src={"images/businessHome/ProfileScreenshot" + this.props.jpg}
+                                    alt="Candidate Results Page Screenshot"
+                                />
                             </div>
                         </figure>
                     </div>
@@ -223,17 +246,24 @@ class BusinessHome extends Component {
         );
     }
 
-
     // second section of the page, gives three screenshots as well as corresponding information
     screenshotsSection() {
         return (
             <section id="three-screenshots">
                 <div styleName="screenshot-view">
                     <div styleName="screenshot-left-text">
-                        <div styleName="screenshot-left-text-container" className="font18px font16pxUnder800 primary-white">
-                            <h2 className="primary-purple-light font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1200only br"><br/></div>will perform the best... or the worst</h2>
-                            Analyze candidates to see if they exhibit the qualities of
-                            proven high achievers or low performers in that position.
+                        <div
+                            styleName="screenshot-left-text-container"
+                            className="font18px font16pxUnder800 primary-white"
+                        >
+                            <h2 className="primary-purple-light font30px font24pxUnder800 font22pxUnder500">
+                                Quickly identify which candidates{" "}
+                                <div className="above1200only br">
+                                    <br />
+                                </div>will perform the best... or the worst
+                            </h2>
+                            Analyze candidates to see if they exhibit the qualities of proven high
+                            achievers or low performers in that position.
                         </div>
                     </div>
                     <div styleName="screenshot-right">
@@ -244,16 +274,22 @@ class BusinessHome extends Component {
                     </div>
                 </div>
 
-                <br/>
+                <br />
 
                 <div styleName="screenshot-view">
                     <div styleName="screenshot-right-text">
-                        <div styleName="screenshot-right-text-container" className="font18px font16pxUnder800 primary-white">
-                            <h2 className="primary-cyan font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
+                        <div
+                            styleName="screenshot-right-text-container"
+                            className="font18px font16pxUnder800 primary-white"
+                        >
+                            <h2 className="primary-cyan font30px font24pxUnder800 font22pxUnder500">
+                                Use data to eliminate biases{" "}
+                                <div className="above900only br">
+                                    <br />
+                                </div>and guesswork
                             </h2>
-                            Why read hundreds of resumes? Moonshot uses
-                            machine learning to reveal the empirical evidence
-                            instead of conjecture based on a resume.
+                            Why read hundreds of resumes? Moonshot uses machine learning to reveal
+                            the empirical evidence instead of conjecture based on a resume.
                         </div>
                     </div>
                     <div styleName="screenshot-left">
@@ -268,9 +304,21 @@ class BusinessHome extends Component {
 
                 <div styleName="screenshot-view">
                     <div styleName="screenshot-left-text">
-                        <div styleName="screenshot-left-text-container" className="font18px font16pxUnder800 primary-white">
-                            <h2 className="font30px font24pxUnder800 font22pxUnder500" style={{color: "#ff748c"}}>Constantly improve with every <div className="above1000only br"><br/></div>new candidate and hire</h2>
-                            Your next hire should always be your best one yet. It&#39;s smart to learn from your successes and mistakes.
+                        <div
+                            styleName="screenshot-left-text-container"
+                            className="font18px font16pxUnder800 primary-white"
+                        >
+                            <h2
+                                className="font30px font24pxUnder800 font22pxUnder500"
+                                style={{ color: "#ff748c" }}
+                            >
+                                Constantly improve with every{" "}
+                                <div className="above1000only br">
+                                    <br />
+                                </div>new candidate and hire
+                            </h2>
+                            Your next hire should always be your best one yet. It&#39;s smart to
+                            learn from your successes and mistakes.
                         </div>
                     </div>
 
@@ -285,69 +333,107 @@ class BusinessHome extends Component {
         );
     }
 
-
     statisticsSection() {
         return (
             <section styleName="statistics-section" id="businessHomeStatistics">
-                { this.state.showRectangles ? this.skewedRectangles(20) : null }
+                {this.state.showRectangles ? this.skewedRectangles(20) : null}
                 <div>
                     <div className="center">
-                        <div className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-cyan" style={{padding: "0 16px", marginBottom: "40px"}}>
+                        <div
+                            className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-cyan"
+                            style={{ padding: "0 16px", marginBottom: "40px" }}
+                        >
                             Candidate Predictions Improve Hiring Results
                         </div>
-                        <div style={{position:"relative"}}>
+                        <div style={{ position: "relative" }}>
                             <div className="flourishes3">
-                                <embed src="/images/businessHome/Flourishes3.svg"/>
+                                <embed src="/images/businessHome/Flourishes3.svg" />
                             </div>
-                            <Paper styleName="stats-box"
-                                zDepth={2}>
-                                <div style={{position: "relative", textAlign:"left"}}>
-                                    <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Improve Your Efficiency</div>
-                                    <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">Decrease your cost and time per hire by spending 50%<div className="above600only br"><br/></div> less time screening candidates.</div>
-                                    <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
+                            <Paper styleName="stats-box" zDepth={2}>
+                                <div style={{ position: "relative", textAlign: "left" }}>
+                                    <div className="primary-white font20px font18pxUnder900 font14pxUnder700">
+                                        Improve Your Efficiency
+                                    </div>
+                                    <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font16pxBetween600">
+                                        Decrease your cost and time per hire by spending 50%<div className="above600only br">
+                                            <br />
+                                        </div>{" "}
+                                        less time screening candidates.
+                                    </div>
+                                    <div
+                                        className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text"
+                                        onClick={() => goTo("/chatbot")}
+                                    >
+                                        <span>Learn More</span> &#8594;
+                                    </div>
                                 </div>
                             </Paper>
-                            <Paper styleName="stats-box"
-                                zDepth={2}>
-                                <div style={{position: "relative", textAlign:"left"}}>
-                                    <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Scale Your Culture</div>
-                                    <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">Hire candidates that not only fit your company culture, but also offer new and diverse perspectives.</div>
-                                    <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
+                            <Paper styleName="stats-box" zDepth={2}>
+                                <div style={{ position: "relative", textAlign: "left" }}>
+                                    <div className="primary-white font20px font18pxUnder900 font14pxUnder700">
+                                        Scale Your Culture
+                                    </div>
+                                    <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px font">
+                                        Hire candidates that not only fit your company culture, but
+                                        also offer new and diverse perspectives.
+                                    </div>
+                                    <div
+                                        className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text"
+                                        onClick={() => goTo("/chatbot")}
+                                    >
+                                        <span>Learn More</span> &#8594;
+                                    </div>
                                 </div>
                             </Paper>
-                            <Paper styleName="stats-box"
-                                zDepth={2}>
-                                <div style={{position: "relative", textAlign:"left"}}>
-                                    <div className="primary-white font20px font18pxUnder900 font14pxUnder700">Hire Top Performers</div>
-                                    <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">A repeatable, everlearning process that consistently identifies top performers and bad hires.</div>
-                                    <div className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text" onClick={() => goTo("/chatbot")}><span>Learn More</span> &#8594;</div>
+                            <Paper styleName="stats-box" zDepth={2}>
+                                <div style={{ position: "relative", textAlign: "left" }}>
+                                    <div className="primary-white font20px font18pxUnder900 font14pxUnder700">
+                                        Hire Top Performers
+                                    </div>
+                                    <div className="secondary-gray font16px font14pxUnder900 font12pxUnder700 marginTop10px">
+                                        A repeatable, everlearning process that consistently
+                                        identifies top performers and bad hires.
+                                    </div>
+                                    <div
+                                        className="primary-cyan font18px font16pxUnder900 font14pxUnder700 marginTop10px clickableNoUnderline learn-more-text"
+                                        onClick={() => goTo("/chatbot")}
+                                    >
+                                        <span>Learn More</span> &#8594;
+                                    </div>
                                 </div>
                             </Paper>
                         </div>
                     </div>
                 </div>
             </section>
-        )
+        );
     }
-
 
     videoSection() {
         return (
             <section id="video-section">
-                <div styleName="video-container" className="font22px font18pxUnder950 font16pxUnder400">
+                <div
+                    styleName="video-container"
+                    className="font22px font18pxUnder950 font16pxUnder400"
+                >
                     <div>
                         <div styleName="video-screenshot">
                             <div />
                             <img src={"/images/businessHome/ListViewScreenshot" + this.props.png} />
                         </div>
-                        <div styleName="skew-image-cover"></div>
+                        <div styleName="skew-image-cover" />
                         <div styleName="video-companion">
                             <div>
                                 <div styleName="video-text">
-                                    We predict how successful your candidates will be before you hire them.
+                                    We predict how successful your candidates will be before you
+                                    hire them.
                                 </div>
                                 <div>
-                                    <button styleName="video-button" className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font16pxUnder950 font14pxUnder400 primary-white" onClick={() => goTo("/chatbot")}>
+                                    <button
+                                        styleName="video-button"
+                                        className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font16pxUnder950 font14pxUnder400 primary-white"
+                                        onClick={() => goTo("/chatbot")}
+                                    >
                                         Try for Free
                                     </button>
                                 </div>
@@ -358,7 +444,6 @@ class BusinessHome extends Component {
             </section>
         );
     }
-
 
     learnFromHiresSection() {
         const features = [
@@ -373,10 +458,19 @@ class BusinessHome extends Component {
             {
                 title: "Any Position",
                 text1: "Evaluations for any position",
-                text2: <div>across <div className="home-pink inlineBlock">five position types</div><HoverTip
-                    style={{marginTop: "26px", marginLeft: "-70px"}}
-                    text={<div>Developer<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
-                /></div>,
+                text2: (
+                    <div>
+                        across <div className="home-pink inlineBlock">five position types</div>
+                        <HoverTip
+                            style={{ marginTop: "26px", marginLeft: "-70px" }}
+                            text={
+                                <div>
+                                    Developer<br />Sales<br />Support<br />Marketing<br />Product
+                                </div>
+                            }
+                        />
+                    </div>
+                ),
                 icon: "5Icon",
                 alt: "5 Icon",
                 iconStyle: {}
@@ -404,8 +498,8 @@ class BusinessHome extends Component {
                 icon: "GraphIcon",
                 alt: "Graph Icon",
                 iconStyle: {}
-            },
-        ]
+            }
+        ];
 
         // create a box for each feature
         let featureBoxes = features.map(feature => {
@@ -419,11 +513,17 @@ class BusinessHome extends Component {
                         />
                     </div>
                     <div>
-                        <div className="bold font16pxUnder800 font14pxUnder700">{ feature.title }</div>
-                        <div className="secondary-gray font14pxUnder800 font12pxUnder700">{ feature.text1 }<br/>{ feature.text2 }</div>
+                        <div className="bold font16pxUnder800 font14pxUnder700">
+                            {feature.title}
+                        </div>
+                        <div className="secondary-gray font14pxUnder800 font12pxUnder700">
+                            {feature.text1}
+                            <br />
+                            {feature.text2}
+                        </div>
                     </div>
                 </div>
-            )
+            );
         });
 
         // add the box at the top left with the title for the whole area
@@ -432,51 +532,59 @@ class BusinessHome extends Component {
                 key="featuresHeader"
                 styleName="feature-box"
                 className="primary-peach left-align font26px font22pxUnder800 font18pxUnder700"
-                style={{lineHeight: "1.3"}}
+                style={{ lineHeight: "1.3" }}
             >
-                We learn from each hire<br/> so that we can make the next one even better.
+                We learn from each hire<br /> so that we can make the next one even better.
             </div>
-        )
+        );
 
         return (
             <section id="learnFromHires" styleName="learn-from-hires-section">
-                { this.state.showRectangles ? this.skewedRectangles(6) : null }
+                {this.state.showRectangles ? this.skewedRectangles(6) : null}
                 <div className="center">
-                    <div className="primary-white inline-block" style={{maxWidth: "1200px"}}>
-                        { featureBoxes }
+                    <div className="primary-white inline-block" style={{ maxWidth: "1200px" }}>
+                        {featureBoxes}
                     </div>
                 </div>
             </section>
         );
     }
 
-
     pricingSection() {
-        const positionUrl = this.state.position ? ("?position=" + this.state.position) : "";
+        const positionUrl = this.state.position ? "?position=" + this.state.position : "";
 
         return (
             <section id="pricingSection" styleName="pricing-section">
                 <a id="pricing" name="pricing" className="anchor" />
-                { this.state.showRectangles ? this.skewedRectangles(6) : null }
-                <div style={{margin: "auto", textAlign: "center", position: "relative"}}>
+                {this.state.showRectangles ? this.skewedRectangles(6) : null}
+                <div style={{ margin: "auto", textAlign: "center", position: "relative" }}>
                     <div
                         className="font36px font32pxUnder700 font26pxUnder500 center home-peach"
-                        style={{marginBottom: '50px'}}
+                        style={{ marginBottom: "50px" }}
                     >
                         Pay Only When You Hire
-                        <div className="font18px font16pxUnder700 font12pxUnder400 primary-white" style={{padding: "0 10px"}}>
-                            Our incentives are aligned. You only pay when you hire<div className="above500only br"><br/></div> a top performer who stays at your company.
+                        <div
+                            className="font18px font16pxUnder700 font12pxUnder400 primary-white"
+                            style={{ padding: "0 10px" }}
+                        >
+                            Our incentives are aligned. You only pay when you hire<div className="above500only br">
+                                <br />
+                            </div>{" "}
+                            a top performer who stays at your company.
                         </div>
                     </div>
                     <div styleName="pricing-box box-1">
-                        <div style={{textAlign: "center", position: "relative"}}>
+                        <div style={{ textAlign: "center", position: "relative" }}>
                             <img
                                 src={"/images/businessHome/Flourish1" + this.props.png}
                                 alt="Flourish Icon"
                                 styleName="flourish-icon"
                             />
                             <div styleName="pricing-container">
-                                <div className="home-peach paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
+                                <div
+                                    className="home-peach paddingTop10px font20px font16pxUnder400"
+                                    style={{ fontWeight: "bold" }}
+                                >
                                     Test It Out
                                 </div>
                                 <img
@@ -487,7 +595,10 @@ class BusinessHome extends Component {
                                 <div className="marginTop10px primary-white font22px font18pxUnder400">
                                     First Hire
                                 </div>
-                                <div styleName="price-free" className="home-peach font30px font24pxUnder400">
+                                <div
+                                    styleName="price-free"
+                                    className="home-peach font30px font24pxUnder400"
+                                >
                                     FREE
                                 </div>
                                 <ul className="primary-white font14px font12pxUnder400">
@@ -496,22 +607,30 @@ class BusinessHome extends Component {
                                     <li>Review the results</li>
                                     <li>Hire the best candidate</li>
                                 </ul>
-                                <button className="button large round-4px gradient-transition gradient-1-home-pricing-peach gradient-2-home-pricing-pink primary-white font18px" onClick={() => goTo("/chatbot")}>
+                                <button
+                                    className="button large round-4px gradient-transition gradient-1-home-pricing-peach gradient-2-home-pricing-pink primary-white font18px"
+                                    onClick={() => goTo("/chatbot")}
+                                >
                                     Try for Free
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div className="under800only" style={{height:"0px"}}><br/></div>
+                    <div className="under800only" style={{ height: "0px" }}>
+                        <br />
+                    </div>
                     <div styleName="pricing-box box-2">
-                        <div style={{textAlign: "center", position: "relative"}}>
+                        <div style={{ textAlign: "center", position: "relative" }}>
                             <img
                                 src={"/images/businessHome/Flourish2" + this.props.png}
                                 styleName="flourish-icon flourish-2"
                                 alt="Flourish Icon"
                             />
                             <div styleName="pricing-container">
-                                <div className="home-blue paddingTop10px font20px font16pxUnder400" style={{fontWeight: "bold"}}>
+                                <div
+                                    className="home-blue paddingTop10px font20px font16pxUnder400"
+                                    style={{ fontWeight: "bold" }}
+                                >
                                     Scale It Up
                                 </div>
                                 <img
@@ -523,23 +642,37 @@ class BusinessHome extends Component {
                                     Each Additional Hire
                                 </div>
                                 <div className="primary-white">
-                                    <span className="font30px font24pxUnder400 home-blue" style={{fontWeight:"bold"}}>${this.state.price}</span>
+                                    <span
+                                        className="font30px font24pxUnder400 home-blue"
+                                        style={{ fontWeight: "bold" }}
+                                    >
+                                        ${this.state.price}
+                                    </span>
                                     <span className="font16px font14pxUnder400">&nbsp;/ month</span>
-                                    <div className="font16px font14pxUnder400" style={{marginTop:"-10px"}}>
+                                    <div
+                                        className="font16px font14pxUnder400"
+                                        style={{ marginTop: "-10px" }}
+                                    >
                                         <span>for up to&nbsp;</span>
                                         {this.makePricingDropdown(this.state.pricing)}
                                     </div>
                                 </div>
-                                <ul className="primary-white font14px font12pxUnder400" style={{textAlign: "left", width: "95%", margin:"auto"}}>
-                                    <li>Monthly payments stop if a<br/>hire is no longer employed</li>
+                                <ul
+                                    className="primary-white font14px font12pxUnder400"
+                                    style={{ textAlign: "left", width: "95%", margin: "auto" }}
+                                >
+                                    <li>
+                                        Monthly payments stop if a<br />hire is no longer employed
+                                    </li>
                                     <li>Pay off your balance at any time</li>
                                 </ul>
                                 <button
-                                    className=
-                                        {"button large round-4px gradient-transition \
+                                    className={
+                                        "button large round-4px gradient-transition \
                                           gradient-1-home-pricing-green \
                                           gradient-2-home-pricing-blue \
-                                          primary-white font18px"}
+                                          primary-white font18px"
+                                    }
                                     onClick={() => goTo("/chatbot")}
                                 >
                                     Try for Free
@@ -549,16 +682,31 @@ class BusinessHome extends Component {
                     </div>
                     <div className="marginTop10px">
                         <div className="primary-white font18px font16pxUnder700 font12pxUnder450">
-                            Unlimited evaluations of all your applicants across <div className="home-peach inlineBlock">five position types</div><HoverTip
-                                style={{marginTop: "26px", marginLeft: "-70px"}}
-                                text={<div>Developer<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
+                            Unlimited evaluations of all your applicants across{" "}
+                            <div className="home-peach inlineBlock">five position types</div>
+                            <HoverTip
+                                style={{ marginTop: "26px", marginLeft: "-70px" }}
+                                text={
+                                    <div>
+                                        Developer<br />Sales<br />Support<br />Marketing<br />Product
+                                    </div>
+                                }
                             />.
                         </div>
                         <div className="pricingInput font18px font16pxUnder800 font14pxUnder500 marginTop40px">
                             <div className="enterPosition">
-                                <input className="blackInput secondary-gray-important" type="text" placeholder="Enter a position you're hiring for..." name="position"
-                                value={this.state.position} onChange={this.onChange.bind(this)}/>
-                                <div className="button medium round-8px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px" onClick={() => goTo("/chatbot" + positionUrl)}>
+                                <input
+                                    className="blackInput secondary-gray-important"
+                                    type="text"
+                                    placeholder="Enter a position you're hiring for..."
+                                    name="position"
+                                    value={this.state.position}
+                                    onChange={this.onChange.bind(this)}
+                                />
+                                <div
+                                    className="button medium round-8px gradient-transition gradient-1-home-peach gradient-2-home-pink primary-white marginLeft10px"
+                                    onClick={() => goTo("/chatbot" + positionUrl)}
+                                >
                                     Try for Free
                                 </div>
                             </div>
@@ -572,20 +720,43 @@ class BusinessHome extends Component {
         );
     }
 
-
     integrationsSection() {
         return (
-            <section id="ATSIntegrations" styleName="ats-integrations-section" className="marginBottom60px">
-                { this.state.showRectangles ? this.skewedRectangles(6) : null }
+            <section
+                id="ATSIntegrations"
+                styleName="ats-integrations-section"
+                className="marginBottom60px"
+            >
+                {this.state.showRectangles ? this.skewedRectangles(6) : null}
                 <div className="center primary-white">
                     <div className="marginBottom40px font30px font24pxUnder700 font20pxUnder500">
                         Integrates with your ATS and favorite apps.
                     </div>
-                    <img src={"images/businessHome/BambooHr" + this.props.png} alt="BambooHr" styleName="bamboo-hr" />
-                    <img src={"images/businessHome/Trello" + this.props.png} alt="Trello" styleName="trello" />
-                    <img src={"images/businessHome/Workable" + this.props.png} alt="Workable" styleName="workable" />
-                    <img src={"images/businessHome/Slack" + this.props.png} alt="Slack" styleName="slack" />
-                    <img src={"images/businessHome/Recruitee" + this.props.png} alt="Recruitee" styleName="recruitee" />
+                    <img
+                        src={"images/businessHome/BambooHr" + this.props.png}
+                        alt="BambooHr"
+                        styleName="bamboo-hr"
+                    />
+                    <img
+                        src={"images/businessHome/Trello" + this.props.png}
+                        alt="Trello"
+                        styleName="trello"
+                    />
+                    <img
+                        src={"images/businessHome/Workable" + this.props.png}
+                        alt="Workable"
+                        styleName="workable"
+                    />
+                    <img
+                        src={"images/businessHome/Slack" + this.props.png}
+                        alt="Slack"
+                        styleName="slack"
+                    />
+                    <img
+                        src={"images/businessHome/Recruitee" + this.props.png}
+                        alt="Recruitee"
+                        styleName="recruitee"
+                    />
                     <div className="marginTop40px font20px font16pxUnder700 font12pxUnder500">
                         and many more...
                     </div>
@@ -594,29 +765,33 @@ class BusinessHome extends Component {
         );
     }
 
-
     render() {
         return (
             <div>
-                {(this.props.currentUser && this.props.currentUser.userType == "accountAdmin") ? <AddUserDialog /> : null}
+                {this.props.currentUser && this.props.currentUser.userType == "accountAdmin" ? (
+                    <AddUserDialog />
+                ) : null}
                 <MetaTags>
                     <title>Moonshot</title>
-                    <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
+                    <meta
+                        name="description"
+                        content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions."
+                    />
                 </MetaTags>
                 <div className="blackBackground businessHome">
-                    { this.introductionSection() }
+                    {this.introductionSection()}
 
-                    { this.screenshotsSection() }
+                    {this.screenshotsSection()}
 
-                    { this.statisticsSection() }
+                    {this.statisticsSection()}
 
-                    { this.videoSection() }
+                    {this.videoSection()}
 
-                    { this.learnFromHiresSection() }
+                    {this.learnFromHiresSection()}
 
-                    { this.pricingSection() }
+                    {this.pricingSection()}
 
-                    { this.integrationsSection() }
+                    {this.integrationsSection()}
                 </div>
             </div>
         );
@@ -624,10 +799,13 @@ class BusinessHome extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification,
-        dialogEmail,
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification,
+            dialogEmail
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -640,4 +818,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessHome);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BusinessHome);

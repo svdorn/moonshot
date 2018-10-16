@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Notification from "../notification";
 import { getUserFromSession } from "../../actions/usersActions";
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
 import AgreeToTerms from "./agreeToTerms";
 import { goTo } from "../../miscFunctions";
@@ -30,7 +31,15 @@ class AuthenticatedComponent extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        this.reCheck();
+        const prevPath = prevProps.location.pathname;
+        const newPath = this.props.location.pathname;
+        const userExisted = typeof prevProps.currentUser === "object";
+        const userExists = typeof this.props.currentUser === "object";
+        // if there used to be a user and now isn't or vise versa
+        // OR if the path has changed, check if permissions are correct
+        if (prevPath !== newPath || userExisted !== userExists) {
+            this.reCheck();
+        }
     }
 
     reCheck() {
@@ -255,6 +264,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser
     };
 }
+
+AuthenticatedComponent = withRouter(AuthenticatedComponent);
 
 export default connect(
     mapStateToProps,
