@@ -14,7 +14,7 @@ import WelcomeMessage from "./dashboardItems/welcomeMessage";
 
 import "./dashboard.css";
 
-class Dashboard extends Component {
+class GuestDashboard extends Component {
     constructor(props) {
         super(props);
 
@@ -29,7 +29,7 @@ class Dashboard extends Component {
     render() {
         const user = this.props.currentUser;
 
-        const activity = <DashboardItem type="Onboarding" width={3} />;
+        let activity = <DashboardItem type="Onboarding" width={3} />;
         // if the user has the popups at onboarding
         if (user && user.popups && user.popups.businessInterests) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
@@ -89,9 +89,9 @@ function mapDispatchToProps(dispatch) {
     );
 }
 
-Dashboard = withRouter(Dashboard);
+GuestDashboard = withRouter(GuestDashboard);
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Dashboard);
+)(GuestDashboard);
