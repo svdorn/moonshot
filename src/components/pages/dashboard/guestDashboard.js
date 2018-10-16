@@ -27,13 +27,14 @@ class GuestDashboard extends Component {
     }
 
     render() {
-        const user = this.props.currentUser;
-
         let activity = <DashboardItem type="Onboarding" width={3} />;
-        // if the user has the popups at onboarding
-        if (user && user.popups && user.popups.businessInterests) {
+        // if the guest has not said which jobs they want to do with the site
+        if (this.state.showJobs) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
         }
+
+        // TODO: delete
+        activity = null;
 
         let blurredClass = "";
         if (this.props.roiModal || this.props.onboardingModel) {
@@ -49,23 +50,19 @@ class GuestDashboard extends Component {
                         content="Your home base for checking in on your candidates, employees, evaluations, and more."
                     />
                 </MetaTags>
-                <InviteCandidatesModal />
-                <AddPositionDialog />
-                <AddUserDialog />
                 <ROIOnboardingDialog />
                 <OnboardingStep4Dialog />
                 <div className="page-line-header">
                     <div />
                     <div>Dashboard</div>
                 </div>
-                <WelcomeMessage />
+                {/* <WelcomeMessage /> */}
                 <div styleName="dashboard">
                     {activity}
                     <DashboardItem type="Candidates" width={1} />
                     <DashboardItem type="Evaluations" width={1} />
                     <DashboardItem type="Employees" width={1} />
-                    <DashboardItem type="Account" width={1} />
-                    <DashboardItem type="Billing" width={1} />
+                    {/*<DashboardItem type="Billing" width={1} />*/}
                 </div>
             </div>
         );
@@ -74,7 +71,6 @@ class GuestDashboard extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
         roiModal: state.users.roiOnboardingOpen,
         onboardingModel: state.users.onboardingStep4Open
     };
