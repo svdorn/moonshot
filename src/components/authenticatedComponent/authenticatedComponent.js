@@ -100,8 +100,8 @@ class AuthenticatedComponent extends Component {
         const { currentUser } = this.props;
         const allowedTypes = this.props.route.userType;
         const wantsGuest =
-            (Array.isArray(allowedTypes) && allowedTypes.includes("guest")) ||
-            (typeof allowedTypes === "string" && allowedTypes === "guest");
+            (Array.isArray(allowedTypes) && allowedTypes.includes("lead")) ||
+            (typeof allowedTypes === "string" && allowedTypes === "lead");
 
         if (!currentUser) {
             // if there is no user and that is what is wanted, user has access
@@ -148,8 +148,8 @@ class AuthenticatedComponent extends Component {
 
         // if the page wants only someone without an account to see it
         const wantsGuest =
-            (Array.isArray(allowedTypes) && allowedTypes.includes("guest")) ||
-            (typeof allowedTypes === "string" && allowedTypes === "guest");
+            (Array.isArray(allowedTypes) && allowedTypes.includes("lead")) ||
+            (typeof allowedTypes === "string" && allowedTypes === "lead");
 
         // if the page wants only people who are not logged in to see it
         if (wantsGuest) {
@@ -157,7 +157,7 @@ class AuthenticatedComponent extends Component {
             return !user;
         }
 
-        // if no one is logged in and it doesn't want a guest, access not granted
+        // if no one is logged in and it doesn't want a lead, access not granted
         else if (!user) {
             return false;
         }

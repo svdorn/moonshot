@@ -28,7 +28,7 @@ class GuestDashboard extends Component {
 
     render() {
         let activity = <DashboardItem type="Onboarding" width={3} />;
-        // if the guest has not said which jobs they want to do with the site
+        // if the lead has not said which jobs they want to do with the site
         if (this.state.showJobs) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
         }

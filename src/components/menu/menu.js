@@ -1,29 +1,42 @@
-"use strict"
-import React, { Component } from 'react';
-import { ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, IconMenu, IconButton } from 'material-ui';
-import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
-import { connect } from 'react-redux';
-import { browserHistory, withRouter } from 'react-router';
-import { bindActionCreators } from 'redux';
-import { signout, closeNotification, endOnboarding, openAddUserModal, openContactUsModal } from "../../actions/usersActions";
+"use strict";
+import React, { Component } from "react";
+import {
+    ToolbarGroup,
+    DropDownMenu,
+    MenuItem,
+    Divider,
+    Toolbar,
+    IconMenu,
+    IconButton
+} from "material-ui";
+import MoreHorizIcon from "material-ui/svg-icons/image/dehaze";
+import { connect } from "react-redux";
+import { browserHistory, withRouter } from "react-router";
+import { bindActionCreators } from "redux";
+import {
+    signout,
+    closeNotification,
+    endOnboarding,
+    openAddUserModal,
+    openContactUsModal
+} from "../../actions/usersActions";
 import { isValidEmail, goTo } from "../../miscFunctions";
-import { axios } from 'axios';
+import { axios } from "axios";
 import { animateScroll } from "react-scroll";
 import AccountAdminMenu from "./accountAdminMenu";
 
 const styles = {
     title: {
-        cursor: 'pointer',
+        cursor: "pointer"
     },
     underlineStyle: {
-        display: 'none',
+        display: "none"
     },
     anchorOrigin: {
-        vertical: 'top',
-        horizontal: 'left'
+        vertical: "top",
+        horizontal: "left"
     }
 };
-
 
 // pages that have a header but don't show the header shadow
 const noShadowPages = [];
@@ -32,23 +45,23 @@ const nonFixedMenuPages = ["evaluation"];
 // pages that don't have a header at all
 const noMenuPages = ["chatbot"];
 
-
 class Menu extends Component {
     constructor(props) {
         super(props);
         let dropDownSelected = "Account";
-        if (this.props.location.pathname === '/settings') {
+        if (this.props.location.pathname === "/settings") {
             dropDownSelected = "Settings";
-        } else if (this.props.location.pathname.toLowerCase() === '/adduser') {
+        } else if (this.props.location.pathname.toLowerCase() === "/adduser") {
             dropDownSelected = "Add User";
-        } else if (this.props.location.pathname === '/billing') {
+        } else if (this.props.location.pathname === "/billing") {
             dropDownSelected = "Billing";
-        } else if (this.props.location.pathname === '/pricing') {
+        } else if (this.props.location.pathname === "/pricing") {
             dropDownSelected = "Pricing";
         }
         // class for the header, only needed for pages with unusual menus
-        const headerClass = props.location.pathname === "/" && window.scrollY === 0 ? "noShadow" : "";
-        const position = '';
+        const headerClass =
+            props.location.pathname === "/" && window.scrollY === 0 ? "noShadow" : "";
+        const position = "";
 
         this.bound_checkForHeaderClassUpdate = this.checkForHeaderClassUpdate.bind(this);
 
@@ -66,26 +79,26 @@ class Menu extends Component {
 
     componentDidUpdate() {
         const pathname = this.props.location.pathname.toLowerCase();
-        if (pathname === '/settings') {
+        if (pathname === "/settings") {
             if (this.state.dropDownSelected !== "Settings") {
-                this.setState({dropDownSelected: "Settings"});
+                this.setState({ dropDownSelected: "Settings" });
             }
-        } else if (pathname === '/adduser') {
+        } else if (pathname === "/adduser") {
             if (this.state.dropDownSelected !== "Add User") {
-                this.setState({dropDownSelected: "Add User"});
+                this.setState({ dropDownSelected: "Add User" });
             }
-        } else if (pathname === '/billing') {
+        } else if (pathname === "/billing") {
             if (this.state.dropDownSelected !== "Billing") {
-                this.setState({dropDownSelected: "Billing"})
+                this.setState({ dropDownSelected: "Billing" });
             }
-        } else if (pathname === '/pricing') {
+        } else if (pathname === "/pricing") {
             if (this.state.dropDownSelected !== "Pricing") {
-                this.setState({dropDownSelected: "Pricing"})
+                this.setState({ dropDownSelected: "Pricing" });
             }
         } else {
             // set dropdown to be on Account if not on settings or onboarding pages
             if (this.state.dropDownSelected !== "Account") {
-                this.setState({dropDownSelected: "Account"});
+                this.setState({ dropDownSelected: "Account" });
             }
         }
 
@@ -104,7 +117,6 @@ class Menu extends Component {
             }
         }
     }
-
 
     // fires when a dropDown menu item is clicked
     handleDropDownItemClick = (event, index, value) => {
@@ -133,7 +145,7 @@ class Menu extends Component {
 
         // if not clicking sign out, set the dropdown to be on the right option
         if (value !== "Sign Out") {
-            this.setState({dropDownSelected: value});
+            this.setState({ dropDownSelected: value });
         }
     };
 
@@ -143,9 +155,8 @@ class Menu extends Component {
         });
     }
 
-
     selectAndGoTo(route, value) {
-        this.setState({dropDownSelected: value});
+        this.setState({ dropDownSelected: value });
         goTo(route);
     }
 
@@ -155,7 +166,7 @@ class Menu extends Component {
         //     this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
         // }
         this.props.signout();
-        goTo('/');
+        goTo("/");
     }
 
     handleAnchorClick(anchor, wantedPath) {
@@ -167,9 +178,10 @@ class Menu extends Component {
             goTo(wantedPath);
         }
         // if we are already on the wanted path, scroll to the wanted anchor
-        else { this.scrollToAnchor(anchor); }
+        else {
+            this.scrollToAnchor(anchor);
+        }
     }
-
 
     // scroll to an anchor on the current page, if it exists
     scrollToAnchor(anchor) {
@@ -184,13 +196,14 @@ class Menu extends Component {
                 // ... scroll down a bit less so that the menu isn't in the way
                 yPosition -= 50;
                 // make sure we're scrolling to to a valid position
-                if (yPosition < 0) { yPosition = 0; }
+                if (yPosition < 0) {
+                    yPosition = 0;
+                }
             }
             // scroll to the element
             animateScroll.scrollTo(yPosition);
         }
     }
-
 
     // get the distance from an element to the top of the page
     distanceFromTop(element) {
@@ -206,19 +219,18 @@ class Menu extends Component {
                     distance += element.offsetTop;
                     // set the current element to its parent
                     element = element.offsetParent;
-                }
-                // continue to do this until the top element has been reached
-                while (element);
+                } while (
+                    // continue to do this until the top element has been reached
+                    element
+                );
             }
             // return the distance - return 0 if the distance is < 0 due to rounding
             return distance < 0 ? 0 : distance;
-        }
-        catch (e) {
+        } catch (e) {
             console.log("Error getting distance from top of page: ", e);
             return 0;
         }
     }
-
 
     checkForHeaderClassUpdate(event) {
         if (this.props.location.pathname === "/") {
@@ -233,40 +245,52 @@ class Menu extends Component {
         }
     }
 
-
     render() {
         let self = this;
         let currentUser = this.props.currentUser;
 
-        // if screen is large enough and user is account admin, give them the side-menu
-        if (currentUser && currentUser.userType === "accountAdmin") {
-            return <AccountAdminMenu/>;
-        }
-
-        let isEmployer = false;
-
-        if (currentUser && (currentUser.userType === "manager" || currentUser.userType === "employee")) {
-            isEmployer = true;
-        }
-
         // get the current path from the url
         let pathname = undefined;
         // try to get the path; lowercased because capitalization will vary
-        try { pathname = this.props.location.pathname.toLowerCase(); }
-        // if the pathname is not yet defined, don't do anything, this will be executed again later
-        catch (e) { pathname = ""; }
+        try {
+            pathname = this.props.location.pathname.toLowerCase();
+        } catch (e) {
+            // if the pathname is not yet defined, don't do anything, this will be executed again later
+            pathname = "";
+        }
 
         // get the different parts of the pathname ([skillTest, front-end-developer, ...])
         const pathnameParts = pathname.split("/").slice(1);
         // get the first, most important part of the path first
         const pathFirstPart = pathnameParts[0];
 
+        // if user is account admin OR they're on explore, give them the side-menu
+        if (
+            pathFirstPart === "explore" ||
+            (currentUser && currentUser.userType === "accountAdmin")
+        ) {
+            return <AccountAdminMenu />;
+        }
+
+        let isEmployer = false;
+
+        if (
+            currentUser &&
+            (currentUser.userType === "manager" || currentUser.userType === "employee")
+        ) {
+            isEmployer = true;
+        }
+
         // don't show the menu if this page requires no menu
-        if (noMenuPages.includes(pathFirstPart)) { return null; }
+        if (noMenuPages.includes(pathFirstPart)) {
+            return null;
+        }
 
         // the url to be directed to by default
         let homeUrl = "/";
-        if (isEmployer) { homeUrl = "/myEvaluations"; }
+        if (isEmployer) {
+            homeUrl = "/myEvaluations";
+        }
 
         // color of the dropDown menu icon
         let iconMenuColor = "white";
@@ -275,7 +299,8 @@ class Menu extends Component {
         // class of any dropdown menu
         let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
         // class of any menu item that is NOT currently selected
-        let menuItemClass = "menuItem font16px borderBottomClickable noWrap primary-white wideScreenMenuItem";
+        let menuItemClass =
+            "menuItem font16px borderBottomClickable noWrap primary-white wideScreenMenuItem";
         // class of any menu item that IS currently selected
         const selectedMenuItemClass = menuItemClass + " currentRoute";
 
@@ -287,7 +312,9 @@ class Menu extends Component {
         let additionalHeaderClass = "";
 
         // add the class to get rid of the shadow if the current path is one of those
-        if (noShadowPages.includes(pathFirstPart)) { additionalHeaderClass += " noShadow"; }
+        if (noShadowPages.includes(pathFirstPart)) {
+            additionalHeaderClass += " noShadow";
+        }
 
         if (pathname === "/") {
             // make sure there aren't already event listeners on scroll/resize ...
@@ -313,34 +340,32 @@ class Menu extends Component {
                 this.setState({ headerClass: "" });
             }
 
-            if (pathname === '/settings') {
+            if (pathname === "/settings") {
                 dropdownClass += " currentRoute";
                 // if settings is selected, the underline bar must be bigger
                 // because "settings" is a bigger word
                 underlineWidth = "60px";
-            } else if (pathname === '/adduser') {
+            } else if (pathname === "/adduser") {
                 dropdownClass += " currentRoute";
                 // if settings is selected, the underline bar must be bigger
                 // because "Add User" is a bigger
                 underlineWidth = "69px";
-            } else if (pathname === '/billing') {
+            } else if (pathname === "/billing") {
                 dropdownClass += " currentRoute";
                 underlineWidth = "46px";
-            } else if (pathname === '/pricing') {
+            } else if (pathname === "/pricing") {
                 dropdownClass += " currentRoute";
                 underlineWidth = "50px";
-            } else if (nonFixedMenuPages.includes(pathFirstPart)){
+            } else if (nonFixedMenuPages.includes(pathFirstPart)) {
                 additionalHeaderClass += " notFixed";
             }
         }
 
-
-
         // show only the Moonshot logo if currently loading
         if (this.props.isFetching) {
             return (
-                <header style={{zIndex: "100"}}>
-                    <Toolbar id="menu" style={{marginTop: "10px"}}>
+                <header style={{ zIndex: "100" }}>
+                    <Toolbar id="menu" style={{ marginTop: "10px" }}>
                         <ToolbarGroup>
                             <img
                                 width={136}
@@ -371,52 +396,60 @@ class Menu extends Component {
             hideUnderline = { display: "none" };
             // don't let the user click back to home via the logo
             logoIsLink = false;
-            menuOptions = [ /* nothing in the menu */ ];
+            menuOptions = [
+                /* nothing in the menu */
+            ];
         }
         // if there is no user logged in
         else if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
-                {optionType: "anchor", title: "Home", url: "/", anchor: "home-top"},
-                {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
-                {optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs"},
-                {optionType: "separator"},
-                {optionType: "url", title: "Log In", url: "/login"},
+                { optionType: "anchor", title: "Home", url: "/", anchor: "home-top" },
+                { optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing" },
+                { optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs" },
+                { optionType: "separator" },
+                { optionType: "url", title: "Log In", url: "/login" }
             ];
             if (pathname === "/") {
-                menuOptions.push({optionType: "button", title: "Enter a position"});
+                menuOptions.push({ optionType: "button", title: "Enter a position" });
             }
         }
         // if the current user is an employee for a business
         else if (currentUser.userType === "employee") {
             menuOptions = [
-                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
-                {optionType: "separator"},
-                {optionType: "dropDown", components: [
-                    {optionType: "url", title: "Account", url:"/"},
-                    {optionType: "divider"},
-                    {optionType: "url", title: "Settings", url: "/settings"},
-                    {optionType: "signOut"}
-                ]}
+                { optionType: "url", title: "Evaluations", url: "/myEvaluations" },
+                { optionType: "separator" },
+                {
+                    optionType: "dropDown",
+                    components: [
+                        { optionType: "url", title: "Account", url: "/" },
+                        { optionType: "divider" },
+                        { optionType: "url", title: "Settings", url: "/settings" },
+                        { optionType: "signOut" }
+                    ]
+                }
             ];
         }
         // if the current user is a candidate who is not onboarding
         else if (currentUser.userType === "candidate") {
             menuOptions = [
-                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
-                {optionType: "separator"},
-                {optionType: "dropDown", components: [
-                    {optionType: "url", title: "Account", url:"/"},
-                    {optionType: "divider"},
-                    {optionType: "url", title: "Settings", url: "/settings"},
-                    {optionType: "signOut"}
-                ]}
+                { optionType: "url", title: "Evaluations", url: "/myEvaluations" },
+                { optionType: "separator" },
+                {
+                    optionType: "dropDown",
+                    components: [
+                        { optionType: "url", title: "Account", url: "/" },
+                        { optionType: "divider" },
+                        { optionType: "url", title: "Settings", url: "/settings" },
+                        { optionType: "signOut" }
+                    ]
+                }
             ];
         }
 
         // if the user is a site admin, give them the admin tab
         if (currentUser && typeof currentUser === "object" && currentUser.admin === true) {
-            menuOptions.unshift({optionType: "url", title: "Admin", url: "/admin"});
+            menuOptions.unshift({ optionType: "url", title: "Admin", url: "/admin" });
         }
 
         // construct the menu's tabs
@@ -433,32 +466,65 @@ class Menu extends Component {
                         optionClass = selectedMenuItemClass;
                     }
                     desktopMenu.push(
-                        <p key={option.title + " desktop"} className={optionClass} onClick={() => goTo(option.url)}>{option.title}</p>
+                        <p
+                            key={option.title + " desktop"}
+                            className={optionClass}
+                            onClick={() => goTo(option.url)}
+                        >
+                            {option.title}
+                        </p>
                     );
                     mobileMenu.push(
-                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => goTo(option.url)}/>
+                        <MenuItem
+                            key={option.title + " mobile"}
+                            primaryText={option.title}
+                            onClick={() => goTo(option.url)}
+                        />
                     );
                     break;
                 case "anchor":
                     desktopMenu.push(
-                        <p key={option.title + " desktop"} className={menuItemClass} onClick={() => self.handleAnchorClick(option.anchor, option.url)}>{option.title}</p>
+                        <p
+                            key={option.title + " desktop"}
+                            className={menuItemClass}
+                            onClick={() => self.handleAnchorClick(option.anchor, option.url)}
+                        >
+                            {option.title}
+                        </p>
                     );
                     mobileMenu.push(
-                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.handleAnchorClick(option.anchor, option.url)}/>
+                        <MenuItem
+                            key={option.title + " mobile"}
+                            primaryText={option.title}
+                            onClick={() => self.handleAnchorClick(option.anchor, option.url)}
+                        />
                     );
                     break;
                 case "separator":
                     // push a line, only visible on desktop
                     desktopMenu.push(
-                        <div key={"separator"} className={"menuDivider wideScreenMenuItem" + loggedInClass} />
+                        <div
+                            key={"separator"}
+                            className={"menuDivider wideScreenMenuItem" + loggedInClass}
+                        />
                     );
                     break;
                 case "modal":
                     desktopMenu.push(
-                        <p key={option.title + " desktop"} className={menuItemClass} onClick={() => self.props.openContactUsModal()}>{option.title}</p>
+                        <p
+                            key={option.title + " desktop"}
+                            className={menuItemClass}
+                            onClick={() => self.props.openContactUsModal()}
+                        >
+                            {option.title}
+                        </p>
                     );
                     mobileMenu.push(
-                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.props.openContactUsModal()}/>
+                        <MenuItem
+                            key={option.title + " mobile"}
+                            primaryText={option.title}
+                            onClick={() => self.props.openContactUsModal()}
+                        />
                     );
                     break;
                 case "dropDown":
@@ -469,48 +535,80 @@ class Menu extends Component {
                             case "url":
                                 // add the menu item to the dropDown
                                 dropDownItems.push(
-                                    <MenuItem key={dropDownOption.title + " desktop"} value={dropDownOption.title} primaryText={dropDownOption.title} />
+                                    <MenuItem
+                                        key={dropDownOption.title + " desktop"}
+                                        value={dropDownOption.title}
+                                        primaryText={dropDownOption.title}
+                                    />
                                 );
                                 // no dropDowns on mobile menu
                                 mobileMenu.push(
-                                    <MenuItem key={dropDownOption.title + " mobile"} primaryText={dropDownOption.title} onClick={() => self.selectAndGoTo(dropDownOption.url, dropDownOption.title)}/>
+                                    <MenuItem
+                                        key={dropDownOption.title + " mobile"}
+                                        primaryText={dropDownOption.title}
+                                        onClick={() =>
+                                            self.selectAndGoTo(
+                                                dropDownOption.url,
+                                                dropDownOption.title
+                                            )
+                                        }
+                                    />
                                 );
                                 break;
                             case "divider":
                                 // add divider, only for desktop dropDown
-                                dropDownItems.push(
-                                    <Divider key={"divider"} />
-                                );
+                                dropDownItems.push(<Divider key={"divider"} />);
                                 break;
                             case "signOut":
                                 // add sign out option to dropDown on desktop
                                 dropDownItems.push(
-                                    <MenuItem key={"signOut desktop"} value="Sign Out" primaryText="Sign Out" />
+                                    <MenuItem
+                                        key={"signOut desktop"}
+                                        value="Sign Out"
+                                        primaryText="Sign Out"
+                                    />
                                 );
                                 // add sign out option to regular menu on mobile
                                 mobileMenu.push(
-                                    <MenuItem key={"signOut mobile"} primaryText="Sign out" onClick={() => self.signOut()}/>
+                                    <MenuItem
+                                        key={"signOut mobile"}
+                                        primaryText="Sign out"
+                                        onClick={() => self.signOut()}
+                                    />
                                 );
                                 break;
                             case "text":
                                 // add text to desktop menu
-                                dropDownItems.push(<MenuItem value="Name" disabled primaryText={dropDownOption.title}/>);
+                                dropDownItems.push(
+                                    <MenuItem
+                                        value="Name"
+                                        disabled
+                                        primaryText={dropDownOption.title}
+                                    />
+                                );
                                 // add text to mobile menu
-                                mobileMenu.push(<MenuItem style={{color: "#00c3ff"}} disabled primaryText={dropDownOption.title}/>);
+                                mobileMenu.push(
+                                    <MenuItem
+                                        style={{ color: "#00c3ff" }}
+                                        disabled
+                                        primaryText={dropDownOption.title}
+                                    />
+                                );
                                 break;
                             default:
                                 break;
                         }
                     });
                     let desktopDropDown = (
-                        <DropDownMenu key={"desktop dropDown"}
-                                      value={self.state.dropDownSelected}
-                                      onChange={self.handleDropDownItemClick}
-                                      underlineStyle={styles.underlineStyle}
-                                      anchorOrigin={styles.anchorOrigin}
-                                      style={{fontSize: "16px", marginTop: "21px"}}
-                                      className={dropdownClass}
-                                      id="menuDropdown"
+                        <DropDownMenu
+                            key={"desktop dropDown"}
+                            value={self.state.dropDownSelected}
+                            onChange={self.handleDropDownItemClick}
+                            underlineStyle={styles.underlineStyle}
+                            anchorOrigin={styles.anchorOrigin}
+                            style={{ fontSize: "16px", marginTop: "21px" }}
+                            className={dropdownClass}
+                            id="menuDropdown"
                         >
                             {dropDownItems}
                         </DropDownMenu>
@@ -522,11 +620,21 @@ class Menu extends Component {
                 case "signOut":
                     // add sign out button to desktop menu
                     desktopMenu.push(
-                        <p key={"signOut desktop"} className={menuItemClass} onClick={() => self.signOut()}>"Sign Out"</p>
+                        <p
+                            key={"signOut desktop"}
+                            className={menuItemClass}
+                            onClick={() => self.signOut()}
+                        >
+                            "Sign Out"
+                        </p>
                     );
                     // add sign out button to mobile menu
                     mobileMenu.push(
-                        <MenuItem key={"signOut mobile"} primaryText="Sign out" onClick={() => self.signOut()}/>
+                        <MenuItem
+                            key={"signOut mobile"}
+                            primaryText="Sign out"
+                            onClick={() => self.signOut()}
+                        />
                     );
                     break;
                 case "button":
@@ -536,10 +644,25 @@ class Menu extends Component {
                         positionUrl = "?position=" + self.state.position;
                     }
                     desktopMenu.push(
-                        <div key="tryForFreeButton" className={"menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"}>
-                            <input className="blackInput secondary-gray-important" type="text" placeholder="Enter a position..." name="position" value={self.state.position} onChange={self.onChange.bind(self)}
+                        <div
+                            key="tryForFreeButton"
+                            className={
+                                "menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"
+                            }
+                        >
+                            <input
+                                className="blackInput secondary-gray-important"
+                                type="text"
+                                placeholder="Enter a position..."
+                                name="position"
+                                value={self.state.position}
+                                onChange={self.onChange.bind(self)}
                             />
-                            <div className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan" style={{marginLeft: "5px"}} onClick={() => goTo("/chatbot" + positionUrl)}>
+                            <div
+                                className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan"
+                                style={{ marginLeft: "5px" }}
+                                onClick={() => goTo("/chatbot" + positionUrl)}
+                            >
                                 Try for Free
                             </div>
                         </div>
@@ -548,7 +671,6 @@ class Menu extends Component {
                     break;
                 default:
                     break;
-
             }
         });
 
@@ -556,8 +678,12 @@ class Menu extends Component {
         // is logged in, show the line that shows up when a dropDown item is selected
         if (currentUser) {
             desktopMenu.push(
-                <div key={"underline"} className="menuUnderline" style={{width: underlineWidth, ...hideUnderline}}/>
-            )
+                <div
+                    key={"underline"}
+                    className="menuUnderline"
+                    style={{ width: underlineWidth, ...hideUnderline }}
+                />
+            );
         }
 
         // default logo class
@@ -585,7 +711,7 @@ class Menu extends Component {
                 width={100}
                 height={30}
                 alt="Moonshot"
-                style={{verticalAlign: "baseline"}}
+                style={{ verticalAlign: "baseline" }}
                 className="easeLogo"
                 id="easeLogo"
                 src={"/logos/EaseLogo" + this.props.png}
@@ -595,59 +721,61 @@ class Menu extends Component {
         let menu = (
             <header
                 className={this.state.headerClass + additionalHeaderClass}
-                style={{zIndex: "100"}}
+                style={{ zIndex: "100" }}
             >
                 <div>
-                    <Toolbar id="menu" style={{height: "35px"}}>
-                        <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "39px"}}>
+                    <Toolbar id="menu" style={{ height: "35px" }}>
+                        <ToolbarGroup className="logoToolbarGroup" style={{ marginTop: "39px" }}>
                             {moonshotLogoHtml}
-                            {this.props.location.pathname === '/influencer' ?
+                            {this.props.location.pathname === "/influencer" ? (
                                 <div>
                                     <div className="easeDivider inlineBlock" />
-                                    <div className="inlineBlock">
-                                        {easeLogoHtml}
-                                    </div>
+                                    <div className="inlineBlock">{easeLogoHtml}</div>
                                 </div>
-                                : null
-                            }
+                            ) : null}
                         </ToolbarGroup>
                         <ToolbarGroup className="marginTop10px">
                             {desktopMenu}
 
                             <IconMenu
-                                iconButtonElement={<IconButton><MoreHorizIcon/></IconButton>}
-                                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                                targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                                iconButtonElement={
+                                    <IconButton>
+                                        <MoreHorizIcon />
+                                    </IconButton>
+                                }
+                                anchorOrigin={{ horizontal: "right", vertical: "top" }}
+                                targetOrigin={{ horizontal: "right", vertical: "top" }}
                                 className="smallScreenMenu"
-                                iconStyle={{fill: iconMenuColor}}
+                                iconStyle={{ fill: iconMenuColor }}
                             >
                                 {mobileMenu}
                             </IconMenu>
                         </ToolbarGroup>
                     </Toolbar>
                 </div>
-
             </header>
         );
 
         return (
             <div>
-                { menu }
+                {menu}
                 <div className="headerSpace" />
             </div>
         );
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        signout,
-        closeNotification,
-        endOnboarding,
-        openAddUserModal,
-        openContactUsModal
-    }, dispatch);
+    return bindActionCreators(
+        {
+            signout,
+            closeNotification,
+            endOnboarding,
+            openAddUserModal,
+            openContactUsModal
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -660,4 +788,7 @@ function mapStateToProps(state) {
 
 Menu = withRouter(Menu);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Menu);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Menu);

@@ -41,7 +41,7 @@ import AffiliateAgreement from "./components/policies/affiliateAgreement";
 import Listing from "./components/pages/listing";
 
 import Dashboard from "./components/pages/dashboard/dashboard";
-import Explore from "./components/pages/dashboard/guestDashboard";
+import Explore from "./components/pages/dashboard/leadDashboard";
 
 // position evaluation - contains all components (psych, gca, admin questions)
 import Evaluation from "./components/pages/evaluation/evaluation";
@@ -95,7 +95,7 @@ const routes = (
                 path="explore"
                 component={AuthenticatedComponent}
                 page={<Explore />}
-                userType={"guest"}
+                userType={"lead"}
                 accountAdminRedirect="/dashboard"
                 candidateRedirect="/myEvaluations"
                 employeeRedirect="/myEvaluations"
