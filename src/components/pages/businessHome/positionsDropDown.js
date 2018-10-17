@@ -7,6 +7,8 @@ import {} from "../../../miscFunctions";
 
 import "./businessHome.css";
 
+const posTypes = ["Developer", "Product", "Support/Customer Service", "Marketing", "Sales"];
+
 class PositionsDropDown extends Component {
     constructor(props) {
         super(props);
@@ -14,9 +16,33 @@ class PositionsDropDown extends Component {
         this.state = {};
     }
 
+    typeAdvance = type => () => {
+        console.log("advancing with type: ", type);
+    };
+
+    nameAdvance = name => () => {
+        console.log("advancing with position name: ", name);
+    };
+
+    noTextOptions() {
+        const options = posTypes.map(type => {
+            return (
+                <div styleName="drop-down-option" onClick={this.typeAdvance(type)}>
+                    {type}
+                </div>
+            );
+        });
+
+        return options;
+    }
+
     render() {
+        const options = this.props.inputText ? this.suggestions() : this.noTextOptions();
+
         return (
-            <div styleName="dropDown">
+            <div styleName="drop-down">
+                <div styleName="drop-down-header drop-down-option">Popular Positions</div>
+                {options}
                 <div />
             </div>
         );
