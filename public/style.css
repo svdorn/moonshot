@@ -758,9 +758,6 @@ form > h1 {
 .infoText {
     margin: 0;
 }
-.infoText.notFull {
-    max-width: calc(1040px / 2 - 20px);
-}
 .infoText.flex {
     justify-content: space-between;
     flex-direction: row;
@@ -5501,9 +5498,6 @@ textarea.multipleChoiceCustomAnswer {
     .businessHome > .infoContainer {
         flex-direction: column;
         padding: 0 30px;
-    }
-    .infoText.notFull {
-        max-width: initial;
     }
     .infoText.flex {
         margin-right: calc((100% - 350px) / 1.5);

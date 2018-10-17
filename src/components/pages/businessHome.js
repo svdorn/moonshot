@@ -230,15 +230,17 @@ class BusinessHome extends Component {
                                 />
                             </h1>
                             <div className="buttonArea font18px font14pxUnder900">
-                                <input
-                                    styleName="get-started-input"
-                                    className="blackInput secondary-gray-important"
-                                    type="text"
-                                    placeholder="Enter a position"
-                                    name="position"
-                                    value={this.state.position}
-                                    onChange={this.onChange.bind(this)}
-                                />
+                                <div style={{ position: "relative" }}>
+                                    <input
+                                        styleName="get-started-input"
+                                        type="text"
+                                        placeholder="Enter a position"
+                                        name="position"
+                                        value={this.state.position}
+                                        onChange={this.onChange.bind(this)}
+                                    />
+                                    <div />
+                                </div>
                                 <div
                                     styleName="get-started-button"
                                     className="button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan"
