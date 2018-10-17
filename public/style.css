@@ -1228,20 +1228,6 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-#ATSIntegrations {
-    position: relative;
-    margin-top: 200px;
-    margin-bottom: 60px;
-}
-#ATSIntegrations > div {
-    position: relative;
-}
-#ATSIntegrations > div > img {
-    margin-left: 40px;
-}
-#ATSIntegrations > div > img:first-child {
-    margin-left: 0;
-}
 
 .skillMultipleChoiceAnswer {
     cursor: pointer;
@@ -4881,10 +4867,6 @@ textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 950px) {
-    #ATSIntegrations > div > img {
-        margin-left: 30px;
-    }
-
     .font40pxUnder950 {
         font-size: 40px;
     }
@@ -4950,10 +4932,6 @@ textarea.multipleChoiceCustomAnswer {
 @media only screen and (max-width: 900px) {
     .above900only {
         display: none;
-    }
-
-    #ATSIntegrations > div > img {
-        margin-left: 25px;
     }
 
     .popup-frame {
@@ -5505,10 +5483,6 @@ textarea.multipleChoiceCustomAnswer {
 
     /* END WHERE LOGO CONTAINER USED TO BE */
 
-    #ATSIntegrations > div > img {
-        margin-left: 20px;
-    }
-
     .marginSides40pxUnder700 {
         margin-right: 40px;
         margin-left: 40px;
@@ -5984,10 +5958,6 @@ textarea.multipleChoiceCustomAnswer {
         padding-left: 0;
     }
 
-    #ATSIntegrations > div > img {
-        margin-left: 15px;
-    }
-
     .page-line-header {
         width: 85%;
     }
@@ -6183,9 +6153,6 @@ textarea.multipleChoiceCustomAnswer {
     .myCandidatesTabs {
         width: 280px;
         font-size: 12px;
-    }
-    #ATSIntegrations > div > img {
-        margin-left: 7.5px;
     }
 
     .myCandidates .mobileCandidate,

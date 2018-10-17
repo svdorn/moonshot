@@ -744,51 +744,6 @@ class BusinessHome extends Component {
         );
     }
 
-    integrationsSection() {
-        return (
-            <section
-                id="ATSIntegrations"
-                styleName="ats-integrations-section"
-                className="marginBottom60px"
-            >
-                {this.state.showRectangles ? this.skewedRectangles(6) : null}
-                <div className="center primary-white">
-                    <div className="marginBottom40px font30px font24pxUnder700 font20pxUnder500">
-                        Integrates with your ATS and favorite apps.
-                    </div>
-                    <img
-                        src={"images/businessHome/BambooHr" + this.props.png}
-                        alt="BambooHr"
-                        styleName="bamboo-hr"
-                    />
-                    <img
-                        src={"images/businessHome/Trello" + this.props.png}
-                        alt="Trello"
-                        styleName="trello"
-                    />
-                    <img
-                        src={"images/businessHome/Workable" + this.props.png}
-                        alt="Workable"
-                        styleName="workable"
-                    />
-                    <img
-                        src={"images/businessHome/Slack" + this.props.png}
-                        alt="Slack"
-                        styleName="slack"
-                    />
-                    <img
-                        src={"images/businessHome/Recruitee" + this.props.png}
-                        alt="Recruitee"
-                        styleName="recruitee"
-                    />
-                    <div className="marginTop40px font20px font16pxUnder700 font12pxUnder500">
-                        and many more...
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
     render() {
         return (
             <div>
@@ -810,12 +765,6 @@ class BusinessHome extends Component {
                     {this.statisticsSection()}
 
                     {this.videoSection()}
-
-                    {this.learnFromHiresSection()}
-
-                    {this.pricingSection()}
-
-                    {this.integrationsSection()}
                 </div>
             </div>
         );

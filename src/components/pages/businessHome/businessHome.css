@@ -14,8 +14,6 @@
 }
 .pricing-section {
 }
-.ats-integrations-section {
-}
 
 .get-started-input-container {
     position: relative;
@@ -380,22 +378,6 @@
 .flourish-icon.flourish-2 {
     width: 101%;
     right: 0;
-}
-
-.trello {
-    height: 38px;
-}
-.bamboo-hr {
-    height: 28px;
-}
-.workable {
-    height: 60px;
-}
-.slack {
-    height: 40px;
-}
-.recruitee {
-    height: 30px;
 }
 
 .learn-from-hires-section {
@@ -942,83 +924,6 @@
 }
 /* END PRICING PAGE GRID */
 
-/* START ATS INTEGRATIONS PAGE GRID */
-.ats-integrations-section > .skewed-container > .skewed-rectangles-container {
-    margin-top: -200px;
-    height: 1800px;
-}
-.ats-integrations-section > .skewed-container > .skewed-rectangles-container > .skewed-rectangles {
-    height: calc(var(--rowWidth) * 400);
-}
-.ats-integrations-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(1) {
-    background: var(--primary-black-light);
-    grid-row-start: 26;
-    grid-row-end: 150;
-    grid-column-start: 1;
-    grid-column-end: 43;
-}
-.ats-integrations-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(2) {
-    background: var(--primary-black-light);
-    grid-row-start: 5;
-    grid-row-end: 26;
-    grid-column-start: 1;
-    grid-column-end: 19;
-}
-
-.ats-integrations-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(3) {
-    background: linear-gradient(to right, #ff748c, #ffe09e);
-    grid-row-start: 1;
-    grid-row-end: 5;
-    grid-column-start: 1;
-    grid-column-end: 11;
-}
-.ats-integrations-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(4) {
-    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
-    grid-row-start: 5;
-    grid-row-end: 9;
-    grid-column-start: 1;
-    grid-column-end: 12;
-}
-.ats-integrations-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(5) {
-    background: linear-gradient(to right, #76defe, #7dfed2 65%, #76defe);
-    grid-row-start: 22;
-    grid-row-end: 26;
-    grid-column-start: 32;
-    grid-column-end: 43;
-}
-.ats-integrations-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(6) {
-    background: linear-gradient(to right, #76defe, #7dfed2 35%, #76defe);
-    grid-row-start: 26;
-    grid-row-end: 30;
-    grid-column-start: 33;
-    grid-column-end: 43;
-}
-/* END ATS INTEGRATIONS PAGE GRID */
-
 @media only screen and (max-width: 1100px) {
     .introduction
         > div
@@ -1144,34 +1049,6 @@
         > .skewed-rectangle:nth-child(6) {
         grid-column-start: 31;
     }
-    .ats-integrations-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(3) {
-        grid-column-end: 13;
-    }
-    .ats-integrations-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(4) {
-        grid-column-end: 14;
-    }
-    .ats-integrations-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(5) {
-        grid-column-start: 30;
-    }
-    .ats-integrations-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(6) {
-        grid-column-start: 31;
-    }
 }
 
 @media only screen and (max-width: 950px) {
@@ -1209,22 +1086,6 @@
         height: 210px;
         width: 210px;
         margin: 0 10px 40px;
-    }
-
-    .trello {
-        height: 28.5px;
-    }
-    .bamboo-hr {
-        height: 21px;
-    }
-    .workable {
-        height: 45px;
-    }
-    .slack {
-        height: 30px;
-    }
-    .recruitee {
-        height: 22.5px;
     }
 
     /* GRID */
@@ -1446,22 +1307,6 @@
         height: 44px;
     }
 
-    .trello {
-        height: 22.8px;
-    }
-    .bamboo-hr {
-        height: 16.8px;
-    }
-    .workable {
-        height: 36px;
-    }
-    .slack {
-        height: 24px;
-    }
-    .recruitee {
-        height: 18px;
-    }
-
     /* GRID */
     /* hide all but the first two rectangles of the first container */
     .introduction
@@ -1636,20 +1481,6 @@
         > .skewed-rectangle:nth-child(6) {
         grid-column-start: 27;
     }
-    .ats-integrations-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(4) {
-        grid-column-end: 17;
-    }
-    .ats-integrations-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(6) {
-        grid-column-start: 27;
-    }
 }
 
 @media only screen and (max-width: 600px) {
@@ -1662,22 +1493,6 @@
 
     .video-container {
         margin-top: 100px;
-    }
-
-    .trello {
-        height: 17.1px;
-    }
-    .bamboo-hr {
-        height: 12.6px;
-    }
-    .workable {
-        height: 27px;
-    }
-    .slack {
-        height: 18px;
-    }
-    .recruitee {
-        height: 13.5px;
     }
 
     /* GRID */
@@ -1769,20 +1584,6 @@
         > .skewed-rectangle:nth-child(6) {
         grid-column-start: 26;
     }
-    .ats-integrations-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(4) {
-        grid-column-end: 19;
-    }
-    .ats-integrations-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(6) {
-        grid-column-start: 25;
-    }
 }
 
 @media only screen and (max-width: 500px) {
@@ -1813,22 +1614,6 @@
     }
     .screenshot-right-text {
         height: 160px;
-    }
-
-    .trello {
-        height: 13.68px;
-    }
-    .bamboo-hr {
-        height: 10.08px;
-    }
-    .workable {
-        height: 21.6px;
-    }
-    .slack {
-        height: 14.4px;
-    }
-    .recruitee {
-        height: 10.8px;
     }
 
     /* GRID */
