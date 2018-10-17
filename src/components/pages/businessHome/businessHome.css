@@ -10,8 +10,6 @@
 }
 .statistics-section {
 }
-.learn-from-hires-section {
-}
 
 .get-started-input-container {
     position: relative;
@@ -271,33 +269,6 @@
     position: relative;
     left: 2px;
     top: 2px;
-}
-
-.feature-box {
-    width: 350px;
-    height: 120px;
-    display: inline-flex;
-    vertical-align: top;
-    position: relative;
-    margin: 15px 10px;
-}
-.feature-box > div:first-child {
-    width: 100px;
-    text-align: center;
-}
-.feature-box > div:last-child {
-    width: 300px;
-    text-align: left;
-}
-.feature-box img {
-    height: 64px;
-}
-
-.learn-from-hires-section {
-    margin-top: 150px;
-    margin-bottom: 180px;
-    position: relative;
-    z-index: 1;
 }
 
 /* GRIDS */
@@ -684,83 +655,6 @@
 }
 /* END STATS PAGE GRID */
 
-/* GRID FOR LEARN FROM HIRES PAGE */
-.learn-from-hires-section > .skewed-container > .skewed-rectangles-container {
-    margin-top: -250px;
-    height: 1800px;
-}
-.learn-from-hires-section > .skewed-container > .skewed-rectangles-container > .skewed-rectangles {
-    height: calc(var(--rowWidth) * 400);
-}
-.learn-from-hires-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(1) {
-    background: var(--primary-black-light);
-    grid-row-start: 14;
-    grid-row-end: 35;
-    grid-column-start: 1;
-    grid-column-end: 14;
-}
-.learn-from-hires-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(2) {
-    background: var(--primary-black-light);
-    grid-row-start: 35;
-    grid-row-end: 115;
-    grid-column-start: 1;
-    grid-column-end: 43;
-}
-
-.learn-from-hires-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(3) {
-    background: linear-gradient(to right, #ff748c, #ffe09e);
-    grid-row-start: 10;
-    grid-row-end: 14;
-    grid-column-start: 1;
-    grid-column-end: 11;
-}
-.learn-from-hires-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(4) {
-    background: linear-gradient(to right, #ffe09e, #ff748c 65%, #ffe09e);
-    grid-row-start: 14;
-    grid-row-end: 18;
-    grid-column-start: 1;
-    grid-column-end: 12;
-}
-.learn-from-hires-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(5) {
-    background: linear-gradient(to right, #80cffe, #a196fe 65%, #80cffe);
-    grid-row-start: 31;
-    grid-row-end: 35;
-    grid-column-start: 32;
-    grid-column-end: 43;
-}
-.learn-from-hires-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(6) {
-    background: linear-gradient(to right, #80cffe, #a196fe 35%, #80cffe);
-    grid-row-start: 35;
-    grid-row-end: 39;
-    grid-column-start: 33;
-    grid-column-end: 43;
-}
-/* END LEARN FROM HIRES PAGE GRID */
-
 @media only screen and (max-width: 1100px) {
     .introduction
         > div
@@ -903,34 +797,6 @@
         -ms-transition: all 0.5s ease;
         transition: all 0.5s ease;
     }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(3) {
-        grid-column-end: 13;
-    }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(4) {
-        grid-column-end: 14;
-    }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(5) {
-        grid-column-start: 30;
-    }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(6) {
-        grid-column-start: 31;
-    }
 }
 
 @media only screen and (max-width: 800px) {
@@ -974,14 +840,6 @@
         padding-left: 0;
         text-align: left;
         margin-bottom: 0px;
-    }
-
-    .feature-box {
-        width: 300px;
-        margin: 10px 5px;
-    }
-    .feature-box img {
-        height: 54px;
     }
 
     .paperBoxBusinessHome {
@@ -1101,20 +959,6 @@
         margin-bottom: 180px;
     }
 
-    .feature-box {
-        width: 200px;
-    }
-    .feature-box > div:first-child {
-        width: 100px;
-        text-align: center;
-    }
-    .feature-box > div:last-child {
-        width: 200px;
-    }
-    .feature-box img {
-        height: 44px;
-    }
-
     /* GRID */
     /* hide all but the first two rectangles of the first container */
     .introduction
@@ -1231,43 +1075,6 @@
         grid-column-start: 26;
         grid-column-end: 32;
     }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(1) {
-        display: none;
-    }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(3) {
-        display: none;
-    }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(4) {
-        grid-column-end: 17;
-        grid-row-start: 31;
-        grid-row-end: 35;
-    }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(5) {
-        display: none;
-    }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(6) {
-        grid-column-start: 27;
-    }
 }
 
 @media only screen and (max-width: 600px) {
@@ -1335,21 +1142,6 @@
         > .skewed-rectangle:nth-child(4) {
         grid-column-start: 27;
     }
-
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(4) {
-        grid-column-end: 19;
-    }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(6) {
-        grid-column-start: 25;
-    }
 }
 
 @media only screen and (max-width: 500px) {
@@ -1405,17 +1197,6 @@
         grid-row-end: 70;
         grid-column-start: 27;
         grid-column-end: 35;
-    }
-    .learn-from-hires-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(2) {
-        background: var(--primary-black-light);
-        grid-row-start: 35;
-        grid-row-end: 138;
-        grid-column-start: 1;
-        grid-column-end: 43;
     }
 }
 
