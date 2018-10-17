@@ -1,31 +1,28 @@
- "use strict"
+"use strict";
 import React, { Component } from "react";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import MetaTags from 'react-meta-tags';
-import { browserHistory } from 'react-router';
-import { closeNotification, updateOnboarding } from '../../../../actions/usersActions';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import MetaTags from "react-meta-tags";
+import { browserHistory } from "react-router";
+import { closeNotification, updateOnboarding } from "../../../../actions/usersActions";
 import VerifyEmail from "./verifyEmail";
-import GoogleJobs from './googleJobs';
+import GoogleJobs from "./googleJobs";
 import ImportCandidates from "./importCandidates";
 import AutomateInvites from "./automateInvites/automateInvites";
-import InviteCadence from './inviteCadence';
+import InviteCadence from "./inviteCadence";
 import InviteAdmins from "./inviteAdmins";
 import InviteEmployees from "./inviteEmployees";
-import Calandar from './calandar';
-import YouTube from 'react-youtube';
+import Calandar from "./calandar";
+import YouTube from "react-youtube";
 import OnboardingProgress from "../../../miscComponents/onboardingProgress";
-import AddUserDialog from '../../../childComponents/addUserDialog';
+import AddUserDialog from "../../../childComponents/addUserDialog";
 import { goTo } from "../../../../miscFunctions";
-
 
 class Onboarding extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-
-        };
+        this.state = {};
     }
 
     goTo(route) {
@@ -50,7 +47,7 @@ class Onboarding extends Component {
         let onboarding = user.onboarding;
         // if we got extra args AND they aren't a click event, add them
         if (typeof extraOnboardingArgs === "object" && !extraOnboardingArgs.target) {
-            onboarding = {...onboarding, ...extraOnboardingArgs};
+            onboarding = { ...onboarding, ...extraOnboardingArgs };
         }
 
         onboarding.step++;
@@ -90,27 +87,26 @@ class Onboarding extends Component {
         this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
     }
 
-
     // the final page, all it does is show the onboarding bar as complete and
     // brings the user to the evals page
     createCongratulations() {
         return (
-            <div className="congratulations primary-white center" style={{height: "100%"}}>
+            <div className="congratulations primary-white center" style={{ height: "100%" }}>
                 <div>
                     <div className="font16px text-left">
-                        Welcome to Moonshot Insights! Your evaluation is live. To ensure your success, we aligned our incentives
-                        by enabling you to invite an unlimited number of candidates and employees. The more candidates that we evaluate,
-                        the less likely you are to miss out on hiring top performers. Additionally, we constantly improve candidate predictions
-                        when we generate and learn from more of your hiring and performance data. To further align incentives, you only pay us when
-                        you hire a high-potential performer who stays at your company, as you can see in&nbsp;
-                        <span
-                            onClick={() => goTo("/pricing")}
-                            className="primary-cyan pointer"
-                        >
+                        Welcome to Moonshot Insights! Your evaluation is live. To ensure your
+                        success, we aligned our incentives by enabling you to invite an unlimited
+                        number of candidates and employees. The more candidates that we evaluate,
+                        the less likely you are to miss out on hiring top performers. Additionally,
+                        we constantly improve candidate predictions when we generate and learn from
+                        more of your hiring and performance data. To further align incentives, you
+                        only pay us when you hire a high-potential performer who stays at your
+                        company, as you can see in&nbsp;
+                        <span onClick={() => goTo("/pricing")} className="primary-cyan pointer">
                             Pricing
-                        </span>.
-                        Your first hire with Moonshot Insights is free. From now on, every hire you make should be better than the last, because
-                        you have more data and context on how to make better hiring decisions.
+                        </span>. Your first hire with Moonshot Insights is free. From now on, every
+                        hire you make should be better than the last, because you have more data and
+                        context on how to make better hiring decisions.
                     </div>
                     <div className="previous-next-area font16px center paddingBottom40px">
                         <div
@@ -131,7 +127,6 @@ class Onboarding extends Component {
         );
     }
 
-
     render() {
         const user = this.props.currentUser;
 
@@ -139,9 +134,10 @@ class Onboarding extends Component {
         let tab = "Candidate";
 
         const opts = {
-            height: '300',
-            width: '492',
-            playerVars: { // https://developers.google.com/youtube/player_parameters
+            height: "300",
+            width: "492",
+            playerVars: {
+                // https://developers.google.com/youtube/player_parameters
                 autoplay: 1,
                 iv_load_policy: 3
             }
@@ -195,23 +191,25 @@ class Onboarding extends Component {
             }
         ];
 
-        let body = <div></div>;
+        let body = <div />;
 
         const childProps = {
             next: this.handleNext.bind(this),
             previous: this.handlePrevious.bind(this)
-        }
+        };
 
         if (user.onboarding) {
             const onboarding = user.onboarding;
             var key = 0;
             var checklist = checklistItems.map(item => {
-
-                let body = <div></div>;
+                let body = <div />;
 
                 if (key < onboarding.furthestStep) {
                     body = (
-                        <div className="marginTop10px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>
+                        <div
+                            className="marginTop10px marginBottom10px primary-cyan font16px clickableNoUnderline"
+                            onClick={() => this.handleStep(item.step)}
+                        >
                             <img
                                 alt=""
                                 src={"/icons/CheckMarkBlue" + this.props.png}
@@ -221,25 +219,32 @@ class Onboarding extends Component {
                         </div>
                     );
                 } else if (key > onboarding.furthestStep) {
-                    body = <div className="marginTop20px marginLeft25px marginBottom10px primary-white opacity30Percent font16px">{item.name} <i className="secondary-red">{item.length}</i></div>;
+                    body = (
+                        <div className="marginTop20px marginLeft25px marginBottom10px primary-white opacity30Percent font16px">
+                            {item.name} <i className="secondary-red">{item.length}</i>
+                        </div>
+                    );
                 } else {
-                    body = <div className="marginTop20px marginLeft25px marginBottom10px primary-white font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>{item.name} <i className="primary-cyan">{item.length}</i></div>;
+                    body = (
+                        <div
+                            className="marginTop20px marginLeft25px marginBottom10px primary-white font16px clickableNoUnderline"
+                            onClick={() => this.handleStep(item.step)}
+                        >
+                            {item.name} <i className="primary-cyan">{item.length}</i>
+                        </div>
+                    );
                 }
                 key++;
-                return (
-                    <div key={key}>
-                        {body}
-                    </div>
-                );
+                return <div key={key}>{body}</div>;
             });
 
             var stepName = "Activate Account";
 
-            switch(onboarding.step) {
+            switch (onboarding.step) {
                 // Activate Account
                 case 0:
                     stepName = "Activate Account";
-                    body = (<VerifyEmail {...childProps} />);
+                    body = <VerifyEmail {...childProps} />;
                     break;
                 // Watch Tutorial
                 case 1:
@@ -274,53 +279,41 @@ class Onboarding extends Component {
                 // Google Jobs Posting
                 case 2:
                     stepName = "Google Jobs Posting";
-                    body = (
-                        <GoogleJobs {...childProps} />
-                    );
+                    body = <GoogleJobs {...childProps} />;
                     break;
                 // Automate Applicant Invites
                 case 3:
                     stepName = this.props.automateApplicantsHeader;
-                    body = (<AutomateInvites {...childProps} />);
+                    body = <AutomateInvites {...childProps} />;
                     break;
                 // Set Applicant Invite Cadence
                 case 4:
-                    stepName =  "Applicant Invitation Cadence";
-                    body = (
-                        <InviteCadence {...childProps} />
-                    );
+                    stepName = "Applicant Invitation Cadence";
+                    body = <InviteCadence {...childProps} />;
                     break;
                 // Invite Existing Candidates
                 case 5:
                     stepName = "Import Candidates";
-                    body = (
-                        <ImportCandidates {...childProps} />
-                    );
+                    body = <ImportCandidates {...childProps} />;
                     break;
                 // Invite Other Admins
                 case 6:
-                    stepName = "Invite Admins"
+                    stepName = "Invite Admins";
                     tab = "Admin";
-                    body = (
-                        <InviteAdmins {...childProps} />
-                    );
+                    body = <InviteAdmins {...childProps} />;
                     break;
                 // Invite Employees
                 case 7:
                     stepName = "Invite Employees";
                     tab = "Employee";
-                    body = (
-                        <InviteEmployees {...childProps} />
-                    );
+                    body = <InviteEmployees {...childProps} />;
                     break;
                 case 8:
                     stepName = "1-on-1 Call";
-                    body = (
-                        <Calandar {...childProps} />
-                    );
+                    body = <Calandar {...childProps} />;
                     break;
                 case 9:
-                    stepName = "Congratulations!"
+                    stepName = "Congratulations!";
                     body = this.createCongratulations();
                     break;
             }
@@ -332,36 +325,48 @@ class Onboarding extends Component {
             <div className="fillScreen">
                 <MetaTags>
                     <title>Onboarding | Moonshot</title>
-                    <meta name="description" content="Get your account activated and ready to start inviting candidates." />
+                    <meta
+                        name="description"
+                        content="Get your account activated and ready to start inviting candidates."
+                    />
                 </MetaTags>
                 <AddUserDialog tab={tab} />
                 <div id="employerOnboarding">
                     <div className="onboardingLeft">
                         <div>
-                            <div className="primary-white font22px font18pxUnder700 marginTop20px" style={{marginLeft: "15px"}}>
+                            <div
+                                className="primary-white font22px font18pxUnder700 marginTop20px"
+                                style={{ marginLeft: "15px" }}
+                            >
                                 Onboarding Checklist
                             </div>
                             {checklist}
                         </div>
                     </div>
                     <div className="onboardingRight">
-                        <div style={{display:"flex",flexDirection:"column", width: "100%"}}>
-                            <div className="center top-progress-bar primary-white" style={{flex:"0 1 auto"}}>
+                        <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+                            <div
+                                className="center top-progress-bar primary-white"
+                                style={{ flex: "0 1 auto" }}
+                            >
                                 <OnboardingProgress className="inlineBlock" />
                                 <div className="font14px">
-                                    {user.onboarding.step < NUM_ONBOARDING_STEPS ?
-                                        `Step: ${user.onboarding.step + 1} / ${NUM_ONBOARDING_STEPS}`
-                                        : "Completed"
-                                    }
+                                    {user.onboarding.step < NUM_ONBOARDING_STEPS
+                                        ? `Step: ${user.onboarding.step +
+                                              1} / ${NUM_ONBOARDING_STEPS}`
+                                        : "Completed"}
                                 </div>
                                 <div
                                     className="primary-cyan font26px font24pxUnder700 font20pxUnder500"
-                                    style={{margin: "5px auto 0", lineHeight: "1.2"}}
+                                    style={{ margin: "5px auto 0", lineHeight: "1.2" }}
                                 >
                                     {stepName}
                                 </div>
                             </div>
-                            <div className="content font16px font14pxUnder800 font12pxUnder600" style={{flex: "1 1 auto"}}>
+                            <div
+                                className="content font16px font14pxUnder800 font12pxUnder600"
+                                style={{ flex: "1 1 auto" }}
+                            >
                                 {body}
                             </div>
                         </div>
@@ -372,22 +377,29 @@ class Onboarding extends Component {
     }
 }
 
-
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         automateInvites: state.users.automateInvites,
-        automateApplicantsHeader: state.users.automateInvites && state.users.automateInvites.header ? state.users.automateInvites.header : "Automate Applicant Invites",
+        automateApplicantsHeader:
+            state.users.automateInvites && state.users.automateInvites.header
+                ? state.users.automateInvites.header
+                : "Automate Applicant Invites",
         png: state.users.png
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification,
-        updateOnboarding
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification,
+            updateOnboarding
+        },
+        dispatch
+    );
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Onboarding);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Onboarding);

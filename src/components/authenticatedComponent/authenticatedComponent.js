@@ -163,12 +163,12 @@ class AuthenticatedComponent extends Component {
         // if the page wants only people who are not logged in to see it
         if (wantsGuest) {
             // allowed to see page if no user is logged in
-            return !user;
+            userHasAccess = !user;
         }
 
         // if no one is logged in and it doesn't want a lead, access not granted
         else if (!user) {
-            return false;
+            userHasAccess = false;
         }
 
         // if the user must be the first business user to see this page but isn't ...

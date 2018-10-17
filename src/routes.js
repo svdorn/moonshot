@@ -96,6 +96,7 @@ const routes = (
                 component={AuthenticatedComponent}
                 page={<Explore />}
                 userType={"lead"}
+                show403={false}
                 accountAdminRedirect="/dashboard"
                 candidateRedirect="/myEvaluations"
                 employeeRedirect="/myEvaluations"

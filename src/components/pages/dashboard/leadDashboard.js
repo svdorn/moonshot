@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { generalAction, updateStore } from "../../../actions/usersActions";
+import { generalAction } from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
@@ -20,25 +20,19 @@ class GuestDashboard extends Component {
 
         this.state = {
             // show the banner with introduction to the dashboard
-            showWelcomeBanner: true,
-            // show the 6 jobs to be done initially
-            showJobs: true
+            showWelcomeBanner: true
         };
     }
 
-    finishJobs = () => {
-        console.log("finishing jobs");
-        this.setState({ showJobs: false });
-        // TODO update the store from here
-        this.props.updateStore();
-    };
-
     render() {
-        // let activity = <DashboardItem type="Onboarding" width={3} />;
+        let activity = null;
         // // if the lead has not said which jobs they want to do with the site
-        // if (this.state.showJobs) {
-        const activity = <DashboardItem type="BuildTeam" width={3} nextStep={this.finishJobs} />;
-        //}
+        console.log("this.props.selectedJobsToBeDone: ", this.props.selectedJobsToBeDone);
+        if (this.props.selectedJobsToBeDone === undefined) {
+            activity = <DashboardItem type="BuildTeam" width={3} />;
+        } else {
+            activity = <DashboardItem type="Onboarding" width={3} />;
+        }
 
         let blurredClass = "";
         if (this.props.roiModal || this.props.onboardingModel) {
@@ -76,7 +70,8 @@ class GuestDashboard extends Component {
 function mapStateToProps(state) {
     return {
         roiModal: state.users.roiOnboardingOpen,
-        onboardingModel: state.users.onboardingStep4Open
+        onboardingModel: state.users.onboardingStep4Open,
+        selectedJobsToBeDone: state.users.selectedJobsToBeDone
     };
 }
 

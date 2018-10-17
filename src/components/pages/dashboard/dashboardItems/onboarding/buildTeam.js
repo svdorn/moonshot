@@ -83,10 +83,9 @@ class BuildTeam extends Component {
 
             this.props.postBusinessInterests(_id, verificationToken, businessId, choiceArr, popups);
         }
-        // if no one is logged in, save the response to redux store
+        // if no one is logged in, move to the next step in onboarding
         else {
-            this.props.updateStore("businessInterests", choiceArr);
-            this.props.nextStep();
+            this.props.updateStore("selectedJobsToBeDone", choiceArr);
         }
     }
 
