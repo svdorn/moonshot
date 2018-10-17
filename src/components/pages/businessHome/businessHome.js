@@ -5,14 +5,15 @@ import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import { closeNotification, dialogEmail } from "../../actions/usersActions";
+import { closeNotification, dialogEmail } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from "material-ui";
-import AddUserDialog from "../childComponents/addUserDialog";
-import ProgressBarDialog from "../miscComponents/progressBarDialog";
-import { isValidEmail, goTo } from "../../miscFunctions";
-import HoverTip from "../miscComponents/hoverTip";
+import AddUserDialog from "../../childComponents/addUserDialog";
+import ProgressBarDialog from "../../miscComponents/progressBarDialog";
+import { isValidEmail, goTo } from "../../../miscFunctions";
+import HoverTip from "../../miscComponents/hoverTip";
+import PositionsDropDown from "./positionsDropDown";
 import Typed from "typed.js";
 
 import "./businessHome.css";
@@ -229,25 +230,17 @@ class BusinessHome extends Component {
                                     }}
                                 />
                             </h1>
-                            <div className="buttonArea font18px font14pxUnder900">
-                                <div styleName="get-started-input-container">
-                                    <textarea
-                                        styleName="get-started-input"
-                                        type="text"
-                                        placeholder="Enter a position"
-                                        name="position"
-                                        value={this.state.position}
-                                        onChange={this.onChange.bind(this)}
-                                    />
-                                    <div />
-                                </div>
-                                <div
-                                    styleName="get-started-button"
-                                    className="button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan"
-                                    onClick={() => goTo("/explore")}
-                                >
-                                    Try for Free
-                                </div>
+                            <div styleName="get-started-input-container">
+                                <textarea
+                                    styleName="get-started-input"
+                                    type="text"
+                                    placeholder="Enter a position"
+                                    name="position"
+                                    value={this.state.position}
+                                    onChange={this.onChange.bind(this)}
+                                />
+                                <div />
+                                <PositionsDropDown />
                             </div>
                             {/*<div className="infoText clickableNoUnderline font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600" onClick={this.handleOpen}>
                                 <img src={"images/businessHome/PlayButton" + this.props.png} alt="Play Button" className="playButton"/>

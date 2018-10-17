@@ -780,10 +780,6 @@ form > h1 {
     margin: 5px 0;
 }
 
-.buttonArea {
-    display: flex;
-    margin: 20px 0;
-}
 .menuButtonArea .blackInput {
     line-height: 22px;
 }
@@ -6252,10 +6248,6 @@ textarea.multipleChoiceCustomAnswer {
     .marginSides40pxUnder700 {
         margin-right: 20px;
         margin-left: 20px;
-    }
-
-    .buttonArea {
-        flex-direction: column;
     }
 
     .frontPage .infoText.flex {

@@ -52,6 +52,21 @@
 .get-started-input:hover + div {
     background: linear-gradient(0deg, var(--primary-cyan), var(--primary-white));
 }
+.dropDown {
+    background-color: var(--primary-black-light);
+    border: 1px solid var(--black-deep-dark);
+    display: none;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+.get-started-input-container:hover > .dropDown,
+.get-started-input:focus ~ .dropDown,
+.dropDown:hover {
+    display: inline-block;
+}
 
 .my-candidates-screenshot {
     --device-scale: 0.46;
@@ -90,10 +105,6 @@
     -ms-flex: 1 0 50%;
     flex: 1 0 50%;
     position: relative;
-}
-
-.get-started-button {
-    margin-left: 4%;
 }
 
 .screenshot-left {
@@ -1903,11 +1914,6 @@
         --device-scale: 0.31;
         top: 215px;
         left: 104%;
-    }
-
-    .get-started-button {
-        margin-left: 10px;
-        width: 98px;
     }
 
     .screenshot-left > img,
