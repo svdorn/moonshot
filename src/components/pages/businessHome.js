@@ -13,6 +13,7 @@ import AddUserDialog from "../childComponents/addUserDialog";
 import ProgressBarDialog from "../miscComponents/progressBarDialog";
 import { isValidEmail, goTo } from "../../miscFunctions";
 import HoverTip from "../miscComponents/hoverTip";
+import Typed from "typed.js";
 
 import "./businessHome.css";
 
@@ -45,6 +46,32 @@ class BusinessHome extends Component {
         }
         const showRectangles = this.cssPropertySupported("gridRowStart");
         this.setState({ ...this.state, showRectangles });
+    }
+
+    componentDidMount() {
+        const typedStrings = [
+            "be successful before you hire them",
+            "be your highest performers",
+            "stay at your company",
+            "enhance your culture",
+            "continue to develop"
+        ];
+
+        const options = {
+            strings: typedStrings,
+            typeSpeed: 40,
+            backSpeed: 25,
+            loop: true,
+            loopCount: Infinity,
+            backDelay: 1500
+        };
+
+        // this.typedSpan refers to the <span> that has typed words
+        this.typed = new Typed(this.typedSpan, options);
+    }
+
+    componentWillUnmount() {
+        this.typed.destroy();
     }
 
     cssPropertySupported(prop) {
@@ -194,12 +221,14 @@ class BusinessHome extends Component {
                                 className="bigTitle font34px font30pxUnder900 font24pxUnder400"
                                 style={{ color: "#72d6f5" }}
                             >
-                                Know which candidates will be successful before you hire them.
+                                Know which candidates will<br />
+                                <span
+                                    style={{ whiteSpace: "pre" }}
+                                    ref={typedSpan => {
+                                        this.typedSpan = typedSpan;
+                                    }}
+                                />
                             </h1>
-                            <p className="infoText notFull font18px font16pxUnder900 font14Under400">
-                                Hire the best people for your team with hiring technology that
-                                constantly learns and improves as you scale.
-                            </p>
                             <div className="buttonArea font18px font14pxUnder900">
                                 <input
                                     styleName="get-started-input"
