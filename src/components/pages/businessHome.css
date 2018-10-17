@@ -17,7 +17,16 @@
 .ats-integrations-section {
 }
 
+.get-started-input-container {
+    position: relative;
+    height: 38px;
+    width: 300px;
+}
 .get-started-input {
+    --get-started-border-width: 2px;
+    width: calc(100% - 2 * var(--get-started-border-width));
+    height: calc(100% - 2 * var(--get-started-border-width));
+    margin: var(--get-started-border-width);
     border-radius: 8px;
     border: none;
     padding: 3px 10px;
@@ -25,20 +34,23 @@
     color: white;
     position: relative;
     z-index: 20;
+    resize: none;
 }
 .get-started-input::placholder {
     color: var(--secondary-gray) !important;
 }
 .get-started-input + div {
-    --get-started-border-width: 2px;
     position: absolute;
-    width: calc(100% + 2 * var(--get-started-border-width));
-    height: calc(100% + 2 * var(--get-started-border-width));
-    background: linear-gradient(to bottom, #72d6f5, #9a73d9);
-    top: calc(-1 * var(--get-started-border-width));
-    left: calc(-1 * var(--get-started-border-width));
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-cyan), var(--primary-white));
+    top: 0;
+    left: 0;
     z-index: 10;
     border-radius: 8px;
+}
+.get-started-input:hover + div {
+    background: linear-gradient(0deg, var(--primary-cyan), var(--primary-white));
 }
 
 .my-candidates-screenshot {
@@ -1896,11 +1908,6 @@
     .get-started-button {
         margin-left: 10px;
         width: 98px;
-    }
-    .get-started-input {
-        margin-bottom: 12px;
-        margin-left: 10px;
-        width: 70%;
     }
 
     .screenshot-left > img,

@@ -230,8 +230,8 @@ class BusinessHome extends Component {
                                 />
                             </h1>
                             <div className="buttonArea font18px font14pxUnder900">
-                                <div style={{ position: "relative" }}>
-                                    <input
+                                <div styleName="get-started-input-container">
+                                    <textarea
                                         styleName="get-started-input"
                                         type="text"
                                         placeholder="Enter a position"
