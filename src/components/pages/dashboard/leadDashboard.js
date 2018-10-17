@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { generalAction } from "../../../actions/usersActions";
+import { generalAction, updateStore } from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
@@ -26,15 +26,19 @@ class GuestDashboard extends Component {
         };
     }
 
-    render() {
-        let activity = <DashboardItem type="Onboarding" width={3} />;
-        // if the lead has not said which jobs they want to do with the site
-        if (this.state.showJobs) {
-            activity = <DashboardItem type="BuildTeam" width={3} />;
-        }
+    finishJobs = () => {
+        console.log("finishing jobs");
+        this.setState({ showJobs: false });
+        // TODO update the store from here
+        this.props.updateStore();
+    };
 
-        // TODO: delete
-        activity = null;
+    render() {
+        // let activity = <DashboardItem type="Onboarding" width={3} />;
+        // // if the lead has not said which jobs they want to do with the site
+        // if (this.state.showJobs) {
+        const activity = <DashboardItem type="BuildTeam" width={3} nextStep={this.finishJobs} />;
+        //}
 
         let blurredClass = "";
         if (this.props.roiModal || this.props.onboardingModel) {

@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 import { Stack } from "../miscFunctions";
 
 // USERS REDUCERS
@@ -9,9 +9,15 @@ const initialState = {
     headerType: undefined,
     headerExpirationTime: undefined,
     userPosted: false
-}
+};
 export function usersReducers(state = initialState, action) {
     switch (action.type) {
+        case "UPDATE_STORE": {
+            return {
+                ...state,
+                [action.variableName]: action.value
+            };
+        }
         case "OPEN_ADD_USER_MODAL":
             return {
                 ...state,
@@ -33,7 +39,7 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "CLOSE_CANDIDATES_POPUP_MODAL":
-            Intercom('update');
+            Intercom("update");
             return {
                 ...state,
                 candidatesPopupModalOpen: false,
@@ -93,15 +99,17 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "OPEN_INVITE_CANDIDATES_MODAL": {
-            return { ...state, inviteCandidatesModalOpen: true }; break;
+            return { ...state, inviteCandidatesModalOpen: true };
+            break;
         }
         case "CLOSE_INVITE_CANDIDATES_MODAL": {
-            return { ...state, inviteCandidatesModalOpen: false }; break;
+            return { ...state, inviteCandidatesModalOpen: false };
+            break;
         }
         case "OPEN_CONTACT_US_MODAL":
             return {
                 ...state,
-                contactUsModal: true,
+                contactUsModal: true
             };
             break;
         case "CLOSE_CONTACT_US_MODAL":
@@ -115,9 +123,11 @@ export function usersReducers(state = initialState, action) {
             return { ...state, footerOnScreen: action.footerOnScreen };
         }
         case "UPDATE_ONBOARDING_STEP": {
-            if (!state.currentUser) { return state; }
+            if (!state.currentUser) {
+                return state;
+            }
             // create onboarding object with new step or with time finished marked
-            let onboard = { };
+            let onboard = {};
             // if the user is finished, update that on the frontend
             if (action.newStep === -1) {
                 onboard = { timeFinished: new Date() };
@@ -134,7 +144,7 @@ export function usersReducers(state = initialState, action) {
                 onboard.highestStep = action.newStep;
             }
             // throw the onboarding stuff back into the user
-            const currentUser = { ...state.currentUser, onboard }
+            const currentUser = { ...state.currentUser, onboard };
             // save the state with the new current user
             return { ...state, currentUser, loadingSomething: false };
             break;
@@ -145,7 +155,7 @@ export function usersReducers(state = initialState, action) {
                 sendVerifyEmailTo: action.sendVerifyEmailTo,
                 loadingSomething: false,
                 userPosted: true
-            }
+            };
             break;
         }
         case "CONTACT_US_EMAIL_SUCCESS":
@@ -186,13 +196,13 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "INTERCOM_EVENT":
-            Intercom('update');
+            Intercom("update");
             return { ...state, loadingSomething: false };
             break;
         case "LOGIN":
             if (action.user && action.user.intercom) {
                 const intercom = action.user.intercom;
-                Intercom('update', {
+                Intercom("update", {
                     email: intercom.email,
                     user_id: intercom.id,
                     name: action.user.name,
@@ -213,7 +223,7 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 currentUser: action.payload,
                 loadingSomething: false
-            }
+            };
             break;
         case "NOTIFICATION":
         case "VERIFY_EMAIL_REJECTED":
@@ -247,14 +257,15 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 loadingSomething: false,
                 userPostedFailed: true,
-                ...notificationInfo(action.notification)}
+                ...notificationInfo(action.notification)
+            };
             break;
         case "SIGNOUT":
-            Intercom('shutdown');
-            Intercom('boot', {
-                app_id: 'xki3jtkg'
+            Intercom("shutdown");
+            Intercom("boot", {
+                app_id: "xki3jtkg"
             });
-            return {...state, currentUser: undefined};
+            return { ...state, currentUser: undefined };
             break;
         case "FORGOT_PASSWORD_REQUESTED":
         case "POST_USER_REQUESTED":
@@ -267,7 +278,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 loadingSomething: true
-            }
+            };
             break;
         case "STOP_LOADING":
             return { ...state, loadingSomething: false };
@@ -276,7 +287,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 userPosted: false
-            }
+            };
             break;
         case "POST_USER": {
             return {
@@ -284,7 +295,7 @@ export function usersReducers(state = initialState, action) {
                 currentUser: action.user,
                 userPosted: true,
                 loadingSomething: false
-            }
+            };
         }
         case "POST_EMAIL_INVITES_SUCCESS":
             return {
@@ -319,10 +330,10 @@ export function usersReducers(state = initialState, action) {
                 notification: action.notification,
                 notificationDate: new Date(),
                 loadingSomething: false
-            }
+            };
             break;
         case "UPDATE_USER":
-            return {...state, currentUser: action.user };
+            return { ...state, currentUser: action.user };
             break;
         case "UPDATE_USER_SETTINGS":
             return {
@@ -348,9 +359,11 @@ export function usersReducers(state = initialState, action) {
             let newState = {
                 ...state,
                 ...notificationInfo(action.notification),
-                loadingSomething: false,
+                loadingSomething: false
             };
-            if (action.user) { newState.currentUser = action.user; }
+            if (action.user) {
+                newState.currentUser = action.user;
+            }
             return newState;
             break;
         case "CONTACT_US":
@@ -371,8 +384,10 @@ export function usersReducers(state = initialState, action) {
             break;
         case "CLOSE_NOTIFICATION":
             return {
-                ...state, notification: undefined, notificationDate: new Date()
-            }
+                ...state,
+                notification: undefined,
+                notificationDate: new Date()
+            };
             break;
         // case "START_ONBOARDING":
         //     return {
@@ -402,45 +417,74 @@ export function usersReducers(state = initialState, action) {
         case "START_PSYCH_EVAL":
         case "USER_UPDATE":
             return {
-                ...state, currentUser: action.currentUser, loadingSomething: false
-            }
+                ...state,
+                currentUser: action.currentUser,
+                loadingSomething: false
+            };
             break;
         case "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS":
             return {
-                ...state, incompleteSteps: action.incompleteSteps, loadingSomething: false
-            }
+                ...state,
+                incompleteSteps: action.incompleteSteps,
+                loadingSomething: false
+            };
             break;
         case "RESET_INCOMPLETE_STEPS":
             return {
-                ...state, incompleteSteps: undefined
-            }
+                ...state,
+                incompleteSteps: undefined
+            };
             break;
         case "SET_WEBP_SUPPORT":
             // set image file types
-            const png = action.webpSupported ? ".webp" : ".png"
+            const png = action.webpSupported ? ".webp" : ".png";
             const jpg = action.webpSupported ? ".webp" : ".jpg";
             return {
-                ...state, webpSupportChecked: true, png, jpg
-            }
+                ...state,
+                webpSupportChecked: true,
+                png,
+                jpg
+            };
             break;
         case "CHANGE_AUTOMATE_INVITES": {
             // get the automateInvites info up to this point
             let automateInvites = state.automateInvites ? state.automateInvites : {};
             // get the arguments we could receive
-            const { page, header, goBack, nextPage, nextCallable, lastSubStep, extraNextFunction, extraNextFunctionPage } = action.args;
+            const {
+                page,
+                header,
+                goBack,
+                nextPage,
+                nextCallable,
+                lastSubStep,
+                extraNextFunction,
+                extraNextFunctionPage
+            } = action.args;
             // if the header should be changed, do so
-            if (header !== undefined) { automateInvites.header = header; }
+            if (header !== undefined) {
+                automateInvites.header = header;
+            }
             // if the next page to be navigated to should be changed, do so
-            if (nextPage !== undefined) { automateInvites.nextPage = nextPage; }
+            if (nextPage !== undefined) {
+                automateInvites.nextPage = nextPage;
+            }
             // if this should be marked as the last page in a sequence, mark it
             // should always be able to move on to next STEP if on the last SUB STEP
-            if (typeof lastSubStep === "boolean") { automateInvites.lastSubStep = lastSubStep; }
+            if (typeof lastSubStep === "boolean") {
+                automateInvites.lastSubStep = lastSubStep;
+            }
             // if the ability to move to the next step should be changed, change it
-            if (typeof nextCallable === "boolean") { automateInvites.nextCallable = nextCallable; }
+            if (typeof nextCallable === "boolean") {
+                automateInvites.nextCallable = nextCallable;
+            }
             // if there is a function to call when Next button pressed, add it
-            if (extraNextFunction !== undefined) { automateInvites.extraNextFunction = extraNextFunction; }
+            if (extraNextFunction !== undefined) {
+                automateInvites.extraNextFunction = extraNextFunction;
+            }
             // if there is a page going along with the above function, add it
-            if (extraNextFunctionPage !== undefined) { automateInvites.extraNextFunctionPage = extraNextFunctionPage; }
+            if (extraNextFunctionPage !== undefined) {
+                automateInvites.extraNextFunctionPage = extraNextFunctionPage;
+            }
             // if there is a page to be navigated to
             if (page !== undefined) {
                 // make sure there is a page stack
@@ -487,7 +531,7 @@ export function usersReducers(state = initialState, action) {
         }
         // override ALL of evaluation state
         case "SET_EVALUATION_STATE": {
-            return { ...state, evaluationState: action.evaluationState }
+            return { ...state, evaluationState: action.evaluationState };
         }
         // override parts of old evaluation state with new eval state
         case "UPDATE_EVALUATION_STATE": {
@@ -499,9 +543,11 @@ export function usersReducers(state = initialState, action) {
                     ...state.evaluationState,
                     ...action.evaluationState
                 }
-            }
+            };
             // update user if given
-            if (action.user) { newState.currentUser = action.user; }
+            if (action.user) {
+                newState.currentUser = action.user;
+            }
             return newState;
         }
         case "ADD_PATHWAY":
@@ -513,14 +559,12 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         default:
-            return {...state};
+            return { ...state };
             break;
     }
 
-    return state
+    return state;
 }
-
-
 
 // type is optional as it should be included within the notification object
 function notificationInfo(notification, givenType) {
@@ -531,18 +575,26 @@ function notificationInfo(notification, givenType) {
     // if the given notification is the message
     if (typeof notification === "string") {
         message = notification;
-        if (errorTypes.includes(givenType)) { type = "errorHeader"; }
+        if (errorTypes.includes(givenType)) {
+            type = "errorHeader";
+        }
     }
     // if the given notification is a notification object
     else if (typeof notification === "object") {
         // add the given message if provided
-        if (typeof notification.message === "string") { message = notification.message; }
+        if (typeof notification.message === "string") {
+            message = notification.message;
+        }
         // add the message type if given
-        if (errorTypes.includes(notification.type) || errorTypes.includes(givenType)) { type = "errorHeader"; }
+        if (errorTypes.includes(notification.type) || errorTypes.includes(givenType)) {
+            type = "errorHeader";
+        }
     }
     // return the notification information if enough info is given to make one
-    return (typeof message === "string") ? {
-        notification: { message, type },
-        notificationDate: new Date()
-    } : {};
+    return typeof message === "string"
+        ? {
+              notification: { message, type },
+              notificationDate: new Date()
+          }
+        : {};
 }

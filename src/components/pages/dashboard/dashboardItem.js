@@ -1,9 +1,9 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {  } from "../../../actions/usersActions";
-import {  } from "../../../miscFunctions";
+import {} from "../../../actions/usersActions";
+import {} from "../../../miscFunctions";
 
 import Onboarding from "./dashboardItems/onboarding/onboarding";
 import Activity from "./dashboardItems/activity";
@@ -15,7 +15,6 @@ import Account from "./dashboardItems/account.js";
 import Billing from "./dashboardItems/billing.js";
 
 import "./dashboard.css";
-
 
 class DashboardItem extends Component {
     constructor(props) {
@@ -29,32 +28,55 @@ class DashboardItem extends Component {
         let width = this.props.width;
         if (typeof this.props.width === "string") {
             width = parseInt(this.props.width, 10);
-        } if (typeof width !== "number" || width === NaN || width < 1 || width > 4) {
+        }
+        if (typeof width !== "number" || width === NaN || width < 1 || width > 4) {
             width = 1;
         }
         width = Math.round(width);
 
         let content = null;
         switch (this.props.type) {
-            case "Onboarding": { content = <Onboarding/>; break; }
-            case "Activity": { content = <Activity />; break; }
-            case "BuildTeam": { content = <BuildTeam />; break; }
-            case "Candidates": { content = <Candidates/>; break; }
-            case "Employees": { content = <Employees/>; break; }
-            case "Evaluations": { content = <Evaluations/>; break; }
-            case "Account": { content = <Account/>; break; }
-            case "Billing": { content = <Billing/>; break; }
-            default: { content = null; break; }
+            case "Onboarding": {
+                content = <Onboarding {...this.props} />;
+                break;
+            }
+            case "Activity": {
+                content = <Activity {...this.props} />;
+                break;
+            }
+            case "BuildTeam": {
+                content = <BuildTeam {...this.props} />;
+                break;
+            }
+            case "Candidates": {
+                content = <Candidates {...this.props} />;
+                break;
+            }
+            case "Employees": {
+                content = <Employees {...this.props} />;
+                break;
+            }
+            case "Evaluations": {
+                content = <Evaluations {...this.props} />;
+                break;
+            }
+            case "Account": {
+                content = <Account {...this.props} />;
+                break;
+            }
+            case "Billing": {
+                content = <Billing {...this.props} />;
+                break;
+            }
+            default: {
+                content = null;
+                break;
+            }
         }
 
-        return (
-            <div styleName={`dashboard-item-container width-${width}`}>
-                { content }
-            </div>
-        );
+        return <div styleName={`dashboard-item-container width-${width}`}>{content}</div>;
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -63,10 +85,10 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-
-    }, dispatch);
+    return bindActionCreators({}, dispatch);
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardItem);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(DashboardItem);
