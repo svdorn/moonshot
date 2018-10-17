@@ -8,6 +8,72 @@ import {} from "../../../miscFunctions";
 import "./businessHome.css";
 
 const posTypes = ["Developer", "Product", "Support/Customer Service", "Marketing", "Sales"];
+// TODO: Make sure none are too long
+const allTitles = [
+    "Software Engineer",
+    "Developer",
+    "Front End Developer",
+    "Product Manager",
+    ".NET Developer",
+    "Java Developer",
+    "Web Developer",
+    "Quality Assurance Engineer",
+    "Software Developer",
+    "Application Developer",
+    "Node.js Developer",
+    "Full-Stack Developer",
+    "DevOps Engineer",
+    "Chief Product Officer",
+    "Product Manager",
+    "Associate Product Manager",
+    "Product Owner",
+    "Group Product Manager",
+    "Director of Product Management",
+    "VP of Product Management",
+    "Customer Service Representative",
+    "Remote Customer Service Representative",
+    "Customer Service Specialist",
+    "Customer Service Engineer",
+    "Customer Service Supervisor",
+    "Customer Service Manager",
+    "Customer Support Representative",
+    "Remote Customer Support Representative",
+    "Customer Support Specialist",
+    "Multilingual Customer Support Specialist",
+    "Customer Support Engineer",
+    "Customer Support Manager",
+    "Customer Success Associate",
+    "Customer Success Manager",
+    "Implementation Specialist",
+    "Customer Success Team Lead",
+    "Customer Experience Manager",
+    "Director of Customer Experience",
+    "Content Creator",
+    "Content Strategist",
+    "Content Marketing Manager",
+    "Creative Assistant",
+    "Digital Brand Manager",
+    "Creative Director",
+    "Marketing Data Analyst",
+    "Marketing Technologist",
+    "Digital Marketing Manager",
+    "Social Media Coordinator",
+    "Social Media Strategist",
+    "Community Manager",
+    "SEO Specialist",
+    "SEO Strategist",
+    "SEO/Marketing Manager",
+    "Sales Representative",
+    "Account Manager",
+    "Outside Sales Representative",
+    "Account Executive",
+    "Inside Sales Representative",
+    "Sales Consultant",
+    "Sales Manager",
+    "Collection Agent",
+    "Car Sales Executive",
+    "Regional Sales Manager"
+];
 
 class PositionsDropDown extends Component {
     constructor(props) {
@@ -33,6 +99,20 @@ class PositionsDropDown extends Component {
             );
         });
 
+        return options;
+    }
+
+    suggestions() {
+        console.log("this.props.inputText: ", this.props.inputText);
+        const options = allTitles
+            .filter(s => s.toLowerCase().includes(this.props.inputText.toLowerCase()))
+            .map(title => {
+                return (
+                    <div styleName="drop-down-option" onClick={this.nameAdvance(title)}>
+                        {title}
+                    </div>
+                );
+            });
         return options;
     }
 

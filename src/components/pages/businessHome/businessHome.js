@@ -240,7 +240,7 @@ class BusinessHome extends Component {
                                     onChange={this.onChange.bind(this)}
                                 />
                                 <div />
-                                <PositionsDropDown />
+                                <PositionsDropDown inputText={this.state.position} />
                             </div>
                             {/*<div className="infoText clickableNoUnderline font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600" onClick={this.handleOpen}>
                                 <img src={"images/businessHome/PlayButton" + this.props.png} alt="Play Button" className="playButton"/>
