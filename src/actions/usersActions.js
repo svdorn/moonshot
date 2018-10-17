@@ -337,20 +337,25 @@ export function updateOnboardingStep(userId, verificationToken, newStep) {
         } else {
             dispatch({ type: "START_LOADING" });
         }
-        axios
-            .post("/api/user/updateOnboardingStep", { userId, verificationToken, newStep })
-            .then(result => {
-                // if done with onboarding
-                if (newStep === -1) {
-                    dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
-                }
-            })
-            .catch(error => {
-                console.log("ERROR: ", error);
-                if (newStep === -1) {
-                    dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
-                }
-            });
+
+        console.log("userId: ", userId);
+        console.log("verificationToken: ", verificationToken);
+        if (userId && verificationToken) {
+            axios
+                .post("/api/user/updateOnboardingStep", { userId, verificationToken, newStep })
+                .then(result => {
+                    // if done with onboarding
+                    if (newStep === -1) {
+                        dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
+                    }
+                })
+                .catch(error => {
+                    console.log("ERROR: ", error);
+                    if (newStep === -1) {
+                        dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
+                    }
+                });
+        }
     };
 }
 

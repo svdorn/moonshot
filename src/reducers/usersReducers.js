@@ -123,9 +123,7 @@ export function usersReducers(state = initialState, action) {
             return { ...state, footerOnScreen: action.footerOnScreen };
         }
         case "UPDATE_ONBOARDING_STEP": {
-            if (!state.currentUser) {
-                return state;
-            }
+            let currentUser = state.currentUser;
             // create onboarding object with new step or with time finished marked
             let onboard = {};
             // if the user is finished, update that on the frontend
@@ -135,18 +133,27 @@ export function usersReducers(state = initialState, action) {
                 onboard = { step: action.newStep };
             }
 
-            // fill in onboarding info with any that already exists from user
-            if (typeof state.currentUser.onboard === "object") {
-                onboard = { ...state.currentUser.onboard, ...onboard };
+            // fill in onboarding info with any that already exists
+            if (!currentUser && typeof state.guestOnboard === "object") {
+                // if there is no user, must be a guest going through onboarding
+                onboard = { ...state.guestOnboard, ...onboard };
+            } else if (currentUser && typeof currentUser.onboard === "object") {
+                // if there is a user and they've already started, fill in old info
+                onboard = { ...currentUser.onboard, ...onboard };
             }
             // update highest step user has been to
             if (typeof onboard.highestStep !== "number" || onboard.highestStep < action.newStep) {
                 onboard.highestStep = action.newStep;
             }
-            // throw the onboarding stuff back into the user
-            const currentUser = { ...state.currentUser, onboard };
-            // save the state with the new current user
-            return { ...state, currentUser, loadingSomething: false };
+
+            if (currentUser) {
+                // throw the onboarding stuff back into the user
+                currentUser = { ...currentUser, onboard };
+                // save the state with the new current user
+                return { ...state, currentUser, loadingSomething: false };
+            } else {
+                return { ...state, guestOnboard: onboard };
+            }
             break;
         }
         case "CREATED_NO_VERIFY_EMAIL_SENT": {
