@@ -206,7 +206,7 @@ class BusinessHome extends Component {
             <section id="introduction" styleName="introduction">
                 <a id="home-top" name="home-top" className="anchor" />
                 <div className="businessHome frontPage">
-                    {this.state.showRectangles ? (
+                    {/*this.state.showRectangles*/ false ? (
                         <div styleName="skewed-rectangles-container">
                             <div styleName="skewed-rectangles">
                                 {this.skewedRectangles(11, { rectanglesOnly: true })}
@@ -247,23 +247,6 @@ class BusinessHome extends Component {
                                 <div>See how it works in 2 minutes</div>
                             </div>*/}
                         </div>
-                        <figure styleName="product-screenshots">
-                            <div styleName="my-candidates-screenshot">
-                                <img
-                                    src={
-                                        "images/businessHome/CandidatesScreenshotTop" +
-                                        this.props.jpg
-                                    }
-                                    alt="My Candidates Page Screenshot"
-                                />
-                            </div>
-                            <div styleName="results-screenshot">
-                                <img
-                                    src={"images/businessHome/ProfileScreenshot" + this.props.jpg}
-                                    alt="Candidate Results Page Screenshot"
-                                />
-                            </div>
-                        </figure>
                     </div>
                 </div>
             </section>
