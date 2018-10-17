@@ -76,10 +76,12 @@
     height: 40px;
     padding: 4px 10px;
 }
+.drop-down-option:not(:first-child) {
+    cursor: pointer;
+}
 .drop-down-option:not(:first-child):hover {
     background-color: var(--primary-black-light);
     color: var(--primary-cyan);
-    cursor: pointer;
 }
 
 .my-candidates-screenshot {
