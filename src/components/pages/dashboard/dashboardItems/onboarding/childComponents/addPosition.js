@@ -3,8 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Field, reduxForm } from 'redux-form';
-import { addNotification, startLoading, stopLoading } from "../../actions/usersActions";
-import {  } from "../../miscFunctions";
+import { addNotification, startLoading, stopLoading } from "../../../../../../actions/usersActions";
+import {  } from "../../../../../../miscFunctions";
 import {
     TextField,
     DropDownMenu,
@@ -68,6 +68,8 @@ class AddPosition extends Component {
 
     handleSubmit(e) {
         try {
+            // TODO: if the user is signed in, add like this, if not just put the data in redux state
+            // TODO: need to be able to add multiple positions
             let self = this;
             e.preventDefault();
             const vals = this.props.formData.addPos.values;
