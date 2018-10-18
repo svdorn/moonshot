@@ -90,15 +90,31 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, var(--primary-cyan), var(--primary-white));
     top: 0;
     left: 0;
     z-index: 10;
     border-radius: 8px;
+
+    background: linear-gradient(
+        to right,
+        var(--primary-cyan),
+        var(--primary-white),
+        var(--primary-cyan)
+    );
+    background-position-x: 108%;
+    background-size: 188%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
-.get-started-input:hover + div {
-    background: linear-gradient(0deg, var(--primary-cyan), var(--primary-white));
+.get-started-input:hover + div,
+.get-started-input:focus + div {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
+
 .drop-down {
     background-color: var(--primary-black-dark);
     border: 2px solid black;
