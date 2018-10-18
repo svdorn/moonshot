@@ -7,9 +7,6 @@ import { generalAction } from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
-import InviteCandidatesModal from "./inviteCandidatesModal";
-import AddPositionDialog from "../../childComponents/addPositionDialog";
-import AddUserDialog from "../../childComponents/addUserDialog";
 import ROIOnboardingDialog from "../../childComponents/roiOnboardingDialog";
 import OnboardingStep4Dialog from "../../childComponents/onboardingStep4Dialog";
 
@@ -17,39 +14,24 @@ import WelcomeMessage from "./dashboardItems/welcomeMessage";
 
 import "./dashboard.css";
 
-class Dashboard extends Component {
+class GuestDashboard extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
-    }
-
-    componentDidMount() {
-        if (
-            this.props.location &&
-            this.props.location.query &&
-            this.props.location.query.inviteCandidates === "open"
-        ) {
-            this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
-        }
+        this.state = {
+            // show the banner with introduction to the dashboard
+            showWelcomeBanner: true
+        };
     }
 
     render() {
-        const user = this.props.currentUser;
-
-        let activity = <DashboardItem type="Activity" width={3} />;
-        // if the user is not done with onboarding
-        if (
-            user &&
-            user.onboard &&
-            !user.onboard.timeFinished &&
-            typeof user.onboard.step === "number"
-        ) {
-            activity = <DashboardItem type="Onboarding" width={3} />;
-        }
-        // if the user has the popups at onboarding
-        if (user && user.popups && user.popups.businessInterests) {
+        let activity = null;
+        // // if the lead has not said which jobs they want to do with the site
+        console.log("this.props.selectedJobsToBeDone: ", this.props.selectedJobsToBeDone);
+        if (this.props.selectedJobsToBeDone === undefined) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
+        } else {
+            activity = <DashboardItem type="Onboarding" width={3} />;
         }
 
         let blurredClass = "";
@@ -66,23 +48,19 @@ class Dashboard extends Component {
                         content="Your home base for checking in on your candidates, employees, evaluations, and more."
                     />
                 </MetaTags>
-                <InviteCandidatesModal />
-                <AddPositionDialog />
-                <AddUserDialog />
                 <ROIOnboardingDialog />
                 <OnboardingStep4Dialog />
                 <div className="page-line-header">
                     <div />
                     <div>Dashboard</div>
                 </div>
-                <WelcomeMessage />
+                {/* <WelcomeMessage /> */}
                 <div styleName="dashboard">
                     {activity}
                     <DashboardItem type="Candidates" width={1} />
                     <DashboardItem type="Evaluations" width={1} />
                     <DashboardItem type="Employees" width={1} />
-                    <DashboardItem type="Account" width={1} />
-                    <DashboardItem type="Billing" width={1} />
+                    {/*<DashboardItem type="Billing" width={1} />*/}
                 </div>
             </div>
         );
@@ -91,9 +69,9 @@ class Dashboard extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
         roiModal: state.users.roiOnboardingOpen,
-        onboardingModel: state.users.onboardingStep4Open
+        onboardingModel: state.users.onboardingStep4Open,
+        selectedJobsToBeDone: state.users.selectedJobsToBeDone
     };
 }
 
@@ -106,9 +84,9 @@ function mapDispatchToProps(dispatch) {
     );
 }
 
-Dashboard = withRouter(Dashboard);
+GuestDashboard = withRouter(GuestDashboard);
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Dashboard);
+)(GuestDashboard);
