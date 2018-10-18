@@ -7,6 +7,7 @@ import { updateOnboardingStep, addNotification, generalAction, updateUser, openA
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists, updateStore } from "../../../../../miscFunctions";
 import AddPosition from "./childComponents/addPosition";
+import Signup from "./childComponents/signup";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
     TextField,
@@ -205,7 +206,7 @@ class WhatToDo extends Component {
     signupView() {
         return(
             <div styleName="full-step-container">
-                Signup
+                <Signup />
             </div>
         );
     }

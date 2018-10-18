@@ -487,6 +487,10 @@
     font-size: 18px;
     padding: 10px 0 4px;
 }
+.signup-fields {
+    margin-top: -15px;
+    margin-bottom: -10px;
+}
 
 .invite-candidates-modal {
     color: var(--secondary-gray);
