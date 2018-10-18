@@ -77,8 +77,14 @@
     z-index: 20;
     resize: none;
 }
-.get-started-input::placholder {
-    color: var(--secondary-gray) !important;
+.get-started-input::placeholder {
+    color: var(--secondary-gray);
+}
+.get-started-input:focus::placeholder {
+    color: transparent;
+}
+.get-started-input:focus {
+    outline: none;
 }
 .get-started-input + div {
     position: absolute;

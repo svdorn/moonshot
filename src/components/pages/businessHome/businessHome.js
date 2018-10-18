@@ -237,8 +237,8 @@ class BusinessHome extends Component {
                                     styleName="get-started-input"
                                     className="font28px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
                                     type="text"
-                                    placeholder="Enter a position"
                                     name="position"
+                                    placeholder="Who do you need to hire?"
                                     value={this.state.position}
                                     onChange={this.onChange.bind(this)}
                                 />
