@@ -115,7 +115,7 @@ class AddPosition extends Component {
 
                 this.props.startLoading();
 
-                axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, name, positionType, isManager})
+                axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName: name, positionType, isManager})
                 .then(res => {
                     self.setState({ positionType: "Position Type", newPosIsManager: false });
                     self.props.stopLoading();
@@ -123,7 +123,7 @@ class AddPosition extends Component {
                         self.props.reset();
                         self.props.addNotification(name + " position successfully added.")
                     } else {
-                        self.propt.next();
+                        self.props.next();
                     }
                 })
                 .catch(error => {

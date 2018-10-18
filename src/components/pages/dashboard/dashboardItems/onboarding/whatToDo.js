@@ -42,7 +42,7 @@ class WhatToDo extends Component {
         super(props);
 
         this.state = {
-            // whether we're on psych or gca view
+            // which view we're on
             step: "position",
         };
 
@@ -51,7 +51,6 @@ class WhatToDo extends Component {
         this.handleCustomPage = this.handleCustomPage.bind(this);
         this.copyLink = this.copyLink.bind(this);
     }
-
 
     next = () => {
         // TODO merge these two into one api call to avoid race conditions
