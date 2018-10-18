@@ -219,10 +219,11 @@ class BusinessHome extends Component {
                     <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
                         <div className="content">
                             <h1
-                                className="bigTitle font34px font30pxUnder900 font24pxUnder400"
+                                className="font40px font30pxUnder900 font24pxUnder400"
                                 style={{ color: "#72d6f5" }}
                             >
-                                Know which candidates will<br />
+                                <span style={{ color: "white" }}>Know which candidates will</span>
+                                <br />
                                 <span
                                     style={{ whiteSpace: "pre" }}
                                     ref={typedSpan => {
@@ -465,7 +466,7 @@ class BusinessHome extends Component {
                         content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions."
                     />
                 </MetaTags>
-                <div className="blackBackground businessHome">
+                <div className="businessHome">
                     {this.introductionSection()}
 
                     {this.screenshotsSection()}

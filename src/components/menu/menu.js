@@ -317,6 +317,8 @@ class Menu extends Component {
         }
 
         if (pathname === "/") {
+            // make the header transparent at if haven't scrolled at all
+            additionalHeaderClass += " transparent-if-no-shadow";
             // make sure there aren't already event listeners on scroll/resize ...
             window.removeEventListener("scroll", this.bound_checkForHeaderClassUpdate);
             window.removeEventListener("resize", this.bound_checkForHeaderClassUpdate);

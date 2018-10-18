@@ -26,6 +26,7 @@ body {
     --min-screen-width: 300px;
     --min-screen-height: 300px;
     --admin-menu-width: 0px;
+    --non-admin-menu-height: 72px;
 }
 
 .primary-orange {
@@ -218,7 +219,7 @@ body {
 
 header {
     position: fixed;
-    height: 72px;
+    height: var(--non-admin-menu-height);
     top: 0;
     width: 100%;
     color: rgb(32, 32, 32);
@@ -226,11 +227,15 @@ header {
     -moz-box-shadow: 0px 8px 10px -3px;
     box-shadow: 0px 8px 10px -3px;
     transition: box-shadow 0.2s ease-in-out;
+    transition: background-color 0.5s ease-in-out;
     background-color: var(--primary-black-dark);
     font-size: 12px;
 }
 header.noShadow {
     box-shadow: none;
+}
+header.noShadow.transparent-if-no-shadow {
+    background-color: initial;
 }
 header + div.headerSpace {
     width: 100%;
@@ -662,10 +667,6 @@ form > h1 {
     --contentColumnWidth: calc(1040px / var(--contentColumns));
     --gutterColumnWidth: var(--contentColumnWidth);
 }
-.businessHome.blackBackground {
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
 
 #employerOnboarding {
     position: relative;
@@ -722,12 +723,9 @@ form > h1 {
 
 .businessHome.frontPage {
     position: relative;
-    padding-top: 138px;
+    padding-top: 30vh;
     /* padding-bottom: 200px; */
     padding-bottom: 75px;
-}
-.bigTitle {
-    margin-bottom: 20px;
 }
 .businessHome > .infoContainer {
     display: flex;
@@ -1117,8 +1115,9 @@ form > h1 {
 }
 
 #three-screenshots {
-    margin: 160px auto 60px;
+    margin: 0 auto 60px;
     max-width: 1240px;
+    padding-top: 40px;
 }
 
 #businessHomeStatistics > div:nth-child(2) {
