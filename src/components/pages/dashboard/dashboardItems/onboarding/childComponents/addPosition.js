@@ -206,9 +206,9 @@ class AddPosition extends Component {
 
         return (
             <div>
-                <form className="center">
+                <form className="center" style={{marginTop:"-10px"}}>
                     {this.state.mustSelectTypeError ?
-                        <div className="secondary-red">Must select a position type.</div>
+                        <div className="secondary-red font10px">Must select a position type.</div>
                         : null
                     }
                     <Field
@@ -243,7 +243,7 @@ class AddPosition extends Component {
                     <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={e => this.handleSubmit(e, true)} style={{padding: "2px 4px", marginBottom:"5px"}}>
                         Add Another Position &#8594;
                     </button>
-                    {this.state.addPositionError ? <div className="secondary-red font16px marginTop10px">{this.state.addPositionError}</div> : null }
+                    {this.state.addPositionError ? <div className="secondary-red font10px">{this.state.addPositionError}</div> : null }
                     <div styleName="emoji-buttons-full">
                         <div onClick={e => this.handleSubmit(e, false)}>
                             <img
