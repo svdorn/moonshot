@@ -121,6 +121,7 @@ class AddPosition extends Component {
                     self.props.stopLoading();
                     if (addAnotherPosition) {
                         self.props.reset();
+                        self.props.addNotification(positionName + " position successfully added.")
                     } else {
                         self.propt.next();
                     }
@@ -144,6 +145,7 @@ class AddPosition extends Component {
                     console.log("here")
                     this.setState({ positionType: "Position Type", newPosIsManager: false });
                     this.props.reset();
+                    this.props.addNotification(positionName + " position successfully added.")
                 } else {
                     this.props.next();
                 }
