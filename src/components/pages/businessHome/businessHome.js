@@ -227,6 +227,7 @@ class BusinessHome extends Component {
                             </h1>
                             <div styleName="get-started-input-container">
                                 <textarea
+                                    id="get-started-input"
                                     styleName="get-started-input"
                                     className="font28px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
                                     type="text"
@@ -234,6 +235,7 @@ class BusinessHome extends Component {
                                     placeholder="Who do you need to hire?"
                                     value={this.state.position}
                                     onChange={this.onChange.bind(this)}
+                                    maxlength="20"
                                 />
                                 <div />
                                 <PositionsDropDown inputText={this.state.position} />

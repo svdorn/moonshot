@@ -19,7 +19,7 @@ import {
     endOnboarding,
     openAddUserModal
 } from "../../actions/usersActions";
-import { isValidEmail, goTo } from "../../miscFunctions";
+import { isValidEmail, goTo, elementInViewport } from "../../miscFunctions";
 import { axios } from "axios";
 import { animateScroll } from "react-scroll";
 import AccountAdminMenu from "./accountAdminMenu";
@@ -231,6 +231,17 @@ class Menu extends Component {
                 this.setState({ headerClass: "" });
             } else if (!(widthWantsShadow && scrollWantsShadow) && this.state.headerClass === "") {
                 this.setState({ headerClass: "noShadow" });
+            }
+
+            // get the 'who do you need to hire' textarea
+            const getStartedInput = document.getElementById("get-started-input");
+            // focus on it (but only if it's NOT already focused and it IS in the viewport)
+            if (
+                window.scrollY > 0 &&
+                document.activeElement.nodeName === "BODY" &&
+                elementInViewport(getStartedInput)
+            ) {
+                getStartedInput.focus();
             }
         }
     }
