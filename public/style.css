@@ -1862,6 +1862,17 @@ form > h1 {
     margin-left: 20%;
 }
 
+.hover-move-arrow {
+    margin: 0 5px 0 0;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+*:hover + .hover-move-arrow {
+    margin: 0 0 0 5px;
+}
+
 #businessHomeStatistics .learn-more-text > span {
     margin-right: 0;
     -webkit-transition: all 0.3s ease;

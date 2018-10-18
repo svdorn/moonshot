@@ -50,8 +50,6 @@ class Menu extends Component {
         let dropDownSelected = "Account";
         if (this.props.location.pathname === "/settings") {
             dropDownSelected = "Settings";
-        } else if (this.props.location.pathname.toLowerCase() === "/adduser") {
-            dropDownSelected = "Add User";
         } else if (this.props.location.pathname === "/billing") {
             dropDownSelected = "Billing";
         } else if (this.props.location.pathname === "/pricing") {
@@ -81,10 +79,6 @@ class Menu extends Component {
         if (pathname === "/settings") {
             if (this.state.dropDownSelected !== "Settings") {
                 this.setState({ dropDownSelected: "Settings" });
-            }
-        } else if (pathname === "/adduser") {
-            if (this.state.dropDownSelected !== "Add User") {
-                this.setState({ dropDownSelected: "Add User" });
             }
         } else if (pathname === "/billing") {
             if (this.state.dropDownSelected !== "Billing") {
@@ -128,9 +122,6 @@ class Menu extends Component {
                 break;
             case "Settings":
                 goTo("/settings");
-                break;
-            case "Add User":
-                this.props.openAddUserModal();
                 break;
             case "Billing":
                 goTo("/billing");
@@ -305,7 +296,7 @@ class Menu extends Component {
 
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
-        let underlineWidth = "61px";
+        let underlineWidth = "53px";
         // whether
         let hideUnderline = {};
         let additionalHeaderClass = "";
@@ -345,12 +336,7 @@ class Menu extends Component {
                 dropdownClass += " currentRoute";
                 // if settings is selected, the underline bar must be bigger
                 // because "settings" is a bigger word
-                underlineWidth = "60px";
-            } else if (pathname === "/adduser") {
-                dropdownClass += " currentRoute";
-                // if settings is selected, the underline bar must be bigger
-                // because "Add User" is a bigger
-                underlineWidth = "69px";
+                underlineWidth = "52px";
             } else if (pathname === "/billing") {
                 dropdownClass += " currentRoute";
                 underlineWidth = "46px";
@@ -406,11 +392,9 @@ class Menu extends Component {
             loggedInClass = " loggedOut";
             menuOptions = [
                 { optionType: "url", title: "Log In", url: "/login" },
-                { optionType: "separator" }
+                { optionType: "separator" },
+                { optionType: "tryNow" }
             ];
-            if (pathname === "/") {
-                menuOptions.push({ optionType: "button", title: "Enter a position" });
-            }
         }
         // if the current user is an employee for a business
         else if (currentUser.userType === "employee") {
@@ -428,7 +412,7 @@ class Menu extends Component {
                 }
             ];
         }
-        // if the current user is a candidate who is not onboarding
+        // if the current user is a candidate
         else if (currentUser.userType === "candidate") {
             menuOptions = [
                 { optionType: "url", title: "Evaluations", url: "/myEvaluations" },
@@ -506,6 +490,29 @@ class Menu extends Component {
                             className={"menuDivider wideScreenMenuItem" + loggedInClass}
                         />
                     );
+                    break;
+                case "tryNow":
+                    desktopMenu.push(
+                        <p
+                            key={"try now desktop"}
+                            className="menuItem pointer font14px noWrap primary-cyan wideScreenMenuItem"
+                            onClick={() => goTo("/explore")}
+                        >
+                            <span className="primary-cyan" style={{ marginRight: "7px" }}>
+                                Try Now For Free
+                            </span>{" "}
+                            <img
+                                className="hover-move-arrow"
+                                style={{ height: "8px", marginTop: "6px" }}
+                                src={`/icons/ArrowBlue${self.props.png}`}
+                            />
+                        </p>
+                    );
+                    <MenuItem
+                        key={"try now mobile"}
+                        primaryText="Try Now For Free"
+                        onClick={() => goTo("/explore")}
+                    />;
                     break;
                 case "dropDown":
                     // the options that will be shown in the dropDown menu
@@ -586,7 +593,7 @@ class Menu extends Component {
                             onChange={self.handleDropDownItemClick}
                             underlineStyle={styles.underlineStyle}
                             anchorOrigin={styles.anchorOrigin}
-                            style={{ fontSize: "16px", marginTop: "21px" }}
+                            style={{ fontSize: "14px", marginTop: "21px" }}
                             className={dropdownClass}
                             id="menuDropdown"
                         >
@@ -617,38 +624,38 @@ class Menu extends Component {
                         />
                     );
                     break;
-                case "button":
-                    // add the menu item to the dropDown
-                    let positionUrl = "";
-                    if (self.state.position) {
-                        positionUrl = "?position=" + self.state.position;
-                    }
-                    desktopMenu.push(
-                        <div
-                            key="tryForFreeButton"
-                            className={
-                                "menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"
-                            }
-                        >
-                            <input
-                                className="blackInput secondary-gray-important"
-                                type="text"
-                                placeholder="Enter a position..."
-                                name="position"
-                                value={self.state.position}
-                                onChange={self.onChange.bind(self)}
-                            />
-                            <div
-                                className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan"
-                                style={{ marginLeft: "5px" }}
-                                onClick={() => goTo("/chatbot" + positionUrl)}
-                            >
-                                Try for Free
-                            </div>
-                        </div>
-                    );
-                    // no button on mobile menu
-                    break;
+                // case "button":
+                //     // add the menu item to the dropDown
+                //     let positionUrl = "";
+                //     if (self.state.position) {
+                //         positionUrl = "?position=" + self.state.position;
+                //     }
+                //     desktopMenu.push(
+                //         <div
+                //             key="tryForFreeButton"
+                //             className={
+                //                 "menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"
+                //             }
+                //         >
+                //             <input
+                //                 className="blackInput secondary-gray-important"
+                //                 type="text"
+                //                 placeholder="Enter a position..."
+                //                 name="position"
+                //                 value={self.state.position}
+                //                 onChange={self.onChange.bind(self)}
+                //             />
+                //             <div
+                //                 className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan"
+                //                 style={{ marginLeft: "5px" }}
+                //                 onClick={() => goTo("/chatbot" + positionUrl)}
+                //             >
+                //                 Try for Free
+                //             </div>
+                //         </div>
+                //     );
+                //     // no button on mobile menu
+                //     break;
                 default:
                     break;
             }
