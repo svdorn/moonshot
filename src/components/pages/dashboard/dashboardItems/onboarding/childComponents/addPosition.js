@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Field, reduxForm } from 'redux-form';
-import { addNotification, startLoading, stopLoading } from "../../../../../../actions/usersActions";
+import { addNotification, startLoading, stopLoading, updateStore } from "../../../../../../actions/usersActions";
 import {  } from "../../../../../../miscFunctions";
 import {
     TextField,
@@ -50,6 +50,8 @@ class AddPosition extends Component {
             // error adding a position
             addPositionError: undefined,
         }
+
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handlePositionTypeChange = (event, index) => {
@@ -68,6 +70,7 @@ class AddPosition extends Component {
 
     handleSubmit(e) {
         try {
+            console.log("here");
             // TODO: if the user is signed in, add like this, if not just put the data in redux state
             // TODO: need to be able to add multiple positions
             let self = this;
@@ -94,25 +97,39 @@ class AddPosition extends Component {
 
             // get all necessary params
             const user = this.props.currentUser;
-            const userId = user._id;
-            const businessId = user.businessInfo.businessId;
-            const verificationToken = user.verificationToken;
             const positionName = vals.position;
             const positionType = this.state.positionType;
             const isManager = this.state.newPosIsManager;
 
-            this.props.startLoading();
+            if (user) {
+                const userId = user._id;
+                const businessId = user.businessInfo.businessId;
+                const verificationToken = user.verificationToken;
 
-            axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName, positionType, isManager})
-            .then(res => {
-                self.setState({ positionType: "Position Type", newPosIsManager: false });
-                self.props.stopLoading();
-                self.props.reset();
-            })
-            .catch(error => {
-                self.props.stopLoading();
-                self.setState({addPositionError: "Error adding position."})
-            })
+                this.props.startLoading();
+
+                axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName, positionType, isManager})
+                .then(res => {
+                    self.setState({ positionType: "Position Type", newPosIsManager: false });
+                    self.props.stopLoading();
+                    self.props.reset();
+                })
+                .catch(error => {
+                    self.props.stopLoading();
+                    self.setState({addPositionError: "Error adding position."})
+                })
+            } else {
+                const position = { positionName, positionType, isManager };
+                console.log(position);
+                const onboardingPositions = this.props.onboardingPositions;
+
+                let positions = onboardingPositions ? onboardingPositions : [];
+
+                positions.push(position);
+
+                console.log("positions: ", positions);
+                this.props.updateStore("onboardingPositions", positions);
+            }
         }
 
         catch (error) {
@@ -167,9 +184,11 @@ class AddPosition extends Component {
             return <MenuItem value={positionType} primaryText={positionType} key={index}/>
         });
 
+        console.log("onboarding positions: ", this.props.onboardingPositions);
+
         return (
             <div>
-                <form onSubmit={this.handleSubmit.bind(this)} className="center">
+                <form onSubmit={this.handleSubmit} className="center">
                     {this.state.mustSelectTypeError ?
                         <div className="secondary-red">Must select a position type.</div>
                         : null
@@ -180,7 +199,7 @@ class AddPosition extends Component {
                         label="Position Name"
                         validate={[required]}
                     /><br/>
-                    <div className="primary-cyan font16px marginTop10px">
+                    <div className="primary-cyan font16px" style={{marginTop: "5px"}}>
                         <div style={{display:"inline-block", verticalAlign:"top"}}>Select a position type:</div>
                         <DropDownMenu value={this.state.positionType}
                                   onChange={this.handlePositionTypeChange}
@@ -203,11 +222,9 @@ class AddPosition extends Component {
                         </div>
                         {"Position is a manager role"}
                     </div>
-                    <RaisedButton
-                        label="Continue"
-                        type="submit"
-                        className="raisedButtonBusinessHome"
-                        /><br/>
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" type="submit" style={{padding: "2px 4px", marginBottom:"5px"}}>
+                        Add Another Position &#8594;
+                    </button>
                     {this.state.addPositionError ? <div className="secondary-red font16px marginTop10px">{this.state.addPositionError}</div> : null }
                 </form>
             </div>
@@ -223,7 +240,8 @@ function mapStateToProps(state) {
         loading: state.users.loadingSomething,
         userPosted: state.users.positionPosted,
         userPostedFailed: state.users.positionPostedFailed,
-        png: state.users.png
+        png: state.users.png,
+        onboardingPositions: state.users.onboardingPositions
     };
 }
 
@@ -232,6 +250,7 @@ function mapDispatchToProps(dispatch) {
         addNotification,
         startLoading,
         stopLoading,
+        updateStore
     }, dispatch);
 }
 

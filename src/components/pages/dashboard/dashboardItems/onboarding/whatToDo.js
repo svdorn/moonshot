@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { withRouter } from 'react-router';
 import { updateOnboardingStep, addNotification, generalAction, updateUser, openAddPositionModal, intercomEvent } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
-import { goTo, makePossessive, propertyExists } from "../../../../../miscFunctions";
+import { goTo, makePossessive, propertyExists, updateStore } from "../../../../../miscFunctions";
 import AddPosition from "./childComponents/addPosition";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
@@ -242,7 +242,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         png: state.users.png,
-        loading: state.users.loadingSomething
+        loading: state.users.loadingSomething,
     };
 }
 
@@ -253,7 +253,8 @@ function mapDispatchToProps(dispatch) {
         generalAction,
         updateUser,
         openAddPositionModal,
-        intercomEvent
+        intercomEvent,
+        updateStore
     }, dispatch);
 }
 
