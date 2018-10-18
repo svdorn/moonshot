@@ -71,7 +71,8 @@ function mapStateToProps(state) {
     return {
         roiModal: state.users.roiOnboardingOpen,
         onboardingModel: state.users.onboardingStep4Open,
-        selectedJobsToBeDone: state.users.selectedJobsToBeDone
+        selectedJobsToBeDone: state.users.selectedJobsToBeDone,
+        onboardingPositions: state.users.onboardingPositions
     };
 }
 
