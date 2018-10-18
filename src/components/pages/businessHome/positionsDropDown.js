@@ -77,6 +77,31 @@ class PositionsDropDown extends Component {
         super(props);
 
         this.state = {};
+
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+    }
+
+    componentDidMount() {
+        document.addEventListener("keypress", this.handleKeyPress);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keypress", this.handleKeyPress);
+    }
+
+    // move to /explore if "enter" pressed
+    handleKeyPress(e) {
+        // get the keycode of the key that was pressed
+        var key = e.which || e.keyCode;
+        // 13 is "enter"
+        if (key === 13) {
+            e.preventDefault();
+            if (this.props.inputText) {
+                this.nameAdvance(this.props.inputText)();
+            } else {
+                console.log("FIGURE IT OUT");
+            }
+        }
     }
 
     // if you click on a role name
