@@ -216,6 +216,7 @@ class BusinessHome extends Component {
                             </div>
                         </div>
                     ) : null}
+                    <div styleName="top-space" />
                     <div styleName="top-content-container">
                         <div styleName="content">
                             <h1

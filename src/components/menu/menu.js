@@ -508,11 +508,13 @@ class Menu extends Component {
                             />
                         </p>
                     );
-                    <MenuItem
-                        key={"try now mobile"}
-                        primaryText="Try Now For Free"
-                        onClick={() => goTo("/explore")}
-                    />;
+                    mobileMenu.push(
+                        <MenuItem
+                            key={"try now mobile"}
+                            primaryText="Try Now For Free"
+                            onClick={() => goTo("/explore")}
+                        />
+                    );
                     break;
                 case "dropDown":
                     // the options that will be shown in the dropDown menu
