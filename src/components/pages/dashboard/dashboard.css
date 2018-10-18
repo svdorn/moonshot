@@ -199,6 +199,18 @@
 .add-positions-view > div:nth-child(4) {
     margin-top: 20px;
 }
+
+.position-view {
+    color: var(--secondary-gray);
+    font: 14px;
+}
+.position-view > div:first-child {
+    color: var(--primary-cyan);
+    font-size: 24px;
+    text-align: center;
+    margin-top: 8px;
+}
+
 .got-it-button {
     color: white;
     position: absolute;
