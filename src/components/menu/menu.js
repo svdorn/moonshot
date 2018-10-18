@@ -17,8 +17,7 @@ import {
     signout,
     closeNotification,
     endOnboarding,
-    openAddUserModal,
-    openContactUsModal
+    openAddUserModal
 } from "../../actions/usersActions";
 import { isValidEmail, goTo } from "../../miscFunctions";
 import { axios } from "axios";
@@ -51,8 +50,6 @@ class Menu extends Component {
         let dropDownSelected = "Account";
         if (this.props.location.pathname === "/settings") {
             dropDownSelected = "Settings";
-        } else if (this.props.location.pathname.toLowerCase() === "/adduser") {
-            dropDownSelected = "Add User";
         } else if (this.props.location.pathname === "/billing") {
             dropDownSelected = "Billing";
         } else if (this.props.location.pathname === "/pricing") {
@@ -69,11 +66,11 @@ class Menu extends Component {
         this.state = {
             dropDownSelected,
             headerClass,
-            position,
-            waitingForScroll: {
-                page: undefined,
-                anchor: undefined
-            }
+            position
+            // waitingForScroll: {
+            //     page: undefined,
+            //     anchor: undefined
+            // }
         };
     }
 
@@ -82,10 +79,6 @@ class Menu extends Component {
         if (pathname === "/settings") {
             if (this.state.dropDownSelected !== "Settings") {
                 this.setState({ dropDownSelected: "Settings" });
-            }
-        } else if (pathname === "/adduser") {
-            if (this.state.dropDownSelected !== "Add User") {
-                this.setState({ dropDownSelected: "Add User" });
             }
         } else if (pathname === "/billing") {
             if (this.state.dropDownSelected !== "Billing") {
@@ -102,20 +95,20 @@ class Menu extends Component {
             }
         }
 
-        const wfs = this.state.waitingForScroll;
-        // if we were waiting for a redirect to scroll
-        if (wfs && wfs.page && wfs.anchor) {
-            // if we are on the page that wants to be scrolled through ...
-            if (pathname === wfs.page.toLowerCase()) {
-                // ... set the state so we aren't waiting anymore ...
-                this.setState({ waitingForScroll: {} });
-                // ... wait a moment for the user to get used to the page ...
-                setTimeout(() => {
-                    // ... and scroll to the wanted anchor
-                    this.scrollToAnchor(wfs.anchor);
-                }, 50);
-            }
-        }
+        // const wfs = this.state.waitingForScroll;
+        // // if we were waiting for a redirect to scroll
+        // if (wfs && wfs.page && wfs.anchor) {
+        //     // if we are on the page that wants to be scrolled through ...
+        //     if (pathname === wfs.page.toLowerCase()) {
+        //         // ... set the state so we aren't waiting anymore ...
+        //         this.setState({ waitingForScroll: {} });
+        //         // ... wait a moment for the user to get used to the page ...
+        //         setTimeout(() => {
+        //             // ... and scroll to the wanted anchor
+        //             this.scrollToAnchor(wfs.anchor);
+        //         }, 50);
+        //     }
+        // }
     }
 
     // fires when a dropDown menu item is clicked
@@ -129,9 +122,6 @@ class Menu extends Component {
                 break;
             case "Settings":
                 goTo("/settings");
-                break;
-            case "Add User":
-                this.props.openAddUserModal();
                 break;
             case "Billing":
                 goTo("/billing");
@@ -169,68 +159,68 @@ class Menu extends Component {
         goTo("/");
     }
 
-    handleAnchorClick(anchor, wantedPath) {
-        // if we aren't on the wanted path ...
-        if (this.props.location.pathname.toLowerCase() != wantedPath.toLowerCase()) {
-            // ... mark that we are waiting until we're on a new page to scroll ...
-            this.setState({ waitingForScroll: { page: wantedPath, anchor } });
-            // ... and redirect to that page
-            goTo(wantedPath);
-        }
-        // if we are already on the wanted path, scroll to the wanted anchor
-        else {
-            this.scrollToAnchor(anchor);
-        }
-    }
-
-    // scroll to an anchor on the current page, if it exists
-    scrollToAnchor(anchor) {
-        // get the element we want to scroll to
-        const element = document.getElementById(anchor);
-        // if the element exists
-        if (element) {
-            // get its y value
-            let yPosition = this.distanceFromTop(element);
-            // if the menu is fixed ...
-            if (!nonFixedMenuPages.includes(this.props.location.pathname.toLowerCase())) {
-                // ... scroll down a bit less so that the menu isn't in the way
-                yPosition -= 50;
-                // make sure we're scrolling to to a valid position
-                if (yPosition < 0) {
-                    yPosition = 0;
-                }
-            }
-            // scroll to the element
-            animateScroll.scrollTo(yPosition);
-        }
-    }
-
-    // get the distance from an element to the top of the page
-    distanceFromTop(element) {
-        try {
-            // set initial distance to top to 0
-            let distance = 0;
-            // if the element has a parent (everything except the top element,
-            // whose offset must be 0) ...
-            if (element.offsetParent) {
-                // go up through every layer in the hierarchy
-                do {
-                    // get the distance from the current element to its parent
-                    distance += element.offsetTop;
-                    // set the current element to its parent
-                    element = element.offsetParent;
-                } while (
-                    // continue to do this until the top element has been reached
-                    element
-                );
-            }
-            // return the distance - return 0 if the distance is < 0 due to rounding
-            return distance < 0 ? 0 : distance;
-        } catch (e) {
-            console.log("Error getting distance from top of page: ", e);
-            return 0;
-        }
-    }
+    // handleAnchorClick(anchor, wantedPath) {
+    //     // if we aren't on the wanted path ...
+    //     if (this.props.location.pathname.toLowerCase() != wantedPath.toLowerCase()) {
+    //         // ... mark that we are waiting until we're on a new page to scroll ...
+    //         this.setState({ waitingForScroll: { page: wantedPath, anchor } });
+    //         // ... and redirect to that page
+    //         goTo(wantedPath);
+    //     }
+    //     // if we are already on the wanted path, scroll to the wanted anchor
+    //     else {
+    //         this.scrollToAnchor(anchor);
+    //     }
+    // }
+    //
+    // // scroll to an anchor on the current page, if it exists
+    // scrollToAnchor(anchor) {
+    //     // get the element we want to scroll to
+    //     const element = document.getElementById(anchor);
+    //     // if the element exists
+    //     if (element) {
+    //         // get its y value
+    //         let yPosition = this.distanceFromTop(element);
+    //         // if the menu is fixed ...
+    //         if (!nonFixedMenuPages.includes(this.props.location.pathname.toLowerCase())) {
+    //             // ... scroll down a bit less so that the menu isn't in the way
+    //             yPosition -= 50;
+    //             // make sure we're scrolling to to a valid position
+    //             if (yPosition < 0) {
+    //                 yPosition = 0;
+    //             }
+    //         }
+    //         // scroll to the element
+    //         animateScroll.scrollTo(yPosition);
+    //     }
+    // }
+    //
+    // // get the distance from an element to the top of the page
+    // distanceFromTop(element) {
+    //     try {
+    //         // set initial distance to top to 0
+    //         let distance = 0;
+    //         // if the element has a parent (everything except the top element,
+    //         // whose offset must be 0) ...
+    //         if (element.offsetParent) {
+    //             // go up through every layer in the hierarchy
+    //             do {
+    //                 // get the distance from the current element to its parent
+    //                 distance += element.offsetTop;
+    //                 // set the current element to its parent
+    //                 element = element.offsetParent;
+    //             } while (
+    //                 // continue to do this until the top element has been reached
+    //                 element
+    //             );
+    //         }
+    //         // return the distance - return 0 if the distance is < 0 due to rounding
+    //         return distance < 0 ? 0 : distance;
+    //     } catch (e) {
+    //         console.log("Error getting distance from top of page: ", e);
+    //         return 0;
+    //     }
+    // }
 
     checkForHeaderClassUpdate(event) {
         if (this.props.location.pathname === "/") {
@@ -300,13 +290,13 @@ class Menu extends Component {
         let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
         // class of any menu item that is NOT currently selected
         let menuItemClass =
-            "menuItem font16px borderBottomClickable noWrap primary-white wideScreenMenuItem";
+            "menuItem font14px borderBottomClickable noWrap primary-white wideScreenMenuItem";
         // class of any menu item that IS currently selected
         const selectedMenuItemClass = menuItemClass + " currentRoute";
 
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
-        let underlineWidth = "61px";
+        let underlineWidth = "53px";
         // whether
         let hideUnderline = {};
         let additionalHeaderClass = "";
@@ -317,6 +307,8 @@ class Menu extends Component {
         }
 
         if (pathname === "/") {
+            // make the header transparent at if haven't scrolled at all
+            additionalHeaderClass += " transparent-if-no-shadow";
             // make sure there aren't already event listeners on scroll/resize ...
             window.removeEventListener("scroll", this.bound_checkForHeaderClassUpdate);
             window.removeEventListener("resize", this.bound_checkForHeaderClassUpdate);
@@ -344,12 +336,7 @@ class Menu extends Component {
                 dropdownClass += " currentRoute";
                 // if settings is selected, the underline bar must be bigger
                 // because "settings" is a bigger word
-                underlineWidth = "60px";
-            } else if (pathname === "/adduser") {
-                dropdownClass += " currentRoute";
-                // if settings is selected, the underline bar must be bigger
-                // because "Add User" is a bigger
-                underlineWidth = "69px";
+                underlineWidth = "52px";
             } else if (pathname === "/billing") {
                 dropdownClass += " currentRoute";
                 underlineWidth = "46px";
@@ -404,15 +391,10 @@ class Menu extends Component {
         else if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
-                { optionType: "anchor", title: "Home", url: "/", anchor: "home-top" },
-                { optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing" },
-                { optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs" },
+                { optionType: "url", title: "Log In", url: "/login" },
                 { optionType: "separator" },
-                { optionType: "url", title: "Log In", url: "/login" }
+                { optionType: "tryNow" }
             ];
-            if (pathname === "/") {
-                menuOptions.push({ optionType: "button", title: "Enter a position" });
-            }
         }
         // if the current user is an employee for a business
         else if (currentUser.userType === "employee") {
@@ -430,7 +412,7 @@ class Menu extends Component {
                 }
             ];
         }
-        // if the current user is a candidate who is not onboarding
+        // if the current user is a candidate
         else if (currentUser.userType === "candidate") {
             menuOptions = [
                 { optionType: "url", title: "Evaluations", url: "/myEvaluations" },
@@ -482,24 +464,24 @@ class Menu extends Component {
                         />
                     );
                     break;
-                case "anchor":
-                    desktopMenu.push(
-                        <p
-                            key={option.title + " desktop"}
-                            className={menuItemClass}
-                            onClick={() => self.handleAnchorClick(option.anchor, option.url)}
-                        >
-                            {option.title}
-                        </p>
-                    );
-                    mobileMenu.push(
-                        <MenuItem
-                            key={option.title + " mobile"}
-                            primaryText={option.title}
-                            onClick={() => self.handleAnchorClick(option.anchor, option.url)}
-                        />
-                    );
-                    break;
+                // case "anchor":
+                //     desktopMenu.push(
+                //         <p
+                //             key={option.title + " desktop"}
+                //             className={menuItemClass}
+                //             onClick={() => self.handleAnchorClick(option.anchor, option.url)}
+                //         >
+                //             {option.title}
+                //         </p>
+                //     );
+                //     mobileMenu.push(
+                //         <MenuItem
+                //             key={option.title + " mobile"}
+                //             primaryText={option.title}
+                //             onClick={() => self.handleAnchorClick(option.anchor, option.url)}
+                //         />
+                //     );
+                //     break;
                 case "separator":
                     // push a line, only visible on desktop
                     desktopMenu.push(
@@ -509,21 +491,28 @@ class Menu extends Component {
                         />
                     );
                     break;
-                case "modal":
+                case "tryNow":
                     desktopMenu.push(
                         <p
-                            key={option.title + " desktop"}
-                            className={menuItemClass}
-                            onClick={() => self.props.openContactUsModal()}
+                            key={"try now desktop"}
+                            className="menuItem pointer font14px noWrap primary-cyan wideScreenMenuItem"
+                            onClick={() => goTo("/explore")}
                         >
-                            {option.title}
+                            <span className="primary-cyan" style={{ marginRight: "7px" }}>
+                                Try Now For Free
+                            </span>{" "}
+                            <img
+                                className="hover-move-arrow"
+                                style={{ height: "8px", marginTop: "6px" }}
+                                src={`/icons/ArrowBlue${self.props.png}`}
+                            />
                         </p>
                     );
                     mobileMenu.push(
                         <MenuItem
-                            key={option.title + " mobile"}
-                            primaryText={option.title}
-                            onClick={() => self.props.openContactUsModal()}
+                            key={"try now mobile"}
+                            primaryText="Try Now For Free"
+                            onClick={() => goTo("/explore")}
                         />
                     );
                     break;
@@ -606,7 +595,7 @@ class Menu extends Component {
                             onChange={self.handleDropDownItemClick}
                             underlineStyle={styles.underlineStyle}
                             anchorOrigin={styles.anchorOrigin}
-                            style={{ fontSize: "16px", marginTop: "21px" }}
+                            style={{ fontSize: "14px", marginTop: "21px" }}
                             className={dropdownClass}
                             id="menuDropdown"
                         >
@@ -637,38 +626,38 @@ class Menu extends Component {
                         />
                     );
                     break;
-                case "button":
-                    // add the menu item to the dropDown
-                    let positionUrl = "";
-                    if (self.state.position) {
-                        positionUrl = "?position=" + self.state.position;
-                    }
-                    desktopMenu.push(
-                        <div
-                            key="tryForFreeButton"
-                            className={
-                                "menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"
-                            }
-                        >
-                            <input
-                                className="blackInput secondary-gray-important"
-                                type="text"
-                                placeholder="Enter a position..."
-                                name="position"
-                                value={self.state.position}
-                                onChange={self.onChange.bind(self)}
-                            />
-                            <div
-                                className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan"
-                                style={{ marginLeft: "5px" }}
-                                onClick={() => goTo("/chatbot" + positionUrl)}
-                            >
-                                Try for Free
-                            </div>
-                        </div>
-                    );
-                    // no button on mobile menu
-                    break;
+                // case "button":
+                //     // add the menu item to the dropDown
+                //     let positionUrl = "";
+                //     if (self.state.position) {
+                //         positionUrl = "?position=" + self.state.position;
+                //     }
+                //     desktopMenu.push(
+                //         <div
+                //             key="tryForFreeButton"
+                //             className={
+                //                 "menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"
+                //             }
+                //         >
+                //             <input
+                //                 className="blackInput secondary-gray-important"
+                //                 type="text"
+                //                 placeholder="Enter a position..."
+                //                 name="position"
+                //                 value={self.state.position}
+                //                 onChange={self.onChange.bind(self)}
+                //             />
+                //             <div
+                //                 className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan"
+                //                 style={{ marginLeft: "5px" }}
+                //                 onClick={() => goTo("/chatbot" + positionUrl)}
+                //             >
+                //                 Try for Free
+                //             </div>
+                //         </div>
+                //     );
+                //     // no button on mobile menu
+                //     break;
                 default:
                     break;
             }
@@ -771,8 +760,7 @@ function mapDispatchToProps(dispatch) {
             signout,
             closeNotification,
             endOnboarding,
-            openAddUserModal,
-            openContactUsModal
+            openAddUserModal
         },
         dispatch
     );

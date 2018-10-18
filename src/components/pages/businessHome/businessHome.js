@@ -205,8 +205,8 @@ class BusinessHome extends Component {
         return (
             <section id="introduction" styleName="introduction">
                 <a id="home-top" name="home-top" className="anchor" />
-                <div className="businessHome frontPage">
-                    {this.state.showRectangles ? (
+                <div styleName="front-page" className="businessHome">
+                    {/*this.state.showRectangles*/ false ? (
                         <div styleName="skewed-rectangles-container">
                             <div styleName="skewed-rectangles">
                                 {this.skewedRectangles(11, { rectanglesOnly: true })}
@@ -216,13 +216,12 @@ class BusinessHome extends Component {
                             </div>
                         </div>
                     ) : null}
-                    <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
-                        <div className="content">
-                            <h1
-                                className="bigTitle font34px font30pxUnder900 font24pxUnder400"
-                                style={{ color: "#72d6f5" }}
-                            >
-                                Know which candidates will<br />
+                    <div styleName="top-space" />
+                    <div styleName="top-content-container">
+                        <div styleName="content">
+                            <h1 className="font40px font30pxUnder900 font26pxUnder600 font22pxUnder500 font18pxUnder400">
+                                <span style={{ color: "white" }}>Know which candidates will</span>
+                                <br />
                                 <span
                                     style={{ whiteSpace: "pre" }}
                                     ref={typedSpan => {
@@ -233,37 +232,29 @@ class BusinessHome extends Component {
                             <div styleName="get-started-input-container">
                                 <textarea
                                     styleName="get-started-input"
+                                    className="font28px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
                                     type="text"
-                                    placeholder="Enter a position"
                                     name="position"
+                                    placeholder="Who do you need to hire?"
                                     value={this.state.position}
                                     onChange={this.onChange.bind(this)}
                                 />
                                 <div />
                                 <PositionsDropDown inputText={this.state.position} />
                             </div>
-                            {/*<div className="infoText clickableNoUnderline font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600" onClick={this.handleOpen}>
-                                <img src={"images/businessHome/PlayButton" + this.props.png} alt="Play Button" className="playButton"/>
-                                <div>See how it works in 2 minutes</div>
-                            </div>*/}
+                            <div
+                                styleName="see-how-it-works"
+                                className="pointer font18px font16pxUnder1000 font14pxUnder800 font12pxUnder600"
+                                onClick={this.handleOpen}
+                            >
+                                <img
+                                    src={"images/businessHome/PlayButton" + this.props.png}
+                                    alt="Play Button"
+                                    styleName="play-button"
+                                />
+                                <div>See how it works</div>
+                            </div>
                         </div>
-                        <figure styleName="product-screenshots">
-                            <div styleName="my-candidates-screenshot">
-                                <img
-                                    src={
-                                        "images/businessHome/CandidatesScreenshotTop" +
-                                        this.props.jpg
-                                    }
-                                    alt="My Candidates Page Screenshot"
-                                />
-                            </div>
-                            <div styleName="results-screenshot">
-                                <img
-                                    src={"images/businessHome/ProfileScreenshot" + this.props.jpg}
-                                    alt="Candidate Results Page Screenshot"
-                                />
-                            </div>
-                        </figure>
                     </div>
                 </div>
             </section>
@@ -482,7 +473,7 @@ class BusinessHome extends Component {
                         content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions."
                     />
                 </MetaTags>
-                <div className="blackBackground businessHome">
+                <div className="businessHome">
                     {this.introductionSection()}
 
                     {this.screenshotsSection()}

@@ -26,6 +26,7 @@ body {
     --min-screen-width: 300px;
     --min-screen-height: 300px;
     --admin-menu-width: 0px;
+    --non-admin-menu-height: 72px;
 }
 
 .primary-orange {
@@ -218,7 +219,7 @@ body {
 
 header {
     position: fixed;
-    height: 72px;
+    height: var(--non-admin-menu-height);
     top: 0;
     width: 100%;
     color: rgb(32, 32, 32);
@@ -226,11 +227,15 @@ header {
     -moz-box-shadow: 0px 8px 10px -3px;
     box-shadow: 0px 8px 10px -3px;
     transition: box-shadow 0.2s ease-in-out;
+    transition: background-color 0.5s ease-in-out;
     background-color: var(--primary-black-dark);
     font-size: 12px;
 }
 header.noShadow {
     box-shadow: none;
+}
+header.noShadow.transparent-if-no-shadow {
+    background-color: initial;
 }
 header + div.headerSpace {
     width: 100%;
@@ -662,10 +667,6 @@ form > h1 {
     --contentColumnWidth: calc(1040px / var(--contentColumns));
     --gutterColumnWidth: var(--contentColumnWidth);
 }
-.businessHome.blackBackground {
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
 
 #employerOnboarding {
     position: relative;
@@ -720,59 +721,11 @@ form > h1 {
     opacity: 0.3;
 }
 
-.businessHome.frontPage {
-    position: relative;
-    padding-top: 138px;
-    /* padding-bottom: 200px; */
-    padding-bottom: 75px;
-}
-.bigTitle {
-    margin-bottom: 20px;
-}
-.businessHome > .infoContainer {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    padding: 0 20px;
-    margin: 0 auto;
-    max-width: 1040px;
-    position: relative;
-    z-index: 10;
-
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.infoContainer > .content {
-    -webkit-box-flex: 1;
-    -ms-flex: 1 0 55%;
-    flex: 1 0 55%;
-    color: white;
-}
 .flex {
     display: flex;
 }
 .i {
     font-style: italic;
-}
-.infoText {
-    margin: 0;
-}
-.infoText.flex {
-    justify-content: space-between;
-    flex-direction: row;
-    max-width: 450px;
-}
-.infoText > div {
-    display: inline-block;
-}
-#pricingSection .infoTextContainer {
-    width: calc(100% - 40px);
-    margin-left: 20px;
-}
-#pricingSection .infoText.flex {
-    width: initial;
-    max-width: 600px;
 }
 
 .menuButtonArea {
@@ -1111,14 +1064,10 @@ form > h1 {
     margin: 20px 10px 40px;
 }
 
-.playButton {
-    height: 30px;
-    margin-right: 10px;
-}
-
 #three-screenshots {
-    margin: 160px auto 60px;
+    margin: 0 auto 60px;
     max-width: 1240px;
+    padding-top: 40px;
 }
 
 #businessHomeStatistics > div:nth-child(2) {
@@ -1861,6 +1810,17 @@ form > h1 {
 }
 #pathwayShortDescription {
     margin-left: 20%;
+}
+
+.hover-move-arrow {
+    margin: 0 5px 0 0;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+*:hover + .hover-move-arrow {
+    margin: 0 0 0 5px;
 }
 
 #businessHomeStatistics .learn-more-text > span {
@@ -4773,10 +4733,6 @@ textarea.multipleChoiceCustomAnswer {
         margin-top: 40px;
     }
 
-    .businessHome.frontPage {
-        padding-bottom: 25px;
-    }
-
     .drawerOpener {
         visibility: visible;
         position: relative;
@@ -5183,10 +5139,6 @@ textarea.multipleChoiceCustomAnswer {
         display: none;
     }
 
-    .businessHome.frontPage {
-        padding-bottom: 50px;
-    }
-
     #pricingSection > div > div > div > ul {
         list-style: none;
     }
@@ -5463,18 +5415,6 @@ textarea.multipleChoiceCustomAnswer {
 
     .pathwayContentTimeText {
         margin-top: 5px;
-    }
-
-    /* HOME PAGE */
-    .businessHome.frontPage {
-        padding-top: 40px;
-    }
-    .businessHome > .infoContainer {
-        flex-direction: column;
-        padding: 0 30px;
-    }
-    .infoText.flex {
-        margin-right: calc((100% - 350px) / 1.5);
     }
 
     .blackInput.googleJobs {
@@ -6165,9 +6105,6 @@ textarea.multipleChoiceCustomAnswer {
         width: calc(100% / 3);
     }
 
-    .businessHome.frontPage {
-        padding-top: 20px;
-    }
     .pointBox {
         width: 27px;
     }
@@ -6215,10 +6152,6 @@ textarea.multipleChoiceCustomAnswer {
     .marginSides40pxUnder700 {
         margin-right: 20px;
         margin-left: 20px;
-    }
-
-    .frontPage .infoText.flex {
-        margin-right: calc((100% - 250px) / 1.2);
     }
 
     .marginTop20pxUnder400 {
