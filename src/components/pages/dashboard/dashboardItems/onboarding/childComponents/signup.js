@@ -111,11 +111,12 @@ class Signup extends Component {
         console.log("onboard:", this.props.onboard);
         const positions = this.props.onboardingPositions;
         const onboard = this.props.onboard;
+        const selectedJobsToBeDone = this.props.selectedJobsToBeDone;
 
         // get the positions here from the onboardingPositions
 
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positions, onboard };
+        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone };
 
         // mark a business signup in google analytics
         ReactGA.event({
@@ -263,7 +264,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         png: state.users.png,
         onboardingPositions: state.users.onboardingPositions,
-        onboard: state.users.guestOnboard
+        onboard: state.users.guestOnboard,
+        selectedJobsToBeDone: state.users.selectedJobsToBeDone
     };
 }
 
