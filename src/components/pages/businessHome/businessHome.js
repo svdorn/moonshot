@@ -234,6 +234,7 @@ class BusinessHome extends Component {
                             <div styleName="get-started-input-container">
                                 <textarea
                                     styleName="get-started-input"
+                                    className="font28px"
                                     type="text"
                                     placeholder="Enter a position"
                                     name="position"

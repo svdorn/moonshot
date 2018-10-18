@@ -300,7 +300,7 @@ class Menu extends Component {
         let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
         // class of any menu item that is NOT currently selected
         let menuItemClass =
-            "menuItem font16px borderBottomClickable noWrap primary-white wideScreenMenuItem";
+            "menuItem font14px borderBottomClickable noWrap primary-white wideScreenMenuItem";
         // class of any menu item that IS currently selected
         const selectedMenuItemClass = menuItemClass + " currentRoute";
 
@@ -406,7 +406,6 @@ class Menu extends Component {
         else if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
-                { optionType: "anchor", title: "Home", url: "/", anchor: "home-top" },
                 { optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing" },
                 { optionType: "modal", title: "Contact Us", url: "/", modal: "contactUs" },
                 { optionType: "separator" },
