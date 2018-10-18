@@ -66,15 +66,19 @@ class WhatToDo extends Component {
             .then(res => {
                 if (Array.isArray(res.data.positions) && res.data.positions.length > 0) {
                     this.next();
+                } else {
+                    self.setState({ step:"position" })
                 }
             })
             .catch(err => {
 
             });
         } else {
-            const onboardingPositions = 0
+            const onboardingPositions = this.props.onboardingPositions;
             if (onboardingPositions && Array.isArray(onboardingPositions) && onboardingPositions.length > 0) {
                 this.next();
+            } else {
+                this.setState({ step:"position" })
             }
         }
     }
