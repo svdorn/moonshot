@@ -721,56 +721,11 @@ form > h1 {
     opacity: 0.3;
 }
 
-.businessHome.frontPage {
-    position: relative;
-    padding-top: 30vh;
-    /* padding-bottom: 200px; */
-    padding-bottom: 75px;
-}
-.businessHome > .infoContainer {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    padding: 0 20px;
-    margin: 0 auto;
-    max-width: 1040px;
-    position: relative;
-    z-index: 10;
-
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.infoContainer > .content {
-    -webkit-box-flex: 1;
-    -ms-flex: 1 0 55%;
-    flex: 1 0 55%;
-    color: white;
-}
 .flex {
     display: flex;
 }
 .i {
     font-style: italic;
-}
-.infoText {
-    margin: 0;
-}
-.infoText.flex {
-    justify-content: space-between;
-    flex-direction: row;
-    max-width: 450px;
-}
-.infoText > div {
-    display: inline-block;
-}
-#pricingSection .infoTextContainer {
-    width: calc(100% - 40px);
-    margin-left: 20px;
-}
-#pricingSection .infoText.flex {
-    width: initial;
-    max-width: 600px;
 }
 
 .menuButtonArea {
@@ -1107,11 +1062,6 @@ form > h1 {
 
 .upload-candidate-csv-dialog .drag-here-text {
     margin: 20px 10px 40px;
-}
-
-.playButton {
-    height: 30px;
-    margin-right: 10px;
 }
 
 #three-screenshots {
@@ -4783,10 +4733,6 @@ textarea.multipleChoiceCustomAnswer {
         margin-top: 40px;
     }
 
-    .businessHome.frontPage {
-        padding-bottom: 25px;
-    }
-
     .drawerOpener {
         visibility: visible;
         position: relative;
@@ -5193,10 +5139,6 @@ textarea.multipleChoiceCustomAnswer {
         display: none;
     }
 
-    .businessHome.frontPage {
-        padding-bottom: 50px;
-    }
-
     #pricingSection > div > div > div > ul {
         list-style: none;
     }
@@ -5473,18 +5415,6 @@ textarea.multipleChoiceCustomAnswer {
 
     .pathwayContentTimeText {
         margin-top: 5px;
-    }
-
-    /* HOME PAGE */
-    .businessHome.frontPage {
-        padding-top: 40px;
-    }
-    .businessHome > .infoContainer {
-        flex-direction: column;
-        padding: 0 30px;
-    }
-    .infoText.flex {
-        margin-right: calc((100% - 350px) / 1.5);
     }
 
     .blackInput.googleJobs {
@@ -6175,9 +6105,6 @@ textarea.multipleChoiceCustomAnswer {
         width: calc(100% / 3);
     }
 
-    .businessHome.frontPage {
-        padding-top: 20px;
-    }
     .pointBox {
         width: 27px;
     }
@@ -6225,10 +6152,6 @@ textarea.multipleChoiceCustomAnswer {
     .marginSides40pxUnder700 {
         margin-right: 20px;
         margin-left: 20px;
-    }
-
-    .frontPage .infoText.flex {
-        margin-right: calc((100% - 250px) / 1.2);
     }
 
     .marginTop20pxUnder400 {

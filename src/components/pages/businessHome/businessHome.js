@@ -205,7 +205,7 @@ class BusinessHome extends Component {
         return (
             <section id="introduction" styleName="introduction">
                 <a id="home-top" name="home-top" className="anchor" />
-                <div className="businessHome frontPage">
+                <div styleName="front-page" className="businessHome">
                     {/*this.state.showRectangles*/ false ? (
                         <div styleName="skewed-rectangles-container">
                             <div styleName="skewed-rectangles">
@@ -216,10 +216,10 @@ class BusinessHome extends Component {
                             </div>
                         </div>
                     ) : null}
-                    <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
-                        <div className="content">
+                    <div styleName="top-content-container">
+                        <div styleName="content">
                             <h1
-                                className="font40px font30pxUnder900 font24pxUnder400"
+                                className="font40px font30pxUnder900 font26pxUnder600 font22pxUnder500 font18pxUnder400"
                                 style={{ color: "#72d6f5" }}
                             >
                                 <span style={{ color: "white" }}>Know which candidates will</span>
@@ -234,7 +234,7 @@ class BusinessHome extends Component {
                             <div styleName="get-started-input-container">
                                 <textarea
                                     styleName="get-started-input"
-                                    className="font28px"
+                                    className="font28px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
                                     type="text"
                                     placeholder="Enter a position"
                                     name="position"
@@ -244,10 +244,18 @@ class BusinessHome extends Component {
                                 <div />
                                 <PositionsDropDown inputText={this.state.position} />
                             </div>
-                            {/*<div className="infoText clickableNoUnderline font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600" onClick={this.handleOpen}>
-                                <img src={"images/businessHome/PlayButton" + this.props.png} alt="Play Button" className="playButton"/>
-                                <div>See how it works in 2 minutes</div>
-                            </div>*/}
+                            <div
+                                styleName="see-how-it-works"
+                                className="pointer font18px font16pxUnder1000 font14pxUnder800 font12pxUnder600"
+                                onClick={this.handleOpen}
+                            >
+                                <img
+                                    src={"images/businessHome/PlayButton" + this.props.png}
+                                    alt="Play Button"
+                                    styleName="play-button"
+                                />
+                                <div>See how it works</div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -9,8 +9,39 @@
 .statistics-section {
 }
 
+.front-page {
+    position: relative;
+    padding-top: 30vh;
+}
+
+.top-content-container {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    padding: 0 20px;
+    margin: 0 auto;
+    max-width: 80%;
+    position: relative;
+    z-index: 10;
+
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.top-content-container > .content {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 0 55%;
+    flex: 1 0 55%;
+    color: white;
+}
+.top-content-container {
+    flex-direction: column;
+    padding: 0 30px;
+}
+
 .introduction {
     height: 100vh;
+    min-height: 400px;
     width: 100%;
     background: linear-gradient(to bottom right, #1e1e1e, var(--primary-black-dark));
     margin-top: calc(-1 * var(--non-admin-menu-height));
@@ -92,6 +123,17 @@
 .drop-down-option:not(:first-child):hover {
     background-color: var(--primary-black-light);
     color: var(--primary-cyan);
+}
+
+.see-how-it-works {
+    margin-top: 20px;
+}
+.see-how-it-works > div {
+    display: inline-block;
+}
+.play-button {
+    height: 30px;
+    margin-right: 10px;
 }
 
 .screenshot-left {
@@ -766,9 +808,20 @@
         -ms-transition: all 0.5s ease;
         transition: all 0.5s ease;
     }
+
+    .get-started-input-container {
+        width: 450px;
+        height: 45px;
+        margin-top: 18px;
+    }
 }
 
 @media only screen and (max-width: 800px) {
+    .play-button {
+        height: 26px;
+        margin-right: 8px;
+    }
+
     .screenshot-view {
         text-align: center;
         height: 180px;
@@ -883,6 +936,10 @@
 }
 
 @media only screen and (max-width: 700px) {
+    .top-content-container {
+        max-width: calc(30% + 360px);
+    }
+
     .stats-box {
         height: 190px;
         width: 180px;
@@ -1034,6 +1091,18 @@
 }
 
 @media only screen and (max-width: 600px) {
+    .get-started-input-container {
+        width: 410px;
+        height: 41px;
+        margin-top: 14px;
+    }
+    .see-how-it-works {
+        margin-top: 10px;
+    }
+    .play-button {
+        height: 24px;
+    }
+
     .stats-box {
         height: 160px;
         width: 280px;
@@ -1101,6 +1170,11 @@
 }
 
 @media only screen and (max-width: 500px) {
+    .get-started-input-container {
+        width: 350px;
+        height: 39px;
+    }
+
     .screenshot-view {
         margin-bottom: -20px;
         margin: 0px;
@@ -1157,6 +1231,11 @@
 }
 
 @media only screen and (max-width: 400px) {
+    .get-started-input-container {
+        width: 280px;
+        height: 36px;
+        margin-top: 12px;
+    }
     .screenshot-left > img,
     .screenshot-right > img {
         height: 172.8px;
@@ -1215,6 +1294,17 @@
         > .skewed-rectangles:first-child
         > .skewed-rectangle:nth-child(4) {
         grid-column-start: 26;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    .top-content-container {
+        padding: 0 15px;
+    }
+}
+@media only screen and (max-width: 320px) {
+    .top-content-container {
+        padding: 0 6px;
     }
 }
 
