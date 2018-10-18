@@ -437,6 +437,12 @@
 .circular-progress {
     text-align: center;
 }
+.circular-progress-fully-center {
+    position: absolute;
+    bottom: calc(var(--item-width)/2);
+    left: 65%;
+    transform: translate(-50%);
+}
 
 .onboarding-title {
     color: var(--primary-cyan);
