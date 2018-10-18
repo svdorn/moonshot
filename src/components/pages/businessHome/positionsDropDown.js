@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {} from "../../../actions/usersActions";
-import {} from "../../../miscFunctions";
+import { goTo } from "../../../miscFunctions";
 
 import "./businessHome.css";
 
@@ -79,14 +79,17 @@ class PositionsDropDown extends Component {
         this.state = {};
     }
 
+    // if you click on a role name
     typeAdvance = type => () => {
-        console.log("advancing with type: ", type);
+        goTo(`/explore?role=${type}`);
     };
 
+    // if you clicked on a specific title
     nameAdvance = name => () => {
-        console.log("advancing with position name: ", name);
+        goTo(`/explore?title=${name}`);
     };
 
+    // display the five functions as options if there is no search text
     noTextOptions() {
         const options = posTypes.map(type => {
             return (
@@ -99,8 +102,8 @@ class PositionsDropDown extends Component {
         return options;
     }
 
+    // display the matching searched position titles if there is any search text
     suggestions() {
-        console.log("this.props.inputText: ", this.props.inputText);
         const options = allTitles
             .filter(s => s.toLowerCase().includes(this.props.inputText.toLowerCase()))
             .map(title => {
