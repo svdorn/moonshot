@@ -87,12 +87,8 @@ class BusinessHome extends Component {
         this.setState({ infoIndex });
     }
 
-    handleOpen = () => {
-        this.setState({ open: true });
-    };
-
-    handleClose = () => {
-        this.setState({ open: false, dialogScreen: 1 });
+    handleOpenVideo = () => {
+        goTo("/explore?tutorialVideo=true");
     };
 
     handleCheckMarkClick() {
@@ -245,7 +241,7 @@ class BusinessHome extends Component {
                             <div
                                 styleName="see-how-it-works"
                                 className="pointer font18px font16pxUnder1000 font14pxUnder800 font12pxUnder600"
-                                onClick={this.handleOpen}
+                                onClick={this.handleOpenVideo}
                             >
                                 <img
                                     src={"images/businessHome/PlayButton" + this.props.png}
