@@ -15,7 +15,7 @@ const validate = values => {
     const errors = {};
     const requiredFields = [
         'name',
-        'companyName',
+        'company',
         'email',
         'password',
     ];
@@ -46,6 +46,7 @@ class Signup extends Component {
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleFrameChange = this.handleFrameChange.bind(this);
     }
 
 
@@ -73,7 +74,6 @@ class Signup extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-
         if (!this.state.agreeingToTerms) {
             return this.props.addNotification("Must agree to Terms and Conditions and Privacy Policy.", "error");
         }
@@ -86,7 +86,7 @@ class Signup extends Component {
             'email',
             'password',
             'name',
-            'companyName'
+            'company'
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -97,7 +97,7 @@ class Signup extends Component {
         if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
 
         // grab values we need from the form
-        const { password, email } = vals;
+        const { name, company, password, email } = vals;
 
         if (!isValidEmail(email)) {
             return this.props.addNotification("Invalid email.", "error");
@@ -105,13 +105,17 @@ class Signup extends Component {
         if (!isValidPassword(password)) {
             return this.props.addNotification("Password must be at least 8 characters long", "error");
         }
+        console.log("here")
+        console.log("vals: ", vals);
+        console.log("onboardingpositions: ", this.props.onboardingPositions);
+        console.log("onboard:", this.props.onboard);
+        const positions = this.props.onboardingPositions;
+        const onboard = this.props.onboard;
 
         // get the positions here from the onboardingPositions
 
-        // grab values we need from state (which got its values from the url)
-        const { name, company, positionTitle, positionType, isManager } = this.state;
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positionTitle, positionType, isManager };
+        const args = { password, email, name, company, positions, onboard };
 
         // mark a business signup in google analytics
         ReactGA.event({
@@ -130,15 +134,49 @@ class Signup extends Component {
         });
     }
 
-    handleFrameChange = () => {
-        this.setState({ frame: 2 })
+    handleFrameChange(e){
+        e.preventDefault();
+        const vals = this.props.formData.businessSignup.values;
+        let notValid = false;
+        const requiredFields = [
+            'name',
+            'company'
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
+        else this.setState({ frame: 2 })
     }
 
     makeFrame1() {
         return(
-            <div>
-                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.handleFrameChange} style={{padding: "2px 4px"}}>
-                    Enter &#8594;
+            <div className="center">
+                <div className="primary-cyan font22px font20pxUnder500">
+                    Add Your Info
+                </div>
+                <div className="font14px">
+                    We need this to setup your positions.
+                </div>
+                <div className="inputContainer" styleName="signup-fields">
+                    <Field
+                        name="name"
+                        component={renderTextField}
+                        label="Full Name"
+                    /><br/>
+                </div>
+                <div className="inputContainer" styleName="signup-fields">
+                    <Field
+                        name="company"
+                        component={renderTextField}
+                        label="Company"
+                    /><br/>
+                </div>
+                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop20px" onClick={this.handleFrameChange} style={{padding: "2px 4px"}}>
+                    Onward &#8594;
                 </button>
             </div>
         )
@@ -193,7 +231,6 @@ class Signup extends Component {
                         Enter &#8594;
                     </button>
                 }
-
             </div>
         )
     }
@@ -225,7 +262,8 @@ function mapStateToProps(state) {
         loadingCreateBusiness: state.users.loadingSomething,
         currentUser: state.users.currentUser,
         png: state.users.png,
-        onboardingPositions: state.users.onboardingPositions
+        onboardingPositions: state.users.onboardingPositions,
+        onboard: state.users.guestOnboard
     };
 }
 

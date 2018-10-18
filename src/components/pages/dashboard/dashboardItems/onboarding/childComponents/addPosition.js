@@ -104,7 +104,7 @@ class AddPosition extends Component {
 
             // get all necessary params
             const user = this.props.currentUser;
-            const positionName = vals.position;
+            const name = vals.position;
             const positionType = this.state.positionType;
             const isManager = this.state.newPosIsManager;
 
@@ -115,13 +115,13 @@ class AddPosition extends Component {
 
                 this.props.startLoading();
 
-                axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName, positionType, isManager})
+                axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, name, positionType, isManager})
                 .then(res => {
                     self.setState({ positionType: "Position Type", newPosIsManager: false });
                     self.props.stopLoading();
                     if (addAnotherPosition) {
                         self.props.reset();
-                        self.props.addNotification(positionName + " position successfully added.")
+                        self.props.addNotification(name + " position successfully added.")
                     } else {
                         self.propt.next();
                     }
@@ -131,7 +131,7 @@ class AddPosition extends Component {
                     self.setState({addPositionError: "Error adding position."})
                 })
             } else {
-                const position = { positionName, positionType, isManager };
+                const position = { name, positionType, isManager };
                 console.log(position);
                 const onboardingPositions = this.props.onboardingPositions;
 
@@ -139,13 +139,11 @@ class AddPosition extends Component {
 
                 positions.push(position);
 
-                console.log("positions: ", positions);
                 this.props.updateStore("onboardingPositions", positions);
                 if (addAnotherPosition) {
-                    console.log("here")
                     this.setState({ positionType: "Position Type", newPosIsManager: false });
                     this.props.reset();
-                    this.props.addNotification(positionName + " position successfully added.")
+                    this.props.addNotification(name + " position successfully added.")
                 } else {
                     this.props.next();
                 }
@@ -203,8 +201,6 @@ class AddPosition extends Component {
         const positionTypeItems = this.state.positionTypes.map(function (positionType, index) {
             return <MenuItem value={positionType} primaryText={positionType} key={index}/>
         });
-
-        console.log("onboarding positions: ", this.props.onboardingPositions);
 
         return (
             <div>
