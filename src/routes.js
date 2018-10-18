@@ -19,7 +19,7 @@ import Pricing from "./components/pages/businessPages/pricing";
 import BusinessSignup from "./components/pages/businessPages/businessSignup";
 import Chatbot from "./components/pages/businessPages/landbot";
 
-import BusinessHome from "./components/pages/businessHome";
+import BusinessHome from "./components/pages/businessHome/businessHome";
 import Influencer from "./components/pages/influencer";
 import Main from "./main";
 import AuthenticatedComponent from "./components/authenticatedComponent/authenticatedComponent";
