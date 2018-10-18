@@ -20,6 +20,8 @@ import {
 } from 'material-ui';
 import axios from 'axios';
 
+import "../../../dashboard.css";
+
 const required = value => (value ? undefined : 'This field is required.');
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -51,7 +53,13 @@ class AddPosition extends Component {
             addPositionError: undefined,
         }
 
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.intercomMsg = this.intercomMsg.bind(this);
+    }
+
+    intercomMsg = () => {
+        const { _id, verificationToken } = this.props.currentUser;
+        // trigger intercom event
+        this.props.intercomEvent('onboarding-step-4', _id, verificationToken, null);
     }
 
     handlePositionTypeChange = (event, index) => {
@@ -68,9 +76,8 @@ class AddPosition extends Component {
         this.setState(newState);
     }
 
-    handleSubmit(e) {
+    handleSubmit(e, addAnotherPosition) {
         try {
-            console.log("here");
             // TODO: if the user is signed in, add like this, if not just put the data in redux state
             // TODO: need to be able to add multiple positions
             let self = this;
@@ -112,7 +119,11 @@ class AddPosition extends Component {
                 .then(res => {
                     self.setState({ positionType: "Position Type", newPosIsManager: false });
                     self.props.stopLoading();
-                    self.props.reset();
+                    if (addAnotherPosition) {
+                        self.props.reset();
+                    } else {
+                        self.propt.next();
+                    }
                 })
                 .catch(error => {
                     self.props.stopLoading();
@@ -129,6 +140,13 @@ class AddPosition extends Component {
 
                 console.log("positions: ", positions);
                 this.props.updateStore("onboardingPositions", positions);
+                if (addAnotherPosition) {
+                    console.log("here")
+                    this.setState({ positionType: "Position Type", newPosIsManager: false });
+                    this.props.reset();
+                } else {
+                    this.props.next();
+                }
             }
         }
 
@@ -188,7 +206,7 @@ class AddPosition extends Component {
 
         return (
             <div>
-                <form onSubmit={this.handleSubmit} className="center">
+                <form className="center">
                     {this.state.mustSelectTypeError ?
                         <div className="secondary-red">Must select a position type.</div>
                         : null
@@ -222,10 +240,24 @@ class AddPosition extends Component {
                         </div>
                         {"Position is a manager role"}
                     </div>
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" type="submit" style={{padding: "2px 4px", marginBottom:"5px"}}>
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={e => this.handleSubmit(e, true)} style={{padding: "2px 4px", marginBottom:"5px"}}>
                         Add Another Position &#8594;
                     </button>
                     {this.state.addPositionError ? <div className="secondary-red font16px marginTop10px">{this.state.addPositionError}</div> : null }
+                    <div styleName="emoji-buttons-full">
+                        <div onClick={e => this.handleSubmit(e, false)}>
+                            <img
+                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
+                            />
+                            <div style={{paddingTop: "5px"}}>All set</div>
+                        </div>
+                        <div onClick={this.intercomMsg}>
+                            <img
+                                src={`/icons/emojis/Face${this.props.png}`}
+                            />
+                            <div style={{paddingTop: "5px"}}>More info</div>
+                        </div>
+                    </div>
                 </form>
             </div>
         );

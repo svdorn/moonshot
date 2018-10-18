@@ -196,21 +196,7 @@ class WhatToDo extends Component {
                     Add Your First Position
                 </div>
                 <div>
-                    <AddPosition />
-                </div>
-                <div styleName="emoji-buttons-full">
-                    <div onClick={this.next}>
-                        <img
-                            src={`/icons/emojis/ThumbsUp${this.props.png}`}
-                        />
-                        <div style={{paddingTop: "5px"}}>All set</div>
-                    </div>
-                    <div onClick={this.intercomMsg}>
-                        <img
-                            src={`/icons/emojis/Face${this.props.png}`}
-                        />
-                        <div style={{paddingTop: "5px"}}>More info</div>
-                    </div>
+                    <AddPosition next={this.next} />
                 </div>
             </div>
         );
@@ -219,6 +205,7 @@ class WhatToDo extends Component {
     signupView() {
         return(
             <div styleName="full-step-container">
+                Signup
             </div>
         );
     }
