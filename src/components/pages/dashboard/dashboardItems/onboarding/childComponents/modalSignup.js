@@ -37,6 +37,13 @@ const validate = values => {
     return errors;
 };
 
+const defaultInfo = {
+    header1: "Add Your Info",
+    body1: "We need this to setup your account.",
+    header2: "Secure Your Login",
+    body2: "Fill this out so you can log back in.",
+};
+
 class ModalSignup extends Component {
     constructor(props) {
         super(props);
@@ -44,8 +51,12 @@ class ModalSignup extends Component {
         this.bound_handleKeyPress = this.handleKeyPress.bind(this);
 
         this.state = {
+            open: false,
             agreeingToTerms: false,
-            frame: 1
+            frame: 1,
+            info: defaultInfo,
+            type: undefined,
+            name: undefined
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,6 +68,53 @@ class ModalSignup extends Component {
         // add listener for keyboard enter key
         const self = this;
         document.addEventListener('keypress', self.bound_handleKeyPress);
+    }
+
+    componentDidUpdate() {
+        if (this.state.open != this.props.open) {
+            const open = this.props.open;
+            if (!open) {
+                this.setState({ info: defaultInfo, open })
+            }
+            const info = this.props.info;
+
+            if (!info) {
+                return;
+            }
+
+            if (info.type === "menu") {
+                switch(info.name) {
+                    case "Button":
+                        this.setState({ open });
+                        break;
+                    case "Candidates":
+                    case "Employees":
+                    case "Evaluations":
+                        const infoContent = {
+                            header1: `${info.name} Page Info`,
+                            body1: "We need this so we can set up the page for your company.",
+                            header2: "Info Successfully Added",
+                            body2: "Fill this out so you can log back in and freely access your page."
+                        };
+                        this.setState({ info: infoContent, type: info.type, name: info.name, open })
+                    default:
+                        this.setState({ open });
+                        break;
+                }
+            } else {
+                switch(info.name.toLowerCase()) {
+                    case "candidates":
+                        break;
+                    case "employees":
+                        break;
+                    case "evaluations":
+                        break;
+                    default:
+                        this.setState({ open });
+                        break;
+                }
+            }
+        }
     }
 
     closeSignupModal = () => {
@@ -163,10 +221,10 @@ class ModalSignup extends Component {
         return(
             <div className="center">
                 <div className="primary-cyan font22px font20pxUnder500">
-                    Add Your Info
+                    { this.state.info.header1 }
                 </div>
                 <div className="font14px">
-                    We need this to setup your positions.
+                    { this.state.info.body1 }
                 </div>
                 <div className="inputContainer" styleName="signup-fields">
                     <Field
@@ -193,10 +251,10 @@ class ModalSignup extends Component {
         return(
             <div className="center">
                 <div className="primary-cyan font22px font20pxUnder500">
-                    Save Your Progress
+                    { this.state.info.header2 }
                 </div>
                 <div className="font14px" style={{marginTop:"-7px"}}>
-                    Fill this out so you can log back in.
+                    { this.state.info.body2 }
                 </div>
                 <div className="inputContainer" styleName="signup-fields">
                     <Field
@@ -295,7 +353,8 @@ function mapStateToProps(state) {
         onboardingPositions: state.users.onboardingPositions,
         onboard: state.users.guestOnboard,
         selectedJobsToBeDone: state.users.selectedJobsToBeDone,
-        open: state.users.signupModalOpen
+        open: state.users.signupModalOpen,
+        info: state.users.signupModalInfo,
     };
 }
 

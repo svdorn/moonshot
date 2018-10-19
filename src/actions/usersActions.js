@@ -52,9 +52,9 @@ export function closeAddPositionModal() {
     };
 }
 
-export function openSignupModal() {
+export function openSignupModal(type, name) {
     return function(dispatch) {
-        dispatch({ type: "OPEN_SIGNUP_MODAL" });
+        dispatch({ type: "OPEN_SIGNUP_MODAL", category: type, name });
         dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: true });
         dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: true });
     };

@@ -71,15 +71,18 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "OPEN_SIGNUP_MODAL":
+            let signupModalInfo = { type: action.category, name: action.name };
             return {
                 ...state,
-                signupModalOpen: true
+                signupModalOpen: true,
+                signupModalInfo
             };
             break;
         case "CLOSE_SIGNUP_MODAL":
             return {
                 ...state,
-                signupModalOpen: false
+                signupModalOpen: false,
+                signupModalInfo: null
             };
             break;
         case "OPEN_ADD_ADMIN_MODAL":

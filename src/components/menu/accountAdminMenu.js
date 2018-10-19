@@ -89,12 +89,12 @@ class AccountAdminMenu extends Component {
         }
         // otherwise open the sign up modal to prompt account creation
         else {
-            this.openSignUpModal();
+            this.openSignUpModal(menuOption.title);
         }
     };
 
-    openSignUpModal = () => {
-        this.props.openSignupModal();
+    openSignUpModal = (name) => {
+        this.props.openSignupModal("menu", name);
     };
 
     render() {
@@ -190,7 +190,7 @@ class AccountAdminMenu extends Component {
             bottomItem = (
                 <div>
                     <img src={`/icons/User${png}`} styleName="user-icon" />
-                    <div styleName="menu-option" onClick={this.openSignUpModal}>
+                    <div styleName="menu-option" onClick={() => this.openSignUpModal("Button")}>
                         <div styleName="user-name">Create Account</div>
                     </div>
                 </div>
