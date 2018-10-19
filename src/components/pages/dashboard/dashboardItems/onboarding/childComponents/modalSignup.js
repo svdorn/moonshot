@@ -9,6 +9,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import ReactGA from 'react-ga';
+import colors from "../../../../../../colors";
 import { renderTextField, renderPasswordField, isValidEmail, goTo, isValidPassword } from "../../../../../../miscFunctions";
 
 import "../../../dashboard.css";
@@ -244,6 +245,21 @@ class ModalSignup extends Component {
     //name, email, password, confirm password, signup button
     render() {
 
+        let navArea = [];
+        const selectedStyle = {
+            background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
+        };
+        // add the circles you can navigate with
+        for (let navCircleIdx = 0; navCircleIdx < 2; navCircleIdx++) {
+            navArea.push(
+                <div
+                    styleName="nav-circle"
+                    style={(this.state.frame - 1) === navCircleIdx ? selectedStyle : {}}
+                    key={`signup modal ${navCircleIdx}`}
+                />
+            );
+        }
+
         return (
             <Dialog
                 open={!!this.props.open}
@@ -252,6 +268,9 @@ class ModalSignup extends Component {
             >
                 <form styleName="modal-signup">
                     {this.state.frame === 1 ? <div>{ this.makeFrame1() }</div> : <div>{ this.makeFrame2() }</div>}
+                    <div className="center">
+                        { navArea }
+                    </div>
                 </form>
             </Dialog>
         );
