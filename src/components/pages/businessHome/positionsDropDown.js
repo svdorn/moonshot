@@ -154,10 +154,12 @@ class PositionsDropDown extends Component {
     }
 
     render() {
-        const options = this.props.inputText ? this.suggestions() : this.noTextOptions();
+        const { inputText } = this.props;
+
+        const options = inputText ? this.suggestions() : this.noTextOptions();
 
         return (
-            <div styleName="drop-down">
+            <div styleName={`drop-down ${inputText ? "titles" : "roles"}`}>
                 <div styleName="drop-down-header drop-down-option">Popular Positions</div>
                 {options}
                 <div />
