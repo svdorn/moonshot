@@ -253,7 +253,7 @@ class ModalSignup extends Component {
         for (let navCircleIdx = 0; navCircleIdx < 2; navCircleIdx++) {
             navArea.push(
                 <div
-                    styleName="nav-circle"
+                    styleName="signup-circle"
                     style={(this.state.frame - 1) === navCircleIdx ? selectedStyle : {}}
                     key={`signup modal ${navCircleIdx}`}
                 />
