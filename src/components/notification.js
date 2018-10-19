@@ -39,16 +39,22 @@ class Notification extends Component {
         if (!this.props.notification) {
             return null;
         }
-        const { user } = this.props;
-        const adminClass =
-            user && user.userType === "accountAdmin" ? "account-admin-notification" : "";
 
+        let pathname = "";
         let shiftClass = "";
         try {
-            if (this.props.location.pathname === "/") {
-                shiftClass = "shift-down";
-            }
+            pathname = this.props.location.pathname;
         } catch (e) {}
+
+        if (pathname === "/") {
+            shiftClass = "shift-down";
+        }
+
+        const { user } = this.props;
+        const adminClass =
+            pathname === "/explore" || (user && user.userType === "accountAdmin")
+                ? "account-admin-notification"
+                : "";
 
         return (
             <div>
