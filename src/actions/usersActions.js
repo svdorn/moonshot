@@ -55,12 +55,16 @@ export function closeAddPositionModal() {
 export function openSignupModal() {
     return function(dispatch) {
         dispatch({ type: "OPEN_SIGNUP_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: true });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: true });
     };
 }
 
 export function closeSignupModal() {
     return function(dispatch) {
         dispatch({ type: "CLOSE_SIGNUP_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
     };
 }
 
