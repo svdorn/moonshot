@@ -3,6 +3,7 @@ import React from "react";
 import { TextField } from "material-ui";
 import colors from "./colors";
 import { browserHistory } from "react-router";
+import clipboard from "clipboard-polyfill";
 
 // Queue implementation
 function Queue() {
@@ -291,6 +292,17 @@ function replaceCharacters(oldString, characters, replacement) {
     return newString;
 }
 
+function copyCustomLink(currentUser, addNotification) {
+    if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
+        let URL = "https://moonshotinsights.io/apply/" + currentUser.businessInfo.uniqueName;
+        URL = encodeURI(URL);
+        clipboard.writeText(URL);
+        addNotification("Link copied to clipboard", "info");
+    } else {
+        addNotification("Error copying link, try refreshing", "error");
+    }
+}
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -307,6 +319,7 @@ const miscFunctions = {
     makePossessive,
     elementInViewport,
     replaceCharacters,
+    copyCustomLink,
 
     Queue,
     Stack

@@ -131,16 +131,28 @@ async function POST_createBusinessAndUser(req, res) {
     // validate arguments
     const stringArgs = [name, company, email, password];
     if (!validArgs({ stringArgs })) {
+        console.log(
+            "name: ",
+            name,
+            "company: ",
+            company,
+            "email: ",
+            email,
+            "password is a string: ",
+            typeof password === "string"
+        );
         return res.status(400).send("Bad Request.");
     }
 
     // validate email
     if (!isValidEmail(email)) {
+        console.log("Invalid email format. Email: ", email);
         return res.status(400).send("Invalid email format.");
     }
 
     // validate positions
     if (!positions || positions.length < 1) {
+        console.log("Positions: ", positions);
         return res.status(400).send("Bad Request.");
     }
 
@@ -163,12 +175,14 @@ async function POST_createBusinessAndUser(req, res) {
             .pop()
             .toLowerCase();
         if (popularProviders.includes(provider)) {
+            console.log("Given email not a work email. Email: ", email);
             return res.status(400).send("Please use your work email address.");
         }
     }
 
     // validate password
     if (!isValidPassword(password)) {
+        console.log("Password not 8 characters long. Password length: ", password.length);
         return res.status(400).send("Password needs to be at least 8 characters long.");
     }
 
@@ -186,6 +200,7 @@ async function POST_createBusinessAndUser(req, res) {
         console.log("Error creating user from business signup: ", createUserError);
         // tell the user they need a different email if this address is taken already
         if (createUserError === errors.EMAIL_TAKEN) {
+            console.log("Email already taken: ", email);
             return res.status(400).send(errors.EMAIL_TAKEN);
         }
         // otherwise return a standard server error message

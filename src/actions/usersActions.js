@@ -525,30 +525,6 @@ export function postAdminInvites(adminEmails, currentUserInfo) {
     };
 }
 
-// POST CREATE LINK
-export function postCreateLink(currentUserInfo, closeDialog) {
-    return function(dispatch) {
-        dispatch({ type: "POST_EMAIL_INVITES_REQUESTED" });
-
-        axios
-            .post("/api/business/postCreateLink", { currentUserInfo })
-            // email invites success
-            .then(function(res) {
-                dispatch({ type: "POST_LINK_SUCCESS", payload: res.data[0].code });
-            })
-            // error posting email invites
-            .catch(function(err) {
-                if (typeof closeDialog === "function") {
-                    closeDialog();
-                }
-                dispatch({
-                    type: "NOTIFICATION_AND_STOP_LOADING",
-                    ...notification("Error creating link, please refresh and try again.", "error")
-                });
-            });
-    };
-}
-
 export function addNotification(message, notificationType) {
     return function(dispatch) {
         dispatch({ type: "ADD_NOTIFICATION", ...notification(message, notificationType) });
