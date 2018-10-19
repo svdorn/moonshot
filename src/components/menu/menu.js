@@ -24,6 +24,8 @@ import { axios } from "axios";
 import { animateScroll } from "react-scroll";
 import AccountAdminMenu from "./accountAdminMenu";
 
+import "./menu.css";
+
 const styles = {
     title: {
         cursor: "pointer"
@@ -312,12 +314,14 @@ class Menu extends Component {
         let hideUnderline = {};
         let additionalHeaderClass = "";
 
+        const onHome = pathname === "/";
+
         // add the class to get rid of the shadow if the current path is one of those
         if (noShadowPages.includes(pathFirstPart)) {
             additionalHeaderClass += " noShadow";
         }
 
-        if (pathname === "/") {
+        if (onHome) {
             // make the header transparent at if haven't scrolled at all
             additionalHeaderClass += " transparent-if-no-shadow";
             // make sure there aren't already event listeners on scroll/resize ...
@@ -402,8 +406,13 @@ class Menu extends Component {
         else if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
-                { optionType: "url", title: "Log In", url: "/login" },
-                { optionType: "separator" },
+                {
+                    optionType: "url",
+                    title: "Log In",
+                    url: "/login",
+                    styleName: onHome ? "hover-color" : ""
+                },
+                { optionType: "separator", styleName: onHome ? "semi-transparent" : "" },
                 { optionType: "tryNow" }
             ];
         }
@@ -462,6 +471,7 @@ class Menu extends Component {
                         <p
                             key={option.title + " desktop"}
                             className={optionClass}
+                            styleName={option.styleName ? option.styleName : ""}
                             onClick={() => goTo(option.url)}
                         >
                             {option.title}
@@ -499,6 +509,7 @@ class Menu extends Component {
                         <div
                             key={"separator"}
                             className={"menuDivider wideScreenMenuItem" + loggedInClass}
+                            styleName={option.styleName ? option.styleName : ""}
                         />
                     );
                     break;
