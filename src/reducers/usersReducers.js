@@ -70,6 +70,18 @@ export function usersReducers(state = initialState, action) {
                 onboardingStep4Open: false
             };
             break;
+        case "OPEN_SIGNUP_MODAL":
+            return {
+                ...state,
+                signupModalOpen: true
+            };
+            break;
+        case "CLOSE_SIGNUP_MODAL":
+            return {
+                ...state,
+                signupModalOpen: false
+            };
+            break;
         case "OPEN_ADD_ADMIN_MODAL":
             return {
                 ...state,

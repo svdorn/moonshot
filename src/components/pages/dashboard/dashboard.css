@@ -549,6 +549,13 @@
     margin-top: 5px;
     text-align: left;
 }
+.modal-signup {
+    padding: 50px;
+    background-color: var(--primary-black-dark);
+    color: var(--secondary-gray);
+    min-width: 270px;
+    min-height: 300px;
+}
 
 .nav-circle {
     width: 16px;

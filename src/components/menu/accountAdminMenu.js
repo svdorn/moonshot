@@ -9,7 +9,8 @@ import {
     signout,
     closeNotification,
     openAddUserModal,
-    openContactUsModal
+    openContactUsModal,
+    openSignupModal
 } from "../../actions/usersActions";
 import { goTo, getFirstName, withinElement } from "../../miscFunctions";
 import { axios } from "axios";
@@ -93,7 +94,7 @@ class AccountAdminMenu extends Component {
     };
 
     openSignUpModal = () => {
-        console.log("showing sign up modal");
+        this.props.openSignupModal();
     };
 
     render() {
@@ -251,7 +252,8 @@ function mapDispatchToProps(dispatch) {
             signout,
             closeNotification,
             openAddUserModal,
-            openContactUsModal
+            openContactUsModal,
+            openSignupModal
         },
         dispatch
     );

@@ -52,6 +52,18 @@ export function closeAddPositionModal() {
     };
 }
 
+export function openSignupModal() {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_SIGNUP_MODAL" });
+    };
+}
+
+export function closeSignupModal() {
+    return function(dispatch) {
+        dispatch({ type: "CLOSE_SIGNUP_MODAL" });
+    };
+}
+
 export function closeCandidatesPopupModal(userId, verificationToken, popups) {
     return function(dispatch) {
         dispatch({ type: "START_LOADING" });
