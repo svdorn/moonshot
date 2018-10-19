@@ -89,7 +89,7 @@ class GuestDashboard extends Component {
                     <div />
                     <div>Dashboard</div>
                 </div>
-                {/* <WelcomeMessage /> */}
+                <WelcomeMessage />
                 <div styleName="dashboard">
                     {activity}
                     <DashboardItem type="Candidates" width={1} />

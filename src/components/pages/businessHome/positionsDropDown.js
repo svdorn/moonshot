@@ -24,7 +24,6 @@ const allTitles = [
     "Full-Stack Developer",
     "DevOps Engineer",
     "Chief Product Officer",
-    "Product Manager",
     "Associate Product Manager",
     "Product Owner",
     "Group Product Manager",
@@ -130,7 +129,7 @@ class PositionsDropDown extends Component {
     noTextOptions() {
         const options = posTypes.map(type => {
             return (
-                <div styleName="drop-down-option" onClick={this.typeAdvance(type)}>
+                <div key={type} styleName="drop-down-option" onClick={this.typeAdvance(type)}>
                     {type}
                 </div>
             );
@@ -145,7 +144,7 @@ class PositionsDropDown extends Component {
             .filter(s => s.toLowerCase().includes(this.props.inputText.toLowerCase()))
             .map(title => {
                 return (
-                    <div styleName="drop-down-option" onClick={this.nameAdvance(title)}>
+                    <div key={title} styleName="drop-down-option" onClick={this.nameAdvance(title)}>
                         {title}
                     </div>
                 );
