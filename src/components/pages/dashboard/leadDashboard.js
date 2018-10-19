@@ -76,7 +76,13 @@ class GuestDashboard extends Component {
         );
 
         return (
-            <div className={"center full-height " + blurredClass}>
+            <div
+                className={
+                    "center full-height " +
+                    blurredClass +
+                    (this.props.blurLeadDashboard ? " blur" : "")
+                }
+            >
                 <MetaTags>
                     <title>Dashboard | Moonshot</title>
                     <meta
@@ -109,7 +115,8 @@ function mapStateToProps(state) {
         roiModal: state.users.roiOnboardingOpen,
         onboardingModel: state.users.onboardingStep4Open,
         selectedJobsToBeDone: state.users.selectedJobsToBeDone,
-        onboardingPositions: state.users.onboardingPositions
+        onboardingPositions: state.users.onboardingPositions,
+        blurLeadDashboard: state.users.blurLeadDashboard
     };
 }
 
