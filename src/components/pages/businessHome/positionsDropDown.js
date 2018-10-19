@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {} from "../../../actions/usersActions";
+import { addNotification, closeNotification } from "../../../actions/usersActions";
 import { goTo } from "../../../miscFunctions";
 
 import "./businessHome.css";
@@ -91,15 +91,22 @@ class PositionsDropDown extends Component {
 
     // move to /explore if "enter" pressed
     handleKeyPress(e) {
+        // get the textarea html element
+        const getStartedInput = document.getElementById("get-started-input");
+        // if there is no input text and the text area is not focused, just return
+        if (!this.props.inputText && document.activeElement !== getStartedInput) {
+            return;
+        }
         // get the keycode of the key that was pressed
         var key = e.which || e.keyCode;
         // 13 is "enter"
         if (key === 13) {
             e.preventDefault();
             if (this.props.inputText) {
+                this.props.closeNotification();
                 this.nameAdvance(this.props.inputText)();
             } else {
-                console.log("FIGURE IT OUT");
+                this.props.addNotification("Please enter a position title!");
             }
         }
     }
@@ -161,7 +168,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({ addNotification, closeNotification }, dispatch);
 }
 
 export default connect(

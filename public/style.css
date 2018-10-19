@@ -7,6 +7,7 @@ body {
     font-family: "Muli", sans-serif;
     min-width: var(--min-screen-width);
     background-color: var(--primary-black-dark);
+    overflow-x: hidden;
 }
 
 :root {
