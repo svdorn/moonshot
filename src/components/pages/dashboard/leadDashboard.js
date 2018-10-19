@@ -20,11 +20,6 @@ class GuestDashboard extends Component {
     constructor(props) {
         super(props);
 
-        console.log(
-            "props.location && props.location.query && props.location.query.tutorialVideo: ",
-            props.location && props.location.query && props.location.query.tutorialVideo
-        );
-
         this.state = {
             // show the banner with introduction to the dashboard
             showWelcomeBanner: true,
@@ -64,7 +59,7 @@ class GuestDashboard extends Component {
 
         const tutorialVideo = (
             <Dialog
-                open={this.state.showTutorialVideo}
+                open={!!this.state.showTutorialVideo}
                 maxWidth={false}
                 onClose={this.closeTutorialVideo}
             >
@@ -112,12 +107,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators(
-        {
-            generalAction
-        },
-        dispatch
-    );
+    return bindActionCreators({ generalAction }, dispatch);
 }
 
 GuestDashboard = withRouter(GuestDashboard);
