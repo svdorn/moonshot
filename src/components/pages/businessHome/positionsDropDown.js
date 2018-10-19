@@ -7,7 +7,7 @@ import { goTo, replaceCharacters } from "../../../miscFunctions";
 
 import "./businessHome.css";
 
-const posTypes = ["Developer", "Product", "Support | Customer Service", "Marketing", "Sales"];
+const posTypes = ["Developer", "Sales", "Support | Customer Service", "Marketing", "Product"];
 // TODO: Make sure none are too long
 const allTitles = [
     "Software Engineer",
