@@ -20,6 +20,8 @@ import {
 } from 'material-ui';
 import axios from 'axios';
 
+import "../../../dashboard.css";
+
 const required = value => (value ? undefined : 'This field is required.');
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -51,7 +53,13 @@ class AddPosition extends Component {
             addPositionError: undefined,
         }
 
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.intercomMsg = this.intercomMsg.bind(this);
+    }
+
+    intercomMsg = () => {
+        const { _id, verificationToken } = this.props.currentUser;
+        // trigger intercom event
+        this.props.intercomEvent('onboarding-step-4', _id, verificationToken, null);
     }
 
     handlePositionTypeChange = (event, index) => {
@@ -68,9 +76,8 @@ class AddPosition extends Component {
         this.setState(newState);
     }
 
-    handleSubmit(e) {
+    handleSubmit(e, addAnotherPosition) {
         try {
-            console.log("here");
             // TODO: if the user is signed in, add like this, if not just put the data in redux state
             // TODO: need to be able to add multiple positions
             let self = this;
@@ -97,7 +104,7 @@ class AddPosition extends Component {
 
             // get all necessary params
             const user = this.props.currentUser;
-            const positionName = vals.position;
+            const name = vals.position;
             const positionType = this.state.positionType;
             const isManager = this.state.newPosIsManager;
 
@@ -108,18 +115,23 @@ class AddPosition extends Component {
 
                 this.props.startLoading();
 
-                axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName, positionType, isManager})
+                axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName: name, positionType, isManager})
                 .then(res => {
                     self.setState({ positionType: "Position Type", newPosIsManager: false });
                     self.props.stopLoading();
-                    self.props.reset();
+                    if (addAnotherPosition) {
+                        self.props.reset();
+                        self.props.addNotification(name + " position successfully added.")
+                    } else {
+                        self.props.next();
+                    }
                 })
                 .catch(error => {
                     self.props.stopLoading();
                     self.setState({addPositionError: "Error adding position."})
                 })
             } else {
-                const position = { positionName, positionType, isManager };
+                const position = { name, positionType, isManager };
                 console.log(position);
                 const onboardingPositions = this.props.onboardingPositions;
 
@@ -127,8 +139,14 @@ class AddPosition extends Component {
 
                 positions.push(position);
 
-                console.log("positions: ", positions);
                 this.props.updateStore("onboardingPositions", positions);
+                if (addAnotherPosition) {
+                    this.setState({ positionType: "Position Type", newPosIsManager: false });
+                    this.props.reset();
+                    this.props.addNotification(name + " position successfully added.")
+                } else {
+                    this.props.next();
+                }
             }
         }
 
@@ -184,13 +202,11 @@ class AddPosition extends Component {
             return <MenuItem value={positionType} primaryText={positionType} key={index}/>
         });
 
-        console.log("onboarding positions: ", this.props.onboardingPositions);
-
         return (
             <div>
-                <form onSubmit={this.handleSubmit} className="center">
+                <form className="center" style={{marginTop:"-10px"}}>
                     {this.state.mustSelectTypeError ?
-                        <div className="secondary-red">Must select a position type.</div>
+                        <div className="secondary-red font10px">Must select a position type.</div>
                         : null
                     }
                     <Field
@@ -222,10 +238,24 @@ class AddPosition extends Component {
                         </div>
                         {"Position is a manager role"}
                     </div>
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" type="submit" style={{padding: "2px 4px", marginBottom:"5px"}}>
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={e => this.handleSubmit(e, true)} style={{padding: "2px 4px", marginBottom:"5px"}}>
                         Add Another Position &#8594;
                     </button>
-                    {this.state.addPositionError ? <div className="secondary-red font16px marginTop10px">{this.state.addPositionError}</div> : null }
+                    {this.state.addPositionError ? <div className="secondary-red font10px">{this.state.addPositionError}</div> : null }
+                    <div styleName="emoji-buttons-full">
+                        <div onClick={e => this.handleSubmit(e, false)}>
+                            <img
+                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
+                            />
+                            <div style={{paddingTop: "5px"}}>All set</div>
+                        </div>
+                        <div onClick={this.intercomMsg}>
+                            <img
+                                src={`/icons/emojis/Face${this.props.png}`}
+                            />
+                            <div style={{paddingTop: "5px"}}>More info</div>
+                        </div>
+                    </div>
                 </form>
             </div>
         );

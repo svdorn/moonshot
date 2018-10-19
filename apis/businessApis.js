@@ -124,13 +124,12 @@ async function GET_billingIsSetUp(req, res) {
 // create a business and the first account admin for that business
 async function POST_createBusinessAndUser(req, res) {
     // get necessary arguments
-    let { name, company, email, positionTitle, password, positionType, isManager } = sanitize(
+    let { name, company, email, password, positions, onboard, selectedJobsToBeDone } = sanitize(
         req.body
     );
-    isManager = !!(isManager === "YES");
 
     // validate arguments
-    const stringArgs = [name, company, email, positionTitle, password, positionType];
+    const stringArgs = [name, company, email, password];
     if (!validArgs({ stringArgs })) {
         return res.status(400).send("Bad Request.");
     }
@@ -138,6 +137,11 @@ async function POST_createBusinessAndUser(req, res) {
     // validate email
     if (!isValidEmail(email)) {
         return res.status(400).send("Invalid email format.");
+    }
+
+    // validate positions
+    if (!positions || positions.length < 1) {
+        return res.status(400).send("Bad Request.");
     }
 
     // make sure the email is a work email, not a gmail or hotmail or whatever
@@ -168,8 +172,14 @@ async function POST_createBusinessAndUser(req, res) {
         return res.status(400).send("Password needs to be at least 8 characters long.");
     }
 
+    businessInterestsPopup = true;
+    // check if positions should be added
+    if (Array.isArray(selectedJobsToBeDone)) {
+        businessInterestsPopup = false;
+    }
+
     // create the user
-    const userInfo = { name, email, password };
+    const userInfo = { name, email, password, onboard, businessInterestsPopup };
     try {
         var user = await createAccountAdmin(userInfo);
     } catch (createUserError) {
@@ -185,7 +195,8 @@ async function POST_createBusinessAndUser(req, res) {
     // create business
     const newBusinessInfo = {
         name: company,
-        positions: [{ name: positionTitle, positionType, isManager }]
+        positions,
+        selectedJobsToBeDone
     };
 
     try {
@@ -279,7 +290,7 @@ async function POST_createBusinessAndUser(req, res) {
 async function createAccountAdmin(info) {
     return new Promise(function(resolve, reject) {
         // get needed args
-        const { name, password, email } = info;
+        const { name, password, email, onboard, businessInterestsPopup } = info;
 
         let user = {
             name,
@@ -310,7 +321,7 @@ async function createAccountAdmin(info) {
             employees: true,
             evaluations: true,
             dashboard: true,
-            businessInterests: true
+            businessInterests: businessInterestsPopup
         };
         // had to select that they agreed to the terms to sign up so must be true
         user.termsAndConditions = [
@@ -340,11 +351,15 @@ async function createAccountAdmin(info) {
         user.notifications.firstTime = true;
         // user will have to do business onboarding
         user.hasFinishedOnboarding = false;
-        user.onboard = {
-            step: 1,
-            highestStep: 1,
-            actions: []
-        };
+        if (onboard) {
+            user.onboard = onboard;
+        } else {
+            user.onboard = {
+                step: 1,
+                highestStep: 1,
+                actions: []
+            };
+        }
         // user.onboarding = {
         //     step: 0,
         //     complete: false,
@@ -453,7 +468,7 @@ async function createAccountAdmin(info) {
 async function createBusiness(info) {
     return new Promise(async function(resolve, reject) {
         // get needed args
-        const { name, positions } = info;
+        const { name, positions, selectedJobsToBeDone } = info;
         // make sure the minimum necessary args are there
         if (!name) {
             return reject("No business name provided.");
@@ -499,6 +514,11 @@ async function createBusiness(info) {
                 // add the position
                 business.positions.push(bizPos);
             }
+        }
+
+        // check if interests should be added
+        if (Array.isArray(selectedJobsToBeDone)) {
+            business.interests = selectedJobsToBeDone;
         }
 
         // create an API_Key for the business
