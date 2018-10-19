@@ -80,6 +80,7 @@
     z-index: 20;
     resize: none;
     white-space: nowrap;
+    overflow-y: hidden;
 }
 .get-started-input::placeholder {
     color: var(--secondary-gray);
@@ -131,7 +132,7 @@
     position: absolute;
     top: 100%;
     left: 0;
-    overflow-x: scroll;
+    overflow-x: hidden;
     z-index: 10;
     font-size: 16px;
 }
