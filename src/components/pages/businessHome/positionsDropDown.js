@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification, closeNotification } from "../../../actions/usersActions";
-import { goTo } from "../../../miscFunctions";
+import { goTo, replaceCharacters } from "../../../miscFunctions";
 
 import "./businessHome.css";
 
@@ -104,7 +104,12 @@ class PositionsDropDown extends Component {
             e.preventDefault();
             if (this.props.inputText) {
                 this.props.closeNotification();
-                this.nameAdvance(this.props.inputText)();
+
+                const replacedPercents = replaceCharacters(this.props.inputText, ["%"], "%25");
+
+                const replacedAnds = replaceCharacters(replacedPercents, ["&"], "%26");
+
+                this.nameAdvance(replacedAnds)();
             } else {
                 this.props.addNotification("Please enter a position title!");
             }

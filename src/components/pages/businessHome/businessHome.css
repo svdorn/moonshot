@@ -79,6 +79,7 @@
     position: relative;
     z-index: 20;
     resize: none;
+    white-space: nowrap;
 }
 .get-started-input::placeholder {
     color: var(--secondary-gray);

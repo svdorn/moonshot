@@ -235,7 +235,6 @@ class BusinessHome extends Component {
                                     placeholder="Who do you need to hire?"
                                     value={this.state.position}
                                     onChange={this.onChange.bind(this)}
-                                    maxlength="20"
                                 />
                                 <div />
                                 <PositionsDropDown inputText={this.state.position} />

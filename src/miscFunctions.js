@@ -267,6 +267,30 @@ function makePossessive(name) {
     }
 }
 
+function replaceCharacters(oldString, characters, replacement) {
+    if (
+        typeof oldString !== "string" ||
+        typeof replacement !== "string" ||
+        !Array.isArray(characters)
+    ) {
+        throw new Error(
+            "replaceCharacters usage: replaceCharacters('dingi', ['i', 'n'], 'ae') results in daeaegae"
+        );
+    }
+
+    let newString = "";
+
+    oldString.split("").forEach(currChar => {
+        if (characters.includes(currChar)) {
+            newString += replacement;
+        } else {
+            newString += currChar;
+        }
+    });
+
+    return newString;
+}
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -282,6 +306,7 @@ const miscFunctions = {
     withinElement,
     makePossessive,
     elementInViewport,
+    replaceCharacters,
 
     Queue,
     Stack
