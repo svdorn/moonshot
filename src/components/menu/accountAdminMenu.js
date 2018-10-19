@@ -208,7 +208,7 @@ class AccountAdminMenu extends Component {
         );
 
         const menuContent = (
-            <div>
+            <div className={this.props.blurMenu ? "blur" : ""}>
                 {logo}
                 <div styleName="main-menu-items">{topItems}</div>
                 <div styleName="menu-bottom">{bottomItem}</div>
@@ -262,7 +262,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
         png: state.users.png,
-        footerOnScreen: state.users.footerOnScreen
+        footerOnScreen: state.users.footerOnScreen,
+        blurMenu: state.users.blurMenu
     };
 }
 

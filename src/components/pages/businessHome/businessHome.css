@@ -46,7 +46,7 @@
     height: 100vh;
     min-height: 400px;
     width: 100%;
-    background: linear-gradient(to bottom right, #1e1e1e, var(--primary-black-dark));
+    background: linear-gradient(to bottom right, #1b1b1b, var(--primary-black-dark));
     margin-top: calc(-1 * var(--non-admin-menu-height));
 
     -webkit-transition: all 0.5s ease;
@@ -74,7 +74,7 @@
     border-radius: 8px;
     border: none;
     padding: 3px 10px;
-    background-color: #222222;
+    background-color: var(--primary-black-dark);
     color: white;
     position: relative;
     z-index: 20;
@@ -83,7 +83,8 @@
     overflow-y: hidden;
 }
 .get-started-input::placeholder {
-    color: var(--secondary-gray);
+    /* color: var(--secondary-gray); */
+    color: white;
 }
 .get-started-input:focus::placeholder {
     color: transparent;

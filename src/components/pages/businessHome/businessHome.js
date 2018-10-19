@@ -215,8 +215,8 @@ class BusinessHome extends Component {
                     <div styleName="top-space" />
                     <div styleName="top-content-container">
                         <div styleName="content">
-                            <h1 className="font40px font30pxUnder900 font26pxUnder600 font22pxUnder500 font18pxUnder400">
-                                <span style={{ color: "white" }}>Know which candidates will</span>
+                            <h1 className="font38px font30pxUnder900 font26pxUnder600 font22pxUnder500 font18pxUnder400">
+                                <span style={{ color: "#d7d7d7" }}>Know which candidates will</span>
                                 <br />
                                 <span
                                     style={{ whiteSpace: "pre" }}

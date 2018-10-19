@@ -316,6 +316,10 @@ class Menu extends Component {
 
         const onHome = pathname === "/";
 
+        if (onHome) {
+            additionalHeaderClass += " extra-dark";
+        }
+
         // add the class to get rid of the shadow if the current path is one of those
         if (noShadowPages.includes(pathFirstPart)) {
             additionalHeaderClass += " noShadow";

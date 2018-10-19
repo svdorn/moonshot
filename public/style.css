@@ -232,6 +232,9 @@ header {
     background-color: var(--primary-black-dark);
     font-size: 12px;
 }
+header.extra-dark {
+    background-color: var(--black-deep-dark);
+}
 header.noShadow {
     box-shadow: none;
 }
@@ -3789,6 +3792,9 @@ button.link {
     filter: none;
 }
 .dialogForBizOverlay {
+    filter: blur(10px);
+}
+.blur {
     filter: blur(10px);
 }
 .dialogForSignup {

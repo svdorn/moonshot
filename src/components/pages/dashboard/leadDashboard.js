@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { generalAction } from "../../../actions/usersActions";
+import { generalAction, updateStore } from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import YouTube from "react-youtube";
@@ -29,8 +29,15 @@ class GuestDashboard extends Component {
         };
     }
 
+    componentDidMount() {
+        if (this.state.showTutorialVideo) {
+            this.props.updateStore("blurMenu", true);
+        }
+    }
+
     closeTutorialVideo = () => {
         this.setState({ showTutorialVideo: false });
+        this.props.updateStore("blurMenu", false);
     };
 
     render() {
@@ -43,7 +50,7 @@ class GuestDashboard extends Component {
         }
 
         let blurredClass = "";
-        if (this.props.roiModal || this.props.onboardingModel) {
+        if (this.props.roiModal || this.props.onboardingModel || this.state.showTutorialVideo) {
             blurredClass = "dialogForBizOverlay";
         }
 
@@ -107,7 +114,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ generalAction }, dispatch);
+    return bindActionCreators({ generalAction, updateStore }, dispatch);
 }
 
 GuestDashboard = withRouter(GuestDashboard);
