@@ -38,10 +38,12 @@ const validate = values => {
 };
 
 const defaultInfo = {
-    header1: "Add Your Info",
-    body1: "We need this to setup your account.",
-    header2: "Secure Your Login",
-    body2: "Fill this out so you can log back in.",
+    header1: null,
+    body1: null,
+    header2: "Add Your Info",
+    body2: "We need this to setup your account.",
+    header3: "Secure Your Login",
+    body3: "Fill this out so you can log back in.",
 };
 
 class ModalSignup extends Component {
@@ -85,18 +87,20 @@ class ModalSignup extends Component {
             if (info.type === "menu") {
                 switch(info.name) {
                     case "Button":
-                        this.setState({ open });
+                        this.setState({ open, frame: 2 });
                         break;
                     case "Candidates":
                     case "Employees":
                     case "Evaluations":
                         const infoContent = {
-                            header1: `${info.name} Page Info`,
-                            body1: "We need this so we can set up the page for your company.",
-                            header2: "Info Successfully Added",
-                            body2: "Fill this out so you can log back in and freely access your page."
+                            header1: `Set Up Your ${info.name} Page`,
+                            body1: `Continue to add some info so we can start populating your ${info.name.toLowerCase()} page.`,
+                            header2: `${info.name} Page Info`,
+                            body2: "We need this so we can set up the page for your company.",
+                            header3: "Info Successfully Added",
+                            body3: "Fill this out so you can log back in and freely access your page."
                         };
-                        this.setState({ info: infoContent, type: info.type, name: info.name, open })
+                        this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1 })
                     default:
                         this.setState({ open });
                         break;
@@ -201,6 +205,10 @@ class ModalSignup extends Component {
 
     handleFrameChange(e){
         e.preventDefault();
+        if (this.state.info.header1 && this.state.frame === 1) {
+            this.setState({ frame: 2 });
+            return;
+        }
         const vals = this.props.formData.businessSignup.values;
         let notValid = false;
         const requiredFields = [
@@ -217,14 +225,14 @@ class ModalSignup extends Component {
         else this.setState({ frame: 2 })
     }
 
-    makeFrame1() {
+    makeFrame2() {
         return(
             <div className="center">
                 <div className="primary-cyan font22px font20pxUnder500">
-                    { this.state.info.header1 }
+                    { this.state.info.header2 }
                 </div>
                 <div className="font14px">
-                    { this.state.info.body1 }
+                    { this.state.info.body2 }
                 </div>
                 <div className="inputContainer" styleName="signup-fields">
                     <Field
@@ -247,14 +255,14 @@ class ModalSignup extends Component {
         )
     }
 
-    makeFrame2() {
+    makeFrame3() {
         return(
             <div className="center">
                 <div className="primary-cyan font22px font20pxUnder500">
-                    { this.state.info.header2 }
+                    { this.state.info.header3 }
                 </div>
                 <div className="font14px" style={{marginTop:"-7px"}}>
-                    { this.state.info.body2 }
+                    { this.state.info.body3 }
                 </div>
                 <div className="inputContainer" styleName="signup-fields">
                     <Field
@@ -312,7 +320,7 @@ class ModalSignup extends Component {
             navArea.push(
                 <div
                     styleName="signup-circle"
-                    style={(this.state.frame - 1) === navCircleIdx ? selectedStyle : {}}
+                    style={(this.state.frame - 2) === navCircleIdx ? selectedStyle : {}}
                     key={`signup modal ${navCircleIdx}`}
                 />
             );
@@ -324,12 +332,37 @@ class ModalSignup extends Component {
                 maxWidth={false}
                 onClose={this.closeSignupModal}
             >
-                <form styleName="modal-signup">
-                    {this.state.frame === 1 ? <div>{ this.makeFrame1() }</div> : <div>{ this.makeFrame2() }</div>}
-                    <div className="center">
-                        { navArea }
+                {this.state.frame === 1 && this.state.info.header1 ?
+                    <div styleName="modal-signup">
+                        <div className="primary-cyan font22px font20pxUnder500">
+                            { this.state.info.header1 }
+                        </div>
+                        <div className="font16px" style={{maxWidth: "400px", margin: "20px auto"}}>
+                            { this.state.info.body1 }
+                        </div>
+                        <div
+                            key={"continue signup modal"}
+                            className="menuItem pointer font16px noWrap primary-cyan wideScreenMenuItem"
+                            onClick={this.handleFrameChange}
+                        >
+                            <span className="primary-cyan" style={{ marginRight: "7px" }}>
+                                Continue
+                            </span>{" "}
+                            <img
+                                className="hover-move-arrow"
+                                style={{ height: "8px" }}
+                                src={`/icons/ArrowBlue${this.props.png}`}
+                            />
+                        </div>
                     </div>
-                </form>
+                    :
+                    <form styleName="modal-signup">
+                        {this.state.frame === 2 ? <div>{ this.makeFrame2() }</div> : <div>{ this.makeFrame3() }</div>}
+                        <div className="center">
+                            { navArea }
+                        </div>
+                    </form>
+                }
             </Dialog>
         );
     }
