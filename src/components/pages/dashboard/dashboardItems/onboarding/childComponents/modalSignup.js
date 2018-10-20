@@ -58,7 +58,8 @@ class ModalSignup extends Component {
             frame: 1,
             info: defaultInfo,
             type: undefined,
-            name: undefined
+            name: undefined,
+            error: undefined
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -76,7 +77,7 @@ class ModalSignup extends Component {
         if (this.state.open != this.props.open) {
             const open = this.props.open;
             if (!open) {
-                this.setState({ info: defaultInfo, open })
+                this.setState({ info: defaultInfo, open, error: undefined })
             }
             const info = this.props.info;
 
@@ -87,7 +88,7 @@ class ModalSignup extends Component {
             if (info.type === "menu") {
                 switch(info.name) {
                     case "Button":
-                        this.setState({ open, frame: 2 });
+                        this.setState({ open, frame: 2, error: undefined });
                         break;
                     case "Candidates":
                     case "Employees":
@@ -100,21 +101,20 @@ class ModalSignup extends Component {
                             header3: "Info Successfully Added",
                             body3: "Fill this out so you can log back in and freely access your page."
                         };
-                        this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1 })
+                        this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1, error: undefined })
                     default:
-                        this.setState({ open });
+                        this.setState({ open, frame: 1, error: undefined });
                         break;
                 }
             } else {
-                switch(info.name.toLowerCase()) {
-                    case "candidates":
+                switch(info.name) {
+                    case "Candidates":
+                    case "Employees":
                         break;
-                    case "employees":
-                        break;
-                    case "evaluations":
+                    case "Evaluations":
                         break;
                     default:
-                        this.setState({ open });
+                        this.setState({ open, frame: 1, error: undefined });
                         break;
                 }
             }
@@ -221,8 +221,11 @@ class ModalSignup extends Component {
                 notValid = true;
             }
         });
-        if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
-        else this.setState({ frame: 2 })
+        if (notValid) {
+            this.setState({ error: "Must fill out all fields to continue." })
+            return;
+        }
+        else this.setState({ frame: 2, error: undefined })
     }
 
     makeFrame2() {
@@ -234,6 +237,12 @@ class ModalSignup extends Component {
                 <div className="font14px">
                     { this.state.info.body2 }
                 </div>
+                {this.state.error ?
+                    <div className="secondary-red font16px">
+                        {this.state.error}
+                    </div>
+                    : null
+                }
                 <div className="inputContainer" styleName="signup-fields">
                     <Field
                         name="name"
