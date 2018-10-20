@@ -150,12 +150,6 @@ async function POST_createBusinessAndUser(req, res) {
         return res.status(400).send("Invalid email format.");
     }
 
-    // validate positions
-    if (!positions || positions.length < 1) {
-        console.log("Positions: ", positions);
-        return res.status(400).send("Bad Request.");
-    }
-
     // make sure the email is a work email, not a gmail or hotmail or whatever
     if (!devMode) {
         const popularProviders = [

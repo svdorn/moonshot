@@ -431,6 +431,8 @@ export function createBusinessAndUser(userInfo) {
                     user: response.data,
                     ...notification("Your account has been activated! Thanks for signing up!")
                 });
+                dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
+                dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
                 goTo("/dashboard");
             })
             .catch(error => {

@@ -225,7 +225,7 @@ class ModalSignup extends Component {
             this.setState({ error: "Must fill out all fields to continue." })
             return;
         }
-        else this.setState({ frame: 2, error: undefined })
+        else this.setState({ frame: 3, error: undefined })
     }
 
     makeFrame2() {
