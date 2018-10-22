@@ -122,6 +122,7 @@ class ModalSignup extends Component {
                         this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1, error: undefined })
                         break;
                     case "Evaluations":
+                        this.setState({ open, frame: 2, error: undefined, info: defaultInfo });
                         break;
                     default:
                         this.setState({ open, frame: 1, error: undefined });

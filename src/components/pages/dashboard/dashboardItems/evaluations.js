@@ -150,7 +150,7 @@ class Evaluations extends Component {
 
         let onClick = () => this.props.openAddPositionModal();
         if (!this.props.currentUser) {
-            onClick = () => this.props.openSignupModal("boxes", "Candidates");
+            onClick = () => this.props.openSignupModal("boxes", "Evaluations");
         }
 
         let smallCTA = (
