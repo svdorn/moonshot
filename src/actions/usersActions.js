@@ -434,6 +434,9 @@ export function createBusinessAndUser(userInfo) {
                 dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
                 dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
                 goTo("/dashboard");
+                if (userInfo.verificationModal) {
+                    dispatch({ type: "OPEN_VERIFICATION_MODAL" });
+                }
             })
             .catch(error => {
                 dispatch({

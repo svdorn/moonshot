@@ -187,14 +187,18 @@ class ModalSignup extends Component {
         const positions = this.props.onboardingPositions;
         const onboard = this.props.onboard;
         const selectedJobsToBeDone = this.props.selectedJobsToBeDone;
-        if (this.props.info && this.props.info.type === "menu") {
+        if (this.props.info && this.props.info.type === "menu" && this.props.info.name !== "Button") {
             var showVerifyEmailBanner = true;
+        }
+        else if (this.props.info && this.props.info.type === "boxes") {
+            var showVerifyEmailBanner = true;
+            var verificationModal = true;
         }
 
         // get the positions here from the onboardingPositions
 
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone, showVerifyEmailBanner };
+        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone, showVerifyEmailBanner, verificationModal };
 
         // mark a business signup in google analytics
         ReactGA.event({

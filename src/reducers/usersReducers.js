@@ -32,6 +32,18 @@ export function usersReducers(state = initialState, action) {
                 userPostedFailed: false
             };
             break;
+        case "OPEN_VERIFICATION_MODAL":
+            return {
+                ...state,
+                verificationModal: true
+            };
+            break;
+        case "CLOSE_VERIFICATION_MODAL":
+            return {
+                ...state,
+                verificationModal: false,
+            };
+            break;
         case "OPEN_CANDIDATES_POPUP_MODAL":
             return {
                 ...state,
