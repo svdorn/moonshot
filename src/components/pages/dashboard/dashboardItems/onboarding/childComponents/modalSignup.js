@@ -102,14 +102,24 @@ class ModalSignup extends Component {
                             body3: "Fill this out so you can log back in and freely access your page."
                         };
                         this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1, error: undefined })
+                        break;
                     default:
                         this.setState({ open, frame: 1, error: undefined });
                         break;
                 }
             } else {
                 switch(info.name) {
-                    case "Candidates":
-                    case "Employees":
+                    case "Candidate":
+                    case "Employee":
+                        const infoContent = {
+                            header1: `Activate ${info.name} Invites`,
+                            body1: `Continue to add some info so we can activate invites for your company.`,
+                            header2: `Info to Activate Invites`,
+                            body2: `We need this to activate ${info.name.toLowerCase()} invites for your company.`,
+                            header3: "Info Successfully Added",
+                            body3: "Fill this out so you can log back in and freely manage your invites."
+                        };
+                        this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1, error: undefined })
                         break;
                     case "Evaluations":
                         break;
@@ -173,18 +183,22 @@ class ModalSignup extends Component {
         if (!isValidPassword(password)) {
             return this.props.addNotification("Password must be at least 8 characters long", "error");
         }
-        console.log("here")
-        console.log("vals: ", vals);
-        console.log("onboardingpositions: ", this.props.onboardingPositions);
-        console.log("onboard:", this.props.onboard);
+
         const positions = this.props.onboardingPositions;
         const onboard = this.props.onboard;
         const selectedJobsToBeDone = this.props.selectedJobsToBeDone;
+        if (this.props.info && this.props.info.type === "menu" && this.props.info.name !== "Button") {
+            var showVerifyEmailBanner = true;
+        }
+        else if (this.props.info && this.props.info.type === "boxes") {
+            var showVerifyEmailBanner = true;
+            var verificationModal = true;
+        }
 
         // get the positions here from the onboardingPositions
 
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone };
+        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone, showVerifyEmailBanner, verificationModal };
 
         // mark a business signup in google analytics
         ReactGA.event({
