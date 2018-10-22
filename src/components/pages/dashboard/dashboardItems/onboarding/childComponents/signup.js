@@ -24,17 +24,22 @@ import "../../../dashboard.css";
 const validate = values => {
     const errors = {};
     const requiredFields = ["name", "company", "email", "password"];
+    // return errors immediately so only one shows up at a time
+    for (let fieldIdx = 0; fieldIdx < requiredFields.length; fieldIdx++) {
+        const field = requiredFields[fieldIdx];
+        if (!values[field]) {
+            errors[field] = "This field is required";
+            return errors;
+        }
+    }
     if (values.email && !isValidEmail(values.email)) {
         errors.email = "Invalid email address";
+        return errors;
     }
     if (!isValidPassword(values.password)) {
         errors.password = "Password must be at least 8 characters long";
+        return errors;
     }
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = "This field is required";
-        }
-    });
 
     return errors;
 };
@@ -141,16 +146,17 @@ class Signup extends Component {
     handleFrameChange(e) {
         e.preventDefault();
         const vals = this.props.formData.businessSignup.values;
-        let notValid = false;
         const requiredFields = ["name", "company"];
-        requiredFields.forEach(field => {
+
+        for (let fieldIdx = 0; fieldIdx < requiredFields.length; fieldIdx++) {
+            const field = requiredFields[fieldIdx];
             if (!vals || !vals[field]) {
                 this.props.touch(field);
-                notValid = true;
+                return this.props.addNotification("Must fill out all fields.", "error");
             }
-        });
-        if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
-        else this.setState({ frame: 2 });
+        }
+
+        this.setState({ frame: 2 });
     }
 
     makeFrame1() {
