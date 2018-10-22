@@ -124,7 +124,7 @@ async function GET_billingIsSetUp(req, res) {
 // create a business and the first account admin for that business
 async function POST_createBusinessAndUser(req, res) {
     // get necessary arguments
-    let { name, company, email, password, positions, onboard, selectedJobsToBeDone } = sanitize(
+    let { name, company, email, password, positions, onboard, selectedJobsToBeDone, showVerifyEmailBanner } = sanitize(
         req.body
     );
 
@@ -187,7 +187,7 @@ async function POST_createBusinessAndUser(req, res) {
     }
 
     // create the user
-    const userInfo = { name, email, password, onboard, businessInterestsPopup };
+    const userInfo = { name, email, password, onboard, businessInterestsPopup, showVerifyEmailBanner };
     try {
         var user = await createAccountAdmin(userInfo);
     } catch (createUserError) {
@@ -278,6 +278,8 @@ async function POST_createBusinessAndUser(req, res) {
             recipients = ["stevedorn9@gmail.com"];
         }
     }
+    const positionName = business.positions ? business.positions[0].name : undefined;
+    const positionType = business.positoins ? business.positons[0].positionType : undefined;
     let subject = "New Account Admin Sign Up";
     let content =
         "<div>" +
@@ -285,8 +287,8 @@ async function POST_createBusinessAndUser(req, res) {
         `<p>Name: ${user.name}</p>` +
         `<p>Email: ${user.email}</p>` +
         `<p>Business name: ${business.name}</p>` +
-        `<p>Position name: ${business.positions[0].name}</p>` +
-        `<p>Position type: ${business.positions[0].positionType}</p>` +
+        `<p>Position name: ${positionName}</p>` +
+        `<p>Position type: ${positionType}</p>` +
         "</div>";
     try {
         await sendEmail({ recipients, subject, content });
@@ -299,7 +301,7 @@ async function POST_createBusinessAndUser(req, res) {
 async function createAccountAdmin(info) {
     return new Promise(function(resolve, reject) {
         // get needed args
-        const { name, password, email, onboard, businessInterestsPopup } = info;
+        const { name, password, email, onboard, businessInterestsPopup, showVerifyEmailBanner } = info;
 
         let user = {
             name,
@@ -368,6 +370,9 @@ async function createAccountAdmin(info) {
                 highestStep: 1,
                 actions: []
             };
+        }
+        if (showVerifyEmailBanner) {
+            user.showVerifyEmailBanner = true;
         }
         // user.onboarding = {
         //     step: 0,
