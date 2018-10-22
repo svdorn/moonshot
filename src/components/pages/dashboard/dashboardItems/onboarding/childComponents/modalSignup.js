@@ -102,14 +102,24 @@ class ModalSignup extends Component {
                             body3: "Fill this out so you can log back in and freely access your page."
                         };
                         this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1, error: undefined })
+                        break;
                     default:
                         this.setState({ open, frame: 1, error: undefined });
                         break;
                 }
             } else {
                 switch(info.name) {
-                    case "Candidates":
-                    case "Employees":
+                    case "Candidate":
+                    case "Employee":
+                        const infoContent = {
+                            header1: `Activate ${info.name} Invites`,
+                            body1: `Continue to add some info so we can activate invites for your company.`,
+                            header2: `Info to Activate Invites`,
+                            body2: `We need this to activate ${info.name.toLowerCase()} invites for your company.`,
+                            header3: "Info Successfully Added",
+                            body3: "Fill this out so you can log back in and freely manage your invites."
+                        };
+                        this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1, error: undefined })
                         break;
                     case "Evaluations":
                         break;
