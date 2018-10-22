@@ -172,6 +172,7 @@
     position: relative;
     flex: 1;
     padding: calc(var(--item-margin) / 2) var(--item-margin);
+    height: 100%;
 }
 .candidate-view > div:first-child {
     flex: 1;
@@ -245,7 +246,7 @@
 }
 .emoji-buttons-full {
     position: absolute;
-    bottom: -50px;
+    /* bottom: -50px; */
     left: 50%;
     transform: translate(-50%);
     width: 100%;
@@ -439,7 +440,7 @@
 }
 .circular-progress-fully-center {
     position: absolute;
-    bottom: calc(var(--item-width)/2);
+    bottom: calc(var(--item-width) / 2);
     left: 65%;
     transform: translate(-50%);
 }
@@ -555,6 +556,14 @@
     color: var(--secondary-gray);
     min-width: 270px;
     min-height: 300px;
+}
+
+.save-your-progress {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .nav-circle {

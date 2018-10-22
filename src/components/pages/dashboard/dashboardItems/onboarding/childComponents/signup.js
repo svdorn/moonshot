@@ -185,7 +185,7 @@ class Signup extends Component {
 
     makeFrame2() {
         return (
-            <div className="center">
+            <div className="center" styleName="save-your-progress">
                 <div className="primary-cyan font22px font20pxUnder500">Save Your Progress</div>
                 <div className="font14px" style={{ marginTop: "-7px" }}>
                     Fill this out so you can log back in.
@@ -210,7 +210,7 @@ class Signup extends Component {
                             style={{ marginTop: "-18px" }}
                         />
                     </div>
-                    I have read and agree to the Moonshot Insights<br />
+                    I have read and agree to the Moonshot Insights{" "}
                     <a
                         href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                         target="_blank"
@@ -245,12 +245,12 @@ class Signup extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <div>
-                <form>
+            <div style={{ height: "100%" }}>
+                <form style={{ height: "100%" }}>
                     {this.state.frame === 1 ? (
-                        <div>{this.makeFrame1()}</div>
+                        <div style={{ height: "100%" }}>{this.makeFrame1()}</div>
                     ) : (
-                        <div>{this.makeFrame2()}</div>
+                        <div style={{ height: "100%" }}>{this.makeFrame2()}</div>
                     )}
                 </form>
             </div>
