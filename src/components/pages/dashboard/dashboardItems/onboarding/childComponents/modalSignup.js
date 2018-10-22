@@ -183,10 +183,7 @@ class ModalSignup extends Component {
         if (!isValidPassword(password)) {
             return this.props.addNotification("Password must be at least 8 characters long", "error");
         }
-        console.log("here")
-        console.log("vals: ", vals);
-        console.log("onboardingpositions: ", this.props.onboardingPositions);
-        console.log("onboard:", this.props.onboard);
+
         const positions = this.props.onboardingPositions;
         const onboard = this.props.onboard;
         const selectedJobsToBeDone = this.props.selectedJobsToBeDone;
