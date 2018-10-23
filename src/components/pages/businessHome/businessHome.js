@@ -10,11 +10,12 @@ import axios from "axios";
 import MetaTags from "react-meta-tags";
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from "material-ui";
 import AddUserDialog from "../../childComponents/addUserDialog";
-import ProgressBarDialog from "../../miscComponents/progressBarDialog";
 import { isValidEmail, goTo } from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
+import CornersButton from "../../miscComponents/cornersButton";
 import PositionsDropDown from "./positionsDropDown";
 import Typed from "typed.js";
+import colors from "../../../colors";
 
 import "./businessHome.css";
 
@@ -276,12 +277,12 @@ class BusinessHome extends Component {
                     </div>
                 </div>
                 <div className="primary-white center">
-                    <div
-                        className="cyan primary-cyan corners-button"
+                    <CornersButton
+                        content="Experience The Product For Yourself"
                         onClick={() => goTo("/explore")}
-                    >
-                        Experience The Product For Yourself
-                    </div>
+                        color1={colors.primaryCyan}
+                        color2={colors.primaryWhite}
+                    />
                     <div>See everything immediately. No email, password, or credit card.</div>
                 </div>
             </section>

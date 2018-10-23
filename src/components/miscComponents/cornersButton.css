@@ -1,0 +1,96 @@
+.button {
+    --top-padding: 10px;
+    --side-padding: 20px;
+    display: inline-block;
+
+    cursor: pointer;
+    position: relative;
+}
+
+.border {
+    position: absolute;
+}
+.border-top,
+.border-bottom {
+    height: 1px;
+    width: calc(100% - (2 * var(--top-padding)));
+}
+.border-right,
+.border-left {
+    width: 1px;
+    height: calc(100% - (2 * var(--top-padding)));
+}
+.border-top {
+    top: 0;
+    left: 0;
+}
+.border-right {
+    right: 0;
+    bottom: 0;
+}
+.border-bottom {
+    bottom: 0;
+    right: 0;
+}
+.border-left {
+    left: 0;
+    top: 0;
+}
+.button:hover .border {
+    transition: 1s;
+}
+.button:hover .border-top,
+.button:hover .border-bottom {
+    width: 100%;
+}
+.button:hover .border-right,
+.button:hover .border-left {
+    height: 100%;
+}
+
+.content {
+    margin: var(--top-padding) var(--side-padding);
+    z-index: 2;
+}
+
+.under-hover-content {
+    position: absolute;
+    left: 0;
+    right: 100%;
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+}
+.button:hover .under-hover-content {
+    right: 0;
+    transition: right 1s 1s;
+}
+.hover-content {
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 4;
+}
+.button:hover .hover-content {
+    opacity: 1;
+
+    transition: 1s 3s;
+}
+.above-hover-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    z-index: 5;
+}
+.button:hover .above-hover-content {
+    opacity: 1;
+    left: 100%;
+
+    transition: opacity 1s 2s, left 1s 4s;
+}

@@ -303,6 +303,8 @@ function copyCustomLink(currentUser, addNotification) {
     }
 }
 
+function noop() {}
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -320,6 +322,7 @@ const miscFunctions = {
     elementInViewport,
     replaceCharacters,
     copyCustomLink,
+    noop,
 
     Queue,
     Stack
