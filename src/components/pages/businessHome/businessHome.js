@@ -258,6 +258,25 @@ class BusinessHome extends Component {
         );
     }
 
+    // second section of the page, shows a preview of the candidate list view + report
+    previewSection() {
+        return (
+            <section id="product-preview" styleName="product-preview-section">
+                <div className="center">
+                    <div styleName="image-container">
+                        <img
+                            src={`/images/businessHome/MyCandidatesScreenshot${this.props.png}`}
+                            styleName="my-candidates-screenshot"
+                        />
+                        <div styleName="candidate-name">Justin Ye</div>
+                    </div>
+                </div>
+                <div className="cyan corners-button">Experience The Product For Yourself</div>
+                <div>See everything immediately. No email, password, or credit card.</div>
+            </section>
+        );
+    }
+
     // second section of the page, gives three screenshots as well as corresponding information
     screenshotsSection() {
         return (
@@ -472,6 +491,8 @@ class BusinessHome extends Component {
                 </MetaTags>
                 <div className="businessHome">
                     {this.introductionSection()}
+
+                    {this.previewSection()}
 
                     {this.screenshotsSection()}
 
