@@ -466,7 +466,6 @@ module.exports.POST_intercomEvent = async function(req, res) {
 
     if (!req.body.userId || !req.body.verificationToken) {
         var email = await generateNewUniqueEmail();
-        console.log("email generated: ", email);
         var intercom = await client.users.create({
             email,
             name: "there"
