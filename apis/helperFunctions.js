@@ -4,10 +4,12 @@ const credentials = require('../credentials');
 
 const Users = require('../models/users.js');
 const UnsubscribedEmails = require("../models/unsubscribedEmails.js");
+const UniqueEmails = require("../models/uniqueEmails.js");
 const Businesses = require('../models/businesses.js');
 const Skills = require('../models/skills.js');
 
 const errors = require("./errors");
+const crypto = require('crypto');
 
 // info for sending out emails through mailgun
 const mailDomain = "mail.moonshotinsights.io";
@@ -597,30 +599,49 @@ function removeDuplicates(a) {
     return out;
 }
 
-// DANGEROUS, returns user with all fields
+// returns a new unique email for intercom events
 async function generateNewUniqueEmail() {
     return new Promise(async function(resolve, reject) {
-        // get the user from the db
-        let user = undefined;
+        // initialize random characters string
+        let randomChars;
+        let randomEmail;
+        // see if this code already exists
         try {
-            user = await Users.findById(userId);
-        } catch (getUserError) {
-            console.log("Error getting user from the database: ", getUserError);
-            return reject({status: 500, message: "Server error, try again later", error: getUserError});
+            // will contain any code that has the same random characters
+            let foundEmail;
+            // if this gets up to 8 something is super weird
+            let counter = 0;
+            do {
+                if (counter >= 8) {
+                    throw "Too many codes found that had already been used.";
+                }
+                counter++;
+                // assign randomChars 10 random hex characters
+                randomChars = crypto.randomBytes(5).toString("hex");
+                // assign random chars to an email
+                randomEmail = randomChars + "@test.test";
+                // try to find another code with the same random characters
+                foundEmail = await UniqueEmails.findOne({ email: randomEmail });
+            } while (foundEmail);
+        } catch (findEmailError) {
+            console.log("Error looking for email with same characters.");
+            return reject(findEmailError);
         }
-
-        if (!user) {
-            console.log("User not found from id: ", userId);
-            return reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
+        // we are now guaranteed to have a unique code
+        const NOW = new Date();
+        // create the code
+        let uniqueEmail = {
+            email: randomEmail,
+            created: NOW,
+        };
+        // make the code in the db
+        try {
+            code = await UniqueEmails.create(uniqueEmail);
+        } catch (createEmailError) {
+            return reject(createEmailError);
         }
-
-        // verify user's identity
-        if (!verificationToken && user.verificationToken !== verificationToken) {
-            console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
-            return reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
-        }
-
-        return resolve(user);
+        // return the code
+        return resolve(uniqueEmail.email);
     })
 }
 
@@ -986,6 +1007,7 @@ const helperFunctions = {
     randomInt,
     shuffle,
     frontEndUser,
+    generateNewUniqueEmail,
     getAndVerifyUser,
     getUserFromReq,
     getUserAndBusiness,

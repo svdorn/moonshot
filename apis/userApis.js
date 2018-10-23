@@ -24,6 +24,7 @@ const { sanitize,
         frontEndUser,
         emailFooter,
         getSkillNamesByIds,
+        generateNewUniqueEmail,
         lastPossibleSecond,
         findNestedValue,
         moonshotUrl
@@ -463,12 +464,11 @@ module.exports.POST_intercomEvent = async function(req, res) {
     const event_name = sanitize(req.body.eventName);
     const metadata = sanitize(req.body.metadata);
 
-    let user_id = undefined;
-    let email = undefined;
-
     if (!req.body.userId || !req.body.verificationToken) {
+        var email = await generateNewUniqueEmail();
+        console.log("email generated: ", email);
         var intercom = await client.users.create({
-            email: "abc@test.com",
+            email,
             name: "there"
         });
         var user = {};
