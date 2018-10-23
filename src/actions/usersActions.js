@@ -204,7 +204,11 @@ export function intercomEvent(eventName, userId, verificationToken, metadata) {
         axios
             .post("/api/user/intercomEvent", { eventName, userId, verificationToken, metadata })
             .then(function(response) {
-                dispatch({ type: "INTERCOM_EVENT" });
+                if (response.data.temp) {
+                    dispatch({ type: "INTERCOM_EVENT_TEMP", user: response.data.user });
+                } else {
+                    dispatch({ type: "INTERCOM_EVENT" });
+                }
             })
             .catch(function(err) {
                 dispatch({ type: "INTERCOM_EVENT_REJECTED", ...notification(err, "error") });

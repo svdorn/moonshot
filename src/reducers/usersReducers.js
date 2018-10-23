@@ -233,6 +233,18 @@ export function usersReducers(state = initialState, action) {
             Intercom("update");
             return { ...state, loadingSomething: false };
             break;
+        case "INTERCOM_EVENT_TEMP":
+            if (action.user && action.user.intercom) {
+                const intercom = action.user.intercom;
+                Intercom("update", {
+                    email: intercom.email,
+                    user_id: intercom.id,
+                    name: action.user.name,
+                    user_hash: action.user.hmac
+                });
+            }
+            return { ...state, loadingSomething: false };
+            break;
         case "LOGIN":
             if (action.user && action.user.intercom) {
                 const intercom = action.user.intercom;

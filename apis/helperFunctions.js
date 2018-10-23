@@ -597,6 +597,33 @@ function removeDuplicates(a) {
     return out;
 }
 
+// DANGEROUS, returns user with all fields
+async function generateNewUniqueEmail() {
+    return new Promise(async function(resolve, reject) {
+        // get the user from the db
+        let user = undefined;
+        try {
+            user = await Users.findById(userId);
+        } catch (getUserError) {
+            console.log("Error getting user from the database: ", getUserError);
+            return reject({status: 500, message: "Server error, try again later", error: getUserError});
+        }
+
+        if (!user) {
+            console.log("User not found from id: ", userId);
+            return reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
+        }
+
+        // verify user's identity
+        if (!verificationToken && user.verificationToken !== verificationToken) {
+            console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
+            return reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
+        }
+
+        return resolve(user);
+    })
+}
+
 
 // DANGEROUS, returns user with all fields
 async function getAndVerifyUser(userId, verificationToken) {

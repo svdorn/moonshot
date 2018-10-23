@@ -463,12 +463,38 @@ module.exports.POST_intercomEvent = async function(req, res) {
     const event_name = sanitize(req.body.eventName);
     const metadata = sanitize(req.body.metadata);
 
-    try { var user = await getUserFromReq(req); }
-    catch (getUserError) {
-        console.log("Error getting user while trying to update onboarding step: ", getUserError);
-        const status = getUserError.status ? getUserError.status : 500;
-        const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
-        return res.status(status).send(message);
+    let user_id = undefined;
+    let email = undefined;
+
+    if (!req.body.userId || !req.body.verificationToken) {
+        var intercom = await client.users.create({
+            email: "abc@test.com",
+            name: "there"
+        });
+        var user = {};
+        var temp = true;
+        // Add the intercom info to the user
+        if (intercom.body) {
+            user.intercom = {};
+            user.intercom.email = intercom.body.email;
+            user.intercom.id = intercom.body.id;
+        } else {
+            console.log("error creating an intercom user: ", createIntercomError);
+            return res.status(500).send("Server error.");
+        }
+        const hash = crypto
+            .createHmac("sha256", credentials.hmacKey)
+            .update(user.intercom.id)
+            .digest("hex");
+        user.hmac = hash;
+    } else {
+        try { var user = await getUserFromReq(req); }
+        catch (getUserError) {
+            console.log("Error getting user while trying to update onboarding step: ", getUserError);
+            const status = getUserError.status ? getUserError.status : 500;
+            const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
+            return res.status(status).send(message);
+        }
     }
 
     // if user doesn't have correct info, throw error
@@ -486,7 +512,7 @@ module.exports.POST_intercomEvent = async function(req, res) {
       email: user.intercom.email,
       metadata
   }, function (d) {
-        return res.status(200).send({});
+        return res.status(200).send({ user, temp });
     });
 }
 
