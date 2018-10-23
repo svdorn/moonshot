@@ -73,7 +73,7 @@
     margin: var(--get-started-border-width);
     border-radius: 8px;
     border: none;
-    padding: 3px 10px;
+    padding: 5px 10px 0;
     background-color: var(--primary-black-dark);
     color: white;
     position: relative;
@@ -83,8 +83,8 @@
     overflow-y: hidden;
 }
 .get-started-input::placeholder {
-    /* color: var(--secondary-gray); */
-    color: white;
+    color: var(--secondary-gray);
+    font-style: italic;
 }
 .get-started-input:focus::placeholder {
     color: transparent;
@@ -118,7 +118,11 @@
 }
 .get-started-input:hover + div,
 .get-started-input:focus + div {
+    -webkit-box-shadow: 0 0 22px 5px #151515;
+    -moz-box-shadow: 0 0 22px 5px #151515;
+    box-shadow: 0 0 22px 5px #151515;
     background-position-x: 0px;
+
     -webkit-transition: all 0.5s ease;
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
@@ -869,6 +873,10 @@
         height: 210px;
         width: 210px;
         margin: 0 10px 40px;
+    }
+
+    .get-started-input {
+        padding-top: 4px;
     }
 
     /* GRID */
