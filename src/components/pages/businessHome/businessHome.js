@@ -269,6 +269,10 @@ class BusinessHome extends Component {
                             styleName="my-candidates-screenshot"
                         />
                         <div styleName="candidate-name">Justin Ye</div>
+                        <img
+                            src={`/images/businessHome/CandidateResultsScreenshot${this.props.png}`}
+                            styleName="results-screenshot"
+                        />
                     </div>
                 </div>
                 <div className="cyan corners-button">Experience The Product For Yourself</div>
