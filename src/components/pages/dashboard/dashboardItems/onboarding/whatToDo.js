@@ -7,6 +7,7 @@ import { updateOnboardingStep, addNotification, generalAction, updateUser, openA
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists, updateStore } from "../../../../../miscFunctions";
 import AddPosition from "./childComponents/addPosition";
+import Signup from "./childComponents/signup";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
     TextField,
@@ -41,8 +42,8 @@ class WhatToDo extends Component {
         super(props);
 
         this.state = {
-            // whether we're on psych or gca view
-            step: "position",
+            // which view we're on
+            step: ""
         };
 
         this.next = this.next.bind(this);
@@ -51,19 +52,46 @@ class WhatToDo extends Component {
         this.copyLink = this.copyLink.bind(this);
     }
 
+    componentDidMount() {
+        let self = this;
+        const { currentUser } = this.props;
+        if (currentUser) {
+            // get all the positions they're evaluating for
+            axios.get("/api/business/positions", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
+                }
+            })
+            .then(res => {
+                if (Array.isArray(res.data.positions) && res.data.positions.length > 0) {
+                    this.next();
+                } else {
+                    self.setState({ step:"position" })
+                }
+            })
+            .catch(err => {
+
+            });
+        } else {
+            const onboardingPositions = this.props.onboardingPositions;
+            if (onboardingPositions && Array.isArray(onboardingPositions) && onboardingPositions.length > 0) {
+                this.next();
+            } else {
+                this.setState({ step:"position" })
+            }
+        }
+    }
 
     next = () => {
         // TODO merge these two into one api call to avoid race conditions
-        if (this.state.step === "position") {
+        if (this.state.step === "position" || this.state.step === "") {
             if (this.props.currentUser) {
+                this.props.generalAction("OPEN_ONBOARDING_4_MODAL");
                 this.setState({ step: "copyLink" })
             } else {
                 this.setState({ step: "signup" })
             }
-            return;
-        } else if (this.state.step === "signup") {
-            // TODO: write new user to database and log them in
-            this.setState({ step: "copyLink" })
             return;
         }
 
@@ -196,21 +224,7 @@ class WhatToDo extends Component {
                     Add Your First Position
                 </div>
                 <div>
-                    <AddPosition />
-                </div>
-                <div styleName="emoji-buttons-full">
-                    <div onClick={this.next}>
-                        <img
-                            src={`/icons/emojis/ThumbsUp${this.props.png}`}
-                        />
-                        <div style={{paddingTop: "5px"}}>All set</div>
-                    </div>
-                    <div onClick={this.intercomMsg}>
-                        <img
-                            src={`/icons/emojis/Face${this.props.png}`}
-                        />
-                        <div style={{paddingTop: "5px"}}>More info</div>
-                    </div>
+                    <AddPosition next={this.next} />
                 </div>
             </div>
         );
@@ -219,6 +233,7 @@ class WhatToDo extends Component {
     signupView() {
         return(
             <div styleName="full-step-container">
+                <Signup />
             </div>
         );
     }
@@ -232,7 +247,7 @@ class WhatToDo extends Component {
             case "copyLink":
                 return this.copyLinkView();
             default:
-                return <div>Here</div>;
+                return <div styleName="circular-progress-fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>;
         }
     }
 }
@@ -243,6 +258,7 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         png: state.users.png,
         loading: state.users.loadingSomething,
+        onboardingPositions: state.users.onboardingPositions,
     };
 }
 

@@ -52,6 +52,22 @@ export function closeAddPositionModal() {
     };
 }
 
+export function openSignupModal(type, name) {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_SIGNUP_MODAL", category: type, name });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: true });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: true });
+    };
+}
+
+export function closeSignupModal() {
+    return function(dispatch) {
+        dispatch({ type: "CLOSE_SIGNUP_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
+    };
+}
+
 export function closeCandidatesPopupModal(userId, verificationToken, popups) {
     return function(dispatch) {
         dispatch({ type: "START_LOADING" });
@@ -330,9 +346,6 @@ function defaultErrorHandler(dispatch, options) {
 export function updateOnboardingStep(userId, verificationToken, newStep) {
     return function(dispatch) {
         if (newStep !== -1) {
-            if (newStep === 4) {
-                dispatch({ type: "OPEN_ONBOARDING_4_MODAL" });
-            }
             dispatch({ type: "UPDATE_ONBOARDING_STEP", newStep });
         } else {
             dispatch({ type: "START_LOADING" });
@@ -418,7 +431,12 @@ export function createBusinessAndUser(userInfo) {
                     user: response.data,
                     ...notification("Your account has been activated! Thanks for signing up!")
                 });
+                dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
+                dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
                 goTo("/dashboard");
+                if (userInfo.verificationModal) {
+                    dispatch({ type: "OPEN_VERIFICATION_MODAL" });
+                }
             })
             .catch(error => {
                 dispatch({
@@ -524,30 +542,6 @@ export function postAdminInvites(adminEmails, currentUserInfo) {
             // error posting email invites
             .catch(function(err) {
                 dispatch({ type: "POST_EMAIL_INVITES_REJECTED", ...notification(err, "error") });
-            });
-    };
-}
-
-// POST CREATE LINK
-export function postCreateLink(currentUserInfo, closeDialog) {
-    return function(dispatch) {
-        dispatch({ type: "POST_EMAIL_INVITES_REQUESTED" });
-
-        axios
-            .post("/api/business/postCreateLink", { currentUserInfo })
-            // email invites success
-            .then(function(res) {
-                dispatch({ type: "POST_LINK_SUCCESS", payload: res.data[0].code });
-            })
-            // error posting email invites
-            .catch(function(err) {
-                if (typeof closeDialog === "function") {
-                    closeDialog();
-                }
-                dispatch({
-                    type: "NOTIFICATION_AND_STOP_LOADING",
-                    ...notification("Error creating link, please refresh and try again.", "error")
-                });
             });
     };
 }

@@ -2,12 +2,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {} from "../../../actions/usersActions";
-import {} from "../../../miscFunctions";
+import { addNotification, closeNotification } from "../../../actions/usersActions";
+import { goTo, replaceCharacters } from "../../../miscFunctions";
 
 import "./businessHome.css";
 
-const posTypes = ["Developer", "Product", "Support/Customer Service", "Marketing", "Sales"];
+const posTypes = ["Developer", "Sales", "Support | Customer Service", "Marketing", "Product"];
 // TODO: Make sure none are too long
 const allTitles = [
     "Software Engineer",
@@ -24,7 +24,6 @@ const allTitles = [
     "Full-Stack Developer",
     "DevOps Engineer",
     "Chief Product Officer",
-    "Product Manager",
     "Associate Product Manager",
     "Product Owner",
     "Group Product Manager",
@@ -77,20 +76,60 @@ class PositionsDropDown extends Component {
         super(props);
 
         this.state = {};
+
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
+    componentDidMount() {
+        document.addEventListener("keypress", this.handleKeyPress);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keypress", this.handleKeyPress);
+    }
+
+    // move to /explore if "enter" pressed
+    handleKeyPress(e) {
+        // get the textarea html element
+        const getStartedInput = document.getElementById("get-started-input");
+        // if there is no input text and the text area is not focused, just return
+        if (!this.props.inputText && document.activeElement !== getStartedInput) {
+            return;
+        }
+        // get the keycode of the key that was pressed
+        var key = e.which || e.keyCode;
+        // 13 is "enter"
+        if (key === 13) {
+            e.preventDefault();
+            if (this.props.inputText) {
+                this.props.closeNotification();
+
+                const replacedPercents = replaceCharacters(this.props.inputText, ["%"], "%25");
+
+                const replacedAnds = replaceCharacters(replacedPercents, ["&"], "%26");
+
+                this.nameAdvance(replacedAnds)();
+            } else {
+                this.props.addNotification("Please enter a position title!");
+            }
+        }
+    }
+
+    // if you click on a role name
     typeAdvance = type => () => {
-        console.log("advancing with type: ", type);
+        goTo(`/explore?role=${type}`);
     };
 
+    // if you clicked on a specific title
     nameAdvance = name => () => {
-        console.log("advancing with position name: ", name);
+        goTo(`/explore?title=${name}`);
     };
 
+    // display the five functions as options if there is no search text
     noTextOptions() {
         const options = posTypes.map(type => {
             return (
-                <div styleName="drop-down-option" onClick={this.typeAdvance(type)}>
+                <div key={type} styleName="drop-down-option" onClick={this.typeAdvance(type)}>
                     {type}
                 </div>
             );
@@ -99,13 +138,13 @@ class PositionsDropDown extends Component {
         return options;
     }
 
+    // display the matching searched position titles if there is any search text
     suggestions() {
-        console.log("this.props.inputText: ", this.props.inputText);
         const options = allTitles
             .filter(s => s.toLowerCase().includes(this.props.inputText.toLowerCase()))
             .map(title => {
                 return (
-                    <div styleName="drop-down-option" onClick={this.nameAdvance(title)}>
+                    <div key={title} styleName="drop-down-option" onClick={this.nameAdvance(title)}>
                         {title}
                     </div>
                 );
@@ -114,10 +153,12 @@ class PositionsDropDown extends Component {
     }
 
     render() {
-        const options = this.props.inputText ? this.suggestions() : this.noTextOptions();
+        const { inputText } = this.props;
+
+        const options = inputText ? this.suggestions() : this.noTextOptions();
 
         return (
-            <div styleName="drop-down">
+            <div styleName={`drop-down ${inputText ? "titles" : "roles"}`}>
                 <div styleName="drop-down-header drop-down-option">Popular Positions</div>
                 {options}
                 <div />
@@ -133,7 +174,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({ addNotification, closeNotification }, dispatch);
 }
 
 export default connect(

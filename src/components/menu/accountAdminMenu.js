@@ -9,7 +9,8 @@ import {
     signout,
     closeNotification,
     openAddUserModal,
-    openContactUsModal
+    openContactUsModal,
+    openSignupModal
 } from "../../actions/usersActions";
 import { goTo, getFirstName, withinElement } from "../../miscFunctions";
 import { axios } from "axios";
@@ -88,12 +89,12 @@ class AccountAdminMenu extends Component {
         }
         // otherwise open the sign up modal to prompt account creation
         else {
-            this.openSignUpModal();
+            this.openSignUpModal(menuOption.title);
         }
     };
 
-    openSignUpModal = () => {
-        console.log("showing sign up modal");
+    openSignUpModal = (name) => {
+        this.props.openSignupModal("menu", name);
     };
 
     render() {
@@ -189,7 +190,7 @@ class AccountAdminMenu extends Component {
             bottomItem = (
                 <div>
                     <img src={`/icons/User${png}`} styleName="user-icon" />
-                    <div styleName="menu-option" onClick={this.openSignUpModal}>
+                    <div styleName="menu-option" onClick={() => this.openSignUpModal("Button")}>
                         <div styleName="user-name">Create Account</div>
                     </div>
                 </div>
@@ -208,7 +209,7 @@ class AccountAdminMenu extends Component {
         );
 
         const menuContent = (
-            <div>
+            <div className={this.props.blurMenu ? "blur" : ""}>
                 {logo}
                 <div styleName="main-menu-items">{topItems}</div>
                 <div styleName="menu-bottom">{bottomItem}</div>
@@ -251,7 +252,8 @@ function mapDispatchToProps(dispatch) {
             signout,
             closeNotification,
             openAddUserModal,
-            openContactUsModal
+            openContactUsModal,
+            openSignupModal
         },
         dispatch
     );
@@ -262,7 +264,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
         png: state.users.png,
-        footerOnScreen: state.users.footerOnScreen
+        footerOnScreen: state.users.footerOnScreen,
+        blurMenu: state.users.blurMenu
     };
 }
 

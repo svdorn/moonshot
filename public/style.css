@@ -7,6 +7,7 @@ body {
     font-family: "Muli", sans-serif;
     min-width: var(--min-screen-width);
     background-color: var(--primary-black-dark);
+    overflow-x: hidden;
 }
 
 :root {
@@ -230,6 +231,9 @@ header {
     transition: background-color 0.5s ease-in-out;
     background-color: var(--primary-black-dark);
     font-size: 12px;
+}
+header.extra-dark {
+    background-color: var(--black-deep-dark);
 }
 header.noShadow {
     box-shadow: none;
@@ -3789,6 +3793,10 @@ button.link {
 }
 .dialogForBizOverlay {
     filter: blur(10px);
+}
+.blur {
+    filter: blur(10px);
+    pointer-events: none;
 }
 .dialogForSignup {
     background-color: rgb(42, 42, 42) !important;

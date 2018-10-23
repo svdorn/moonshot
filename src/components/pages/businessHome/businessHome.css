@@ -46,7 +46,7 @@
     height: 100vh;
     min-height: 400px;
     width: 100%;
-    background: linear-gradient(to bottom right, #1e1e1e, var(--primary-black-dark));
+    background: linear-gradient(to bottom right, #1b1b1b, var(--primary-black-dark));
     margin-top: calc(-1 * var(--non-admin-menu-height));
 
     -webkit-transition: all 0.5s ease;
@@ -74,14 +74,17 @@
     border-radius: 8px;
     border: none;
     padding: 3px 10px;
-    background-color: #222222;
+    background-color: var(--primary-black-dark);
     color: white;
     position: relative;
     z-index: 20;
     resize: none;
+    white-space: nowrap;
+    overflow-y: hidden;
 }
 .get-started-input::placeholder {
-    color: var(--secondary-gray);
+    /* color: var(--secondary-gray); */
+    color: white;
 }
 .get-started-input:focus::placeholder {
     color: transparent;
@@ -130,9 +133,15 @@
     position: absolute;
     top: 100%;
     left: 0;
-    overflow-x: scroll;
+    overflow-x: hidden;
     z-index: 10;
     font-size: 16px;
+}
+.drop-down.titles {
+    overflow-y: scroll;
+}
+.drop-down.roles {
+    overflow-y: hidden;
 }
 .get-started-input-container:hover > .drop-down,
 .get-started-input:focus ~ .drop-down,
@@ -164,6 +173,7 @@
     opacity: 0.6;
     z-index: 2;
     display: inline-block;
+    vertical-align: middle;
 
     -webkit-transition: all 0.5s ease;
     -ms-transition: all 0.5s ease;
@@ -192,7 +202,7 @@
     transition: all 0.2s ease-in;
     top: -50px;
     height: 270px;
-    z-index: 10;
+    z-index: 5;
     width: 400px;
     position: absolute;
     -webkit-box-shadow: 0px 0px 26px 3px #00000073;

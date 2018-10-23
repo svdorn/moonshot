@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import { generalAction, openAddPositionModal } from "../../../../actions/usersActions";
+import { generalAction, openAddPositionModal, openSignupModal } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -148,8 +148,13 @@ class Evaluations extends Component {
             margin: "4px 0 0 -6px"
         };
 
+        let onClick = () => this.props.openAddPositionModal();
+        if (!this.props.currentUser) {
+            onClick = () => this.props.openSignupModal("boxes", "Evaluations");
+        }
+
         let smallCTA = (
-            <div styleName="box-cta" onClick={() => this.props.openAddPositionModal()}>
+            <div styleName="box-cta" onClick={onClick}>
                 Add Position <img src={`/icons/LineArrow${this.props.png}`} />
             </div>
         );
@@ -239,7 +244,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             generalAction,
-            openAddPositionModal
+            openAddPositionModal,
+            openSignupModal
         },
         dispatch
     );

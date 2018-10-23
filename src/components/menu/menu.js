@@ -19,10 +19,12 @@ import {
     endOnboarding,
     openAddUserModal
 } from "../../actions/usersActions";
-import { isValidEmail, goTo } from "../../miscFunctions";
+import { isValidEmail, goTo, elementInViewport } from "../../miscFunctions";
 import { axios } from "axios";
 import { animateScroll } from "react-scroll";
 import AccountAdminMenu from "./accountAdminMenu";
+
+import "./menu.css";
 
 const styles = {
     title: {
@@ -232,6 +234,17 @@ class Menu extends Component {
             } else if (!(widthWantsShadow && scrollWantsShadow) && this.state.headerClass === "") {
                 this.setState({ headerClass: "noShadow" });
             }
+
+            // get the 'who do you need to hire' textarea
+            const getStartedInput = document.getElementById("get-started-input");
+            // focus on it (but only if it's NOT already focused and it IS in the viewport)
+            if (
+                window.scrollY > 0 &&
+                document.activeElement.nodeName === "BODY" &&
+                elementInViewport(getStartedInput)
+            ) {
+                getStartedInput.focus();
+            }
         }
     }
 
@@ -301,12 +314,18 @@ class Menu extends Component {
         let hideUnderline = {};
         let additionalHeaderClass = "";
 
+        const onHome = pathname === "/";
+
+        if (onHome) {
+            additionalHeaderClass += " extra-dark";
+        }
+
         // add the class to get rid of the shadow if the current path is one of those
         if (noShadowPages.includes(pathFirstPart)) {
             additionalHeaderClass += " noShadow";
         }
 
-        if (pathname === "/") {
+        if (onHome) {
             // make the header transparent at if haven't scrolled at all
             additionalHeaderClass += " transparent-if-no-shadow";
             // make sure there aren't already event listeners on scroll/resize ...
@@ -391,8 +410,13 @@ class Menu extends Component {
         else if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
-                { optionType: "url", title: "Log In", url: "/login" },
-                { optionType: "separator" },
+                {
+                    optionType: "url",
+                    title: "Log In",
+                    url: "/login",
+                    styleName: onHome ? "hover-color" : ""
+                },
+                { optionType: "separator", styleName: onHome ? "semi-transparent" : "" },
                 { optionType: "tryNow" }
             ];
         }
@@ -451,6 +475,7 @@ class Menu extends Component {
                         <p
                             key={option.title + " desktop"}
                             className={optionClass}
+                            styleName={option.styleName ? option.styleName : ""}
                             onClick={() => goTo(option.url)}
                         >
                             {option.title}
@@ -488,6 +513,7 @@ class Menu extends Component {
                         <div
                             key={"separator"}
                             className={"menuDivider wideScreenMenuItem" + loggedInClass}
+                            styleName={option.styleName ? option.styleName : ""}
                         />
                     );
                     break;

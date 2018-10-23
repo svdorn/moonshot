@@ -11,13 +11,16 @@
     margin-top: 20px;
     width: calc(100% - 140px);
 }
+.notification.shift-down {
+    transform: translateY(200%);
+}
 
 .errorHeader {
-    background: linear-gradient(to right, #E83C53, #FB553A)
+    background: linear-gradient(to right, #e83c53, #fb553a);
 }
 
 .infoHeader {
-    background: linear-gradient(to right, #72d6f5, #9A73D9)
+    background: linear-gradient(to right, #72d6f5, #9a73d9);
 }
 
 .notification-message {
@@ -39,7 +42,6 @@
     cursor: pointer;
 }
 
-
 @media screen and (max-width: 1000px) {
     .notification.account-admin-notification {
         margin-top: 0px;
@@ -47,8 +49,11 @@
     }
 }
 
-
 @media screen and (max-width: 700px) {
-    .notification { margin-top: -70px; }
-    .notification.account-admin-notification { margin-top: 0px; }
+    .notification {
+        margin-top: -70px;
+    }
+    .notification.account-admin-notification {
+        margin-top: 0px;
+    }
 }

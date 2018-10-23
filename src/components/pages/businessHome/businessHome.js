@@ -87,12 +87,8 @@ class BusinessHome extends Component {
         this.setState({ infoIndex });
     }
 
-    handleOpen = () => {
-        this.setState({ open: true });
-    };
-
-    handleClose = () => {
-        this.setState({ open: false, dialogScreen: 1 });
+    handleOpenVideo = () => {
+        goTo("/explore?tutorialVideo=true");
     };
 
     handleCheckMarkClick() {
@@ -219,8 +215,8 @@ class BusinessHome extends Component {
                     <div styleName="top-space" />
                     <div styleName="top-content-container">
                         <div styleName="content">
-                            <h1 className="font40px font30pxUnder900 font26pxUnder600 font22pxUnder500 font18pxUnder400">
-                                <span style={{ color: "white" }}>Know which candidates will</span>
+                            <h1 className="font38px font30pxUnder900 font26pxUnder600 font22pxUnder500 font18pxUnder400">
+                                <span style={{ color: "#d7d7d7" }}>Know which candidates will</span>
                                 <br />
                                 <span
                                     style={{ whiteSpace: "pre" }}
@@ -231,6 +227,7 @@ class BusinessHome extends Component {
                             </h1>
                             <div styleName="get-started-input-container">
                                 <textarea
+                                    id="get-started-input"
                                     styleName="get-started-input"
                                     className="font28px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
                                     type="text"
@@ -245,7 +242,7 @@ class BusinessHome extends Component {
                             <div
                                 styleName="see-how-it-works"
                                 className="pointer font18px font16pxUnder1000 font14pxUnder800 font12pxUnder600"
-                                onClick={this.handleOpen}
+                                onClick={this.handleOpenVideo}
                             >
                                 <img
                                     src={"images/businessHome/PlayButton" + this.props.png}

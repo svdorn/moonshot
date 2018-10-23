@@ -32,6 +32,18 @@ export function usersReducers(state = initialState, action) {
                 userPostedFailed: false
             };
             break;
+        case "OPEN_VERIFICATION_MODAL":
+            return {
+                ...state,
+                verificationModal: true
+            };
+            break;
+        case "CLOSE_VERIFICATION_MODAL":
+            return {
+                ...state,
+                verificationModal: false,
+            };
+            break;
         case "OPEN_CANDIDATES_POPUP_MODAL":
             return {
                 ...state,
@@ -68,6 +80,21 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 onboardingStep4Open: false
+            };
+            break;
+        case "OPEN_SIGNUP_MODAL":
+            let signupModalInfo = { type: action.category, name: action.name };
+            return {
+                ...state,
+                signupModalOpen: true,
+                signupModalInfo
+            };
+            break;
+        case "CLOSE_SIGNUP_MODAL":
+            return {
+                ...state,
+                signupModalOpen: false,
+                signupModalInfo: null
             };
             break;
         case "OPEN_ADD_ADMIN_MODAL":

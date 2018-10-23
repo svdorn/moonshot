@@ -124,19 +124,29 @@ async function GET_billingIsSetUp(req, res) {
 // create a business and the first account admin for that business
 async function POST_createBusinessAndUser(req, res) {
     // get necessary arguments
-    let { name, company, email, positionTitle, password, positionType, isManager } = sanitize(
+    let { name, company, email, password, positions, onboard, selectedJobsToBeDone, showVerifyEmailBanner } = sanitize(
         req.body
     );
-    isManager = !!(isManager === "YES");
 
     // validate arguments
-    const stringArgs = [name, company, email, positionTitle, password, positionType];
+    const stringArgs = [name, company, email, password];
     if (!validArgs({ stringArgs })) {
+        console.log(
+            "name: ",
+            name,
+            "company: ",
+            company,
+            "email: ",
+            email,
+            "password is a string: ",
+            typeof password === "string"
+        );
         return res.status(400).send("Bad Request.");
     }
 
     // validate email
     if (!isValidEmail(email)) {
+        console.log("Invalid email format. Email: ", email);
         return res.status(400).send("Invalid email format.");
     }
 
@@ -159,23 +169,32 @@ async function POST_createBusinessAndUser(req, res) {
             .pop()
             .toLowerCase();
         if (popularProviders.includes(provider)) {
+            console.log("Given email not a work email. Email: ", email);
             return res.status(400).send("Please use your work email address.");
         }
     }
 
     // validate password
     if (!isValidPassword(password)) {
+        console.log("Password not 8 characters long. Password length: ", password.length);
         return res.status(400).send("Password needs to be at least 8 characters long.");
     }
 
+    businessInterestsPopup = true;
+    // check if positions should be added
+    if (Array.isArray(selectedJobsToBeDone)) {
+        businessInterestsPopup = false;
+    }
+
     // create the user
-    const userInfo = { name, email, password };
+    const userInfo = { name, email, password, onboard, businessInterestsPopup, showVerifyEmailBanner };
     try {
         var user = await createAccountAdmin(userInfo);
     } catch (createUserError) {
         console.log("Error creating user from business signup: ", createUserError);
         // tell the user they need a different email if this address is taken already
         if (createUserError === errors.EMAIL_TAKEN) {
+            console.log("Email already taken: ", email);
             return res.status(400).send(errors.EMAIL_TAKEN);
         }
         // otherwise return a standard server error message
@@ -185,7 +204,8 @@ async function POST_createBusinessAndUser(req, res) {
     // create business
     const newBusinessInfo = {
         name: company,
-        positions: [{ name: positionTitle, positionType, isManager }]
+        positions,
+        selectedJobsToBeDone
     };
 
     try {
@@ -258,6 +278,8 @@ async function POST_createBusinessAndUser(req, res) {
             recipients = ["stevedorn9@gmail.com"];
         }
     }
+    const positionName = business.positions ? business.positions[0].name : undefined;
+    const positionType = business.positoins ? business.positons[0].positionType : undefined;
     let subject = "New Account Admin Sign Up";
     let content =
         "<div>" +
@@ -265,8 +287,8 @@ async function POST_createBusinessAndUser(req, res) {
         `<p>Name: ${user.name}</p>` +
         `<p>Email: ${user.email}</p>` +
         `<p>Business name: ${business.name}</p>` +
-        `<p>Position name: ${business.positions[0].name}</p>` +
-        `<p>Position type: ${business.positions[0].positionType}</p>` +
+        `<p>Position name: ${positionName}</p>` +
+        `<p>Position type: ${positionType}</p>` +
         "</div>";
     try {
         await sendEmail({ recipients, subject, content });
@@ -279,7 +301,7 @@ async function POST_createBusinessAndUser(req, res) {
 async function createAccountAdmin(info) {
     return new Promise(function(resolve, reject) {
         // get needed args
-        const { name, password, email } = info;
+        const { name, password, email, onboard, businessInterestsPopup, showVerifyEmailBanner } = info;
 
         let user = {
             name,
@@ -310,7 +332,7 @@ async function createAccountAdmin(info) {
             employees: true,
             evaluations: true,
             dashboard: true,
-            businessInterests: true
+            businessInterests: businessInterestsPopup
         };
         // had to select that they agreed to the terms to sign up so must be true
         user.termsAndConditions = [
@@ -340,11 +362,18 @@ async function createAccountAdmin(info) {
         user.notifications.firstTime = true;
         // user will have to do business onboarding
         user.hasFinishedOnboarding = false;
-        user.onboard = {
-            step: 1,
-            highestStep: 1,
-            actions: []
-        };
+        if (onboard) {
+            user.onboard = onboard;
+        } else {
+            user.onboard = {
+                step: 1,
+                highestStep: 1,
+                actions: []
+            };
+        }
+        if (showVerifyEmailBanner) {
+            user.showVerifyEmailBanner = true;
+        }
         // user.onboarding = {
         //     step: 0,
         //     complete: false,
@@ -453,7 +482,7 @@ async function createAccountAdmin(info) {
 async function createBusiness(info) {
     return new Promise(async function(resolve, reject) {
         // get needed args
-        const { name, positions } = info;
+        const { name, positions, selectedJobsToBeDone } = info;
         // make sure the minimum necessary args are there
         if (!name) {
             return reject("No business name provided.");
@@ -499,6 +528,11 @@ async function createBusiness(info) {
                 // add the position
                 business.positions.push(bizPos);
             }
+        }
+
+        // check if interests should be added
+        if (Array.isArray(selectedJobsToBeDone)) {
+            business.interests = selectedJobsToBeDone;
         }
 
         // create an API_Key for the business

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import {} from "../../../../actions/usersActions";
+import { openSignupModal } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { primaryCyan } from "../../../../colors";
@@ -95,8 +95,12 @@ class Employees extends Component {
         );
 
         const employeeAction = newEmployees > 0 ? "Grade" : "Invite";
+        let onClick = () => goTo("/myEmployees");
+        if (!this.props.currentUser) {
+            onClick = () => this.props.openSignupModal("boxes", "Employee");
+        }
         const smallCTA = (
-            <div styleName="box-cta" onClick={() => goTo("/myEmployees")}>
+            <div styleName="box-cta" onClick={onClick}>
                 {employeeAction} Employees <img src={`/icons/LineArrow${this.props.png}`} />
             </div>
         );
@@ -130,7 +134,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({ openSignupModal }, dispatch);
 }
 
 export default connect(

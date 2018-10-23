@@ -12,6 +12,7 @@ import AddPositionDialog from "../../childComponents/addPositionDialog";
 import AddUserDialog from "../../childComponents/addUserDialog";
 import ROIOnboardingDialog from "../../childComponents/roiOnboardingDialog";
 import OnboardingStep4Dialog from "../../childComponents/onboardingStep4Dialog";
+import VerificationModal from "./dashboardItems/onboarding/childComponents/verificationModal";
 
 import WelcomeMessage from "./dashboardItems/welcomeMessage";
 
@@ -71,6 +72,7 @@ class Dashboard extends Component {
                 <AddUserDialog />
                 <ROIOnboardingDialog />
                 <OnboardingStep4Dialog />
+                <VerificationModal />
                 <div className="page-line-header">
                     <div />
                     <div>Dashboard</div>
