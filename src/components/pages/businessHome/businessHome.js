@@ -275,8 +275,15 @@ class BusinessHome extends Component {
                         />
                     </div>
                 </div>
-                <div className="cyan corners-button">Experience The Product For Yourself</div>
-                <div>See everything immediately. No email, password, or credit card.</div>
+                <div className="primary-white center">
+                    <div
+                        className="cyan primary-cyan corners-button"
+                        onClick={() => goTo("/explore")}
+                    >
+                        Experience The Product For Yourself
+                    </div>
+                    <div>See everything immediately. No email, password, or credit card.</div>
+                </div>
             </section>
         );
     }
