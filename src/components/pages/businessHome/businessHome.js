@@ -263,7 +263,7 @@ class BusinessHome extends Component {
     previewSection() {
         return (
             <section id="product-preview" styleName="product-preview-section">
-                {this.state.showRectangles ? this.skewedRectangles(20) : null}
+                {this.state.showRectangles ? this.skewedRectangles(10) : null}
                 <div className="center">
                     <div styleName="image-container">
                         <img
