@@ -203,16 +203,6 @@ class BusinessHome extends Component {
             <section id="introduction" styleName="introduction">
                 <a id="home-top" name="home-top" className="anchor" />
                 <div styleName="front-page" className="businessHome">
-                    {/*this.state.showRectangles*/ false ? (
-                        <div styleName="skewed-rectangles-container">
-                            <div styleName="skewed-rectangles">
-                                {this.skewedRectangles(11, { rectanglesOnly: true })}
-                            </div>
-                            <div styleName="skewed-rectangles">
-                                {this.skewedRectangles(7, { rectanglesOnly: true })}
-                            </div>
-                        </div>
-                    ) : null}
                     <div styleName="top-space" />
                     <div styleName="top-content-container">
                         <div styleName="content">

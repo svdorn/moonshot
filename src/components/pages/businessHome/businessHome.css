@@ -420,144 +420,7 @@
     height: 100%;
     position: relative;
 }
-/* END GENERAL SETUP */
-
-/* INTRODUCTION GRID */
-.introduction > div > .skewed-rectangles-container {
-    height: 150%;
-}
-.introduction > div > .skewed-rectangles-container > .skewed-rectangles:first-child {
-    height: calc(var(--row-width) * 62);
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(1) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 59;
-    grid-row-end: 63;
-    grid-column-start: 1;
-    grid-column-end: 7;
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(2) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 59;
-    grid-row-end: 63;
-    grid-column-start: 7;
-    grid-column-end: 10;
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(3) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 16;
-    grid-row-end: 20;
-    grid-column-start: 29;
-    grid-column-end: 35;
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(4) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 22;
-    grid-row-end: 26;
-    grid-column-start: 31;
-    grid-column-end: 41;
-}
-/* SECOND GRID OF SKEWED RECTANGLES */
-.introduction > div > .skewed-rectangles-container > .skewed-rectangles:nth-child(2) {
-    /* account for the first skewed rectangles grid */
-    margin-top: calc(var(--row-width) * 62);
-    height: calc(var(--row-width) * 23);
-    background-color: #323232;
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:nth-child(2)
-    > .skewed-rectangle:nth-child(1) {
-    background: linear-gradient(to right, #9c9ffe, #aa89fe);
-    grid-row-start: 1;
-    grid-row-end: 5;
-    grid-column-start: 1;
-    grid-column-end: 9;
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:nth-child(2)
-    > .skewed-rectangle:nth-child(2) {
-    background: linear-gradient(to right, #9c9ffe, #aa89fe);
-    grid-row-start: 1;
-    grid-row-end: 5;
-    grid-column-start: 24;
-    grid-column-end: 33;
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:nth-child(2)
-    > .skewed-rectangle:nth-child(3) {
-    background-color: var(--primary-black-dark);
-    grid-row-start: 49;
-    grid-row-end: 63;
-    grid-column-start: 1;
-    grid-column-end: 16;
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:nth-child(2)
-    > .skewed-rectangle:nth-child(4) {
-    background-color: var(--primary-black-dark);
-    grid-row-start: 63;
-    grid-row-end: 67;
-    grid-column-start: 1;
-    grid-column-end: 34;
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:nth-child(2)
-    > .skewed-rectangle:nth-child(5) {
-    background: linear-gradient(to right, #ad84fe, #86c5fe);
-    grid-row-start: 63;
-    grid-row-end: 67;
-    grid-column-start: 34;
-    grid-column-end: 43;
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:nth-child(2)
-    > .skewed-rectangle:nth-child(6) {
-    background: linear-gradient(to right, #86c5fe, #ad84fe);
-    grid-row-start: 20;
-    grid-row-end: 24;
-    grid-column-start: 28;
-    grid-column-end: 32;
-}
-.introduction
-    > div
-    > .skewed-rectangles-container
-    > .skewed-rectangles:nth-child(2)
-    > .skewed-rectangle:nth-child(7) {
-    background: linear-gradient(to right, #86c5fe, #ad84fe);
-    grid-row-start: 20;
-    grid-row-end: 24;
-    grid-column-start: 28;
-    grid-column-end: 32;
-}
-/* END INTRODUCTION GRID */
+/* END GENERAL GRID SETUP */
 
 /* GRID PREVIEW PAGE */
 .product-preview-section {
@@ -914,23 +777,6 @@
     }
 }
 
-@media only screen and (max-width: 1100px) {
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(2) {
-        grid-column-end: 12;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:nth-child(2)
-        > .skewed-rectangle:nth-child(1) {
-        grid-column-end: 11;
-    }
-}
-
 @media only screen and (max-width: 1000px) {
     .stats-box {
         height: 210px;
@@ -1012,14 +858,6 @@
 
     .get-started-input {
         padding-top: 4px;
-    }
-
-    /* GRID */
-    .introduction > div > .skewed-rectangles-container {
-        margin-top: -45px;
-        -webkit-transition: all 0.5s ease;
-        -ms-transition: all 0.5s ease;
-        transition: all 0.5s ease;
     }
 
     .get-started-input-container {
@@ -1142,123 +980,6 @@
         height: 190px;
         margin-bottom: 180px;
     }
-
-    /* GRID */
-    /* hide all but the first two rectangles of the first container */
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(n + 3) {
-        display: none;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(1) {
-        grid-row-start: 59;
-        grid-row-end: 63;
-        grid-column-start: 28;
-        grid-column-end: 40;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(2) {
-        grid-row-start: 53;
-        grid-row-end: 57;
-        grid-column-start: 27;
-        grid-column-end: 35;
-    }
-
-    .introduction > div > .skewed-rectangles-container {
-        height: 150%;
-    }
-    .introduction > div > .skewed-rectangles-container > .skewed-rectangles:nth-child(2) {
-        height: calc(var(--row-width) * 56);
-        background-color: #323232;
-        top: 130px;
-    }
-
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:nth-child(2)
-        > .skewed-rectangle:nth-child(1) {
-        background: var(--primary-black-dark);
-        grid-row-start: 1;
-        grid-row-end: 5;
-        grid-column-start: 1;
-        grid-column-end: 15;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:nth-child(2)
-        > .skewed-rectangle:nth-child(2) {
-        background: linear-gradient(to right, #a196fe, #80cffe);
-        grid-row-start: 1;
-        grid-row-end: 5;
-        grid-column-start: 15;
-        grid-column-end: 19;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:nth-child(2)
-        > .skewed-rectangle:nth-child(3) {
-        background: var(--primary-black-dark);
-        grid-row-start: 1;
-        grid-row-end: 5;
-        grid-column-start: 19;
-        grid-column-end: 30;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:nth-child(2)
-        > .skewed-rectangle:nth-child(4) {
-        background: linear-gradient(to right, #9c9ffe, #aa89fe);
-        grid-row-start: 5;
-        grid-row-end: 9;
-        grid-column-start: 12;
-        grid-column-end: 18;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:nth-child(2)
-        > .skewed-rectangle:nth-child(5) {
-        background: var(--primary-black-dark);
-        grid-row-start: 44;
-        grid-row-end: 53;
-        grid-column-start: 1;
-        grid-column-end: 20;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:nth-child(2)
-        > .skewed-rectangle:nth-child(6) {
-        background: var(--primary-black-dark);
-        grid-row-start: 53;
-        grid-row-end: 57;
-        grid-column-start: 1;
-        grid-column-end: 26;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:nth-child(2)
-        > .skewed-rectangle:nth-child(7) {
-        background: linear-gradient(to right, #ad84fe, #86c5fe);
-        grid-row-start: 53;
-        grid-row-end: 57;
-        grid-column-start: 26;
-        grid-column-end: 32;
-    }
 }
 
 @media only screen and (max-width: 600px) {
@@ -1345,31 +1066,6 @@
         width: 350px;
         height: 39px;
     }
-
-    /* GRID */
-    .introduction > div > .skewed-rectangles-container > .skewed-rectangles:first-child {
-        height: calc(var(--row-width) * 80);
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(1) {
-        grid-row-start: 72;
-        grid-row-end: 76;
-        grid-column-start: 26;
-        grid-column-end: 40;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(2) {
-        grid-row-start: 66;
-        grid-row-end: 70;
-        grid-column-start: 27;
-        grid-column-end: 35;
-    }
 }
 
 @media only screen and (max-width: 400px) {
@@ -1394,40 +1090,6 @@
     .paperBoxBusinessHome {
         height: 395px;
         width: 280px;
-    }
-
-    /* GRID */
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(1) {
-        grid-column-start: 24;
-        grid-row-start: 77;
-        grid-row-end: 81;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(2) {
-        grid-column-start: 25;
-        grid-row-start: 71;
-        grid-row-end: 75;
-    }
-    .introduction > div > .skewed-rectangles-container > .skewed-rectangles:nth-child(2) {
-        top: 180px;
-    }
-    .introduction
-        > div
-        > .skewed-rectangles-container
-        > .skewed-rectangles:nth-child(2)
-        > .skewed-rectangle:nth-child(7) {
-        background: linear-gradient(to right, #ad84fe, #86c5fe);
-        grid-row-start: 53;
-        grid-row-end: 57;
-        grid-column-start: 25;
-        grid-column-end: 32;
     }
     .statistics-section
         > .skewed-container
