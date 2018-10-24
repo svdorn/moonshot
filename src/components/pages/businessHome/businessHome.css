@@ -12,7 +12,7 @@
 .product-preview-section {
     --preview-image-height: 420px;
     background: linear-gradient(to right, #1e1e1e, var(--primary-black-dark));
-    padding: 200px 0 500px;
+    padding: 500px 0 500px;
 }
 
 .front-page {
@@ -881,6 +881,36 @@
 @media only screen and (min-width: 1500px) {
     .get-started-input {
         --get-started-border-width: 4px;
+    }
+}
+
+@media only screen and (max-width: 4000px) {
+    .product-preview-section {
+        padding: 400px 0 500px;
+    }
+}
+
+@media only screen and (max-width: 3000px) {
+    .product-preview-section {
+        padding: 300px 0 500px;
+    }
+}
+
+@media only screen and (max-width: 2500px) {
+    .product-preview-section {
+        padding: 200px 0 500px;
+    }
+}
+
+@media only screen and (max-width: 2000px) {
+    .product-preview-section {
+        padding: 130px 0 500px;
+    }
+}
+
+@media only screen and (max-width: 1500px) {
+    .product-preview-section {
+        padding: 60px 0 500px;
     }
 }
 
