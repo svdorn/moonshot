@@ -1,5 +1,6 @@
 "use strict";
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { noop } from "../../miscFunctions";
 import { primaryCyan, primaryWhite } from "../../colors";
 import "./cornersButton.css";
@@ -12,7 +13,7 @@ class CornersButton extends Component {
     }
 
     render() {
-        let { className, onClick, color1, color2, content } = this.props;
+        let { className, onClick, color1, color2, content, png } = this.props;
         if (typeof className !== "string") {
             className = "";
         }
@@ -38,10 +39,17 @@ class CornersButton extends Component {
                 <div styleName="hover-content" style={{ color: color2 }}>
                     {content}
                 </div>
+                <img styleName="arrow" src={`/icons/LineArrow${png}`} />
                 <div styleName="above-hover-content" style={{ backgroundColor: "red" }} />
             </div>
         );
     }
 }
 
-export default CornersButton;
+function mapStateToProps(state) {
+    return {
+        png: state.users.png
+    };
+}
+
+export default connect(mapStateToProps)(CornersButton);

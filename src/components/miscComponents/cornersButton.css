@@ -1,6 +1,6 @@
 .button {
     --top-padding: 10px;
-    --side-padding: 20px;
+    --side-padding: 50px;
     display: inline-block;
 
     cursor: pointer;
@@ -79,6 +79,21 @@
 
     transition: 1s 3s;
 }
+.arrow {
+    opacity: 0;
+    position: absolute;
+    height: 10px;
+    top: 50%;
+    right: calc(var(--side-padding) / 3);
+    transform: translateX(-100%) translateY(-50%);
+    z-index: 5;
+}
+.button:hover .arrow {
+    opacity: 1;
+    transform: translateX(0%) translateY(-50%);
+
+    transition: opacity 1s 3s, transform 0.5s 4.5s;
+}
 .above-hover-content {
     position: absolute;
     left: 0;
@@ -86,7 +101,7 @@
     top: 0;
     bottom: 0;
     opacity: 0;
-    z-index: 5;
+    z-index: 6;
 }
 .button:hover .above-hover-content {
     opacity: 1;

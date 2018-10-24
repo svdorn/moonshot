@@ -1,10 +1,9 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {  } from "../../actions/usersActions";
-import {  } from "../../miscFunctions";
-
+import {} from "../../actions/usersActions";
+import {} from "../../miscFunctions";
 
 class BoilerPlate extends Component {
     constructor(props) {
@@ -14,13 +13,9 @@ class BoilerPlate extends Component {
     }
 
     render() {
-        return (
-            <div>
-            </div>
-        );
+        return <div />;
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -29,10 +24,10 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-
-    }, dispatch);
+    return bindActionCreators({}, dispatch);
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(BoilerPlate);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BoilerPlate);
