@@ -40,7 +40,7 @@ class CornersButton extends Component {
                     {content}
                 </div>
                 <img styleName="arrow" src={`/icons/LineArrow${png}`} />
-                <div styleName="above-hover-content" style={{ backgroundColor: "red" }} />
+                <div styleName="above-hover-content" style={{ backgroundColor: color1 }} />
             </div>
         );
     }

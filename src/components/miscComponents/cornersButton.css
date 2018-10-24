@@ -1,5 +1,5 @@
 .button {
-    --top-padding: 10px;
+    --top-padding: 15px;
     --side-padding: 50px;
     display: inline-block;
 
@@ -37,7 +37,7 @@
     top: 0;
 }
 .button:hover .border {
-    transition: 1s;
+    transition: 200ms;
 }
 .button:hover .border-top,
 .button:hover .border-bottom {
@@ -63,7 +63,7 @@
 }
 .button:hover .under-hover-content {
     right: 0;
-    transition: right 1s 1s;
+    transition: right 400ms 200ms;
 }
 .hover-content {
     opacity: 0;
@@ -77,22 +77,22 @@
 .button:hover .hover-content {
     opacity: 1;
 
-    transition: 1s 3s;
+    transition: 5ms 610ms;
 }
 .arrow {
     opacity: 0;
     position: absolute;
-    height: 10px;
+    width: calc(var(--side-padding) / 3);
     top: 50%;
-    right: calc(var(--side-padding) / 3);
-    transform: translateX(-100%) translateY(-50%);
+    right: calc(var(--side-padding) / 2.5);
+    transform: translateX(-100%) translateY(calc(2px - 50%));
     z-index: 5;
 }
 .button:hover .arrow {
     opacity: 1;
-    transform: translateX(0%) translateY(-50%);
+    transform: translateX(0%) translateY(calc(1px - 50%));
 
-    transition: opacity 1s 3s, transform 0.5s 4.5s;
+    transition: opacity 5ms 610ms, transform 200ms 820ms;
 }
 .above-hover-content {
     position: absolute;
@@ -107,5 +107,5 @@
     opacity: 1;
     left: 100%;
 
-    transition: opacity 1s 2s, left 1s 4s;
+    transition: opacity 5ms 600ms, left 400ms 620ms;
 }
