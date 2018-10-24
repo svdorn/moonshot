@@ -293,93 +293,6 @@ class BusinessHome extends Component {
         );
     }
 
-    // second section of the page, gives three screenshots as well as corresponding information
-    screenshotsSection() {
-        return (
-            <section id="three-screenshots">
-                <div styleName="screenshot-view">
-                    <div styleName="screenshot-left-text">
-                        <div
-                            styleName="screenshot-left-text-container"
-                            className="font18px font16pxUnder800 primary-white"
-                        >
-                            <h2 className="primary-purple-light font30px font24pxUnder800 font22pxUnder500">
-                                Quickly identify which candidates{" "}
-                                <div className="above1200only br">
-                                    <br />
-                                </div>will perform the best... or the worst
-                            </h2>
-                            Analyze candidates to see if they exhibit the qualities of proven high
-                            achievers or low performers in that position.
-                        </div>
-                    </div>
-                    <div styleName="screenshot-right">
-                        <img
-                            alt="Analysis Text"
-                            src={"/images/businessHome/CandidatesScreenshot" + this.props.jpg}
-                        />
-                    </div>
-                </div>
-
-                <br />
-
-                <div styleName="screenshot-view">
-                    <div styleName="screenshot-right-text">
-                        <div
-                            styleName="screenshot-right-text-container"
-                            className="font18px font16pxUnder800 primary-white"
-                        >
-                            <h2 className="primary-cyan font30px font24pxUnder800 font22pxUnder500">
-                                Use data to eliminate biases{" "}
-                                <div className="above900only br">
-                                    <br />
-                                </div>and guesswork
-                            </h2>
-                            Why read hundreds of resumes? Moonshot uses machine learning to reveal
-                            the empirical evidence instead of conjecture based on a resume.
-                        </div>
-                    </div>
-                    <div styleName="screenshot-left">
-                        <img
-                            alt="Predictive Insights"
-                            src={"/images/businessHome/ProdScreenshot" + this.props.jpg}
-                        />
-                    </div>
-                </div>
-
-                <br />
-
-                <div styleName="screenshot-view">
-                    <div styleName="screenshot-left-text">
-                        <div
-                            styleName="screenshot-left-text-container"
-                            className="font18px font16pxUnder800 primary-white"
-                        >
-                            <h2
-                                className="font30px font24pxUnder800 font22pxUnder500"
-                                style={{ color: "#ff748c" }}
-                            >
-                                Constantly improve with every{" "}
-                                <div className="above1000only br">
-                                    <br />
-                                </div>new candidate and hire
-                            </h2>
-                            Your next hire should always be your best one yet. It&#39;s smart to
-                            learn from your successes and mistakes.
-                        </div>
-                    </div>
-
-                    <div styleName="screenshot-right">
-                        <img
-                            alt="Analysis Text"
-                            src={"/images/businessHome/ProductScreenshot" + this.props.jpg}
-                        />
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
     statisticsSection() {
         return (
             <section styleName="statistics-section" id="businessHomeStatistics">
@@ -509,8 +422,6 @@ class BusinessHome extends Component {
                     {this.introductionSection()}
 
                     {this.previewSection()}
-
-                    {this.screenshotsSection()}
 
                     {this.statisticsSection()}
 

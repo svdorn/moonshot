@@ -253,63 +253,6 @@
     height: calc(var(--preview-image-height) / 1.36);
 }
 
-.screenshot-left {
-    float: left;
-}
-.screenshot-right {
-    float: right;
-    margin-right: 2%;
-}
-.screenshot-left > img,
-.screenshot-right > img {
-    transition: all 0.2s ease-in;
-    top: -50px;
-    height: 270px;
-    z-index: 5;
-    width: 400px;
-    position: absolute;
-    -webkit-box-shadow: 0px 0px 26px 3px #00000073;
-    box-shadow: 0px 0px 26px 3px #00000073;
-}
-.screenshot-left > img {
-    margin: 30px 0 0 0;
-    left: 2%;
-}
-.screenshot-right > img {
-    right: 4%;
-    margin: 30px 30px 0 0;
-}
-
-.screenshot-left-text {
-    float: left;
-    margin-left: 2%;
-}
-.screenshot-right-text {
-    float: right;
-    width: 43%;
-}
-.screenshot-left-text,
-.screenshot-right-text {
-    margin-top: 30px;
-    width: 54%;
-    overflow: auto;
-    width: 45%;
-}
-.screenshot-left-text-container,
-.screenshot-right-text-container {
-    float: right;
-    margin-left: 0px;
-    text-align: left;
-}
-
-.screenshot-view {
-    text-align: left;
-    position: relative;
-    margin: 0 5%;
-    clear: both;
-    height: 320px;
-}
-
 .stats-box {
     height: 210px;
     width: 280px;
@@ -953,38 +896,7 @@
     }
 }
 
-@media only screen and (max-width: 1050px) {
-    .screenshot-left > img {
-        left: 0%;
-    }
-    .screenshot-right > img {
-        right: 0%;
-    }
-
-    .screenshot-left-text {
-        width: 49%;
-        ,margin-left: 0;
-    }
-    .screenshot-right-text {
-        width: 45%;
-    }
-    .screenshot-left-text-container {
-        margin-left: 0px;
-    }
-    .screenshot-right-text-container {
-        margin-right: 0px;
-    }
-}
-
 @media only screen and (max-width: 1000px) {
-    .screenshot-left > img,
-    .screenshot-right > img {
-        top: 0px;
-        height: 216px;
-        width: 320px;
-        transition: all 0.2s ease-out;
-    }
-
     .stats-box {
         height: 210px;
         width: 240px;
@@ -1086,48 +998,6 @@
     .play-button {
         height: 26px;
         margin-right: 8px;
-    }
-
-    .screenshot-view {
-        text-align: center;
-        height: 180px;
-        display: table;
-    }
-
-    .screenshot-left > img,
-    .screenshot-right > img {
-        position: relative;
-        margin-top: 60px;
-    }
-    .screenshot-right,
-    .screenshot-left {
-        float: none;
-    }
-    .screenshot-right > img {
-        margin-left: 30px;
-    }
-
-    .screenshot-right-text {
-        margin-left: 0px;
-    }
-    .screenshot-left-text {
-        margin-top: 0;
-    }
-    .screenshot-left-text,
-    .screenshot-right-text {
-        margin: auto;
-        float: initial;
-        margin-left: 0px;
-        width: 100%;
-    }
-    .screenshot-left-text-container,
-    .screenshot-right-text-container {
-        text-align: left;
-        margin-left: 0px;
-        margin-bottom: 20px;
-        padding-left: 0;
-        text-align: left;
-        margin-bottom: 0px;
     }
 
     .paperBoxBusinessHome {
@@ -1441,35 +1311,6 @@
         height: 39px;
     }
 
-    .screenshot-view {
-        margin-bottom: -20px;
-        margin: 0px;
-        height: 160px;
-    }
-
-    .screenshot-left-text-container,
-    .screenshot-right-text-container {
-        padding-left: 5%;
-        padding-right: 5%;
-    }
-    .screenshot-right-text,
-    .screenshot-left-text {
-        height: 152px;
-        overflow: visible;
-        transform: none;
-        width: 90%;
-    }
-    .screenshot-left-text-container {
-        height: 135px;
-    }
-    .screenshot-left-text {
-        height: 120px;
-        margin-top: 0;
-    }
-    .screenshot-right-text {
-        height: 160px;
-    }
-
     /* GRID */
     .introduction > div > .skewed-rectangles-container > .skewed-rectangles:first-child {
         height: calc(var(--row-width) * 80);
@@ -1508,15 +1349,6 @@
     }
     .drop-down-option {
         padding: 10px 12px;
-    }
-
-    .screenshot-left > img,
-    .screenshot-right > img {
-        height: 172.8px;
-        width: 256px;
-    }
-    .screenshot-right {
-        margin-right: 0;
     }
 
     .video-container {
