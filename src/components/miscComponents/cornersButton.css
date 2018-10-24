@@ -9,6 +9,7 @@
 
 .border {
     position: absolute;
+    z-index: 2;
 }
 .border-top,
 .border-bottom {

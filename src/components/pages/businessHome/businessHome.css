@@ -11,6 +11,8 @@
 
 .product-preview-section {
     --preview-image-height: 420px;
+    background: linear-gradient(to right, #1e1e1e, var(--primary-black-dark));
+    padding-top: 200px;
 }
 
 .front-page {
@@ -405,6 +407,10 @@
     top: 2px;
 }
 
+.image-preview {
+    padding-top: 180px;
+}
+
 /* GRIDS */
 /* GENERAL SETUP */
 .businessHome {
@@ -608,24 +614,26 @@
 /* GRID PREVIEW PAGE */
 .product-preview-section {
     --rect-row-top-left-start: calc(var(--rect-row-top-left-mid) - 4);
-    --rect-row-top-left-mid: 75;
+    --rect-row-top-left-mid: 5;
     --rect-row-top-left-end: calc(var(--rect-row-top-left-mid) + 4);
     --rect-row-top-right-start: calc(var(--rect-row-top-right-mid) - 4);
-    --rect-row-top-right-mid: 95;
+    --rect-row-top-right-mid: 25;
     --rect-row-top-right-end: calc(var(--rect-row-top-right-mid) + 4);
 
+    --rect-body-height: 170;
+
     --rect-row-bottom-left-start: calc(var(--rect-row-bottom-left-mid) - 4);
-    --rect-row-bottom-left-mid: 185;
+    --rect-row-bottom-left-mid: calc(var(--rect-row-top-left-mid) + var(--rect-body-height));
     --rect-row-bottom-left-end: calc(var(--rect-row-bottom-left-mid) + 4);
     --rect-row-bottom-right-start: calc(var(--rect-row-bottom-right-mid) - 4);
-    --rect-row-bottom-right-mid: 185;
+    --rect-row-bottom-right-mid: calc(var(--rect-row-top-left-mid) + var(--rect-body-height));
     --rect-row-bottom-right-end: calc(var(--rect-row-bottom-right-mid) + 4);
 
     --g-color-1: var(--primary-white);
     --g-color-2: var(--primary-cyan);
 }
 .product-preview-section > .skewed-container > .skewed-rectangles-container {
-    margin-top: -500px;
+    margin-top: 0px;
     height: 1200px;
 }
 .product-preview-section > .skewed-container > .skewed-rectangles-container > .skewed-rectangles {

@@ -264,7 +264,7 @@ class BusinessHome extends Component {
         return (
             <section id="product-preview" styleName="product-preview-section">
                 {this.state.showRectangles ? this.skewedRectangles(10) : null}
-                <div className="center">
+                <div className="center" styleName="image-preview">
                     <div styleName="image-container">
                         <img
                             src={`/images/businessHome/MyCandidatesScreenshot${this.props.png}`}
@@ -285,7 +285,9 @@ class BusinessHome extends Component {
                         color2={colors.primaryWhite}
                         style={{ margin: "40px auto 20px" }}
                     />
-                    <div>See everything immediately. No email, password, or credit card.</div>
+                    <div style={{ zIndex: 5 }}>
+                        See everything immediately. No email, password, or credit card.
+                    </div>
                 </div>
             </section>
         );
