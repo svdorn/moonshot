@@ -669,14 +669,6 @@ form > h1 {
     transform: translate(50%, -50%) rotate(-90deg);
 }
 
-.businessHome {
-    --rowWidth: 5px;
-    --contentColumns: 24;
-    --gutterColumns: 8;
-    --contentColumnWidth: calc(1040px / var(--contentColumns));
-    --gutterColumnWidth: var(--contentColumnWidth);
-}
-
 #employerOnboarding {
     position: relative;
     display: flex;

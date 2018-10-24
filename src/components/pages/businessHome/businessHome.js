@@ -263,6 +263,7 @@ class BusinessHome extends Component {
     previewSection() {
         return (
             <section id="product-preview" styleName="product-preview-section">
+                {this.state.showRectangles ? this.skewedRectangles(20) : null}
                 <div className="center">
                     <div styleName="image-container">
                         <img
@@ -502,7 +503,7 @@ class BusinessHome extends Component {
                         content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions."
                     />
                 </MetaTags>
-                <div className="businessHome">
+                <div styleName="businessHome">
                     {this.introductionSection()}
 
                     {this.previewSection()}
