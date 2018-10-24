@@ -282,6 +282,7 @@ class BusinessHome extends Component {
                         onClick={() => goTo("/explore")}
                         color1={colors.primaryCyan}
                         color2={colors.primaryWhite}
+                        style={{ margin: "40px auto 20px" }}
                     />
                     <div>See everything immediately. No email, password, or credit card.</div>
                 </div>

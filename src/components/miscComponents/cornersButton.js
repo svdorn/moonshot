@@ -13,7 +13,7 @@ class CornersButton extends Component {
     }
 
     render() {
-        let { className, onClick, color1, color2, content, png } = this.props;
+        let { className, onClick, color1, color2, style, content, png } = this.props;
         if (typeof className !== "string") {
             className = "";
         }
@@ -26,8 +26,11 @@ class CornersButton extends Component {
         if (typeof color2 !== "string") {
             color2 = primaryWhite;
         }
+        if (typeof style !== "object") {
+            style = {};
+        }
         return (
-            <div styleName="button" className={className} onClick={onClick}>
+            <div styleName="button" className={className} onClick={onClick} style={style}>
                 <div styleName="content" style={{ color: color1 }}>
                     {content}
                 </div>

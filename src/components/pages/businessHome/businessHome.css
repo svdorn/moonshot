@@ -202,6 +202,9 @@
     position: relative;
     text-align: center;
     display: inline-block;
+    -webkit-box-shadow: 0 0 26px 5px var(--shadow-black);
+    -moz-box-shadow: 0 0 26px 5px var(--shadow-black);
+    box-shadow: 0 0 26px 5px var(--shadow-black);
     --candidate-name-font-size: 13px;
 }
 .my-candidates-screenshot {
