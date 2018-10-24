@@ -369,9 +369,9 @@
     --gutter-column-width: var(--content-column-width);
 
     --rect-col-left-start: 1;
-    --rect-col-upper-left-end: 9;
+    --rect-col-upper-left-end: 3;
     --rect-col-lower-left-end: calc(var(--rect-col-upper-left-end) + 1);
-    --rect-col-upper-right-start: 34;
+    --rect-col-upper-right-start: 40;
     --rect-col-lower-right-start: calc(var(--rect-col-upper-right-start) + 1);
     --rect-col-right-end: calc(3 + var(--content-columns) + (2 * var(--gutter-columns)));
 }
@@ -769,6 +769,25 @@
     .product-preview-section {
         padding: 130px 0 500px;
     }
+
+    .businessHome {
+        --rect-col-upper-left-end: 4;
+        --rect-col-upper-right-start: 39;
+    }
+}
+
+@media only screen and (max-width: 1800px) {
+    .businessHome {
+        --rect-col-upper-left-end: 6;
+        --rect-col-upper-right-start: 37;
+    }
+}
+
+@media only screen and (max-width: 1600px) {
+    .businessHome {
+        --rect-col-upper-left-end: 8;
+        --rect-col-upper-right-start: 35;
+    }
 }
 
 @media only screen and (max-width: 1500px) {
@@ -777,7 +796,26 @@
     }
 }
 
+@media only screen and (max-width: 1400px) {
+    .businessHome {
+        --rect-col-upper-left-end: 10;
+        --rect-col-upper-right-start: 33;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .businessHome {
+        --rect-col-upper-left-end: 11;
+        --rect-col-upper-right-start: 32;
+    }
+}
+
 @media only screen and (max-width: 1000px) {
+    .businessHome {
+        --rect-col-upper-left-end: 13;
+        --rect-col-upper-right-start: 30;
+    }
+
     .stats-box {
         height: 210px;
         width: 240px;
@@ -850,6 +888,11 @@
 }
 
 @media only screen and (max-width: 900px) {
+    .businessHome {
+        --rect-col-upper-left-end: 14;
+        --rect-col-upper-right-start: 29;
+    }
+
     .stats-box {
         height: 210px;
         width: 210px;
@@ -868,6 +911,11 @@
 }
 
 @media only screen and (max-width: 800px) {
+    .businessHome {
+        --rect-col-upper-left-end: 15;
+        --rect-col-upper-right-start: 28;
+    }
+
     .play-button {
         height: 26px;
         margin-right: 8px;
@@ -945,6 +993,11 @@
 }
 
 @media only screen and (max-width: 700px) {
+    .businessHome {
+        --rect-col-upper-left-end: 16;
+        --rect-col-upper-right-start: 27;
+    }
+
     .top-content-container {
         max-width: calc(30% + 360px);
     }
@@ -983,6 +1036,16 @@
 }
 
 @media only screen and (max-width: 600px) {
+    .businessHome {
+        --rect-col-upper-left-end: 17;
+        --rect-col-upper-right-start: 26;
+    }
+
+    /* top big background box */
+    .product-preview-section .skewed-rectangle:nth-child(2) {
+        grid-column-end: 25;
+    }
+
     .get-started-input-container {
         width: 410px;
         height: 41px;
@@ -1062,6 +1125,16 @@
 }
 
 @media only screen and (max-width: 500px) {
+    .businessHome {
+        --rect-col-upper-left-end: 18;
+        --rect-col-upper-right-start: 25;
+    }
+
+    /* top big background box */
+    .product-preview-section .skewed-rectangle:nth-child(2) {
+        grid-column-end: 24;
+    }
+
     .get-started-input-container {
         width: 350px;
         height: 39px;
@@ -1069,6 +1142,16 @@
 }
 
 @media only screen and (max-width: 400px) {
+    .businessHome {
+        --rect-col-upper-left-end: 19;
+        --rect-col-upper-right-start: 24;
+    }
+
+    /* top big background box */
+    .product-preview-section .skewed-rectangle:nth-child(2) {
+        grid-column-end: 23;
+    }
+
     .get-started-input-container {
         width: 280px;
         height: 36px;
