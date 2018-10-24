@@ -12,7 +12,7 @@
 .product-preview-section {
     --preview-image-height: 420px;
     background: linear-gradient(to right, #1e1e1e, var(--primary-black-dark));
-    padding-top: 200px;
+    padding: 200px 0 500px;
 }
 
 .front-page {
@@ -352,6 +352,11 @@
 
 .image-preview {
     padding-top: 180px;
+}
+
+.no-credit-card {
+    position: relative;
+    font-style: italic;
 }
 
 /* GRIDS */

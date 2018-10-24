@@ -285,7 +285,7 @@ class BusinessHome extends Component {
                         color2={colors.primaryWhite}
                         style={{ margin: "40px auto 20px" }}
                     />
-                    <div style={{ zIndex: 5 }}>
+                    <div styleName="no-credit-card">
                         See everything immediately. No email, password, or credit card.
                     </div>
                 </div>
