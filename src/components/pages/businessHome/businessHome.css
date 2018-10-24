@@ -589,7 +589,7 @@
 }
 /* background grid color */
 .product-preview-section .skewed-rectangle:nth-child(1) {
-    background: #323232;
+    background: #262626;
     grid-row-start: var(--rect-row-top-right-mid);
     grid-row-end: var(--rect-row-bottom-left-mid);
     grid-column-start: 1;
@@ -597,7 +597,7 @@
 }
 /* top big background box */
 .product-preview-section .skewed-rectangle:nth-child(2) {
-    background: #323232;
+    background: #262626;
     grid-row-start: var(--rect-row-top-right-mid);
     grid-row-end: var(--rect-row-top-left-mid);
     grid-column-start: 1;
