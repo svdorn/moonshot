@@ -256,7 +256,7 @@ class Apply extends Component {
 
             content = (
                 <div>
-                    <div className="marginTop50px marginBottom30px">
+                    <div className="paddingTop50px marginBottom30px">
                         <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">{this.state.company} Evaluation</div>
                         <div className="font16px font14pxUnder700 font12pxUnder500 secondary-gray" styleName="powered-by">Powered by Moonshot Insights</div>
                     </div>
@@ -282,8 +282,17 @@ class Apply extends Component {
             );
         }
 
+        let blurredClass = "";
+        if (this.props.claimPageModal) {
+            blurredClass = "dialogForBizOverlay";
+        }
+
         return (
-            <div className="jsxWrapper blackBackground fillScreen center">
+            <div className={
+                "center full-height " +
+                blurredClass +
+                (this.props.blurLeadDashboard ? " blur" : "")
+            }>
                 <ClaimPageModal />
                 { content }
             </div>
@@ -297,6 +306,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         png: state.users.png,
         formData: state.form,
+        blurLeadDashboard: state.users.blurLeadDashboard,
+        claimPageModal: state.users.claimPageModal,
     };
 }
 

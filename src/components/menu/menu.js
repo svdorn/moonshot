@@ -271,6 +271,7 @@ class Menu extends Component {
         if (
             pathFirstPart === "explore" ||
             (currentUser && currentUser.userType === "accountAdmin")
+            || (pathFirstPart === "apply" && this.props.location.query && this.props.location.query.onboarding)
         ) {
             return <AccountAdminMenu />;
         }
