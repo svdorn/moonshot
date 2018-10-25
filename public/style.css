@@ -5655,6 +5655,12 @@ textarea.multipleChoiceCustomAnswer {
     }
 }
 
+@media only screen and (min-width: 551px) {
+    .under550only {
+        display: none;
+    }
+}
+
 @media only screen and (max-width: 547px) {
     .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(2) {
         display: none;

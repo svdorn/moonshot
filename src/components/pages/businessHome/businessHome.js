@@ -273,10 +273,15 @@ class BusinessHome extends Component {
                         onClick={() => goTo("/explore")}
                         color1={colors.primaryCyan}
                         color2={colors.primaryWhite}
-                        style={{ margin: "40px auto 20px" }}
+                        className="font16px font14pxUnder900 font12pxUnder400"
+                        style={{ margin: "40px 25px 20px" }}
                     />
-                    <div styleName="no-credit-card">
-                        See everything immediately. No email, password, or credit card.
+                    <div
+                        styleName="no-credit-card"
+                        className="font16px font14pxUnder900 font12pxUnder400"
+                    >
+                        See everything immediately. <br className="under550only" />
+                        No email, password, or credit card.
                     </div>
                 </div>
             </section>
