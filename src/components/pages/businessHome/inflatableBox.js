@@ -16,7 +16,16 @@ class InflatableBox extends Component {
             <div styleName="box">
                 <div styleName="hoverable">
                     <div>
-                        <div>{this.props.title}</div>
+                        <div styleName="title">{this.props.title}</div>
+                        <div styleName="body">
+                            <div>{this.props.body}</div>
+                            <div>Take the tour now</div>
+                            <img
+                                className="hover-move-arrow"
+                                style={{ height: "8px", marginTop: "-1px" }}
+                                src={`/icons/ArrowBlue${this.props.png}`}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

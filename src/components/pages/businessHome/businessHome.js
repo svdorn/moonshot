@@ -25,33 +25,27 @@ let rectangleKeyIndex = 0;
 const boxTexts = [
     {
         title: "Quickly Identify Top Talent",
-        body:
-            "Maximize your effieciency by spending less time screening and interviewing candidates"
+        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
     },
     {
         title: "Quickly Identify Top Talent",
-        body:
-            "Maximize your effieciency by spending less time screening and interviewing candidates"
+        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
     },
     {
         title: "Quickly Identify Top Talent",
-        body:
-            "Maximize your effieciency by spending less time screening and interviewing candidates"
+        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
     },
     {
         title: "Quickly Identify Top Talent",
-        body:
-            "Maximize your effieciency by spending less time screening and interviewing candidates"
+        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
     },
     {
         title: "Quickly Identify Top Talent",
-        body:
-            "Maximize your effieciency by spending less time screening and interviewing candidates"
+        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
     },
     {
         title: "Quickly Identify Top Talent",
-        body:
-            "Maximize your effieciency by spending less time screening and interviewing candidates"
+        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
     }
 ];
 

@@ -38,6 +38,8 @@
     background-color: var(--primary-black-dark);
     height: calc(100% - (2 * var(--border-width)));
     margin: var(--border-width);
+    position: relative;
+    overflow: hidden;
 }
 
 /* hover animation */
@@ -51,4 +53,40 @@
 }
 .hoverable:hover > div {
     background-color: var(--black-deep-dark);
+}
+
+.title {
+    font-weight: bold;
+    color: var(--primary-white);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+.hoverable:hover .title {
+    opacity: 0;
+    top: 0;
+}
+
+.body {
+    position: absolute;
+    width: calc(var(--box-width) - 60px);
+    bottom: 0;
+    opacity: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    color: var(--secondary-gray);
+    text-align: left;
+    margin-left: 20px;
+}
+.body > div:nth-child(2) {
+    display: inline-block;
+    color: var(--primary-cyan);
+    margin: 20px 8px 0 0;
+}
+.hoverable:hover .body {
+    opacity: 1;
+    bottom: 50%;
 }
