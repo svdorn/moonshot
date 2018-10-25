@@ -97,6 +97,14 @@ class Menu extends Component {
             if (this.state.dropDownSelected !== "Account") {
                 this.setState({ dropDownSelected: "Account" });
             }
+
+            if (pathname === "/") {
+                // see if the user has scrolled and state doesn't know it OR opposite
+                const hasScrolled = window.scrollY > 0;
+                if (this.state.hasScrolled !== hasScrolled) {
+                    this.setState({ hasScrolled });
+                }
+            }
         }
 
         // const wfs = this.state.waitingForScroll;
@@ -231,28 +239,12 @@ class Menu extends Component {
             // on homepage, only give a shadow if wanted by both width and height
             const widthWantsShadow = window.innerWidth > 700;
             const scrollWantsShadow = window.scrollY !== 0;
-            let newState = {};
-            let shouldSetState = false;
 
             // see if there should be a shadow on the menu
             if (widthWantsShadow && scrollWantsShadow && this.state.headerClass === "noShadow") {
-                newState.headerClass = "";
-                shouldSetState = true;
+                this.setState({ headerClass: "" });
             } else if (!(widthWantsShadow && scrollWantsShadow) && this.state.headerClass === "") {
-                newState.headerClass = "noShadow";
-                shouldSetState = true;
-            }
-
-            // see if the user has scrolled and state doesn't know it OR opposite
-            const hasScrolled = window.scrollY > 0;
-            if (this.state.hasScrolled !== hasScrolled) {
-                newState.hasScrolled = hasScrolled;
-                shouldSetState = true;
-            }
-
-            // if something about state has changed, set it
-            if (shouldSetState) {
-                this.setState(newState);
+                this.setState({ headerClass: "noShadow" });
             }
 
             // get the 'who do you need to hire' textarea
