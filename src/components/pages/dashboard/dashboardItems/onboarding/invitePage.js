@@ -36,7 +36,6 @@ class InvitePage extends Component {
         super(props);
 
         this.state = {
-            error: undefined
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -68,7 +67,7 @@ class InvitePage extends Component {
         return (
             <div styleName="item-padding">
                 <div styleName="build-team-container">
-                <form className="center" style={{ height: "100%" }}>
+                <form className="center" onSubmit={this.handleSubmit} style={{ height: "100%" }}>
                         <div className="primary-cyan font24px font20pxUnder700 font16pxUnder500">
                             A Candidate Invite Page Just For You
                         </div>
@@ -79,7 +78,7 @@ class InvitePage extends Component {
                             <Field name="company" component={renderTextField} label="Enter your company name" />
                             <br />
                         </div>
-                        <button className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop20px" styleName="onboarding-button" style={{padding: "6px 20px"}}>
+                        <button className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop20px" styleName="onboarding-button" style={{padding: "6px 20px"}} onClick={this.handleSubmit}>
                             <span>See Your Page &#8594;</span>
                         </button>
                     </form>
@@ -92,7 +91,8 @@ class InvitePage extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        loading: state.users.loadingSomething
+        loading: state.users.loadingSomething,
+        formData: state.form,
     };
 }
 
