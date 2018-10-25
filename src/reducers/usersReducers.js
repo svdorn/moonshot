@@ -44,6 +44,18 @@ export function usersReducers(state = initialState, action) {
                 verificationModal: false,
             };
             break;
+        case "OPEN_INTRODUCTION_MODAL":
+            return {
+                ...state,
+                introductionModal: true
+            };
+            break;
+        case "CLOSE_INTRODUCTION_MODAL":
+            return {
+                ...state,
+                introductionModal: false,
+            };
+            break;
         case "OPEN_CANDIDATES_POPUP_MODAL":
             return {
                 ...state,

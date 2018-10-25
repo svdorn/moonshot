@@ -68,6 +68,22 @@ export function closeSignupModal() {
     };
 }
 
+export function openIntroductionModal() {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_INTRODUCTION_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: true });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: true });
+    };
+}
+
+export function closeIntroductionModal() {
+    return function(dispatch) {
+        dispatch({ type: "CLOSE_INTRODUCTION_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
+    };
+}
+
 export function closeCandidatesPopupModal(userId, verificationToken, popups) {
     return function(dispatch) {
         dispatch({ type: "START_LOADING" });

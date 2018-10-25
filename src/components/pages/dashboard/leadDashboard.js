@@ -10,8 +10,8 @@ import YouTube from "react-youtube";
 import Dialog from "@material-ui/core/Dialog";
 import DashboardItem from "./dashboardItem";
 import ROIOnboardingDialog from "../../childComponents/roiOnboardingDialog";
-import OnboardingStep4Dialog from "../../childComponents/onboardingStep4Dialog";
 import ModalSignup from "./dashboardItems/onboarding/childComponents/modalSignup";
+import IntroductionModal from "./dashboardItems/onboarding/childComponents/modalSignup";
 
 import WelcomeMessage from "./dashboardItems/welcomeMessage";
 
@@ -93,8 +93,8 @@ class GuestDashboard extends Component {
                 </MetaTags>
                 {tutorialVideo}
                 <ROIOnboardingDialog />
-                <OnboardingStep4Dialog />
                 <ModalSignup />
+                <IntroductionModal />
                 <div className="page-line-header">
                     <div />
                     <div>Dashboard</div>
