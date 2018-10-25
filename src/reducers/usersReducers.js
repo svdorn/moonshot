@@ -44,6 +44,18 @@ export function usersReducers(state = initialState, action) {
                 verificationModal: false,
             };
             break;
+        case "OPEN_CLAIM_PAGE_MODAL":
+            return {
+                ...state,
+                claimPageModal: true
+            };
+            break;
+        case "CLOSE_CLAIM_PAGE_MODAL":
+            return {
+                ...state,
+                claimPageModal: false,
+            };
+            break;
         case "OPEN_INTRODUCTION_MODAL":
             return {
                 ...state,

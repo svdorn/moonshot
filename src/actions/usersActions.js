@@ -52,6 +52,22 @@ export function closeAddPositionModal() {
     };
 }
 
+export function openClaimPageModal() {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_CLAIM_PAGE_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: true });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: true });
+    };
+}
+
+export function closeClaimPageModal() {
+    return function(dispatch) {
+        dispatch({ type: "CLOSE_CLAIM_PAGE_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
+    };
+}
+
 export function openSignupModal(type, name) {
     return function(dispatch) {
         dispatch({ type: "OPEN_SIGNUP_MODAL", category: type, name });

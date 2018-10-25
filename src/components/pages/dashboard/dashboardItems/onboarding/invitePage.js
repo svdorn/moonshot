@@ -60,7 +60,7 @@ class InvitePage extends Component {
             return;
         }
 
-        goTo("/apply");
+        goTo("/apply/" + vals.company + "?onboarding=true");
     }
 
     render() {
