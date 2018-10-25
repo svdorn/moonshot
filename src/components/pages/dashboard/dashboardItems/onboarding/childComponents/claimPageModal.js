@@ -37,15 +37,6 @@ const validate = values => {
     return errors;
 };
 
-const defaultInfo = {
-    header1: null,
-    body1: null,
-    header2: "Add Your Info",
-    body2: "We need this to setup your account.",
-    header3: "Secure Your Login",
-    body3: "Fill this out so you can log back in.",
-};
-
 class ClaimPageModal extends Component {
     constructor(props) {
         super(props);
@@ -53,17 +44,11 @@ class ClaimPageModal extends Component {
         this.bound_handleKeyPress = this.handleKeyPress.bind(this);
 
         this.state = {
-            open: false,
             agreeingToTerms: false,
             frame: 1,
-            info: defaultInfo,
-            type: undefined,
-            name: undefined,
-            error: undefined
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleFrameChange = this.handleFrameChange.bind(this);
     }
 
 
@@ -71,65 +56,6 @@ class ClaimPageModal extends Component {
         // add listener for keyboard enter key
         const self = this;
         document.addEventListener('keypress', self.bound_handleKeyPress);
-    }
-
-    componentDidUpdate() {
-        if (this.state.open != this.props.open) {
-            const open = this.props.open;
-            if (!open) {
-                this.setState({ info: defaultInfo, open, error: undefined })
-            }
-            const info = this.props.info;
-
-            if (!info) {
-                return;
-            }
-
-            if (info.type === "menu") {
-                switch(info.name) {
-                    case "Button":
-                        this.setState({ open, frame: 2, error: undefined });
-                        break;
-                    case "Candidates":
-                    case "Employees":
-                    case "Evaluations":
-                        const infoContent = {
-                            header1: `Set Up Your ${info.name} Page`,
-                            body1: `Continue to add some info so we can start populating your ${info.name.toLowerCase()} page.`,
-                            header2: `${info.name} Page Info`,
-                            body2: "We need this so we can set up the page for your company.",
-                            header3: "Info Successfully Added",
-                            body3: "Fill this out so you can log back in and freely access your page."
-                        };
-                        this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1, error: undefined })
-                        break;
-                    default:
-                        this.setState({ open, frame: 1, error: undefined });
-                        break;
-                }
-            } else {
-                switch(info.name) {
-                    case "Candidate":
-                    case "Employee":
-                        const infoContent = {
-                            header1: `Activate ${info.name} Invites`,
-                            body1: `Continue to add some info so we can activate invites for your company.`,
-                            header2: `Info to Activate Invites`,
-                            body2: `We need this to activate ${info.name.toLowerCase()} invites for your company.`,
-                            header3: "Info Successfully Added",
-                            body3: "Fill this out so you can log back in and freely manage your invites."
-                        };
-                        this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1, error: undefined })
-                        break;
-                    case "Evaluations":
-                        this.setState({ open, frame: 2, error: undefined, info: defaultInfo });
-                        break;
-                    default:
-                        this.setState({ open, frame: 1, error: undefined });
-                        break;
-                }
-            }
-        }
     }
 
     close = () => {
@@ -218,84 +144,56 @@ class ClaimPageModal extends Component {
         });
     }
 
-    handleFrameChange(e){
-        e.preventDefault();
-        if (this.state.info.header1 && this.state.frame === 1) {
-            this.setState({ frame: 2 });
-            return;
+    // go forward or backward to a different frames question
+    navFrames = direction => {
+        let newIndex = this.state.frame;
+        if (direction === "back") {
+            newIndex--;
+        } else {
+            newIndex++;
         }
-        const vals = this.props.formData.businessSignup.values;
-        let notValid = false;
-        const requiredFields = [
-            'name',
-            'company'
-        ];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) {
-            this.setState({ error: "Must fill out all fields to continue." })
-            return;
-        }
-        else this.setState({ frame: 3, error: undefined })
-    }
 
-    makeFrame2() {
+        this.setState({ frame: newIndex });
+    };
+
+    makeFrame1() {
         return(
             <div className="center">
-                <div className="primary-cyan font22px font20pxUnder500">
-                    { this.state.info.header2 }
-                </div>
-                <div className="font14px">
-                    { this.state.info.body2 }
-                </div>
-                {this.state.error ?
-                    <div className="secondary-red font16px">
-                        {this.state.error}
-                    </div>
-                    : null
-                }
-                <div className="inputContainer" styleName="signup-fields">
+                <div className="inputContainer">
                     <Field
                         name="name"
                         component={renderTextField}
                         label="Full Name"
                     /><br/>
                 </div>
-                <div className="inputContainer" styleName="signup-fields">
-                    <Field
-                        name="company"
-                        component={renderTextField}
-                        label="Company"
-                    /><br/>
-                </div>
-                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop20px" onClick={this.handleFrameChange} style={{padding: "2px 4px"}}>
-                    Onward &#8594;
+                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "2px 4px"}}>
+                    Claim &#8594;
                 </button>
             </div>
-        )
+        );
     }
 
-    makeFrame3() {
+    makeFrame2() {
         return(
             <div className="center">
-                <div className="primary-cyan font22px font20pxUnder500">
-                    { this.state.info.header3 }
-                </div>
-                <div className="font14px" style={{marginTop:"-7px"}}>
-                    { this.state.info.body3 }
-                </div>
-                <div className="inputContainer" styleName="signup-fields">
+                <div className="inputContainer">
                     <Field
                         name="email"
                         component={renderTextField}
                         label="Email"
                     /><br/>
                 </div>
-                <div className="inputContainer" styleName="signup-fields">
+                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "2px 4px"}}>
+                    Claim &#8594;
+                </button>
+            </div>
+        );
+    }
+
+    makeFrame3() {
+        return(
+            <div className="center">
+                <div className="inputContainer">
                     <Field
                         name="password"
                         component={renderPasswordField}
@@ -324,12 +222,12 @@ class ClaimPageModal extends Component {
                     >terms of service</a>.
                 </div>
                 {this.props.loadingCreateBusiness ? <CircularProgress color="#72d6f5"/> :
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.handleSubmit} style={{padding: "2px 4px"}}>
-                        Enter &#8594;
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" onClick={this.handleSubmit} style={{padding: "2px 4px"}}>
+                        Claim &#8594;
                     </button>
                 }
             </div>
-        )
+        );
     }
 
     //name, email, password, confirm password, signup button
@@ -340,14 +238,57 @@ class ClaimPageModal extends Component {
             background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
         };
         // add the circles you can navigate with
-        for (let navCircleIdx = 0; navCircleIdx < 2; navCircleIdx++) {
+        for (let navCircleIdx = 0; navCircleIdx < 3; navCircleIdx++) {
             navArea.push(
                 <div
-                    styleName="signup-circle"
-                    style={(this.state.frame - 2) === navCircleIdx ? selectedStyle : {}}
-                    key={`signup modal ${navCircleIdx}`}
+                    styleName="nav-circle"
+                    style={(this.state.frame - 1) === navCircleIdx ? selectedStyle : {}}
+                    key={`signup question ${navCircleIdx}`}
                 />
             );
+        }
+        // add the left and right arrows
+        const arrowStyle = {
+            width: "12px",
+            height: "12px",
+            display: "inline-block",
+            margin: "2px 8px"
+        };
+        if (this.state.frame !== 1) {
+            navArea.unshift(
+                <div
+                    className="left circleArrowIcon arrow-2px"
+                    style={arrowStyle}
+                    onClick={this.navFrames.bind(this, "back")}
+                    key="back arrow"
+                />
+            );
+        }
+        if (this.state.frame !== 3) {
+            navArea.push(
+                <div
+                    className="right circleArrowIcon arrow-2px"
+                    style={arrowStyle}
+                    onClick={this.navFrames.bind(this, "next")}
+                    key="next arrow"
+                />
+            );
+        }
+
+        let frame = null;
+        switch(this.state.frame) {
+            case 1:
+                frame = this.makeFrame1();
+                break;
+            case 2:
+                frame = this.makeFrame2();
+                break;
+            case 3:
+                frame = this.makeFrame3();
+                break;
+            default:
+                frame = this.makeFrame1();
+                break;
         }
 
         return (
@@ -356,37 +297,20 @@ class ClaimPageModal extends Component {
                 maxWidth={false}
                 onClose={this.close}
             >
-                {this.state.frame === 1 && this.state.info.header1 ?
-                    <div styleName="modal-signup">
-                        <div className="primary-cyan font22px font20pxUnder500">
-                            { this.state.info.header1 }
+                    <form styleName="modal-signup" className="inline-block">
+                        <div>
+                            <div className="primary-cyan font22px font20pxUnder500">
+                                Claim Your Page
+                            </div>
+                            <div className="font14px">
+                                Fill this out so you can manage your page.
+                            </div>
                         </div>
-                        <div className="font16px" style={{maxWidth: "400px", margin: "20px auto"}}>
-                            { this.state.info.body1 }
-                        </div>
-                        <div
-                            key={"continue signup modal"}
-                            className="menuItem pointer font16px noWrap primary-cyan wideScreenMenuItem"
-                            onClick={this.handleFrameChange}
-                        >
-                            <span className="primary-cyan" style={{ marginRight: "7px" }}>
-                                Continue
-                            </span>{" "}
-                            <img
-                                className="hover-move-arrow"
-                                style={{ height: "8px" }}
-                                src={`/icons/ArrowBlue${this.props.png}`}
-                            />
-                        </div>
-                    </div>
-                    :
-                    <form styleName="modal-signup">
-                        {this.state.frame === 2 ? <div>{ this.makeFrame2() }</div> : <div>{ this.makeFrame3() }</div>}
-                        <div className="center">
+                        <div className="noselect">
+                            { frame }
                             { navArea }
                         </div>
                     </form>
-                }
             </Dialog>
         );
     }

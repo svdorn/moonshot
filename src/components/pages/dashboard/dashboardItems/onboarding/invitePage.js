@@ -71,7 +71,7 @@ class InvitePage extends Component {
                         <div className="primary-cyan font24px font20pxUnder700 font16pxUnder500">
                             A Candidate Invite Page Just For You
                         </div>
-                        <div className="marginTop20px">
+                        <div className="marginTop10px">
                             One page that all of your candidates can visit to complete their evaluation.
                         </div>
                         <div className="inputContainer" styleName="signup-fields">
