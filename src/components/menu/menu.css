@@ -13,3 +13,29 @@
 .semi-transparent {
     opacity: 0.7;
 }
+
+.product-tour {
+    display: inline-block;
+    overflow-x: hidden;
+    width: 83px;
+
+    -webkit-transition: width 0.5s ease;
+    -moz-transition: width 0.5s ease;
+    -ms-transition: width 0.5s ease;
+    transition: width 0.5s ease;
+
+    /* -webkit-transition: margin 1ms 0.5s;
+    -moz-transition: margin 1ms 0.5s;
+    -ms-transition: margin 1ms 0.5s;
+    transition: margin 1ms 0.5s; */
+}
+.product-tour.hide {
+    width: 0px;
+    /* margin-left: 0; */
+    /* margin-right: 0; */
+
+    /* -webkit-transition: margin 1ms 0.5s;
+    -moz-transition: margin 1ms 0.5s;
+    -ms-transition: margin 1ms 0.5s;
+    transition: margin 1ms 0.5s; */
+}

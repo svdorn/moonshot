@@ -35,10 +35,12 @@
 }
 .hoverable > div {
     --border-width: 2px;
-    background-color: var(--black-deep-dark);
+    background-color: var(--primary-black-dark);
     height: calc(100% - (2 * var(--border-width)));
     margin: var(--border-width);
 }
+
+/* hover animation */
 .hoverable:hover {
     width: var(--box-width);
     height: var(--box-height);
@@ -46,4 +48,7 @@
     -moz-box-shadow: 0 0 22px 5px #151515;
     box-shadow: 0 0 22px 5px #151515;
     background-position-x: 0px;
+}
+.hoverable:hover > div {
+    background-color: var(--black-deep-dark);
 }

@@ -68,7 +68,9 @@ class Menu extends Component {
         this.state = {
             dropDownSelected,
             headerClass,
-            position
+            position,
+            // whether the user has scrolled at all
+            hasScrolled: window.scrollY > 0
             // waitingForScroll: {
             //     page: undefined,
             //     anchor: undefined
@@ -229,10 +231,28 @@ class Menu extends Component {
             // on homepage, only give a shadow if wanted by both width and height
             const widthWantsShadow = window.innerWidth > 700;
             const scrollWantsShadow = window.scrollY !== 0;
+            let newState = {};
+            let shouldSetState = false;
+
+            // see if there should be a shadow on the menu
             if (widthWantsShadow && scrollWantsShadow && this.state.headerClass === "noShadow") {
-                this.setState({ headerClass: "" });
+                newState.headerClass = "";
+                shouldSetState = true;
             } else if (!(widthWantsShadow && scrollWantsShadow) && this.state.headerClass === "") {
-                this.setState({ headerClass: "noShadow" });
+                newState.headerClass = "noShadow";
+                shouldSetState = true;
+            }
+
+            // see if the user has scrolled and state doesn't know it OR opposite
+            const hasScrolled = window.scrollY > 0;
+            if (this.state.hasScrolled !== hasScrolled) {
+                newState.hasScrolled = hasScrolled;
+                shouldSetState = true;
+            }
+
+            // if something about state has changed, set it
+            if (shouldSetState) {
+                this.setState(newState);
             }
 
             // get the 'who do you need to hire' textarea
@@ -415,6 +435,12 @@ class Menu extends Component {
                     title: "Log In",
                     url: "/login",
                     styleName: onHome ? "hover-color" : ""
+                },
+                {
+                    optionType: "url",
+                    title: "Product Tour",
+                    url: "/explore",
+                    styleName: `product-tour hover-color ${this.state.hasScrolled ? "" : "hide"}`
                 },
                 { optionType: "separator", styleName: onHome ? "semi-transparent" : "" },
                 { optionType: "tryNow" }
