@@ -1,0 +1,152 @@
+.button {
+    --top-padding: 15px;
+    --side-padding: 50px;
+    display: inline-block;
+
+    cursor: pointer;
+    position: relative;
+}
+
+.border {
+    position: absolute;
+    z-index: 2;
+}
+.border-top,
+.border-bottom {
+    height: 1px;
+    width: calc(100% - (2 * var(--top-padding)));
+}
+.border-right,
+.border-left {
+    width: 1px;
+    height: calc(100% - (2 * var(--top-padding)));
+}
+.border-top {
+    top: 0;
+    left: 0;
+}
+.border-right {
+    right: 0;
+    bottom: 0;
+}
+.border-bottom {
+    bottom: 0;
+    right: 0;
+}
+.border-left {
+    left: 0;
+    top: 0;
+}
+.button:hover .border-top,
+.button:hover .border-bottom {
+    width: 100%;
+}
+.button:hover .border-right,
+.button:hover .border-left {
+    height: 100%;
+}
+
+.content {
+    margin: var(--top-padding) var(--side-padding);
+    z-index: 2;
+}
+
+.under-hover-content {
+    position: absolute;
+    left: 0;
+    right: 100%;
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+}
+
+.hover-content {
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(100% - (2 * var(--side-padding)));
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 4;
+}
+.arrow {
+    opacity: 0;
+    position: absolute;
+    width: calc(var(--side-padding) / 3);
+    top: 50%;
+    right: calc(var(--side-padding) / 2.5);
+    transform: translateX(-100%) translateY(calc(1px - 50%));
+    z-index: 5;
+}
+.above-hover-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    z-index: 6;
+}
+
+/* HOVER ANIMATION */
+.button:hover .border {
+    transition: 200ms;
+}
+.button:hover .under-hover-content {
+    right: 0;
+    transition: right 300ms 200ms;
+}
+.button:hover .hover-content {
+    opacity: 1;
+
+    transition: 5ms 510ms;
+}
+.button:hover .arrow {
+    opacity: 1;
+    transform: translateX(0%) translateY(calc(1px - 50%));
+
+    transition: opacity 5ms 510ms, transform 100ms 620ms;
+
+    animation: sway 1.5s infinite 720ms linear;
+}
+.button:hover .above-hover-content {
+    opacity: 1;
+    left: 100%;
+
+    transition: opacity 5ms 500ms, left 200ms 520ms;
+}
+
+/* DE-HOVER ANIMATION */
+.border {
+    transition: 200ms 420ms;
+}
+.under-hover-content {
+    transition: right 200ms 220ms;
+}
+.hover-content {
+    transition: 5ms 200ms;
+}
+.arrow {
+    transition: opacity 5ms 200ms, transform 100ms;
+}
+.above-hover-content {
+    transition: opacity 5ms 210ms, left 200ms;
+}
+
+@keyframes sway {
+    0% {
+        transform: translateX(0%) translateY(calc(1px - 50%));
+    }
+    25% {
+        transform: translateX(10%) translateY(calc(1px - 50%));
+    }
+    50% {
+        transform: translateX(0%) translateY(calc(1px - 50%));
+    }
+    75% {
+        transform: translateX(-10%) translateY(calc(1px - 50%));
+    }
+    100% {
+        transform: translateX(0%) translateY(calc(1px - 50%));
+    }
+}

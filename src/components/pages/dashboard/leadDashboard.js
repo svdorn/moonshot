@@ -17,6 +17,15 @@ import WelcomeMessage from "./dashboardItems/welcomeMessage";
 
 import "./dashboard.css";
 
+const videoSizes = {
+    huge: { height: 732, width: 1280 },
+    under1500: { height: 549, width: 960 },
+    under1100: { height: 366, width: 640 },
+    under750: { height: 275, width: 480 },
+    under600: { height: 183, width: 320 },
+    under420: { height: 117, width: 204 }
+};
+
 class GuestDashboard extends Component {
     constructor(props) {
         super(props);
@@ -26,20 +35,55 @@ class GuestDashboard extends Component {
             showWelcomeBanner: true,
             // if the tutorial video should be open on page load
             showTutorialVideo:
-                props.location && props.location.query && props.location.query.tutorialVideo
+                props.location && props.location.query && props.location.query.tutorialVideo,
+            // what the size of the video should be
+            videoSize: "huge"
         };
+
+        this.bound_handleResize = this.handleResize.bind(this);
     }
 
+    // if the props want us to show the intro video, show it and set a listener
+    // to resize the video if necessary
     componentDidMount() {
         if (this.state.showTutorialVideo) {
+            this.bound_handleResize();
             this.props.updateStore("blurMenu", true);
+            window.addEventListener("resize", this.bound_handleResize);
         }
     }
 
+    // make sure the video listener is removed when no longer needed
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.bound_handleResize);
+    }
+
+    // close the video, unblur the screen, and remove the event listener on video close
     closeTutorialVideo = () => {
         this.setState({ showTutorialVideo: false });
         this.props.updateStore("blurMenu", false);
+        window.removeEventListener("resize", this.bound_handleResize);
     };
+
+    // when the screen is resized, check if the video needs to be resized as well
+    handleResize() {
+        const windowWidth = window.innerWidth;
+        let videoSize = "huge";
+        if (windowWidth <= 420) {
+            videoSize = "under420";
+        } else if (windowWidth <= 600) {
+            videoSize = "under600";
+        } else if (windowWidth <= 750) {
+            videoSize = "under750";
+        } else if (windowWidth <= 1100) {
+            videoSize = "under1100";
+        } else if (windowWidth <= 1500) {
+            videoSize = "under1500";
+        }
+        if (this.state.videoSize !== videoSize) {
+            this.setState({ videoSize });
+        }
+    }
 
     render() {
         let activity = null;
@@ -55,12 +99,17 @@ class GuestDashboard extends Component {
             blurredClass = "dialogForBizOverlay";
         }
 
+        const { videoSize } = this.state;
+        const { height, width } = videoSizes[videoSize];
         const videoOpts = {
-            height: "366",
-            width: "640",
+            height,
+            width,
             playerVars: {
+                // autoplay the video when it appears
                 autoplay: 1,
+                // don't show YouTube branding
                 modestbranding: 1,
+                // only show related videos from the Moonshot channel
                 rel: 0
             }
         };
@@ -71,8 +120,14 @@ class GuestDashboard extends Component {
                 maxWidth={false}
                 onClose={this.closeTutorialVideo}
             >
-                <YouTube videoId="K_QHU89CY0s" opts={videoOpts} onEnd={this.closeTutorialVideo} />
-                <div styleName="remove-youtube-space" />
+                <div style={{ backgroundColor: "black" }}>
+                    <YouTube
+                        videoId="K_QHU89CY0s"
+                        opts={videoOpts}
+                        onEnd={this.closeTutorialVideo}
+                    />
+                    <div styleName="remove-youtube-space" />
+                </div>
             </Dialog>
         );
 

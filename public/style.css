@@ -21,6 +21,7 @@ body {
     --primary-black-light: #393939;
     --primary-black-dark: #2e2e2e;
     --black-deep-dark: #2a2a2a;
+    --shadow-black: #1d1d1d;
     --secondary-gray: #d7d7d7;
     --secondary-red: #eb394f;
 
@@ -224,16 +225,18 @@ header {
     top: 0;
     width: 100%;
     color: rgb(32, 32, 32);
-    -webkit-box-shadow: 0px 8px 10px -3px;
-    -moz-box-shadow: 0px 8px 10px -3px;
-    box-shadow: 0px 8px 10px -3px;
-    transition: box-shadow 0.2s ease-in-out;
-    transition: background-color 0.5s ease-in-out;
+    -webkit-box-shadow: 0px 8px 7px -5px var(--shadow-black);
+    -moz-box-shadow: 0px 8px 7px -5px var(--shadow-black);
+    box-shadow: 0px 8px 7px -5px var(--shadow-black);
+    transition: all 0.5s ease-in-out;
     background-color: var(--primary-black-dark);
     font-size: 12px;
 }
 header.extra-dark {
     background-color: var(--black-deep-dark);
+    -webkit-box-shadow: 0px 8px 7px -5px #0e0e0e;
+    -moz-box-shadow: 0px 8px 7px -5px #0e0e0e;
+    box-shadow: 0px 8px 7px -5px #0e0e0e;
 }
 header.noShadow {
     box-shadow: none;
@@ -320,7 +323,9 @@ footer {
     z-index: 10;
     position: relative;
     background-color: #353535;
-    box-shadow: 0 0 44px 1px black;
+    -webkit-box-shadow: 0 0 10px 3px var(--shadow-black);
+    -moz-box-shadow: 0 0 10px 3px var(--shadow-black);
+    box-shadow: 0 0 10px 3px var(--shadow-black);
     color: white;
 }
 .lightBlackForm > form {
@@ -662,14 +667,6 @@ form > h1 {
 .carousel .right.circleArrowIcon {
     right: 0;
     transform: translate(50%, -50%) rotate(-90deg);
-}
-
-.businessHome {
-    --rowWidth: 5px;
-    --contentColumns: 24;
-    --gutterColumns: 8;
-    --contentColumnWidth: calc(1040px / var(--contentColumns));
-    --gutterColumnWidth: var(--contentColumnWidth);
 }
 
 #employerOnboarding {
@@ -1066,12 +1063,6 @@ form > h1 {
 
 .upload-candidate-csv-dialog .drag-here-text {
     margin: 20px 10px 40px;
-}
-
-#three-screenshots {
-    margin: 0 auto 60px;
-    max-width: 1240px;
-    padding-top: 40px;
 }
 
 #businessHomeStatistics > div:nth-child(2) {
@@ -5661,6 +5652,12 @@ textarea.multipleChoiceCustomAnswer {
     }
     .font6pxUnder600 {
         font-size: 6px;
+    }
+}
+
+@media only screen and (min-width: 551px) {
+    .under550only {
+        display: none;
     }
 }
 

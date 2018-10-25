@@ -10,15 +10,50 @@ import axios from "axios";
 import MetaTags from "react-meta-tags";
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from "material-ui";
 import AddUserDialog from "../../childComponents/addUserDialog";
-import ProgressBarDialog from "../../miscComponents/progressBarDialog";
 import { isValidEmail, goTo } from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
+import CornersButton from "../../miscComponents/cornersButton";
 import PositionsDropDown from "./positionsDropDown";
+import InflatableBox from "./inflatableBox";
 import Typed from "typed.js";
+import colors from "../../../colors";
 
 import "./businessHome.css";
 
 let rectangleKeyIndex = 0;
+
+const boxTexts = [
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    },
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    },
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    },
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    },
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    },
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    }
+];
 
 class BusinessHome extends Component {
     constructor(props) {
@@ -202,16 +237,6 @@ class BusinessHome extends Component {
             <section id="introduction" styleName="introduction">
                 <a id="home-top" name="home-top" className="anchor" />
                 <div styleName="front-page" className="businessHome">
-                    {/*this.state.showRectangles*/ false ? (
-                        <div styleName="skewed-rectangles-container">
-                            <div styleName="skewed-rectangles">
-                                {this.skewedRectangles(11, { rectanglesOnly: true })}
-                            </div>
-                            <div styleName="skewed-rectangles">
-                                {this.skewedRectangles(7, { rectanglesOnly: true })}
-                            </div>
-                        </div>
-                    ) : null}
                     <div styleName="top-space" />
                     <div styleName="top-content-container">
                         <div styleName="content">
@@ -229,7 +254,7 @@ class BusinessHome extends Component {
                                 <textarea
                                     id="get-started-input"
                                     styleName="get-started-input"
-                                    className="font28px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
+                                    className="font26px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
                                     type="text"
                                     name="position"
                                     placeholder="Who do you need to hire?"
@@ -258,87 +283,39 @@ class BusinessHome extends Component {
         );
     }
 
-    // second section of the page, gives three screenshots as well as corresponding information
-    screenshotsSection() {
+    // second section of the page, shows a preview of the candidate list view + report
+    previewSection() {
         return (
-            <section id="three-screenshots">
-                <div styleName="screenshot-view">
-                    <div styleName="screenshot-left-text">
-                        <div
-                            styleName="screenshot-left-text-container"
-                            className="font18px font16pxUnder800 primary-white"
-                        >
-                            <h2 className="primary-purple-light font30px font24pxUnder800 font22pxUnder500">
-                                Quickly identify which candidates{" "}
-                                <div className="above1200only br">
-                                    <br />
-                                </div>will perform the best... or the worst
-                            </h2>
-                            Analyze candidates to see if they exhibit the qualities of proven high
-                            achievers or low performers in that position.
-                        </div>
-                    </div>
-                    <div styleName="screenshot-right">
+            <section id="product-preview" styleName="product-preview-section">
+                {this.state.showRectangles ? this.skewedRectangles(10) : null}
+                <div className="center" styleName="image-preview">
+                    <div styleName="image-container">
                         <img
-                            alt="Analysis Text"
-                            src={"/images/businessHome/CandidatesScreenshot" + this.props.jpg}
+                            src={`/images/businessHome/MyCandidatesScreenshot${this.props.png}`}
+                            styleName="my-candidates-screenshot"
+                        />
+                        <div styleName="candidate-name">Justin Ye</div>
+                        <img
+                            src={`/images/businessHome/CandidateResultsScreenshot${this.props.png}`}
+                            styleName="results-screenshot"
                         />
                     </div>
                 </div>
-
-                <br />
-
-                <div styleName="screenshot-view">
-                    <div styleName="screenshot-right-text">
-                        <div
-                            styleName="screenshot-right-text-container"
-                            className="font18px font16pxUnder800 primary-white"
-                        >
-                            <h2 className="primary-cyan font30px font24pxUnder800 font22pxUnder500">
-                                Use data to eliminate biases{" "}
-                                <div className="above900only br">
-                                    <br />
-                                </div>and guesswork
-                            </h2>
-                            Why read hundreds of resumes? Moonshot uses machine learning to reveal
-                            the empirical evidence instead of conjecture based on a resume.
-                        </div>
-                    </div>
-                    <div styleName="screenshot-left">
-                        <img
-                            alt="Predictive Insights"
-                            src={"/images/businessHome/ProdScreenshot" + this.props.jpg}
-                        />
-                    </div>
-                </div>
-
-                <br />
-
-                <div styleName="screenshot-view">
-                    <div styleName="screenshot-left-text">
-                        <div
-                            styleName="screenshot-left-text-container"
-                            className="font18px font16pxUnder800 primary-white"
-                        >
-                            <h2
-                                className="font30px font24pxUnder800 font22pxUnder500"
-                                style={{ color: "#ff748c" }}
-                            >
-                                Constantly improve with every{" "}
-                                <div className="above1000only br">
-                                    <br />
-                                </div>new candidate and hire
-                            </h2>
-                            Your next hire should always be your best one yet. It&#39;s smart to
-                            learn from your successes and mistakes.
-                        </div>
-                    </div>
-
-                    <div styleName="screenshot-right">
-                        <img
-                            alt="Analysis Text"
-                            src={"/images/businessHome/ProductScreenshot" + this.props.jpg}
-                        />
+                <div className="primary-white center">
+                    <CornersButton
+                        content="Experience The Product For Yourself"
+                        onClick={() => goTo("/explore")}
+                        color1={colors.primaryCyan}
+                        color2={colors.primaryWhite}
+                        className="font16px font14pxUnder900 font12pxUnder400"
+                        style={{ margin: "40px 25px 20px" }}
+                    />
+                    <div
+                        styleName="no-credit-card"
+                        className="font16px font14pxUnder900 font12pxUnder400"
+                    >
+                        See everything immediately. <br className="under550only" />
+                        No email, password, or credit card.
                     </div>
                 </div>
             </section>
@@ -346,9 +323,13 @@ class BusinessHome extends Component {
     }
 
     statisticsSection() {
+        const boxes = boxTexts.map(boxText => {
+            return <InflatableBox title={boxText.title} body={boxText.body} />;
+        });
+
         return (
             <section styleName="statistics-section" id="businessHomeStatistics">
-                {this.state.showRectangles ? this.skewedRectangles(20) : null}
+                {/* this.state.showRectangles */ false ? this.skewedRectangles(20) : null}
                 <div>
                     <div className="center">
                         <div
@@ -361,6 +342,9 @@ class BusinessHome extends Component {
                             <div className="flourishes3">
                                 <embed src="/images/businessHome/Flourishes3.svg" />
                             </div>
+
+                            <div styleName="inflatable-boxes">{boxes}</div>
+
                             <Paper styleName="stats-box" zDepth={2}>
                                 <div style={{ position: "relative", textAlign: "left" }}>
                                     <div className="primary-white font20px font18pxUnder900 font14pxUnder700">
@@ -470,10 +454,10 @@ class BusinessHome extends Component {
                         content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions."
                     />
                 </MetaTags>
-                <div className="businessHome">
+                <div styleName="businessHome">
                     {this.introductionSection()}
 
-                    {this.screenshotsSection()}
+                    {this.previewSection()}
 
                     {this.statisticsSection()}
 
