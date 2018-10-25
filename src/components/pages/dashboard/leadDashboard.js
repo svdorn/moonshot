@@ -91,7 +91,7 @@ class GuestDashboard extends Component {
         if (this.props.selectedJobsToBeDone === undefined) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
         } else {
-            activity = <DashboardItem type="Onboarding" width={3} />;
+            activity = <DashboardItem type="InvitePage" width={3} />;
         }
 
         let blurredClass = "";
