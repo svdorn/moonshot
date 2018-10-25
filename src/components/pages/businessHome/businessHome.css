@@ -359,6 +359,14 @@
     font-style: italic;
 }
 
+.inflatable-boxes {
+    display: flex;
+    width: 1000px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
 /* GRIDS */
 /* GENERAL SETUP */
 .businessHome {

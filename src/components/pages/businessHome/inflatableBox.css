@@ -1,0 +1,49 @@
+.box {
+    --box-width: 300px;
+    --height-scalar: 0.6;
+    --box-height: calc(var(--box-width) * var(--height-scalar));
+    --unhovered-scalar: 0.9;
+
+    position: relative;
+    width: var(--box-width);
+    height: var(--box-height);
+    text-align: center;
+}
+.hoverable {
+    width: calc(var(--box-width) * var(--unhovered-scalar));
+    height: calc(var(--box-height) * var(--unhovered-scalar));
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    cursor: pointer;
+
+    -webkit-box-shadow: 0 0 8px 3px #151515;
+    -moz-box-shadow: 0 0 8px 3px #151515;
+    box-shadow: 0 0 8px 3px #151515;
+    background: linear-gradient(
+        to right,
+        var(--primary-cyan),
+        var(--primary-white),
+        var(--primary-cyan)
+    );
+    background-position-x: 108%;
+    background-size: 188%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.hoverable > div {
+    --border-width: 2px;
+    background-color: var(--black-deep-dark);
+    height: calc(100% - (2 * var(--border-width)));
+    margin: var(--border-width);
+}
+.hoverable:hover {
+    width: var(--box-width);
+    height: var(--box-height);
+    -webkit-box-shadow: 0 0 22px 5px #151515;
+    -moz-box-shadow: 0 0 22px 5px #151515;
+    box-shadow: 0 0 22px 5px #151515;
+    background-position-x: 0px;
+}

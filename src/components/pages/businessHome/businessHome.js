@@ -14,12 +14,46 @@ import { isValidEmail, goTo } from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
 import CornersButton from "../../miscComponents/cornersButton";
 import PositionsDropDown from "./positionsDropDown";
+import InflatableBox from "./inflatableBox";
 import Typed from "typed.js";
 import colors from "../../../colors";
 
 import "./businessHome.css";
 
 let rectangleKeyIndex = 0;
+
+const boxTexts = [
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    },
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    },
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    },
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    },
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    },
+    {
+        title: "Quickly Identify Top Talent",
+        body:
+            "Maximize your effieciency by spending less time screening and interviewing candidates"
+    }
+];
 
 class BusinessHome extends Component {
     constructor(props) {
@@ -289,9 +323,13 @@ class BusinessHome extends Component {
     }
 
     statisticsSection() {
+        const boxes = boxTexts.map(boxText => {
+            return <InflatableBox title={boxText.title} body={boxText.body} />;
+        });
+
         return (
             <section styleName="statistics-section" id="businessHomeStatistics">
-                {this.state.showRectangles ? this.skewedRectangles(20) : null}
+                {/* this.state.showRectangles */ false ? this.skewedRectangles(20) : null}
                 <div>
                     <div className="center">
                         <div
@@ -304,6 +342,9 @@ class BusinessHome extends Component {
                             <div className="flourishes3">
                                 <embed src="/images/businessHome/Flourishes3.svg" />
                             </div>
+
+                            <div styleName="inflatable-boxes">{boxes}</div>
+
                             <Paper styleName="stats-box" zDepth={2}>
                                 <div style={{ position: "relative", textAlign: "left" }}>
                                     <div className="primary-white font20px font18pxUnder900 font14pxUnder700">
