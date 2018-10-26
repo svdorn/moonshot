@@ -195,6 +195,10 @@ class BusinessHome extends Component {
         this.setState({ pricing: pricingStage, price });
     };
 
+    onMouseInputEnter = e => {
+        e.target.focus();
+    };
+
     // create a bunch of empty skewed rectangles that should be modified with css
     skewedRectangles(numRects, options) {
         // will contain a bunch of un-styled skewed rectangles
@@ -254,6 +258,7 @@ class BusinessHome extends Component {
                                     placeholder="Who do you need to hire?"
                                     value={this.state.position}
                                     onChange={this.onChange.bind(this)}
+                                    onMouseEnter={this.onMouseInputEnter}
                                 />
                                 <div />
                                 <PositionsDropDown inputText={this.state.position} />
@@ -309,7 +314,7 @@ class BusinessHome extends Component {
                         className="font16px font14pxUnder900 font12pxUnder400"
                     >
                         See everything immediately. <br className="under550only" />
-                        No email, password, or credit card.
+                        No credit card required.
                     </div>
                 </div>
             </section>
@@ -322,7 +327,7 @@ class BusinessHome extends Component {
         });
 
         return (
-            <section styleName="statistics-section" id="businessHomeStatistics">
+            <section styleName="statistics-section">
                 {/* this.state.showRectangles */ false ? this.skewedRectangles(20) : null}
                 <div>
                     <div className="center">
