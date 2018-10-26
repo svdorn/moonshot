@@ -42,7 +42,6 @@ class InvitePage extends Component {
     }
 
     handleSubmit(e) {
-        console.log("in submit");
         e.preventDefault();
 
         const vals = this.props.formData.businessSignup.values;

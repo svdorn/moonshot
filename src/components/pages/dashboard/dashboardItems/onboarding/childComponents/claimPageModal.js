@@ -86,6 +86,8 @@ class ClaimPageModal extends Component {
 
         const vals = this.props.formData.businessSignup.values;
 
+        console.log("vals: ", vals);
+
         // Form validation before submit
         let notValid = false;
         const requiredFields = [
@@ -100,7 +102,7 @@ class ClaimPageModal extends Component {
                 notValid = true;
             }
         });
-        if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
+        if (notValid) return this.setState({ error: "Must fill out all fields." });
 
         // grab values we need from the form
         const { name, company, password, email } = vals;
