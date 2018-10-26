@@ -333,7 +333,7 @@ class BusinessHome extends Component {
                             Candidate Predictions Improve Hiring Results
                         </div>
                         <div style={{ position: "relative" }}>
-                            <div className="flourishes3">
+                            <div styleName="flourish">
                                 <embed src="/images/businessHome/Flourishes3.svg" />
                             </div>
 

@@ -367,6 +367,15 @@
     margin: 0 auto;
 }
 
+.flourish {
+    position: absolute;
+    transform: translate(0%, -25%);
+
+    -webkit-transition: transform 0.5s ease;
+    -moz-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+
 /* GRIDS */
 /* GENERAL SETUP */
 .businessHome {
@@ -1069,6 +1078,10 @@
     /* top big background box */
     .product-preview-section .skewed-rectangle:nth-child(2) {
         grid-column-end: 25;
+    }
+
+    .flourish {
+        transform: translate(-18%, -25%);
     }
 
     .get-started-input-container {
