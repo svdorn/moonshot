@@ -10,16 +10,12 @@ import {
     goTo
 } from "../../../../../miscFunctions";
 import { button } from "../../../../../classes";
-import AddPosition from "./childComponents/addPosition";
 
 import "../../dashboard.css";
 
-class FirstPage extends Component {
+class WelcomePage extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-        };
     }
 
     welcomeFrameClick = () => {
@@ -44,33 +40,12 @@ class FirstPage extends Component {
         );
     }
 
-    makeAddPositionFrame() {
-        return (
-            <div>
-                <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
-                    Who do you need to hire?
-                </div>
-                <div className="font14px marginBottom10px">
-                    Enter one of your open positions.
-                </div>
-                <AddPosition />
-            </div>
-        );
-    }
-
     render() {
-        let frame = null;
-        if (!this.props.welcomeToMoonshot) {
-            frame = this.makeWelcomeFrame();
-        } else {
-            frame = this.makeAddPositionFrame();
-        }
-
         return (
             <div styleName="item-padding">
                 <div styleName="build-team-container">
                     <div className="center" style={{ height: "100%" }}>
-                        { frame }
+                        { this.makeWelcomeFrame() }
                     </div>
                 </div>
             </div>
@@ -83,8 +58,7 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         loading: state.users.loadingSomething,
         png: state.users.png,
-        welcomeToMoonshot: state.users.welcomeToMoonshot,
-        onboardingPositions: state.users.onboardingPositions
+        welcomeToMoonshot: state.users.welcomeToMoonshot
     };
 }
 
@@ -101,4 +75,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(FirstPage);
+)(WelcomePage);

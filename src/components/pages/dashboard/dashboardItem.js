@@ -9,7 +9,8 @@ import Onboarding from "./dashboardItems/onboarding/onboarding";
 import Activity from "./dashboardItems/activity";
 import BuildTeam from "./dashboardItems/onboarding/buildTeam";
 import InvitePage from "./dashboardItems/onboarding/invitePage";
-import FirstPage from "./dashboardItems/onboarding/firstPage";
+import WelcomePage from "./dashboardItems/onboarding/welcomePage";
+import AddPositionPage from "./dashboardItems/onboarding/addPositionPage";
 import Candidates from "./dashboardItems/candidates.js";
 import Employees from "./dashboardItems/employees.js";
 import Evaluations from "./dashboardItems/evaluations.js";
@@ -54,8 +55,12 @@ class DashboardItem extends Component {
                 content = <InvitePage {...this.props} />;
                 break;
             }
-            case "FirstPage": {
-                content = <FirstPage {...this.props} />;
+            case "WelcomePage": {
+                content = <WelcomePage {...this.props} />;
+                break;
+            }
+            case "AddPositionPage": {
+                content = <AddPositionPage {...this.props} />;
                 break;
             }
             case "Candidates": {

@@ -85,12 +85,14 @@ class GuestDashboard extends Component {
         let activity = null;
         const onboardingPositions = this.props.onboardingPositions;
         // if the first steps are not done
-        if (!this.props.welcomeToMoonshot || (!(onboardingPositions && Array.isArray(onboardingPositions) && onboardingPositions.length > 0))) {
-            activity = <DashboardItem type="FirstPage" width={3} />
+        if (!this.props.welcomeToMoonshot) {
+            activity = <DashboardItem type="WelcomePage" width={3} />
         }
         // if the lead has not said which jobs they want to do with the site
         else if (this.props.selectedJobsToBeDone === undefined) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
+        } else if (!(onboardingPositions && Array.isArray(onboardingPositions) && onboardingPositions.length > 0)) {
+            activity = <DashboardItem type="AddPositionPage" width={3} />
         } else {
             activity = <DashboardItem type="InvitePage" width={3} />;
         }
