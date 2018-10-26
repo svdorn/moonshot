@@ -88,6 +88,11 @@
     text-align: left;
     margin-left: 20px;
 }
+.foreground > div {
+    -webkit-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
 .body > div:nth-child(2) {
     display: inline-block;
     color: var(--primary-cyan);
