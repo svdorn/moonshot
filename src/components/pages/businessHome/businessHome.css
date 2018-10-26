@@ -945,9 +945,6 @@
     }
 
     /* GRID */
-    .statistics-section {
-        margin-top: 100px;
-    }
     .statistics-section
         > .skewed-container
         > .skewed-rectangles-container
