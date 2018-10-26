@@ -166,7 +166,7 @@ class ClaimPageModal extends Component {
                         label="Full Name"
                     /><br/>
                 </div>
-                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "4px 8px"}}>
+                <button className="button disabled gradient-transition inlineBlock round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "4px 8px"}}>
                     Start
                 </button>
             </div>
@@ -183,7 +183,7 @@ class ClaimPageModal extends Component {
                         label="Email"
                     /><br/>
                 </div>
-                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "4px 8px"}}>
+                <button className="button disabled gradient-transition inlineBlock round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "4px 8px"}}>
                     Start
                 </button>
             </div>
