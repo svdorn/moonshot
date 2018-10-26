@@ -29,16 +29,18 @@
     );
     background-position-x: 108%;
     background-size: 188%;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+    -webkit-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+    transition: all 0.4s ease;
 }
-.hoverable > div {
+.hoverable > .background {
     --border-width: 2px;
-    background-color: var(--black-deep-dark);
+    background-color: var(--primary-black-dark);
     height: calc(100% - (2 * var(--border-width)));
     margin: var(--border-width);
 }
+
+/* hover animation */
 .hoverable:hover {
     width: var(--box-width);
     height: var(--box-height);
@@ -46,4 +48,57 @@
     -moz-box-shadow: 0 0 22px 5px #151515;
     box-shadow: 0 0 22px 5px #151515;
     background-position-x: 0px;
+}
+.hoverable:hover > .background {
+    background-color: var(--black-deep-dark);
+}
+
+.foreground {
+    pointer-events: none;
+    width: calc(var(--box-width) * var(--unhovered-scalar));
+    height: calc(var(--box-height) * var(--unhovered-scalar));
+    overflow: hidden;
+    position: relative;
+    margin: calc((var(--box-height) * (1 - var(--unhovered-scalar))) / 2) auto;
+}
+
+.title {
+    font-weight: bold;
+    color: var(--primary-white);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+.hoverable:hover + .foreground .title {
+    opacity: 0;
+    top: 0;
+}
+
+.body {
+    position: absolute;
+    width: calc(var(--box-width) - 60px);
+    bottom: 0;
+    opacity: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    color: var(--secondary-gray);
+    text-align: left;
+    margin-left: 20px;
+}
+.foreground > div {
+    -webkit-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+.body > div:nth-child(2) {
+    display: inline-block;
+    color: var(--primary-cyan);
+    margin: 20px 8px 0 0;
+}
+.hoverable:hover + .foreground .body {
+    opacity: 1;
+    bottom: 50%;
 }
