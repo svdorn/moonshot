@@ -24,7 +24,8 @@ class FirstPage extends Component {
 
     makeWelcomeFrame() {
         return (
-
+            <div>
+            </div>
         );
     }
 
@@ -35,11 +36,19 @@ class FirstPage extends Component {
     }
 
     render() {
+        let frame = null;
+        console.log(this.props.welcomeToMoonshot);
+        if (!this.props.welcomeToMoonshot) {
+            frame = this.makeWelcomeFrame();
+        } else {
+            frame = this.makeAddPositionFrame();
+        }
+
         return (
             <div styleName="item-padding">
                 <div styleName="build-team-container">
                     <div className="center" style={{ height: "100%" }}>
-                        { this.makeAddPositionFrame() }
+                        { frame }
                     </div>
                 </div>
             </div>
@@ -51,6 +60,8 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         loading: state.users.loadingSomething,
+        welcomeToMoonshot: state.users.welcomeToMoonshot,
+        onboardingPositions: state.users.onboardingPositions
     };
 }
 

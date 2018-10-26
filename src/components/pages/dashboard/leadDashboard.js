@@ -83,8 +83,13 @@ class GuestDashboard extends Component {
 
     render() {
         let activity = null;
+        const onboardingPositions = this.props.onboardingPositions;
+        // if the first steps are not done
+        if (!this.props.welcomeToMoonshot || (!(onboardingPositions && Array.isArray(onboardingPositions) && onboardingPositions.length > 0))) {
+            activity = <DashboardItem type="FirstPage" width={3} />
+        }
         // if the lead has not said which jobs they want to do with the site
-        if (this.props.selectedJobsToBeDone === undefined) {
+        else if (this.props.selectedJobsToBeDone === undefined) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
         } else {
             activity = <DashboardItem type="InvitePage" width={3} />;
@@ -168,7 +173,9 @@ function mapStateToProps(state) {
         onboardingModel: state.users.onboardingStep4Open,
         selectedJobsToBeDone: state.users.selectedJobsToBeDone,
         onboardingPositions: state.users.onboardingPositions,
-        blurLeadDashboard: state.users.blurLeadDashboard
+        blurLeadDashboard: state.users.blurLeadDashboard,
+        welcomeToMoonshot: state.users.welcomeToMoonshot,
+        onboardingPositions: state.users.onboardingPositions
     };
 }
 
