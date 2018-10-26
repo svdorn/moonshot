@@ -253,22 +253,6 @@
     height: calc(var(--preview-image-height) / 1.36);
 }
 
-.stats-box {
-    height: 210px;
-    width: 280px;
-    display: inline-block;
-    margin: 0 25px 40px;
-    vertical-align: top;
-    padding: 2px;
-    background: linear-gradient(to top left, var(--primary-white), var(--primary-cyan));
-}
-.stats-box > div {
-    padding: 20px 24px 0;
-    background: var(--primary-black-dark);
-    height: 100%;
-    width: 100%;
-}
-
 .video-screenshot {
     position: absolute;
     width: 100%;
@@ -365,6 +349,21 @@
     justify-content: space-between;
     flex-wrap: wrap;
     margin: 0 auto;
+}
+
+.flourish {
+    position: absolute;
+    transform: translate(0%, -25%);
+
+    -webkit-transition: transform 0.5s ease;
+    -moz-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+
+.statistics-section > div {
+    margin: 40px auto;
+    max-width: 1340px;
+    position: relative;
 }
 
 /* GRIDS */
@@ -824,15 +823,6 @@
         --rect-col-upper-right-start: 30;
     }
 
-    .stats-box {
-        height: 210px;
-        width: 240px;
-        margin: 0 20px 40px;
-    }
-    .stats-box > div {
-        padding: 20px 0 0 10px;
-    }
-
     .statistics-section
         > .skewed-container
         > .skewed-rectangles-container
@@ -907,12 +897,6 @@
     }
     .image-container {
         --candidate-name-font-size: 12px;
-    }
-
-    .stats-box {
-        height: 210px;
-        width: 210px;
-        margin: 0 10px 40px;
     }
 
     .get-started-input {
@@ -1027,12 +1011,6 @@
         max-width: calc(30% + 360px);
     }
 
-    .stats-box {
-        height: 190px;
-        width: 180px;
-        margin: 0 8px 40px;
-    }
-
     .video-screenshot,
     .skew-image-cover {
         display: none;
@@ -1071,6 +1049,10 @@
         grid-column-end: 25;
     }
 
+    .flourish {
+        transform: translate(-18%, -25%);
+    }
+
     .get-started-input-container {
         width: 410px;
         height: 41px;
@@ -1081,13 +1063,6 @@
     }
     .play-button {
         height: 24px;
-    }
-
-    .stats-box {
-        height: 160px;
-        width: 280px;
-        display: block;
-        margin: 20px auto;
     }
 
     .video-container {

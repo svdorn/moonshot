@@ -68,7 +68,9 @@ class Menu extends Component {
         this.state = {
             dropDownSelected,
             headerClass,
-            position
+            position,
+            // whether the user has scrolled at all
+            hasScrolled: window.scrollY > 0
             // waitingForScroll: {
             //     page: undefined,
             //     anchor: undefined
@@ -94,6 +96,14 @@ class Menu extends Component {
             // set dropdown to be on Account if not on settings or onboarding pages
             if (this.state.dropDownSelected !== "Account") {
                 this.setState({ dropDownSelected: "Account" });
+            }
+
+            if (pathname === "/") {
+                // see if the user has scrolled and state doesn't know it OR opposite
+                const hasScrolled = window.scrollY > 0;
+                if (this.state.hasScrolled !== hasScrolled) {
+                    this.setState({ hasScrolled });
+                }
             }
         }
 
@@ -229,6 +239,8 @@ class Menu extends Component {
             // on homepage, only give a shadow if wanted by both width and height
             const widthWantsShadow = window.innerWidth > 700;
             const scrollWantsShadow = window.scrollY !== 0;
+
+            // see if there should be a shadow on the menu
             if (widthWantsShadow && scrollWantsShadow && this.state.headerClass === "noShadow") {
                 this.setState({ headerClass: "" });
             } else if (!(widthWantsShadow && scrollWantsShadow) && this.state.headerClass === "") {
@@ -416,6 +428,12 @@ class Menu extends Component {
                     title: "Log In",
                     url: "/login",
                     styleName: onHome ? "hover-color" : ""
+                },
+                {
+                    optionType: "url",
+                    title: "Product Tour",
+                    url: "/explore",
+                    styleName: `product-tour hover-color ${this.state.hasScrolled ? "" : "hide"}`
                 },
                 { optionType: "separator", styleName: onHome ? "semi-transparent" : "" },
                 { optionType: "tryNow" }

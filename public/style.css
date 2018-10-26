@@ -1065,15 +1065,6 @@ form > h1 {
     margin: 20px 10px 40px;
 }
 
-#businessHomeStatistics > div:nth-child(2) {
-    margin: 40px auto;
-    max-width: 1340px;
-    position: relative;
-}
-#businessHomeStatistics .horizListText {
-    height: 60px;
-}
-
 .processButtonsContainer {
     position: relative;
     display: inline-block;
@@ -1153,12 +1144,6 @@ form > h1 {
     -moz-box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.5);
     padding: 3px;
-}
-
-#businessHomeStatistics div {
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
 }
 
 #pricingSection {
@@ -1818,17 +1803,6 @@ form > h1 {
     margin: 0 0 0 5px;
 }
 
-#businessHomeStatistics .learn-more-text > span {
-    margin-right: 0;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-}
-#businessHomeStatistics .learn-more-text:hover > span {
-    margin-right: 10px;
-}
-
 button.link {
     background: none;
     margin: 0;
@@ -1959,11 +1933,6 @@ button.link {
     bottom: 20px;
     right: 50%;
     transform: translateX(50%);
-}
-
-.flourishes3 {
-    position: absolute;
-    transform: translateY(-25%);
 }
 
 .paperBoxInviteCadence {
@@ -5592,10 +5561,6 @@ textarea.multipleChoiceCustomAnswer {
 
     .blackInput.googleJobs {
         width: auto;
-    }
-
-    .flourishes3 {
-        transform: translateY(-25%) translateX(-18%);
     }
 
     .crystalBall {
