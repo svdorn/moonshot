@@ -10,12 +10,13 @@ import axios from "axios";
 import MetaTags from "react-meta-tags";
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from "material-ui";
 import AddUserDialog from "../../childComponents/addUserDialog";
-import { isValidEmail, goTo } from "../../../miscFunctions";
+import { isValidEmail, goTo, elementInViewport } from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
 import CornersButton from "../../miscComponents/cornersButton";
 import PositionsDropDown from "./positionsDropDown";
 import InflatableBox from "./inflatableBox";
 import Typed from "typed.js";
+import Vivus from "vivus";
 import colors from "../../../colors";
 
 import "./businessHome.css";
@@ -101,6 +102,23 @@ class BusinessHome extends Component {
 
         // this.typedSpan refers to the <span> that has typed words
         this.typed = new Typed(this.typedSpan, options);
+
+        this.vivusSvg = new Vivus("home-flourish-svg");
+
+        this.handleScroll = this.handleScroll.bind(this);
+        document.addEventListener("scroll", this.handleScroll);
+    }
+
+    handleScroll() {
+        console.log("running");
+        let flourishElement = document.getElementById("home-flourish-svg");
+        if (elementInViewport(flourishElement)) {
+            document.removeEventListener("scroll", this.handleScroll);
+            this.vivusSvg.play();
+            flourishElement.className = "";
+        } else if (this.state.drewSvg) {
+            document.removeEventListener("scroll", this.handleScroll);
+        }
     }
 
     componentWillUnmount() {
@@ -343,7 +361,8 @@ class BusinessHome extends Component {
                         <div style={{ position: "relative" }}>
                             <div styleName="flourish">
                                 <object
-                                    id="home-flourish"
+                                    id="home-flourish-svg"
+                                    className="opacity-hidden"
                                     type="image/svg+xml"
                                     data="/images/businessHome/Flourish.svg"
                                 />
