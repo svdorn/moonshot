@@ -9,6 +9,7 @@
     height: var(--box-height);
     margin-bottom: 40px;
     text-align: center;
+    font-size: 16px;
 }
 .hoverable {
     width: calc(var(--box-width) * var(--unhovered-scalar));
@@ -103,4 +104,41 @@
 .hoverable:hover + .foreground .body {
     opacity: 1;
     transform: translate(-50%, -50%);
+}
+
+@media only screen and (max-width: 950px) {
+    .box {
+        margin-bottom: 30px;
+        font-size: 14px;
+        --box-width: 260px;
+    }
+
+    .body {
+        margin-left: 2px;
+        padding-right: 0px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .box {
+        --box-width: 200px;
+        --box-height: 180px;
+    }
+
+    .body {
+        width: calc(var(--box-width) - 20px);
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .box {
+        --box-width: 270px;
+        --box-height: calc(var(--box-width) * var(--height-scalar));
+    }
+
+    .body {
+        width: calc(var(--box-width) - 20px);
+        margin-left: 4px;
+        padding-right: 7px;
+    }
 }

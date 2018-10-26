@@ -818,6 +818,12 @@
     }
 }
 
+@media only screen and (max-width: 1050px) {
+    .inflatable-boxes {
+        width: 900px;
+    }
+}
+
 @media only screen and (max-width: 1000px) {
     .businessHome {
         --rect-col-upper-left-end: 13;
@@ -883,6 +889,10 @@
     .video-container {
         width: 580px;
         height: 200px;
+    }
+
+    .inflatable-boxes {
+        width: 800px;
     }
 }
 
@@ -990,6 +1000,12 @@
         > .skewed-rectangles:first-child
         > .skewed-rectangle:nth-child(17) {
         grid-column-end: 15;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    .inflatable-boxes {
+        width: 540px;
     }
 }
 
@@ -1123,6 +1139,10 @@
         > .skewed-rectangle:nth-child(4) {
         grid-column-start: 27;
     }
+
+    .inflatable-boxes {
+        width: 420px;
+    }
 }
 
 @media only screen and (max-width: 550px) {
@@ -1156,6 +1176,12 @@
     .get-started-input-container {
         width: 350px;
         height: 39px;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .inflatable-boxes {
+        width: 260px;
     }
 }
 
