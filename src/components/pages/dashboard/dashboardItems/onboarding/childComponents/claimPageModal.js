@@ -81,12 +81,15 @@ class ClaimPageModal extends Component {
     handleSubmit(e) {
         e.preventDefault();
         if (!this.state.agreeingToTerms) {
-            return this.props.addNotification("Must agree to Terms and Conditions and Privacy Policy.", "error");
+            return this.setState({ error: "Must agree to Terms and Conditions and Privacy Policy." });
         }
 
         const vals = this.props.formData.businessSignup.values;
 
         console.log("vals: ", vals);
+        if (vals && !vals.company && this.props.company) {
+            vals.company = this.props.company;
+        }
 
         // Form validation before submit
         let notValid = false;

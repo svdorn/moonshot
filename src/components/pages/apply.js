@@ -294,7 +294,7 @@ class Apply extends Component {
                 blurredClass +
                 (this.props.blurLeadDashboard ? " blur" : "")
             }>
-                <ClaimPageModal />
+                <ClaimPageModal company={this.state.company} />
                 <ModalSignup />
                 { content }
             </div>
