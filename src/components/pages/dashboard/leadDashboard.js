@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { generalAction, updateStore } from "../../../actions/usersActions";
+import { generalAction, updateStore, openIntroductionModal } from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import YouTube from "react-youtube";
@@ -57,7 +57,7 @@ class GuestDashboard extends Component {
     // close the video, unblur the screen, and remove the event listener on video close
     closeTutorialVideo = () => {
         this.setState({ showTutorialVideo: false });
-        this.props.updateStore("blurMenu", false);
+        this.props.openIntroductionModal();
         window.removeEventListener("resize", this.bound_handleResize);
     };
 
@@ -182,7 +182,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ generalAction, updateStore }, dispatch);
+    return bindActionCreators({ generalAction, updateStore, openIntroductionModal }, dispatch);
 }
 
 GuestDashboard = withRouter(GuestDashboard);
