@@ -1065,12 +1065,6 @@ form > h1 {
     margin: 20px 10px 40px;
 }
 
-#businessHomeStatistics > div:nth-child(2) {
-    margin: 40px auto;
-    max-width: 1340px;
-    position: relative;
-}
-
 .processButtonsContainer {
     position: relative;
     display: inline-block;
