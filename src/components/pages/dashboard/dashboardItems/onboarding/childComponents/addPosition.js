@@ -52,14 +52,6 @@ class AddPosition extends Component {
             // error adding a position
             addPositionError: undefined,
         }
-
-        this.intercomMsg = this.intercomMsg.bind(this);
-    }
-
-    intercomMsg = () => {
-        const { _id, verificationToken } = this.props.currentUser;
-        // trigger intercom event
-        this.props.intercomEvent('onboarding-step-4', _id, verificationToken, null);
     }
 
     handlePositionTypeChange = (event, index) => {
@@ -76,7 +68,7 @@ class AddPosition extends Component {
         this.setState(newState);
     }
 
-    handleSubmit(e, addAnotherPosition) {
+    handleSubmit = (e) => {
         try {
             // TODO: if the user is signed in, add like this, if not just put the data in redux state
             // TODO: need to be able to add multiple positions
@@ -119,12 +111,7 @@ class AddPosition extends Component {
                 .then(res => {
                     self.setState({ positionType: "Position Type", newPosIsManager: false });
                     self.props.stopLoading();
-                    if (addAnotherPosition) {
-                        self.props.reset();
-                        self.props.addNotification(name + " position successfully added.")
-                    } else {
-                        self.props.next();
-                    }
+                    self.props.next();
                 })
                 .catch(error => {
                     self.props.stopLoading();
@@ -132,7 +119,6 @@ class AddPosition extends Component {
                 })
             } else {
                 const position = { name, positionType, isManager };
-                console.log(position);
                 const onboardingPositions = this.props.onboardingPositions;
 
                 let positions = onboardingPositions ? onboardingPositions : [];
@@ -140,13 +126,7 @@ class AddPosition extends Component {
                 positions.push(position);
 
                 this.props.updateStore("onboardingPositions", positions);
-                if (addAnotherPosition) {
-                    this.setState({ positionType: "Position Type", newPosIsManager: false });
-                    this.props.reset();
-                    this.props.addNotification(name + " position successfully added.")
-                } else {
-                    this.props.next();
-                }
+                this.props.next();
             }
         }
 
@@ -238,24 +218,10 @@ class AddPosition extends Component {
                         </div>
                         {"Position is a manager role"}
                     </div>
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={e => this.handleSubmit(e, true)} style={{padding: "2px 4px", marginBottom:"5px"}}>
-                        Add Another Position &#8594;
-                    </button>
                     {this.state.addPositionError ? <div className="secondary-red font10px">{this.state.addPositionError}</div> : null }
-                    <div styleName="emoji-buttons-full">
-                        <div onClick={e => this.handleSubmit(e, false)}>
-                            <img
-                                src={`/icons/emojis/ThumbsUp${this.props.png}`}
-                            />
-                            <div style={{paddingTop: "5px"}}>All set</div>
-                        </div>
-                        <div onClick={this.intercomMsg}>
-                            <img
-                                src={`/icons/emojis/Face${this.props.png}`}
-                            />
-                            <div style={{paddingTop: "5px"}}>More info</div>
-                        </div>
-                    </div>
+                    <button onClick={this.handleSubmit} className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="onboarding-button" style={{padding: "6px 20px"}}>
+                        <span>Enter &#8594;</span>
+                    </button>
                 </form>
             </div>
         );
