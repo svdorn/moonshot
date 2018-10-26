@@ -105,28 +105,17 @@ class ClaimPageModal extends Component {
         // grab values we need from the form
         const { name, company, password, email } = vals;
 
-        if (!isValidEmail(email)) {
-            return this.props.addNotification("Invalid email.", "error");
-        }
         if (!isValidPassword(password)) {
-            return this.props.addNotification("Password must be at least 8 characters long", "error");
+            return this.setState({ error: "Password must be at least 8 characters." });
         }
 
         const positions = this.props.onboardingPositions;
         const onboard = this.props.onboard;
         const selectedJobsToBeDone = this.props.selectedJobsToBeDone;
-        if (this.props.info && this.props.info.type === "menu" && this.props.info.name !== "Button") {
-            var showVerifyEmailBanner = true;
-        }
-        else if (this.props.info && this.props.info.type === "boxes") {
-            var showVerifyEmailBanner = true;
-            var verificationModal = true;
-        }
-
         // get the positions here from the onboardingPositions
 
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone, showVerifyEmailBanner, verificationModal };
+        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone  };
 
         // mark a business signup in google analytics
         ReactGA.event({
@@ -152,13 +141,15 @@ class ClaimPageModal extends Component {
             newIndex--;
         } else {
             let requiredFields = [];
+            const vals = this.props.formData.businessSignup.values;
+            let checkEmail = false;
             if (newIndex === 1) {
                 requiredFields.push('name');
             } else if (newIndex === 2) {
                 requiredFields.push('email');
+                checkEmail = true;
             }
 
-            const vals = this.props.formData.businessSignup.values;
             let notValid = false;
             requiredFields.forEach(field => {
                 if (!vals || !vals[field]) {
@@ -168,6 +159,9 @@ class ClaimPageModal extends Component {
             });
             if (notValid) {
                 return;
+            }
+            if (checkEmail && !isValidEmail(vals.email)) {
+                return this.setState({ error: "Invalid email." });
             }
             newIndex++;
         }
