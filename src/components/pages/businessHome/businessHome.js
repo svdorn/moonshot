@@ -342,7 +342,11 @@ class BusinessHome extends Component {
                         </div>
                         <div style={{ position: "relative" }}>
                             <div styleName="flourish">
-                                <embed src="/images/businessHome/Flourishes3.svg" />
+                                <object
+                                    id="home-flourish"
+                                    type="image/svg+xml"
+                                    data="/images/businessHome/Flourish.svg"
+                                />
                             </div>
 
                             <div styleName="inflatable-boxes">{boxes}</div>
