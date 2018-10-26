@@ -25,27 +25,30 @@ let rectangleKeyIndex = 0;
 const boxTexts = [
     {
         title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        body: "Analyze candidates to see if they exhibit the qualities of proven high achievers."
     },
     {
-        title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        title: "Save Time and Effort",
+        body:
+            "Maximize your efficiency by spending less time screening and interviewing candidates."
     },
     {
-        title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        title: "Constantly Learn and Improve",
+        body:
+            "Every hiring decision is more informed than your last as machine learning is applied to your candidate and employee data."
     },
     {
-        title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        title: "Eliminate Biases",
+        body: "Remove unconscious biases to empirically identify better and more diverse hires."
     },
     {
-        title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        title: "Scale Your Culture",
+        body:
+            "Hire candidates that not only fit your company culture, but also offer new and diverse perspectives."
     },
     {
-        title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        title: "Keep Turnover Low",
+        body: "Hire candidates who are most likely to stay and grow with your company."
     }
 ];
 

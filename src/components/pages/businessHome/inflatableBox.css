@@ -7,6 +7,7 @@
     position: relative;
     width: var(--box-width);
     height: var(--box-height);
+    margin-bottom: 40px;
     text-align: center;
 }
 .hoverable {
@@ -80,13 +81,14 @@
 .body {
     position: absolute;
     width: calc(var(--box-width) - 60px);
-    bottom: 0;
+    top: 50%;
     opacity: 0;
     left: 50%;
     transform: translate(-50%, 50%);
     color: var(--secondary-gray);
     text-align: left;
     margin-left: 20px;
+    padding-right: 10px;
 }
 .foreground > div {
     -webkit-transition: all 0.4s ease;
@@ -100,5 +102,5 @@
 }
 .hoverable:hover + .foreground .body {
     opacity: 1;
-    bottom: 50%;
+    transform: translate(-50%, -50%);
 }
