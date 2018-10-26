@@ -86,13 +86,19 @@ class GuestDashboard extends Component {
         const onboardingPositions = this.props.onboardingPositions;
         // if the first steps are not done
         if (!this.props.welcomeToMoonshot) {
-            activity = <DashboardItem type="WelcomePage" width={3} />
+            activity = <DashboardItem type="WelcomePage" width={3} />;
         }
         // if the lead has not said which jobs they want to do with the site
         else if (this.props.selectedJobsToBeDone === undefined) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
-        } else if (!(onboardingPositions && Array.isArray(onboardingPositions) && onboardingPositions.length > 0)) {
-            activity = <DashboardItem type="AddPositionPage" width={3} />
+        } else if (
+            !(
+                onboardingPositions &&
+                Array.isArray(onboardingPositions) &&
+                onboardingPositions.length > 0
+            )
+        ) {
+            activity = <DashboardItem type="AddPositionPage" width={3} />;
         } else {
             activity = <DashboardItem type="InvitePage" width={3} />;
         }
@@ -134,6 +140,9 @@ class GuestDashboard extends Component {
             </Dialog>
         );
 
+        // TODO
+        const hideItems = true;
+
         return (
             <div
                 className={
@@ -159,9 +168,9 @@ class GuestDashboard extends Component {
                 </div>
                 <div styleName="dashboard">
                     {activity}
-                    <DashboardItem type="Candidates" width={1} />
-                    <DashboardItem type="Evaluations" width={1} />
-                    <DashboardItem type="Employees" width={1} />
+                    <DashboardItem type="Candidates" width={1} blurred={hideItems} />
+                    <DashboardItem type="Evaluations" width={1} blurred={hideItems} />
+                    <DashboardItem type="Employees" width={1} blurred={hideItems} />
                     {/*<DashboardItem type="Billing" width={1} />*/}
                 </div>
             </div>

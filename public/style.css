@@ -3826,6 +3826,7 @@ li.pathwayPreviewLi.featuredPathwayPreview {
 }
 .slightly-blurred {
     filter: blur(5px);
+    pointer-events: none;
 }
 .noBlur {
     filter: none;
