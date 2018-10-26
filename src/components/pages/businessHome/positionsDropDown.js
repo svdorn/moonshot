@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification, closeNotification } from "../../../actions/usersActions";
+import { addNotification, closeNotification, openIntroductionModal } from "../../../actions/usersActions";
 import { goTo, replaceCharacters } from "../../../miscFunctions";
 
 import "./businessHome.css";
@@ -118,11 +118,13 @@ class PositionsDropDown extends Component {
     // if you click on a role name
     typeAdvance = type => () => {
         goTo(`/explore?role=${type}`);
+        this.props.openIntroductionModal();
     };
 
     // if you clicked on a specific title
     nameAdvance = name => () => {
         goTo(`/explore?title=${name}`);
+        this.props.openIntroductionModal();
     };
 
     // display the five functions as options if there is no search text
@@ -174,7 +176,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ addNotification, closeNotification }, dispatch);
+    return bindActionCreators({ addNotification, closeNotification, openIntroductionModal }, dispatch);
 }
 
 export default connect(

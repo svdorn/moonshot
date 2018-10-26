@@ -56,6 +56,10 @@
     padding: 30px 10px 10px 10px;
     text-align: left;
 }
+.welcome-frame-modal {
+    text-align: left;
+    max-width: 500px;
+}
 .blue-arrow {
     font-size: 22px;
     margin-top: 15px;
@@ -711,6 +715,10 @@
     .welcome-frame {
         width: 100%;
         padding: 10px;
+    }
+
+    .welcome-frame-modal {
+        max-width: 260px;
     }
 
     .blue-arrow {

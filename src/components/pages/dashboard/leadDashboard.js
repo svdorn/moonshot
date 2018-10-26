@@ -11,7 +11,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DashboardItem from "./dashboardItem";
 import ROIOnboardingDialog from "../../childComponents/roiOnboardingDialog";
 import ModalSignup from "./dashboardItems/onboarding/childComponents/modalSignup";
-import IntroductionModal from "./dashboardItems/onboarding/childComponents/modalSignup";
+import IntroductionModal from "./dashboardItems/onboarding/childComponents/introductionModal";
 
 import "./dashboard.css";
 

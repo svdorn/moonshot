@@ -17,7 +17,8 @@ import {
     signout,
     closeNotification,
     endOnboarding,
-    openAddUserModal
+    openAddUserModal,
+    openIntroductionModal
 } from "../../actions/usersActions";
 import { isValidEmail, goTo, elementInViewport } from "../../miscFunctions";
 import { axios } from "axios";
@@ -258,6 +259,11 @@ class Menu extends Component {
                 getStartedInput.focus();
             }
         }
+    }
+
+    goToExplore = () => {
+        goTo("/explore");
+        this.props.openIntroductionModal();
     }
 
     render() {
@@ -541,7 +547,7 @@ class Menu extends Component {
                         <p
                             key={"try now desktop"}
                             className="menuItem pointer font14px noWrap primary-cyan wideScreenMenuItem"
-                            onClick={() => goTo("/explore")}
+                            onClick={self.goToExplore}
                         >
                             <span className="primary-cyan" style={{ marginRight: "7px" }}>
                                 Try Now For Free
@@ -557,7 +563,7 @@ class Menu extends Component {
                         <MenuItem
                             key={"try now mobile"}
                             primaryText="Try Now For Free"
-                            onClick={() => goTo("/explore")}
+                            onClick={self.goToExplore}
                         />
                     );
                     break;
@@ -805,7 +811,8 @@ function mapDispatchToProps(dispatch) {
             signout,
             closeNotification,
             endOnboarding,
-            openAddUserModal
+            openAddUserModal,
+            openIntroductionModal
         },
         dispatch
     );
