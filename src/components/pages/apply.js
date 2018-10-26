@@ -10,6 +10,7 @@ import MetaTags from 'react-meta-tags';
 import { goTo } from "../../miscFunctions";
 import HoverTip from "../miscComponents/hoverTip";
 import ClaimPageModal from "./dashboard/dashboardItems/onboarding/childComponents/claimPageModal";
+import ModalSignup from "./dashboard/dashboardItems/onboarding/childComponents/modalSignup";
 import axios from 'axios';
 
 import "./apply.css";
@@ -294,6 +295,7 @@ class Apply extends Component {
                 (this.props.blurLeadDashboard ? " blur" : "")
             }>
                 <ClaimPageModal />
+                <ModalSignup />
                 { content }
             </div>
         );
