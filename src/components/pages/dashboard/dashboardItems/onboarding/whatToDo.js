@@ -7,7 +7,6 @@ import { updateOnboardingStep, addNotification, generalAction, updateUser, openA
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists, updateStore } from "../../../../../miscFunctions";
 import AddPosition from "./childComponents/addPosition";
-import Signup from "./childComponents/signup";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
     TextField,
@@ -84,17 +83,6 @@ class WhatToDo extends Component {
     }
 
     next = () => {
-        // TODO merge these two into one api call to avoid race conditions
-        if (this.state.step === "position" || this.state.step === "") {
-            if (this.props.currentUser) {
-                this.props.generalAction("OPEN_ONBOARDING_4_MODAL");
-                this.setState({ step: "copyLink" })
-            } else {
-                this.setState({ step: "signup" })
-            }
-            return;
-        }
-
         const { _id, verificationToken, verified } = this.props.currentUser;
 
         if (!verified) {
@@ -217,38 +205,13 @@ class WhatToDo extends Component {
         );
     }
 
-    positionView() {
-        return(
-            <div styleName="full-step-container position-view">
-                <div>
-                    Add Your First Position
-                </div>
-                <div>
-                    <AddPosition next={this.next} />
-                </div>
-            </div>
-        );
-    }
-
-    signupView() {
-        return(
-            <div styleName="full-step-container">
-                <Signup />
-            </div>
-        );
-    }
 
     render() {
-        switch (this.state.step) {
-            case "position":
-                return this.positionView();
-            case "signup":
-                return this.signupView();
-            case "copyLink":
-                return this.copyLinkView();
-            default:
-                return <div styleName="circular-progress-fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>;
-        }
+        return (
+            <div>
+                { this.copyLinkView() }
+            </div>
+        );
     }
 }
 

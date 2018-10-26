@@ -86,7 +86,6 @@ class ClaimPageModal extends Component {
 
         const vals = this.props.formData.businessSignup.values;
 
-        console.log("vals: ", vals);
         if (vals && !vals.company && this.props.company) {
             vals.company = this.props.company;
         }
