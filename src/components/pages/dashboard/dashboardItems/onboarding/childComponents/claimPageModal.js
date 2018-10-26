@@ -166,8 +166,8 @@ class ClaimPageModal extends Component {
                         label="Full Name"
                     /><br/>
                 </div>
-                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "2px 4px"}}>
-                    Claim &#8594;
+                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "4px 8px"}}>
+                    Start
                 </button>
             </div>
         );
@@ -183,8 +183,8 @@ class ClaimPageModal extends Component {
                         label="Email"
                     /><br/>
                 </div>
-                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "2px 4px"}}>
-                    Claim &#8594;
+                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "4px 8px"}}>
+                    Start
                 </button>
             </div>
         );
@@ -222,8 +222,8 @@ class ClaimPageModal extends Component {
                     >terms of service</a>.
                 </div>
                 {this.props.loadingCreateBusiness ? <CircularProgress color="#72d6f5"/> :
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" onClick={this.handleSubmit} style={{padding: "2px 4px"}}>
-                        Claim &#8594;
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" onClick={this.handleSubmit} style={{padding: "4px 8px"}}>
+                        Start
                     </button>
                 }
             </div>
@@ -241,23 +241,22 @@ class ClaimPageModal extends Component {
         for (let navCircleIdx = 0; navCircleIdx < 3; navCircleIdx++) {
             navArea.push(
                 <div
-                    styleName="nav-circle"
+                    styleName="signup-circle"
                     style={(this.state.frame - 1) === navCircleIdx ? selectedStyle : {}}
                     key={`signup question ${navCircleIdx}`}
                 />
             );
         }
+        let arrowArea = [];
         // add the left and right arrows
         const arrowStyle = {
-            width: "12px",
-            height: "12px",
-            display: "inline-block",
-            margin: "2px 8px"
+            width: "20px",
+            height: "20px",
         };
         if (this.state.frame !== 1) {
-            navArea.unshift(
+            arrowArea.unshift(
                 <div
-                    className="left circleArrowIcon arrow-2px"
+                    className="left circleArrowIcon"
                     style={arrowStyle}
                     onClick={this.navFrames.bind(this, "back")}
                     key="back arrow"
@@ -265,9 +264,9 @@ class ClaimPageModal extends Component {
             );
         }
         if (this.state.frame !== 3) {
-            navArea.push(
+            arrowArea.push(
                 <div
-                    className="right circleArrowIcon arrow-2px"
+                    className="right circleArrowIcon"
                     style={arrowStyle}
                     onClick={this.navFrames.bind(this, "next")}
                     key="next arrow"
@@ -297,17 +296,22 @@ class ClaimPageModal extends Component {
                 maxWidth={false}
                 onClose={this.close}
             >
-                    <form styleName="modal-signup" className="inline-block">
+                    <form styleName="modal-signup" className="inline-block center">
                         <div>
                             <div className="primary-cyan font22px font20pxUnder500">
-                                Claim Your Page
+                                Secure Your Page
                             </div>
                             <div className="font14px">
                                 Fill this out so you can manage your page.
                             </div>
                         </div>
-                        <div className="noselect">
-                            { frame }
+                        <div>
+                            <div className="carousel">
+                                <div style={{paddingRight:"30px", paddingLeft:"30px"}}>
+                                    { frame }
+                                </div>
+                                { arrowArea }
+                            </div>
                             { navArea }
                         </div>
                     </form>

@@ -198,7 +198,7 @@ class Apply extends Component {
                         All of your candidates can visit the link to this page to complete their evaluation.
                     </div>
                     <div onClick={this.openClaimPageModal}>
-                        Claim This Page <img src={`/icons/ArrowBlue${this.props.png}`} />
+                        Secure This Page <img src={`/icons/ArrowBlue${this.props.png}`} />
                     </div>
                 </div>
             </div>
