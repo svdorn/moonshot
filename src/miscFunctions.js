@@ -256,6 +256,18 @@ function elementInViewport(el) {
     );
 }
 
+function elementPartiallyInViewport(el) {
+    var rect = el.getBoundingClientRect();
+
+    const screenHeight = window.innerHeight || document.documentElement.clientHeight;
+    const screenWidth = window.innerWidth || document.documentElement.clientWidth;
+
+    const inVertically = rect.top < screenHeight && rect.bottom > 0;
+    const inHorizontally = rect.left < screenWidth && rect.right > 0;
+
+    return inVertically && inHorizontally;
+}
+
 function makePossessive(name) {
     if (typeof name !== "string") {
         return name;
@@ -320,6 +332,7 @@ const miscFunctions = {
     withinElement,
     makePossessive,
     elementInViewport,
+    elementPartiallyInViewport,
     replaceCharacters,
     copyCustomLink,
     noop,

@@ -10,7 +10,7 @@ import axios from "axios";
 import MetaTags from "react-meta-tags";
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from "material-ui";
 import AddUserDialog from "../../childComponents/addUserDialog";
-import { isValidEmail, goTo, elementInViewport } from "../../../miscFunctions";
+import { isValidEmail, goTo, elementPartiallyInViewport } from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
 import CornersButton from "../../miscComponents/cornersButton";
 import PositionsDropDown from "./positionsDropDown";
@@ -110,9 +110,8 @@ class BusinessHome extends Component {
     }
 
     handleScroll() {
-        console.log("running");
         let flourishElement = document.getElementById("home-flourish-svg");
-        if (elementInViewport(flourishElement)) {
+        if (elementPartiallyInViewport(flourishElement)) {
             document.removeEventListener("scroll", this.handleScroll);
             this.vivusSvg.play();
             flourishElement.className = "";
