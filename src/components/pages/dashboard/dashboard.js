@@ -14,8 +14,6 @@ import ROIOnboardingDialog from "../../childComponents/roiOnboardingDialog";
 import OnboardingStep4Dialog from "../../childComponents/onboardingStep4Dialog";
 import VerificationModal from "./dashboardItems/onboarding/childComponents/verificationModal";
 
-import WelcomeMessage from "./dashboardItems/welcomeMessage";
-
 import "./dashboard.css";
 
 class Dashboard extends Component {
@@ -77,7 +75,6 @@ class Dashboard extends Component {
                     <div />
                     <div>Dashboard</div>
                 </div>
-                <WelcomeMessage />
                 <div styleName="dashboard">
                     {activity}
                     <DashboardItem type="Candidates" width={1} />

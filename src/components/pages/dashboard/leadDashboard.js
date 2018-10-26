@@ -13,8 +13,6 @@ import ROIOnboardingDialog from "../../childComponents/roiOnboardingDialog";
 import ModalSignup from "./dashboardItems/onboarding/childComponents/modalSignup";
 import IntroductionModal from "./dashboardItems/onboarding/childComponents/modalSignup";
 
-import WelcomeMessage from "./dashboardItems/welcomeMessage";
-
 import "./dashboard.css";
 
 const videoSizes = {
@@ -31,8 +29,6 @@ class GuestDashboard extends Component {
         super(props);
 
         this.state = {
-            // show the banner with introduction to the dashboard
-            showWelcomeBanner: true,
             // if the tutorial video should be open on page load
             showTutorialVideo:
                 props.location && props.location.query && props.location.query.tutorialVideo,
@@ -154,7 +150,6 @@ class GuestDashboard extends Component {
                     <div />
                     <div>Dashboard</div>
                 </div>
-                <WelcomeMessage />
                 <div styleName="dashboard">
                     {activity}
                     <DashboardItem type="Candidates" width={1} />
