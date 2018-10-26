@@ -140,7 +140,7 @@ class GuestDashboard extends Component {
             </Dialog>
         );
 
-        // TODO
+        // hide the dashboard items until onboarding is complete
         const hideItems = true;
 
         return (

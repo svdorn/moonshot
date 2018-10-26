@@ -56,6 +56,10 @@ class Dashboard extends Component {
             blurredClass = "dialogForBizOverlay";
         }
 
+        // old acc admins won't have onboard object, so if they don't just say the finished
+        const finishedOnboarding =
+            !user.onboard || typeof user.onboard.step !== "number" || user.onboard.timeFinished;
+
         return (
             <div className={"center full-height " + blurredClass}>
                 <MetaTags>
@@ -77,11 +81,11 @@ class Dashboard extends Component {
                 </div>
                 <div styleName="dashboard">
                     {activity}
-                    <DashboardItem type="Candidates" width={1} />
-                    <DashboardItem type="Evaluations" width={1} />
-                    <DashboardItem type="Employees" width={1} />
-                    <DashboardItem type="Account" width={1} />
-                    <DashboardItem type="Billing" width={1} />
+                    <DashboardItem type="Candidates" width={1} blurred={!finishedOnboarding} />
+                    <DashboardItem type="Evaluations" width={1} blurred={!finishedOnboarding} />
+                    <DashboardItem type="Employees" width={1} blurred={!finishedOnboarding} />
+                    <DashboardItem type="Account" width={1} blurred={!finishedOnboarding} />
+                    <DashboardItem type="Billing" width={1} blurred={!finishedOnboarding} />
                 </div>
             </div>
         );
