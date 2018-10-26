@@ -46,6 +46,7 @@ class ClaimPageModal extends Component {
         this.state = {
             agreeingToTerms: false,
             frame: 1,
+            error: undefined
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -150,10 +151,28 @@ class ClaimPageModal extends Component {
         if (direction === "back") {
             newIndex--;
         } else {
+            let requiredFields = [];
+            if (newIndex === 1) {
+                requiredFields.push('name');
+            } else if (newIndex === 2) {
+                requiredFields.push('email');
+            }
+
+            const vals = this.props.formData.businessSignup.values;
+            let notValid = false;
+            requiredFields.forEach(field => {
+                if (!vals || !vals[field]) {
+                    this.props.touch(field);
+                    notValid = true;
+                }
+            });
+            if (notValid) {
+                return;
+            }
             newIndex++;
         }
 
-        this.setState({ frame: newIndex });
+        this.setState({ frame: newIndex, error: undefined });
     };
 
     makeFrame1() {
@@ -304,6 +323,12 @@ class ClaimPageModal extends Component {
                             <div className="font14px">
                                 Fill this out so you can manage your page.
                             </div>
+                            {this.state.error ?
+                                <div className="font14px marginTop10px secondary-red">
+                                    {this.state.error}
+                                </div>
+                                : null
+                            }
                         </div>
                         <div>
                             <div className="carousel">
