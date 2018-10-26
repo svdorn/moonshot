@@ -353,7 +353,8 @@
 
 .flourish {
     position: absolute;
-    transform: translate(0%, -25%);
+    left: 50%;
+    transform: translate(-50%, -25%);
 
     -webkit-transition: transform 0.5s ease;
     -moz-transition: transform 0.5s ease;
@@ -921,6 +922,12 @@
     }
 }
 
+@media only screen and (max-width: 850px) {
+    .flourish {
+        transform: translate(-50%, 6%);
+    }
+}
+
 @media only screen and (max-width: 800px) {
     .businessHome {
         --rect-col-upper-left-end: 15;
@@ -1066,10 +1073,6 @@
         grid-column-end: 25;
     }
 
-    .flourish {
-        transform: translate(-18%, -25%);
-    }
-
     .get-started-input-container {
         width: 410px;
         height: 41px;
@@ -1182,6 +1185,10 @@
 @media only screen and (max-width: 450px) {
     .inflatable-boxes {
         width: 260px;
+    }
+
+    .flourish {
+        transform: translate(-50%, 41%) rotate(90deg);
     }
 }
 
