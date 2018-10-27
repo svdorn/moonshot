@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification, openAddPositionModal, openAddUserModal, generalAction } from "../../../../actions/usersActions";
+import { addNotification, openAddPositionModal, openAddUserModal, generalAction, confirmEmbedLink } from "../../../../actions/usersActions";
 import { propertyExists, goTo, makePossessive, getFirstName } from "../../../../miscFunctions";
 import clipboard from "clipboard-polyfill";
 import Carousel from "../../../miscComponents/carousel";
@@ -38,7 +38,6 @@ class Activity extends Component {
          this.openAddPositionModal = this.openAddPositionModal.bind(this);
          this.openAddUserModal = this.openAddUserModal.bind(this);
          this.reviewCandidates = this.reviewCandidates.bind(this);
-         this.copyLink = this.copyLink.bind(this);
     }
 
     componentDidMount() {
@@ -58,7 +57,7 @@ class Activity extends Component {
                 if (!user.confirmEmbedLink) {
                     frame = "Embed Link";
                     this.setState({ frame, numUsers: 0 });
-                }else if (response.data.totalCandidates > 0) {
+                } else if (response.data.totalCandidates > 0) {
                     frame = "Awaiting Review";
                     this.setState({ frame });
                     self.getCandidateData();
@@ -137,6 +136,14 @@ class Activity extends Component {
         } else {
             this.props.addNotification("Error copying link, try refreshing", "error");
         }
+    }
+
+    confirmEmbedLink = () => {
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+
+        this.props.confirmEmbedLink(userId, verificationToken);
+        this.setState({ frame: "Tips For Hiring", numUsers: 0 });
     }
 
     openAddPositionModal = () => {
@@ -253,16 +260,17 @@ class Activity extends Component {
                     <div className="font22px font18pxUnder700 font16pxUnder500 primary-cyan">
                         { possessiveBusinessName } Activation
                     </div>
-                    <div>
+                    <div className="primary-white font16px font14pxUnder700">
                         Confirm that you{"'"}ve properly copied and pasted the link to your candidate
                         invite page in your automated emails or other communications with candidates.
                     </div>
                     <div
-                        className={"primary-white " + button.cyan}
+                        className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop20px " + button.cyanRound}
+                        onClick={this.confirmEmbedLink}
                     >
                         I have embedded the link
                     </div>
-                    <div className="clickable">
+                    <div className="clickable marginTop10px">
                         Need help?
                     </div>
                 </div>
@@ -470,7 +478,8 @@ function mapDispatchToProps(dispatch) {
         addNotification,
         openAddPositionModal,
         openAddUserModal,
-        generalAction
+        generalAction,
+        confirmEmbedLink
     }, dispatch);
 }
 

@@ -288,6 +288,7 @@ export function usersReducers(state = initialState, action) {
             break;
         // case "UPDATE_ONBOARDING":
         case "HIDE_POPUPS":
+        case "CONFIRM_EMBED_LINK":
             return {
                 ...state,
                 currentUser: action.payload,
@@ -299,6 +300,7 @@ export function usersReducers(state = initialState, action) {
         case "CHANGE_TEMP_PASS_REJECTED":
         case "ADD_PATHWAY_REJECTED":
         case "HIDE_POPUPS_REJECTED":
+        case "CONFIRM_EMBED_LINK_REJECTED":
         case "POST_BUSINESS_INTERESTS_REJECTED":
         case "ADD_NOTIFICATION":
             return {

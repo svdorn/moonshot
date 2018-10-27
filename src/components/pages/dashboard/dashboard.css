@@ -238,7 +238,7 @@
 }
 .embed-link > div:first-child {
     flex: 1;
-    padding: calc(var(--item-margin));
+    padding: calc(2*var(--item-margin));
     position: relative;
 }
 .embed-link > div:nth-child(2) {

@@ -59,6 +59,7 @@ module.exports = {
     POST_updateOnboardingStep,
     POST_popups,
     POST_reSendVerificationEmail,
+    POST_confirmEmbedLink,
 
     // not api endpoints
     sendVerificationEmail
@@ -449,6 +450,35 @@ async function POST_popups(req, res) {
 
     // if a user was found from the token, verify them and get rid of the token
     user.popups = popups;
+
+    // save the verified user
+    try { var returnedUser = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user when updating onboarding info: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    res.json(frontEndUser(returnedUser));
+}
+
+async function POST_confirmEmbedLink(req, res) {
+    const { userId, verificationToken } = req.body;
+
+    // get the user who is asking for their evaluations page
+    try {
+        var user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user when trying update popup info: ", getUserError);
+        const status = getUserError.status ? getUserError.status : 500;
+        const message = getUserError.message ? getUserError.message : "Server error.";
+        return res.status(status).send(message);
+    }
+
+    // if no user found from token, can't verify
+    if (!user) { return res.status(404).send("User not found"); }
+
+    // if a user was found from the token, verify them and get rid of the token
+    user.confirmEmbedLink = true;
 
     // save the verified user
     try { var returnedUser = await user.save(); }

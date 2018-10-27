@@ -188,6 +188,7 @@ app.post("/user/updateOnboardingStep", userApis.POST_updateOnboardingStep);
 app.post("/user/popups", userApis.POST_popups);
 app.post("/user/intercomEvent", userApis.POST_intercomEvent);
 app.post("/user/reSendVerificationEmail", userApis.POST_reSendVerificationEmail);
+app.post("/user/confirmEmbedLink", userApis.POST_confirmEmbedLink);
 
 app.post("/candidate/candidate", candidateApis.POST_candidate);
 
