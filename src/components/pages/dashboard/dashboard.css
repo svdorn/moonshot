@@ -613,9 +613,22 @@
     -webkit-box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.5);
 }
-.invite-candidates-template > div {
+.invite-candidates-template > div:nth-child(2) {
+    margin-top: 20px !important;
+}
+.invite-candidates-template > div:not(:first-child) {
     margin-top: 3px;
     text-align: left;
+}
+.invite-candidates-template .copy-link {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+}
+.invite-candidates-template .copy-template {
+    position: absolute;
+    right: 1px;
+    top: 1px;
 }
 .modal-signup {
     padding: 50px;

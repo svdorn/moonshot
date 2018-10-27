@@ -6,5 +6,6 @@ module.exports = {
         orangeRed: "button medium round-4px gradient-transition gradient-1-red gradient-2-orange",
         disabled: "button medium round-4px gradient-transition disabled",
         cyan: "button medium round-4px background-primary-cyan",
+        lightBlack: "button medium round-6px background-secondary-dark-gray"
     }
 }

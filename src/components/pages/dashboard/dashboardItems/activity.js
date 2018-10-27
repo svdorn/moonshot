@@ -269,6 +269,20 @@ class Activity extends Component {
                 <div>
                     <div styleName="invite-candidates-template">
                         <div>
+                            <div
+                                className={"primary-white " + button.lightBlack}
+                                styleName="copy-link"
+                            >
+                                Copy Link
+                            </div>
+                            <div
+                                className={"primary-white " + button.lightBlack}
+                                styleName="copy-template"
+                            >
+                                Copy Template
+                            </div>
+                        </div>
+                        <div>
                             Subject: { subject }
                         </div>
                         <div>
