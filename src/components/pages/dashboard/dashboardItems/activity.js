@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification, openAddPositionModal, openAddUserModal, generalAction, confirmEmbedLink } from "../../../../actions/usersActions";
+import { addNotification, openAddPositionModal, openAddUserModal, updateUser, generalAction, confirmEmbedLink } from "../../../../actions/usersActions";
 import { propertyExists, goTo, makePossessive, getFirstName } from "../../../../miscFunctions";
 import clipboard from "clipboard-polyfill";
 import Carousel from "../../../miscComponents/carousel";
@@ -141,6 +141,25 @@ class Activity extends Component {
     confirmEmbedLink = () => {
         const userId = this.props.currentUser._id;
         const verificationToken = this.props.currentUser.verificationToken;
+        const verified = this.props.currentUser.verified;
+
+        if (!verified) {
+            const credentials = {
+                userId,
+                verificationToken
+            }
+            axios.post("/api/accountAdmin/sendVerificationEmail", credentials)
+            .then(res => {
+                axios.post("/api/accountAdmin/showVerifyEmailBanner", { userId, verificationToken })
+                .then(response => {
+                    this.props.generalAction("OPEN_VERIFICATION_MODAL");
+                    this.props.updateUser(response.data.user);
+                })
+                .catch(error => { console.log(error); });
+            })
+            .catch(error => {
+            })
+        }
 
         this.props.confirmEmbedLink(userId, verificationToken);
         this.setState({ frame: "Tips For Hiring", numUsers: 0 });
@@ -478,6 +497,7 @@ function mapDispatchToProps(dispatch) {
         addNotification,
         openAddPositionModal,
         openAddUserModal,
+        updateUser,
         generalAction,
         confirmEmbedLink
     }, dispatch);

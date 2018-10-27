@@ -58,18 +58,18 @@ class VerificationModal extends Component {
             >
                 <div styleName="modal-signup">
                     <div className="primary-cyan font22px font18pxUnder700 center">
-                        Verify Email To Activate Invites
+                        Verify Your Email
                     </div>
-                    <div className="font14px font12pxUnder700" style={{maxWidth: "400px", margin:"15px auto"}}>
-                        We need you to do this before we can allow invites to be sent from this email. Do you need a new verification email?
+                    <div className="center font16px font14pxUnder700" style={{maxWidth: "400px", margin:"5px auto"}}>
+                        Go to your inbox to verify. This will allow us to activate your page and evaluations.
                     </div>
                     <div className="center">
                         <div
-                            className={this.state.loadingSendVerificationEmail ? button.disabled : button.purpleBlue}
+                            className={this.state.loadingSendVerificationEmail ? button.disabled : button.cyan}
                             onClick={this.sendVerificationEmail}
-                            style={{margin: "20px auto"}}
+                            style={{margin: "20px auto", fontSize: "18px", color: "white"}}
                         >
-                            Send Verification Email
+                            Re-Send Verification Email
                         </div>
                         {this.state.loadingSendVerificationEmail ? <div><CircularProgress color={colors.primaryCyan} /></div> : null}
                     </div>
