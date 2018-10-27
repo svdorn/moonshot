@@ -51,6 +51,8 @@ class AddPositionModal extends Component {
             mustSelectTypeError: false,
             // error adding a position
             addPositionError: undefined,
+            // if they clicked that they want to update
+            update: undefined
         }
     }
 
@@ -66,6 +68,10 @@ class AddPositionModal extends Component {
     handleClickIsManager = () => {
         const newState = { ...this.state, newPosIsManager: !this.state.newPosIsManager }
         this.setState(newState);
+    }
+
+    handleUpdate = () => {
+        this.setState({ update: true });
     }
 
     handleSubmit = (e) => {
@@ -182,31 +188,65 @@ class AddPositionModal extends Component {
             return <MenuItem value={positionType} primaryText={positionType} key={index}/>
         });
 
+        let header = "Update Position";
+        if (this.state.update) {
+            header = "Update Position";
+        } else if (this.props.title) {
+            header = this.props.title;
+        } else if (this.props.role) {
+            header = this.props.role + " Position";
+        }
+
         return (
             <div>
-                <form className="center" style={{marginTop:"-10px"}}>
+                <form className="center">
+                    <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
+                        { header }
+                        {!this.state.update ?
+                            <div className="inlineBlock clickable" onClick={this.handleUpdate}>
+                                <img
+                                    src={"/icons/Arrow2" + this.props.png}
+                                    alt="Edit"
+                                    height={20}
+                                />
+                            </div>
+                            : null
+                        }
+                    </div>
+                    <div className="font14px" style={{margin: "5px"}}>
+                        Complete the details for this position.
+                    </div>
                     {this.state.mustSelectTypeError ?
                         <div className="secondary-red font10px">Must select a position type.</div>
                         : null
                     }
-                    <Field
-                        name="position"
-                        component={renderTextField}
-                        label="Position Name"
-                        validate={[required]}
-                    /><br/>
-                    <div className="primary-cyan font16px" style={{marginTop: "5px"}}>
-                        <div style={{display:"inline-block", verticalAlign:"top"}}>Select a position type:</div>
-                        <DropDownMenu value={this.state.positionType}
-                                  onChange={this.handlePositionTypeChange}
-                                  labelStyle={style.menuLabelStyle}
-                                  anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "14px", marginTop: "-20px"}}
-                        >
-                            {positionTypeItems}
-                        </DropDownMenu>
-                    </div><br/>
-                    <div style={{margin:"-30px auto 7px"}} className="primary-white">
+                    { !this.props.title || this.state.update ?
+                        <div>
+                            <Field
+                                name="position"
+                                component={renderTextField}
+                                label="Position Name"
+                                validate={[required]}
+                            /><br/>
+                        </div>
+                        : null
+                    }
+                    { !this.props.role || this.state.update ?
+                        <div className="primary-cyan font16px" style={{marginTop: "5px"}}>
+                            <div style={{display:"inline-block", verticalAlign:"top"}}>Select a position type:</div>
+                            <DropDownMenu value={this.state.positionType}
+                                      onChange={this.handlePositionTypeChange}
+                                      labelStyle={style.menuLabelStyle}
+                                      anchorOrigin={style.anchorOrigin}
+                                      style={{fontSize: "14px", marginTop: "-20px"}}
+                            >
+                                {positionTypeItems}
+                            </DropDownMenu>
+                        </div>
+                        : null
+                    }
+                    <br/>
+                    <div style={{margin:"-5px auto 7px"}} className="primary-white">
                         <div className="checkbox smallCheckbox whiteCheckbox"
                              onClick={this.handleClickIsManager.bind(this)}
                         >
@@ -219,8 +259,8 @@ class AddPositionModal extends Component {
                         {"Position is a manager role"}
                     </div>
                     {this.state.addPositionError ? <div className="secondary-red font10px">{this.state.addPositionError}</div> : null }
-                    <button onClick={this.handleSubmit} className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="onboarding-button" style={{padding: "6px 20px"}}>
-                        <span>Enter &#8594;</span>
+                    <button onClick={this.handleSubmit} className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop10px" styleName="onboarding-button" style={{padding: "6px 20px"}}>
+                        <span>Continue</span>
                     </button>
                 </form>
             </div>
