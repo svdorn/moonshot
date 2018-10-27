@@ -3,13 +3,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification, openAddPositionModal, openAddUserModal, generalAction } from "../../../../actions/usersActions";
-import { propertyExists, goTo, makePossessive } from "../../../../miscFunctions";
+import { propertyExists, goTo, makePossessive, getFirstName } from "../../../../miscFunctions";
 import clipboard from "clipboard-polyfill";
 import Carousel from "../../../miscComponents/carousel";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { primaryCyan, primaryWhite } from "../../../../colors";
+import { button } from "../../../../classes.js";
 import HoverTip from "../../../miscComponents/hoverTip";
 import axios from "axios";
 
@@ -54,7 +55,10 @@ class Activity extends Component {
         .then(response => {
             if (propertyExists(response, ["data", "totalCandidates"]), "number") {
                 let frame = "Tips For Hiring";
-                if (response.data.totalCandidates > 0) {
+                if (!user.confirmEmbedLink) {
+                    frame = "Embed Link";
+                    this.setState({ frame, numUsers: 0 });
+                }else if (response.data.totalCandidates > 0) {
                     frame = "Awaiting Review";
                     this.setState({ frame });
                     self.getCandidateData();
@@ -229,6 +233,67 @@ class Activity extends Component {
         );
     }
 
+    embedLink() {
+        const { currentUser } = this.props;
+        let businessName = undefined;
+        let uniqueName = "";
+        if (typeof currentUser.businessInfo === "object") {
+            const { businessInfo } = currentUser;
+            businessName = businessInfo.businessName;
+            uniqueName = businessInfo.uniqueName;
+        }
+        try { var possessiveBusinessName = makePossessive(this.props.currentUser.businessInfo.businessName); }
+        catch (e) { possessiveBusinessName = "Your"; }
+
+        const subject = businessName ? `Invitation from ${businessName}` : "Evaluation Invitation";
+
+        return (
+            <div className="inline-block" styleName="onboarding-info embed-link">
+                <div>
+                    <div className="font22px font18pxUnder700 font16pxUnder500 primary-cyan">
+                        { possessiveBusinessName } Activation
+                    </div>
+                    <div>
+                        Confirm that you{"'"}ve properly copied and pasted the link to your candidate
+                        invite page in your automated emails or other communications with candidates.
+                    </div>
+                    <div
+                        className={"primary-white " + button.cyan}
+                    >
+                        I have embedded the link
+                    </div>
+                    <div className="clickable">
+                        Need help?
+                    </div>
+                </div>
+                <div>
+                    <div styleName="invite-candidates-template">
+                        <div>
+                            Subject: { subject }
+                        </div>
+                        <div>
+                            Hi,
+                        </div>
+                        <div>
+                            Congratulations, we would like to invite you to the next round of evaluations! We are excited to learn more about you and see how well you could fit with our team. The next step is
+                            completing a 22-minute evaluation, which you can sign up and take <a style={{color:"#76defe", textDecoration:"underline"}} href={`https://moonshotinsights.io/apply/${uniqueName}`}>here</a>.
+                        </div>
+                        <div>
+                            We look forward to reviewing your results. Please let me know if you have any questions.
+                        </div>
+                        <div>
+                            All the best,
+                            <div>
+                                { getFirstName(currentUser.name) }
+                            </div>
+                        </div>
+                    </div>
+                    Email template you can copy, paste and tweak for your automated emails to candidates.
+                </div>
+            </div>
+        );
+    }
+
     handleTabChange = () => event => {
         const tab = event.target.value;
         let getData = this.getCandidateData;
@@ -336,6 +401,8 @@ class Activity extends Component {
             switch (frame) {
                 // if there are no candidates at all, show hiring tips
                 case "Tips For Hiring": { content = this.tipsForHiring(); break; }
+                // if the user hasn't confirmed that they've embedded the link
+                case "Embed Link": { content = this.embedLink(); break; }
                 // if there are any candidates, show number of unreviewed ones
                 case "Awaiting Review": {
                     content = this.awaitingReview();
@@ -346,15 +413,25 @@ class Activity extends Component {
             }
         }
 
+        console.log(frame)
+
         return (
             <div>
                 { doneLoading ?
-                    <div styleName="activity-container">
-                        <div styleName="activity-title">
-                            <span styleName="not-small-mobile">{ possessiveBusinessName } </span>Activity
-                        </div>
-                        { dropdown }
-                        { content }
+                    <div>
+                        {frame === "Embed Link" ?
+                            <div>
+                                { content }
+                            </div>
+                            :
+                            <div styleName="activity-container">
+                                <div styleName="activity-title">
+                                    <span styleName="not-small-mobile">{ possessiveBusinessName } </span>Activity
+                                </div>
+                                { dropdown }
+                                { content }
+                            </div>
+                        }
                     </div>
                 :
                     <div className="fully-center">

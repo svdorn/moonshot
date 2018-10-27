@@ -236,6 +236,17 @@
     padding: var(--item-margin) var(--item-margin) 0;
     position: relative;
 }
+.embed-link > div:first-child {
+    flex: 1;
+    padding: calc(var(--item-margin));
+    position: relative;
+}
+.embed-link > div:nth-child(2) {
+    width: calc(var(--item-width) + (8 * var(--item-margin)));
+    text-align: center;
+    padding: var(--item-margin) var(--item-margin) 0;
+    position: relative;
+}
 .copy-link-view > div:first-child {
     color: var(--primary-cyan);
     text-align: center;
@@ -591,6 +602,21 @@
     margin-top: 5px;
     text-align: left;
 }
+.invite-candidates-template {
+    color: var(--secondary-gray);
+    display: inline-block;
+    max-height: 180px;
+    overflow-y: scroll;
+    padding: 10px;
+    position: relative;
+    -moz-box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.5);
+}
+.invite-candidates-template > div {
+    margin-top: 3px;
+    text-align: left;
+}
 .modal-signup {
     padding: 50px;
     background-color: var(--primary-black-dark);
@@ -688,6 +714,7 @@
 
     .candidate-view > div:nth-child(2),
     .ml-step > div:nth-child(2),
+    .embed-link > div:nth-child(2),
     .admin-view > div:nth-child(2) {
         width: calc(var(--item-width) + var(--item-margin));
     }
@@ -789,6 +816,7 @@
     }
     .candidate-view > div:nth-child(2),
     .ml-step > div:nth-child(2),
+    .embed-link > div:nth-child(2),
     .admin-view > div:nth-child(2) {
         width: var(--item-width);
     }
