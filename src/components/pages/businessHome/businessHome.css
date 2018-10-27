@@ -354,7 +354,7 @@
 .flourish {
     position: absolute;
     left: 50%;
-    transform: translate(-50%, -25%);
+    transform: translate(-50%, -15%);
 
     -webkit-transition: transform 0.5s ease;
     -moz-transition: transform 0.5s ease;
@@ -366,6 +366,13 @@
     padding: 0 0 100px;
     max-width: 1340px;
     position: relative;
+}
+
+.title-separator {
+    width: 100px;
+    height: 2px;
+    margin: 0 auto 60px;
+    background-color: var(--primary-cyan);
 }
 
 /* GRIDS */
@@ -542,204 +549,6 @@
 }
 /* END PREVIEW PAGE GRID */
 
-/* GRID FOR STATISTICS PAGE */
-.statistics-section > .skewed-container > .skewed-rectangles-container {
-    margin-top: -500px;
-    height: 1200px;
-}
-.statistics-section > .skewed-container > .skewed-rectangles-container > .skewed-rectangles {
-    height: calc(var(--row-width) * 400);
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(1) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 29;
-    grid-row-end: 33;
-    grid-column-start: 26;
-    grid-column-end: 33;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(2) {
-    background: #323232;
-    grid-row-start: 103;
-    grid-row-end: 185;
-    grid-column-start: 1;
-    grid-column-end: 43;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(3) {
-    background: #323232;
-    grid-row-start: 71;
-    grid-row-end: 103;
-    grid-column-start: 1;
-    grid-column-end: 26;
-}
-
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(4) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 103;
-    grid-row-end: 107;
-    grid-column-start: 32;
-    grid-column-end: 43;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(5) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 78;
-    grid-row-end: 82;
-    grid-column-start: 24;
-    grid-column-end: 29;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(6) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 67;
-    grid-row-end: 71;
-    grid-column-start: 1;
-    grid-column-end: 8;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(7) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 67;
-    grid-row-end: 71;
-    grid-column-start: 8;
-    grid-column-end: 11;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(8) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 71;
-    grid-row-end: 75;
-    grid-column-start: 7;
-    grid-column-end: 12;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(9) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 71;
-    grid-row-end: 75;
-    grid-column-start: 1;
-    grid-column-end: 7;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(10) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 67;
-    grid-row-end: 71;
-    grid-column-start: 21;
-    grid-column-end: 25;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(11) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 202;
-    grid-row-end: 206;
-    grid-column-start: 34;
-    grid-column-end: 38;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(12) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 202;
-    grid-row-end: 206;
-    grid-column-start: 38;
-    grid-column-end: 43;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(13) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 206;
-    grid-row-end: 210;
-    grid-column-start: 33;
-    grid-column-end: 38;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(14) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 206;
-    grid-row-end: 210;
-    grid-column-start: 38;
-    grid-column-end: 43;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(15) {
-    background: #323232;
-    grid-row-start: 185;
-    grid-row-end: 206;
-    grid-column-start: 20;
-    grid-column-end: 43;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(16) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 181;
-    grid-row-end: 185;
-    grid-column-start: 1;
-    grid-column-end: 11;
-}
-.statistics-section
-    > .skewed-container
-    > .skewed-rectangles-container
-    > .skewed-rectangles:first-child
-    > .skewed-rectangle:nth-child(17) {
-    background: linear-gradient(to right, #80cffe, #a196fe 65%, #80cffe);
-    grid-row-start: 185;
-    grid-row-end: 189;
-    grid-column-start: 1;
-    grid-column-end: 10;
-}
-/* END STATS PAGE GRID */
-
 @media only screen and (min-width: 1300px) {
     .get-started-input {
         --get-started-border-width: 3px;
@@ -830,45 +639,6 @@
         --rect-col-upper-left-end: 13;
         --rect-col-upper-right-start: 30;
     }
-
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(1) {
-        grid-row-start: 40;
-        grid-row-end: 44;
-        grid-column-end: 32;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(13) {
-        grid-column-start: 30;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(16) {
-        background: linear-gradient(to right, #80cffe, #a196fe);
-        grid-row-start: 181;
-        grid-row-end: 185;
-        grid-column-start: 1;
-        grid-column-end: 13;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(17) {
-        background: linear-gradient(to right, #80cffe, #a196fe 65%, #80cffe);
-        grid-row-start: 185;
-        grid-row-end: 189;
-        grid-column-start: 1;
-        grid-column-end: 12;
-    }
 }
 
 @media only screen and (max-width: 950px) {
@@ -942,68 +712,6 @@
     .paperBoxBusinessHome {
         margin-left: 0;
         margin-right: 0;
-    }
-
-    /* GRID */
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(1) {
-        grid-row-start: 67;
-        grid-row-end: 71;
-        grid-column-start: 1;
-        grid-column-end: 17;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(4) {
-        background: linear-gradient(to right, #80cffe, #a196fe);
-        grid-row-start: 103;
-        grid-row-end: 107;
-        grid-column-start: 29;
-        grid-column-end: 38;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(5) {
-        display: none;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(12) {
-        background: linear-gradient(to right, #a196fe, #80cffe);
-        grid-row-start: 202;
-        grid-row-end: 206;
-        grid-column-start: 33;
-        grid-column-end: 43;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(13) {
-        grid-column-start: 28;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(16) {
-        grid-column-end: 16;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(17) {
-        grid-column-end: 15;
     }
 }
 
@@ -1084,60 +792,6 @@
 
     .video-container {
         margin-top: 100px;
-    }
-
-    /* GRID */
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(7) {
-        grid-column-end: 14;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(8) {
-        grid-column-start: 14;
-        grid-column-end: 18;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(9) {
-        grid-column-end: 15;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(10) {
-        grid-column-start: 15;
-        grid-column-end: 19;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(11) {
-        display: none;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(12) {
-        grid-column-start: 29;
-        grid-column-end: 43;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(4) {
-        grid-column-start: 27;
     }
 
     .inflatable-boxes {
@@ -1225,13 +879,6 @@
     .paperBoxBusinessHome {
         height: 395px;
         width: 280px;
-    }
-    .statistics-section
-        > .skewed-container
-        > .skewed-rectangles-container
-        > .skewed-rectangles:first-child
-        > .skewed-rectangle:nth-child(4) {
-        grid-column-start: 26;
     }
 }
 

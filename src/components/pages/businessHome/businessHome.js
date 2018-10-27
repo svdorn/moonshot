@@ -353,10 +353,11 @@ class BusinessHome extends Component {
                     <div className="center">
                         <div
                             className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-cyan"
-                            style={{ padding: "0 16px", marginBottom: "40px" }}
+                            style={{ padding: "0 16px", marginBottom: "15px" }}
                         >
-                            Candidate Predictions Improve Hiring Results
+                            Candidate Predictions Designed For You
                         </div>
+                        <div styleName="title-separator" />
                         <div style={{ position: "relative" }}>
                             <div styleName="flourish">
                                 <object
