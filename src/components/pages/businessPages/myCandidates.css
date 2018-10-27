@@ -1,1 +1,24 @@
+.mock-data-memo {
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--primary-white);
+    text-align: center;
+    margin-top: 20px;
+}
 
+.mock-data-memo .info {
+    margin-right: 2px;
+    margin-top: 3px;
+    display: inline-block;
+    border-radius: 20px;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: top;
+    border: 2px solid white;
+}
+
+.mock-data-memo:hover > span {
+    color: var(--primary-cyan);
+}
