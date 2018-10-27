@@ -81,7 +81,8 @@ const FOR_USER = [
     "hasFinishedOnboarding",
     "showVerifyEmailBanner",
     "intercom",
-    "popups"
+    "popups",
+    "confirmEmbedLink"
 ];
 
 // removes information from a db user object so that it can be passed for that
