@@ -413,6 +413,7 @@
     position: absolute;
     top: calc(var(--item-margin));
     right: calc(var(--item-margin));
+    color: var(--primary-white);
     font-size: 14px;
     cursor: pointer;
 }
