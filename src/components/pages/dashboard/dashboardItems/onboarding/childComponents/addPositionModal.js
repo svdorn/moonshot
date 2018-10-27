@@ -191,11 +191,11 @@ class AddPositionModal extends Component {
                     <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
                         { header }
                         {!update ?
-                            <div className="inlineBlock clickable" onClick={this.handleUpdate}>
+                            <div className="inlineBlock clickable" style={{marginLeft: "10px"}} onClick={this.handleUpdate}>
                                 <img
-                                    src={"/icons/Arrow2" + this.props.png}
+                                    src={"/icons/Pencil" + this.props.png}
                                     alt="Edit"
-                                    height={20}
+                                    height={15}
                                 />
                             </div>
                             : null
