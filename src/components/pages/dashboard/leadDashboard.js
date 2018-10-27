@@ -9,7 +9,6 @@ import MetaTags from "react-meta-tags";
 import YouTube from "react-youtube";
 import Dialog from "@material-ui/core/Dialog";
 import DashboardItem from "./dashboardItem";
-import ROIOnboardingDialog from "../../childComponents/roiOnboardingDialog";
 import ModalSignup from "./dashboardItems/onboarding/childComponents/modalSignup";
 import IntroductionModal from "./dashboardItems/onboarding/childComponents/introductionModal";
 
@@ -104,7 +103,7 @@ class GuestDashboard extends Component {
         }
 
         let blurredClass = "";
-        if (this.props.roiModal || this.props.onboardingModel || this.state.showTutorialVideo) {
+        if (this.state.showTutorialVideo) {
             blurredClass = "dialogForBizOverlay";
         }
 
@@ -159,7 +158,6 @@ class GuestDashboard extends Component {
                     />
                 </MetaTags>
                 {tutorialVideo}
-                <ROIOnboardingDialog />
                 <ModalSignup />
                 <IntroductionModal />
                 <div className="page-line-header">
@@ -180,8 +178,6 @@ class GuestDashboard extends Component {
 
 function mapStateToProps(state) {
     return {
-        roiModal: state.users.roiOnboardingOpen,
-        onboardingModel: state.users.onboardingStep4Open,
         selectedJobsToBeDone: state.users.selectedJobsToBeDone,
         onboardingPositions: state.users.onboardingPositions,
         blurLeadDashboard: state.users.blurLeadDashboard,

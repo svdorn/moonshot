@@ -295,7 +295,6 @@ export function postBusinessInterests(userId, verificationToken, businessId, int
             .post("/api/business/interests", { userId, verificationToken, businessId, interests })
             .then(function(response) {
                 dispatch(hidePopups(userId, verificationToken, popups));
-                dispatch({ type: "OPEN_ROI_ONBOARDING_MODAL" });
             })
             .catch(function(err) {
                 dispatch({

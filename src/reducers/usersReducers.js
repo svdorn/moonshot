@@ -82,30 +82,6 @@ export function usersReducers(state = initialState, action) {
                 loadingSomething: false
             };
             break;
-        case "OPEN_ROI_ONBOARDING_MODAL":
-            return {
-                ...state,
-                roiOnboardingOpen: true
-            };
-            break;
-        case "CLOSE_ROI_ONBOARDING_MODAL":
-            return {
-                ...state,
-                roiOnboardingOpen: false
-            };
-            break;
-        case "OPEN_ONBOARDING_4_MODAL":
-            return {
-                ...state,
-                onboardingStep4Open: true
-            };
-            break;
-        case "CLOSE_ONBOARDING_4_MODAL":
-            return {
-                ...state,
-                onboardingStep4Open: false
-            };
-            break;
         case "OPEN_SIGNUP_MODAL":
             let signupModalInfo = { type: action.category, name: action.name };
             return {
