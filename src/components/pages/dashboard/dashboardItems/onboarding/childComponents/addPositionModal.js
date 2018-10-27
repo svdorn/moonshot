@@ -81,10 +81,11 @@ class AddPositionModal extends Component {
         try {
             let self = this;
             e.preventDefault();
-            let vals = this.props.formData.addPos.values;
             if (this.state.title) {
-                vals = {};
+                var vals = {};
                 vals.position = this.state.title;
+            } else {
+                var vals = this.props.formData.addPos.values;
             }
             let positionType = this.state.positionType;
             if (this.state.role) {
@@ -156,7 +157,7 @@ class AddPositionModal extends Component {
                 horizontal: "left"
             },
             menuLabelStyle: {
-                fontSize: "14px",
+                fontSize: "16px",
                 color: "white",
                 marginTop: "3px"
             }
@@ -200,7 +201,7 @@ class AddPositionModal extends Component {
                             : null
                         }
                     </div>
-                    <div className="font14px" style={{margin: "5px"}}>
+                    <div className="font14px" style={{margin: "5px auto 8px"}}>
                         Complete the details for this position.
                     </div>
                     {this.state.mustSelectTypeError ?
@@ -214,26 +215,27 @@ class AddPositionModal extends Component {
                                 component={renderTextField}
                                 label="Position Name"
                                 validate={[required]}
-                            /><br/>
+                            />
                         </div>
                         : null
                     }
                     { !role || update ?
-                        <div className="primary-cyan font16px" style={{marginTop: "5px"}}>
-                            <div style={{display:"inline-block", verticalAlign:"top"}}>Select a position type:</div>
-                            <DropDownMenu value={this.state.positionType}
-                                      onChange={this.handlePositionTypeChange}
-                                      labelStyle={style.menuLabelStyle}
-                                      anchorOrigin={style.anchorOrigin}
-                                      style={{fontSize: "14px", marginTop: "-20px"}}
-                            >
-                                {positionTypeItems}
-                            </DropDownMenu>
+                        <div>
+                            <div className="primary-cyan font16px" style={{marginTop: "5px"}}>
+                                <div style={{display:"inline-block", verticalAlign:"top"}}>Select a position type:</div>
+                                <DropDownMenu value={this.state.positionType}
+                                          onChange={this.handlePositionTypeChange}
+                                          labelStyle={style.menuLabelStyle}
+                                          anchorOrigin={style.anchorOrigin}
+                                          style={{fontSize: "16px", marginTop: "-20px"}}
+                                >
+                                    {positionTypeItems}
+                                </DropDownMenu>
+                            </div>
                         </div>
                         : null
                     }
-                    <br/>
-                    <div style={{margin:"-5px auto 7px"}} className="primary-white">
+                    <div style={{margin:"5px auto 7px"}} className="primary-white">
                         <div className="checkbox smallCheckbox whiteCheckbox"
                              onClick={this.handleClickIsManager.bind(this)}
                         >
