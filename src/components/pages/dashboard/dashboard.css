@@ -409,6 +409,17 @@
     font-size: 14px !important;
     font-family: inherit !important;
 }
+.page-unused {
+    position: absolute;
+    top: calc(var(--item-margin));
+    right: calc(var(--item-margin));
+    font-size: 14px;
+    cursor: pointer;
+}
+.page-unused > div > div {
+    margin-top: 4px;
+    margin-right: 2px;
+}
 .box-cta {
     position: absolute;
     bottom: 4px;

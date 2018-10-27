@@ -10,6 +10,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { primaryCyan, primaryWhite } from "../../../../colors";
+import HoverTip from "../../../miscComponents/hoverTip";
 import axios from "axios";
 
 import "../dashboard.css";
@@ -201,6 +202,19 @@ class Activity extends Component {
                 <div styleName="mobile-only tips-for-hiring-header">
                     { "A couple tips while you're waiting for candidates to \
                     complete your evaluation:" }
+                </div>
+                <div styleName="desktop-only">
+                    <div styleName="page-unused">
+                        <div>
+                            <div className="info-hoverable">i</div>
+                            Page Unused
+                        </div>
+                        <HoverTip
+                            className="font12px secondary-gray"
+                            style={{ marginTop: "-2px", marginLeft: "-80px" }}
+                            text="No candidates have completed an evaluation yet. Confirm that you embedded your candidate invite link properly in your messages to candidates."
+                        />
+                    </div>
                 </div>
                 <div styleName="carousel-container">
                     <Carousel
