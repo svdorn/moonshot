@@ -274,7 +274,7 @@ class Activity extends Component {
                         Need help?
                     </div>
                 </div>
-                <div>
+                <div className="primary-white">
                     <div styleName="invite-candidates-template">
                         <div>
                             <div
