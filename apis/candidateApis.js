@@ -206,6 +206,7 @@ function POST_candidate(req, res) {
         if (user.userType === "accountAdmin") {
             user.businessInfo.businessName = business.name;
             user.businessInfo.uniqueName = business.uniqueName;
+            user.confirmEmbedLink = true;
         }
 
         if (process.env.NODE_ENV === "production") {
