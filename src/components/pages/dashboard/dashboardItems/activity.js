@@ -272,6 +272,7 @@ class Activity extends Component {
                             <div
                                 className={"primary-white " + button.lightBlack}
                                 styleName="copy-link"
+                                onClick={this.copyLink}
                             >
                                 Copy Link
                             </div>
