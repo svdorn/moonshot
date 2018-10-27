@@ -14,6 +14,7 @@ import {
 } from "../../actions/usersActions";
 import { goTo, getFirstName, withinElement } from "../../miscFunctions";
 import { axios } from "axios";
+import { button } from "../../classes.js";
 import { animateScroll } from "react-scroll";
 
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
@@ -191,7 +192,11 @@ class AccountAdminMenu extends Component {
                 <div>
                     <img src={`/icons/User${png}`} styleName="user-icon" />
                     <div styleName="menu-option" onClick={() => this.openSignUpModal("Button")}>
-                        <div styleName="user-name">Create Account</div>
+                        <div
+                            className={button.purpleBlue}
+                        >
+                            Create Account
+                        </div>
                     </div>
                 </div>
             );
