@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification, openAddPositionModal, openAddUserModal, updateUser, generalAction, confirmEmbedLink } from "../../../../actions/usersActions";
-import { propertyExists, goTo, makePossessive, getFirstName } from "../../../../miscFunctions";
+import { propertyExists, goTo, makePossessive, getFirstName, copyFromPage } from "../../../../miscFunctions";
 import clipboard from "clipboard-polyfill";
 import Carousel from "../../../miscComponents/carousel";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -136,6 +136,11 @@ class Activity extends Component {
         } else {
             this.props.addNotification("Error copying link, try refreshing", "error");
         }
+    }
+
+    copyTemplate = () => {
+        copyFromPage("#invite-template");
+        this.props.addNotification("Template copied to clipboard", "info");
     }
 
     confirmEmbedLink = () => {
@@ -306,6 +311,7 @@ class Activity extends Component {
                             <div
                                 className={"primary-white " + button.lightBlack}
                                 styleName="copy-template"
+                                onClick={this.copyTemplate}
                             >
                                 Copy Template
                             </div>
@@ -313,20 +319,22 @@ class Activity extends Component {
                         <div>
                             Subject: { subject }
                         </div>
-                        <div>
-                            Hi,
-                        </div>
-                        <div>
-                            Congratulations, we would like to invite you to the next round of evaluations! We are excited to learn more about you and see how well you could fit with our team. The next step is
-                            completing a 22-minute evaluation, which you can sign up and take <a style={{color:"#76defe", textDecoration:"underline"}} href={`https://moonshotinsights.io/apply/${uniqueName}`}>here</a>.
-                        </div>
-                        <div>
-                            We look forward to reviewing your results. Please let me know if you have any questions.
-                        </div>
-                        <div>
-                            All the best,
+                        <div id="invite-template">
                             <div>
-                                { getFirstName(currentUser.name) }
+                                Hi,
+                            </div>
+                            <div>
+                                Congratulations, we would like to invite you to the next round of evaluations! We are excited to learn more about you and see how well you could fit with our team. The next step is
+                                completing a 22-minute evaluation, which you can sign up and take <a style={{color:"#76defe", textDecoration:"underline"}} href={`https://moonshotinsights.io/apply/${uniqueName}`}>here</a>.
+                            </div>
+                            <div>
+                                We look forward to reviewing your results. Please let me know if you have any questions.
+                            </div>
+                            <div>
+                                All the best,
+                                <div>
+                                    { getFirstName(currentUser.name) }
+                                </div>
                             </div>
                         </div>
                     </div>
