@@ -10,8 +10,6 @@ import DashboardItem from "./dashboardItem";
 import InviteCandidatesModal from "./inviteCandidatesModal";
 import AddPositionDialog from "../../childComponents/addPositionDialog";
 import AddUserDialog from "../../childComponents/addUserDialog";
-import ROIOnboardingDialog from "../../childComponents/roiOnboardingDialog";
-import OnboardingStep4Dialog from "../../childComponents/onboardingStep4Dialog";
 import VerificationModal from "./dashboardItems/onboarding/childComponents/verificationModal";
 
 import "./dashboard.css";
@@ -51,17 +49,12 @@ class Dashboard extends Component {
             activity = <DashboardItem type="BuildTeam" width={3} />;
         }
 
-        let blurredClass = "";
-        if (this.props.roiModal || this.props.onboardingModel) {
-            blurredClass = "dialogForBizOverlay";
-        }
-
         // old acc admins won't have onboard object, so if they don't just say the finished
         const finishedOnboarding =
             !user.onboard || typeof user.onboard.step !== "number" || user.onboard.timeFinished;
 
         return (
-            <div className={"center full-height " + blurredClass}>
+            <div className="center full-height ">
                 <MetaTags>
                     <title>Dashboard | Moonshot</title>
                     <meta
@@ -72,8 +65,6 @@ class Dashboard extends Component {
                 <InviteCandidatesModal />
                 <AddPositionDialog />
                 <AddUserDialog />
-                <ROIOnboardingDialog />
-                <OnboardingStep4Dialog />
                 <VerificationModal />
                 <div className="page-line-header">
                     <div />
@@ -94,9 +85,7 @@ class Dashboard extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
-        roiModal: state.users.roiOnboardingOpen,
-        onboardingModel: state.users.onboardingStep4Open
+        currentUser: state.users.currentUser
     };
 }
 

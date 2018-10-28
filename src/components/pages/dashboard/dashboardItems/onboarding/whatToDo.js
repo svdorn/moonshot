@@ -40,56 +40,14 @@ class WhatToDo extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            // which view we're on
-            step: ""
-        };
-
         this.next = this.next.bind(this);
         this.intercomMsg = this.intercomMsg.bind(this);
         this.handleCustomPage = this.handleCustomPage.bind(this);
         this.copyLink = this.copyLink.bind(this);
     }
 
-    componentDidMount() {
-        let self = this;
-        const { currentUser } = this.props;
-        if (currentUser) {
-            // get all the positions they're evaluating for
-            axios.get("/api/business/positions", {
-                params: {
-                    userId: currentUser._id,
-                    verificationToken: currentUser.verificationToken
-                }
-            })
-            .then(res => {
-                if (Array.isArray(res.data.positions) && res.data.positions.length > 0) {
-                    this.next();
-                } else {
-                    self.setState({ step:"position" })
-                }
-            })
-            .catch(err => {
-
-            });
-        } else {
-            const onboardingPositions = this.props.onboardingPositions;
-            if (onboardingPositions && Array.isArray(onboardingPositions) && onboardingPositions.length > 0) {
-                this.next();
-            } else {
-                this.setState({ step:"position" })
-            }
-        }
-    }
-
     next = () => {
         const { _id, verificationToken, verified } = this.props.currentUser;
-
-        if (!verified) {
-            axios.post("/api/accountAdmin/showVerifyEmailBanner", { userId: _id, verificationToken })
-            .then(response => { this.props.updateUser(response.data.user); })
-            .catch(error => { console.log(error); });
-        }
 
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, -1);

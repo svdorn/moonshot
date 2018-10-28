@@ -93,6 +93,8 @@ const usersSchema = mongoose.Schema({
         // whether the popups should show on the dashboard
         dashboard: Boolean
     },
+    // if the user has confirmed that the link has been embedded
+    confirmEmbedLink: Boolean,
     // info we need to keep to access users on Intercom
     intercom: {
         // The email that they are registered with on intercom

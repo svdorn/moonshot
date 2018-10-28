@@ -334,6 +334,7 @@ async function createAccountAdmin(info) {
             dashboard: true,
             businessInterests: businessInterestsPopup
         };
+        user.confirmEmbedLink = false;
         // had to select that they agreed to the terms to sign up so must be true
         user.termsAndConditions = [
             {

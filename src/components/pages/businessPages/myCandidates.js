@@ -24,6 +24,7 @@ import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
 import AddUserDialog from '../../childComponents/addUserDialog';
 import CandidatesPopupDialog from '../../childComponents/candidatesPopupDialog';
+import InviteCandidatesModal from "../dashboard/inviteCandidatesModal";
 import { qualifierFromScore } from '../../../miscFunctions';
 import HoverTip from "../../miscComponents/hoverTip";
 
@@ -303,6 +304,10 @@ class MyCandidates extends Component {
         let state = JSON.parse(JSON.stringify(this.state));
         state[checkMarkField] = !state[checkMarkField];
         this.setState(state, this.reorder);
+    }
+
+    openEmailTemplateModal = () => {
+        this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
     }
 
 
@@ -1009,6 +1014,19 @@ class MyCandidates extends Component {
         }
     }
 
+    mockDataMemo() {
+        if (this.props.currentUser && this.state.mockData) {
+            return (
+                <div styleName="mock-data-memo" key="mock data memo" onClick={this.openEmailTemplateModal}>
+                    <div styleName="info">i</div>
+                    This is mock data. <span>Start inviting your candidates.</span>
+                </div>
+            );
+        } else {
+            return null;
+        }
+    }
+
 
     candidatesSelected() {
         const selections = this.state.selectedCandidates;
@@ -1282,6 +1300,7 @@ class MyCandidates extends Component {
                         : null
                     }
                     <CandidatesPopupDialog />
+                    <InviteCandidatesModal />
                     <MetaTags>
                         <title>My Candidates | Moonshot</title>
                         <meta name="description" content="View analytical breakdowns and manage your candidates."/>
@@ -1290,6 +1309,8 @@ class MyCandidates extends Component {
                     <div className="page-line-header"><div/><div>Candidates</div></div>
 
                     { this.popup() }
+
+                    { this.mockDataMemo() }
 
                     { tabs }
 
@@ -1311,14 +1332,6 @@ class MyCandidates extends Component {
                             <div className="candidatesContainer">
                                 <div>
                                     { this.createCandidatesTable(positionId) }
-                                    <div className="myCandidatesOverlayContainer">
-                                        { !this.state.mobile && this.state.mockData ?
-                                            <div className="myCandidatesOverlay secondary-gray" onClick={this.openAddUserModal.bind(this)}>
-                                                This is mock data. <u className="primary-cyan">Start inviting your candidates.</u>
-                                            </div>
-                                             : null
-                                        }
-                                    </div>
                                 </div>
                                 { this.state.showResults ?
                                     <div>

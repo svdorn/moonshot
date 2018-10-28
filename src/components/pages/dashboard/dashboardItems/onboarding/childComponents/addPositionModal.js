@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Field, reduxForm } from 'redux-form';
-import { addNotification, startLoading, stopLoading, updateStore } from "../../../../../../actions/usersActions";
+import { updateStore } from "../../../../../../actions/usersActions";
 import {  } from "../../../../../../miscFunctions";
 import {
     TextField,
@@ -51,6 +51,11 @@ class AddPositionModal extends Component {
             mustSelectTypeError: false,
             // error adding a position
             addPositionError: undefined,
+            // if they clicked that they want to update
+            update: undefined,
+            // title and role from props
+            title: this.props.title,
+            role: this.props.role
         }
     }
 
@@ -68,13 +73,24 @@ class AddPositionModal extends Component {
         this.setState(newState);
     }
 
+    handleUpdate = () => {
+        this.setState({ update: true, title: undefined, role: undefined });
+    }
+
     handleSubmit = (e) => {
         try {
-            // TODO: if the user is signed in, add like this, if not just put the data in redux state
-            // TODO: need to be able to add multiple positions
             let self = this;
             e.preventDefault();
-            const vals = this.props.formData.addPos.values;
+            if (this.state.title) {
+                var vals = {};
+                vals.position = this.state.title;
+            } else {
+                var vals = this.props.formData.addPos.values;
+            }
+            let positionType = this.state.positionType;
+            if (this.state.role) {
+                positionType = this.state.role;
+            }
 
             // Form validation before submit
             let notValid = false;
@@ -88,50 +104,26 @@ class AddPositionModal extends Component {
             if (notValid) return;
 
             // if the user didn't select a position type, don't let them move on
-            if (this.state.positionType === "Position Type") {
+            if (positionType === "Position Type") {
                 return this.setState({ mustSelectTypeError: true });
             } else {
                 this.setState({ mustSelectTypeError: false });
             }
 
             // get all necessary params
-            const user = this.props.currentUser;
             const name = vals.position;
-            const positionType = this.state.positionType;
             const isManager = this.state.newPosIsManager;
 
-            if (user) {
-                const userId = user._id;
-                const businessId = user.businessInfo.businessId;
-                const verificationToken = user.verificationToken;
+            const position = { name, positionType, isManager };
+            const onboardingPositions = this.props.onboardingPositions;
 
-                this.props.startLoading();
+            let positions = onboardingPositions ? onboardingPositions : [];
 
-                axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName: name, positionType, isManager})
-                .then(res => {
-                    self.setState({ positionType: "Position Type", newPosIsManager: false });
-                    self.props.stopLoading();
-                    self.props.next();
-                })
-                .catch(error => {
-                    self.props.stopLoading();
-                    self.setState({addPositionError: "Error adding position."})
-                })
-            } else {
-                const position = { name, positionType, isManager };
-                const onboardingPositions = this.props.onboardingPositions;
+            positions.push(position);
 
-                let positions = onboardingPositions ? onboardingPositions : [];
-
-                positions.push(position);
-
-                this.props.updateStore("onboardingPositions", positions);
-                this.props.next();
-            }
-        }
-
-        catch (error) {
-            this.props.stopLoading();
+            this.props.updateStore("onboardingPositions", positions);
+            this.props.close();
+        } catch (error) {
             this.setState({addPositionError: "Error adding position."})
             return;
         }
@@ -165,7 +157,7 @@ class AddPositionModal extends Component {
                 horizontal: "left"
             },
             menuLabelStyle: {
-                fontSize: "14px",
+                fontSize: "16px",
                 color: "white",
                 marginTop: "3px"
             }
@@ -182,31 +174,68 @@ class AddPositionModal extends Component {
             return <MenuItem value={positionType} primaryText={positionType} key={index}/>
         });
 
+        const { update, title, role } = this.state;
+
+        let header = "Update Position";
+        if (update) {
+            header = "Update Position";
+        } else if (title) {
+            header = title;
+        } else if (role) {
+            header = role + " Position";
+        }
+
         return (
             <div>
-                <form className="center" style={{marginTop:"-10px"}}>
+                <form className="center">
+                    <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
+                        { header }
+                        {!update ?
+                            <div className="inlineBlock clickable" style={{marginLeft: "10px"}} onClick={this.handleUpdate}>
+                                <img
+                                    src={"/icons/Pencil" + this.props.png}
+                                    alt="Edit"
+                                    height={15}
+                                />
+                            </div>
+                            : null
+                        }
+                    </div>
+                    <div className="font14px" style={{margin: "5px auto 8px"}}>
+                        Complete the details for this position.
+                    </div>
                     {this.state.mustSelectTypeError ?
                         <div className="secondary-red font10px">Must select a position type.</div>
                         : null
                     }
-                    <Field
-                        name="position"
-                        component={renderTextField}
-                        label="Position Name"
-                        validate={[required]}
-                    /><br/>
-                    <div className="primary-cyan font16px" style={{marginTop: "5px"}}>
-                        <div style={{display:"inline-block", verticalAlign:"top"}}>Select a position type:</div>
-                        <DropDownMenu value={this.state.positionType}
-                                  onChange={this.handlePositionTypeChange}
-                                  labelStyle={style.menuLabelStyle}
-                                  anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "14px", marginTop: "-20px"}}
-                        >
-                            {positionTypeItems}
-                        </DropDownMenu>
-                    </div><br/>
-                    <div style={{margin:"-30px auto 7px"}} className="primary-white">
+                    { !title || update ?
+                        <div>
+                            <Field
+                                name="position"
+                                component={renderTextField}
+                                label="Position Name"
+                                validate={[required]}
+                            />
+                        </div>
+                        : null
+                    }
+                    { !role || update ?
+                        <div>
+                            <div className="primary-cyan font16px" style={{marginTop: "5px"}}>
+                                <div style={{display:"inline-block", verticalAlign:"top"}}>Select a position type:</div>
+                                <DropDownMenu value={this.state.positionType}
+                                          onChange={this.handlePositionTypeChange}
+                                          labelStyle={style.menuLabelStyle}
+                                          anchorOrigin={style.anchorOrigin}
+                                          style={{fontSize: "16px", marginTop: "-20px"}}
+                                >
+                                    {positionTypeItems}
+                                </DropDownMenu>
+                            </div>
+                        </div>
+                        : null
+                    }
+                    <div style={{margin:"5px auto 7px"}} className="primary-white">
                         <div className="checkbox smallCheckbox whiteCheckbox"
                              onClick={this.handleClickIsManager.bind(this)}
                         >
@@ -219,8 +248,8 @@ class AddPositionModal extends Component {
                         {"Position is a manager role"}
                     </div>
                     {this.state.addPositionError ? <div className="secondary-red font10px">{this.state.addPositionError}</div> : null }
-                    <button onClick={this.handleSubmit} className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="onboarding-button" style={{padding: "6px 20px"}}>
-                        <span>Enter &#8594;</span>
+                    <button onClick={this.handleSubmit} className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop10px" styleName="onboarding-button" style={{padding: "6px 20px"}}>
+                        <span>Continue</span>
                     </button>
                 </form>
             </div>
@@ -233,7 +262,6 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
-        loading: state.users.loadingSomething,
         userPosted: state.users.positionPosted,
         userPostedFailed: state.users.positionPostedFailed,
         png: state.users.png,
@@ -243,9 +271,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addNotification,
-        startLoading,
-        stopLoading,
         updateStore
     }, dispatch);
 }

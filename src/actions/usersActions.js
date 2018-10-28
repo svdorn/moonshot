@@ -271,6 +271,22 @@ export function hidePopups(userId, verificationToken, popups) {
     };
 }
 
+export function confirmEmbedLink(userId, verificationToken) {
+    return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
+        axios
+            .post("/api/user/confirmEmbedLink", { userId, verificationToken })
+            .then(function(response) {
+                const returnedUser = response.data;
+                dispatch({ type: "CONFIRM_EMBED_LINK", payload: returnedUser });
+            })
+            .catch(function(err) {
+                dispatch({ type: "CONFIRM_EMBED_LINK_REJECTED", ...notification(err, "error") });
+            });
+    };
+}
+
 export function postBusinessInterests(userId, verificationToken, businessId, interests, popups) {
     return function(dispatch) {
         dispatch({ type: "START_LOADING" });
@@ -279,7 +295,6 @@ export function postBusinessInterests(userId, verificationToken, businessId, int
             .post("/api/business/interests", { userId, verificationToken, businessId, interests })
             .then(function(response) {
                 dispatch(hidePopups(userId, verificationToken, popups));
-                dispatch({ type: "OPEN_ROI_ONBOARDING_MODAL" });
             })
             .catch(function(err) {
                 dispatch({
