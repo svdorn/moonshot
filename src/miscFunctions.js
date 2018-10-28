@@ -303,6 +303,15 @@ function copyCustomLink(currentUser, addNotification) {
     }
 }
 
+// takes in either a className as ".name-of-element" or id as "#name-of-element"
+function copyFromPage(identifier) {
+    let range = document.createRange();
+    range.selectNode(document.querySelector(identifier));
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+}
+
 function noop() {}
 
 const miscFunctions = {
@@ -322,6 +331,7 @@ const miscFunctions = {
     elementInViewport,
     replaceCharacters,
     copyCustomLink,
+    copyFromPage,
     noop,
 
     Queue,
