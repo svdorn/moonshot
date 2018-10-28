@@ -463,8 +463,6 @@ class Activity extends Component {
             }
         }
 
-        console.log(frame)
-
         return (
             <div>
                 { doneLoading ?
