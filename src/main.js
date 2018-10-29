@@ -137,7 +137,7 @@ class Main extends Component {
             currentUser.popups.dashboard) ||
             (currentUser.popups &&
             currentUser.popups.businessInterests) ||
-            (!positionCount || positionCount < 1))
+            (positionCount < 1))
         ) {
             return <PreOnboardingFooter />
         }

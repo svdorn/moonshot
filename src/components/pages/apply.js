@@ -4,13 +4,15 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { addNotification, openClaimPageModal } from "../../actions/usersActions";
+import { addNotification, openClaimPageModal, openAddPositionModal, generalAction } from "../../actions/usersActions";
 import { makePossessive } from "../../miscFunctions";
 import MetaTags from 'react-meta-tags';
 import { goTo } from "../../miscFunctions";
 import HoverTip from "../miscComponents/hoverTip";
 import ClaimPageModal from "./dashboard/dashboardItems/onboarding/childComponents/claimPageModal";
 import ModalSignup from "./dashboard/dashboardItems/onboarding/childComponents/modalSignup";
+import AddPositionDialog from "../childComponents/addPositionDialog";
+import InviteCandidatesModal from "./dashboard/inviteCandidatesModal";
 import axios from 'axios';
 
 import "./apply.css";
@@ -132,9 +134,30 @@ class Apply extends Component {
         this.props.openClaimPageModal();
     }
 
+    openAddPositionModal = () => {
+        this.props.openAddPositionModal();
+    }
+
+    openInviteCandidatesModal = () => {
+        this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
+    }
+
+    dashboardAndModal = () => {
+        goTo("/dashboard");
+        this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
+    }
+
 
     // info for an admin coming to preview this page
     adminInformation() {
+
+        if (!this.props.currentUser.confirmEmbedLink) {
+            var buttonText = "Continue To Invite Candidates ";
+            var onClick = () => this.dashboardAndModal();
+        } else {
+            var buttonText = "Invite Candidates ";
+            var onClick = () => this.openInviteCandidatesModal();
+        }
         return (
             <div>
                 <div>
@@ -149,10 +172,10 @@ class Apply extends Component {
                 </div>
                 <div styleName="employer-box">
                     <div>
-                        This is { makePossessive(this.state.company) } candidate invite page. When candidates click on your link, they will be taken here. New evaluations will automatically be added to your dropdown list above.
+                        This is { makePossessive(this.state.company) } candidate invite page. When candidates click on your link, they will be taken here. New evaluations will automatically be added to your dropdown list above. <span className="primary-cyan clickable" onClick={this.openAddPositionModal}>Add evaluations</span> for other open positions.
                     </div>
-                    <div onClick={() => goTo("/dashboard")}>
-                        Continue To Embed Your Link <img src={`/icons/ArrowBlue${this.props.png}`} />
+                    <div onClick={onClick}>
+                        {buttonText} <img src={`/icons/ArrowBlue${this.props.png}`} />
                     </div>
                 </div>
             </div>
@@ -265,7 +288,7 @@ class Apply extends Component {
         }
 
         let blurredClass = "";
-        if (this.props.claimPageModal) {
+        if (this.props.claimPageModal || this.props.inviteCandidatesModal || this.props.positionModal) {
             blurredClass = "dialogForBizOverlay";
         }
 
@@ -277,6 +300,8 @@ class Apply extends Component {
             }>
                 <ClaimPageModal company={this.state.company} />
                 <ModalSignup />
+                <AddPositionDialog />
+                <InviteCandidatesModal />
                 { content }
             </div>
         );
@@ -291,13 +316,17 @@ function mapStateToProps(state) {
         formData: state.form,
         blurLeadDashboard: state.users.blurLeadDashboard,
         claimPageModal: state.users.claimPageModal,
+        inviteCandidatesModal: state.users.inviteCandidatesModalOpen,
+        positionModal: state.users.positionModalOpen,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addNotification,
-        openClaimPageModal
+        openClaimPageModal,
+        openAddPositionModal,
+        generalAction
     }, dispatch);
 }
 
