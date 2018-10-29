@@ -148,7 +148,11 @@ class Main extends Component {
             typeof currentUser.onboard.step === "number"
         ) {
             return <OnboardingStepsFooter />;
-        } else {
+        }else if (
+            currentUser &&
+            currentUser.userType === "accountAdmin" &&
+            !currentUser.confirmEmbedLink
+        ) {
             return <CopyLinkFooter />;
         }
     }
