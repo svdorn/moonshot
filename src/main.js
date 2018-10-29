@@ -133,9 +133,10 @@ class Main extends Component {
         if (
             currentUser &&
             currentUser.userType === "accountAdmin" &&
-            currentUser.onboard &&
-            !currentUser.onboard.timeFinished &&
-            typeof currentUser.onboard.step === "number"
+            (currentUser.popups &&
+            currentUser.popups.dashboard) ||
+            (currentUser.popups &&
+            currentUser.popups.businessInterests)
         ) {
             return <PreOnboardingFooter />
         }

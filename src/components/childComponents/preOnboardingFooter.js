@@ -17,6 +17,12 @@ class PreOnboardingFooter extends Component {
     render() {
         const { currentUser } = this.props;
         if (!currentUser || currentUser.userType !== "accountAdmin") { return null; }
+        // get the current path from the url
+        let pathname = undefined;
+        // try to get the path; lowercased because capitalization will vary
+        try { pathname = this.props.location.pathname.toLowerCase(); }
+        // if the pathname is not yet defined, don't do anything, this will be executed again later
+        catch (e) { pathname = ""; }
 
         const showFooter = pathname !== "/dashboard";
 

@@ -48,6 +48,9 @@ class Dashboard extends Component {
         if (user && user.popups && user.popups.businessInterests) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
         }
+        if (user && user.popups && user.popups.dashboard) {
+            activity = <DashboardItem type="WelcomePage" width={3} />;
+        }
 
         // old acc admins won't have onboard object, so if they don't just say the finished
         const finishedOnboarding =

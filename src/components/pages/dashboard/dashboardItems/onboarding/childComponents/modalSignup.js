@@ -196,10 +196,14 @@ class ModalSignup extends Component {
             var verificationModal = true;
         }
 
+        if (this.props.welcomeToMoonshot) {
+            var welcomeToMoonshot = true;
+        }
+
         // get the positions here from the onboardingPositions
 
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone, showVerifyEmailBanner, verificationModal };
+        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone, welcomeToMoonshot, showVerifyEmailBanner, verificationModal };
 
         // mark a business signup in google analytics
         ReactGA.event({
@@ -412,6 +416,7 @@ function mapStateToProps(state) {
         selectedJobsToBeDone: state.users.selectedJobsToBeDone,
         open: state.users.signupModalOpen,
         info: state.users.signupModalInfo,
+        welcomeToMoonshot: state.users.welcomeToMoonshot
     };
 }
 

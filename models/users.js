@@ -89,8 +89,7 @@ const usersSchema = mongoose.Schema({
         employees: Boolean,
         // where the business interests should pop up or not
         businessInterests: Boolean,
-        // DEPRECIATED
-        // whether the popups should show on the dashboard
+        // whether the welcomeToMoonshotInsights should show on the dashboard
         dashboard: Boolean
     },
     // if the user has confirmed that the link has been embedded

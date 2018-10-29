@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
     addNotification,
-    updateStore
+    updateStore,
+    hidePopups
 } from "../../../../../actions/usersActions";
 import {
     goTo
@@ -19,7 +20,23 @@ class WelcomePage extends Component {
     }
 
     welcomeFrameClick = () => {
-        this.props.updateStore("welcomeToMoonshot", true);
+        const user = this.props.currentUser;
+        if (user) {
+            let popups = user.popups;
+            if (popups) {
+                popups.dashboard = false;
+            } else {
+                popups = {};
+                popups.dashboard = false;
+            }
+
+            const userId = user._id;
+            const verificationToken = user.verificationToken;
+
+            this.props.hidePopups(userId, verificationToken, popups);
+        } else {
+            this.props.updateStore("welcomeToMoonshot", true);
+        }
     }
 
     makeWelcomeFrame() {
@@ -66,7 +83,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             addNotification,
-            updateStore
+            updateStore,
+            hidePopups
         },
         dispatch
     );
