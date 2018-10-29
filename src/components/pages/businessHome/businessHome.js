@@ -221,6 +221,13 @@ class BusinessHome extends Component {
         e.target.focus();
     };
 
+    // move the position of the what and how section background
+    whatHowMoveBackground = () => {
+        // if it was on the left, put it on the right, and vice versa
+        const newPosition = this.state.whatHowPosition === "right" ? "left" : "right";
+        this.setState({ whatHowPosition: newPosition });
+    };
+
     // create a bunch of empty skewed rectangles that should be modified with css
     skewedRectangles(numRects, options) {
         // will contain a bunch of un-styled skewed rectangles
@@ -308,7 +315,6 @@ class BusinessHome extends Component {
     previewSection() {
         return (
             <section id="product-preview" styleName="product-preview-section">
-                {this.state.showRectangles ? this.skewedRectangles(10) : null}
                 <div className="center" styleName="image-preview">
                     <div styleName="image-container">
                         <img
@@ -343,10 +349,6 @@ class BusinessHome extends Component {
         );
     }
 
-    whatHowMoveBackground() {
-        console.log("moving background (but not really)");
-    }
-
     whatAndHowSection() {
         const { whatHowPosition } = this.state;
         const parts = [
@@ -368,23 +370,24 @@ class BusinessHome extends Component {
             const focused = whatHowPosition === part.position;
             // only show the two buttons if this part is highlighted
             const buttons = !focused ? null : (
-                <div>
+                <div styleName="stacked-buttons">
                     <CornersButton
                         content="Try Now For Free"
                         onClick={() => goTo("/explore")}
                         color1={colors.primaryCyan}
                         color2={colors.primaryWhite}
                         className="font16px font14pxUnder900 font12pxUnder400"
-                        style={{ margin: "10px auto" }}
                     />
-                    or
-                    <div>See How It Works</div>
+                    <div styleName="cta-or">or</div>
+                    <div className="primary-white">See How It Works</div>
                 </div>
             );
             return (
                 <div styleName="what-how-part" key={`what-how-part ${part.position}`}>
-                    <div className={focused ? "primary-cyan" : "secondary-gray"}>{part.title}</div>
-                    <div className={focused ? "primary-white" : "secondary-gray"}>{part.body}</div>
+                    <div className={focused ? "primary-cyan" : "secondary-gray"} styleName="title">
+                        {part.title}
+                    </div>
+                    <div styleName={`body ${focused ? "focused" : ""}`}>{part.body}</div>
                     {buttons}
                 </div>
             );
@@ -400,7 +403,7 @@ class BusinessHome extends Component {
                                 whatHowPosition === "right" ? "left" : "right"
                             }`}
                             className="circleArrowIcon"
-                            onClick={this.whatHowMove}
+                            onClick={this.whatHowMoveBackground}
                         />
                     </div>
                     {partsJsx}
@@ -496,9 +499,13 @@ class BusinessHome extends Component {
                 <div styleName="businessHome">
                     {this.introductionSection()}
 
-                    {this.previewSection()}
+                    <div styleName="rectangles-area">
+                        {this.state.showRectangles ? this.skewedRectangles(17) : null}
 
-                    {this.whatAndHowSection()}
+                        {this.previewSection()}
+
+                        {this.whatAndHowSection()}
+                    </div>
 
                     {this.boxesSection()}
                 </div>
