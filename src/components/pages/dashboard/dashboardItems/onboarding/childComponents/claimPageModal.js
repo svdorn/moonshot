@@ -118,8 +118,12 @@ class ClaimPageModal extends Component {
         const selectedJobsToBeDone = this.props.selectedJobsToBeDone;
         // get the positions here from the onboardingPositions
 
+        if (this.props.welcomeToMoonshot) {
+            var welcomeToMoonshot = true;
+        }
+
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone  };
+        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone, welcomeToMoonshot  };
 
         // mark a business signup in google analytics
         ReactGA.event({
@@ -363,6 +367,7 @@ function mapStateToProps(state) {
         selectedJobsToBeDone: state.users.selectedJobsToBeDone,
         open: state.users.claimPageModal,
         info: state.users.signupModalInfo,
+        welcomeToMoonshot: state.users.welcomeToMoonshot
     };
 }
 
