@@ -541,8 +541,8 @@
     --rect-body-bottom-height: var(--rect-body-top-height);
 
     --rect-small-background-height: 20;
-    --rect-small-background-middle-offset: 4;
-    --rect-middle: calc(1 + var(--gutter-columns) + 12);
+    --rect-small-background-middle-offset: 5;
+    --rect-middle: calc(1 + var(--gutter-columns) + 13);
 
     --rect-row-top-left-start: calc(var(--rect-row-top-left-mid) - 4);
     --rect-row-top-left-mid: 5;
@@ -905,9 +905,11 @@
 
     .product-preview-section {
         --preview-image-height: 280px;
+        margin-bottom: 200px;
     }
     .rectangles-area {
-        --rect-body-top-height: 140;
+        --rect-body-top-height: 115;
+        --rect-body-bottom-height: 155;
     }
 
     .image-container {
@@ -1000,9 +1002,8 @@
         --rect-col-right-wide-start: 26;
     }
 
-    /* top big background box */
-    .rectangles-area .skewed-rectangle:nth-child(2) {
-        grid-column-end: 25;
+    .rectangles-area {
+        --rect-small-background-middle-offset: 4;
     }
 
     .get-started-input-container {
@@ -1031,7 +1032,8 @@
         --preview-image-height: 200px;
     }
     .rectangles-area {
-        --rect-body-top-height: 125;
+        --rect-body-top-height: 105;
+        --rect-body-bottom-height: 165;
     }
     .image-container {
         --candidate-name-font-size: 6px;
@@ -1043,6 +1045,18 @@
     .candidate-name::after {
         display: none;
     }
+
+    .what-how-background {
+        --box-width: 300px;
+        --box-height: 280px;
+    }
+    .stacked-buttons {
+        margin-top: 20px;
+    }
+    .stacked-buttons > div:nth-child(n + 2),
+    .stacked-buttons > img {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 500px) {
@@ -1052,8 +1066,8 @@
     }
 
     /* top big background box */
-    .rectangles-area .skewed-rectangle:nth-child(2) {
-        grid-column-end: 24;
+    .rectangles-area {
+        --rect-small-background-middle-offset: 3;
     }
 
     .get-started-input-container {
@@ -1079,14 +1093,24 @@
     }
     .product-preview-section {
         --preview-image-height: 150px;
+        margin-bottom: 240px;
     }
     .rectangles-area {
-        --rect-body-top-height: 115;
+        --rect-body-top-height: 105;
+        --rect-body-bottom-height: 165;
     }
 
-    /* top big background box */
-    .rectangles-area .skewed-rectangle:nth-child(2) {
-        grid-column-end: 23;
+    .what-how-background {
+        --box-width: 260px;
+        --box-height: 280px;
+        font-size: 14px;
+    }
+    .what-how-part .title {
+        font-size: 24px;
+    }
+
+    .rectangles-area {
+        --rect-small-background-middle-offset: 2;
     }
 
     .get-started-input-container {
