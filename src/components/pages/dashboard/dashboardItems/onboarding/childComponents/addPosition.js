@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Field, reduxForm } from 'redux-form';
-import { addNotification, startLoading, stopLoading, updateStore } from "../../../../../../actions/usersActions";
+import { addNotification, startLoading, stopLoading, updateStore, updatePositionCount } from "../../../../../../actions/usersActions";
 import {  } from "../../../../../../miscFunctions";
 import {
     TextField,
@@ -109,9 +109,8 @@ class AddPosition extends Component {
 
                 axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName: name, positionType, isManager})
                 .then(res => {
-                    self.setState({ positionType: "Position Type", newPosIsManager: false });
                     self.props.stopLoading();
-                    self.props.next();
+                    self.props.updatePositionCount(1);
                 })
                 .catch(error => {
                     self.props.stopLoading();
@@ -246,7 +245,8 @@ function mapDispatchToProps(dispatch) {
         addNotification,
         startLoading,
         stopLoading,
-        updateStore
+        updateStore,
+        updatePositionCount
     }, dispatch);
 }
 

@@ -493,6 +493,12 @@ export function usersReducers(state = initialState, action) {
                 jpg
             };
             break;
+        case "UPDATE_POSITION_COUNT":
+            return {
+                ...state,
+                positionCount: action.count
+            };
+            break;
         case "CHANGE_AUTOMATE_INVITES": {
             // get the automateInvites info up to this point
             let automateInvites = state.automateInvites ? state.automateInvites : {};

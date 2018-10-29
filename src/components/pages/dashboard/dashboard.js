@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { generalAction } from "../../../actions/usersActions";
+import { generalAction, updatePositionCount } from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
@@ -11,6 +11,7 @@ import InviteCandidatesModal from "./inviteCandidatesModal";
 import AddPositionDialog from "../../childComponents/addPositionDialog";
 import AddUserDialog from "../../childComponents/addUserDialog";
 import VerificationModal from "./dashboardItems/onboarding/childComponents/verificationModal";
+import axios from 'axios';
 
 import "./dashboard.css";
 
@@ -29,27 +30,75 @@ class Dashboard extends Component {
         ) {
             this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
         }
+        let self = this;
+        const { currentUser, positionCount } = this.props;
+        if (!positionCount || positionCount < 1) {
+            // get all the positions they're evaluating for
+            axios.get("/api/business/positions", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
+                }
+            })
+            .then(res => {
+                const positions = res.data.positions;
+                if (positions && Array.isArray(positions) && positions.length > 0) {
+                    this.props.updatePositionCount(positions.length);
+                } else {
+                    this.props.updatePositionCount(0);
+                }
+            })
+            .catch(err => {
+                console.log("error getting positions: ", err);
+                if (err.response && err.response.data) { console.log(err.response.data); }
+            });
+        }
+    }
+
+    componentDidUpdate() {
+        const { positionCount } = this.props;
+        if (!positionCount || positionCount < 1) {
+            const currentUser = this.props.currentUser;
+            // get all the positions they're evaluating for
+            axios.get("/api/business/positions", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
+                }
+            })
+            .then(res => {
+                const positions = res.data.positions;
+                if (positions && Array.isArray(positions) && positions.length > 0) {
+                    this.props.updatePositionCount(positions.length);
+                } else {
+                    this.props.updatePositionCount(0);
+                }
+            })
+            .catch(err => {
+                console.log("error getting positions: ", err);
+                if (err.response && err.response.data) { console.log(err.response.data); }
+            });
+        }
     }
 
     render() {
         const user = this.props.currentUser;
+        const positionCount = this.props.positionCount;
 
         let activity = <DashboardItem type="Activity" width={3} />;
-        // if the user is not done with onboarding
-        if (
+        if (user && user.popups && user.popups.dashboard) {
+            activity = <DashboardItem type="WelcomePage" width={3} />;
+        } else if (user && user.popups && user.popups.businessInterests) {
+            activity = <DashboardItem type="BuildTeam" width={3} />;
+        } else if (user && (!positionCount || positionCount < 1)) {
+            activity = <DashboardItem type="AddPositionPage" width={3} />;
+        } else if (
             user &&
             user.onboard &&
             !user.onboard.timeFinished &&
             typeof user.onboard.step === "number"
         ) {
             activity = <DashboardItem type="Onboarding" width={3} />;
-        }
-        // if the user has the popups at onboarding
-        if (user && user.popups && user.popups.businessInterests) {
-            activity = <DashboardItem type="BuildTeam" width={3} />;
-        }
-        if (user && user.popups && user.popups.dashboard) {
-            activity = <DashboardItem type="WelcomePage" width={3} />;
         }
 
         // old acc admins won't have onboard object, so if they don't just say the finished
@@ -88,14 +137,16 @@ class Dashboard extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        positionCount: state.users.positionCount
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            generalAction
+            generalAction,
+            updatePositionCount
         },
         dispatch
     );

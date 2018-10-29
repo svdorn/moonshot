@@ -128,15 +128,16 @@ class Main extends Component {
     }
 
     popupFooter() {
-        const { currentUser } = this.props;
+        const { currentUser, positionCount } = this.props;
 
         if (
             currentUser &&
             currentUser.userType === "accountAdmin" &&
-            (currentUser.popups &&
+            ((currentUser.popups &&
             currentUser.popups.dashboard) ||
             (currentUser.popups &&
-            currentUser.popups.businessInterests)
+            currentUser.popups.businessInterests) ||
+            (!positionCount || positionCount < 1))
         ) {
             return <PreOnboardingFooter />
         }
@@ -224,7 +225,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
         notification: state.users.notification,
-        webpSupportChecked: state.users.webpSupportChecked
+        webpSupportChecked: state.users.webpSupportChecked,
+        positionCount: state.users.positionCount
     };
 }
 

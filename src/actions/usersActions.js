@@ -40,6 +40,12 @@ export function setWebpSupport(webpSupported) {
     };
 }
 
+export function updatePositionCount(count) {
+    return function(dispatch) {
+        dispatch({ type: "UPDATE_POSITION_COUNT", count });
+    };
+}
+
 export function openAddPositionModal() {
     return function(dispatch) {
         dispatch({ type: "OPEN_ADD_POSITION_MODAL" });

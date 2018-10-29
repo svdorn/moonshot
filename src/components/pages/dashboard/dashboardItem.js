@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {} from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { primaryCyan, primaryWhite } from "../../../colors";
 
 import Onboarding from "./dashboardItems/onboarding/onboarding";
 import Activity from "./dashboardItems/activity";
@@ -89,6 +91,12 @@ class DashboardItem extends Component {
             }
         }
 
+        const { currentUser, positionCount } = this.props;
+
+        if (currentUser && this.props.positionCount == undefined) {
+            content = <div className="fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>;
+        }
+
         return (
             <div
                 styleName={`dashboard-item-container width-${width}`}
@@ -102,7 +110,8 @@ class DashboardItem extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        positionCount: state.users.positionCount
     };
 }
 
