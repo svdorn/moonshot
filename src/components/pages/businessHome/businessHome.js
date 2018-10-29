@@ -379,16 +379,28 @@ class BusinessHome extends Component {
                         className="font16px font14pxUnder900 font12pxUnder400"
                     />
                     <div styleName="cta-or">or</div>
-                    <div className="primary-white">See How It Works</div>
+                    <img
+                        src={"images/businessHome/PlayButton" + this.props.png}
+                        alt="Play Button"
+                        styleName="what-how-play-button"
+                    />
+                    <div className="primary-white" styleName="see-cta">
+                        See How It Works
+                    </div>
                 </div>
             );
             return (
                 <div styleName="what-how-part" key={`what-how-part ${part.position}`}>
-                    <div className={focused ? "primary-cyan" : "secondary-gray"} styleName="title">
-                        {part.title}
+                    <div>
+                        <div
+                            className={focused ? "primary-cyan" : "secondary-gray"}
+                            styleName="title"
+                        >
+                            {part.title}
+                        </div>
+                        <div styleName={`body ${focused ? "focused" : ""}`}>{part.body}</div>
+                        {buttons}
                     </div>
-                    <div styleName={`body ${focused ? "focused" : ""}`}>{part.body}</div>
-                    {buttons}
                 </div>
             );
         });
