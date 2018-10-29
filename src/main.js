@@ -27,6 +27,7 @@ import Notification from "./components/notification";
 import ContactUsDialog from "./components/childComponents/contactUsDialog";
 import AddAdminDialog from "./components/childComponents/addAdminDialog";
 import CopyLinkFooter from "./components/childComponents/copyLinkFooter";
+import PreOnboardingFooter from "./components/childComponents/preOnboardingFooter";
 import OnboardingStepsFooter from "./components/childComponents/onboardingStepsFooter";
 import AdminVerifyEmail from "./components/childComponents/adminVerifyEmail";
 import ReactGA from "react-ga";
@@ -130,6 +131,15 @@ class Main extends Component {
         const { currentUser } = this.props;
 
         if (
+            currentUser &&
+            currentUser.userType === "accountAdmin" &&
+            currentUser.onboard &&
+            !currentUser.onboard.timeFinished &&
+            typeof currentUser.onboard.step === "number"
+        ) {
+            return <PreOnboardingFooter />
+        }
+        else if (
             currentUser &&
             currentUser.userType === "accountAdmin" &&
             currentUser.onboard &&

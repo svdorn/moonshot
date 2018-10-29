@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import { addNotification } from '../../actions/usersActions';
 import { propertyExists, makePossessive } from "../../miscFunctions";
 import clipboard from "clipboard-polyfill";
+import { withRouter } from 'react-router';
 import axios from 'axios';
 
 import './copyLinkFooter.css';
@@ -71,28 +72,33 @@ class CopyLinkFooter extends Component {
             businessName = currentUser.businessInfo.businessName;
         }
 
-        return (
-            <div>
-                { !this.state.fetchDataError && this.state.candidateCount === 0 ?
-                    <div styleName={"footer-container" + (this.props.footerOnScreen ? " absolute" : "")}>
-                        <div styleName="footer">
-                            <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
-                            <div className="secondary-gray" styleName="text">
-                                <div styleName="desktop-text">
-                                    Embed { makePossessive(businessName) } candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
+        const showFooter = pathname !== "/dashboard";
+
+        if (!showFooter) { return null; }
+        else {
+            return (
+                <div>
+                    { !this.state.fetchDataError && this.state.candidateCount === 0 ?
+                        <div styleName={"footer-container" + (this.props.footerOnScreen ? " absolute" : "")}>
+                            <div styleName="footer">
+                                <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
+                                <div className="secondary-gray" styleName="text">
+                                    <div styleName="desktop-text">
+                                        Embed { makePossessive(businessName) } candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
+                                    </div>
+                                </div>
+                                <div styleName="buttons">
+                                    <button styleName="button" className="button noselect round-6px background-primary-cyan primary-white" onClick={this.copyLink} style={{padding: "3px 10px"}}>
+                                        <span>Copy Link</span>
+                                    </button>
                                 </div>
                             </div>
-                            <div styleName="buttons">
-                                <button styleName="button" className="button noselect round-6px background-primary-cyan primary-white" onClick={this.copyLink} style={{padding: "3px 10px"}}>
-                                    <span>Copy Link</span>
-                                </button>
-                            </div>
                         </div>
-                    </div>
-                    : null
-                 }
-            </div>
-        );
+                        : null
+                     }
+                </div>
+            );
+        }
     }
 }
 
@@ -111,5 +117,6 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
+CopyLinkFooter = withRouter(CopyLinkFooter);
 
 export default connect(mapStateToProps, mapDispatchToProps)(CopyLinkFooter);
