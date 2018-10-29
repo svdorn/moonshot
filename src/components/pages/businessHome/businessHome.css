@@ -16,7 +16,7 @@
 }
 .rectangles-area {
     background: linear-gradient(to right, #1e1e1e, var(--primary-black-dark));
-    padding: 500px 0 500px;
+    padding: 500px 0 300px;
 }
 
 .what-and-how-section {
@@ -737,25 +737,25 @@
 
 @media only screen and (max-width: 4000px) {
     .rectangles-area {
-        padding: 400px 0 500px;
+        padding: 400px 0 300px;
     }
 }
 
 @media only screen and (max-width: 3000px) {
     .rectangles-area {
-        padding: 300px 0 500px;
+        padding: 300px 0 300px;
     }
 }
 
 @media only screen and (max-width: 2500px) {
     .rectangles-area {
-        padding: 200px 0 500px;
+        padding: 200px 0 300px;
     }
 }
 
 @media only screen and (max-width: 2000px) {
     .rectangles-area {
-        padding: 130px 0 500px;
+        padding: 130px 0 300px;
     }
 
     .businessHome {
@@ -780,7 +780,7 @@
 
 @media only screen and (max-width: 1500px) {
     .rectangles-area {
-        padding: 60px 0 500px;
+        padding: 60px 0 300px;
     }
 }
 
