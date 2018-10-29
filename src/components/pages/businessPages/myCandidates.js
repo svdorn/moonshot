@@ -16,7 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { closeNotification, openAddUserModal, hidePopups, addNotification, generalAction } from "../../../actions/usersActions";
+import { closeNotification, openAddUserModal, hidePopups, addNotification, generalAction, intercomEvent } from "../../../actions/usersActions";
 import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -929,6 +929,7 @@ class MyCandidates extends Component {
         const verificationToken = this.props.currentUser.verificationToken;
 
         this.props.hidePopups(userId, verificationToken, popups);
+        this.props.intercomEvent("candidates_page_first_time", userId, verificationToken, null);
     }
 
 
@@ -1401,7 +1402,8 @@ function mapDispatchToProps(dispatch) {
         openAddUserModal,
         hidePopups,
         addNotification,
-        generalAction
+        generalAction,
+        intercomEvent
     }, dispatch);
 }
 

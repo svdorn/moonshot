@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification, openAddPositionModal, openAddUserModal, updateUser, generalAction, confirmEmbedLink } from "../../../../actions/usersActions";
+import { addNotification, openAddPositionModal, openAddUserModal, updateUser, generalAction, confirmEmbedLink, intercomEvent } from "../../../../actions/usersActions";
 import { propertyExists, goTo, makePossessive, getFirstName, copyFromPage } from "../../../../miscFunctions";
 import clipboard from "clipboard-polyfill";
 import Carousel from "../../../miscComponents/carousel";
@@ -182,6 +182,12 @@ class Activity extends Component {
         this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
     }
 
+    needHelpIntercomEvent = () => {
+        const { _id, verificationToken } = this.props.currentUser;
+        
+        this.props.intercomEvent("need_help_embedding_link", _id, verificationToken, null);
+    }
+
     tipsForHiring() {
         try { var possessiveBusinessName = makePossessive(this.props.currentUser.businessInfo.businessName); }
         catch (e) { var possessiveBusinessName = "your"; }
@@ -294,7 +300,7 @@ class Activity extends Component {
                     >
                         I have embedded the link
                     </div>
-                    <div className="clickable marginTop10px">
+                    <div className="clickable marginTop10px" onClick={this.needHelpIntercomEvent}>
                         Need help?
                     </div>
                 </div>
@@ -505,7 +511,8 @@ function mapDispatchToProps(dispatch) {
         openAddUserModal,
         updateUser,
         generalAction,
-        confirmEmbedLink
+        confirmEmbedLink,
+        intercomEvent
     }, dispatch);
 }
 
