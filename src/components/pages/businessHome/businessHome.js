@@ -65,7 +65,9 @@ class BusinessHome extends Component {
             // initially don't show the rectangles in case the user's browser is old
             showRectangles: false,
             agreeingToTerms: false,
-            error: ""
+            error: "",
+            // the background position of the what-how section (left or right)
+            whatHowPosition: "left"
         };
     }
 
@@ -341,9 +343,75 @@ class BusinessHome extends Component {
         );
     }
 
-    statisticsSection() {
+    whatHowMoveBackground() {
+        console.log("moving background (but not really)");
+    }
+
+    whatAndHowSection() {
+        const { whatHowPosition } = this.state;
+        const parts = [
+            {
+                title: "What We Do",
+                position: "left",
+                body:
+                    "We predict candidate job performance, growth potential, longevity (tenure), and culture fit at your company."
+            },
+            {
+                title: "How We Do It",
+                position: "right",
+                body:
+                    "Candidates take a ~20-minute assessment comprised of a revolutionary personality test and an abstract problem-solving quiz."
+            }
+        ];
+
+        const partsJsx = parts.map(part => {
+            const focused = whatHowPosition === part.position;
+            // only show the two buttons if this part is highlighted
+            const buttons = !focused ? null : (
+                <div>
+                    <CornersButton
+                        content="Try Now For Free"
+                        onClick={() => goTo("/explore")}
+                        color1={colors.primaryCyan}
+                        color2={colors.primaryWhite}
+                        className="font16px font14pxUnder900 font12pxUnder400"
+                        style={{ margin: "10px auto" }}
+                    />
+                    or
+                    <div>See How It Works</div>
+                </div>
+            );
+            return (
+                <div styleName="what-how-part" key={`what-how-part ${part.position}`}>
+                    <div className={focused ? "primary-cyan" : "secondary-gray"}>{part.title}</div>
+                    <div className={focused ? "primary-white" : "secondary-gray"}>{part.body}</div>
+                    {buttons}
+                </div>
+            );
+        });
+
+        return (
+            <section styleName="what-and-how-section">
+                <div styleName="what-how-background">
+                    <div styleName={`moveable-background ${whatHowPosition}`}>
+                        <div />
+                        <div
+                            styleName={`circle-arrow-icon ${
+                                whatHowPosition === "right" ? "left" : "right"
+                            }`}
+                            className="circleArrowIcon"
+                            onClick={this.whatHowMove}
+                        />
+                    </div>
+                    {partsJsx}
+                </div>
+            </section>
+        );
+    }
+
+    boxesSection() {
         const boxes = boxTexts.map(boxText => {
-            return <InflatableBox title={boxText.title} body={boxText.body} />;
+            return <InflatableBox title={boxText.title} body={boxText.body} key={boxText.title} />;
         });
 
         return (
@@ -430,9 +498,9 @@ class BusinessHome extends Component {
 
                     {this.previewSection()}
 
-                    {this.statisticsSection()}
+                    {this.whatAndHowSection()}
 
-                    {this.videoSection()}
+                    {this.boxesSection()}
                 </div>
             </div>
         );

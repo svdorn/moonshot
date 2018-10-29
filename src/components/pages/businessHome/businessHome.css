@@ -16,6 +16,9 @@
     padding: 500px 0 500px;
 }
 
+.what-and-how-section {
+}
+
 .front-page {
     position: relative;
 }
@@ -362,7 +365,8 @@
 }
 
 .statistics-section > div {
-    margin: -100px auto 0;
+    /* margin: -100px auto 0; */
+    margin: 0 auto;
     padding: 0 0 100px;
     max-width: 1340px;
     position: relative;
@@ -373,6 +377,64 @@
     height: 2px;
     margin: 0 auto 60px;
     background-color: var(--primary-cyan);
+}
+
+.what-how-background {
+    --box-height: 400px;
+    --box-width: 300px;
+    --box-height-overflow: 15px;
+    --box-width-space: 15px;
+
+    padding: 20px 10px;
+    position: relative;
+    margin: 0 auto;
+    height: calc(var(--box-height) - (2 * var(--box-height-overflow)));
+    width: calc((2 * var(--box-width)) + (2 * var(--box-width-space)));
+    background-color: var(--black-deep-dark);
+    box-shadow: 0 0 10px 5px var(--shadow-black);
+}
+
+.moveable-background {
+    position: absolute;
+    background: linear-gradient(to right, var(--primary-cyan), var(--primary-white));
+    height: var(--box-height);
+    width: var(--box-width);
+    top: calc(-1 * var(--box-height-overflow));
+    left: var(--box-width-space);
+
+    --border: 2px;
+}
+.moveable-background.left {
+    transform: translateX(0);
+}
+.moveable-background.right {
+    transform: translateX(100%);
+}
+.moveable-background > div:first-child {
+    background-color: blue;
+    height: calc(100% - (2 * var(--border)));
+    margin: var(--border);
+}
+.what-how-part {
+    display: inline-block;
+    text-align: center;
+    height: calc(var(--box-height) - (2 * var(--box-height-overflow)));
+    width: var(--box-width);
+}
+.moveable-background > .circle-arrow-icon {
+    background-color: var(--primary-white);
+    position: absolute;
+    top: 50%;
+}
+.moveable-background > .circle-arrow-icon.right {
+    left: auto;
+    right: 0;
+    transform: translate(50%, -50%) rotate(-90deg);
+}
+.moveable-background > .circle-arrow-icon.left {
+    left: 0;
+    right: auto;
+    transform: translate(-50%, -50%) rotate(90deg);
 }
 
 /* GRIDS */

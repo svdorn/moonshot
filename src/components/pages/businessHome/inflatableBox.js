@@ -13,7 +13,7 @@ class InflatableBox extends Component {
 
     render() {
         return (
-            <div styleName="box">
+            <div styleName="box" key={this.props.key ? this.props.key : ""}>
                 <div styleName="hoverable">
                     <div styleName="background" />
                 </div>
