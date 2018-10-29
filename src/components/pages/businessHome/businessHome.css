@@ -530,6 +530,13 @@
 
 /* GRID PREVIEW PAGE */
 .rectangles-area {
+    --rect-body-top-height: 170;
+    --rect-body-bottom-height: var(--rect-body-top-height);
+
+    --rect-small-background-height: 20;
+    --rect-small-background-middle-offset: 4;
+    --rect-middle: calc(1 + var(--gutter-columns) + 12);
+
     --rect-row-top-left-start: calc(var(--rect-row-top-left-mid) - 4);
     --rect-row-top-left-mid: 5;
     --rect-row-top-left-end: calc(var(--rect-row-top-left-mid) + 4);
@@ -539,18 +546,11 @@
     );
     --rect-row-top-right-end: calc(var(--rect-row-top-right-mid) + 4);
 
-    --rect-body-top-height: 170;
-    --rect-body-bottom-height: var(--rect-body-top-height);
-
-    --rect-small-background-height: 20;
-    --rect-small-background-middle-offset: 4;
-    --rect-middle: calc(1 + var(--gutter-columns) + 12);
-
     --rect-row-mid-left-start: calc(var(--rect-row-mid-left-mid) - 4);
     --rect-row-mid-left-mid: calc(var(--rect-row-top-left-mid) + var(--rect-body-top-height));
     --rect-row-mid-left-end: calc(var(--rect-row-mid-left-mid) + 4);
     --rect-row-mid-right-start: calc(var(--rect-row-mid-right-mid) - 4);
-    --rect-row-mid-right-mid: calc(var(--rect-row-top-left-mid) + var(--rect-body-top-height));
+    --rect-row-mid-right-mid: calc(var(--rect-row-top-right-mid) + var(--rect-body-top-height));
     --rect-row-mid-right-end: calc(var(--rect-row-mid-right-mid) + 4);
 
     --rect-row-bottom-left-start: calc(var(--rect-row-bottom-left-mid) - 4);
@@ -582,9 +582,11 @@
 }
 /* bottom background grid color */
 .rectangles-area .skewed-rectangle:nth-child(2) {
-    background: #262626;
-    grid-row-start: var(--rect-row-top-right-mid);
-    grid-row-end: var(--rect-row-mid-left-mid);
+    background: #282828;
+    grid-row-start: calc(var(--rect-row-top-left-mid) + var(--rect-body-top-height));
+    grid-row-end: calc(
+        var(--rect-row-top-left-mid) + var(--rect-body-top-height) + var(--rect-body-bottom-height)
+    );
     grid-column-start: 1;
     grid-column-end: 43;
 }
