@@ -15,25 +15,6 @@ import axios from 'axios';
 
 import "./apply.css";
 
-const checklistInfo = [
-    {
-        title: "What Candidates See",
-        step: 1
-    },
-    {
-        title: "What You'll See",
-        step: 2
-    },
-    {
-        title: "How It Works",
-        step: 3
-    },
-    {
-        title: "What To Do",
-        step: 4
-    }
-];
-
 class Apply extends Component {
     constructor(props) {
         super(props);

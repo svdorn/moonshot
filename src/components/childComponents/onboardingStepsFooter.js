@@ -19,12 +19,8 @@ const checklistInfo = [
         step: 2
     },
     {
-        title: "How It Works",
-        step: 3
-    },
-    {
         title: "What To Do",
-        step: 4
+        step: 3
     }
 ];
 
