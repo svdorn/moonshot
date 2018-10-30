@@ -256,6 +256,18 @@ function elementInViewport(el) {
     );
 }
 
+function elementPartiallyInViewport(el) {
+    var rect = el.getBoundingClientRect();
+
+    const screenHeight = window.innerHeight || document.documentElement.clientHeight;
+    const screenWidth = window.innerWidth || document.documentElement.clientWidth;
+
+    const inVertically = rect.top < screenHeight && rect.bottom > 0;
+    const inHorizontally = rect.left < screenWidth && rect.right > 0;
+
+    return inVertically && inHorizontally;
+}
+
 function makePossessive(name) {
     if (typeof name !== "string") {
         return name;
@@ -303,6 +315,17 @@ function copyCustomLink(currentUser, addNotification) {
     }
 }
 
+// takes in either a className as ".name-of-element" or id as "#name-of-element"
+function copyFromPage(identifier) {
+    let range = document.createRange();
+    range.selectNode(document.querySelector(identifier));
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+}
+
+function noop() {}
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -318,8 +341,11 @@ const miscFunctions = {
     withinElement,
     makePossessive,
     elementInViewport,
+    elementPartiallyInViewport,
     replaceCharacters,
     copyCustomLink,
+    copyFromPage,
+    noop,
 
     Queue,
     Stack

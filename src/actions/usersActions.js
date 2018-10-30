@@ -40,6 +40,12 @@ export function setWebpSupport(webpSupported) {
     };
 }
 
+export function updatePositionCount(count) {
+    return function(dispatch) {
+        dispatch({ type: "UPDATE_POSITION_COUNT", count });
+    };
+}
+
 export function openAddPositionModal() {
     return function(dispatch) {
         dispatch({ type: "OPEN_ADD_POSITION_MODAL" });
@@ -49,6 +55,22 @@ export function openAddPositionModal() {
 export function closeAddPositionModal() {
     return function(dispatch) {
         dispatch({ type: "CLOSE_ADD_POSITION_MODAL" });
+    };
+}
+
+export function openClaimPageModal() {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_CLAIM_PAGE_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: true });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: true });
+    };
+}
+
+export function closeClaimPageModal() {
+    return function(dispatch) {
+        dispatch({ type: "CLOSE_CLAIM_PAGE_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
     };
 }
 
@@ -68,32 +90,30 @@ export function closeSignupModal() {
     };
 }
 
+export function openIntroductionModal() {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_INTRODUCTION_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: true });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: true });
+    };
+}
+
+export function closeIntroductionModal() {
+    return function(dispatch) {
+        dispatch({ type: "CLOSE_INTRODUCTION_MODAL" });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
+        dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
+    };
+}
+
 export function closeCandidatesPopupModal(userId, verificationToken, popups) {
     return function(dispatch) {
         dispatch({ type: "START_LOADING" });
 
-        const eventName = "candidates_page_first_time";
-        const metadata = null;
-
         axios
             .post("/api/user/popups", { userId, verificationToken, popups })
             .then(function(response) {
-                axios
-                    .post("/api/user/intercomEvent", {
-                        eventName,
-                        userId,
-                        verificationToken,
-                        metadata
-                    })
-                    .then(function(response) {
-                        dispatch({ type: "CLOSE_CANDIDATES_POPUP_MODAL" });
-                    })
-                    .catch(function(err) {
-                        dispatch({
-                            type: "INTERCOM_EVENT_REJECTED",
-                            ...notification(err, "error")
-                        });
-                    });
+                dispatch({ type: "CLOSE_CANDIDATES_POPUP_MODAL" });
             })
             .catch(function(err) {
                 dispatch({ type: "HIDE_POPUPS_REJECTED", ...notification(err, "error") });
@@ -204,7 +224,11 @@ export function intercomEvent(eventName, userId, verificationToken, metadata) {
         axios
             .post("/api/user/intercomEvent", { eventName, userId, verificationToken, metadata })
             .then(function(response) {
-                dispatch({ type: "INTERCOM_EVENT" });
+                if (response.data.temp) {
+                    dispatch({ type: "INTERCOM_EVENT_TEMP", user: response.data.user });
+                } else {
+                    dispatch({ type: "INTERCOM_EVENT" });
+                }
             })
             .catch(function(err) {
                 dispatch({ type: "INTERCOM_EVENT_REJECTED", ...notification(err, "error") });
@@ -235,6 +259,22 @@ export function hidePopups(userId, verificationToken, popups) {
     };
 }
 
+export function confirmEmbedLink(userId, verificationToken) {
+    return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
+        axios
+            .post("/api/user/confirmEmbedLink", { userId, verificationToken })
+            .then(function(response) {
+                const returnedUser = response.data;
+                dispatch({ type: "CONFIRM_EMBED_LINK", payload: returnedUser });
+            })
+            .catch(function(err) {
+                dispatch({ type: "CONFIRM_EMBED_LINK_REJECTED", ...notification(err, "error") });
+            });
+    };
+}
+
 export function postBusinessInterests(userId, verificationToken, businessId, interests, popups) {
     return function(dispatch) {
         dispatch({ type: "START_LOADING" });
@@ -243,7 +283,6 @@ export function postBusinessInterests(userId, verificationToken, businessId, int
             .post("/api/business/interests", { userId, verificationToken, businessId, interests })
             .then(function(response) {
                 dispatch(hidePopups(userId, verificationToken, popups));
-                dispatch({ type: "OPEN_ROI_ONBOARDING_MODAL" });
             })
             .catch(function(err) {
                 dispatch({

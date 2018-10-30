@@ -25,14 +25,9 @@ const checklistInfo = [
         step: 2
     },
     {
-        title: "How It Works",
-        body: <WhyItWorks />,
-        step: 3
-    },
-    {
         title: "What To Do",
         body: <WhatToDo />,
-        step: 4
+        step: 3
     }
 ];
 
@@ -97,7 +92,7 @@ class Onboarding extends Component {
 
         // get the content that goes on the right side (the actual info)
         let content = <div>Invalid step</div>;
-        if (step >= 1 && step <= 4) {
+        if (step >= 1 && step <= 3) {
             // make sure idx is valid
             content = checklistInfo[Math.round(step) - 1].body;
         } else {

@@ -3,18 +3,15 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { generalAction } from "../../../actions/usersActions";
+import { generalAction, updatePositionCount } from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
 import InviteCandidatesModal from "./inviteCandidatesModal";
 import AddPositionDialog from "../../childComponents/addPositionDialog";
 import AddUserDialog from "../../childComponents/addUserDialog";
-import ROIOnboardingDialog from "../../childComponents/roiOnboardingDialog";
-import OnboardingStep4Dialog from "../../childComponents/onboardingStep4Dialog";
 import VerificationModal from "./dashboardItems/onboarding/childComponents/verificationModal";
-
-import WelcomeMessage from "./dashboardItems/welcomeMessage";
+import axios from 'axios';
 
 import "./dashboard.css";
 
@@ -33,14 +30,69 @@ class Dashboard extends Component {
         ) {
             this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
         }
+        let self = this;
+        const { currentUser, positionCount } = this.props;
+        if (!positionCount || positionCount < 1) {
+            // get all the positions they're evaluating for
+            axios.get("/api/business/positions", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
+                }
+            })
+            .then(res => {
+                const positions = res.data.positions;
+                if (positions && Array.isArray(positions) && positions.length > 0) {
+                    this.props.updatePositionCount(positions.length);
+                } else {
+                    this.props.updatePositionCount(0);
+                }
+            })
+            .catch(err => {
+                console.log("error getting positions: ", err);
+                if (err.response && err.response.data) { console.log(err.response.data); }
+            });
+        }
+    }
+
+    componentDidUpdate() {
+        const { positionCount } = this.props;
+        if (!positionCount || positionCount < 1) {
+            const currentUser = this.props.currentUser;
+            // get all the positions they're evaluating for
+            axios.get("/api/business/positions", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
+                }
+            })
+            .then(res => {
+                const positions = res.data.positions;
+                if (positions && Array.isArray(positions) && positions.length > 0) {
+                    this.props.updatePositionCount(positions.length);
+                } else {
+                    this.props.updatePositionCount(0);
+                }
+            })
+            .catch(err => {
+                console.log("error getting positions: ", err);
+                if (err.response && err.response.data) { console.log(err.response.data); }
+            });
+        }
     }
 
     render() {
         const user = this.props.currentUser;
+        const positionCount = this.props.positionCount;
 
         let activity = <DashboardItem type="Activity" width={3} />;
-        // if the user is not done with onboarding
-        if (
+        if (user && user.popups && user.popups.dashboard) {
+            activity = <DashboardItem type="WelcomePage" width={3} />;
+        } else if (user && user.popups && user.popups.businessInterests) {
+            activity = <DashboardItem type="BuildTeam" width={3} />;
+        } else if (user && (!positionCount || positionCount < 1)) {
+            activity = <DashboardItem type="AddPositionPage" width={3} />;
+        } else if (
             user &&
             user.onboard &&
             !user.onboard.timeFinished &&
@@ -48,18 +100,13 @@ class Dashboard extends Component {
         ) {
             activity = <DashboardItem type="Onboarding" width={3} />;
         }
-        // if the user has the popups at onboarding
-        if (user && user.popups && user.popups.businessInterests) {
-            activity = <DashboardItem type="BuildTeam" width={3} />;
-        }
 
-        let blurredClass = "";
-        if (this.props.roiModal || this.props.onboardingModel) {
-            blurredClass = "dialogForBizOverlay";
-        }
+        // old acc admins won't have onboard object, so if they don't just say the finished
+        const finishedOnboarding =
+            !user.onboard || typeof user.onboard.step !== "number" || user.onboard.timeFinished;
 
         return (
-            <div className={"center full-height " + blurredClass}>
+            <div className="center full-height ">
                 <MetaTags>
                     <title>Dashboard | Moonshot</title>
                     <meta
@@ -70,21 +117,18 @@ class Dashboard extends Component {
                 <InviteCandidatesModal />
                 <AddPositionDialog />
                 <AddUserDialog />
-                <ROIOnboardingDialog />
-                <OnboardingStep4Dialog />
                 <VerificationModal />
                 <div className="page-line-header">
                     <div />
                     <div>Dashboard</div>
                 </div>
-                <WelcomeMessage />
                 <div styleName="dashboard">
                     {activity}
-                    <DashboardItem type="Candidates" width={1} />
-                    <DashboardItem type="Evaluations" width={1} />
-                    <DashboardItem type="Employees" width={1} />
-                    <DashboardItem type="Account" width={1} />
-                    <DashboardItem type="Billing" width={1} />
+                    <DashboardItem type="Candidates" width={1} blurred={!finishedOnboarding} />
+                    <DashboardItem type="Evaluations" width={1} blurred={!finishedOnboarding} />
+                    <DashboardItem type="Employees" width={1} blurred={!finishedOnboarding} />
+                    <DashboardItem type="Account" width={1} blurred={!finishedOnboarding} />
+                    <DashboardItem type="Billing" width={1} blurred={!finishedOnboarding} />
                 </div>
             </div>
         );
@@ -94,15 +138,15 @@ class Dashboard extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        roiModal: state.users.roiOnboardingOpen,
-        onboardingModel: state.users.onboardingStep4Open
+        positionCount: state.users.positionCount
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            generalAction
+            generalAction,
+            updatePositionCount
         },
         dispatch
     );

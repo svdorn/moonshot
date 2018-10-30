@@ -3,38 +3,20 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification } from '../../actions/usersActions';
-import { propertyExists, makePossessive } from "../../miscFunctions";
-import clipboard from "clipboard-polyfill";
+import { propertyExists, makePossessive, goTo } from "../../miscFunctions";
 import { withRouter } from 'react-router';
 import axios from 'axios';
 
-import './copyLinkFooter.css';
+import './preOnboardingFooter.css';
 
-class CopyLinkFooter extends Component {
+class PreOnboardingFooter extends Component {
     constructor(props) {
         super(props);
-    }
-
-    copyLink = () => {
-        const { currentUser } = this.props;
-        if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
-            let URL = "https://moonshotinsights.io/apply/" + currentUser.businessInfo.uniqueName;
-            URL = encodeURI(URL);
-            clipboard.writeText(URL);
-            this.props.addNotification("Link copied to clipboard", "info");
-        } else {
-            this.props.addNotification("Error copying link, try refreshing", "error");
-        }
     }
 
     render() {
         const { currentUser } = this.props;
         if (!currentUser || currentUser.userType !== "accountAdmin") { return null; }
-
-        let businessName = "your";
-        if (propertyExists(currentUser, ["businessInfo", "businessName"], "string")) {
-            businessName = currentUser.businessInfo.businessName;
-        }
         // get the current path from the url
         let pathname = undefined;
         // try to get the path; lowercased because capitalization will vary
@@ -52,12 +34,12 @@ class CopyLinkFooter extends Component {
                         <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
                         <div className="secondary-gray" styleName="text">
                             <div styleName="desktop-text">
-                                Embed { makePossessive(businessName) } candidate invite page in your ATS, <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>or other communications with candidates.
+                                Continue to achieve <br styleName="non-big-desktop"/>automated emails <br styleName="big-desktop"/>your first few steps.
                             </div>
                         </div>
                         <div styleName="buttons">
-                            <button styleName="button" className="button noselect round-6px background-primary-cyan primary-white" onClick={this.copyLink} style={{padding: "3px 10px"}}>
-                                <span>Copy Link</span>
+                            <button styleName="button" className="button noselect round-6px background-primary-cyan primary-white" onClick={() => goTo("/dashboard")} style={{padding: "3px 10px"}}>
+                                <span>Continue</span>
                             </button>
                         </div>
                     </div>
@@ -82,6 +64,6 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-CopyLinkFooter = withRouter(CopyLinkFooter);
+PreOnboardingFooter = withRouter(PreOnboardingFooter);
 
-export default connect(mapStateToProps, mapDispatchToProps)(CopyLinkFooter);
+export default connect(mapStateToProps, mapDispatchToProps)(PreOnboardingFooter);

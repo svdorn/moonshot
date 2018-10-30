@@ -4,10 +4,15 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {} from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { primaryCyan, primaryWhite } from "../../../colors";
 
 import Onboarding from "./dashboardItems/onboarding/onboarding";
 import Activity from "./dashboardItems/activity";
 import BuildTeam from "./dashboardItems/onboarding/buildTeam";
+import InvitePage from "./dashboardItems/onboarding/invitePage";
+import WelcomePage from "./dashboardItems/onboarding/welcomePage";
+import AddPositionPage from "./dashboardItems/onboarding/addPositionPage";
 import Candidates from "./dashboardItems/candidates.js";
 import Employees from "./dashboardItems/employees.js";
 import Evaluations from "./dashboardItems/evaluations.js";
@@ -25,8 +30,8 @@ class DashboardItem extends Component {
 
     render() {
         // get the relative width of the dashboard item
-        let width = this.props.width;
-        if (typeof this.props.width === "string") {
+        let { width } = this.props;
+        if (typeof width === "string") {
             width = parseInt(this.props.width, 10);
         }
         if (typeof width !== "number" || width === NaN || width < 1 || width > 4) {
@@ -46,6 +51,18 @@ class DashboardItem extends Component {
             }
             case "BuildTeam": {
                 content = <BuildTeam {...this.props} />;
+                break;
+            }
+            case "InvitePage": {
+                content = <InvitePage {...this.props} />;
+                break;
+            }
+            case "WelcomePage": {
+                content = <WelcomePage {...this.props} />;
+                break;
+            }
+            case "AddPositionPage": {
+                content = <AddPositionPage {...this.props} />;
                 break;
             }
             case "Candidates": {
@@ -74,13 +91,27 @@ class DashboardItem extends Component {
             }
         }
 
-        return <div styleName={`dashboard-item-container width-${width}`}>{content}</div>;
+        const { currentUser, positionCount } = this.props;
+
+        if (currentUser && this.props.positionCount == undefined) {
+            content = <div className="fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>;
+        }
+
+        return (
+            <div
+                styleName={`dashboard-item-container width-${width}`}
+                className={this.props.blurred ? "slightly-blurred" : ""}
+            >
+                {content}
+            </div>
+        );
     }
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        positionCount: state.users.positionCount
     };
 }
 

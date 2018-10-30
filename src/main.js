@@ -27,6 +27,7 @@ import Notification from "./components/notification";
 import ContactUsDialog from "./components/childComponents/contactUsDialog";
 import AddAdminDialog from "./components/childComponents/addAdminDialog";
 import CopyLinkFooter from "./components/childComponents/copyLinkFooter";
+import PreOnboardingFooter from "./components/childComponents/preOnboardingFooter";
 import OnboardingStepsFooter from "./components/childComponents/onboardingStepsFooter";
 import AdminVerifyEmail from "./components/childComponents/adminVerifyEmail";
 import ReactGA from "react-ga";
@@ -127,9 +128,20 @@ class Main extends Component {
     }
 
     popupFooter() {
-        const { currentUser } = this.props;
+        const { currentUser, positionCount } = this.props;
 
         if (
+            currentUser &&
+            currentUser.userType === "accountAdmin" &&
+            ((currentUser.popups &&
+            currentUser.popups.dashboard) ||
+            (currentUser.popups &&
+            currentUser.popups.businessInterests) ||
+            (positionCount < 1))
+        ) {
+            return <PreOnboardingFooter />
+        }
+        else if (
             currentUser &&
             currentUser.userType === "accountAdmin" &&
             currentUser.onboard &&
@@ -137,7 +149,11 @@ class Main extends Component {
             typeof currentUser.onboard.step === "number"
         ) {
             return <OnboardingStepsFooter />;
-        } else {
+        }else if (
+            currentUser &&
+            currentUser.userType === "accountAdmin" &&
+            !currentUser.confirmEmbedLink
+        ) {
             return <CopyLinkFooter />;
         }
     }
@@ -209,7 +225,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
         notification: state.users.notification,
-        webpSupportChecked: state.users.webpSupportChecked
+        webpSupportChecked: state.users.webpSupportChecked,
+        positionCount: state.users.positionCount
     };
 }
 

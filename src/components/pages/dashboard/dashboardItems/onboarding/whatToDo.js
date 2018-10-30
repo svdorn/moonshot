@@ -7,7 +7,6 @@ import { updateOnboardingStep, addNotification, generalAction, updateUser, openA
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists, updateStore } from "../../../../../miscFunctions";
 import AddPosition from "./childComponents/addPosition";
-import Signup from "./childComponents/signup";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
     TextField,
@@ -41,67 +40,14 @@ class WhatToDo extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            // which view we're on
-            step: ""
-        };
-
         this.next = this.next.bind(this);
         this.intercomMsg = this.intercomMsg.bind(this);
         this.handleCustomPage = this.handleCustomPage.bind(this);
         this.copyLink = this.copyLink.bind(this);
     }
 
-    componentDidMount() {
-        let self = this;
-        const { currentUser } = this.props;
-        if (currentUser) {
-            // get all the positions they're evaluating for
-            axios.get("/api/business/positions", {
-                params: {
-                    userId: currentUser._id,
-                    verificationToken: currentUser.verificationToken
-                }
-            })
-            .then(res => {
-                if (Array.isArray(res.data.positions) && res.data.positions.length > 0) {
-                    this.next();
-                } else {
-                    self.setState({ step:"position" })
-                }
-            })
-            .catch(err => {
-
-            });
-        } else {
-            const onboardingPositions = this.props.onboardingPositions;
-            if (onboardingPositions && Array.isArray(onboardingPositions) && onboardingPositions.length > 0) {
-                this.next();
-            } else {
-                this.setState({ step:"position" })
-            }
-        }
-    }
-
     next = () => {
-        // TODO merge these two into one api call to avoid race conditions
-        if (this.state.step === "position" || this.state.step === "") {
-            if (this.props.currentUser) {
-                this.props.generalAction("OPEN_ONBOARDING_4_MODAL");
-                this.setState({ step: "copyLink" })
-            } else {
-                this.setState({ step: "signup" })
-            }
-            return;
-        }
-
         const { _id, verificationToken, verified } = this.props.currentUser;
-
-        if (!verified) {
-            axios.post("/api/accountAdmin/showVerifyEmailBanner", { userId: _id, verificationToken })
-            .then(response => { this.props.updateUser(response.data.user); })
-            .catch(error => { console.log(error); });
-        }
 
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, -1);
@@ -217,38 +163,13 @@ class WhatToDo extends Component {
         );
     }
 
-    positionView() {
-        return(
-            <div styleName="full-step-container position-view">
-                <div>
-                    Add Your First Position
-                </div>
-                <div>
-                    <AddPosition next={this.next} />
-                </div>
-            </div>
-        );
-    }
-
-    signupView() {
-        return(
-            <div styleName="full-step-container">
-                <Signup />
-            </div>
-        );
-    }
 
     render() {
-        switch (this.state.step) {
-            case "position":
-                return this.positionView();
-            case "signup":
-                return this.signupView();
-            case "copyLink":
-                return this.copyLinkView();
-            default:
-                return <div styleName="circular-progress-fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>;
-        }
+        return (
+            <div>
+                { this.copyLinkView() }
+            </div>
+        );
     }
 }
 

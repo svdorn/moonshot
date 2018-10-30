@@ -44,6 +44,30 @@ export function usersReducers(state = initialState, action) {
                 verificationModal: false,
             };
             break;
+        case "OPEN_CLAIM_PAGE_MODAL":
+            return {
+                ...state,
+                claimPageModal: true
+            };
+            break;
+        case "CLOSE_CLAIM_PAGE_MODAL":
+            return {
+                ...state,
+                claimPageModal: false,
+            };
+            break;
+        case "OPEN_INTRODUCTION_MODAL":
+            return {
+                ...state,
+                introductionModal: true
+            };
+            break;
+        case "CLOSE_INTRODUCTION_MODAL":
+            return {
+                ...state,
+                introductionModal: false,
+            };
+            break;
         case "OPEN_CANDIDATES_POPUP_MODAL":
             return {
                 ...state,
@@ -56,30 +80,6 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 candidatesPopupModalOpen: false,
                 loadingSomething: false
-            };
-            break;
-        case "OPEN_ROI_ONBOARDING_MODAL":
-            return {
-                ...state,
-                roiOnboardingOpen: true
-            };
-            break;
-        case "CLOSE_ROI_ONBOARDING_MODAL":
-            return {
-                ...state,
-                roiOnboardingOpen: false
-            };
-            break;
-        case "OPEN_ONBOARDING_4_MODAL":
-            return {
-                ...state,
-                onboardingStep4Open: true
-            };
-            break;
-        case "CLOSE_ONBOARDING_4_MODAL":
-            return {
-                ...state,
-                onboardingStep4Open: false
             };
             break;
         case "OPEN_SIGNUP_MODAL":
@@ -233,6 +233,17 @@ export function usersReducers(state = initialState, action) {
             Intercom("update");
             return { ...state, loadingSomething: false };
             break;
+        case "INTERCOM_EVENT_TEMP":
+            if (action.user && action.user.intercom) {
+                const intercom = action.user.intercom;
+                Intercom("update", {
+                    email: intercom.email,
+                    user_id: intercom.id,
+                    user_hash: action.user.hmac
+                });
+            }
+            return { ...state, loadingSomething: false };
+            break;
         case "LOGIN":
             if (action.user && action.user.intercom) {
                 const intercom = action.user.intercom;
@@ -253,6 +264,7 @@ export function usersReducers(state = initialState, action) {
             break;
         // case "UPDATE_ONBOARDING":
         case "HIDE_POPUPS":
+        case "CONFIRM_EMBED_LINK":
             return {
                 ...state,
                 currentUser: action.payload,
@@ -264,6 +276,7 @@ export function usersReducers(state = initialState, action) {
         case "CHANGE_TEMP_PASS_REJECTED":
         case "ADD_PATHWAY_REJECTED":
         case "HIDE_POPUPS_REJECTED":
+        case "CONFIRM_EMBED_LINK_REJECTED":
         case "POST_BUSINESS_INTERESTS_REJECTED":
         case "ADD_NOTIFICATION":
             return {
@@ -478,6 +491,12 @@ export function usersReducers(state = initialState, action) {
                 webpSupportChecked: true,
                 png,
                 jpg
+            };
+            break;
+        case "UPDATE_POSITION_COUNT":
+            return {
+                ...state,
+                positionCount: action.count
             };
             break;
         case "CHANGE_AUTOMATE_INVITES": {

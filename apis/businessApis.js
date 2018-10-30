@@ -124,7 +124,7 @@ async function GET_billingIsSetUp(req, res) {
 // create a business and the first account admin for that business
 async function POST_createBusinessAndUser(req, res) {
     // get necessary arguments
-    let { name, company, email, password, positions, onboard, selectedJobsToBeDone, showVerifyEmailBanner } = sanitize(
+    let { name, company, email, password, positions, onboard, welcomeToMoonshot, selectedJobsToBeDone, showVerifyEmailBanner } = sanitize(
         req.body
     );
 
@@ -180,14 +180,18 @@ async function POST_createBusinessAndUser(req, res) {
         return res.status(400).send("Password needs to be at least 8 characters long.");
     }
 
+    let dashboardPopup = true;
     businessInterestsPopup = true;
+    if (welcomeToMoonshot) {
+        dashboardPopup = false;
+    }
     // check if positions should be added
     if (Array.isArray(selectedJobsToBeDone)) {
         businessInterestsPopup = false;
     }
 
     // create the user
-    const userInfo = { name, email, password, onboard, businessInterestsPopup, showVerifyEmailBanner };
+    const userInfo = { name, email, password, onboard, dashboardPopup, businessInterestsPopup, showVerifyEmailBanner };
     try {
         var user = await createAccountAdmin(userInfo);
     } catch (createUserError) {
@@ -301,7 +305,7 @@ async function POST_createBusinessAndUser(req, res) {
 async function createAccountAdmin(info) {
     return new Promise(function(resolve, reject) {
         // get needed args
-        const { name, password, email, onboard, businessInterestsPopup, showVerifyEmailBanner } = info;
+        const { name, password, email, onboard, dashboardPopup, businessInterestsPopup, showVerifyEmailBanner } = info;
 
         let user = {
             name,
@@ -331,9 +335,10 @@ async function createAccountAdmin(info) {
             candidateModal: true,
             employees: true,
             evaluations: true,
-            dashboard: true,
+            dashboard: dashboardPopup,
             businessInterests: businessInterestsPopup
         };
+        user.confirmEmbedLink = false;
         // had to select that they agreed to the terms to sign up so must be true
         user.termsAndConditions = [
             {

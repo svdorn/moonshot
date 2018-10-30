@@ -71,6 +71,7 @@
         "stripe": "^6.12.1",
         "style-loader": "^0.23.1",
         "typed.js": "^2.0.9",
+        "vivus": "^0.4.4",
         "webpack": "^4.20.2",
         "webpack-cli": "^3.1.2",
         "webpack-merge": "^4.1.4"

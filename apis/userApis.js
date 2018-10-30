@@ -24,6 +24,7 @@ const { sanitize,
         frontEndUser,
         emailFooter,
         getSkillNamesByIds,
+        generateNewUniqueEmail,
         lastPossibleSecond,
         findNestedValue,
         moonshotUrl
@@ -58,6 +59,7 @@ module.exports = {
     POST_updateOnboardingStep,
     POST_popups,
     POST_reSendVerificationEmail,
+    POST_confirmEmbedLink,
 
     // not api endpoints
     sendVerificationEmail
@@ -459,16 +461,69 @@ async function POST_popups(req, res) {
     res.json(frontEndUser(returnedUser));
 }
 
+async function POST_confirmEmbedLink(req, res) {
+    const { userId, verificationToken } = req.body;
+
+    // get the user who is asking for their evaluations page
+    try {
+        var user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user when trying update popup info: ", getUserError);
+        const status = getUserError.status ? getUserError.status : 500;
+        const message = getUserError.message ? getUserError.message : "Server error.";
+        return res.status(status).send(message);
+    }
+
+    // if no user found from token, can't verify
+    if (!user) { return res.status(404).send("User not found"); }
+
+    // if a user was found from the token, verify them and get rid of the token
+    user.confirmEmbedLink = true;
+
+    // save the verified user
+    try { var returnedUser = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user when updating onboarding info: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    res.json(frontEndUser(returnedUser));
+}
+
 module.exports.POST_intercomEvent = async function(req, res) {
     const event_name = sanitize(req.body.eventName);
     const metadata = sanitize(req.body.metadata);
 
-    try { var user = await getUserFromReq(req); }
-    catch (getUserError) {
-        console.log("Error getting user while trying to update onboarding step: ", getUserError);
-        const status = getUserError.status ? getUserError.status : 500;
-        const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
-        return res.status(status).send(message);
+    if (!req.body.userId || !req.body.verificationToken) {
+        var email = await generateNewUniqueEmail();
+        var intercom = await client.users.create({
+            email,
+            name: "there"
+        });
+        var user = {};
+        var temp = true;
+        // Add the intercom info to the user
+        if (intercom.body) {
+            user.intercom = {};
+            user.intercom.email = intercom.body.email;
+            user.intercom.id = intercom.body.id;
+        } else {
+            console.log("error creating an intercom user: ", createIntercomError);
+            return res.status(500).send("Server error.");
+        }
+        const hash = crypto
+            .createHmac("sha256", credentials.hmacKey)
+            .update(user.intercom.id)
+            .digest("hex");
+        user.hmac = hash;
+    } else {
+        try { var user = await getUserFromReq(req); }
+        catch (getUserError) {
+            console.log("Error getting user while trying to update onboarding step: ", getUserError);
+            const status = getUserError.status ? getUserError.status : 500;
+            const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
+            return res.status(status).send(message);
+        }
     }
 
     // if user doesn't have correct info, throw error
@@ -486,7 +541,7 @@ module.exports.POST_intercomEvent = async function(req, res) {
       email: user.intercom.email,
       metadata
   }, function (d) {
-        return res.status(200).send({});
+        return res.status(200).send({ user, temp });
     });
 }
 

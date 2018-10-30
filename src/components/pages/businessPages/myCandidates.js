@@ -10,27 +10,22 @@ import {
     CircularProgress,
     Tabs,
     Tab
-} from "material-ui";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { browserHistory } from "react-router";
-import {
-    closeNotification,
-    openAddUserModal,
-    hidePopups,
-    addNotification,
-    generalAction
-} from "../../../actions/usersActions";
-import { Field, reduxForm } from "redux-form";
-import MetaTags from "react-meta-tags";
-import axios from "axios";
+} from 'material-ui';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { browserHistory } from 'react-router';
+import { closeNotification, openAddUserModal, hidePopups, addNotification, generalAction, intercomEvent } from "../../../actions/usersActions";
+import { Field, reduxForm } from 'redux-form';
+import MetaTags from 'react-meta-tags';
+import axios from 'axios';
 import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
-import AddUserDialog from "../../childComponents/addUserDialog";
-import CandidatesPopupDialog from "../../childComponents/candidatesPopupDialog";
-import { qualifierFromScore } from "../../../miscFunctions";
+import AddUserDialog from '../../childComponents/addUserDialog';
+import CandidatesPopupDialog from '../../childComponents/candidatesPopupDialog';
+import InviteCandidatesModal from "../dashboard/inviteCandidatesModal";
+import { qualifierFromScore } from '../../../miscFunctions';
 import HoverTip from "../../miscComponents/hoverTip";
 
 import "./myCandidates.css";
@@ -330,6 +325,10 @@ class MyCandidates extends Component {
         let state = JSON.parse(JSON.stringify(this.state));
         state[checkMarkField] = !state[checkMarkField];
         this.setState(state, this.reorder);
+    }
+
+    openEmailTemplateModal = () => {
+        this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
     }
 
     // reorder the candidates that are shown and hide/show any that need to be
@@ -1040,6 +1039,7 @@ class MyCandidates extends Component {
         const verificationToken = this.props.currentUser.verificationToken;
 
         this.props.hidePopups(userId, verificationToken, popups);
+        this.props.intercomEvent("candidates_page_first_time", userId, verificationToken, null);
     }
 
     // the tabs at the top that say All, Favorites, etc...
@@ -1123,6 +1123,20 @@ class MyCandidates extends Component {
             return null;
         }
     }
+
+    mockDataMemo() {
+        if (this.props.currentUser && this.state.mockData) {
+            return (
+                <div styleName="mock-data-memo" key="mock data memo" onClick={this.openEmailTemplateModal}>
+                    <div styleName="info">i</div>
+                    This is mock data. <span>Start inviting your candidates.</span>
+                </div>
+            );
+        } else {
+            return null;
+        }
+    }
+
 
     candidatesSelected() {
         const selections = this.state.selectedCandidates;
@@ -1422,6 +1436,7 @@ class MyCandidates extends Component {
                         <AddUserDialog position={this.state.position} tab={"Candidate"} />
                     ) : null}
                     <CandidatesPopupDialog />
+                    <InviteCandidatesModal />
                     <MetaTags>
                         <title>My Candidates | Moonshot</title>
                         <meta
@@ -1437,7 +1452,9 @@ class MyCandidates extends Component {
 
                     {this.popup()}
 
-                    {tabs}
+                    { this.mockDataMemo() }
+
+                    { tabs }
 
                     <div className="center">
                         <div className="candidatesAndOptions">
@@ -1456,20 +1473,7 @@ class MyCandidates extends Component {
                             {this.state.mobile ? this.mobileTopOptions() : this.topOptions()}
                             <div className="candidatesContainer">
                                 <div>
-                                    {this.createCandidatesTable(positionId)}
-                                    <div className="myCandidatesOverlayContainer">
-                                        {!this.state.mobile && this.state.mockData ? (
-                                            <div
-                                                className="myCandidatesOverlay secondary-gray"
-                                                onClick={this.openAddUserModal.bind(this)}
-                                            >
-                                                This is mock data.{" "}
-                                                <u className="primary-cyan">
-                                                    Start inviting your candidates.
-                                                </u>
-                                            </div>
-                                        ) : null}
-                                    </div>
+                                    { this.createCandidatesTable(positionId) }
                                 </div>
                                 {this.state.showResults ? (
                                     <div>
@@ -1537,16 +1541,14 @@ const style = {
 };
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators(
-        {
-            closeNotification,
-            openAddUserModal,
-            hidePopups,
-            addNotification,
-            generalAction
-        },
-        dispatch
-    );
+    return bindActionCreators({
+        closeNotification,
+        openAddUserModal,
+        hidePopups,
+        addNotification,
+        generalAction,
+        intercomEvent
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
