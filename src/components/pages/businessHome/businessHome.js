@@ -5,7 +5,7 @@ import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import { closeNotification, dialogEmail } from "../../../actions/usersActions";
+import { closeNotification, dialogEmail, openIntroductionModal } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from "material-ui";
@@ -145,6 +145,7 @@ class BusinessHome extends Component {
 
     handleOpenExplore = () => {
         goTo("/explore");
+        this.props.openIntroductionModal();
     };
 
     handleCheckMarkClick() {
@@ -550,7 +551,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             closeNotification,
-            dialogEmail
+            dialogEmail,
+            openIntroductionModal
         },
         dispatch
     );
