@@ -405,7 +405,7 @@
     top: calc(-1 * var(--box-height-space));
     left: var(--box-width-space);
 
-    --border: 2px;
+    --border: 3px;
 }
 .moveable-background.left {
     transform: translateX(0);
