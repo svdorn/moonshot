@@ -603,7 +603,7 @@
 }
 .rectangles-area .skewed-rectangles-container {
     margin-top: 0px;
-    height: 2400px;
+    height: 2000px;
 }
 .rectangles-area .skewed-rectangles {
     height: calc(var(--row-width) * 400);
