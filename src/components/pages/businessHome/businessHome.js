@@ -67,7 +67,8 @@ class BusinessHome extends Component {
             agreeingToTerms: false,
             error: "",
             // the background position of the what-how section (left or right)
-            whatHowPosition: "left"
+            whatHowPosition: "left",
+            backgroundPosition: "left"
         };
     }
 
@@ -223,9 +224,15 @@ class BusinessHome extends Component {
 
     // move the position of the what and how section background
     whatHowMoveBackground = () => {
+        const self = this;
         // if it was on the left, put it on the right, and vice versa
-        const newPosition = this.state.whatHowPosition === "right" ? "left" : "right";
-        this.setState({ whatHowPosition: newPosition });
+        const newPosition = self.state.whatHowPosition === "right" ? "left" : "right";
+        self.setState({ backgroundPosition: newPosition }, () => {
+            console.log(self.state);
+            setTimeout(() => {
+                self.setState({ whatHowPosition: newPosition });
+            }, 400);
+        });
     };
 
     // create a bunch of empty skewed rectangles that should be modified with css
@@ -350,7 +357,7 @@ class BusinessHome extends Component {
     }
 
     whatAndHowSection() {
-        const { whatHowPosition } = this.state;
+        const { whatHowPosition, backgroundPosition } = this.state;
         const parts = [
             {
                 title: "What We Do",
@@ -369,8 +376,8 @@ class BusinessHome extends Component {
         const partsJsx = parts.map(part => {
             const focused = whatHowPosition === part.position;
             // only show the two buttons if this part is highlighted
-            const buttons = (
-                <div styleName={`stacked-buttons ${focused ? "" : "not-"}focused`}>
+            const buttons = !focused ? null : (
+                <div styleName={`stacked-buttons`}>
                     <CornersButton
                         content="Try Now For Free"
                         onClick={() => goTo("/explore")}
@@ -408,11 +415,11 @@ class BusinessHome extends Component {
         return (
             <section styleName="what-and-how-section">
                 <div styleName="what-how-background">
-                    <div styleName={`moveable-background ${whatHowPosition}`}>
+                    <div styleName={`moveable-background ${backgroundPosition}`}>
                         <div />
                         <div
                             styleName={`circle-arrow-icon ${
-                                whatHowPosition === "right" ? "left" : "right"
+                                backgroundPosition === "right" ? "left" : "right"
                             }`}
                             className="circleArrowIcon"
                             onClick={this.whatHowMoveBackground}
