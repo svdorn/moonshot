@@ -10,12 +10,13 @@ import axios from "axios";
 import MetaTags from "react-meta-tags";
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from "material-ui";
 import AddUserDialog from "../../childComponents/addUserDialog";
-import { isValidEmail, goTo } from "../../../miscFunctions";
+import { isValidEmail, goTo, elementPartiallyInViewport } from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
 import CornersButton from "../../miscComponents/cornersButton";
 import PositionsDropDown from "./positionsDropDown";
 import InflatableBox from "./inflatableBox";
 import Typed from "typed.js";
+import Vivus from "vivus";
 import colors from "../../../colors";
 
 import "./businessHome.css";
@@ -25,27 +26,30 @@ let rectangleKeyIndex = 0;
 const boxTexts = [
     {
         title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        body: "Analyze candidates to see if they exhibit the qualities of proven high achievers."
     },
     {
-        title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        title: "Save Time and Effort",
+        body:
+            "Maximize your efficiency by spending less time screening and interviewing candidates."
     },
     {
-        title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        title: "Constantly Learn and Improve",
+        body:
+            "Every hiring decision is more informed than your last as machine learning is applied to your candidate and employee data."
     },
     {
-        title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        title: "Eliminate Biases",
+        body: "Remove unconscious biases to empirically identify better and more diverse hires."
     },
     {
-        title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        title: "Scale Your Culture",
+        body:
+            "Hire candidates that not only fit your company culture, but also offer new and diverse perspectives."
     },
     {
-        title: "Quickly Identify Top Talent",
-        body: "Maximize your efficiency by spending less time screening and interviewing candidates"
+        title: "Keep Turnover Low",
+        body: "Hire candidates who are most likely to stay and grow with your company."
     }
 ];
 
@@ -61,7 +65,10 @@ class BusinessHome extends Component {
             // initially don't show the rectangles in case the user's browser is old
             showRectangles: false,
             agreeingToTerms: false,
-            error: ""
+            error: "",
+            // the background position of the what-how section (left or right)
+            whatHowPosition: "left",
+            backgroundPosition: "left"
         };
     }
 
@@ -98,6 +105,22 @@ class BusinessHome extends Component {
 
         // this.typedSpan refers to the <span> that has typed words
         this.typed = new Typed(this.typedSpan, options);
+
+        this.vivusSvg = new Vivus("home-flourish-svg");
+
+        this.handleScroll = this.handleScroll.bind(this);
+        document.addEventListener("scroll", this.handleScroll);
+    }
+
+    handleScroll() {
+        let flourishElement = document.getElementById("home-flourish-svg");
+        if (elementPartiallyInViewport(flourishElement)) {
+            document.removeEventListener("scroll", this.handleScroll);
+            this.vivusSvg.play();
+            flourishElement.className = "";
+        } else if (this.state.drewSvg) {
+            document.removeEventListener("scroll", this.handleScroll);
+        }
     }
 
     componentWillUnmount() {
@@ -195,6 +218,23 @@ class BusinessHome extends Component {
         this.setState({ pricing: pricingStage, price });
     };
 
+    onMouseInputEnter = e => {
+        e.target.focus();
+    };
+
+    // move the position of the what and how section background
+    whatHowMoveBackground = () => {
+        const self = this;
+        // if it was on the left, put it on the right, and vice versa
+        const newPosition = self.state.whatHowPosition === "right" ? "left" : "right";
+        self.setState({ backgroundPosition: newPosition }, () => {
+            console.log(self.state);
+            setTimeout(() => {
+                self.setState({ whatHowPosition: newPosition });
+            }, 350);
+        });
+    };
+
     // create a bunch of empty skewed rectangles that should be modified with css
     skewedRectangles(numRects, options) {
         // will contain a bunch of un-styled skewed rectangles
@@ -254,6 +294,7 @@ class BusinessHome extends Component {
                                     placeholder="Who do you need to hire?"
                                     value={this.state.position}
                                     onChange={this.onChange.bind(this)}
+                                    onMouseEnter={this.onMouseInputEnter}
                                 />
                                 <div />
                                 <PositionsDropDown inputText={this.state.position} />
@@ -281,7 +322,6 @@ class BusinessHome extends Component {
     previewSection() {
         return (
             <section id="product-preview" styleName="product-preview-section">
-                {this.state.showRectangles ? this.skewedRectangles(10) : null}
                 <div className="center" styleName="image-preview">
                     <div styleName="image-container">
                         <img
@@ -309,32 +349,115 @@ class BusinessHome extends Component {
                         className="font16px font14pxUnder900 font12pxUnder400"
                     >
                         See everything immediately. <br className="under550only" />
-                        No email, password, or credit card.
+                        No credit card required.
                     </div>
                 </div>
             </section>
         );
     }
 
-    statisticsSection() {
-        const boxes = boxTexts.map(boxText => {
-            return <InflatableBox title={boxText.title} body={boxText.body} />;
+    whatAndHowSection() {
+        const { whatHowPosition, backgroundPosition } = this.state;
+        const parts = [
+            {
+                title: "What We Do",
+                position: "left",
+                body:
+                    "We predict candidate job performance, growth potential, longevity (tenure), and culture fit at your company."
+            },
+            {
+                title: "How We Do It",
+                position: "right",
+                body:
+                    "Candidates take a ~20-minute assessment comprised of a revolutionary personality test and an abstract problem-solving quiz."
+            }
+        ];
+
+        const partsJsx = parts.map(part => {
+            const focused = whatHowPosition === part.position;
+            // only show the two buttons if this part is highlighted
+            const buttons = !focused ? null : (
+                <div styleName={`stacked-buttons`}>
+                    <CornersButton
+                        content="Try Now For Free"
+                        onClick={() => goTo("/explore")}
+                        color1={colors.primaryCyan}
+                        color2={colors.primaryWhite}
+                        className="font16px font14pxUnder900 font12pxUnder400"
+                    />
+                    <div styleName="cta-or">or</div>
+                    <div styleName="see-how">
+                        <img
+                            src={"images/businessHome/PlayButton" + this.props.png}
+                            alt="Play Button"
+                            styleName="what-how-play-button"
+                        />
+                        <div className="primary-white" styleName="see-cta">
+                            See How It Works
+                        </div>
+                    </div>
+                </div>
+            );
+            return (
+                <div styleName="what-how-part" key={`what-how-part ${part.position}`}>
+                    <div>
+                        <div
+                            className={focused ? "primary-cyan" : "secondary-gray"}
+                            styleName="title"
+                        >
+                            {part.title}
+                        </div>
+                        <div styleName={`body ${focused ? "focused" : ""}`}>{part.body}</div>
+                        {buttons}
+                    </div>
+                </div>
+            );
         });
 
         return (
-            <section styleName="statistics-section" id="businessHomeStatistics">
+            <section styleName="what-and-how-section">
+                <div styleName="what-how-background">
+                    <div styleName={`moveable-background ${backgroundPosition}`}>
+                        <div />
+                        <div
+                            styleName={`circle-arrow-icon ${
+                                backgroundPosition === "right" ? "left" : "right"
+                            }`}
+                            className="circleArrowIcon"
+                            onClick={this.whatHowMoveBackground}
+                        />
+                    </div>
+                    {partsJsx}
+                </div>
+            </section>
+        );
+    }
+
+    boxesSection() {
+        const boxes = boxTexts.map(boxText => {
+            return <InflatableBox title={boxText.title} body={boxText.body} key={boxText.title} />;
+        });
+
+        return (
+            <section styleName="statistics-section">
                 {/* this.state.showRectangles */ false ? this.skewedRectangles(20) : null}
                 <div>
                     <div className="center">
                         <div
-                            className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-cyan"
-                            style={{ padding: "0 16px", marginBottom: "40px" }}
+                            className="font30px font26pxUnder850 font22pxUnder600 font20pxUnder400 center primary-white"
+                            style={{ padding: "0 16px", marginBottom: "15px" }}
                         >
-                            Candidate Predictions Improve Hiring Results
+                            Candidate Predictions <br className="under500only" />Designed For You
                         </div>
+                        <div styleName="title-separator" />
                         <div style={{ position: "relative" }}>
                             <div styleName="flourish">
-                                <embed src="/images/businessHome/Flourishes3.svg" />
+                                <object
+                                    id="home-flourish-svg"
+                                    className="opacity-hidden"
+                                    type="image/svg+xml"
+                                    data="/images/businessHome/Flourish.svg"
+                                />
                             </div>
 
                             <div styleName="inflatable-boxes">{boxes}</div>
@@ -397,11 +520,15 @@ class BusinessHome extends Component {
                 <div styleName="businessHome">
                     {this.introductionSection()}
 
-                    {this.previewSection()}
+                    <div styleName="rectangles-area">
+                        {this.state.showRectangles ? this.skewedRectangles(17) : null}
 
-                    {this.statisticsSection()}
+                        {this.previewSection()}
 
-                    {this.videoSection()}
+                        {this.whatAndHowSection()}
+                    </div>
+
+                    {this.boxesSection()}
                 </div>
             </div>
         );

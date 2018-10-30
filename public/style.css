@@ -3448,6 +3448,10 @@ button.link {
     margin-top: 7px;
 }
 
+.opacity-hidden {
+    opacity: 0;
+}
+
 .raisedButtonBusinessHome > button {
     background-color: white !important;
 }

@@ -90,21 +90,29 @@
 
 /* HOVER ANIMATION */
 .button:hover .border {
+    -webkit-transition: 200ms;
+    -ms-transition: 200ms;
     transition: 200ms;
 }
 .button:hover .under-hover-content {
     right: 0;
+    -webkit-transition: right 300ms 200ms;
+    -ms-transition: right 300ms 200ms;
     transition: right 300ms 200ms;
 }
 .button:hover .hover-content {
     opacity: 1;
 
+    -webkit-transition: 5ms 510ms;
+    -ms-transition: 5ms 510ms;
     transition: 5ms 510ms;
 }
 .button:hover .arrow {
     opacity: 1;
     transform: translateX(0%) translateY(calc(1px - 50%));
 
+    -webkit-transition: opacity 5ms 510ms, transform 100ms 620ms;
+    -ms-transition: opacity 5ms 510ms, transform 100ms 620ms;
     transition: opacity 5ms 510ms, transform 100ms 620ms;
 
     animation: sway 1.5s infinite 720ms linear;
@@ -113,23 +121,35 @@
     opacity: 1;
     left: 100%;
 
+    -webkit-transition: opacity 5ms 500ms, left 200ms 520ms;
+    -ms-transition: opacity 5ms 500ms, left 200ms 520ms;
     transition: opacity 5ms 500ms, left 200ms 520ms;
 }
 
 /* DE-HOVER ANIMATION */
 .border {
+    -webkit-transition: 200ms 420ms;
+    -ms-transition: 200ms 420ms;
     transition: 200ms 420ms;
 }
 .under-hover-content {
+    -webkit-transition: right 200ms 220ms;
+    -ms-transition: right 200ms 220ms;
     transition: right 200ms 220ms;
 }
 .hover-content {
+    -webkit-transition: 5ms 200ms;
+    -ms-transition: 5ms 200ms;
     transition: 5ms 200ms;
 }
 .arrow {
+    -webkit-transition: opacity 5ms 200ms, transform 100ms;
+    -ms-transition: opacity 5ms 200ms, transform 100ms;
     transition: opacity 5ms 200ms, transform 100ms;
 }
 .above-hover-content {
+    -webkit-transition: opacity 5ms 210ms, left 200ms;
+    -ms-transition: opacity 5ms 210ms, left 200ms;
     transition: opacity 5ms 210ms, left 200ms;
 }
 
