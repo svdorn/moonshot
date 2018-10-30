@@ -490,6 +490,13 @@
     height: 26px;
     margin-right: 10px;
 }
+.see-how {
+    display: inline-block;
+    cursor: pointer;
+}
+.see-how:hover > .see-cta {
+    text-decoration: underline;
+}
 .see-cta {
     display: inline-block;
 }
