@@ -143,6 +143,10 @@ class BusinessHome extends Component {
         goTo("/explore?tutorialVideo=true");
     };
 
+    handleOpenExplore = () => {
+        goTo("/explore");
+    };
+
     handleCheckMarkClick() {
         this.setState({
             agreeingToTerms: !this.state.agreeingToTerms,
@@ -338,7 +342,7 @@ class BusinessHome extends Component {
                 <div className="primary-white center">
                     <CornersButton
                         content="Experience The Product For Yourself"
-                        onClick={() => goTo("/explore")}
+                        onClick={this.handleOpenExplore}
                         color1={colors.primaryCyan}
                         color2={colors.primaryWhite}
                         className="font16px font14pxUnder900 font12pxUnder400"
@@ -380,13 +384,13 @@ class BusinessHome extends Component {
                 <div styleName={`stacked-buttons`}>
                     <CornersButton
                         content="Try Now For Free"
-                        onClick={() => goTo("/explore")}
+                        onClick={this.handleOpenExplore}
                         color1={colors.primaryCyan}
                         color2={colors.primaryWhite}
                         className="font16px font14pxUnder900 font12pxUnder400"
                     />
                     <div styleName="cta-or">or</div>
-                    <div styleName="see-how">
+                    <div styleName="see-how" onClick={this.handleOpenVideo}>
                         <img
                             src={"images/businessHome/PlayButton" + this.props.png}
                             alt="Play Button"
@@ -435,7 +439,14 @@ class BusinessHome extends Component {
 
     boxesSection() {
         const boxes = boxTexts.map(boxText => {
-            return <InflatableBox title={boxText.title} body={boxText.body} key={boxText.title} />;
+            return (
+                <InflatableBox
+                    title={boxText.title}
+                    body={boxText.body}
+                    key={boxText.title}
+                    onClick={this.handleOpenExplore}
+                />
+            );
         });
 
         return (
