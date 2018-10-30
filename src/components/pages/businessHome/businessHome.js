@@ -5,12 +5,21 @@ import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import { closeNotification, dialogEmail, openIntroductionModal } from "../../../actions/usersActions";
+import {
+    closeNotification,
+    dialogEmail,
+    openIntroductionModal
+} from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from "material-ui";
 import AddUserDialog from "../../childComponents/addUserDialog";
-import { isValidEmail, goTo, elementPartiallyInViewport } from "../../../miscFunctions";
+import {
+    isValidEmail,
+    goTo,
+    elementPartiallyInViewport,
+    elementInViewport
+} from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
 import CornersButton from "../../miscComponents/cornersButton";
 import PositionsDropDown from "./positionsDropDown";
@@ -120,6 +129,19 @@ class BusinessHome extends Component {
             flourishElement.className = "";
         } else if (this.state.drewSvg) {
             document.removeEventListener("scroll", this.handleScroll);
+        }
+
+        // get the 'who do you need to hire' textarea
+        const getStartedInput = document.getElementById("get-started-input");
+        // focus on it (in certain circumstances)
+        console.log("here");
+        if (
+            window.innerWidth > 800 && // don't do this on mobile
+            window.scrollY > 0 && // only if partially scrolled already
+            // document.activeElement.nodeName === "BODY" && // if not focused on anything else
+            elementInViewport(getStartedInput) // if the input is on the screen
+        ) {
+            getStartedInput.focus();
         }
     }
 
