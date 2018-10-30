@@ -231,7 +231,7 @@ class BusinessHome extends Component {
             console.log(self.state);
             setTimeout(() => {
                 self.setState({ whatHowPosition: newPosition });
-            }, 400);
+            }, 350);
         });
     };
 
