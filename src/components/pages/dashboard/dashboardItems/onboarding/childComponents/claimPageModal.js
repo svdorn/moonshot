@@ -189,7 +189,7 @@ class ClaimPageModal extends Component {
                     /><br/>
                 </div>
                 <div
-                    className={"primary-white font16px font14pxUnder700 marginTop10px " + button.cyanRound}
+                    className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " + button.cyan}
                     onClick={this.navFrames.bind(this, "next")}
                 >
                     Next
@@ -209,7 +209,7 @@ class ClaimPageModal extends Component {
                     /><br/>
                 </div>
                 <div
-                    className={"primary-white font16px font14pxUnder700 marginTop10px " + button.cyanRound}
+                    className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " + button.cyan}
                     onClick={this.navFrames.bind(this, "next")}
                 >
                     Next
@@ -250,9 +250,12 @@ class ClaimPageModal extends Component {
                     >terms of service</a>.
                 </div>
                 {this.props.loadingCreateBusiness ? <CircularProgress color="#72d6f5"/> :
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" onClick={this.handleSubmit} style={{padding: "4px 8px"}}>
+                    <div
+                        className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " + button.cyan}
+                        onClick={this.handleSubmit}
+                    >
                         Start
-                    </button>
+                    </div>
                 }
             </div>
         );
