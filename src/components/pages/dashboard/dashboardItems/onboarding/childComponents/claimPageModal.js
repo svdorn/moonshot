@@ -77,15 +77,21 @@ class ClaimPageModal extends Component {
     }
 
     handleKeyPress(e) {
+        const { frame } = this.state;
+
         var key = e.which || e.keyCode;
         if (key === 13) {
             // 13 is enter
-            this.handleSubmit();
+            e.preventDefault();
+            if (frame === 3) {
+                this.handleSubmit(e);
+            } else if (frame === 1 || frame === 2) {
+                this.navFrames("next");
+            }
         }
     }
 
     handleSubmit(e) {
-        e.preventDefault();
         if (!this.state.agreeingToTerms) {
             return this.setState({
                 error: "Must agree to Terms and Conditions and Privacy Policy."

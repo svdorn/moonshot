@@ -173,7 +173,7 @@ class ModalSignup extends Component {
     }
 
     handleSubmit(e) {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (!this.state.agreeingToTerms) {
             return this.setState({
                 error: "Must agree to Terms and Conditions and Privacy Policy."
@@ -255,7 +255,7 @@ class ModalSignup extends Component {
     }
 
     handleFrameChange(e) {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (this.state.info.header1 && this.state.frame === 1) {
             this.setState({ frame: 2 });
             return;
