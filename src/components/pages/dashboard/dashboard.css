@@ -177,7 +177,6 @@
 }
 
 #invite-template {
-
 }
 
 .onboarding-button > span {
@@ -242,7 +241,7 @@
 }
 .embed-link > div:first-child {
     flex: 1;
-    padding: calc(2*var(--item-margin));
+    padding: calc(2 * var(--item-margin));
     position: relative;
 }
 .embed-link > div:nth-child(2) {
@@ -656,13 +655,23 @@
 }
 
 .nav-circle {
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
     border-radius: 8px;
     background: linear-gradient(to bottom right, var(--secondary-gray), var(--primary-black-light));
     display: inline-block;
     margin: auto 10px;
     cursor: pointer;
+}
+.psych-nav {
+    position: absolute;
+    top: 137px;
+}
+.psych-nav.left {
+    left: 6px;
+}
+.psych-nav.right {
+    right: 6px;
 }
 .signup-circle {
     width: 10px;
@@ -896,5 +905,12 @@
 
     .link-to-custom-page {
         margin: 7px 10px 0;
+    }
+
+    .psych-nav.left {
+        left: 6px;
+    }
+    .psych-nav.right {
+        right: 6px;
     }
 }

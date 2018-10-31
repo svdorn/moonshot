@@ -158,22 +158,22 @@ class CandidateView extends Component {
         }
         // add the left and right arrows
         const arrowStyle = {
-            width: "12px",
-            height: "12px",
-            display: "inline-block",
-            margin: "2px 8px"
+            width: "16px",
+            height: "16px"
         };
-        navArea.unshift(
+        const leftNav = (
             <div
                 className="left circleArrowIcon arrow-2px"
+                styleName="left psych-nav"
                 style={arrowStyle}
                 onClick={this.navPsychQuestions.bind(this, "back")}
                 key="back arrow"
             />
         );
-        navArea.push(
+        const rightNav = (
             <div
                 className="right circleArrowIcon arrow-2px"
+                styleName="right psych-nav"
                 style={arrowStyle}
                 onClick={this.navPsychQuestions.bind(this, "next")}
                 key="next arrow"
@@ -197,6 +197,8 @@ class CandidateView extends Component {
                     {this.emojiButtons("a")}
                 </div>
                 <div className="noselect">
+                    {leftNav}
+                    {rightNav}
                     {psychSliders[this.state.questionIndex]}
                     <div style={{ marginTop: "20px" }}>{navArea}</div>
                 </div>
