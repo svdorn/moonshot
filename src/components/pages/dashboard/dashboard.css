@@ -184,7 +184,7 @@
 
 .add-position-header {
     margin-top: auto;
-    margin-bottom: auto;
+    margin-bottom: -40px;
 }
 .add-position-ismgr {
     margin: -30px auto 7px;

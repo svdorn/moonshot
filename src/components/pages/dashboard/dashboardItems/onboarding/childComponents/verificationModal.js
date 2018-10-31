@@ -3,7 +3,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { generalAction, addNotification } from '../../../../../../actions/usersActions';
+import Button from '@material-ui/core/Button';
 import Dialog from "@material-ui/core/Dialog";
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import colors from "../../../../../../colors";
 import { goTo } from "../../../../../../miscFunctions";
@@ -57,22 +60,29 @@ class VerificationModal extends Component {
                 onClose={this.close}
             >
                 <div styleName="modal-signup">
-                    <div className="primary-cyan font22px font18pxUnder700 center">
-                        Verify Your Email
-                    </div>
-                    <div className="center font16px font14pxUnder700" style={{maxWidth: "400px", margin:"5px auto"}}>
-                        Go to your inbox to verify. This will allow us to activate your page and evaluations.
-                    </div>
-                    <div className="center">
-                        <div
-                            className={"primary-white font18px font16pxUnder700 " + this.state.loadingSendVerificationEmail ? button.disabled : button.cyan}
-                            onClick={this.sendVerificationEmail}
-                            style={{margin: "20px auto"}}
-                        >
-                            Re-Send Verification Email
+                    <DialogContent>
+                        <div className="primary-cyan font22px font18pxUnder700 center">
+                            Verify Your Email
                         </div>
-                        {this.state.loadingSendVerificationEmail ? <div><CircularProgress color={colors.primaryCyan} /></div> : null}
-                    </div>
+                        <div className="center font16px font14pxUnder700" style={{maxWidth: "400px", margin:"5px auto"}}>
+                            Go to your inbox to verify. This will allow us to activate your page and evaluations.
+                        </div>
+                        <div className="center">
+                            <div
+                                className={"primary-white font18px font16pxUnder700 " + this.state.loadingSendVerificationEmail ? button.disabled : button.cyan}
+                                onClick={this.sendVerificationEmail}
+                                style={{margin: "20px auto"}}
+                            >
+                                Re-Send Verification Email
+                            </div>
+                            {this.state.loadingSendVerificationEmail ? <div><CircularProgress color={colors.primaryCyan} /></div> : null}
+                        </div>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.close} color="inherit">
+                            Close
+                        </Button>
+                    </DialogActions>
                 </div>
             </Dialog>
         );
