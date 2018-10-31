@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { createBusinessAndUser, closeNotification, addNotification, closeClaimPageModal } from '../../../../../../actions/usersActions';
+import { createBusinessAndUser, closeNotification, closeClaimPageModal } from '../../../../../../actions/usersActions';
 import { TextField } from 'material-ui';
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -350,7 +350,6 @@ class ClaimPageModal extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         createBusinessAndUser,
-        addNotification,
         closeNotification,
         closeClaimPageModal
     }, dispatch);
