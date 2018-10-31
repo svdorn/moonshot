@@ -456,7 +456,7 @@ export function onSignUpPage() {
     };
 }
 
-export function createBusinessAndUser(userInfo) {
+export function createBusinessAndUser(userInfo, customErrorAction) {
     return function(dispatch) {
         // start the loading bar
         dispatch({ type: "START_LOADING" });
@@ -476,10 +476,18 @@ export function createBusinessAndUser(userInfo) {
                 }
             })
             .catch(error => {
-                dispatch({
-                    type: "NOTIFICATION_AND_STOP_LOADING",
-                    ...notification(error, "error")
-                });
+                // if something besides the usual action should happen on error, do that
+                if (typeof customErrorAction === "function") {
+                    dispatch({ type: "STOP_LOADING" });
+                    customErrorAction(error);
+                }
+                // otherwise show an error notification and stop loading
+                else {
+                    dispatch({
+                        type: "NOTIFICATION_AND_STOP_LOADING",
+                        ...notification(error, "error")
+                    });
+                }
             });
     };
 }

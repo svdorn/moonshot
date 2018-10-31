@@ -150,8 +150,25 @@ class ClaimPageModal extends Component {
         });
 
         // create the user
-        this.props.createBusinessAndUser(args);
+        this.props.createBusinessAndUser(args, this.onSignupError);
     }
+
+    onSignupError = errorObject => {
+        let errorMessage = "Error signing up, try refreshing.";
+        console.log("errorObject: ", errorObject);
+        if (propertyExists(errorObject, ["response", "data"])) {
+            const errData = errorObject.response.data;
+            if (typeof errData === "object" && errData.message === "string") {
+                errorMessage = errData.message;
+            } else if (typeof errData === "string") {
+                errorMessage = errData;
+            }
+        }
+        if (errorMessage.includes("email")) {
+            this.setState({ frame: 2 });
+        }
+        this.setState({ error: errorMessage });
+    };
 
     handleCheckMarkClick() {
         this.setState({
@@ -195,6 +212,13 @@ class ClaimPageModal extends Component {
         this.setState({ frame: newIndex, error: undefined });
     };
 
+    // navigate around by using the bottom nav circles
+    circleNav = wantedFrame => () => {
+        if (wantedFrame < this.state.frame) {
+            this.setState({ frame: wantedFrame });
+        }
+    };
+
     makeFrame1() {
         return (
             <div className="center">
@@ -204,8 +228,7 @@ class ClaimPageModal extends Component {
                 </div>
                 <div
                     className={
-                        "primary-white font18px font16pxUnder700 marginTop10px " +
-                        button.cyan
+                        "primary-white font18px font16pxUnder700 marginTop10px " + button.cyan
                     }
                     onClick={this.navFrames.bind(this, "next")}
                 >
@@ -224,8 +247,7 @@ class ClaimPageModal extends Component {
                 </div>
                 <div
                     className={
-                        "primary-white font18px font16pxUnder700 marginTop10px " +
-                        button.cyan
+                        "primary-white font18px font16pxUnder700 marginTop10px " + button.cyan
                     }
                     onClick={this.navFrames.bind(this, "next")}
                 >
@@ -283,8 +305,7 @@ class ClaimPageModal extends Component {
                 ) : (
                     <div
                         className={
-                            "primary-white font18px font16pxUnder700 marginTop10px " +
-                            button.cyan
+                            "primary-white font18px font16pxUnder700 marginTop10px " + button.cyan
                         }
                         onClick={this.handleSubmit}
                     >
@@ -308,6 +329,8 @@ class ClaimPageModal extends Component {
                     styleName="signup-circle"
                     style={this.state.frame - 1 === navCircleIdx ? selectedStyle : {}}
                     key={`signup question ${navCircleIdx}`}
+                    className={this.state.frame > navCircleIdx ? "pointer" : ""}
+                    onClick={this.circleNav(navCircleIdx + 1)}
                 />
             );
         }
