@@ -1032,6 +1032,12 @@
         animation: sweep-under-to-top 1s;
     }
 
+    .stacked-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .video-screenshot,
     .skew-image-cover {
         display: none;
@@ -1165,7 +1171,7 @@
 
     .what-how-background {
         --box-width: 260px;
-        --box-height: 280px;
+        --box-height: 260px;
         font-size: 14px;
     }
     .what-how-part .title {
