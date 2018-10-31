@@ -122,6 +122,10 @@ class BusinessHome extends Component {
     }
 
     handleScroll() {
+        if (this.props.location.pathname !== "/") {
+            return;
+        }
+
         let flourishElement = document.getElementById("home-flourish-svg");
         if (elementPartiallyInViewport(flourishElement)) {
             document.removeEventListener("scroll", this.handleScroll);
@@ -134,7 +138,6 @@ class BusinessHome extends Component {
         // get the 'who do you need to hire' textarea
         const getStartedInput = document.getElementById("get-started-input");
         // focus on it (in certain circumstances)
-        console.log("here");
         if (
             window.innerWidth > 800 && // don't do this on mobile
             window.scrollY > 0 && // only if partially scrolled already
@@ -147,6 +150,7 @@ class BusinessHome extends Component {
 
     componentWillUnmount() {
         this.typed.destroy();
+        document.removeEventListener("scroll", this.handleScroll);
     }
 
     cssPropertySupported(prop) {
