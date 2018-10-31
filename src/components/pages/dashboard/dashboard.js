@@ -87,7 +87,7 @@ class Dashboard extends Component {
 
         let activity = <DashboardItem type="Activity" width={3} />;
         if (user && user.popups && user.popups.dashboard) {
-            activity = <DashboardItem type="WelcomePage" width={3} />;
+            activity = <DashboardItem type="WelcomePage" width={3} widthMobile={2} />;
         } else if (user && user.popups && user.popups.businessInterests) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
         } else if (user && (!positionCount || positionCount < 1)) {

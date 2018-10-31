@@ -46,6 +46,9 @@
 .dashboard-item-container.width-3 {
     width: calc((var(--item-width) * 3) + (var(--item-margin) * 4));
 }
+.dashboard-item-container.width-3.mobile-width-2 {
+    width: calc((var(--item-width) * 3) + (var(--item-margin) * 4));
+}
 
 .small-title {
     font-size: 16px;
@@ -720,6 +723,10 @@
         width: calc((var(--item-width) * 2) + (var(--item-margin) * 2));
         height: calc(var(--item-width) * (5 / 4));
     }
+    .dashboard-item-container.width-3.mobile-width-2 {
+        width: calc((var(--item-width) * 2) + (var(--item-margin) * 2));
+        height: calc(var(--item-width) * (5 / 4));
+    }
 
     .full-step-container {
         padding: calc(var(--item-margin) / 1.5);
@@ -826,6 +833,10 @@
     .dashboard-item-container.width-3 {
         width: var(--item-width);
         height: calc(var(--item-width) * 2.125);
+    }
+    .dashboard-item-container.width-3.mobile-width-2 {
+        width: var(--item-width);
+        height: calc(var(--item-width) * 1.35);
     }
     .checklist-container {
         height: calc(100% / 17);

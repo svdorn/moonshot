@@ -30,7 +30,7 @@ class DashboardItem extends Component {
 
     render() {
         // get the relative width of the dashboard item
-        let { width } = this.props;
+        let { width, widthMobile } = this.props;
         if (typeof width === "string") {
             width = parseInt(this.props.width, 10);
         }
@@ -38,6 +38,10 @@ class DashboardItem extends Component {
             width = 1;
         }
         width = Math.round(width);
+        let mobileWidth = "";
+        if (typeof widthMobile === "number") {
+            mobileWidth = `mobile-width-${widthMobile}`;
+        }
 
         let content = null;
         switch (this.props.type) {
@@ -99,7 +103,7 @@ class DashboardItem extends Component {
 
         return (
             <div
-                styleName={`dashboard-item-container width-${width}`}
+                styleName={`dashboard-item-container width-${width} ` + mobileWidth}
                 className={this.props.blurred ? "slightly-blurred" : ""}
             >
                 {content}
