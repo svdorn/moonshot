@@ -61,7 +61,7 @@
     max-width: 500px;
 }
 .blue-arrow {
-    font-size: 22px;
+    font-size: 20px;
     margin-top: 15px;
     cursor: pointer;
     color: var(--primary-cyan);
@@ -645,7 +645,7 @@
     top: 1px;
 }
 .modal-signup {
-    padding: 50px;
+    padding: 40px 50px;
     background-color: var(--primary-black-dark);
     color: var(--secondary-gray);
     min-width: 270px;
@@ -768,7 +768,7 @@
     }
 
     .blue-arrow {
-        font-size: 20px;
+        font-size: 18px;
     }
 }
 
@@ -793,7 +793,7 @@
     }
 
     .blue-arrow {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .dashboard {
