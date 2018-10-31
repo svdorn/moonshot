@@ -363,9 +363,8 @@
     height: 80%;
     position: absolute;
     bottom: 10%;
-    left: 48%;
+    left: 50%;
     transform: translate(-50%);
-    background-color: var(--primary-black-dark);
 }
 .apply-image {
     height: 70%;
@@ -720,17 +719,17 @@
     }
 
     .checklist {
-        display: inline-block;
+        flex-direction: row;
     }
     .checklist-container {
         height: calc(100% / 5);
         width: 100%;
     }
-    .checklist-item {
+    /* .checklist-item {
         width: 50%;
         height: 50%;
         float: left;
-    }
+    } */
 
     .onboarding-content {
         height: calc(100% * (4 / 5));
@@ -831,7 +830,6 @@
         width: 100%;
     }
     .checklist-item {
-        width: 25%;
         height: 100%;
     }
     .checklist-item > div:nth-child(2) {
