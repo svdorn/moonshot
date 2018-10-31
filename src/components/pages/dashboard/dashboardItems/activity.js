@@ -184,7 +184,7 @@ class Activity extends Component {
 
     needHelpIntercomEvent = () => {
         const { _id, verificationToken } = this.props.currentUser;
-        
+
         this.props.intercomEvent("need_help_embedding_link", _id, verificationToken, null);
     }
 
@@ -301,7 +301,7 @@ class Activity extends Component {
                         I have embedded the link
                     </div>
                     <div className="clickable marginTop10px" onClick={this.needHelpIntercomEvent}>
-                        Need help?
+                        <u>Need help?</u>
                     </div>
                 </div>
                 <div className="primary-white">
