@@ -182,6 +182,15 @@
 #invite-template {
 }
 
+.add-position-header {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.add-position-ismgr {
+    margin: -30px auto 7px;
+    color: var(--primary-white);
+}
+
 .onboarding-button > span {
     margin-right: 0;
     -webkit-transition: all 0.3s ease;
@@ -789,6 +798,14 @@
     .welcome-frame {
         width: 100%;
         padding: 10px;
+    }
+
+    .add-position-ismgr {
+        margin: -15px auto 10px;
+    }
+    .add-position-header {
+        margin-top: 10px;
+        margin-bottom: -30px;
     }
 
     .welcome-frame-modal {

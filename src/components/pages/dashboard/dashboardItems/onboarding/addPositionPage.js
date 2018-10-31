@@ -22,11 +22,13 @@ class AddPositionPage extends Component {
     makeAddPositionFrame() {
         return (
             <div>
-                <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
-                    Who do you need to hire?
-                </div>
-                <div className="font14px marginBottom10px">
-                    <i>Enter one of your open positions.</i>
+                <div styleName="add-position-header">
+                    <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
+                        Who do you need to hire?
+                    </div>
+                    <div className="font14px marginBottom10px">
+                        <i>Enter one of your open positions.</i>
+                    </div>
                 </div>
                 <AddPosition />
             </div>

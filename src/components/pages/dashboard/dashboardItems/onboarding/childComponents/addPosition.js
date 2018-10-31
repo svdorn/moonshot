@@ -193,7 +193,7 @@ class AddPosition extends Component {
                             {positionTypeItems}
                         </DropDownMenu>
                     </div><br/>
-                    <div style={{margin:"-30px auto 7px"}} className="primary-white">
+                    <div styleName="add-position-ismgr">
                         <div className="checkbox smallCheckbox whiteCheckbox"
                              onClick={this.handleClickIsManager.bind(this)}
                         >
@@ -206,7 +206,7 @@ class AddPosition extends Component {
                         {"Position is a manager role"}
                     </div>
                     {this.state.addPositionError ? <div className="secondary-red font10px">{this.state.addPositionError}</div> : null }
-                    <button onClick={this.handleSubmit} className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="onboarding-button" style={{padding: "5px 17px"}}>
+                    <button onClick={this.handleSubmit} className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700" styleName="onboarding-button" style={{padding: "5px 17px"}}>
                         <span>Enter &#8594;</span>
                     </button>
                 </form>
