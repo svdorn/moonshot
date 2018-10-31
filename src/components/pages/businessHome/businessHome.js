@@ -407,8 +407,8 @@ class BusinessHome extends Component {
         const partsJsx = parts.map(part => {
             const focused = whatHowPosition === part.position;
             // only show the two buttons if this part is highlighted
-            const buttons = !focused ? null : (
-                <div styleName={`stacked-buttons`}>
+            const buttons = (
+                <div styleName={`stacked-buttons ${focused ? "show" : "hide"}`}>
                     <CornersButton
                         content="Try Now For Free"
                         onClick={this.handleOpenExplore}

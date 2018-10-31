@@ -480,7 +480,20 @@
 }
 .stacked-buttons {
     pointer-events: all;
+    overflow: hidden;
+
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+.stacked-buttons.show {
+    max-height: 200px;
     margin-top: 30px;
+}
+.stacked-buttons.hide {
+    max-height: 0px;
+    margin-top: 0px;
+    opacity: 0;
 }
 .cta-or {
     color: var(--secondary-gray);
@@ -498,9 +511,9 @@
     opacity: 0.8;
     cursor: pointer;
 
-    -webkit-transition: opacity 0.2s;
-    -moz-transition: opacity 0.2s;
-    transition: opacity 0.2s;
+    -webkit-transition: opacity 0.2s ease;
+    -moz-transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease;
 }
 .see-how:hover {
     opacity: 1;
