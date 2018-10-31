@@ -16,11 +16,13 @@ import ReactGA from "react-ga";
 import colors from "../../../../../../colors";
 import {
     renderTextField,
+    viewablePasswordField,
     isValidEmail,
     goTo,
     isValidPassword,
     propertyExists
 } from "../../../../../../miscFunctions";
+import ViewablePassword from "../../../../../miscComponents/viewablePassword";
 
 import "../../../dashboard.css";
 
@@ -41,32 +43,6 @@ const validate = values => {
 
     return errors;
 };
-
-const passwordFieldStyle = {
-    // the hint that shows up when search bar is in focus
-    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
-    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
-    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
-    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
-    searchUnderlineFocusStyle: { color: "green" }
-};
-
-const customPasswordField = ({ input, label, meta: { touched, error }, type, ...custom }) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        inputStyle={passwordFieldStyle.searchInputStyle}
-        hintStyle={passwordFieldStyle.searchHintStyle}
-        floatingLabelFocusStyle={passwordFieldStyle.searchFloatingLabelFocusStyle}
-        floatingLabelStyle={passwordFieldStyle.searchFloatingLabelStyle}
-        underlineFocusStyle={passwordFieldStyle.searchUnderlineFocusStyle}
-        {...input}
-        {...custom}
-        autofill="new-password"
-        type={type}
-    />
-);
 
 const defaultInfo = {
     header1: null,
@@ -90,8 +66,6 @@ class ModalSignup extends Component {
             info: defaultInfo,
             type: undefined,
             name: undefined,
-            // whether the password field should show password circles or the actual password
-            showPassword: false,
             error: undefined
         };
 
@@ -104,10 +78,6 @@ class ModalSignup extends Component {
         const self = this;
         document.addEventListener("keypress", self.bound_handleKeyPress);
     }
-
-    toggleShowPassword = () => {
-        this.setState({ showPassword: !this.state.showPassword });
-    };
 
     componentDidUpdate() {
         if (this.state.open != this.props.open) {
@@ -195,15 +165,22 @@ class ModalSignup extends Component {
     }
 
     handleKeyPress(e) {
+        const { frame } = this.state;
+
         var key = e.which || e.keyCode;
         if (key === 13) {
             // 13 is enter
-            this.handleSubmit();
+            e.preventDefault();
+            if (frame === 3) {
+                this.handleSubmit(e);
+            } else if (frame === 1 || frame === 2) {
+                this.handleFrameChange();
+            }
         }
     }
 
     handleSubmit(e) {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (!this.state.agreeingToTerms) {
             return this.setState({
                 error: "Must agree to Terms and Conditions and Privacy Policy."
@@ -285,7 +262,7 @@ class ModalSignup extends Component {
     }
 
     handleFrameChange(e) {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (this.state.info.header1 && this.state.frame === 1) {
             this.setState({ frame: 2 });
             return;
@@ -315,11 +292,11 @@ class ModalSignup extends Component {
                 {this.state.error ? (
                     <div className="secondary-red font16px">{this.state.error}</div>
                 ) : null}
-                <div className="inputContainer" styleName="signup-fields">
+                <div className="inputContainer signup-fields">
                     <Field name="name" component={renderTextField} label="Full Name" />
                     <br />
                 </div>
-                <div className="inputContainer" styleName="signup-fields">
+                <div className="inputContainer signup-fields">
                     <Field name="company" component={renderTextField} label="Company" />
                     <br />
                 </div>
@@ -335,10 +312,10 @@ class ModalSignup extends Component {
     }
 
     makeFrame3() {
-        const { showPassword } = this.state;
-        let password = undefined;
+        // value of the password entered
+        let value = undefined;
         if (propertyExists(this, ["props", "formData", "businessSignup", "values", "password"])) {
-            password = this.props.formData.businessSignup.values.password;
+            value = this.props.formData.businessSignup.values.password;
         }
 
         return (
@@ -352,32 +329,18 @@ class ModalSignup extends Component {
                 {this.state.error ? (
                     <div className="font14px marginTop10px secondary-red">{this.state.error}</div>
                 ) : null}
-                <div className="inputContainer" styleName="signup-fields">
+                <div className="inputContainer signup-fields">
                     <Field name="email" component={renderTextField} label="Email" />
                     <br />
                 </div>
-                <div className="inputContainer" styleName="signup-fields">
-                    <Field
-                        name="password"
-                        component={customPasswordField}
-                        label="Password"
-                        type={showPassword ? "text" : "password"}
-                        autofill="new-password"
-                    />
-                    <div
-                        className="password-toggle-visibility"
-                        style={{
-                            right:
-                                typeof password === "string" && password.length > 12
-                                    ? "-15px"
-                                    : "31px"
-                        }}
-                        onClick={this.toggleShowPassword}
-                    >
-                        {showPassword ? "hide" : "show"}
-                    </div>
-                    <br />
-                </div>
+
+                <ViewablePassword
+                    name="password"
+                    label="Password"
+                    value={value}
+                    className="signup-fields"
+                />
+
                 <div style={{ margin: "20px 20px 0px" }} className="font12px">
                     <div
                         className="checkbox smallCheckbox whiteCheckbox"

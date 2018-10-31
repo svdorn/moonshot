@@ -316,6 +316,11 @@ footer {
     margin-left: 35px;
 }
 
+.signup-fields {
+    margin-top: -15px;
+    margin-bottom: -10px;
+}
+
 .password-toggle-visibility {
     display: inline-block;
     position: absolute;

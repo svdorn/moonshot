@@ -8,10 +8,7 @@ import {
     postBusinessInterests,
     updateStore
 } from "../../../../../actions/usersActions";
-import {
-    renderTextField,
-    goTo
-} from "../../../../../miscFunctions";
+import { renderTextField, goTo } from "../../../../../miscFunctions";
 import { button } from "../../../../../classes";
 
 import "../../dashboard.css";
@@ -35,8 +32,7 @@ class InvitePage extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-        };
+        this.state = {};
 
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -66,18 +62,32 @@ class InvitePage extends Component {
         return (
             <div styleName="item-padding">
                 <div styleName="build-team-container">
-                <form className="center" onSubmit={this.handleSubmit} style={{ height: "100%" }}>
+                    <form
+                        className="center"
+                        onSubmit={this.handleSubmit}
+                        style={{ height: "100%" }}
+                    >
                         <div className="primary-cyan font24px font20pxUnder700 font16pxUnder500">
                             A Candidate Invite Page Just For You
                         </div>
                         <div className="marginTop10px">
-                            One page that all of your candidates can visit to complete their evaluation.
+                            One page that all of your candidates can visit to complete their
+                            evaluation.
                         </div>
-                        <div className="inputContainer" styleName="signup-fields">
-                            <Field name="company" component={renderTextField} label="Enter your company name" />
+                        <div className="inputContainer signup-fields">
+                            <Field
+                                name="company"
+                                component={renderTextField}
+                                label="Enter your company name"
+                            />
                             <br />
                         </div>
-                        <button className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop20px" styleName="onboarding-button" style={{padding: "6px 20px"}} onClick={this.handleSubmit}>
+                        <button
+                            className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop20px"
+                            styleName="onboarding-button"
+                            style={{ padding: "6px 20px" }}
+                            onClick={this.handleSubmit}
+                        >
                             <span>See Your Page &#8594;</span>
                         </button>
                     </form>
@@ -91,7 +101,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         loading: state.users.loadingSomething,
-        formData: state.form,
+        formData: state.form
     };
 }
 
