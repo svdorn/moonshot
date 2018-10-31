@@ -91,7 +91,7 @@ class Dashboard extends Component {
         } else if (user && user.popups && user.popups.businessInterests) {
             activity = <DashboardItem type="BuildTeam" width={3} />;
         } else if (user && (!positionCount || positionCount < 1)) {
-            activity = <DashboardItem type="AddPositionPage" width={3} />;
+            activity = <DashboardItem type="AddPositionPage" width={3} widthMobile={2} />;
         } else if (
             user &&
             user.onboard &&

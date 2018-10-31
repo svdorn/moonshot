@@ -64,6 +64,7 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
         floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
         floatingLabelStyle={style.searchFloatingLabelStyle}
         underlineFocusStyle={style.searchUnderlineFocusStyle}
+        className="text-field"
         {...input}
         {...custom}
     />

@@ -97,7 +97,7 @@ class GuestDashboard extends Component {
                 onboardingPositions.length > 0
             )
         ) {
-            activity = <DashboardItem type="AddPositionPage" width={3} />;
+            activity = <DashboardItem type="AddPositionPage" width={3} widthMobile={2} />;
         } else {
             activity = <DashboardItem type="InvitePage" width={3} />;
         }
