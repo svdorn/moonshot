@@ -1,37 +1,44 @@
-"use strict"
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { createBusinessAndUser, closeNotification, closeClaimPageModal } from '../../../../../../actions/usersActions';
-import { TextField } from 'material-ui';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+    createBusinessAndUser,
+    closeNotification,
+    closeClaimPageModal
+} from "../../../../../../actions/usersActions";
+import { TextField } from "material-ui";
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { Field, reduxForm } from 'redux-form';
-import MetaTags from 'react-meta-tags';
-import ReactGA from 'react-ga';
+import { Field, reduxForm } from "redux-form";
+import MetaTags from "react-meta-tags";
+import ReactGA from "react-ga";
 import colors from "../../../../../../colors";
 import { button } from "../../../../../../classes.js";
-import { renderTextField, renderPasswordField, isValidEmail, goTo, isValidPassword } from "../../../../../../miscFunctions";
+import {
+    renderTextField,
+    viewablePasswordField,
+    isValidEmail,
+    goTo,
+    isValidPassword,
+    propertyExists
+} from "../../../../../../miscFunctions";
+import ViewablePassword from "../../../../../miscComponents/viewablePassword";
 
 import "../../../dashboard.css";
 
 const validate = values => {
     const errors = {};
-    const requiredFields = [
-        'name',
-        'company',
-        'email',
-        'password',
-    ];
+    const requiredFields = ["name", "company", "email", "password"];
     if (values.email && !isValidEmail(values.email)) {
-        errors.email = 'Invalid email address';
+        errors.email = "Invalid email address";
     }
     if (!isValidPassword(values.password)) {
-        errors.password = 'Password must be at least 8 characters long';
+        errors.password = "Password must be at least 8 characters long";
     }
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'This field is required'
+            errors[field] = "This field is required";
         }
     });
 
@@ -48,41 +55,41 @@ class ClaimPageModal extends Component {
             agreeingToTerms: false,
             frame: 1,
             error: undefined
-        }
+        };
 
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-
     componentDidMount() {
         // add listener for keyboard enter key
         const self = this;
-        document.addEventListener('keypress', self.bound_handleKeyPress);
+        document.addEventListener("keypress", self.bound_handleKeyPress);
     }
 
     close = () => {
         this.props.closeClaimPageModal();
-    }
-
+    };
 
     componentWillUnmount() {
         // remove listener for keyboard enter key
         const self = this;
-        document.removeEventListener('keypress', self.bound_handleKeyPress);
+        document.removeEventListener("keypress", self.bound_handleKeyPress);
     }
 
     handleKeyPress(e) {
         var key = e.which || e.keyCode;
-        if (key === 13) { // 13 is enter
+        if (key === 13) {
+            // 13 is enter
             this.handleSubmit();
         }
     }
 
-
     handleSubmit(e) {
         e.preventDefault();
         if (!this.state.agreeingToTerms) {
-            return this.setState({ error: "Must agree to Terms and Conditions and Privacy Policy." });
+            return this.setState({
+                error: "Must agree to Terms and Conditions and Privacy Policy."
+            });
         }
 
         const vals = this.props.formData.businessSignup.values;
@@ -93,12 +100,7 @@ class ClaimPageModal extends Component {
 
         // Form validation before submit
         let notValid = false;
-        const requiredFields = [
-            'email',
-            'password',
-            'name',
-            'company'
-        ];
+        const requiredFields = ["email", "password", "name", "company"];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
                 this.props.touch(field);
@@ -124,12 +126,21 @@ class ClaimPageModal extends Component {
         }
 
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone, welcomeToMoonshot  };
+        const args = {
+            password,
+            email,
+            name,
+            company,
+            positions,
+            onboard,
+            selectedJobsToBeDone,
+            welcomeToMoonshot
+        };
 
         // mark a business signup in google analytics
         ReactGA.event({
-            category: 'Signup',
-            action: 'Business Signup'
+            category: "Signup",
+            action: "Business Signup"
         });
 
         // create the user
@@ -153,9 +164,9 @@ class ClaimPageModal extends Component {
             const vals = this.props.formData.businessSignup.values;
             let checkEmail = false;
             if (newIndex === 1) {
-                requiredFields.push('name');
+                requiredFields.push("name");
             } else if (newIndex === 2) {
-                requiredFields.push('email');
+                requiredFields.push("email");
                 checkEmail = true;
             }
 
@@ -179,17 +190,17 @@ class ClaimPageModal extends Component {
     };
 
     makeFrame1() {
-        return(
+        return (
             <div className="center">
                 <div className="inputContainer">
-                    <Field
-                        name="name"
-                        component={renderTextField}
-                        label="Full Name"
-                    /><br/>
+                    <Field name="name" component={renderTextField} label="Full Name" />
+                    <br />
                 </div>
                 <div
-                    className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " + button.cyan}
+                    className={
+                        "primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " +
+                        button.cyan
+                    }
                     onClick={this.navFrames.bind(this, "next")}
                 >
                     Next
@@ -199,17 +210,17 @@ class ClaimPageModal extends Component {
     }
 
     makeFrame2() {
-        return(
+        return (
             <div className="center">
                 <div className="inputContainer">
-                    <Field
-                        name="email"
-                        component={renderTextField}
-                        label="Email"
-                    /><br/>
+                    <Field name="email" component={renderTextField} label="Email" />
+                    <br />
                 </div>
                 <div
-                    className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " + button.cyan}
+                    className={
+                        "primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " +
+                        button.cyan
+                    }
                     onClick={this.navFrames.bind(this, "next")}
                 >
                     Next
@@ -219,51 +230,67 @@ class ClaimPageModal extends Component {
     }
 
     makeFrame3() {
-        return(
+        let value = undefined;
+        if (propertyExists(this, ["props", "formData", "businessSignup", "values", "password"])) {
+            value = this.props.formData.businessSignup.values.password;
+        }
+
+        return (
             <div className="center">
-                <div className="inputContainer">
-                    <Field
-                        name="password"
-                        component={renderPasswordField}
-                        label="Password"
-                    /><br/>
-                </div>
-                <div style={{margin: "20px 20px 0px"}} className="font12px">
-                    <div className="checkbox smallCheckbox whiteCheckbox"
-                         onClick={this.handleCheckMarkClick.bind(this)}>
+                <ViewablePassword
+                    name="password"
+                    label="Password"
+                    value={value}
+                    className="signup-fields"
+                />
+                <div style={{ margin: "20px 20px 0px" }} className="font12px">
+                    <div
+                        className="checkbox smallCheckbox whiteCheckbox"
+                        onClick={this.handleCheckMarkClick.bind(this)}
+                    >
                         <img
                             alt=""
                             className={"checkMark" + this.state.agreeingToTerms}
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            style={{marginTop:"-18px"}}
+                            style={{ marginTop: "-18px" }}
                         />
                     </div>
-                    I have read and agree to the Moonshot Insights<br/>
-                    <a  href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
+                    I have read and agree to the Moonshot Insights<br />
+                    <a
+                        href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                         target="_blank"
                         className="primary-cyan hover-primary-cyan"
-                    >privacy policy</a>
+                    >
+                        privacy policy
+                    </a>
                     {" and "}
-                    <a  href="https://www.docdroid.net/pGBcFSh/moonshot-insights-agreement.pdf"
+                    <a
+                        href="https://www.docdroid.net/pGBcFSh/moonshot-insights-agreement.pdf"
                         target="_blank"
                         className="primary-cyan hover-primary-cyan"
-                    >terms of service</a>.
+                    >
+                        terms of service
+                    </a>.
                 </div>
-                {this.props.loadingCreateBusiness ? <CircularProgress color="#72d6f5"/> :
+                {this.props.loadingCreateBusiness ? (
+                    <CircularProgress color="#72d6f5" />
+                ) : (
                     <div
-                        className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " + button.cyan}
+                        className={
+                            "primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " +
+                            button.cyan
+                        }
                         onClick={this.handleSubmit}
                     >
                         Start
                     </div>
-                }
+                )}
             </div>
         );
     }
 
     //name, email, password, confirm password, signup button
     render() {
-
         let navArea = [];
         const selectedStyle = {
             background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
@@ -273,14 +300,14 @@ class ClaimPageModal extends Component {
             navArea.push(
                 <div
                     styleName="signup-circle"
-                    style={(this.state.frame - 1) === navCircleIdx ? selectedStyle : {}}
+                    style={this.state.frame - 1 === navCircleIdx ? selectedStyle : {}}
                     key={`signup question ${navCircleIdx}`}
                 />
             );
         }
 
         let frame = null;
-        switch(this.state.frame) {
+        switch (this.state.frame) {
             case 1:
                 frame = this.makeFrame1();
                 break;
@@ -296,44 +323,38 @@ class ClaimPageModal extends Component {
         }
 
         return (
-            <Dialog
-                open={!!this.props.open}
-                maxWidth={false}
-                onClose={this.close}
-            >
-                    <form styleName="modal-signup" className="inline-block center">
-                        <div>
-                            <div className="primary-cyan font22px font20pxUnder500">
-                                Secure Your Page
-                            </div>
-                            <div className="font14px">
-                                Fill this out so you can manage your page.
-                            </div>
-                            {this.state.error ?
-                                <div className="font14px marginTop10px secondary-red">
-                                    {this.state.error}
-                                </div>
-                                : null
-                            }
+            <Dialog open={!!this.props.open} maxWidth={false} onClose={this.close}>
+                <form styleName="modal-signup" className="inline-block center">
+                    <div>
+                        <div className="primary-cyan font22px font20pxUnder500">
+                            Secure Your Page
                         </div>
-                        <div>
-                            <div style={{paddingRight:"30px", paddingLeft:"30px"}}>
-                                { frame }
+                        <div className="font14px">Fill this out so you can manage your page.</div>
+                        {this.state.error ? (
+                            <div className="font14px marginTop10px secondary-red">
+                                {this.state.error}
                             </div>
-                            { navArea }
-                        </div>
-                    </form>
+                        ) : null}
+                    </div>
+                    <div>
+                        <div style={{ paddingRight: "30px", paddingLeft: "30px" }}>{frame}</div>
+                        {navArea}
+                    </div>
+                </form>
             </Dialog>
         );
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        createBusinessAndUser,
-        closeNotification,
-        closeClaimPageModal
-    }, dispatch);
+    return bindActionCreators(
+        {
+            createBusinessAndUser,
+            closeNotification,
+            closeClaimPageModal
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -352,8 +373,11 @@ function mapStateToProps(state) {
 }
 
 ClaimPageModal = reduxForm({
-    form: 'businessSignup',
+    form: "businessSignup",
     validate
 })(ClaimPageModal);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ClaimPageModal);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ClaimPageModal);
