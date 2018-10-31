@@ -67,14 +67,15 @@ class InvitePage extends Component {
                         onSubmit={this.handleSubmit}
                         style={{ height: "100%" }}
                     >
-                        <div className="primary-cyan font24px font20pxUnder700 font16pxUnder500">
-                            A Candidate Invite Page Just For You
+                        <div className="primary-cyan font24px font20pxUnder700 font18pxUnder500">
+                            <div styleName="not-small-mobile">A Candidate Invite Page Just For You</div>
+                            <div styleName="small-mobile-only" className="marginTop20px">Your Candidate Invite Page</div>
                         </div>
                         <div className="marginTop10px">
                             One page that all of your candidates can visit to complete their
                             evaluation.
                         </div>
-                        <div className="inputContainer signup-fields">
+                        <div className="inputContainer signup-fields" styleName="not-small-mobile">
                             <Field
                                 name="company"
                                 component={renderTextField}
@@ -82,10 +83,18 @@ class InvitePage extends Component {
                             />
                             <br />
                         </div>
+                        <div className="inputContainer signup-fields" styleName="small-mobile-only">
+                            <Field
+                                name="company"
+                                component={renderTextField}
+                                label="Company name"
+                            />
+                            <br />
+                        </div>
                         <button
                             className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop20px"
                             styleName="onboarding-button"
-                            style={{ padding: "6px 20px" }}
+                            style={{ padding: "5px 17px" }}
                             onClick={this.handleSubmit}
                         >
                             <span>See Your Page &#8594;</span>

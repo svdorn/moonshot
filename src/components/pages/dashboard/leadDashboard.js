@@ -99,7 +99,7 @@ class GuestDashboard extends Component {
         ) {
             activity = <DashboardItem type="AddPositionPage" width={3} widthMobile={2} />;
         } else {
-            activity = <DashboardItem type="InvitePage" width={3} />;
+            activity = <DashboardItem type="InvitePage" width={3} widthMobile={2} />;
         }
 
         let blurredClass = "";
