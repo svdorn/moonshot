@@ -82,16 +82,21 @@ class InviteCandidatesModal extends Component {
         ];
 
         return (
-            <Dialog
-                actions={actions}
-                open={this.props.open ? true : false}
-                onClose={this.handleClose}
-                autoScrollBodyContent={true}
-                paperClassName="dialogForBiz"
-                contentClassName="center"
-            >
-                <div>{ this.makeDialogBody() }</div>
-            </Dialog>
+            <div>
+                {this.props.currentUser ?
+                    <Dialog
+                        actions={actions}
+                        open={!!this.props.open}
+                        onClose={this.handleClose}
+                        autoScrollBodyContent={true}
+                        paperClassName="dialogForBiz"
+                        contentClassName="center"
+                    >
+                        <div>{ this.makeDialogBody() }</div>
+                    </Dialog>
+                    : null
+                }
+            </div>
         );
     }
 }
