@@ -48,7 +48,11 @@ class Apply extends Component {
 
         if (this.props.location.query && this.props.location.query.onboarding) {
             // get positions from its form
-            const positions = [{name: "iOS Developer"}];
+            let positions = [{name: "iOS Developer"}];
+            const onboardingPositions = this.props.onboardingPositions;
+            if (onboardingPositions && Array.isArray(onboardingPositions) && onboardingPositions.length > 0) {
+                positions = onboardingPositions;
+            }
             this.positionsFound(positions, undefined, company, true, false);
         } else {
             if (this.props.currentUser && this.props.currentUser.userType === "accountAdmin" && this.props.currentUser.businessInfo) {
@@ -318,6 +322,7 @@ function mapStateToProps(state) {
         claimPageModal: state.users.claimPageModal,
         inviteCandidatesModal: state.users.inviteCandidatesModalOpen,
         positionModal: state.users.positionModalOpen,
+        onboardingPositions: state.users.onboardingPositions
     };
 }
 
