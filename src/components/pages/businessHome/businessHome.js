@@ -373,7 +373,7 @@ class BusinessHome extends Component {
                         color1={colors.primaryCyan}
                         color2={colors.primaryWhite}
                         className="font16px font14pxUnder900 font12pxUnder400"
-                        style={{ margin: "40px 25px 20px" }}
+                        style={{ margin: "40px 25px 15px" }}
                     />
                     <div
                         styleName="no-credit-card"
