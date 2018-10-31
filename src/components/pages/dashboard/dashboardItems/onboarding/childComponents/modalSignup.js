@@ -33,7 +33,7 @@ const validate = values => {
         errors.email = "Invalid email address";
     }
     if (!isValidPassword(values.password)) {
-        errors.password = "Password must be at least 8 characters long";
+        errors.password = "Must be least 8+ characters";
     }
     requiredFields.forEach(field => {
         if (!values[field]) {

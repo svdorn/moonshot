@@ -6,6 +6,8 @@ import {} from "../../actions/usersActions";
 import { viewablePasswordField } from "../../miscFunctions";
 import { Field } from "redux-form";
 
+import "./viewablePassword.css";
+
 class ViewablePassword extends Component {
     constructor(props) {
         super(props);
@@ -23,10 +25,8 @@ class ViewablePassword extends Component {
         const value = this.props.value ? this.props.value : undefined;
         const { showPassword } = this.state;
 
-        const style =
-            typeof value === "string" && value.length > 12
-                ? { left: "calc(100% - 20px)" }
-                : { right: "36px" };
+        const place = typeof value === "string" && value.length > 12 ? "outside" : "inside";
+        console.log("place: ", place);
 
         return (
             <div className="inputContainer signup-fields">
@@ -38,8 +38,7 @@ class ViewablePassword extends Component {
                     autofill="new-password"
                 />
                 <div
-                    className="password-toggle-visibility"
-                    style={style}
+                    styleName={"password-toggle-visibility " + place}
                     onClick={this.toggleShowPassword}
                 >
                     {showPassword ? "hide" : "show"}

@@ -100,6 +100,7 @@ const viewablePasswordField = ({ input, label, meta: { touched, error }, type, .
         {...input}
         {...custom}
         autofill="new-password"
+        className="text-field"
         type={type}
     />
 );
