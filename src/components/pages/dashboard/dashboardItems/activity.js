@@ -308,14 +308,14 @@ class Activity extends Component {
                     <div styleName="invite-candidates-template">
                         <div>
                             <div
-                                className={"primary-white " + button.lightBlack}
+                                className={"primary-white " + button.cyanRound}
                                 styleName="copy-link"
                                 onClick={this.copyLink}
                             >
                                 Copy Link
                             </div>
                             <div
-                                className={"primary-white " + button.lightBlack}
+                                className={"primary-white " + button.cyanRound}
                                 styleName="copy-template"
                                 onClick={this.copyTemplate}
                             >
