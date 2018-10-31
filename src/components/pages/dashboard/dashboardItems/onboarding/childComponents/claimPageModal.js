@@ -195,6 +195,13 @@ class ClaimPageModal extends Component {
         this.setState({ frame: newIndex, error: undefined });
     };
 
+    // navigate around by using the bottom nav circles
+    circleNav = wantedFrame => () => {
+        if (wantedFrame < this.state.frame) {
+            this.setState({ frame: wantedFrame });
+        }
+    };
+
     makeFrame1() {
         return (
             <div className="center">
@@ -308,6 +315,8 @@ class ClaimPageModal extends Component {
                     styleName="signup-circle"
                     style={this.state.frame - 1 === navCircleIdx ? selectedStyle : {}}
                     key={`signup question ${navCircleIdx}`}
+                    className={this.state.frame > navCircleIdx ? "pointer" : ""}
+                    onClick={this.circleNav(navCircleIdx + 1)}
                 />
             );
         }
