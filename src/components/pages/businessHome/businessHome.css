@@ -491,11 +491,19 @@
     margin-right: 10px;
 }
 .see-how {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 10px;
+    opacity: 0.8;
     cursor: pointer;
+
+    -webkit-transition: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    transition: opacity 0.2s;
 }
-.see-how:hover > .see-cta {
-    text-decoration: underline;
+.see-how:hover {
+    opacity: 1;
 }
 .see-cta {
     display: inline-block;
