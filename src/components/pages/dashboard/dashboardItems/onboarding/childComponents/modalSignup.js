@@ -1,41 +1,73 @@
-"use strict"
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { createBusinessAndUser, closeNotification, addNotification, closeSignupModal } from '../../../../../../actions/usersActions';
-import { TextField } from 'material-ui';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+    createBusinessAndUser,
+    closeNotification,
+    addNotification,
+    closeSignupModal
+} from "../../../../../../actions/usersActions";
+import { TextField } from "material-ui";
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { Field, reduxForm } from 'redux-form';
-import MetaTags from 'react-meta-tags';
-import ReactGA from 'react-ga';
+import { Field, reduxForm } from "redux-form";
+import MetaTags from "react-meta-tags";
+import ReactGA from "react-ga";
 import colors from "../../../../../../colors";
-import { renderTextField, renderPasswordField, isValidEmail, goTo, isValidPassword } from "../../../../../../miscFunctions";
+import {
+    renderTextField,
+    isValidEmail,
+    goTo,
+    isValidPassword,
+    propertyExists
+} from "../../../../../../miscFunctions";
 
 import "../../../dashboard.css";
 
 const validate = values => {
     const errors = {};
-    const requiredFields = [
-        'name',
-        'company',
-        'email',
-        'password',
-    ];
+    const requiredFields = ["name", "company", "email", "password"];
     if (values.email && !isValidEmail(values.email)) {
-        errors.email = 'Invalid email address';
+        errors.email = "Invalid email address";
     }
     if (!isValidPassword(values.password)) {
-        errors.password = 'Password must be at least 8 characters long';
+        errors.password = "Password must be at least 8 characters long";
     }
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'This field is required'
+            errors[field] = "This field is required";
         }
     });
 
     return errors;
 };
+
+const passwordFieldStyle = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
+};
+
+const customPasswordField = ({ input, label, meta: { touched, error }, type, ...custom }) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        inputStyle={passwordFieldStyle.searchInputStyle}
+        hintStyle={passwordFieldStyle.searchHintStyle}
+        floatingLabelFocusStyle={passwordFieldStyle.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={passwordFieldStyle.searchFloatingLabelStyle}
+        underlineFocusStyle={passwordFieldStyle.searchUnderlineFocusStyle}
+        {...input}
+        {...custom}
+        autofill="new-password"
+        type={type}
+    />
+);
 
 const defaultInfo = {
     header1: null,
@@ -43,7 +75,7 @@ const defaultInfo = {
     header2: "Add Your Info",
     body2: "We need this to setup your account.",
     header3: "Secure Your Login",
-    body3: "Fill this out so you can log back in.",
+    body3: "Fill this out so you can log back in."
 };
 
 class ModalSignup extends Component {
@@ -59,25 +91,30 @@ class ModalSignup extends Component {
             info: defaultInfo,
             type: undefined,
             name: undefined,
+            // whether the password field should show password circles or the actual password
+            showPassword: false,
             error: undefined
-        }
+        };
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFrameChange = this.handleFrameChange.bind(this);
     }
 
-
     componentDidMount() {
         // add listener for keyboard enter key
         const self = this;
-        document.addEventListener('keypress', self.bound_handleKeyPress);
+        document.addEventListener("keypress", self.bound_handleKeyPress);
     }
+
+    toggleShowPassword = () => {
+        this.setState({ showPassword: !this.state.showPassword });
+    };
 
     componentDidUpdate() {
         if (this.state.open != this.props.open) {
             const open = this.props.open;
             if (!open) {
-                this.setState({ info: defaultInfo, open, error: undefined })
+                this.setState({ info: defaultInfo, open, error: undefined });
             }
             const info = this.props.info;
 
@@ -86,7 +123,7 @@ class ModalSignup extends Component {
             }
 
             if (info.type === "menu") {
-                switch(info.name) {
+                switch (info.name) {
                     case "Button":
                         this.setState({ open, frame: 2, error: undefined });
                         break;
@@ -99,16 +136,24 @@ class ModalSignup extends Component {
                             header2: `${info.name} Page Info`,
                             body2: "We need this so we can set up the page for your company.",
                             header3: "Info Successfully Added",
-                            body3: "Fill this out so you can log back in and freely access your page."
+                            body3:
+                                "Fill this out so you can log back in and freely access your page."
                         };
-                        this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1, error: undefined })
+                        this.setState({
+                            info: infoContent,
+                            type: info.type,
+                            name: info.name,
+                            open,
+                            frame: 1,
+                            error: undefined
+                        });
                         break;
                     default:
                         this.setState({ open, frame: 1, error: undefined });
                         break;
                 }
             } else {
-                switch(info.name) {
+                switch (info.name) {
                     case "Candidate":
                     case "Employee":
                         const infoContent = {
@@ -117,9 +162,17 @@ class ModalSignup extends Component {
                             header2: `Info to Activate Invites`,
                             body2: `We need this to activate ${info.name.toLowerCase()} invites for your company.`,
                             header3: "Info Successfully Added",
-                            body3: "Fill this out so you can log back in and freely manage your invites."
+                            body3:
+                                "Fill this out so you can log back in and freely manage your invites."
                         };
-                        this.setState({ info: infoContent, type: info.type, name: info.name, open, frame: 1, error: undefined })
+                        this.setState({
+                            info: infoContent,
+                            type: info.type,
+                            name: info.name,
+                            open,
+                            frame: 1,
+                            error: undefined
+                        });
                         break;
                     case "Evaluations":
                         this.setState({ open, frame: 2, error: undefined, info: defaultInfo });
@@ -134,39 +187,36 @@ class ModalSignup extends Component {
 
     closeSignupModal = () => {
         this.props.closeSignupModal();
-    }
-
+    };
 
     componentWillUnmount() {
         // remove listener for keyboard enter key
         const self = this;
-        document.removeEventListener('keypress', self.bound_handleKeyPress);
+        document.removeEventListener("keypress", self.bound_handleKeyPress);
     }
 
     handleKeyPress(e) {
         var key = e.which || e.keyCode;
-        if (key === 13) { // 13 is enter
+        if (key === 13) {
+            // 13 is enter
             this.handleSubmit();
         }
     }
 
-
     handleSubmit(e) {
         e.preventDefault();
         if (!this.state.agreeingToTerms) {
-            return this.props.addNotification("Must agree to Terms and Conditions and Privacy Policy.", "error");
+            return this.props.addNotification(
+                "Must agree to Terms and Conditions and Privacy Policy.",
+                "error"
+            );
         }
 
         const vals = this.props.formData.businessSignup.values;
 
         // Form validation before submit
         let notValid = false;
-        const requiredFields = [
-            'email',
-            'password',
-            'name',
-            'company'
-        ];
+        const requiredFields = ["email", "password", "name", "company"];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
                 this.props.touch(field);
@@ -182,16 +232,22 @@ class ModalSignup extends Component {
             return this.props.addNotification("Invalid email.", "error");
         }
         if (!isValidPassword(password)) {
-            return this.props.addNotification("Password must be at least 8 characters long", "error");
+            return this.props.addNotification(
+                "Password must be at least 8 characters long",
+                "error"
+            );
         }
 
         const positions = this.props.onboardingPositions;
         const onboard = this.props.onboard;
         const selectedJobsToBeDone = this.props.selectedJobsToBeDone;
-        if (this.props.info && this.props.info.type === "menu" && this.props.info.name !== "Button") {
+        if (
+            this.props.info &&
+            this.props.info.type === "menu" &&
+            this.props.info.name !== "Button"
+        ) {
             var showVerifyEmailBanner = true;
-        }
-        else if (this.props.info && this.props.info.type === "boxes") {
+        } else if (this.props.info && this.props.info.type === "boxes") {
             var showVerifyEmailBanner = true;
             var verificationModal = true;
         }
@@ -203,12 +259,23 @@ class ModalSignup extends Component {
         // get the positions here from the onboardingPositions
 
         // combine all those things to be sent to server
-        const args = { password, email, name, company, positions, onboard, selectedJobsToBeDone, welcomeToMoonshot, showVerifyEmailBanner, verificationModal };
+        const args = {
+            password,
+            email,
+            name,
+            company,
+            positions,
+            onboard,
+            selectedJobsToBeDone,
+            welcomeToMoonshot,
+            showVerifyEmailBanner,
+            verificationModal
+        };
 
         // mark a business signup in google analytics
         ReactGA.event({
-            category: 'Signup',
-            action: 'Business Signup'
+            category: "Signup",
+            action: "Business Signup"
         });
 
         // create the user
@@ -222,7 +289,7 @@ class ModalSignup extends Component {
         });
     }
 
-    handleFrameChange(e){
+    handleFrameChange(e) {
         e.preventDefault();
         if (this.state.info.header1 && this.state.frame === 1) {
             this.setState({ frame: 2 });
@@ -230,10 +297,7 @@ class ModalSignup extends Component {
         }
         const vals = this.props.formData.businessSignup.values;
         let notValid = false;
-        const requiredFields = [
-            'name',
-            'company'
-        ];
+        const requiredFields = ["name", "company"];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
                 this.props.touch(field);
@@ -241,104 +305,127 @@ class ModalSignup extends Component {
             }
         });
         if (notValid) {
-            this.setState({ error: "Must fill out all fields to continue." })
+            this.setState({ error: "Must fill out all fields to continue." });
             return;
-        }
-        else this.setState({ frame: 3, error: undefined })
+        } else this.setState({ frame: 3, error: undefined });
     }
 
     makeFrame2() {
-        return(
+        return (
             <div className="center">
                 <div className="primary-cyan font22px font20pxUnder500">
-                    { this.state.info.header2 }
+                    {this.state.info.header2}
                 </div>
-                <div className="font14px">
-                    { this.state.info.body2 }
-                </div>
-                {this.state.error ?
-                    <div className="secondary-red font16px">
-                        {this.state.error}
-                    </div>
-                    : null
-                }
+                <div className="font14px">{this.state.info.body2}</div>
+                {this.state.error ? (
+                    <div className="secondary-red font16px">{this.state.error}</div>
+                ) : null}
                 <div className="inputContainer" styleName="signup-fields">
-                    <Field
-                        name="name"
-                        component={renderTextField}
-                        label="Full Name"
-                    /><br/>
+                    <Field name="name" component={renderTextField} label="Full Name" />
+                    <br />
                 </div>
                 <div className="inputContainer" styleName="signup-fields">
-                    <Field
-                        name="company"
-                        component={renderTextField}
-                        label="Company"
-                    /><br/>
+                    <Field name="company" component={renderTextField} label="Company" />
+                    <br />
                 </div>
-                <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop20px" onClick={this.handleFrameChange} style={{padding: "2px 4px"}}>
+                <button
+                    className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop20px"
+                    onClick={this.handleFrameChange}
+                    style={{ padding: "2px 4px" }}
+                >
                     Onward &#8594;
                 </button>
             </div>
-        )
+        );
     }
 
     makeFrame3() {
-        return(
+        const { showPassword } = this.state;
+        let password = undefined;
+        if (propertyExists(this, ["props", "formData", "businessSignup", "values", "password"])) {
+            password = this.props.formData.businessSignup.values.password;
+        }
+
+        return (
             <div className="center">
                 <div className="primary-cyan font22px font20pxUnder500">
-                    { this.state.info.header3 }
+                    {this.state.info.header3}
                 </div>
-                <div className="font14px" style={{marginTop:"-7px"}}>
-                    { this.state.info.body3 }
+                <div className="font14px" style={{ marginTop: "-7px" }}>
+                    {this.state.info.body3}
                 </div>
                 <div className="inputContainer" styleName="signup-fields">
-                    <Field
-                        name="email"
-                        component={renderTextField}
-                        label="Email"
-                    /><br/>
+                    <Field name="email" component={renderTextField} label="Email" />
+                    <br />
                 </div>
                 <div className="inputContainer" styleName="signup-fields">
                     <Field
                         name="password"
-                        component={renderPasswordField}
+                        component={customPasswordField}
                         label="Password"
-                    /><br/>
+                        type={showPassword ? "text" : "password"}
+                        autofill="new-password"
+                    />
+                    <div
+                        className="password-toggle-visibility"
+                        style={{
+                            right:
+                                typeof password === "string" && password.length > 12
+                                    ? "-15px"
+                                    : "31px"
+                        }}
+                        onClick={this.toggleShowPassword}
+                    >
+                        {showPassword ? "hide" : "show"}
+                    </div>
+                    <br />
                 </div>
-                <div style={{margin: "20px 20px 0px"}} className="font12px">
-                    <div className="checkbox smallCheckbox whiteCheckbox"
-                         onClick={this.handleCheckMarkClick.bind(this)}>
+                <div style={{ margin: "20px 20px 0px" }} className="font12px">
+                    <div
+                        className="checkbox smallCheckbox whiteCheckbox"
+                        onClick={this.handleCheckMarkClick.bind(this)}
+                    >
                         <img
                             alt=""
                             className={"checkMark" + this.state.agreeingToTerms}
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            style={{marginTop:"-18px"}}
+                            style={{ marginTop: "-18px" }}
                         />
                     </div>
-                    I have read and agree to the Moonshot Insights<br/>
-                    <a  href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
+                    I have read and agree to the Moonshot Insights<br />
+                    <a
+                        href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                         target="_blank"
                         className="primary-cyan hover-primary-cyan"
-                    >privacy policy</a>
+                    >
+                        privacy policy
+                    </a>
                     {" and "}
-                    <a  href="https://www.docdroid.net/pGBcFSh/moonshot-insights-agreement.pdf"
+                    <a
+                        href="https://www.docdroid.net/pGBcFSh/moonshot-insights-agreement.pdf"
                         target="_blank"
                         className="primary-cyan hover-primary-cyan"
-                    >terms of service</a>.
+                    >
+                        terms of service
+                    </a>.
                 </div>
-                {this.props.loadingCreateBusiness ? <CircularProgress color="#72d6f5"/> :
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.handleSubmit} style={{padding: "2px 4px"}}>
+                {this.props.loadingCreateBusiness ? (
+                    <CircularProgress color="#72d6f5" />
+                ) : (
+                    <button
+                        className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white"
+                        onClick={this.handleSubmit}
+                        style={{ padding: "2px 4px" }}
+                    >
                         Enter &#8594;
                     </button>
-                }
+                )}
             </div>
-        )
+        );
     }
 
     //name, email, password, confirm password, signup button
     render() {
-
         let navArea = [];
         const selectedStyle = {
             background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
@@ -348,25 +435,24 @@ class ModalSignup extends Component {
             navArea.push(
                 <div
                     styleName="signup-circle"
-                    style={(this.state.frame - 2) === navCircleIdx ? selectedStyle : {}}
+                    style={this.state.frame - 2 === navCircleIdx ? selectedStyle : {}}
                     key={`signup modal ${navCircleIdx}`}
                 />
             );
         }
 
         return (
-            <Dialog
-                open={!!this.props.open}
-                maxWidth={false}
-                onClose={this.closeSignupModal}
-            >
-                {this.state.frame === 1 && this.state.info.header1 ?
+            <Dialog open={!!this.props.open} maxWidth={false} onClose={this.closeSignupModal}>
+                {this.state.frame === 1 && this.state.info.header1 ? (
                     <div styleName="modal-signup">
                         <div className="primary-cyan font22px font20pxUnder500">
-                            { this.state.info.header1 }
+                            {this.state.info.header1}
                         </div>
-                        <div className="font16px" style={{maxWidth: "400px", margin: "20px auto"}}>
-                            { this.state.info.body1 }
+                        <div
+                            className="font16px"
+                            style={{ maxWidth: "400px", margin: "20px auto" }}
+                        >
+                            {this.state.info.body1}
                         </div>
                         <div
                             key={"continue signup modal"}
@@ -383,26 +469,31 @@ class ModalSignup extends Component {
                             />
                         </div>
                     </div>
-                    :
+                ) : (
                     <form styleName="modal-signup">
-                        {this.state.frame === 2 ? <div>{ this.makeFrame2() }</div> : <div>{ this.makeFrame3() }</div>}
-                        <div className="center">
-                            { navArea }
-                        </div>
+                        {this.state.frame === 2 ? (
+                            <div>{this.makeFrame2()}</div>
+                        ) : (
+                            <div>{this.makeFrame3()}</div>
+                        )}
+                        <div className="center">{navArea}</div>
                     </form>
-                }
+                )}
             </Dialog>
         );
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        createBusinessAndUser,
-        addNotification,
-        closeNotification,
-        closeSignupModal
-    }, dispatch);
+    return bindActionCreators(
+        {
+            createBusinessAndUser,
+            addNotification,
+            closeNotification,
+            closeSignupModal
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -421,8 +512,11 @@ function mapStateToProps(state) {
 }
 
 ModalSignup = reduxForm({
-    form: 'businessSignup',
+    form: "businessSignup",
     validate
 })(ModalSignup);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalSignup);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ModalSignup);
