@@ -46,6 +46,9 @@
 .dashboard-item-container.width-3 {
     width: calc((var(--item-width) * 3) + (var(--item-margin) * 4));
 }
+.dashboard-item-container.width-3.mobile-width-2 {
+    width: calc((var(--item-width) * 3) + (var(--item-margin) * 4));
+}
 
 .small-title {
     font-size: 16px;
@@ -61,7 +64,7 @@
     max-width: 500px;
 }
 .blue-arrow {
-    font-size: 22px;
+    font-size: 20px;
     margin-top: 15px;
     cursor: pointer;
     color: var(--primary-cyan);
@@ -177,6 +180,15 @@
 }
 
 #invite-template {
+}
+
+.add-position-header {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.add-position-ismgr {
+    margin: -30px auto 7px;
+    color: var(--primary-white);
 }
 
 .onboarding-button > span {
@@ -641,7 +653,7 @@
     top: 1px;
 }
 .modal-signup {
-    padding: 50px;
+    padding: 40px 50px;
     background-color: var(--primary-black-dark);
     color: var(--secondary-gray);
     min-width: 270px;
@@ -716,6 +728,10 @@
         width: calc((var(--item-width) * 2) + (var(--item-margin) * 2));
         height: calc(var(--item-width) * (5 / 4));
     }
+    .dashboard-item-container.width-3.mobile-width-2 {
+        width: calc((var(--item-width) * 2) + (var(--item-margin) * 2));
+        height: calc(var(--item-width) * (5 / 4));
+    }
 
     .full-step-container {
         padding: calc(var(--item-margin) / 1.5);
@@ -764,7 +780,7 @@
     }
 
     .blue-arrow {
-        font-size: 20px;
+        font-size: 18px;
     }
 }
 
@@ -784,12 +800,20 @@
         padding: 10px;
     }
 
+    .add-position-ismgr {
+        margin: -15px auto 10px;
+    }
+    .add-position-header {
+        margin-top: 10px;
+        margin-bottom: -30px;
+    }
+
     .welcome-frame-modal {
         max-width: 260px;
     }
 
     .blue-arrow {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .dashboard {
@@ -822,6 +846,10 @@
     .dashboard-item-container.width-3 {
         width: var(--item-width);
         height: calc(var(--item-width) * 2.125);
+    }
+    .dashboard-item-container.width-3.mobile-width-2 {
+        width: var(--item-width);
+        height: calc(var(--item-width) * 1.35);
     }
     .checklist-container {
         height: calc(100% / 17);
@@ -861,6 +889,9 @@
     .onboarding-content > div > div:first-child.circular-progress,
     .onboarding-content > div.full-step-container > div:first-child {
         border-bottom: none;
+    }
+    .modal-signup {
+        padding: 20px;
     }
 
     .admin-image {

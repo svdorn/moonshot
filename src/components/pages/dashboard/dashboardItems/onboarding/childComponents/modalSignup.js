@@ -313,7 +313,7 @@ class ModalSignup extends Component {
                     <br />
                 </div>
                 <button
-                    className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop20px"
+                    className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white marginTop20px"
                     onClick={this.handleFrameChange}
                     style={{ padding: "2px 4px" }}
                 >
@@ -384,7 +384,7 @@ class ModalSignup extends Component {
                     <CircularProgress color="#72d6f5" />
                 ) : (
                     <button
-                        className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white"
+                        className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white"
                         onClick={this.handleSubmit}
                         style={{ padding: "2px 4px" }}
                     >

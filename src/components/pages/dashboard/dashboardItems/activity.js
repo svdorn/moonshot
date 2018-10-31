@@ -295,7 +295,7 @@ class Activity extends Component {
                         invite page in your automated emails or other communications with candidates.
                     </div>
                     <div
-                        className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop20px " + button.cyanRound}
+                        className={"primary-white font18px font16pxUnder900 font14pxUnder600 marginTop20px " + button.cyanRound}
                         onClick={this.confirmEmbedLink}
                     >
                         I have embedded the link
@@ -308,14 +308,14 @@ class Activity extends Component {
                     <div styleName="invite-candidates-template">
                         <div>
                             <div
-                                className={"primary-white " + button.lightBlack}
+                                className={"primary-white " + button.cyanRound}
                                 styleName="copy-link"
                                 onClick={this.copyLink}
                             >
                                 Copy Link
                             </div>
                             <div
-                                className={"primary-white " + button.lightBlack}
+                                className={"primary-white " + button.cyanRound}
                                 styleName="copy-template"
                                 onClick={this.copyTemplate}
                             >
@@ -344,7 +344,9 @@ class Activity extends Component {
                             </div>
                         </div>
                     </div>
-                    Email template you can copy, paste and tweak for your automated emails to candidates.
+                    <div styleName="not-small-mobile">
+                        Email template you can copy, paste and tweak for your automated emails to candidates.
+                    </div>
                 </div>
             </div>
         );

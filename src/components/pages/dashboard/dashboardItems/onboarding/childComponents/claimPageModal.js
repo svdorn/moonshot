@@ -211,7 +211,7 @@ class ClaimPageModal extends Component {
                 </div>
                 <div
                     className={
-                        "primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " +
+                        "primary-white font18px font16pxUnder700 marginTop10px " +
                         button.cyan
                     }
                     onClick={this.navFrames.bind(this, "next")}
@@ -231,7 +231,7 @@ class ClaimPageModal extends Component {
                 </div>
                 <div
                     className={
-                        "primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " +
+                        "primary-white font18px font16pxUnder700 marginTop10px " +
                         button.cyan
                     }
                     onClick={this.navFrames.bind(this, "next")}
@@ -290,7 +290,7 @@ class ClaimPageModal extends Component {
                 ) : (
                     <div
                         className={
-                            "primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " +
+                            "primary-white font18px font16pxUnder700 marginTop10px " +
                             button.cyan
                         }
                         onClick={this.handleSubmit}
@@ -352,7 +352,7 @@ class ClaimPageModal extends Component {
                         ) : null}
                     </div>
                     <div>
-                        <div style={{ paddingRight: "30px", paddingLeft: "30px" }}>{frame}</div>
+                        <div>{frame}</div>
                         {navArea}
                     </div>
                 </form>

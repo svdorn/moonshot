@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Field, reduxForm } from 'redux-form';
 import { addNotification, startLoading, stopLoading, updateStore, updatePositionCount } from "../../../../../../actions/usersActions";
-import {  } from "../../../../../../miscFunctions";
+import { renderTextField } from "../../../../../../miscFunctions";
 import {
     TextField,
     DropDownMenu,
@@ -23,18 +23,6 @@ import axios from 'axios';
 import "../../../dashboard.css";
 
 const required = value => (value ? undefined : 'This field is required.');
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        hintStyle={{color: 'white'}}
-        inputStyle={{color: '#72d6f5'}}
-        underlineStyle={{color: '#72d6f5'}}
-        errorText={touched && error}
-        {...input}
-        {...custom}
-    />
-);
 
 class AddPosition extends Component {
     constructor(props) {
@@ -205,7 +193,7 @@ class AddPosition extends Component {
                             {positionTypeItems}
                         </DropDownMenu>
                     </div><br/>
-                    <div style={{margin:"-30px auto 7px"}} className="primary-white">
+                    <div styleName="add-position-ismgr">
                         <div className="checkbox smallCheckbox whiteCheckbox"
                              onClick={this.handleClickIsManager.bind(this)}
                         >
@@ -218,7 +206,7 @@ class AddPosition extends Component {
                         {"Position is a manager role"}
                     </div>
                     {this.state.addPositionError ? <div className="secondary-red font10px">{this.state.addPositionError}</div> : null }
-                    <button onClick={this.handleSubmit} className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500" styleName="onboarding-button" style={{padding: "6px 20px"}}>
+                    <button onClick={this.handleSubmit} className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700" styleName="onboarding-button" style={{padding: "5px 17px"}}>
                         <span>Enter &#8594;</span>
                     </button>
                 </form>

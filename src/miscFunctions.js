@@ -64,6 +64,7 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
         floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
         floatingLabelStyle={style.searchFloatingLabelStyle}
         underlineFocusStyle={style.searchUnderlineFocusStyle}
+        className="text-field"
         {...input}
         {...custom}
     />
@@ -81,6 +82,7 @@ const renderPasswordField = ({ input, label, meta: { touched, error }, ...custom
         underlineFocusStyle={style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
+        className="text-field"
         type="password"
     />
 );
