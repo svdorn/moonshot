@@ -316,6 +316,13 @@ footer {
     margin-left: 35px;
 }
 
+.password-toggle-visibility {
+    display: inline-block;
+    position: absolute;
+    top: 38px;
+    cursor: pointer;
+    color: var(--primary-cyan);
+}
 .inputContainer {
     position: relative;
     text-align: center;
