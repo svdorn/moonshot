@@ -82,6 +82,7 @@ const renderPasswordField = ({ input, label, meta: { touched, error }, ...custom
         underlineFocusStyle={style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
+        className="text-field"
         type="password"
     />
 );

@@ -65,9 +65,9 @@ class VerificationModal extends Component {
                     </div>
                     <div className="center">
                         <div
-                            className={this.state.loadingSendVerificationEmail ? button.disabled : button.cyan}
+                            className={"primary-white font18px font16pxUnder700 " + this.state.loadingSendVerificationEmail ? button.disabled : button.cyan}
                             onClick={this.sendVerificationEmail}
-                            style={{margin: "20px auto", fontSize: "18px", color: "white"}}
+                            style={{margin: "20px auto"}}
                         >
                             Re-Send Verification Email
                         </div>
