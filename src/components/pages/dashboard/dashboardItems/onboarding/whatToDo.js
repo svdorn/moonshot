@@ -104,9 +104,9 @@ class WhatToDo extends Component {
         let uniqueName = "";
         if (typeof currentUser.businessInfo === "object") {
             const { businessInfo } = currentUser;
+            uniqueName = businessInfo.uniqueName;
             if (businessInfo.businessName.length < 8) {
                 possessiveBusinessName = makePossessive(businessInfo.businessName);
-                uniqueName = businessInfo.uniqueName;
             }
         }
 
