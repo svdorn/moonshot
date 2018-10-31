@@ -10,6 +10,7 @@ import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import ReactGA from 'react-ga';
 import colors from "../../../../../../colors";
+import { button } from "../../../../../../classes.js";
 import { renderTextField, renderPasswordField, isValidEmail, goTo, isValidPassword } from "../../../../../../miscFunctions";
 
 import "../../../dashboard.css";
@@ -187,9 +188,12 @@ class ClaimPageModal extends Component {
                         label="Full Name"
                     /><br/>
                 </div>
-                <button className="button disabled gradient-transition inlineBlock round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "4px 8px"}}>
-                    Start
-                </button>
+                <div
+                    className={"primary-white font16px font14pxUnder700 marginTop10px " + button.cyanRound}
+                    onClick={this.navFrames.bind(this, "next")}
+                >
+                    Next
+                </div>
             </div>
         );
     }
@@ -204,9 +208,12 @@ class ClaimPageModal extends Component {
                         label="Email"
                     /><br/>
                 </div>
-                <button className="button disabled gradient-transition inlineBlock round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "4px 8px"}}>
-                    Start
-                </button>
+                <div
+                    className={"primary-white font16px font14pxUnder700 marginTop10px " + button.cyanRound}
+                    onClick={this.navFrames.bind(this, "next")}
+                >
+                    Next
+                </div>
             </div>
         );
     }
@@ -268,32 +275,6 @@ class ClaimPageModal extends Component {
                 />
             );
         }
-        let arrowArea = [];
-        // add the left and right arrows
-        const arrowStyle = {
-            width: "20px",
-            height: "20px",
-        };
-        if (this.state.frame !== 1) {
-            arrowArea.unshift(
-                <div
-                    className="left circleArrowIcon"
-                    style={arrowStyle}
-                    onClick={this.navFrames.bind(this, "back")}
-                    key="back arrow"
-                />
-            );
-        }
-        if (this.state.frame !== 3) {
-            arrowArea.push(
-                <div
-                    className="right circleArrowIcon"
-                    style={arrowStyle}
-                    onClick={this.navFrames.bind(this, "next")}
-                    key="next arrow"
-                />
-            );
-        }
 
         let frame = null;
         switch(this.state.frame) {
@@ -333,11 +314,8 @@ class ClaimPageModal extends Component {
                             }
                         </div>
                         <div>
-                            <div className="carousel">
-                                <div style={{paddingRight:"30px", paddingLeft:"30px"}}>
-                                    { frame }
-                                </div>
-                                { arrowArea }
+                            <div style={{paddingRight:"30px", paddingLeft:"30px"}}>
+                                { frame }
                             </div>
                             { navArea }
                         </div>
