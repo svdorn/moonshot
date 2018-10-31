@@ -26,7 +26,7 @@ class ViewablePassword extends Component {
         const style =
             typeof value === "string" && value.length > 12
                 ? { left: "calc(100% - 20px)" }
-                : { right: "31px" };
+                : { right: "36px" };
 
         return (
             <div className="inputContainer signup-fields">

@@ -251,8 +251,22 @@ class ModalSignup extends Component {
         });
 
         // create the user
-        this.props.createBusinessAndUser(args);
+        this.props.createBusinessAndUser(args, this.onSignupError);
     }
+
+    onSignupError = errorObject => {
+        let errorMessage = "Error signing up, try refreshing.";
+        console.log("errorObject: ", errorObject);
+        if (propertyExists(errorObject, ["response", "data"])) {
+            const errData = errorObject.response.data;
+            if (typeof errData === "object" && errData.message === "string") {
+                errorMessage = errData.message;
+            } else if (typeof errData === "string") {
+                errorMessage = errData;
+            }
+        }
+        this.setState({ error: errorMessage });
+    };
 
     handleCheckMarkClick() {
         this.setState({
