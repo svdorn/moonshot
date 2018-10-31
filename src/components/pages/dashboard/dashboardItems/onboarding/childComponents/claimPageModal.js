@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { createBusinessAndUser, closeNotification, addNotification, closeClaimPageModal } from '../../../../../../actions/usersActions';
+import { createBusinessAndUser, closeNotification, closeClaimPageModal } from '../../../../../../actions/usersActions';
 import { TextField } from 'material-ui';
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -10,6 +10,7 @@ import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import ReactGA from 'react-ga';
 import colors from "../../../../../../colors";
+import { button } from "../../../../../../classes.js";
 import { renderTextField, renderPasswordField, isValidEmail, goTo, isValidPassword } from "../../../../../../miscFunctions";
 
 import "../../../dashboard.css";
@@ -187,9 +188,12 @@ class ClaimPageModal extends Component {
                         label="Full Name"
                     /><br/>
                 </div>
-                <button className="button disabled gradient-transition inlineBlock round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "4px 8px"}}>
-                    Start
-                </button>
+                <div
+                    className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " + button.cyan}
+                    onClick={this.navFrames.bind(this, "next")}
+                >
+                    Next
+                </div>
             </div>
         );
     }
@@ -204,9 +208,12 @@ class ClaimPageModal extends Component {
                         label="Email"
                     /><br/>
                 </div>
-                <button className="button disabled gradient-transition inlineBlock round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" style={{padding: "4px 8px"}}>
-                    Start
-                </button>
+                <div
+                    className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " + button.cyan}
+                    onClick={this.navFrames.bind(this, "next")}
+                >
+                    Next
+                </div>
             </div>
         );
     }
@@ -243,9 +250,12 @@ class ClaimPageModal extends Component {
                     >terms of service</a>.
                 </div>
                 {this.props.loadingCreateBusiness ? <CircularProgress color="#72d6f5"/> :
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white marginTop10px" onClick={this.handleSubmit} style={{padding: "4px 8px"}}>
+                    <div
+                        className={"primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px " + button.cyan}
+                        onClick={this.handleSubmit}
+                    >
                         Start
-                    </button>
+                    </div>
                 }
             </div>
         );
@@ -265,32 +275,6 @@ class ClaimPageModal extends Component {
                     styleName="signup-circle"
                     style={(this.state.frame - 1) === navCircleIdx ? selectedStyle : {}}
                     key={`signup question ${navCircleIdx}`}
-                />
-            );
-        }
-        let arrowArea = [];
-        // add the left and right arrows
-        const arrowStyle = {
-            width: "20px",
-            height: "20px",
-        };
-        if (this.state.frame !== 1) {
-            arrowArea.unshift(
-                <div
-                    className="left circleArrowIcon"
-                    style={arrowStyle}
-                    onClick={this.navFrames.bind(this, "back")}
-                    key="back arrow"
-                />
-            );
-        }
-        if (this.state.frame !== 3) {
-            arrowArea.push(
-                <div
-                    className="right circleArrowIcon"
-                    style={arrowStyle}
-                    onClick={this.navFrames.bind(this, "next")}
-                    key="next arrow"
                 />
             );
         }
@@ -333,11 +317,8 @@ class ClaimPageModal extends Component {
                             }
                         </div>
                         <div>
-                            <div className="carousel">
-                                <div style={{paddingRight:"30px", paddingLeft:"30px"}}>
-                                    { frame }
-                                </div>
-                                { arrowArea }
+                            <div style={{paddingRight:"30px", paddingLeft:"30px"}}>
+                                { frame }
                             </div>
                             { navArea }
                         </div>
@@ -350,7 +331,6 @@ class ClaimPageModal extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         createBusinessAndUser,
-        addNotification,
         closeNotification,
         closeClaimPageModal
     }, dispatch);

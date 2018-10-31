@@ -600,7 +600,14 @@
     -webkit-box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.5);
 }
+.invite-candidates-modal > div:nth-child(4) {
+    margin-top: 15px;
+}
 .invite-candidates-modal > div > div {
+    margin-top: 5px;
+    text-align: left;
+}
+.invite-candidates-modal > div > div > div {
     margin-top: 5px;
     text-align: left;
 }

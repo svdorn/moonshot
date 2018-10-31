@@ -5,7 +5,6 @@ import { bindActionCreators } from "redux";
 import {
     createBusinessAndUser,
     closeNotification,
-    addNotification,
     closeSignupModal
 } from "../../../../../../actions/usersActions";
 import { TextField } from "material-ui";
@@ -206,10 +205,9 @@ class ModalSignup extends Component {
     handleSubmit(e) {
         e.preventDefault();
         if (!this.state.agreeingToTerms) {
-            return this.props.addNotification(
-                "Must agree to Terms and Conditions and Privacy Policy.",
-                "error"
-            );
+            return this.setState({
+                error: "Must agree to Terms and Conditions and Privacy Policy."
+            });
         }
 
         const vals = this.props.formData.businessSignup.values;
@@ -223,19 +221,16 @@ class ModalSignup extends Component {
                 notValid = true;
             }
         });
-        if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
+        if (notValid) return this.setState({ error: "Must fill out all fields." });
 
         // grab values we need from the form
         const { name, company, password, email } = vals;
 
         if (!isValidEmail(email)) {
-            return this.props.addNotification("Invalid email.", "error");
+            return this.setState({ error: "Invalid email." });
         }
         if (!isValidPassword(password)) {
-            return this.props.addNotification(
-                "Password must be at least 8 characters long",
-                "error"
-            );
+            return this.setState({ error: "Password must be at least 8 characters." });
         }
 
         const positions = this.props.onboardingPositions;
@@ -354,6 +349,9 @@ class ModalSignup extends Component {
                 <div className="font14px" style={{ marginTop: "-7px" }}>
                     {this.state.info.body3}
                 </div>
+                {this.state.error ? (
+                    <div className="font14px marginTop10px secondary-red">{this.state.error}</div>
+                ) : null}
                 <div className="inputContainer" styleName="signup-fields">
                     <Field name="email" component={renderTextField} label="Email" />
                     <br />
@@ -488,7 +486,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             createBusinessAndUser,
-            addNotification,
             closeNotification,
             closeSignupModal
         },
