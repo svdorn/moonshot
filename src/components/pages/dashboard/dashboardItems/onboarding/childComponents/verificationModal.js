@@ -59,7 +59,7 @@ class VerificationModal extends Component {
                 maxWidth={false}
                 onClose={this.close}
             >
-                <div styleName="modal-signup">
+                <div styleName="modal-verification">
                     <DialogContent>
                         <div className="primary-cyan font22px font18pxUnder700 center">
                             Verify Your Email
@@ -67,9 +67,9 @@ class VerificationModal extends Component {
                         <div className="center font16px font14pxUnder700" style={{maxWidth: "400px", margin:"5px auto"}}>
                             Go to your inbox to verify. This will allow us to activate your page and evaluations.
                         </div>
-                        <div className="center">
+                        <div className="center primary-white font18px font16pxUnder700">
                             <div
-                                className={"primary-white font18px font16pxUnder700 " + this.state.loadingSendVerificationEmail ? button.disabled : button.cyan}
+                                className={this.state.loadingSendVerificationEmail ? button.disabled : button.cyan}
                                 onClick={this.sendVerificationEmail}
                                 style={{margin: "20px auto"}}
                             >

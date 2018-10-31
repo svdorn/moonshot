@@ -660,6 +660,14 @@
     min-height: 300px;
 }
 
+.modal-verification {
+    padding: 20px;
+    background-color: var(--primary-black-dark);
+    color: var(--secondary-gray);
+    min-width: 270px;
+    min-height: 300px;
+}
+
 .save-your-progress {
     display: flex;
     flex-direction: column;
