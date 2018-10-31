@@ -184,7 +184,7 @@
 
 .add-position-header {
     margin-top: auto;
-    margin-bottom: auto;
+    margin-bottom: -40px;
 }
 .add-position-ismgr {
     margin: -30px auto 7px;
@@ -654,6 +654,14 @@
 }
 .modal-signup {
     padding: 40px 50px;
+    background-color: var(--primary-black-dark);
+    color: var(--secondary-gray);
+    min-width: 270px;
+    min-height: 300px;
+}
+
+.modal-verification {
+    padding: 20px;
     background-color: var(--primary-black-dark);
     color: var(--secondary-gray);
     min-width: 270px;

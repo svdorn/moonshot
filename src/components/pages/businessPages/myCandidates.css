@@ -22,3 +22,19 @@
 .mock-data-memo:hover > span {
     color: var(--primary-cyan);
 }
+
+@media screen and (max-width: 700px) {
+    .mock-data-memo {
+        font-size: 14px;
+        color: var(--primary-white);
+    }
+
+    .mock-data-memo .info {
+        width: 14px;
+        height: 14px;
+        text-align: center;
+        font-size: 12px;
+        vertical-align: top;
+        border: 1px solid white;
+    }
+}
