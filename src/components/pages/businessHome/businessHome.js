@@ -438,6 +438,7 @@ class BusinessHome extends Component {
                         >
                             {part.title}
                         </div>
+                        {focused ? null : <div styleName="what-how title-separator" />}
                         <div styleName={`body ${focused ? "focused" : ""}`}>{part.body}</div>
                         {buttons}
                     </div>

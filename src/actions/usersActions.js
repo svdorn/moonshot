@@ -390,8 +390,6 @@ export function updateOnboardingStep(userId, verificationToken, newStep) {
             dispatch({ type: "START_LOADING" });
         }
 
-        console.log("userId: ", userId);
-        console.log("verificationToken: ", verificationToken);
         if (userId && verificationToken) {
             axios
                 .post("/api/user/updateOnboardingStep", { userId, verificationToken, newStep })

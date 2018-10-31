@@ -382,6 +382,11 @@
     background-color: var(--primary-cyan);
 }
 
+.title-separator.what-how {
+    width: 60px;
+    margin: 5px auto 10px;
+}
+
 .what-how-background {
     --box-height: 400px;
     --box-width: 320px;
