@@ -3,9 +3,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { generalAction, addNotification } from "../../../actions/usersActions";
-import { getFirstName } from "../../../miscFunctions";
+import { getFirstName, copyFromPage } from "../../../miscFunctions";
 import { Dialog, FlatButton, CircularProgress } from 'material-ui';
 import { primaryCyan } from "../../../colors";
+import { button } from "../../../classes.js";
 import axios from 'axios';
 
 import "./dashboard.css";
@@ -22,6 +23,12 @@ class InviteCandidatesModal extends Component {
 
     handleClose = () => {
         this.props.generalAction("CLOSE_INVITE_CANDIDATES_MODAL");
+    }
+
+    copyTemplate = () => {
+        copyFromPage("#invite-template");
+        this.handleClose();
+        this.props.addNotification("Template copied to clipboard", "info");
     }
 
     makeDialogBody() {
@@ -48,24 +55,30 @@ class InviteCandidatesModal extends Component {
                     <div>
                         Subject: { subject }
                     </div>
-                    <div>
-                        Hi,
-                    </div>
-                    <div>
-                        Congratulations, we would like to invite you to the next round of evaluations! We are excited to learn more about you and see how well you could fit with our team. The next step is
-                        completing a 22-minute evaluation, which you can sign up and take <a style={{color:"#76defe", textDecoration:"underline"}} href={`https://moonshotinsights.io/apply/${uniqueName}`}>here</a>.
-                    </div>
-                    <div>
-                        We look forward to reviewing your results. Please let me know if you have any questions.
-                    </div>
-                    <div>
-                        All the best,
+                    <div id="invite-template">
                         <div>
-                            { getFirstName(currentUser.name) }
+                            Hi,
+                        </div>
+                        <div>
+                            Congratulations, we would like to invite you to the next round of evaluations! We are excited to learn more about you and see how well you could fit with our team. The next step is
+                            completing a 22-minute evaluation, which you can sign up and take <a style={{color:"#76defe", textDecoration:"underline"}} href={`https://moonshotinsights.io/apply/${uniqueName}`}>here</a>.
+                        </div>
+                        <div>
+                            We look forward to reviewing your results. Please let me know if you have any questions.
+                        </div>
+                        <div>
+                            All the best,
+                            <div>
+                                { getFirstName(currentUser.name) }
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div>
+                <div
+                    className={"primary-white font18px font16pxUnder700 font14pxUnder500 " + button.cyan}
+                    onClick={this.copyTemplate}
+                >
+                    Copy Message
                 </div>
             </div>
         );
