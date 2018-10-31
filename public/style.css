@@ -10,6 +10,10 @@ body {
     overflow-x: hidden;
 }
 
+#app {
+    overflow-x: hidden;
+}
+
 :root {
     --primary-orange: #ff582d;
     --primary-pink: #fd0d8b;

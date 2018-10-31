@@ -20,7 +20,7 @@ import {
     openAddUserModal,
     openIntroductionModal
 } from "../../actions/usersActions";
-import { isValidEmail, goTo, elementInViewport } from "../../miscFunctions";
+import { isValidEmail, goTo } from "../../miscFunctions";
 import { axios } from "axios";
 import { animateScroll } from "react-scroll";
 import AccountAdminMenu from "./accountAdminMenu";
@@ -247,24 +247,13 @@ class Menu extends Component {
             } else if (!(widthWantsShadow && scrollWantsShadow) && this.state.headerClass === "") {
                 this.setState({ headerClass: "noShadow" });
             }
-
-            // get the 'who do you need to hire' textarea
-            const getStartedInput = document.getElementById("get-started-input");
-            // focus on it (but only if it's NOT already focused and it IS in the viewport)
-            if (
-                window.scrollY > 0 &&
-                document.activeElement.nodeName === "BODY" &&
-                elementInViewport(getStartedInput)
-            ) {
-                getStartedInput.focus();
-            }
         }
     }
 
     goToExplore = () => {
         goTo("/explore");
         this.props.openIntroductionModal();
-    }
+    };
 
     render() {
         let self = this;
@@ -288,8 +277,10 @@ class Menu extends Component {
         // if user is account admin OR they're on explore, give them the side-menu
         if (
             pathFirstPart === "explore" ||
-            (currentUser && currentUser.userType === "accountAdmin")
-            || (pathFirstPart === "apply" && this.props.location.query && this.props.location.query.onboarding)
+            (currentUser && currentUser.userType === "accountAdmin") ||
+            (pathFirstPart === "apply" &&
+                this.props.location.query &&
+                this.props.location.query.onboarding)
         ) {
             return <AccountAdminMenu />;
         }

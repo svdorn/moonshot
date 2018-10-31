@@ -5,12 +5,21 @@ import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import { closeNotification, dialogEmail, openIntroductionModal } from "../../../actions/usersActions";
+import {
+    closeNotification,
+    dialogEmail,
+    openIntroductionModal
+} from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from "material-ui";
 import AddUserDialog from "../../childComponents/addUserDialog";
-import { isValidEmail, goTo, elementPartiallyInViewport } from "../../../miscFunctions";
+import {
+    isValidEmail,
+    goTo,
+    elementPartiallyInViewport,
+    elementInViewport
+} from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
 import CornersButton from "../../miscComponents/cornersButton";
 import PositionsDropDown from "./positionsDropDown";
@@ -113,6 +122,10 @@ class BusinessHome extends Component {
     }
 
     handleScroll() {
+        if (this.props.location.pathname !== "/") {
+            return;
+        }
+
         let flourishElement = document.getElementById("home-flourish-svg");
         if (elementPartiallyInViewport(flourishElement)) {
             document.removeEventListener("scroll", this.handleScroll);
@@ -121,10 +134,23 @@ class BusinessHome extends Component {
         } else if (this.state.drewSvg) {
             document.removeEventListener("scroll", this.handleScroll);
         }
+
+        // get the 'who do you need to hire' textarea
+        const getStartedInput = document.getElementById("get-started-input");
+        // focus on it (in certain circumstances)
+        if (
+            window.innerWidth > 800 && // don't do this on mobile
+            window.scrollY > 0 && // only if partially scrolled already
+            // document.activeElement.nodeName === "BODY" && // if not focused on anything else
+            elementInViewport(getStartedInput) // if the input is on the screen
+        ) {
+            getStartedInput.focus();
+        }
     }
 
     componentWillUnmount() {
         this.typed.destroy();
+        document.removeEventListener("scroll", this.handleScroll);
     }
 
     cssPropertySupported(prop) {
@@ -347,7 +373,7 @@ class BusinessHome extends Component {
                         color1={colors.primaryCyan}
                         color2={colors.primaryWhite}
                         className="font16px font14pxUnder900 font12pxUnder400"
-                        style={{ margin: "40px 25px 20px" }}
+                        style={{ margin: "40px 25px 15px" }}
                     />
                     <div
                         styleName="no-credit-card"
@@ -381,8 +407,8 @@ class BusinessHome extends Component {
         const partsJsx = parts.map(part => {
             const focused = whatHowPosition === part.position;
             // only show the two buttons if this part is highlighted
-            const buttons = !focused ? null : (
-                <div styleName={`stacked-buttons`}>
+            const buttons = (
+                <div styleName={`stacked-buttons ${focused ? "show" : "hide"}`}>
                     <CornersButton
                         content="Try Now For Free"
                         onClick={this.handleOpenExplore}
