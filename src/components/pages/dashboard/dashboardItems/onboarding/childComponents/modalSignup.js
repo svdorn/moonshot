@@ -165,10 +165,17 @@ class ModalSignup extends Component {
     }
 
     handleKeyPress(e) {
+        const { frame } = this.state;
+
         var key = e.which || e.keyCode;
         if (key === 13) {
             // 13 is enter
-            this.handleSubmit();
+            e.preventDefault();
+            if (frame === 3) {
+                this.handleSubmit(e);
+            } else if (frame === 1 || frame === 2) {
+                this.handleFrameChange();
+            }
         }
     }
 
