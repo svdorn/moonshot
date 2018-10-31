@@ -283,15 +283,13 @@ class ModalSignup extends Component {
     }
 
     makeFrame2() {
+        const { error, info } = this.state;
+
         return (
             <div className="center">
-                <div className="primary-cyan font22px font20pxUnder500">
-                    {this.state.info.header2}
-                </div>
-                <div className="font14px">{this.state.info.body2}</div>
-                {this.state.error ? (
-                    <div className="secondary-red font16px">{this.state.error}</div>
-                ) : null}
+                <div className="primary-cyan font22px font20pxUnder500">{info.header2}</div>
+                <div className="font14px">{info.body2}</div>
+                {error ? <div className="secondary-red font16px">{error}</div> : null}
                 <div className="inputContainer signup-fields">
                     <Field name="name" component={renderTextField} label="Full Name" />
                     <br />
@@ -312,6 +310,8 @@ class ModalSignup extends Component {
     }
 
     makeFrame3() {
+        const { info, error, agreeingToTerms } = this.state;
+
         // value of the password entered
         let value = undefined;
         if (propertyExists(this, ["props", "formData", "businessSignup", "values", "password"])) {
@@ -320,15 +320,11 @@ class ModalSignup extends Component {
 
         return (
             <div className="center">
-                <div className="primary-cyan font22px font20pxUnder500">
-                    {this.state.info.header3}
-                </div>
+                <div className="primary-cyan font22px font20pxUnder500">{info.header3}</div>
                 <div className="font14px" style={{ marginTop: "-7px" }}>
-                    {this.state.info.body3}
+                    {info.body3}
                 </div>
-                {this.state.error ? (
-                    <div className="font14px marginTop10px secondary-red">{this.state.error}</div>
-                ) : null}
+                {error ? <div className="font14px marginTop10px secondary-red">{error}</div> : null}
                 <div className="inputContainer signup-fields">
                     <Field name="email" component={renderTextField} label="Email" />
                     <br />
@@ -348,7 +344,7 @@ class ModalSignup extends Component {
                     >
                         <img
                             alt=""
-                            className={"checkMark" + this.state.agreeingToTerms}
+                            className={"checkMark" + agreeingToTerms}
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             style={{ marginTop: "-18px" }}
                         />
@@ -385,8 +381,17 @@ class ModalSignup extends Component {
         );
     }
 
+    // navigate around by using the bottom nav circles
+    circleNav = wantedFrame => () => {
+        if (wantedFrame < this.state.frame) {
+            this.setState({ frame: wantedFrame });
+        }
+    };
+
     //name, email, password, confirm password, signup button
     render() {
+        const { frame, info } = this.state;
+
         let navArea = [];
         const selectedStyle = {
             background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
@@ -396,24 +401,24 @@ class ModalSignup extends Component {
             navArea.push(
                 <div
                     styleName="signup-circle"
-                    style={this.state.frame - 2 === navCircleIdx ? selectedStyle : {}}
+                    style={frame - 2 === navCircleIdx ? selectedStyle : {}}
+                    className={frame - 2 >= navCircleIdx ? "pointer" : ""}
                     key={`signup modal ${navCircleIdx}`}
+                    onClick={this.circleNav(navCircleIdx + 2)}
                 />
             );
         }
 
         return (
             <Dialog open={!!this.props.open} maxWidth={false} onClose={this.closeSignupModal}>
-                {this.state.frame === 1 && this.state.info.header1 ? (
+                {frame === 1 && info.header1 ? (
                     <div styleName="modal-signup">
-                        <div className="primary-cyan font22px font20pxUnder500">
-                            {this.state.info.header1}
-                        </div>
+                        <div className="primary-cyan font22px font20pxUnder500">{info.header1}</div>
                         <div
                             className="font16px"
                             style={{ maxWidth: "400px", margin: "20px auto" }}
                         >
-                            {this.state.info.body1}
+                            {info.body1}
                         </div>
                         <div
                             key={"continue signup modal"}
@@ -432,7 +437,7 @@ class ModalSignup extends Component {
                     </div>
                 ) : (
                     <form styleName="modal-signup">
-                        {this.state.frame === 2 ? (
+                        {frame === 2 ? (
                             <div>{this.makeFrame2()}</div>
                         ) : (
                             <div>{this.makeFrame3()}</div>
