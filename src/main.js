@@ -133,15 +133,12 @@ class Main extends Component {
         if (
             currentUser &&
             currentUser.userType === "accountAdmin" &&
-            ((currentUser.popups &&
-            currentUser.popups.dashboard) ||
-            (currentUser.popups &&
-            currentUser.popups.businessInterests) ||
-            (positionCount < 1))
+            ((currentUser.popups && currentUser.popups.dashboard) ||
+                (currentUser.popups && currentUser.popups.businessInterests) ||
+                positionCount < 1)
         ) {
-            return <PreOnboardingFooter />
-        }
-        else if (
+            return <PreOnboardingFooter />;
+        } else if (
             currentUser &&
             currentUser.userType === "accountAdmin" &&
             currentUser.onboard &&
@@ -149,7 +146,7 @@ class Main extends Component {
             typeof currentUser.onboard.step === "number"
         ) {
             return <OnboardingStepsFooter />;
-        }else if (
+        } else if (
             currentUser &&
             currentUser.userType === "accountAdmin" &&
             !currentUser.confirmEmbedLink

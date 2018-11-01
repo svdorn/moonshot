@@ -1,6 +1,7 @@
 "use strict";
 import React from "react";
 import { TextField } from "material-ui";
+import NewTextField from "@material-ui/core/TextField";
 import colors from "./colors";
 import { browserHistory } from "react-router";
 import clipboard from "clipboard-polyfill";
@@ -65,6 +66,19 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
         floatingLabelStyle={style.searchFloatingLabelStyle}
         underlineFocusStyle={style.searchUnderlineFocusStyle}
         className="text-field"
+        {...input}
+        {...custom}
+    />
+);
+
+const renderNewTextField = ({ input, label, placeholder, meta: { touched, error }, ...custom }) => (
+    <NewTextField
+        label={touched && error ? error : label}
+        placeholder={typeof placeholder === "string" ? placeholder : label}
+        required={typeof required === "boolean" ? required : false}
+        error={touched && error ? true : false}
+        variant="standard"
+        inputLabelProps={{ classes: { root: "INPUT-LABEL-MCDANGUS primary-cyan" } }}
         {...input}
         {...custom}
     />
@@ -349,6 +363,7 @@ function noop() {}
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
+    renderNewTextField,
     renderPasswordField,
     viewablePasswordField,
     getFirstName,
