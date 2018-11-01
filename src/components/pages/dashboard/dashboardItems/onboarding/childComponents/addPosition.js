@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Field, reduxForm } from 'redux-form';
-import { addNotification, startLoading, stopLoading, updateStore, updatePositionCount } from "../../../../../../actions/usersActions";
+import { startLoading, stopLoading, updateStore, updatePositionCount } from "../../../../../../actions/usersActions";
 import { renderTextField } from "../../../../../../miscFunctions";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -205,7 +205,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addNotification,
         startLoading,
         stopLoading,
         updateStore,
