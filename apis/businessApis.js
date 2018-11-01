@@ -124,9 +124,17 @@ async function GET_billingIsSetUp(req, res) {
 // create a business and the first account admin for that business
 async function POST_createBusinessAndUser(req, res) {
     // get necessary arguments
-    let { name, company, email, password, positions, onboard, welcomeToMoonshot, selectedJobsToBeDone, showVerifyEmailBanner } = sanitize(
-        req.body
-    );
+    let {
+        name,
+        company,
+        email,
+        password,
+        positions,
+        onboard,
+        welcomeToMoonshot,
+        selectedJobsToBeDone,
+        showVerifyEmailBanner
+    } = sanitize(req.body);
 
     // validate arguments
     const stringArgs = [name, company, email, password];
@@ -191,7 +199,15 @@ async function POST_createBusinessAndUser(req, res) {
     }
 
     // create the user
-    const userInfo = { name, email, password, onboard, dashboardPopup, businessInterestsPopup, showVerifyEmailBanner };
+    const userInfo = {
+        name,
+        email,
+        password,
+        onboard,
+        dashboardPopup,
+        businessInterestsPopup,
+        showVerifyEmailBanner
+    };
     try {
         var user = await createAccountAdmin(userInfo);
     } catch (createUserError) {
@@ -305,7 +321,15 @@ async function POST_createBusinessAndUser(req, res) {
 async function createAccountAdmin(info) {
     return new Promise(function(resolve, reject) {
         // get needed args
-        const { name, password, email, onboard, dashboardPopup, businessInterestsPopup, showVerifyEmailBanner } = info;
+        const {
+            name,
+            password,
+            email,
+            onboard,
+            dashboardPopup,
+            businessInterestsPopup,
+            showVerifyEmailBanner
+        } = info;
 
         let user = {
             name,
@@ -3050,12 +3074,6 @@ async function GET_employeeSearch(req, res) {
     const positionName = sanitize(req.query.positionName);
     // the thing we should sort by - default is alphabetical
     const sortBy = sanitize(req.query.sortBy);
-
-    // sort by overall score by default
-    // let sort = { }
-    // if (sortBy) {
-    //
-    // }
 
     let positionRequirements = [
         { businessId: mongoose.Types.ObjectId(businessId) },

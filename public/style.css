@@ -2112,10 +2112,11 @@ button.link {
     width: 80% !important;
 }
 .employeePreviewGrading > div:nth-child(4) > div:first-child > div > div > div:first-child {
-    background: linear-gradient(to right, #fd0d8b, #ff5d27);
+    background: linear-gradient(to right, var(--primary-cyan), var(--primary-white));
 }
 .employeePreviewGrading > div:nth-child(4) > div:first-child > div > div > div:nth-child(3) {
-    background: linear-gradient(to right, #fd0d8b, #ff5d27);
+    background: linear-gradient(to right, var(--primary-cyan), var(--primary-white));
+    border: none !important;
 }
 .adminQuestionsContainer > div:nth-child(2) > div > div:first-child > div > div > div:first-child {
     background: linear-gradient(to right, #fd0d8b, #ff5d27);
@@ -2171,9 +2172,9 @@ button.link {
     position: relative;
     width: 210px;
     height: 220px;
-    -moz-box-shadow: 0px 0px 50px 1px #00000073;
-    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
-    box-shadow: 0px 0px 50px 1px #00000073;
+    -moz-box-shadow: 0px 0px 8px 0px #00000073;
+    -webkit-box-shadow: 0px 0px 8px 0px #00000073;
+    box-shadow: 0px 0px 8px 0px #00000073;
     -moz-transition: -moz-box-shadow 0.2s;
     -webkit-transition: -webkit-transition 0.2s;
     transition: box-shadow 0.2s;
@@ -2183,9 +2184,9 @@ button.link {
     background-color: #333333;
 }
 .employeePreview:hover {
-    -moz-box-shadow: 0px 0px 50px 15px #00000073;
-    -webkit-box-shadow: 0px 0px 50px 15px #00000073;
-    box-shadow: 0px 0px 50px 15px #00000073;
+    -moz-box-shadow: 0px 0px 15px 1px #00000073;
+    -webkit-box-shadow: 0px 0px 15px 1px #00000073;
+    box-shadow: 0px 0px 15px 1px #00000073;
     -moz-transition: -moz-box-shadow 0.2s;
     -webkit-transition: -webkit-transition 0.2s;
     transition: box-shadow 0.2s;
