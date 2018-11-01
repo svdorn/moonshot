@@ -4,29 +4,16 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Field, reduxForm } from "redux-form";
 import {
-    addNotification,
     startLoading,
     stopLoading,
     updateStore,
     updatePositionCount
 } from "../../../../../../actions/usersActions";
 import { renderTextField } from "../../../../../../miscFunctions";
-import {
-    TextField,
-    DropDownMenu,
-    MenuItem,
-    Divider,
-    Toolbar,
-    ToolbarGroup,
-    Dialog,
-    FlatButton,
-    CircularProgress,
-    RaisedButton,
-    Paper
-} from "material-ui";
-import axios from "axios";
-
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 import TextInput from "../../../../../userInput/textInput";
+import axios from "axios";
 
 import "../../../dashboard.css";
 
@@ -57,17 +44,43 @@ class AddPosition extends Component {
         };
     }
 
-    handlePositionTypeChange = (event, index) => {
-        const positionType = this.state.positionTypes[index];
+    handleClickIsManager = () => {
+        const newState = { ...this.state, newPosIsManager: !this.state.newPosIsManager };
+        this.setState(newState);
+    };
+
+    // create the dropdown for the different positions
+    makeDropdown(position) {
+        const positions = this.state.positionTypes.map(pos => {
+            return (
+                <MenuItem value={pos} key={`position${pos}`}>
+                    {pos}
+                </MenuItem>
+            );
+        });
+
+        return (
+            <Select
+                disableUnderline={true}
+                classes={{
+                    root: "selectRootWhite font16px font14pxUnder500",
+                    icon: "selectIconWhiteImportant selectIconMarginSmallText"
+                }}
+                value={position}
+                onChange={this.handleChangePositionType(position)}
+                key={`position`}
+            >
+                {positions}
+            </Select>
+        );
+    }
+
+    handleChangePositionType = position => event => {
+        const positionType = event.target.value;
         let newState = { ...this.state, positionType };
         if (positionType !== "Position Type") {
             newState.mustSelectTypeError = false;
         }
-        this.setState(newState);
-    };
-
-    handleClickIsManager = () => {
-        const newState = { ...this.state, newPosIsManager: !this.state.newPosIsManager };
         this.setState(newState);
     };
 
@@ -146,50 +159,6 @@ class AddPosition extends Component {
     };
 
     render() {
-        const style = {
-            separator: {
-                width: "70%",
-                position: "relative",
-                height: "40px",
-                textAlign: "center"
-            },
-            separatorText: {
-                padding: "0px 40px",
-                backgroundColor: "#2e2e2e",
-                display: "inline-block",
-                position: "relative",
-                fontSize: "23px",
-                color: "white"
-            },
-            separatorLine: {
-                width: "100%",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
-            },
-            anchorOrigin: {
-                vertical: "top",
-                horizontal: "left"
-            },
-            menuLabelStyle: {
-                fontSize: "14px",
-                color: "white",
-                marginTop: "3px"
-            }
-        };
-        const actions = [
-            <FlatButton
-                label="Close"
-                onClick={this.handleClose}
-                className="primary-white-important"
-            />
-        ];
-
-        const positionTypeItems = this.state.positionTypes.map(function(positionType, index) {
-            return <MenuItem value={positionType} primaryText={positionType} key={index} />;
-        });
-
         return (
             <div>
                 <form className="center" style={{ marginTop: "-10px" }}>
@@ -203,19 +172,10 @@ class AddPosition extends Component {
                         required={true}
                         placeholder="iOS Developer"
                     />
-                    <div className="primary-cyan font16px" style={{ marginTop: "5px" }}>
-                        <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                            Select a position type:
-                        </div>
-                        <DropDownMenu
-                            value={this.state.positionType}
-                            onChange={this.handlePositionTypeChange}
-                            labelStyle={style.menuLabelStyle}
-                            anchorOrigin={style.anchorOrigin}
-                            style={{ fontSize: "14px", marginTop: "-20px" }}
-                        >
-                            {positionTypeItems}
-                        </DropDownMenu>
+                    <br />
+                    <div styleName="add-position-select-type">
+                        <div>Select a position type:</div>
+                        <div>{this.makeDropdown(this.state.positionType)}</div>
                     </div>
                     <br />
                     <div styleName="add-position-ismgr">
@@ -263,7 +223,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            addNotification,
             startLoading,
             stopLoading,
             updateStore,
