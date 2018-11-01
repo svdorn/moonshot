@@ -35,14 +35,14 @@ const renderField = ({
         error={touched && error ? true : false}
         variant="standard"
         autoComplete={typeof autoComplete === "string" ? autoComplete : "on"}
-        // InputLabelProps={{
-        //     classes: { root: "INPUT-LABEL-MCDANGUS primary-cyan" },
-        //     FormLabelClasses: {
-        //         root: "ROOT-FORM-LABEL",
-        //         error: "ERROR-INPUT",
-        //         focused: "FOCUSED-INPUT"
-        //     }
-        // }}
+        InputLabelProps={{
+            classes: { root: "input-label" },
+            FormLabelClasses: {
+                root: "root-cyan-label",
+                error: "error-input-label",
+                focused: "focused-input-label"
+            }
+        }}
         {...input}
         {...custom}
     />

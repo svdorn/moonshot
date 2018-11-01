@@ -628,13 +628,12 @@ form > h1 {
     background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
 }
 
-.ROOT-FORM-LABEL.INPUT-LABEL-MCDANGUS,
-.ROOT-FORM-LABEL.INPUT-LABEL-MCDANGUS.FOCUSED-INPUT {
+.root-cyan-label.input-label,
+.root-cyan-label.input-label.focused-input-label {
     color: var(--primary-cyan);
-    font-family: inherit;
 }
-.ROOT-FORM-LABEL.INPUT-LABEL-MCDANGUS.ERROR-INPUT,
-.ROOT-FORM-LABEL.INPUT-LABEL-MCDANGUS.ERROR-INPUT.FOCUSED-INPUT {
+.root-cyan-label.input-label.error-input-label,
+.root-cyan-label.input-label.focused-input-label.error-input-label {
     color: var(--secondary-red);
 }
 
