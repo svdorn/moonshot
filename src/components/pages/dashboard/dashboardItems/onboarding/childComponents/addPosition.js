@@ -31,15 +31,6 @@ class AddPosition extends Component {
         }
     }
 
-    handlePositionTypeChange = (event, index) => {
-        const positionType = this.state.positionTypes[index];
-        let newState = { ...this.state, positionType };
-        if (positionType !== "Position Type") {
-            newState.mustSelectTypeError = false;
-        }
-        this.setState(newState);
-    };
-
     handleClickIsManager = () => {
         const newState = { ...this.state, newPosIsManager: !this.state.newPosIsManager }
         this.setState(newState);
@@ -75,7 +66,12 @@ class AddPosition extends Component {
     }
 
     handleChangePositionType = position => event => {
-        this.setState({positionType: event.target.value});
+        const positionType = event.target.value;
+        let newState = { ...this.state, positionType };
+        if (positionType !== "Position Type") {
+            newState.mustSelectTypeError = false;
+        }
+        this.setState(newState);
     }
 
     handleSubmit = (e) => {

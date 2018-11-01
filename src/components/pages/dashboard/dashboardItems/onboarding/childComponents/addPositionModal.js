@@ -4,37 +4,14 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Field, reduxForm } from 'redux-form';
 import { updateStore } from "../../../../../../actions/usersActions";
-import {  } from "../../../../../../miscFunctions";
-import {
-    TextField,
-    DropDownMenu,
-    MenuItem,
-    Divider,
-    Toolbar,
-    ToolbarGroup,
-    Dialog,
-    FlatButton,
-    CircularProgress,
-    RaisedButton,
-    Paper
-} from 'material-ui';
+import { renderTextField } from "../../../../../../miscFunctions";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
 
 import "../../../dashboard.css";
 
 const required = value => (value ? undefined : 'This field is required.');
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        hintStyle={{color: 'white'}}
-        inputStyle={{color: '#72d6f5'}}
-        underlineStyle={{color: '#72d6f5'}}
-        errorText={touched && error}
-        {...input}
-        {...custom}
-    />
-);
 
 class AddPositionModal extends Component {
     constructor(props) {
@@ -59,14 +36,43 @@ class AddPositionModal extends Component {
         }
     }
 
-    handlePositionTypeChange = (event, index) => {
-        const positionType = this.state.positionTypes[index];
+    // create the dropdown for the different positions
+    makeDropdown(position) {
+        const positions = this.state.positionTypes.map(pos => {
+            return (
+                <MenuItem
+                    value={pos}
+                    key={`position${pos}`}
+                >
+                    { pos }
+                </MenuItem>
+            )
+        });
+
+        return (
+            <Select
+                disableUnderline={true}
+                classes={{
+                    root: "selectRootWhite font16px font14pxUnder500",
+                    icon: "selectIconWhiteImportant selectIconMarginSmallText"
+                }}
+                value={position}
+                onChange={this.handleChangePositionType(position)}
+                key={`position`}
+            >
+                { positions }
+            </Select>
+        );
+    }
+
+    handleChangePositionType = position => event => {
+        const positionType = event.target.value;
         let newState = { ...this.state, positionType };
         if (positionType !== "Position Type") {
             newState.mustSelectTypeError = false;
         }
         this.setState(newState);
-    };
+    }
 
     handleClickIsManager = () => {
         const newState = { ...this.state, newPosIsManager: !this.state.newPosIsManager }
@@ -130,50 +136,6 @@ class AddPositionModal extends Component {
     }
 
     render() {
-        const style = {
-            separator: {
-                width: "70%",
-                position: "relative",
-                height: "40px",
-                textAlign: "center"
-            },
-            separatorText: {
-                padding: "0px 40px",
-                backgroundColor: "#2e2e2e",
-                display: "inline-block",
-                position: "relative",
-                fontSize: "23px",
-                color: "white"
-            },
-            separatorLine: {
-                width: "100%",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
-            },
-            anchorOrigin: {
-                vertical: "top",
-                horizontal: "left"
-            },
-            menuLabelStyle: {
-                fontSize: "16px",
-                color: "white",
-                marginTop: "3px"
-            }
-        }
-        const actions = [
-            <FlatButton
-                label="Close"
-                onClick={this.handleClose}
-                className="primary-white-important"
-            />,
-        ];
-
-        const positionTypeItems = this.state.positionTypes.map(function (positionType, index) {
-            return <MenuItem value={positionType} primaryText={positionType} key={index}/>
-        });
-
         const { update, title, role } = this.state;
 
         let header = "Update Position";
@@ -209,7 +171,7 @@ class AddPositionModal extends Component {
                         : null
                     }
                     { !title || update ?
-                        <div>
+                        <div style={{marginTop:"-20px"}}>
                             <Field
                                 name="position"
                                 component={renderTextField}
@@ -221,16 +183,13 @@ class AddPositionModal extends Component {
                     }
                     { !role || update ?
                         <div>
-                            <div className="primary-cyan font16px" style={{marginTop: "5px"}}>
-                                <div style={{display:"inline-block", verticalAlign:"top"}}>Select a position type:</div>
-                                <DropDownMenu value={this.state.positionType}
-                                          onChange={this.handlePositionTypeChange}
-                                          labelStyle={style.menuLabelStyle}
-                                          anchorOrigin={style.anchorOrigin}
-                                          style={{fontSize: "16px", marginTop: "-20px"}}
-                                >
-                                    {positionTypeItems}
-                                </DropDownMenu>
+                            <div styleName="add-position-select-type">
+                                <div>
+                                    Select a position type:
+                                </div>
+                                <div>
+                                    {this.makeDropdown(this.state.positionType)}
+                                </div>
                             </div>
                         </div>
                         : null
