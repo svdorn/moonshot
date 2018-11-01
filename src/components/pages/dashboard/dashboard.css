@@ -191,6 +191,9 @@
     margin-bottom: 20px;
     font-size: 16px;
 }
+.add-position-select-type-in-modal {
+    margin-top: 10px;
+}
 .add-position-select-type > div {
     display: inline-block;
     vertical-align: top;
