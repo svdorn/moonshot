@@ -71,41 +71,6 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
     />
 );
 
-const renderNewTextField = ({
-    input,
-    label,
-    placeholder,
-    autoComplete,
-    meta: { touched, error },
-    ...custom
-}) => (
-    <NewTextField
-        label={label}
-        placeholder={typeof placeholder === "string" ? placeholder : label}
-        helperText={touched && error ? error : undefined}
-        required={typeof required === "boolean" ? required : false}
-        error={touched && error ? true : false}
-        variant="standard"
-        autoComplete={typeof autoComplete === "string" ? autoComplete : "on"}
-        InputLabelProps={{
-            classes: { root: "INPUT-LABEL-MCDANGUS primary-cyan" },
-            FormLabelClasses: {
-                root: "ROOT-FORM-LABEL",
-                error: "ERROR-INPUT",
-                focused: "FOCUSED-INPUT"
-            }
-        }}
-        InputProps={{
-            disableUnderline: false,
-            classes: {
-                underline: "opacity-white-text"
-            }
-        }}
-        {...input}
-        {...custom}
-    />
-);
-
 const renderPasswordField = ({ input, label, meta: { touched, error }, ...custom }) => (
     <TextField
         hintText={label}
@@ -385,7 +350,6 @@ function noop() {}
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
-    renderNewTextField,
     renderPasswordField,
     viewablePasswordField,
     getFirstName,

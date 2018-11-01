@@ -67,6 +67,7 @@ class TextInput extends Component {
                         label={label}
                         required={required}
                         validate={validate}
+                        placeholder={placeholder}
                     />
                 </MuiThemeProvider>
             </div>

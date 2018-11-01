@@ -183,8 +183,7 @@
 }
 
 .add-position-header {
-    margin-top: auto;
-    margin-bottom: -40px;
+    margin-bottom: 8px;
 }
 .add-position-ismgr {
     margin: -30px auto 7px;
@@ -790,6 +789,10 @@
     .blue-arrow {
         font-size: 18px;
     }
+
+    .add-position-header {
+        margin-bottom: 20px;
+    }
 }
 
 @media screen and (min-width: 571px) {
@@ -813,7 +816,7 @@
     }
     .add-position-header {
         margin-top: 10px;
-        margin-bottom: -30px;
+        margin-bottom: 15px;
     }
 
     .welcome-frame-modal {

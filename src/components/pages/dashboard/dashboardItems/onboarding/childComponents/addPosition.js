@@ -10,7 +10,7 @@ import {
     updateStore,
     updatePositionCount
 } from "../../../../../../actions/usersActions";
-import { renderTextField, renderNewTextField } from "../../../../../../miscFunctions";
+import { renderTextField } from "../../../../../../miscFunctions";
 import {
     TextField,
     DropDownMenu,
@@ -196,26 +196,12 @@ class AddPosition extends Component {
                     {this.state.mustSelectTypeError ? (
                         <div className="secondary-red font10px">Must select a position type.</div>
                     ) : null}
-                    <Field
-                        name="position"
-                        component={renderNewTextField}
-                        required={true}
-                        label="Position Name"
-                        validate={[required]}
-                    />
-                    <br />
-                    <Field
-                        name="position"
-                        component={renderTextField}
-                        label="Position Name"
-                        validate={[required]}
-                    />
                     <TextInput
                         name="position"
                         label="Position Name"
                         validate={[required]}
                         required={true}
-                        placeholder="McJangus"
+                        placeholder="iOS Developer"
                     />
                     <div className="primary-cyan font16px" style={{ marginTop: "5px" }}>
                         <div style={{ display: "inline-block", verticalAlign: "top" }}>
