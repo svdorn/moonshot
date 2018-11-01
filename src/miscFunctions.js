@@ -71,13 +71,22 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
     />
 );
 
-const renderNewTextField = ({ input, label, placeholder, meta: { touched, error }, ...custom }) => (
+const renderNewTextField = ({
+    input,
+    label,
+    placeholder,
+    autoComplete,
+    meta: { touched, error },
+    ...custom
+}) => (
     <NewTextField
-        label={touched && error ? error : label}
+        label={label}
         placeholder={typeof placeholder === "string" ? placeholder : label}
+        helperText={touched && error ? error : undefined}
         required={typeof required === "boolean" ? required : false}
         error={touched && error ? true : false}
         variant="standard"
+        autoComplete={typeof autoComplete === "string" ? autoComplete : "on"}
         InputLabelProps={{
             classes: { root: "INPUT-LABEL-MCDANGUS primary-cyan" },
             FormLabelClasses: {
