@@ -186,6 +186,20 @@
     margin-top: auto;
     margin-bottom: -40px;
 }
+.add-position-select-type {
+    color: var(--primary-cyan);
+    margin-top: 5px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+.add-position-select-type > div {
+    display: inline-block;
+    vertical-align: top;
+}
+.add-position-select-type > div:nth-child(2) {
+    margin-top: -3px;
+    margin-left: 7px;
+}
 .add-position-ismgr {
     margin: -30px auto 7px;
     color: var(--primary-white);

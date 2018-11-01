@@ -2890,6 +2890,10 @@ button.link {
 .selectIconMargin {
     margin-top: -5px;
 }
+.selectIconMarginSmallText {
+    margin-top: -2px;
+    right: 10px !important;
+}
 .topOptionWhite {
     color: white;
 }
