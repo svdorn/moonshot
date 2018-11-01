@@ -13,12 +13,13 @@ class InflatableBox extends Component {
 
     render() {
         return (
-            <div
-                styleName="box"
-                key={this.props.key ? this.props.key : ""}
-                onClick={typeof this.props.onClick === "function" ? this.props.onClick : () => {}}
-            >
-                <div styleName="hoverable">
+            <div styleName="box" key={this.props.key ? this.props.key : ""}>
+                <div
+                    styleName="hoverable"
+                    onClick={
+                        typeof this.props.onClick === "function" ? this.props.onClick : () => {}
+                    }
+                >
                     <div styleName="background" />
                 </div>
                 <div styleName="foreground">

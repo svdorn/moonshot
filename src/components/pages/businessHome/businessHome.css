@@ -188,8 +188,8 @@
     margin-top: 22px;
     opacity: 0.6;
     z-index: 2;
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
 
     -webkit-transition: all 0.5s ease;
     -ms-transition: all 0.5s ease;
@@ -382,6 +382,11 @@
     background-color: var(--primary-cyan);
 }
 
+.title-separator.what-how {
+    width: 60px;
+    margin: 5px auto 10px;
+}
+
 .what-how-background {
     --box-height: 400px;
     --box-width: 320px;
@@ -480,7 +485,20 @@
 }
 .stacked-buttons {
     pointer-events: all;
+    overflow: hidden;
+
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+.stacked-buttons.show {
+    max-height: 200px;
     margin-top: 30px;
+}
+.stacked-buttons.hide {
+    max-height: 0px;
+    margin-top: 0px;
+    opacity: 0;
 }
 .cta-or {
     color: var(--secondary-gray);
@@ -491,11 +509,19 @@
     margin-right: 10px;
 }
 .see-how {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 10px;
+    opacity: 0.8;
     cursor: pointer;
+
+    -webkit-transition: opacity 0.2s ease;
+    -moz-transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease;
 }
-.see-how:hover > .see-cta {
-    text-decoration: underline;
+.see-how:hover {
+    opacity: 1;
 }
 .see-cta {
     display: inline-block;
@@ -1024,6 +1050,12 @@
         animation: sweep-under-to-top 1s;
     }
 
+    .stacked-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .video-screenshot,
     .skew-image-cover {
         display: none;
@@ -1157,7 +1189,7 @@
 
     .what-how-background {
         --box-width: 260px;
-        --box-height: 280px;
+        --box-height: 260px;
         font-size: 14px;
     }
     .what-how-part .title {

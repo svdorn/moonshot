@@ -85,7 +85,7 @@ class GuestDashboard extends Component {
         const onboardingPositions = this.props.onboardingPositions;
         // if the first steps are not done
         if (!this.props.welcomeToMoonshot) {
-            activity = <DashboardItem type="WelcomePage" width={3} />;
+            activity = <DashboardItem type="WelcomePage" width={3} widthMobile={2} />;
         }
         // if the lead has not said which jobs they want to do with the site
         else if (this.props.selectedJobsToBeDone === undefined) {
@@ -97,9 +97,9 @@ class GuestDashboard extends Component {
                 onboardingPositions.length > 0
             )
         ) {
-            activity = <DashboardItem type="AddPositionPage" width={3} />;
+            activity = <DashboardItem type="AddPositionPage" width={3} widthMobile={2} />;
         } else {
-            activity = <DashboardItem type="InvitePage" width={3} />;
+            activity = <DashboardItem type="InvitePage" width={3} widthMobile={2} />;
         }
 
         let blurredClass = "";

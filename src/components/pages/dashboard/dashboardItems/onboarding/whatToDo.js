@@ -1,9 +1,16 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { withRouter } from 'react-router';
-import { updateOnboardingStep, addNotification, generalAction, updateUser, openAddPositionModal, intercomEvent } from "../../../../../actions/usersActions";
+import { withRouter } from "react-router";
+import {
+    updateOnboardingStep,
+    addNotification,
+    generalAction,
+    updateUser,
+    openAddPositionModal,
+    intercomEvent
+} from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists, updateStore } from "../../../../../miscFunctions";
 import AddPosition from "./childComponents/addPosition";
@@ -15,21 +22,21 @@ import {
     Divider,
     Toolbar,
     ToolbarGroup,
-    RaisedButton,
-} from 'material-ui';
+    RaisedButton
+} from "material-ui";
 import { primaryCyan } from "../../../../../colors";
-import axios from 'axios';
+import axios from "axios";
 
 import "../../dashboard.css";
 
-const required = value => (value ? undefined : 'This field is required.');
+const required = value => (value ? undefined : "This field is required.");
 
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
+const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) => (
     <TextField
         hintText={label}
-        hintStyle={{color: 'white'}}
-        inputStyle={{color: '#72d6f5'}}
-        underlineStyle={{color: '#72d6f5'}}
+        hintStyle={{ color: "white" }}
+        inputStyle={{ color: "#72d6f5" }}
+        underlineStyle={{ color: "#72d6f5" }}
         errorText={touched && error}
         {...input}
         {...custom}
@@ -51,13 +58,13 @@ class WhatToDo extends Component {
 
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, -1);
-    }
+    };
 
     intercomMsg = () => {
         const { _id, verificationToken } = this.props.currentUser;
         // trigger intercom event
-        this.props.intercomEvent('onboarding-step-4', _id, verificationToken, null);
-    }
+        this.props.intercomEvent("onboarding-step-4", _id, verificationToken, null);
+    };
 
     copyLink = () => {
         const { currentUser } = this.props;
@@ -69,23 +76,27 @@ class WhatToDo extends Component {
         } else {
             this.props.addNotification("Error copying link, try refreshing", "error");
         }
-    }
+    };
 
     handleCustomPage = () => {
         const { currentUser } = this.props;
         if (propertyExists(currentUser, ["businessInfo", "uniqueName"], "string")) {
             goTo(`/apply/${currentUser.businessInfo.uniqueName}`);
         } else {
-            this.props.addNotification("Error getting to your custom page, try refreshing.", "error");
+            this.props.addNotification(
+                "Error getting to your custom page, try refreshing.",
+                "error"
+            );
         }
-    }
-
+    };
 
     highlight(event) {
-        try { event.target.select(); }
-        catch (e) { /* not a big deal if can't highlight the link */ }
+        try {
+            event.target.select();
+        } catch (e) {
+            /* not a big deal if can't highlight the link */
+        }
     }
-
 
     copyLinkView() {
         const { currentUser } = this.props;
@@ -93,8 +104,10 @@ class WhatToDo extends Component {
         let uniqueName = "";
         if (typeof currentUser.businessInfo === "object") {
             const { businessInfo } = currentUser;
-            possessiveBusinessName = makePossessive(businessInfo.businessName);
             uniqueName = businessInfo.uniqueName;
+            if (businessInfo.businessName.length < 8) {
+                possessiveBusinessName = makePossessive(businessInfo.businessName);
+            }
         }
 
         return (
@@ -104,20 +117,20 @@ class WhatToDo extends Component {
                         {"A Candidate Invite Page Just For You"}
                     </div>
                     <div>
-                        { `${ possessiveBusinessName } invite link is
+                        {`${possessiveBusinessName} invite link is
                         designed to be embedded in your automated emails or other
                         messages to candidates. We see the best results when
                         companies invite all applicants to complete an evaluation,
                         as their highest performers are often screened out based on
                         non-predictive data in resumes. Copy and embed your link in
-                        emails you send to candidates after they apply. Here's an ` }
+                        emails you send to candidates after they apply. Here's an `}
                         <span
                             onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}
                             className="primary-cyan clickable"
                         >
                             {"email template"}
                         </span>
-                        { " you can use." }
+                        {" you can use."}
                     </div>
                     <div styleName="link-area">
                         <input
@@ -126,75 +139,75 @@ class WhatToDo extends Component {
                             onClick={this.highlight}
                             value={`https://moonshotinsights.io/apply/${uniqueName}`}
                         />
-                        <button className="button noselect round-6px background-primary-cyan primary-white learn-more-texts" onClick={this.copyLink} style={{padding: "3px 10px"}}>
+                        <button
+                            className="button noselect round-6px background-primary-cyan primary-white learn-more-texts"
+                            onClick={this.copyLink}
+                            style={{ padding: "3px 10px" }}
+                        >
                             <span>Copy Link</span>
                         </button>
-                        <br styleName="small-mobile-only"/>
+                        <br styleName="small-mobile-only" />
                         <div
                             className="pointer underline"
                             styleName="link-to-custom-page"
                             onClick={this.handleCustomPage}
                         >
-                            { "See Your Page" }
+                            {"See Your Page"}
                         </div>
                     </div>
-                    {!this.props.loading ?
+                    {!this.props.loading ? (
                         <div styleName="emoji-buttons-full">
                             <div onClick={this.next}>
-                                <img
-                                    src={`/icons/emojis/PartyPopper${this.props.png}`}
-                                />
-                                <div style={{paddingTop: "5px"}}>All set!</div>
+                                <img src={`/icons/emojis/PartyPopper${this.props.png}`} />
+                                <div style={{ paddingTop: "5px" }}>All set!</div>
                             </div>
                             <div onClick={this.intercomMsg}>
-                                <img
-                                    src={`/icons/emojis/Face${this.props.png}`}
-                                />
-                                <div style={{paddingTop: "5px"}}>More info</div>
+                                <img src={`/icons/emojis/Face${this.props.png}`} />
+                                <div style={{ paddingTop: "5px" }}>More info</div>
                             </div>
                         </div>
-                        :
+                    ) : (
                         <div styleName="circular-progress">
                             <CircularProgress style={{ color: primaryCyan }} />
                         </div>
-                    }
+                    )}
                 </div>
             </div>
         );
     }
 
-
     render() {
-        return (
-            <div>
-                { this.copyLinkView() }
-            </div>
-        );
+        return <div>{this.copyLinkView()}</div>;
     }
 }
-
 
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         png: state.users.png,
         loading: state.users.loadingSomething,
-        onboardingPositions: state.users.onboardingPositions,
+        onboardingPositions: state.users.onboardingPositions
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        updateOnboardingStep,
-        addNotification,
-        generalAction,
-        updateUser,
-        openAddPositionModal,
-        intercomEvent,
-        updateStore
-    }, dispatch);
+    return bindActionCreators(
+        {
+            updateOnboardingStep,
+            addNotification,
+            generalAction,
+            updateUser,
+            openAddPositionModal,
+            intercomEvent,
+            updateStore
+        },
+        dispatch
+    );
 }
 
 WhatToDo = withRouter(WhatToDo);
 
-export default connect(mapStateToProps, mapDispatchToProps)(WhatToDo);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(WhatToDo);

@@ -10,6 +10,10 @@ body {
     overflow-x: hidden;
 }
 
+#app {
+    overflow-x: hidden;
+}
+
 :root {
     --primary-orange: #ff582d;
     --primary-pink: #fd0d8b;
@@ -210,6 +214,10 @@ body {
     color: var(--secondary-red);
 }
 
+.opacity-white-text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
 /* ensures the element takes up at least one full screen height */
 .full-height {
     min-height: 100vh;
@@ -310,6 +318,11 @@ footer {
 
 .moonshotMenuLogo {
     margin-left: 35px;
+}
+
+.signup-fields {
+    margin-top: -15px;
+    margin-bottom: -10px;
 }
 
 .inputContainer {
@@ -613,6 +626,15 @@ form > h1 {
 }
 .tab-position-circle.selected {
     background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
+}
+
+.root-cyan-label.input-label,
+.root-cyan-label.input-label.focused-input-label {
+    color: var(--primary-cyan);
+}
+.root-cyan-label.input-label.error-input-label,
+.root-cyan-label.input-label.focused-input-label.error-input-label {
+    color: var(--secondary-red);
 }
 
 .carousel .frame-position-circle {
@@ -2880,6 +2902,10 @@ button.link {
 }
 .selectIconMargin {
     margin-top: -5px;
+}
+.selectIconMarginSmallText {
+    margin-top: -2px;
+    right: 10px !important;
 }
 .topOptionWhite {
     color: white;
@@ -5525,6 +5551,9 @@ textarea.multipleChoiceCustomAnswer {
     }
     .outside500to600only {
         display: none;
+    }
+    .text-field {
+        width: auto !important;
     }
     #discoverSearchBarMedScreen > div:nth-child(4) {
         display: inherit;

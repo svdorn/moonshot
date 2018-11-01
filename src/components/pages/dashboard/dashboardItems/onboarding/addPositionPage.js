@@ -2,13 +2,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-    addNotification,
-    updateStore
-} from "../../../../../actions/usersActions";
-import {
-    goTo
-} from "../../../../../miscFunctions";
+import { addNotification, updateStore } from "../../../../../actions/usersActions";
+import { goTo } from "../../../../../miscFunctions";
 import { button } from "../../../../../classes";
 import AddPosition from "./childComponents/addPosition";
 
@@ -22,11 +17,13 @@ class AddPositionPage extends Component {
     makeAddPositionFrame() {
         return (
             <div>
-                <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
-                    Who do you need to hire?
-                </div>
-                <div className="font14px marginBottom10px">
-                    Enter one of your open positions.
+                <div styleName="add-position-header">
+                    <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
+                        Who do you need to hire?
+                    </div>
+                    <div className="font14px">
+                        <i>Enter one of your open positions.</i>
+                    </div>
                 </div>
                 <AddPosition />
             </div>
@@ -38,7 +35,7 @@ class AddPositionPage extends Component {
             <div styleName="item-padding">
                 <div styleName="build-team-container">
                     <div className="center" style={{ height: "100%" }}>
-                        { this.makeAddPositionFrame() }
+                        {this.makeAddPositionFrame()}
                     </div>
                 </div>
             </div>

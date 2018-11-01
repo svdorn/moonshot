@@ -1,19 +1,5 @@
 "use strict";
 import React, { Component } from "react";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import {
-    lightBlue500,
-    grey300,
-    grey400,
-    grey500,
-    white,
-    darkBlack,
-    fullBlack
-} from "material-ui/styles/colors";
-import { fade } from "material-ui/utils/colorManipulator";
-import spacing from "material-ui/styles/spacing";
-import { Paper, CircularProgress } from "material-ui";
 import { getUserFromSession, setWebpSupport } from "./actions/usersActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
@@ -33,6 +19,22 @@ import AdminVerifyEmail from "./components/childComponents/adminVerifyEmail";
 import ReactGA from "react-ga";
 
 import "./main.css";
+
+// OLD MUI THEME
+
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import {
+    lightBlue500,
+    grey300,
+    grey400,
+    grey500,
+    white,
+    darkBlack,
+    fullBlack
+} from "material-ui/styles/colors";
+import { fade } from "material-ui/utils/colorManipulator";
+import spacing from "material-ui/styles/spacing";
 
 let theme = {
     // this messes with the slider colors
@@ -59,6 +61,26 @@ let theme = {
 };
 
 let muiTheme = getMuiTheme(theme);
+
+// END OLD MUI THEME
+
+// NEW MUI THEME
+
+// import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+// const theme = createMuiTheme({
+//     palette: {
+//         primary: {
+//             main: "#2e2e2e",
+//             light: "#393939",
+//             dark: "#2e2e2e"
+//         },
+//         secondary: {
+//             main: "#76defe"
+//         }
+//     }
+// });
+
+// END NEW MUI THEME
 
 class Main extends Component {
     constructor(props) {
@@ -133,15 +155,12 @@ class Main extends Component {
         if (
             currentUser &&
             currentUser.userType === "accountAdmin" &&
-            ((currentUser.popups &&
-            currentUser.popups.dashboard) ||
-            (currentUser.popups &&
-            currentUser.popups.businessInterests) ||
-            (positionCount < 1))
+            ((currentUser.popups && currentUser.popups.dashboard) ||
+                (currentUser.popups && currentUser.popups.businessInterests) ||
+                positionCount < 1)
         ) {
-            return <PreOnboardingFooter />
-        }
-        else if (
+            return <PreOnboardingFooter />;
+        } else if (
             currentUser &&
             currentUser.userType === "accountAdmin" &&
             currentUser.onboard &&
@@ -149,7 +168,7 @@ class Main extends Component {
             typeof currentUser.onboard.step === "number"
         ) {
             return <OnboardingStepsFooter />;
-        }else if (
+        } else if (
             currentUser &&
             currentUser.userType === "accountAdmin" &&
             !currentUser.confirmEmbedLink

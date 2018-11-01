@@ -46,6 +46,9 @@
 .dashboard-item-container.width-3 {
     width: calc((var(--item-width) * 3) + (var(--item-margin) * 4));
 }
+.dashboard-item-container.width-3.mobile-width-2 {
+    width: calc((var(--item-width) * 3) + (var(--item-margin) * 4));
+}
 
 .small-title {
     font-size: 16px;
@@ -61,7 +64,7 @@
     max-width: 500px;
 }
 .blue-arrow {
-    font-size: 22px;
+    font-size: 20px;
     margin-top: 15px;
     cursor: pointer;
     color: var(--primary-cyan);
@@ -177,7 +180,31 @@
 }
 
 #invite-template {
+}
 
+.add-position-header {
+    margin-bottom: 12px;
+}
+.add-position-select-type {
+    color: var(--primary-cyan);
+    margin-top: -18px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+.add-position-select-type-in-modal {
+    margin-top: 10px;
+}
+.add-position-select-type > div {
+    display: inline-block;
+    vertical-align: top;
+}
+.add-position-select-type > div:nth-child(2) {
+    margin-top: -3px;
+    margin-left: 7px;
+}
+.add-position-ismgr {
+    margin: -40px auto 7px;
+    color: var(--primary-white);
 }
 
 .onboarding-button > span {
@@ -242,7 +269,7 @@
 }
 .embed-link > div:first-child {
     flex: 1;
-    padding: calc(2*var(--item-margin));
+    padding: calc(2 * var(--item-margin));
     position: relative;
 }
 .embed-link > div:nth-child(2) {
@@ -357,16 +384,15 @@
     height: 85%;
     position: absolute;
     bottom: 0;
-    left: 50%;
+    left: 48%;
     transform: translate(-50%);
 }
 .admin-image {
     height: 80%;
     position: absolute;
     bottom: 10%;
-    left: 48%;
+    left: 50%;
     transform: translate(-50%);
-    background-color: var(--primary-black-dark);
 }
 .apply-image {
     height: 70%;
@@ -581,10 +607,6 @@
     font-size: 18px;
     padding: 10px 0 4px;
 }
-.signup-fields {
-    margin-top: -15px;
-    margin-bottom: -10px;
-}
 
 .invite-candidates-modal {
     color: var(--secondary-gray);
@@ -602,7 +624,14 @@
     -webkit-box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.5);
 }
+.invite-candidates-modal > div:nth-child(4) {
+    margin-top: 15px;
+}
 .invite-candidates-modal > div > div {
+    margin-top: 5px;
+    text-align: left;
+}
+.invite-candidates-modal > div > div > div {
     margin-top: 5px;
     text-align: left;
 }
@@ -640,7 +669,15 @@
     top: 1px;
 }
 .modal-signup {
-    padding: 50px;
+    padding: 40px 50px;
+    background-color: var(--primary-black-dark);
+    color: var(--secondary-gray);
+    min-width: 200px;
+    min-height: 300px;
+}
+
+.modal-verification {
+    padding: 20px;
     background-color: var(--primary-black-dark);
     color: var(--secondary-gray);
     min-width: 270px;
@@ -656,13 +693,23 @@
 }
 
 .nav-circle {
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
     border-radius: 8px;
     background: linear-gradient(to bottom right, var(--secondary-gray), var(--primary-black-light));
     display: inline-block;
     margin: auto 10px;
     cursor: pointer;
+}
+.psych-nav {
+    position: absolute;
+    top: 137px;
+}
+.psych-nav.left {
+    left: 6px;
+}
+.psych-nav.right {
+    right: 6px;
 }
 .signup-circle {
     width: 10px;
@@ -705,22 +752,21 @@
         width: calc((var(--item-width) * 2) + (var(--item-margin) * 2));
         height: calc(var(--item-width) * (5 / 4));
     }
+    .dashboard-item-container.width-3.mobile-width-2 {
+        width: calc((var(--item-width) * 2) + (var(--item-margin) * 2));
+        height: calc(var(--item-width) * (5 / 4));
+    }
 
     .full-step-container {
         padding: calc(var(--item-margin) / 1.5);
     }
 
     .checklist {
-        display: inline-block;
+        flex-direction: row;
     }
     .checklist-container {
         height: calc(100% / 5);
         width: 100%;
-    }
-    .checklist-item {
-        width: 50%;
-        height: 50%;
-        float: left;
     }
 
     .onboarding-content {
@@ -741,6 +787,10 @@
         width: calc(var(--item-width) + var(--item-margin));
     }
 
+    .add-position-select-type {
+        margin-top: -5px;
+    }
+
     .custom-page-title {
         font-size: 16px;
     }
@@ -758,7 +808,11 @@
     }
 
     .blue-arrow {
-        font-size: 20px;
+        font-size: 18px;
+    }
+
+    .add-position-header {
+        margin-bottom: 20px;
     }
 }
 
@@ -778,12 +832,20 @@
         padding: 10px;
     }
 
+    .add-position-ismgr {
+        margin: -15px auto 10px;
+    }
+    .add-position-header {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
     .welcome-frame-modal {
         max-width: 260px;
     }
 
     .blue-arrow {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .dashboard {
@@ -817,12 +879,15 @@
         width: var(--item-width);
         height: calc(var(--item-width) * 2.125);
     }
+    .dashboard-item-container.width-3.mobile-width-2 {
+        width: var(--item-width);
+        height: calc(var(--item-width) * 1.35);
+    }
     .checklist-container {
         height: calc(100% / 17);
         width: 100%;
     }
     .checklist-item {
-        width: 25%;
         height: 100%;
     }
     .checklist-item > div:nth-child(2) {
@@ -856,6 +921,9 @@
     .onboarding-content > div > div:first-child.circular-progress,
     .onboarding-content > div.full-step-container > div:first-child {
         border-bottom: none;
+    }
+    .modal-signup {
+        padding: 20px;
     }
 
     .admin-image {
@@ -896,5 +964,16 @@
 
     .link-to-custom-page {
         margin: 7px 10px 0;
+    }
+
+    .psych-nav.left {
+        left: 6px;
+    }
+    .psych-nav.right {
+        right: 6px;
+    }
+
+    .gca-image {
+        left: 50%;
     }
 }

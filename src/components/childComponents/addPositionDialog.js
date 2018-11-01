@@ -1,12 +1,17 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Field, reduxForm } from 'redux-form';
-import { closeAddPositionModal, addNotification, startLoading, stopLoading, openAddUserModal } from "../../actions/usersActions";
-import {  } from "../../miscFunctions";
+import { reduxForm } from "redux-form";
 import {
-    TextField,
+    closeAddPositionModal,
+    addNotification,
+    startLoading,
+    stopLoading,
+    openAddUserModal
+} from "../../actions/usersActions";
+import {} from "../../miscFunctions";
+import {
     DropDownMenu,
     MenuItem,
     Divider,
@@ -17,22 +22,11 @@ import {
     CircularProgress,
     RaisedButton,
     Paper
-} from 'material-ui';
-import axios from 'axios';
+} from "material-ui";
+import axios from "axios";
+import TextInput from "../userInput/textInput";
 
-const required = value => (value ? undefined : 'This field is required.');
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        hintStyle={{color: 'white'}}
-        inputStyle={{color: '#72d6f5'}}
-        underlineStyle={{color: '#72d6f5'}}
-        errorText={touched && error}
-        {...input}
-        {...custom}
-    />
-);
+const required = value => (value ? undefined : "This field is required.");
 
 class AddPositionDialog extends Component {
     constructor(props) {
@@ -44,20 +38,27 @@ class AddPositionDialog extends Component {
             // whether the new position to add is for a manager
             newPosIsManager: false,
             // list of position Types
-            positionTypes: ["Position Type", "Developer", "Sales", "Support", "Marketing", "Product"],
+            positionTypes: [
+                "Position Type",
+                "Developer",
+                "Sales",
+                "Support",
+                "Marketing",
+                "Product"
+            ],
             // if user didn't select a position type when making a new position
             mustSelectTypeError: false,
             // error adding a position
             addPositionError: undefined,
             open: false,
             screen: 1
-        }
+        };
     }
 
     componentDidUpdate() {
         // make sure the props defining whether the modal is open matches the state for that
         if (this.props.modalOpen != this.state.open && this.props.modalOpen != undefined) {
-            this.setState({ open: this.props.modalOpen })
+            this.setState({ open: this.props.modalOpen });
         }
     }
 
@@ -68,9 +69,9 @@ class AddPositionDialog extends Component {
     handleNextScreen = () => {
         const screen = this.state.screen + 1;
         if (screen > 0 && screen < 3) {
-            this.setState({screen})
+            this.setState({ screen });
         }
-    }
+    };
 
     handlePositionTypeChange = (event, index) => {
         const positionType = this.state.positionTypes[index];
@@ -82,9 +83,9 @@ class AddPositionDialog extends Component {
     };
 
     handleClickIsManager = () => {
-        const newState = { ...this.state, newPosIsManager: !this.state.newPosIsManager }
+        const newState = { ...this.state, newPosIsManager: !this.state.newPosIsManager };
         this.setState(newState);
-    }
+    };
 
     handleSubmit(e) {
         try {
@@ -94,7 +95,7 @@ class AddPositionDialog extends Component {
 
             // Form validation before submit
             let notValid = false;
-            const requiredFields = [ 'position' ];
+            const requiredFields = ["position"];
             requiredFields.forEach(field => {
                 if (!vals || !vals[field]) {
                     this.props.touch(field);
@@ -121,22 +122,28 @@ class AddPositionDialog extends Component {
 
             this.props.startLoading();
 
-            axios.post("api/business/addEvaluation", {userId, verificationToken, businessId, positionName, positionType, isManager})
-            .then(res => {
-                self.setState({ positionType: "Position Type", newPosIsManager: false });
-                self.handleNextScreen();
-                self.props.stopLoading();
-                self.props.reset();
-            })
-            .catch(error => {
-                self.props.stopLoading();
-                self.setState({addPositionError: "Error adding position."})
-            })
-        }
-
-        catch (error) {
+            axios
+                .post("api/business/addEvaluation", {
+                    userId,
+                    verificationToken,
+                    businessId,
+                    positionName,
+                    positionType,
+                    isManager
+                })
+                .then(res => {
+                    self.setState({ positionType: "Position Type", newPosIsManager: false });
+                    self.handleNextScreen();
+                    self.props.stopLoading();
+                    self.props.reset();
+                })
+                .catch(error => {
+                    self.props.stopLoading();
+                    self.setState({ addPositionError: "Error adding position." });
+                });
+        } catch (error) {
             this.props.stopLoading();
-            this.setState({addPositionError: "Error adding position."})
+            this.setState({ addPositionError: "Error adding position." });
             return;
         }
     }
@@ -174,59 +181,72 @@ class AddPositionDialog extends Component {
                 horizontal: "left"
             },
             menuLabelStyle: {
-
                 fontSize: "18px",
                 color: "white"
             }
-        }
+        };
         const actions = [
             <FlatButton
                 label="Close"
                 onClick={this.handleClose}
                 className="primary-white-important"
-            />,
+            />
         ];
 
-        const positionTypeItems = this.state.positionTypes.map(function (positionType, index) {
-            return <MenuItem value={positionType} primaryText={positionType} key={index}/>
+        const positionTypeItems = this.state.positionTypes.map(function(positionType, index) {
+            return <MenuItem value={positionType} primaryText={positionType} key={index} />;
         });
 
         // Dialog for adding evaluation
         const screen = this.state.screen;
-        let dialogBody = <div></div>;
+        let dialogBody = <div />;
         if (screen === 1) {
             dialogBody = (
                 <form onSubmit={this.handleSubmit.bind(this)} className="center">
-                    {this.state.mustSelectTypeError ?
-                        <div className="secondary-red" style={{marginBottom:"-23px"}}>Must select a position type.</div>
-                        : null
-                    }
+                    {this.state.mustSelectTypeError ? (
+                        <div className="secondary-red" style={{ marginBottom: "-23px" }}>
+                            Must select a position type.
+                        </div>
+                    ) : null}
                     <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
                         Add Evaluation
                     </div>
                     <div className="primary-white font16px font14pxUnder700 marginTop10px marginBottom10px">
                         Enter the details of your new position.
                     </div>
-                    <Field
+                    <TextInput
                         name="position"
-                        component={renderTextField}
                         label="Position Name"
                         validate={[required]}
-                    /><br/>
+                        required={true}
+                        placeholder="iOS Developer"
+                    />
+                    <br />
                     <div className="primary-cyan font16px marginTop10px">
-                        <div style={{display:"inline-block", marginTop:"16px", verticalAlign:"top"}}>Select a position type:</div>
-                        <DropDownMenu value={this.state.positionType}
-                                  onChange={this.handlePositionTypeChange}
-                                  labelStyle={style.menuLabelStyle}
-                                  anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "16px"}}
+                        <div
+                            style={{
+                                display: "inline-block",
+                                marginTop: "16px",
+                                verticalAlign: "top"
+                            }}
+                        >
+                            Select a position type:
+                        </div>
+                        <DropDownMenu
+                            value={this.state.positionType}
+                            onChange={this.handlePositionTypeChange}
+                            labelStyle={style.menuLabelStyle}
+                            anchorOrigin={style.anchorOrigin}
+                            style={{ fontSize: "16px" }}
                         >
                             {positionTypeItems}
                         </DropDownMenu>
-                    </div><br/>
-                    <div style={{margin:"-20px auto 10px"}} className="primary-white">
-                        <div className="checkbox smallCheckbox whiteCheckbox"
-                             onClick={this.handleClickIsManager.bind(this)}
+                    </div>
+                    <br />
+                    <div style={{ margin: "-20px auto 10px" }} className="primary-white">
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={this.handleClickIsManager.bind(this)}
                         >
                             <img
                                 alt=""
@@ -240,27 +260,45 @@ class AddPositionDialog extends Component {
                         label="Continue"
                         type="submit"
                         className="raisedButtonBusinessHome marginTop10px"
-                        /><br/>
-                    {this.state.addPositionError ? <div className="secondary-red font16px marginTop10px">{this.state.addPositionError}</div> : null }
-                    {this.props.loading ? <CircularProgress color="white" style={{marginTop: "8px"}}/> : null}
+                    />
+                    <br />
+                    {this.state.addPositionError ? (
+                        <div className="secondary-red font16px marginTop10px">
+                            {this.state.addPositionError}
+                        </div>
+                    ) : null}
+                    {this.props.loading ? (
+                        <CircularProgress color="white" style={{ marginTop: "8px" }} />
+                    ) : null}
                 </form>
             );
         } else if (screen === 2) {
-                    dialogBody = (
-                        <div>
-                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"30px auto"}}>
-                                Evaluation Added
-                            </div>
-                            <div className="primary-white-important font16px font14pxUnder700 font12pxUnder400" style={{width:"90%", margin:"10px auto 0"}}>
-                                Congrats on adding an evaluation! Embed your link into your hiring workflow to automate your candidate invites.
-                                <div className="marginTop20px">
-                                        <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={this.handleClose} style={{padding: "5px 17px"}}>
-                                            {"Close"}
-                                        </button>
-                                </div>
-                            </div>
+            dialogBody = (
+                <div>
+                    <div
+                        className="primary-cyan font28px font24pxUnder700 font20pxUnder500"
+                        style={{ width: "90%", margin: "30px auto" }}
+                    >
+                        Evaluation Added
+                    </div>
+                    <div
+                        className="primary-white-important font16px font14pxUnder700 font12pxUnder400"
+                        style={{ width: "90%", margin: "10px auto 0" }}
+                    >
+                        Congrats on adding an evaluation! Embed your link into your hiring workflow
+                        to automate your candidate invites.
+                        <div className="marginTop20px">
+                            <button
+                                className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white"
+                                onClick={this.handleClose}
+                                style={{ padding: "5px 17px" }}
+                            >
+                                {"Close"}
+                            </button>
                         </div>
-                    );
+                    </div>
+                </div>
+            );
         }
 
         const dialog = (
@@ -277,14 +315,9 @@ class AddPositionDialog extends Component {
             </Dialog>
         );
 
-        return (
-            <div>
-                {dialog}
-            </div>
-        );
+        return <div>{dialog}</div>;
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -299,17 +332,23 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeAddPositionModal,
-        addNotification,
-        startLoading,
-        stopLoading,
-        openAddUserModal
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeAddPositionModal,
+            addNotification,
+            startLoading,
+            stopLoading,
+            openAddUserModal
+        },
+        dispatch
+    );
 }
 
 AddPositionDialog = reduxForm({
-    form: 'addPosition',
+    form: "addPosition"
 })(AddPositionDialog);
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddPositionDialog);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AddPositionDialog);

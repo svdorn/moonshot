@@ -1,6 +1,7 @@
 "use strict";
 import React from "react";
 import { TextField } from "material-ui";
+import NewTextField from "@material-ui/core/TextField";
 import colors from "./colors";
 import { browserHistory } from "react-router";
 import clipboard from "clipboard-polyfill";
@@ -64,6 +65,7 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
         floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
         floatingLabelStyle={style.searchFloatingLabelStyle}
         underlineFocusStyle={style.searchUnderlineFocusStyle}
+        className="text-field"
         {...input}
         {...custom}
     />
@@ -81,7 +83,26 @@ const renderPasswordField = ({ input, label, meta: { touched, error }, ...custom
         underlineFocusStyle={style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
+        className="text-field"
         type="password"
+    />
+);
+
+const viewablePasswordField = ({ input, label, meta: { touched, error }, type, ...custom }) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle={style.searchUnderlineFocusStyle}
+        {...input}
+        {...custom}
+        autofill="new-password"
+        className="text-field"
+        type={type}
     />
 );
 
@@ -330,6 +351,7 @@ const miscFunctions = {
     qualifierFromScore,
     renderTextField,
     renderPasswordField,
+    viewablePasswordField,
     getFirstName,
     isValidEmail,
     htmlDecode,

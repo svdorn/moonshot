@@ -1,40 +1,18 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from "redux-form";
 import { updateStore } from "../../../../../../actions/usersActions";
-import {  } from "../../../../../../miscFunctions";
-import {
-    TextField,
-    DropDownMenu,
-    MenuItem,
-    Divider,
-    Toolbar,
-    ToolbarGroup,
-    Dialog,
-    FlatButton,
-    CircularProgress,
-    RaisedButton,
-    Paper
-} from 'material-ui';
-import axios from 'axios';
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import axios from "axios";
+
+import TextInput from "../../../../../userInput/textInput";
 
 import "../../../dashboard.css";
 
-const required = value => (value ? undefined : 'This field is required.');
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        hintStyle={{color: 'white'}}
-        inputStyle={{color: '#72d6f5'}}
-        underlineStyle={{color: '#72d6f5'}}
-        errorText={touched && error}
-        {...input}
-        {...custom}
-    />
-);
+const required = value => (value ? undefined : "This field is required.");
 
 class AddPositionModal extends Component {
     constructor(props) {
@@ -46,7 +24,14 @@ class AddPositionModal extends Component {
             // whether the new position to add is for a manager
             newPosIsManager: false,
             // list of position Types
-            positionTypes: ["Position Type", "Developer", "Sales", "Support", "Marketing", "Product"],
+            positionTypes: [
+                "Position Type",
+                "Developer",
+                "Sales",
+                "Support",
+                "Marketing",
+                "Product"
+            ],
             // if user didn't select a position type when making a new position
             mustSelectTypeError: false,
             // error adding a position
@@ -56,11 +41,37 @@ class AddPositionModal extends Component {
             // title and role from props
             title: this.props.title,
             role: this.props.role
-        }
+        };
     }
 
-    handlePositionTypeChange = (event, index) => {
-        const positionType = this.state.positionTypes[index];
+    // create the dropdown for the different positions
+    makeDropdown(position) {
+        const positions = this.state.positionTypes.map(pos => {
+            return (
+                <MenuItem value={pos} key={`position${pos}`}>
+                    {pos}
+                </MenuItem>
+            );
+        });
+
+        return (
+            <Select
+                disableUnderline={true}
+                classes={{
+                    root: "selectRootWhite font16px font14pxUnder500",
+                    icon: "selectIconWhiteImportant selectIconMarginSmallText"
+                }}
+                value={position}
+                onChange={this.handleChangePositionType(position)}
+                key={`position`}
+            >
+                {positions}
+            </Select>
+        );
+    }
+
+    handleChangePositionType = position => event => {
+        const positionType = event.target.value;
         let newState = { ...this.state, positionType };
         if (positionType !== "Position Type") {
             newState.mustSelectTypeError = false;
@@ -69,15 +80,15 @@ class AddPositionModal extends Component {
     };
 
     handleClickIsManager = () => {
-        const newState = { ...this.state, newPosIsManager: !this.state.newPosIsManager }
+        const newState = { ...this.state, newPosIsManager: !this.state.newPosIsManager };
         this.setState(newState);
-    }
+    };
 
     handleUpdate = () => {
         this.setState({ update: true, title: undefined, role: undefined });
-    }
+    };
 
-    handleSubmit = (e) => {
+    handleSubmit = e => {
         try {
             let self = this;
             e.preventDefault();
@@ -94,7 +105,7 @@ class AddPositionModal extends Component {
 
             // Form validation before submit
             let notValid = false;
-            const requiredFields = [ 'position' ];
+            const requiredFields = ["position"];
             requiredFields.forEach(field => {
                 if (!vals || !vals[field]) {
                     this.props.touch(field);
@@ -124,56 +135,12 @@ class AddPositionModal extends Component {
             this.props.updateStore("onboardingPositions", positions);
             this.props.close();
         } catch (error) {
-            this.setState({addPositionError: "Error adding position."})
+            this.setState({ addPositionError: "Error adding position." });
             return;
         }
-    }
+    };
 
     render() {
-        const style = {
-            separator: {
-                width: "70%",
-                position: "relative",
-                height: "40px",
-                textAlign: "center"
-            },
-            separatorText: {
-                padding: "0px 40px",
-                backgroundColor: "#2e2e2e",
-                display: "inline-block",
-                position: "relative",
-                fontSize: "23px",
-                color: "white"
-            },
-            separatorLine: {
-                width: "100%",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
-            },
-            anchorOrigin: {
-                vertical: "top",
-                horizontal: "left"
-            },
-            menuLabelStyle: {
-                fontSize: "16px",
-                color: "white",
-                marginTop: "3px"
-            }
-        }
-        const actions = [
-            <FlatButton
-                label="Close"
-                onClick={this.handleClose}
-                className="primary-white-important"
-            />,
-        ];
-
-        const positionTypeItems = this.state.positionTypes.map(function (positionType, index) {
-            return <MenuItem value={positionType} primaryText={positionType} key={index}/>
-        });
-
         const { update, title, role } = this.state;
 
         let header = "Update Position";
@@ -189,55 +156,50 @@ class AddPositionModal extends Component {
             <div>
                 <form className="center">
                     <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
-                        { header }
-                        {!update ?
-                            <div className="inlineBlock clickable" style={{marginLeft: "10px"}} onClick={this.handleUpdate}>
+                        {header}
+                        {!update ? (
+                            <div
+                                className="inlineBlock clickable"
+                                style={{ marginLeft: "10px" }}
+                                onClick={this.handleUpdate}
+                            >
                                 <img
                                     src={"/icons/Pencil" + this.props.png}
                                     alt="Edit"
                                     height={15}
                                 />
                             </div>
-                            : null
-                        }
+                        ) : null}
                     </div>
-                    <div className="font14px" style={{margin: "5px auto 8px"}}>
+                    <div className="font14px" style={{ margin: "5px auto 8px" }}>
                         Complete the details for this position.
                     </div>
-                    {this.state.mustSelectTypeError ?
+                    {this.state.mustSelectTypeError ? (
                         <div className="secondary-red font10px">Must select a position type.</div>
-                        : null
-                    }
-                    { !title || update ?
+                    ) : null}
+                    {!title || update ? (
                         <div>
-                            <Field
+                            <TextInput
                                 name="position"
-                                component={renderTextField}
                                 label="Position Name"
                                 validate={[required]}
+                                required={true}
+                                placeholder="iOS Developer"
                             />
                         </div>
-                        : null
-                    }
-                    { !role || update ?
+                    ) : null}
+                    {!role || update ? (
                         <div>
-                            <div className="primary-cyan font16px" style={{marginTop: "5px"}}>
-                                <div style={{display:"inline-block", verticalAlign:"top"}}>Select a position type:</div>
-                                <DropDownMenu value={this.state.positionType}
-                                          onChange={this.handlePositionTypeChange}
-                                          labelStyle={style.menuLabelStyle}
-                                          anchorOrigin={style.anchorOrigin}
-                                          style={{fontSize: "16px", marginTop: "-20px"}}
-                                >
-                                    {positionTypeItems}
-                                </DropDownMenu>
+                            <div styleName="add-position-select-type-in-modal">
+                                <div>Select a position type:</div>
+                                <div>{this.makeDropdown(this.state.positionType)}</div>
                             </div>
                         </div>
-                        : null
-                    }
-                    <div style={{margin:"5px auto 7px"}} className="primary-white">
-                        <div className="checkbox smallCheckbox whiteCheckbox"
-                             onClick={this.handleClickIsManager.bind(this)}
+                    ) : null}
+                    <div style={{ margin: "5px auto 7px" }} className="primary-white">
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={this.handleClickIsManager.bind(this)}
                         >
                             <img
                                 alt=""
@@ -247,8 +209,15 @@ class AddPositionModal extends Component {
                         </div>
                         {"Position is a manager role"}
                     </div>
-                    {this.state.addPositionError ? <div className="secondary-red font10px">{this.state.addPositionError}</div> : null }
-                    <button onClick={this.handleSubmit} className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop10px" styleName="onboarding-button" style={{padding: "6px 20px"}}>
+                    {this.state.addPositionError ? (
+                        <div className="secondary-red font10px">{this.state.addPositionError}</div>
+                    ) : null}
+                    <button
+                        onClick={this.handleSubmit}
+                        className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop10px"
+                        styleName="onboarding-button"
+                        style={{ padding: "6px 20px" }}
+                    >
                         <span>Continue</span>
                     </button>
                 </form>
@@ -256,7 +225,6 @@ class AddPositionModal extends Component {
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -270,13 +238,19 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        updateStore
-    }, dispatch);
+    return bindActionCreators(
+        {
+            updateStore
+        },
+        dispatch
+    );
 }
 
 AddPositionModal = reduxForm({
-    form: 'addPos',
+    form: "addPos"
 })(AddPositionModal);
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddPositionModal);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AddPositionModal);
