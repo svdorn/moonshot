@@ -5,17 +5,6 @@ import { bindActionCreators } from "redux";
 import { Field, reduxForm } from 'redux-form';
 import { addNotification, startLoading, stopLoading, updateStore, updatePositionCount } from "../../../../../../actions/usersActions";
 import { renderTextField } from "../../../../../../miscFunctions";
-import {
-    TextField,
-    Divider,
-    Toolbar,
-    ToolbarGroup,
-    Dialog,
-    FlatButton,
-    CircularProgress,
-    RaisedButton,
-    Paper
-} from 'material-ui';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
