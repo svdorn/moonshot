@@ -3289,8 +3289,9 @@ button.link {
 .smallCheckbox > img {
     height: 12px;
     width: 12px;
-    margin-top: -25px;
-    margin-left: 1px;
+    position: absolute;
+    top: -5px;
+    left: 2px;
 }
 .checkbox > .checkMarkfalse {
     visibility: hidden;
