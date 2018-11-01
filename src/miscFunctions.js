@@ -78,7 +78,14 @@ const renderNewTextField = ({ input, label, placeholder, meta: { touched, error 
         required={typeof required === "boolean" ? required : false}
         error={touched && error ? true : false}
         variant="standard"
-        inputLabelProps={{ classes: { root: "INPUT-LABEL-MCDANGUS primary-cyan" } }}
+        InputLabelProps={{
+            classes: { root: "INPUT-LABEL-MCDANGUS primary-cyan" },
+            FormLabelClasses: {
+                root: "ROOT-FORM-LABEL",
+                error: "ERROR-INPUT",
+                focused: "FOCUSED-INPUT"
+            }
+        }}
         {...input}
         {...custom}
     />

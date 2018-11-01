@@ -624,6 +624,16 @@ form > h1 {
     background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
 }
 
+.ROOT-FORM-LABEL.INPUT-LABEL-MCDANGUS,
+.ROOT-FORM-LABEL.INPUT-LABEL-MCDANGUS.FOCUSED-INPUT {
+    color: var(--primary-cyan);
+    font-family: inherit;
+}
+.ROOT-FORM-LABEL.INPUT-LABEL-MCDANGUS.ERROR-INPUT,
+.ROOT-FORM-LABEL.INPUT-LABEL-MCDANGUS.ERROR-INPUT.FOCUSED-INPUT {
+    color: var(--secondary-red);
+}
+
 .carousel .frame-position-circle {
     width: 8px;
     height: 8px;
