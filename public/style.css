@@ -214,6 +214,10 @@ body {
     color: var(--secondary-red);
 }
 
+.opacity-white-text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
 /* ensures the element takes up at least one full screen height */
 .full-height {
     min-height: 100vh;

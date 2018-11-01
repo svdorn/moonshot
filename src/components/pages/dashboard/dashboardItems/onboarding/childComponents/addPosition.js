@@ -26,6 +26,8 @@ import {
 } from "material-ui";
 import axios from "axios";
 
+import TextInput from "../../../../../userInput/textInput";
+
 import "../../../dashboard.css";
 
 const required = value => (value ? undefined : "This field is required.");
@@ -207,6 +209,13 @@ class AddPosition extends Component {
                         component={renderTextField}
                         label="Position Name"
                         validate={[required]}
+                    />
+                    <TextInput
+                        name="position"
+                        label="Position Name"
+                        validate={[required]}
+                        required={true}
+                        placeholder="McJangus"
                     />
                     <div className="primary-cyan font16px" style={{ marginTop: "5px" }}>
                         <div style={{ display: "inline-block", verticalAlign: "top" }}>

@@ -95,6 +95,12 @@ const renderNewTextField = ({
                 focused: "FOCUSED-INPUT"
             }
         }}
+        InputProps={{
+            disableUnderline: false,
+            classes: {
+                underline: "opacity-white-text"
+            }
+        }}
         {...input}
         {...custom}
     />
