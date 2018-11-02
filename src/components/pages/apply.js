@@ -53,7 +53,13 @@ class Apply extends Component {
             );
         }
 
-        if (this.props.location.query && this.props.location.query.onboarding) {
+        const { currentUser, location } = this.props;
+
+        if (
+            location.query &&
+            location.query.onboarding &&
+            !(currentUser && currentUser.userType === "candidate")
+        ) {
             // get positions from its form
             let positions = [{ name: "iOS Developer" }];
             const onboardingPositions = this.props.onboardingPositions;
@@ -67,9 +73,9 @@ class Apply extends Component {
             this.positionsFound(positions, undefined, company, true, false);
         } else {
             if (
-                this.props.currentUser &&
-                this.props.currentUser.userType === "accountAdmin" &&
-                this.props.currentUser.businessInfo
+                currentUser &&
+                currentUser.userType === "accountAdmin" &&
+                currentUser.businessInfo
             ) {
                 var businessId = this.props.currentUser.businessInfo.businessId;
             }
