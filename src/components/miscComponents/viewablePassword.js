@@ -26,7 +26,6 @@ class ViewablePassword extends Component {
         const { showPassword } = this.state;
 
         const place = typeof value === "string" && value.length > 12 ? "outside" : "inside";
-        console.log("place: ", place);
 
         return (
             <div className="inputContainer signup-fields">

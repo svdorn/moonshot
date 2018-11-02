@@ -62,7 +62,7 @@ class Apply extends Component {
                 Array.isArray(onboardingPositions) &&
                 onboardingPositions.length > 0
             ) {
-                positions = onboardingPositions;
+                positions = onboardingPositions.slice();
             }
             this.positionsFound(positions, undefined, company, true, false);
         } else {
