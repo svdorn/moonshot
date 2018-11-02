@@ -4149,6 +4149,10 @@ textarea.multipleChoiceCustomAnswer {
     padding-bottom: 40px;
 }
 
+.text-field {
+    width: 260px;
+}
+
 /* decorative triangles */
 
 .triangle {
