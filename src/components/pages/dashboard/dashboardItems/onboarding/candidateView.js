@@ -239,7 +239,7 @@ class CandidateView extends Component {
                         Select the image that completes the pattern (easy example):
                     </div>
                     <img
-                        src={`/images/cognitiveTest/RPM-Example${this.props.png}`}
+                        src={`/images/cognitiveTest/RPM-Example-2${this.props.png}`}
                         styleName="gca-image"
                     />
                 </div>
