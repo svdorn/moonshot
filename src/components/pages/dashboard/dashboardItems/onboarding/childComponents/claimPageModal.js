@@ -34,7 +34,7 @@ const validate = values => {
         errors.email = "Invalid email address";
     }
     if (!isValidPassword(values.password)) {
-        errors.password = "Must be at least 8+ characters";
+        errors.password = "Must be at least 8 characters";
     }
     requiredFields.forEach(field => {
         if (!values[field]) {
@@ -280,7 +280,6 @@ class ClaimPageModal extends Component {
                             alt=""
                             className={"checkMark" + this.state.agreeingToTerms}
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            style={{ marginTop: "-18px" }}
                         />
                     </div>
                     I have read and agree to the Moonshot Insights<br />
@@ -356,7 +355,7 @@ class ClaimPageModal extends Component {
                 <form styleName="modal-signup" className="inline-block center">
                     <div>
                         <div className="primary-cyan font22px font20pxUnder500">
-                            Secure Your Page
+                            Claim Your Page
                         </div>
                         <div className="font14px">Fill this out so you can manage your page.</div>
                         {this.state.error ? (

@@ -244,7 +244,7 @@ class Apply extends Component {
                         evaluation.
                     </div>
                     <div onClick={this.openClaimPageModal}>
-                        Secure This Page <img src={`/icons/ArrowBlue${this.props.png}`} />
+                        Claim This Page <img src={`/icons/ArrowBlue${this.props.png}`} />
                     </div>
                 </div>
             </div>
