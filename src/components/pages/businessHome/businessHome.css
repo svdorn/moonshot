@@ -361,6 +361,9 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%, -15%);
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
 
     -webkit-transition: transform 0.5s ease;
     -moz-transition: transform 0.5s ease;
