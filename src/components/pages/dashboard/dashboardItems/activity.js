@@ -184,8 +184,11 @@ class Activity extends Component {
                             verificationToken
                         })
                         .then(response => {
-                            this.props.generalAction("OPEN_VERIFICATION_MODAL");
-                            this.props.updateUser(response.data.user);
+                            const { user } = response.data;
+                            if (!user.verified) {
+                                this.props.generalAction("OPEN_VERIFICATION_MODAL");
+                            }
+                            this.props.updateUser(user);
                         })
                         .catch(error => {
                             console.log(error);
