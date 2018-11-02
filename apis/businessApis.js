@@ -2418,15 +2418,26 @@ async function newCandidateCountByDate(businessId, positionIds, groupBy, numData
             // get the date to end data collection at
             const now = new Date();
             let mostRecentDay = now.getDate();
-            // if grouping by months, don't get any data after the first of this month
+            let additionalMonth = 0;
+            // if grouping by months, make sure to get data for the entire month
             if (groupBy === "months") {
                 mostRecentDay = 1;
+                additionalMonth = 1;
             }
-            // if grouping by weeks, don't get any data from after Sunday (first day of the week)
+            // if grouping by weeks, get all data from before next Sunday (first day of the week)
             else if (groupBy === "weeks") {
-                mostRecentDay -= now.getDay();
+                mostRecentDay += 7 - now.getDay();
             }
-            let before = new Date(now.getFullYear(), now.getMonth(), mostRecentDay);
+            // otherwise we're grouping by day, so get all data for today
+            else {
+                mostRecentDay++;
+            }
+            let before = new Date(
+                now.getFullYear(),
+                now.getMonth() + additionalMonth, // add a month if grouping by months
+                mostRecentDay
+            );
+            // the start date for the last data point
             let after = new Date(
                 before.getFullYear(),
                 before.getMonth() - monthDifference,
