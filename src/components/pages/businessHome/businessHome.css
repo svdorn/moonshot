@@ -372,9 +372,8 @@
 }
 
 .statistics-section > div {
-    /* margin: -100px auto 0; */
     margin: 0 auto;
-    padding: 0 0 100px;
+    padding: 0 0 70px;
     max-width: 1340px;
     position: relative;
 }

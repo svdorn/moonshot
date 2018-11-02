@@ -394,7 +394,7 @@ class BusinessHome extends Component {
                 title: "What We Do",
                 position: "left",
                 body:
-                    "We predict candidate job performance, growth potential, longevity (tenure), and culture fit at your company."
+                    "We predict candidates' job performance, growth potential, culture fit, and longevity at your company."
             },
             {
                 title: "How We Do It",

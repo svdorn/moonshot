@@ -2964,8 +2964,6 @@ button.link {
     display: inline-block;
     vertical-align: top;
 }
-/* .horizCenteredList li:first-child { margin-left: 0px; } */
-/* .horizCenteredList li:last-child { margin-right: 0px; } */
 
 .pathwayPrevList {
     max-width: 1500px;
