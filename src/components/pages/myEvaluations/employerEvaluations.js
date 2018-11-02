@@ -25,6 +25,7 @@ import AddUserDialog from '../../childComponents/addUserDialog';
 import AddPositionDialog from '../../childComponents/addPositionDialog';
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists } from '../../../miscFunctions';
+import { button } from "../../../classes.js";
 
 const required = value => (value ? undefined : 'This field is required.');
 
@@ -193,7 +194,18 @@ class MyEvaluations extends Component {
         if (this.state.noPositions) {
             evaluations = (
                 <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                    No evaluations.
+                    <div>
+                        No evaluations. Add your first evaluation below.
+                    </div>
+                    <div
+                        className={
+                            "primary-white font18px font16pxUnder900 font14pxUnder600 marginTop20px " +
+                            button.cyanRound
+                        }
+                        onClick={this.openAddPositionModal}
+                    >
+                        + Add Evaluation
+                    </div>
                 </div>
             )
         }
