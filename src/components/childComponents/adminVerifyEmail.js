@@ -103,7 +103,7 @@ class AdminVerifyEmail extends Component {
             currentUser &&
             currentUser.userType === "accountAdmin" &&
             !currentUser.verified &&
-            (currentUser.showVerifyEmailBanner || currentUser.onboardTimeFinished)
+            (currentUser.showVerifyEmailBanner || currentUser.onboard.timeFinished)
         ) {
             return (
                 <div>

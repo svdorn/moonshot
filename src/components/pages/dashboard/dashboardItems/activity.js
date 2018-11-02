@@ -166,9 +166,11 @@ class Activity extends Component {
     };
 
     confirmEmbedLink = () => {
-        const userId = this.props.currentUser._id;
-        const verificationToken = this.props.currentUser.verificationToken;
-        const verified = this.props.currentUser.verified;
+        const { currentUser } = this.props;
+
+        const userId = currentUser._id;
+        const verificationToken = currentUser.verificationToken;
+        const verified = currentUser.verified;
 
         if (!verified) {
             const credentials = {
@@ -192,9 +194,16 @@ class Activity extends Component {
                         })
                         .catch(error => {
                             console.log(error);
+                            if (!verified) {
+                                this.props.generalAction("OPEN_VERIFICATION_MODAL");
+                            }
                         });
                 })
-                .catch(error => {});
+                .catch(error => {
+                    if (!verified) {
+                        this.props.generalAction("OPEN_VERIFICATION_MODAL");
+                    }
+                });
         }
 
         this.props.confirmEmbedLink(userId, verificationToken);

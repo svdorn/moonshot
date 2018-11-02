@@ -117,13 +117,24 @@ class WhatToDo extends Component {
                         {"A Candidate Invite Page Just For You"}
                     </div>
                     <div>
-                        {`${possessiveBusinessName} invite link is
+                        <span styleName="desktop-only">
+                            {`${possessiveBusinessName} invite link is
                         designed to be embedded in your automated emails or other
                         messages to candidates. We see the best results when
                         companies invite all applicants to complete an evaluation,
                         as their highest performers are often screened out based on
                         non-predictive data in resumes. Copy and embed your link in
                         emails you send to candidates after they apply. Here's an `}
+                        </span>
+                        <span styleName="mobile-only">
+                            {`Your invite link is
+                            designed to be embedded in your automated emails or other
+                            messages to candidates. Best results are seen when
+                            companies invite all applicants to complete an evaluation,
+                            as high performers are often screened out based on
+                            non-predictive data in resumes. Copy and embed your link in
+                            emails you send to candidates after they apply. Here's an `}
+                        </span>
                         <span
                             onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}
                             className="primary-cyan clickable"
