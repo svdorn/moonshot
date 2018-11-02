@@ -97,6 +97,7 @@
 }
 .get-started-input::placeholder {
     color: var(--secondary-gray);
+    font-style: italic;
 }
 .get-started-input:focus::placeholder {
     color: transparent;
