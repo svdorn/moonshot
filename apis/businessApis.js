@@ -2934,13 +2934,15 @@ async function GET_candidateSearch(req, res) {
     }
 
     // if mock users are wanted, just get those
-    try {
-        const mockusers = await Mockusers.find({});
-        return res.status(200).send({ mockusers });
-    } catch (getMockusersError) {
-        console.log("Error getting mock users: ", getMockusersError);
-        // just pretend on front end like nothing went wrong
-        return res.status(200).send({ candidates: [] });
+    if (getMockData) {
+        try {
+            const mockusers = await Mockusers.find({});
+            return res.status(200).send({ mockusers });
+        } catch (getMockusersError) {
+            console.log("Error getting mock users: ", getMockusersError);
+            // just pretend on front end like nothing went wrong
+            return res.status(200).send({ candidates: [] });
+        }
     }
 
     // the id of the business that the user works for
