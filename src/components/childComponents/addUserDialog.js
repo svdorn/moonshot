@@ -129,7 +129,7 @@ class AddUserDialog extends Component {
     handleClose = () => {
         this.props.reset();
         let position = "";
-        if (this.state.positions) {
+        if (Array.isArray(this.state.positions) && this.state.positions.length > 0) {
             position = this.state.positions[0].name;
         }
         this.setState({
