@@ -10,22 +10,29 @@ import {
     CircularProgress,
     Tabs,
     Tab
-} from 'material-ui';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { browserHistory } from 'react-router';
-import { closeNotification, openAddUserModal, hidePopups, addNotification, generalAction, intercomEvent } from "../../../actions/usersActions";
-import { Field, reduxForm } from 'redux-form';
-import MetaTags from 'react-meta-tags';
-import axios from 'axios';
+} from "material-ui";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { browserHistory } from "react-router";
+import {
+    closeNotification,
+    openAddUserModal,
+    hidePopups,
+    addNotification,
+    generalAction,
+    intercomEvent
+} from "../../../actions/usersActions";
+import { Field, reduxForm } from "redux-form";
+import MetaTags from "react-meta-tags";
+import axios from "axios";
 import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
-import AddUserDialog from '../../childComponents/addUserDialog';
-import CandidatesPopupDialog from '../../childComponents/candidatesPopupDialog';
+import AddUserDialog from "../../childComponents/addUserDialog";
+import CandidatesPopupDialog from "../../childComponents/candidatesPopupDialog";
 import InviteCandidatesModal from "../dashboard/inviteCandidatesModal";
-import { qualifierFromScore } from '../../../miscFunctions';
+import { qualifierFromScore } from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
 
 import "./myCandidates.css";
@@ -167,9 +174,11 @@ class MyCandidates extends Component {
                 } else {
                     self.setState({
                         noPositions: true,
+                        positions: [{ name: "(No Positions)" }],
                         loadingPositions: false,
                         loadingCandidates: false
                     });
+                    self.findCandidates();
                 }
             })
             .catch(function(err) {
@@ -266,18 +275,17 @@ class MyCandidates extends Component {
 
     // get candidates for the current position from the back end
     findCandidates() {
-        // need a position to search for
-        if (!this.state.noPositions && this.state.position) {
+        // if there are no positions OR if there are positions and one is selected
+        if (this.state.noPositions || this.state.position) {
             axios
                 .get("/api/business/candidateSearch", {
                     params: {
                         searchTerm: this.state.term,
                         // searching by position name right now, could search by id if want to
                         positionName: this.state.position,
-                        sortBy: this.state.sortBy,
-                        sortAscending: this.state.sortAscending,
                         userId: this.props.currentUser._id,
-                        verificationToken: this.props.currentUser.verificationToken
+                        verificationToken: this.props.currentUser.verificationToken,
+                        mockData: this.state.noPositions
                     }
                 })
                 .then(res => {
@@ -329,7 +337,7 @@ class MyCandidates extends Component {
 
     openEmailTemplateModal = () => {
         this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
-    }
+    };
 
     // reorder the candidates that are shown and hide/show any that need to be
     // hidden/shown based on options given
@@ -806,20 +814,22 @@ class MyCandidates extends Component {
         let candidatesContainer = null;
 
         // loading in positions or candidates
-        if (this.state.loadingPositions || this.state.loadingCandidates) {
+        if (
+            this.state.loadingPositions ||
+            this.state.loadingCandidates ||
+            (this.state.noPositions &&
+                (!Array.isArray(this.state.candidates) || this.state.candidates.length === 0))
+        ) {
             return (
                 <div key="candidatesTable">
                     <CircularProgress color="#76defe" style={style.noCandidatesMessage} />
                 </div>
             );
-        } else if (this.state.noPositions) {
-            return (
-                <div key="no open evals">
-                    Your business has no open evaluations.<br />
-                    Contact us at support@moonshotinsights.io to get your first one set up.
-                </div>
-            );
-        } else if (this.state.position == "" && !this.state.loadingPositions) {
+        } else if (
+            this.state.position == "" &&
+            !this.state.loadingPositions &&
+            !this.state.noPositions
+        ) {
             return (
                 <div style={style.noCandidatesMessage} key="select a position">
                     Select a position.
@@ -1127,7 +1137,11 @@ class MyCandidates extends Component {
     mockDataMemo() {
         if (this.props.currentUser && this.state.mockData) {
             return (
-                <div styleName="mock-data-memo" key="mock data memo" onClick={this.openEmailTemplateModal}>
+                <div
+                    styleName="mock-data-memo"
+                    key="mock data memo"
+                    onClick={this.openEmailTemplateModal}
+                >
                     <div styleName="info">i</div>
                     This is mock data. <span>Start inviting your candidates.</span>
                 </div>
@@ -1136,7 +1150,6 @@ class MyCandidates extends Component {
             return null;
         }
     }
-
 
     candidatesSelected() {
         const selections = this.state.selectedCandidates;
@@ -1452,9 +1465,9 @@ class MyCandidates extends Component {
 
                     {this.popup()}
 
-                    { this.mockDataMemo() }
+                    {this.mockDataMemo()}
 
-                    { tabs }
+                    {tabs}
 
                     <div className="center">
                         <div className="candidatesAndOptions">
@@ -1472,9 +1485,7 @@ class MyCandidates extends Component {
                             )}
                             {this.state.mobile ? this.mobileTopOptions() : this.topOptions()}
                             <div className="candidatesContainer">
-                                <div>
-                                    { this.createCandidatesTable(positionId) }
-                                </div>
+                                <div>{this.createCandidatesTable(positionId)}</div>
                                 {this.state.showResults ? (
                                     <div>
                                         <CandidateResults
@@ -1541,14 +1552,17 @@ const style = {
 };
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification,
-        openAddUserModal,
-        hidePopups,
-        addNotification,
-        generalAction,
-        intercomEvent
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification,
+            openAddUserModal,
+            hidePopups,
+            addNotification,
+            generalAction,
+            intercomEvent
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {

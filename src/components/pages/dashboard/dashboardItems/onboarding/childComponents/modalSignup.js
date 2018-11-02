@@ -33,7 +33,7 @@ const validate = values => {
         errors.email = "Invalid email address";
     }
     if (!isValidPassword(values.password)) {
-        errors.password = "Must be least 8+ characters";
+        errors.password = "Must be 8+ characters";
     }
     requiredFields.forEach(field => {
         if (!values[field]) {
@@ -49,7 +49,7 @@ const defaultInfo = {
     body1: null,
     header2: "Add Your Info",
     body2: "We need this to setup your account.",
-    header3: "Secure Your Login",
+    header3: "Set Up Your Login",
     body3: "Fill this out so you can log back in."
 };
 
@@ -360,7 +360,6 @@ class ModalSignup extends Component {
                             alt=""
                             className={"checkMark" + agreeingToTerms}
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            style={{ marginTop: "-18px" }}
                         />
                     </div>
                     I have read and agree to the Moonshot Insights<br />

@@ -67,8 +67,8 @@ class InvitePage extends Component {
                         onSubmit={this.handleSubmit}
                         style={{ height: "100%" }}
                     >
-                        <div className="primary-cyan font24px font20pxUnder700 font18pxUnder500 marginTop20px">
-                            <div styleName="not-small-mobile">A Candidate Invite Page Just For You</div>
+                        <div className="primary-cyan font24px font20pxUnder700 font18pxUnder600 marginTop20px">
+                            <div styleName="not-small-mobile">See Your Candidate Invite Page</div>
                             <div styleName="small-mobile-only">Your Candidate Invite Page</div>
                         </div>
                         <div className="marginTop10px">

@@ -124,9 +124,17 @@ async function GET_billingIsSetUp(req, res) {
 // create a business and the first account admin for that business
 async function POST_createBusinessAndUser(req, res) {
     // get necessary arguments
-    let { name, company, email, password, positions, onboard, welcomeToMoonshot, selectedJobsToBeDone, showVerifyEmailBanner } = sanitize(
-        req.body
-    );
+    let {
+        name,
+        company,
+        email,
+        password,
+        positions,
+        onboard,
+        welcomeToMoonshot,
+        selectedJobsToBeDone,
+        showVerifyEmailBanner
+    } = sanitize(req.body);
 
     // validate arguments
     const stringArgs = [name, company, email, password];
@@ -191,7 +199,15 @@ async function POST_createBusinessAndUser(req, res) {
     }
 
     // create the user
-    const userInfo = { name, email, password, onboard, dashboardPopup, businessInterestsPopup, showVerifyEmailBanner };
+    const userInfo = {
+        name,
+        email,
+        password,
+        onboard,
+        dashboardPopup,
+        businessInterestsPopup,
+        showVerifyEmailBanner
+    };
     try {
         var user = await createAccountAdmin(userInfo);
     } catch (createUserError) {
@@ -305,7 +321,15 @@ async function POST_createBusinessAndUser(req, res) {
 async function createAccountAdmin(info) {
     return new Promise(function(resolve, reject) {
         // get needed args
-        const { name, password, email, onboard, dashboardPopup, businessInterestsPopup, showVerifyEmailBanner } = info;
+        const {
+            name,
+            password,
+            email,
+            onboard,
+            dashboardPopup,
+            businessInterestsPopup,
+            showVerifyEmailBanner
+        } = info;
 
         let user = {
             name,
@@ -2886,8 +2910,7 @@ async function GET_evaluationResults(req, res) {
 }
 
 async function GET_candidateSearch(req, res) {
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
+    const { userId, verificationToken, getMockData, positionName } = sanitize(req.query);
 
     // get the user who is trying to search for candidates
     let user;
@@ -2910,14 +2933,18 @@ async function GET_candidateSearch(req, res) {
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
+    // if mock users are wanted, just get those
+    try {
+        const mockusers = await Mockusers.find({});
+        return res.status(200).send({ mockusers });
+    } catch (getMockusersError) {
+        console.log("Error getting mock users: ", getMockusersError);
+        // just pretend on front end like nothing went wrong
+        return res.status(200).send({ candidates: [] });
+    }
+
     // the id of the business that the user works for
     const businessId = user.businessInfo.businessId;
-    // // the restrictions on the search
-    // const searchTerm = sanitize(req.query.searchTerm);
-    // // if a specific hiring stage is wanted
-    // const hiringStage = sanitize(req.query.hiringStage);
-    // position name is the only required input to the search
-    const positionName = sanitize(req.query.positionName);
 
     let positionRequirements = [
         { businessId: mongoose.Types.ObjectId(businessId) },
@@ -3050,12 +3077,6 @@ async function GET_employeeSearch(req, res) {
     const positionName = sanitize(req.query.positionName);
     // the thing we should sort by - default is alphabetical
     const sortBy = sanitize(req.query.sortBy);
-
-    // sort by overall score by default
-    // let sort = { }
-    // if (sortBy) {
-    //
-    // }
 
     let positionRequirements = [
         { businessId: mongoose.Types.ObjectId(businessId) },

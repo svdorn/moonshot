@@ -62,22 +62,21 @@ class AuthenticatedComponent extends Component {
 
     checkAgreedToTerms() {
         let agreedToTerms = true;
+        const { currentUser } = this.props;
         // if there is a current user we have to make sure they have agreed to the necessary terms
         if (this.props.currentUser) {
             agreedToTerms = false;
-            const acceptedAgreements = this.props.currentUser
-                ? this.props.currentUser.termsAndConditions
-                : undefined;
+            const acceptedAgreements = currentUser ? currentUser.termsAndConditions : undefined;
 
             // if the user has some terms they have agreed to
             if (Array.isArray(acceptedAgreements)) {
                 // everyone has to agree to the privacy policy
                 let necessaryAgreements = ["Privacy Policy"];
                 // candidates have to agree to to the terms of use
-                if (this.props.currentUser.userType === "candidate") {
+                if (["candidate", "employee"].includes(currentUser.userType)) {
                     necessaryAgreements.push("Terms of Use");
                 }
-                // everyone else (employees, account admins, managers) has to agree to terms and conditions
+                // everyone else (account admins, managers) has to agree to terms and conditions
                 else {
                     necessaryAgreements.push("Terms of Service");
                 }

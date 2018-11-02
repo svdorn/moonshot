@@ -1,41 +1,44 @@
-"use strict"
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { postUser, onSignUpPage, closeNotification, addNotification, setUserPosted } from '../../actions/usersActions';
-import { TextField, CircularProgress, FlatButton, Dialog, RaisedButton } from 'material-ui';
-import { Field, reduxForm } from 'redux-form';
-import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import { browserHistory } from 'react-router';
-import TermsOfUse from '../policies/termsOfUse';
-import PrivacyPolicy from '../policies/privacyPolicy';
-import MetaTags from 'react-meta-tags';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+    postUser,
+    onSignUpPage,
+    closeNotification,
+    addNotification,
+    setUserPosted
+} from "../../actions/usersActions";
+import { TextField, CircularProgress, FlatButton, Dialog, RaisedButton } from "material-ui";
+import { Field, reduxForm } from "redux-form";
+import TextInput from "../userInput/textInput";
+import HomepageTriangles from "../miscComponents/HomepageTriangles";
+import { browserHistory } from "react-router";
+import TermsOfUse from "../policies/termsOfUse";
+import PrivacyPolicy from "../policies/privacyPolicy";
+import MetaTags from "react-meta-tags";
 import { renderTextField, renderPasswordField, isValidEmail, goTo } from "../../miscFunctions";
 import { button } from "../../classes";
 import axios from "axios";
 
-
 const validate = values => {
     const errors = {};
-    const requiredFields = [
-        'name',
-        'email',
-        'password',
-        'password2'
-    ];
+    const requiredFields = ["name", "email", "password", "password2"];
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'This field is required'
+            errors[field] = "This field is required";
         }
     });
     if (values.email && !isValidEmail(values.email)) {
-        errors.email = 'Invalid email address';
+        errors.email = "Invalid email address";
     }
-    if (values.password && values.password2 && (values.password != values.password2)) {
-        errors.password2 = 'Passwords must match';
+    if (values.password && values.password2 && values.password != values.password2) {
+        errors.password2 = "Passwords must match";
     }
-    return errors
+    return errors;
 };
+
+const inputStyle = { marginBottom: "10px" };
 
 class Signup extends Component {
     constructor(props) {
@@ -51,7 +54,7 @@ class Signup extends Component {
             sendingVerificationEmail: false,
             contactSupport: false,
             keepMeLoggedIn: true
-        }
+        };
     }
 
     componentWillMount() {
@@ -63,28 +66,28 @@ class Signup extends Component {
 
     componentDidMount() {
         // add listener for keyboard enter key
-        document.addEventListener('keypress', this.bound_handleKeyPress);
+        document.addEventListener("keypress", this.bound_handleKeyPress);
 
         this.props.onSignUpPage();
     }
 
-
     componentWillUnmount() {
         // remove listener for keyboard enter key
-        document.removeEventListener('keypress', this.bound_handleKeyPress);
+        document.removeEventListener("keypress", this.bound_handleKeyPress);
     }
-
 
     handleKeyPress(e) {
         var key = e.which || e.keyCode;
-        if (key === 13) { // 13 is enter
+        if (key === 13) {
+            // 13 is enter
             this.handleSubmit();
         }
     }
 
-
     handleSubmit(e) {
-        if (e) { e.preventDefault(); }
+        if (e) {
+            e.preventDefault();
+        }
 
         if (!this.state.agreeingToTerms) {
             this.props.addNotification("Must agree to Terms of Use and Privacy Policy.", "error");
@@ -95,12 +98,7 @@ class Signup extends Component {
 
         // Form validation before submit
         let notValid = false;
-        const requiredFields = [
-            'name',
-            'email',
-            'password',
-            'password2'
-        ];
+        const requiredFields = ["name", "email", "password", "password2"];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
                 this.props.touch(field);
@@ -124,7 +122,11 @@ class Signup extends Component {
         const email = values.email;
         const { keepMeLoggedIn } = this.state;
         let user = {
-            name, password, email, signUpReferralCode, keepMeLoggedIn
+            name,
+            password,
+            email,
+            signUpReferralCode,
+            keepMeLoggedIn
         };
 
         // if the user got here from a link, add those links
@@ -134,7 +136,10 @@ class Signup extends Component {
         }
 
         if (!user.code) {
-            return this.props.addNotification("Must have a unique employer provided link to sign up.", "error");;
+            return this.props.addNotification(
+                "Must have a unique employer-provided link to sign up.",
+                "error"
+            );
         }
 
         this.props.postUser(user);
@@ -142,82 +147,72 @@ class Signup extends Component {
         this.setState({
             ...this.state,
             email
-        })
+        });
     }
-
 
     handleCheckMarkClick() {
         this.setState({
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
-        })
+        });
     }
 
     keepMeLoggedInClick() {
         this.setState({
             ...this.state,
             keepMeLoggedIn: !this.state.keepMeLoggedIn
-        })
+        });
     }
 
     handleOpenPP = () => {
-        this.setState({openPP: true});
+        this.setState({ openPP: true });
     };
 
     handleClosePP = () => {
-        this.setState({openPP: false});
+        this.setState({ openPP: false });
     };
     handleOpenTOU = () => {
-        this.setState({openTOU: true});
+        this.setState({ openTOU: true });
     };
 
     handleCloseTOU = () => {
-        this.setState({openTOU: false});
+        this.setState({ openTOU: false });
     };
-
 
     // create the main content of the page
     createContent() {
         let urlQuery = {};
-        try { urlQuery = this.props.location.query; }
-        catch (e) { /* no query */ }
+        try {
+            urlQuery = this.props.location.query;
+        } catch (e) {
+            /* no query */
+        }
 
         return (
             <div>
                 <form onSubmit={this.handleSubmit.bind(this)}>
-                    <h1 style={{marginTop: "15px"}}>Sign Up</h1>
-                    <div className="inputContainer">
-                        <Field
-                            name="name"
-                            component={renderTextField}
-                            label="Full Name"
-                        /><br/>
-                    </div>
-                    <div className="inputContainer">
-                        <Field
-                            name="email"
-                            component={renderTextField}
-                            label="Email"
-                        /><br/>
-                    </div>
-                    <div className="inputContainer">
-                        <Field
-                            name="password"
-                            component={renderPasswordField}
-                            label="Password"
-                        /><br/>
-                    </div>
-                    <div className="inputContainer">
-                        <Field
-                            name="password2"
-                            component={renderPasswordField}
-                            label="Confirm Password"
-                        /><br/>
-                    </div>
+                    <h1 style={{ margin: "15px auto 20px" }}>Sign Up</h1>
 
-                    <div style={{margin: "20px 20px 0"}}>
-                        <div className="checkbox smallCheckbox whiteCheckbox"
-                             onClick={this.keepMeLoggedInClick.bind(this)}>
+                    <TextInput name="name" label="Full Name" style={inputStyle} />
+                    <TextInput name="email" label="Email" style={inputStyle} />
+                    <TextInput
+                        name="password"
+                        label="Password"
+                        type="password"
+                        style={inputStyle}
+                    />
+                    <TextInput
+                        name="password2"
+                        label="Confirm Password"
+                        type="password"
+                        style={inputStyle}
+                    />
+
+                    <div style={{ margin: "20px 20px 0" }}>
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={this.keepMeLoggedInClick.bind(this)}
+                        >
                             <img
                                 alt=""
                                 className={"checkMark" + this.state.keepMeLoggedIn}
@@ -226,9 +221,11 @@ class Signup extends Component {
                         </div>
                         Keep me logged in
                     </div>
-                    <div style={{margin: "5px 20px 10px"}}>
-                        <div className="checkbox smallCheckbox whiteCheckbox"
-                             onClick={this.handleCheckMarkClick.bind(this)}>
+                    <div style={{ margin: "5px 20px 10px" }}>
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={this.handleCheckMarkClick.bind(this)}
+                        >
                             <img
                                 alt=""
                                 className={"checkMark" + this.state.agreeingToTerms}
@@ -236,49 +233,53 @@ class Signup extends Component {
                             />
                         </div>
                         I have read and agree to the Moonshot Insights
-                        <br/><span className="clickable primary-cyan" onClick={this.handleOpenPP}>Privacy Policy</span>
-                        {" and "}<span className="clickable primary-cyan" onClick={this.handleOpenTOU}>Terms of Use</span>.
+                        <br />
+                        <span className="clickable primary-cyan" onClick={this.handleOpenPP}>
+                            Privacy Policy
+                        </span>
+                        {" and "}
+                        <span className="clickable primary-cyan" onClick={this.handleOpenTOU}>
+                            Terms of Use
+                        </span>.
                     </div>
-                    <br/>
+                    <br />
                     <RaisedButton
                         label="Sign Up"
                         type="submit"
                         className="raisedButtonBusinessHome"
-                        style={{margin: '-10px 0 10px'}}
+                        style={{ margin: "-10px 0 10px" }}
                     />
-                    <br/>
-                    <div className="clickable"
-                         onClick={() => goTo({pathname: '/login', query: urlQuery})}
-                         style={{display: "inline-block"}}>Already have an account?
+                    <br />
+                    <div
+                        className="clickable"
+                        onClick={() => goTo({ pathname: "/login", query: urlQuery })}
+                        style={{ display: "inline-block" }}
+                    >
+                        Already have an account?
                     </div>
                 </form>
-                {this.props.loadingCreateUser ? <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/> : ""}
+                {this.props.loadingCreateUser ? (
+                    <CircularProgress color="#72d6f5" style={{ marginTop: "8px" }} />
+                ) : (
+                    ""
+                )}
             </div>
         );
     }
-
 
     //name, email, password, confirm password, signup button
     render() {
         let content = this.createContent();
 
         const actionsPP = [
-            <FlatButton
-                label="Close"
-                primary={true}
-                onClick={this.handleClosePP}
-            />,
+            <FlatButton label="Close" primary={true} onClick={this.handleClosePP} />
         ];
         const actionsTOU = [
-            <FlatButton
-                label="Close"
-                primary={true}
-                onClick={this.handleCloseTOU}
-            />,
+            <FlatButton label="Close" primary={true} onClick={this.handleCloseTOU} />
         ];
-        let blurredClass = '';
+        let blurredClass = "";
         if (this.state.openTOU || this.state.openPP) {
-            blurredClass = 'dialogForBizOverlay';
+            blurredClass = "dialogForBizOverlay";
         }
 
         // scroll to the top if user posted
@@ -286,7 +287,7 @@ class Signup extends Component {
             window.scroll({
                 top: 0,
                 left: 0,
-                behavior: 'smooth'
+                behavior: "smooth"
             });
         }
 
@@ -294,7 +295,10 @@ class Signup extends Component {
             <div className="fillScreen formContainer">
                 <MetaTags>
                     <title>Sign Up | Moonshot</title>
-                    <meta name="description" content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
+                    <meta
+                        name="description"
+                        content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion."
+                    />
                 </MetaTags>
                 <div className={blurredClass}>
                     <Dialog
@@ -306,7 +310,7 @@ class Signup extends Component {
                         paperClassName="dialogForSignup"
                         overlayClassName="dialogOverlay"
                     >
-                        <PrivacyPolicy/>
+                        <PrivacyPolicy />
                     </Dialog>
                     <Dialog
                         actions={actionsTOU}
@@ -317,17 +321,14 @@ class Signup extends Component {
                         paperClassName="dialogForSignup"
                         overlayClassName="dialogOverlay"
                     >
-                        <TermsOfUse/>
+                        <TermsOfUse />
                     </Dialog>
                     {/*<HomepageTriangles className="slightly-blurred" style={{pointerEvents: "none"}} variation="5"/>*/}
-                    <div className="form lightBlackForm">
-                        { content }
-                    </div>
+                    <div className="form lightBlackForm">{content}</div>
                 </div>
             </div>
         );
     }
-
 
     /************************ REFERRAL COOKIE FUNCTIONS *******************************/
     //this is the name of the cookie on the users machine
@@ -344,10 +345,10 @@ class Signup extends Component {
 
     readCookie(name) {
         let nameEQ = name + "=";
-        let ca = document.cookie.split(';');
+        let ca = document.cookie.split(";");
         for (var i = 0; i < ca.length; i++) {
             let c = ca[i];
-            while (c.charAt(0) == ' ') {
+            while (c.charAt(0) == " ") {
                 c = c.substring(1, c.length);
             }
             if (c.indexOf(nameEQ) == 0) {
@@ -359,13 +360,16 @@ class Signup extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        postUser,
-        onSignUpPage,
-        addNotification,
-        closeNotification,
-        setUserPosted
-    }, dispatch);
+    return bindActionCreators(
+        {
+            postUser,
+            onSignUpPage,
+            addNotification,
+            closeNotification,
+            setUserPosted
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -380,8 +384,11 @@ function mapStateToProps(state) {
 }
 
 Signup = reduxForm({
-    form: 'signup',
-    validate,
+    form: "signup",
+    validate
 })(Signup);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Signup);
