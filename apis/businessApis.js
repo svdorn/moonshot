@@ -2952,15 +2952,11 @@ async function GET_candidateSearch(req, res) {
         { businessId: mongoose.Types.ObjectId(businessId) },
         { name: positionName }
     ];
-    // // filter by hiring stage if requested
-    // if (hiringStage) {
-    //     positionRequirements.push({ "hiringStage": hiringStage });
-    // }
 
     let query = {
         userType: "candidate",
         // only get users who have verified their email address
-        verified: "true",
+        verified: true,
         // only get the position that was asked for
         positions: {
             $elemMatch: {
@@ -2969,20 +2965,13 @@ async function GET_candidateSearch(req, res) {
         }
     };
 
-    // // search by name too if search term exists
-    // if (searchTerm) {
-    //     const nameRegex = new RegExp(searchTerm, "i");
-    //     query["name"] = nameRegex;
-    // }
-
     // the user attributes that we want to keep
     const attributes =
         "_id name profileUrl positions.reviewed positions.favorite positions.interest positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
 
     // perform the search
-    let candidates = [];
     try {
-        candidates = await Users.find(query).select(attributes);
+        var candidates = await Users.find(query).select(attributes);
     } catch (candidateSearchError) {
         console.log("Error searching for candidates: ", candidateSearchError);
         return res.status(500).send(errors.SERVER_ERROR);
@@ -2994,12 +2983,12 @@ async function GET_candidateSearch(req, res) {
         const allCandidatesQuery = {
             userType: "candidate",
             verified: true,
-            positions: { businessId: mongoose.Types.ObjectId(businessId) }
+            positions: { $elemMatch: { businessId: mongoose.Types.ObjectId(businessId) } }
         };
 
         try {
             // count all candidates for the business
-            const candidateCount = await Users.countDocuments(allCandidatesQuery);
+            var candidateCount = await Users.countDocuments(allCandidatesQuery);
             // if there aren't any, send out the mock users
             var shouldSendMockUsers = candidateCount === 0;
         } catch (countUsersError) {

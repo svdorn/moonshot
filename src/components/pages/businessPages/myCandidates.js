@@ -275,7 +275,6 @@ class MyCandidates extends Component {
 
     // get candidates for the current position from the back end
     findCandidates() {
-        console.log("HERE");
         // if there are no positions OR if there are positions and one is selected
         if (this.state.noPositions || this.state.position) {
             axios
