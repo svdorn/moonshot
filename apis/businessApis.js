@@ -2563,7 +2563,8 @@ async function GET_evaluationsGraphData(req, res) {
         date -= 7;
     }
     const earliestDate = new Date(now.getFullYear(), month, date);
-    const latestDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    // make sure we get all the data from today too
+    const latestDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
     // get counts of evaluation completions
     try {
