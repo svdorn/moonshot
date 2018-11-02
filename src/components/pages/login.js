@@ -1,15 +1,15 @@
 "use strict";
 import React, { Component } from "react";
 import axios from "axios";
-import { TextField, CircularProgress, RaisedButton } from "material-ui";
+import { CircularProgress, RaisedButton } from "material-ui";
 import { login, closeNotification, addNotification } from "../../actions/usersActions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { browserHistory } from "react-router";
-import { Field, reduxForm } from "redux-form";
+import { reduxForm } from "redux-form";
 import HomepageTriangles from "../miscComponents/HomepageTriangles";
 import MetaTags from "react-meta-tags";
-import { renderTextField, renderPasswordField, isValidEmail, goTo } from "../../miscFunctions";
+import { isValidEmail, goTo } from "../../miscFunctions";
 import TextInput from "../userInput/textInput";
 
 const validate = values => {
