@@ -52,8 +52,10 @@ class PredictiveGraph extends Component {
         if (this.props.containerName) {
             // get the container element
             let container = document.getElementById(this.props.containerName);
+
             // get its current width
             const width = container.offsetWidth;
+
             // set current width in state
             this.setState({ width });
             // get the event that fires on transition end

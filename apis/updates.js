@@ -30,6 +30,41 @@ const { sanitize,
 const { gradeEval, getCognitiveScore } = require("./evaluationApis");
 
 
+// give all account admins the business id and unique name of their business
+async function accountAdminBusinessInfo() {
+    try {
+        let users = await Users.find({ "userType": "accountAdmin" });
+
+        for (let userIdx = 0; userIdx < users.length; userIdx++) {
+            let user = users[userIdx];
+
+            console.log("user email: ", user.email);
+
+            const businessId = user.businessInfo.businessId;
+            console.log("businessId: ", businessId);
+
+            if (businessId) {
+                const bizPromise = Businesses.findById(businessId);
+                const business = await bizPromise;
+
+                if (business) {
+                    console.log("business name: ", business.name);
+
+                    user.businessInfo.businessName = business.name;
+                    user.businessInfo.uniqueName = business.uniqueName;
+
+                    await user.save();
+                } else {
+                    console.log("no business found");
+                }
+            }
+        }
+        console.log("done!");
+    } catch (e) {
+        console.log("Error, ", e);
+    }
+}
+
 
 // give all businesses unique names for their application pages
 async function giveUniqueNames() {
@@ -124,7 +159,6 @@ async function updateBusinesses() {
             for (let posIdx = 0; posIdx < positions.length; posIdx++) {
                 let position = positions[posIdx];
 
-                position.finalized = true;
                 if (typeof position.positionType !== "string") { position.positionType = "General" }
                 if (!position.length) { position.length = 25; }
                 if (!position.timeAllotted) { position.timeAllotted = 14; }

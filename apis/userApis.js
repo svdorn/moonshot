@@ -4,6 +4,9 @@ const Skills = require('../models/skills.js');
 const Businesses = require('../models/businesses.js');
 const Adminquestions = require("../models/adminquestions");
 const credentials = require('../credentials');
+const Intercom = require('intercom-client');
+
+const client = new Intercom.Client({ token: credentials.intercomToken });
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -21,8 +24,10 @@ const { sanitize,
         frontEndUser,
         emailFooter,
         getSkillNamesByIds,
+        generateNewUniqueEmail,
         lastPossibleSecond,
-        findNestedValue
+        findNestedValue,
+        moonshotUrl
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require('./psychApis');
@@ -30,13 +35,12 @@ const errors = require('./errors.js');
 
 const { addEvaluation } = require("./evaluationApis");
 
-const userApis = {
+module.exports = {
     POST_signOut,
     POST_stayLoggedIn,
     GET_stayLoggedIn,
     GET_session,
     POST_session,
-    POST_updateOnboarding,
     POST_verifyEmail,
     POST_changePasswordForgot,
     POST_forgotPassword,
@@ -51,7 +55,67 @@ const userApis = {
     GET_notificationPreferences,
     POST_notificationPreferences,
     POST_agreeToTerms,
-    POST_verifyFromApiKey
+    POST_verifyFromApiKey,
+    POST_updateOnboardingStep,
+    POST_popups,
+    POST_reSendVerificationEmail,
+    POST_confirmEmbedLink,
+
+    // not api endpoints
+    sendVerificationEmail
+}
+
+
+// re-send a verification email (user didn't get the first one for some reason)
+async function POST_reSendVerificationEmail(req, res) {
+    const { userId, verificationToken } = sanitize(req.body);
+
+    try { var user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("Error getting user when sending verification email: ", getUserError);
+        return res.status(500).send({message: errors.SERVER_ERROR});
+    }
+
+    // if user is already verified, don't need to re-send verification email
+    if (user.verified) { return res.status(200).send({ alreadyVerified: true, user: frontEndUser(user) }); }
+
+    try { await sendVerificationEmail(user); }
+    catch (sendEmailError) {
+        console.log("Error sending verification email: ", sendEmailError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({ emailSent: true, email: user.email });
+}
+
+
+// send email to verify user account
+async function sendVerificationEmail(user) {
+    return new Promise(async function(resolve, reject) {
+        let recipients = [ user.email ];
+        let subject = 'Verify Email';
+        const content = (
+            `<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
+                <div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>
+                <p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.
+                <br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>
+                <a  style="display:inline-block;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:6px 30px;text-decoration:none;margin:20px;background:#494b4d;"
+                    href="${moonshotUrl}verifyEmail?token=${user.emailVerificationToken}"
+                >
+                    Verify Account
+                </a>
+                <p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>
+                ${emailFooter(user.email)}
+            </div>`
+        );
+
+        try {
+            await sendEmail({recipients, subject, content});
+            return resolve();
+        }
+        // send email error
+        catch (sendEmailError) { return reject(sendEmailError); }
+    });
 }
 
 
@@ -365,16 +429,17 @@ async function POST_session(req, res) {
     });
 }
 
-async function POST_updateOnboarding(req, res) {
+
+async function POST_popups(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
-    const onboarding = sanitize(req.body.onboarding);
+    const popups = sanitize(req.body.popups);
 
     // get the user who is asking for their evaluations page
     try {
         var user = await getAndVerifyUser(userId, verificationToken);
     } catch (getUserError) {
-        console.log("error getting user when trying update onboarding info: ", getUserError);
+        console.log("error getting user when trying update popup info: ", getUserError);
         const status = getUserError.status ? getUserError.status : 500;
         const message = getUserError.message ? getUserError.message : "Server error.";
         return res.status(status).send(message);
@@ -384,7 +449,7 @@ async function POST_updateOnboarding(req, res) {
     if (!user) { return res.status(404).send("User not found"); }
 
     // if a user was found from the token, verify them and get rid of the token
-    user.onboarding = onboarding;
+    user.popups = popups;
 
     // save the verified user
     try { var returnedUser = await user.save(); }
@@ -395,6 +460,165 @@ async function POST_updateOnboarding(req, res) {
 
     res.json(frontEndUser(returnedUser));
 }
+
+async function POST_confirmEmbedLink(req, res) {
+    const { userId, verificationToken } = req.body;
+
+    // get the user who is asking for their evaluations page
+    try {
+        var user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user when trying update popup info: ", getUserError);
+        const status = getUserError.status ? getUserError.status : 500;
+        const message = getUserError.message ? getUserError.message : "Server error.";
+        return res.status(status).send(message);
+    }
+
+    // if no user found from token, can't verify
+    if (!user) { return res.status(404).send("User not found"); }
+
+    // if a user was found from the token, verify them and get rid of the token
+    user.confirmEmbedLink = true;
+
+    // save the verified user
+    try { var returnedUser = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user when updating onboarding info: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    res.json(frontEndUser(returnedUser));
+}
+
+module.exports.POST_intercomEvent = async function(req, res) {
+    const event_name = sanitize(req.body.eventName);
+    const metadata = sanitize(req.body.metadata);
+
+    if (!req.body.userId || !req.body.verificationToken) {
+        var email = await generateNewUniqueEmail();
+        var intercom = await client.users.create({
+            email,
+            name: "there"
+        });
+        var user = {};
+        var temp = true;
+        // Add the intercom info to the user
+        if (intercom.body) {
+            user.intercom = {};
+            user.intercom.email = intercom.body.email;
+            user.intercom.id = intercom.body.id;
+        } else {
+            console.log("error creating an intercom user: ", createIntercomError);
+            return res.status(500).send("Server error.");
+        }
+        const hash = crypto
+            .createHmac("sha256", credentials.hmacKey)
+            .update(user.intercom.id)
+            .digest("hex");
+        user.hmac = hash;
+    } else {
+        try { var user = await getUserFromReq(req); }
+        catch (getUserError) {
+            console.log("Error getting user while trying to update onboarding step: ", getUserError);
+            const status = getUserError.status ? getUserError.status : 500;
+            const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
+            return res.status(status).send(message);
+        }
+    }
+
+    // if user doesn't have correct info, throw error
+    if (!user || !event_name || !user.intercom || !user.intercom.id || !user.intercom.email) {
+        return res.status(400).send("Error getting information");
+    }
+
+    const created_at = Math.floor(Date.now() / 1000);
+
+    // create event
+    client.events.create({
+      event_name,
+      created_at,
+      user_id: user.intercom.id,
+      email: user.intercom.email,
+      metadata
+  }, function (d) {
+        return res.status(200).send({ user, temp });
+    });
+}
+
+
+async function POST_updateOnboardingStep(req, res) {
+    try { var user = await getUserFromReq(req); }
+    catch (getUserError) {
+        console.log("Error getting user while trying to update onboarding step: ", getUserError);
+        const status = getUserError.status ? getUserError.status : 500;
+        const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
+        return res.status(status).send(message);
+    }
+
+    const { newStep } = sanitize(req.body);
+
+    // initialize onboard object if it doesn't exist
+    if (!user.onboard) {
+        user.onboard = {
+            step: 1,
+            highestStep: 1,
+            actions: []
+        }
+    }
+
+    // check if the user is done with onboarding
+    if (newStep === -1) {
+        // user is done with onboarding
+        user.onboard.timeFinished = new Date();
+    } else {
+        // record that the user took this step
+        user.onboard.actions.push({ time: new Date(), newStep });
+        // mark the new step as their current one
+        user.onboard.step = newStep;
+        // if this is the farthest the user has been, mark this as highest step
+        if (!user.onboard.highestStep || newStep > user.onboard.highestStep) { user.onboard.highestStep = newStep; }
+    }
+
+    try { await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user when updating onboarding step: ", saveUserError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.status(200).send({});
+}
+
+
+// async function POST_updateOnboarding(req, res) {
+//     const userId = sanitize(req.body.userId);
+//     const verificationToken = sanitize(req.body.verificationToken);
+//     const onboarding = sanitize(req.body.onboarding);
+//
+//     // get the user who is asking for their evaluations page
+//     try {
+//         var user = await getAndVerifyUser(userId, verificationToken);
+//     } catch (getUserError) {
+//         console.log("error getting user when trying update onboarding info: ", getUserError);
+//         const status = getUserError.status ? getUserError.status : 500;
+//         const message = getUserError.message ? getUserError.message : "Server error.";
+//         return res.status(status).send(message);
+//     }
+//
+//     // if no user found from token, can't verify
+//     if (!user) { return res.status(404).send("User not found"); }
+//
+//     // if a user was found from the token, verify them and get rid of the token
+//     user.onboarding = onboarding;
+//
+//     // save the verified user
+//     try { var returnedUser = await user.save(); }
+//     catch (saveUserError) {
+//         console.log("Error saving user when updating onboarding info: ", saveUserError);
+//         return res.status(500).send(errors.SERVER_ERROR);
+//     }
+//
+//     res.json(frontEndUser(returnedUser));
+// }
 
 
 // signs the user out by destroying the user session
@@ -464,6 +688,7 @@ async function POST_verifyEmail(req, res) {
     // if a user was found from the token, verify them and get rid of the token
     user.verified = true;
     user.emailVerificationToken = undefined;
+    user.showVerifyEmailBanner = false;
 
     // save the verified user
     try { user = await user.save(); }
@@ -473,25 +698,13 @@ async function POST_verifyEmail(req, res) {
     }
 
     // where the user should be redirected after verification
-    const redirect = user.userType === "accountAdmin" ? "onboarding" : "myEvaluations";
+    const redirect = user.userType === "accountAdmin" ? "dashboard" : "myEvaluations";
 
-    // if the session has the user's id, can immediately log them in
-    sessionUserId = sanitize(req.session.unverifiedUserId);
-    // get rid of the unverified id as it won't be needed anymore
-    req.session.unverifiedUserId = undefined;
     // if the session had the correct user id, log the user in
-    const sessionHadUnverifiedId = sessionUserId && sessionUserId.toString() === user._id.toString();
     const loggedIn = req.session.userId && req.session.userId.toString() === user._id.toString();
-    if (sessionHadUnverifiedId || loggedIn) {
-        req.session.userId = user._id.toString();
-        req.session.verificationToken = user.verificationToken;
-        req.session.save(function(saveSessionError) {
-            if (saveSessionError) {
-                console.log("Error saving user session: ", saveSessionError);
-            }
-            // return the user object even if session saving didn't work
-            return res.status(200).send({user: frontEndUser(user), redirect});
-        });
+    if (loggedIn) {
+        // return the user object even if session saving didn't work
+        return res.status(200).send({user: frontEndUser(user), redirect});
     }
 
     // otherwise bring the user to the default page (which could be preceeded by login page)
@@ -789,7 +1002,7 @@ async function GET_checkUserVerified(req, res) {
     }
 
     // if not verified, return unsuccessfully
-    if (!user.verified) { return res.status(403).send({verified: false}); }
+    if (!user.verified) { return res.status(403).send({ verified: false }); }
 
     // return user object if verified
     return res.status(200).send(frontEndUser(user));
@@ -839,10 +1052,6 @@ async function POST_login(req, res) {
         // wrong password, don't log in
         if (passwordsMatch !== true) {
             return res.status(400).send("Password is incorrect.");
-        }
-        // user has not yet verified email and is not an account admin, don't log in
-        if (user.verified !== true && user.userType !== "accountAdmin") {
-            return res.status(401).send("Email not yet verified");
         }
         // all login info is correct
         // if user wants to stay logged in, save the session
@@ -936,8 +1145,6 @@ async function POST_changeSettings(req, res) {
 
 // verify that a user has a legitimate api key
 async function POST_verifyFromApiKey(req, res) {
-    console.log("req.body:", req.body);
-
     // get the api key from the input values
     const API_Key = sanitize(findNestedValue(req.body, "API_Key", 5, true));
     if (!API_Key) { return res.status(401).send({error: "No API_Key provided. Make sure the attribute name is API_Key with that exact capitalization."});}
@@ -958,6 +1165,3 @@ async function POST_verifyFromApiKey(req, res) {
     // successfully verified that user has correct api key
     return res.json({ success: true });
 }
-
-
-module.exports = userApis;

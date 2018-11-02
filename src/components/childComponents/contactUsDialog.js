@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Dialog, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import { closeContactUsModal, contactUsEmail } from "../../actions/usersActions";
-import {Field, reduxForm} from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { isValidEmail } from "../../miscFunctions";
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (

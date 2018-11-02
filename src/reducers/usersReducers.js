@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 import { Stack } from "../miscFunctions";
 
 // USERS REDUCERS
@@ -9,9 +9,15 @@ const initialState = {
     headerType: undefined,
     headerExpirationTime: undefined,
     userPosted: false
-}
+};
 export function usersReducers(state = initialState, action) {
     switch (action.type) {
+        case "UPDATE_STORE": {
+            return {
+                ...state,
+                [action.variableName]: action.value
+            };
+        }
         case "OPEN_ADD_USER_MODAL":
             return {
                 ...state,
@@ -26,10 +32,111 @@ export function usersReducers(state = initialState, action) {
                 userPostedFailed: false
             };
             break;
+        case "OPEN_VERIFICATION_MODAL":
+            return {
+                ...state,
+                verificationModal: true
+            };
+            break;
+        case "CLOSE_VERIFICATION_MODAL":
+            return {
+                ...state,
+                verificationModal: false,
+            };
+            break;
+        case "OPEN_CLAIM_PAGE_MODAL":
+            return {
+                ...state,
+                claimPageModal: true
+            };
+            break;
+        case "CLOSE_CLAIM_PAGE_MODAL":
+            return {
+                ...state,
+                claimPageModal: false,
+            };
+            break;
+        case "OPEN_INTRODUCTION_MODAL":
+            return {
+                ...state,
+                introductionModal: true
+            };
+            break;
+        case "CLOSE_INTRODUCTION_MODAL":
+            return {
+                ...state,
+                introductionModal: false,
+            };
+            break;
+        case "OPEN_CANDIDATES_POPUP_MODAL":
+            return {
+                ...state,
+                candidatesPopupModalOpen: true
+            };
+            break;
+        case "CLOSE_CANDIDATES_POPUP_MODAL":
+            Intercom("update");
+            return {
+                ...state,
+                candidatesPopupModalOpen: false,
+                loadingSomething: false
+            };
+            break;
+        case "OPEN_SIGNUP_MODAL":
+            let signupModalInfo = { type: action.category, name: action.name };
+            return {
+                ...state,
+                signupModalOpen: true,
+                signupModalInfo
+            };
+            break;
+        case "CLOSE_SIGNUP_MODAL":
+            return {
+                ...state,
+                signupModalOpen: false,
+                signupModalInfo: null
+            };
+            break;
+        case "OPEN_ADD_ADMIN_MODAL":
+            return {
+                ...state,
+                addAdminModalOpen: true
+            };
+            break;
+        case "CLOSE_ADD_ADMIN_MODAL":
+            return {
+                ...state,
+                addAdminModalOpen: false,
+                userPosted: false,
+                userPostedFailed: false
+            };
+            break;
+        case "OPEN_ADD_POSITION_MODAL":
+            return {
+                ...state,
+                positionModalOpen: true
+            };
+            break;
+        case "CLOSE_ADD_POSITION_MODAL":
+            return {
+                ...state,
+                positionModalOpen: false,
+                positionPosted: false,
+                posiitonPostedFailed: false
+            };
+            break;
+        case "OPEN_INVITE_CANDIDATES_MODAL": {
+            return { ...state, inviteCandidatesModalOpen: true };
+            break;
+        }
+        case "CLOSE_INVITE_CANDIDATES_MODAL": {
+            return { ...state, inviteCandidatesModalOpen: false };
+            break;
+        }
         case "OPEN_CONTACT_US_MODAL":
             return {
                 ...state,
-                contactUsModal: true,
+                contactUsModal: true
             };
             break;
         case "CLOSE_CONTACT_US_MODAL":
@@ -39,13 +146,50 @@ export function usersReducers(state = initialState, action) {
                 message: undefined
             };
             break;
+        case "MARK_FOOTER_ON_SCREEN": {
+            return { ...state, footerOnScreen: action.footerOnScreen };
+        }
+        case "UPDATE_ONBOARDING_STEP": {
+            let currentUser = state.currentUser;
+            // create onboarding object with new step or with time finished marked
+            let onboard = {};
+            // if the user is finished, update that on the frontend
+            if (action.newStep === -1) {
+                onboard = { timeFinished: new Date() };
+            } else {
+                onboard = { step: action.newStep };
+            }
+
+            // fill in onboarding info with any that already exists
+            if (!currentUser && typeof state.guestOnboard === "object") {
+                // if there is no user, must be a guest going through onboarding
+                onboard = { ...state.guestOnboard, ...onboard };
+            } else if (currentUser && typeof currentUser.onboard === "object") {
+                // if there is a user and they've already started, fill in old info
+                onboard = { ...currentUser.onboard, ...onboard };
+            }
+            // update highest step user has been to
+            if (typeof onboard.highestStep !== "number" || onboard.highestStep < action.newStep) {
+                onboard.highestStep = action.newStep;
+            }
+
+            if (currentUser) {
+                // throw the onboarding stuff back into the user
+                currentUser = { ...currentUser, onboard };
+                // save the state with the new current user
+                return { ...state, currentUser, loadingSomething: false };
+            } else {
+                return { ...state, guestOnboard: onboard };
+            }
+            break;
+        }
         case "CREATED_NO_VERIFY_EMAIL_SENT": {
             return {
                 ...state,
                 sendVerifyEmailTo: action.sendVerifyEmailTo,
                 loadingSomething: false,
                 userPosted: true
-            }
+            };
             break;
         }
         case "CONTACT_US_EMAIL_SUCCESS":
@@ -85,10 +229,25 @@ export function usersReducers(state = initialState, action) {
                 errorMessage: undefined
             };
             break;
+        case "INTERCOM_EVENT":
+            Intercom("update");
+            return { ...state, loadingSomething: false };
+            break;
+        case "INTERCOM_EVENT_TEMP":
+            if (action.user && action.user.intercom) {
+                const intercom = action.user.intercom;
+                Intercom("update", {
+                    email: intercom.email,
+                    user_id: intercom.id,
+                    user_hash: action.user.hmac
+                });
+            }
+            return { ...state, loadingSomething: false };
+            break;
         case "LOGIN":
             if (action.user && action.user.intercom) {
                 const intercom = action.user.intercom;
-                Intercom('update', {
+                Intercom("update", {
                     email: intercom.email,
                     user_id: intercom.id,
                     name: action.user.name,
@@ -103,16 +262,22 @@ export function usersReducers(state = initialState, action) {
                 loadingSomething: false
             };
             break;
-        case "UPDATE_ONBOARDING":
+        // case "UPDATE_ONBOARDING":
+        case "HIDE_POPUPS":
+        case "CONFIRM_EMBED_LINK":
             return {
                 ...state,
-                currentUser: action.payload
-            }
+                currentUser: action.payload,
+                loadingSomething: false
+            };
             break;
         case "NOTIFICATION":
         case "VERIFY_EMAIL_REJECTED":
         case "CHANGE_TEMP_PASS_REJECTED":
         case "ADD_PATHWAY_REJECTED":
+        case "HIDE_POPUPS_REJECTED":
+        case "CONFIRM_EMBED_LINK_REJECTED":
+        case "POST_BUSINESS_INTERESTS_REJECTED":
         case "ADD_NOTIFICATION":
             return {
                 ...state,
@@ -132,17 +297,22 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "UPDATE_USER_REJECTED":
-        case "UPDATE_ONBOARDING_REJECTED":
+        //case "UPDATE_ONBOARDING_REJECTED":
         case "CHANGE_PASSWORD":
         case "POST_EMAIL_INVITES_REJECTED":
-            return {...state, loadingSomething:false, userPostedFailed: true, ...notificationInfo(action.notification)}
+            return {
+                ...state,
+                loadingSomething: false,
+                userPostedFailed: true,
+                ...notificationInfo(action.notification)
+            };
             break;
         case "SIGNOUT":
-            Intercom('shutdown');
-            Intercom('boot', {
-                app_id: 'xki3jtkg'
+            Intercom("shutdown");
+            Intercom("boot", {
+                app_id: "xki3jtkg"
             });
-            return {...state, currentUser: undefined};
+            return { ...state, currentUser: undefined };
             break;
         case "FORGOT_PASSWORD_REQUESTED":
         case "POST_USER_REQUESTED":
@@ -155,7 +325,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 loadingSomething: true
-            }
+            };
             break;
         case "STOP_LOADING":
             return { ...state, loadingSomething: false };
@@ -164,16 +334,21 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 userPosted: false
-            }
+            };
             break;
-        case "POST_USER":
+        case "POST_USER": {
+            return {
+                ...state,
+                currentUser: action.user,
+                userPosted: true,
+                loadingSomething: false
+            };
+        }
         case "POST_EMAIL_INVITES_SUCCESS":
             return {
                 ...state,
                 userPosted: true,
-                loadingSomething: false,
-                waitingForFinalization: action.waitingForFinalization,
-                sendVerifyEmailTo: undefined
+                loadingSomething: false
             };
             break;
         case "POST_USER_SUCCESS_EMAIL_FAIL":
@@ -202,10 +377,10 @@ export function usersReducers(state = initialState, action) {
                 notification: action.notification,
                 notificationDate: new Date(),
                 loadingSomething: false
-            }
+            };
             break;
         case "UPDATE_USER":
-            return {...state, currentUser: action.user };
+            return { ...state, currentUser: action.user };
             break;
         case "UPDATE_USER_SETTINGS":
             return {
@@ -231,9 +406,11 @@ export function usersReducers(state = initialState, action) {
             let newState = {
                 ...state,
                 ...notificationInfo(action.notification),
-                loadingSomething: false,
+                loadingSomething: false
             };
-            if (action.user) { newState.currentUser = action.user; }
+            if (action.user) {
+                newState.currentUser = action.user;
+            }
             return newState;
             break;
         case "CONTACT_US":
@@ -254,76 +431,113 @@ export function usersReducers(state = initialState, action) {
             break;
         case "CLOSE_NOTIFICATION":
             return {
-                ...state, notification: undefined, notificationDate: new Date()
-            }
-            break;
-        case "START_ONBOARDING":
-            return {
-                ...state, isOnboarding: true
-            }
-            break;
-        case "END_ONBOARDING":
-            // update the user if an update was sent
-            if (action.user) {
-                return {
-                    ...state,
-                    isOnboarding: false,
-                    currentUser: action.user
-                }
-            } else {
-                return {
-                    ...state,
-                    isOnboarding: false
-                }
-            }
-            break;
-        case "UPDATE_USER_ONBOARDING":
-            return {
-                ...state, currentUser: action.user
+                ...state,
+                notification: undefined,
+                notificationDate: new Date()
             };
             break;
+        // case "START_ONBOARDING":
+        //     return {
+        //         ...state, isOnboarding: true
+        //     }
+        //     break;
+        // case "END_ONBOARDING":
+        //     // update the user if an update was sent
+        //     if (action.user) {
+        //         return {
+        //             ...state,
+        //             isOnboarding: false,
+        //             currentUser: action.user
+        //         }
+        //     } else {
+        //         return {
+        //             ...state,
+        //             isOnboarding: false
+        //         }
+        //     }
+        //     break;
+        // case "UPDATE_USER_ONBOARDING":
+        //     return {
+        //         ...state, currentUser: action.user
+        //     };
+        //     break;
         case "START_PSYCH_EVAL":
         case "USER_UPDATE":
             return {
-                ...state, currentUser: action.currentUser, loadingSomething: false
-            }
+                ...state,
+                currentUser: action.currentUser,
+                loadingSomething: false
+            };
             break;
         case "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS":
             return {
-                ...state, incompleteSteps: action.incompleteSteps, loadingSomething: false
-            }
+                ...state,
+                incompleteSteps: action.incompleteSteps,
+                loadingSomething: false
+            };
             break;
         case "RESET_INCOMPLETE_STEPS":
             return {
-                ...state, incompleteSteps: undefined
-            }
+                ...state,
+                incompleteSteps: undefined
+            };
             break;
         case "SET_WEBP_SUPPORT":
             // set image file types
-            const png = action.webpSupported ? ".webp" : ".png"
+            const png = action.webpSupported ? ".webp" : ".png";
             const jpg = action.webpSupported ? ".webp" : ".jpg";
             return {
-                ...state, webpSupportChecked: true, png, jpg
-            }
+                ...state,
+                webpSupportChecked: true,
+                png,
+                jpg
+            };
+            break;
+        case "UPDATE_POSITION_COUNT":
+            return {
+                ...state,
+                positionCount: action.count
+            };
             break;
         case "CHANGE_AUTOMATE_INVITES": {
             // get the automateInvites info up to this point
             let automateInvites = state.automateInvites ? state.automateInvites : {};
             // get the arguments we could receive
-            const { page, header, goBack, nextPage, nextCallable, lastSubStep, extraNextFunction, extraNextFunctionPage } = action.args;
+            const {
+                page,
+                header,
+                goBack,
+                nextPage,
+                nextCallable,
+                lastSubStep,
+                extraNextFunction,
+                extraNextFunctionPage
+            } = action.args;
             // if the header should be changed, do so
-            if (header !== undefined) { automateInvites.header = header; }
+            if (header !== undefined) {
+                automateInvites.header = header;
+            }
             // if the next page to be navigated to should be changed, do so
-            if (nextPage !== undefined) { automateInvites.nextPage = nextPage; }
+            if (nextPage !== undefined) {
+                automateInvites.nextPage = nextPage;
+            }
             // if this should be marked as the last page in a sequence, mark it
             // should always be able to move on to next STEP if on the last SUB STEP
-            if (typeof lastSubStep === "boolean") { automateInvites.lastSubStep = lastSubStep; }
+            if (typeof lastSubStep === "boolean") {
+                automateInvites.lastSubStep = lastSubStep;
+            }
             // if the ability to move to the next step should be changed, change it
-            if (typeof nextCallable === "boolean") { automateInvites.nextCallable = nextCallable; }
+            if (typeof nextCallable === "boolean") {
+                automateInvites.nextCallable = nextCallable;
+            }
             // if there is a function to call when Next button pressed, add it
-            if (extraNextFunction !== undefined) { automateInvites.extraNextFunction = extraNextFunction; }
+            if (extraNextFunction !== undefined) {
+                automateInvites.extraNextFunction = extraNextFunction;
+            }
             // if there is a page going along with the above function, add it
-            if (extraNextFunctionPage !== undefined) { automateInvites.extraNextFunctionPage = extraNextFunctionPage; }
+            if (extraNextFunctionPage !== undefined) {
+                automateInvites.extraNextFunctionPage = extraNextFunctionPage;
+            }
             // if there is a page to be navigated to
             if (page !== undefined) {
                 // make sure there is a page stack
@@ -370,7 +584,7 @@ export function usersReducers(state = initialState, action) {
         }
         // override ALL of evaluation state
         case "SET_EVALUATION_STATE": {
-            return { ...state, evaluationState: action.evaluationState }
+            return { ...state, evaluationState: action.evaluationState };
         }
         // override parts of old evaluation state with new eval state
         case "UPDATE_EVALUATION_STATE": {
@@ -382,9 +596,11 @@ export function usersReducers(state = initialState, action) {
                     ...state.evaluationState,
                     ...action.evaluationState
                 }
-            }
+            };
             // update user if given
-            if (action.user) { newState.currentUser = action.user; }
+            if (action.user) {
+                newState.currentUser = action.user;
+            }
             return newState;
         }
         case "ADD_PATHWAY":
@@ -396,14 +612,12 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         default:
-            return {...state};
+            return { ...state };
             break;
     }
 
-    return state
+    return state;
 }
-
-
 
 // type is optional as it should be included within the notification object
 function notificationInfo(notification, givenType) {
@@ -414,18 +628,26 @@ function notificationInfo(notification, givenType) {
     // if the given notification is the message
     if (typeof notification === "string") {
         message = notification;
-        if (errorTypes.includes(givenType)) { type = "errorHeader"; }
+        if (errorTypes.includes(givenType)) {
+            type = "errorHeader";
+        }
     }
     // if the given notification is a notification object
     else if (typeof notification === "object") {
         // add the given message if provided
-        if (typeof notification.message === "string") { message = notification.message; }
+        if (typeof notification.message === "string") {
+            message = notification.message;
+        }
         // add the message type if given
-        if (errorTypes.includes(notification.type) || errorTypes.includes(givenType)) { type = "errorHeader"; }
+        if (errorTypes.includes(notification.type) || errorTypes.includes(givenType)) {
+            type = "errorHeader";
+        }
     }
     // return the notification information if enough info is given to make one
-    return (typeof message === "string") ? {
-        notification: { message, type },
-        notificationDate: new Date()
-    } : {};
+    return typeof message === "string"
+        ? {
+              notification: { message, type },
+              notificationDate: new Date()
+          }
+        : {};
 }

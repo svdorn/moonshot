@@ -60,25 +60,40 @@ const usersSchema = mongoose.Schema({
     signUpReferralCode: String,
     // if false, should route user to onboarding on login
     hasFinishedOnboarding: Boolean,
-    // Employer onboarding
-    onboarding: {
-        // The current step the employer is on in onboarding
+    // employer onboarding
+    onboard: {
+        // the current step the user is on in onboarding
         step: Number,
-        // If the employer is done with onboarding
-        complete: Boolean,
-        // the furthest step the employer has gotten to
-        furthestStep: Number,
-        // the ats the user said they use during onboarding
-        ats: String,
-        // suggestion for candidate application integration method
-        integrationSuggestion: String,
-        // the language the user would like to use to integrate with Moonshot
-        languagePreference: String,
-        // if the user wants a language for site integration that wasn't included by default
-        customLanguage: String,
-        // how many days to wait before inviting candidates to take evaluation
-        daysBeforeInvite: Number
+        // furthest step you've gotten to (so if you're on step 3 and that's the
+        // furthest you've ever been, this will be 3)
+        highestStep: Number,
+        // list of actions the user took
+        actions: [{
+            // date/time the action was taken
+            time: Date,
+            // the new step that the user is on
+            newStep: Number
+        }],
+        // the date/time the user finished onboarding
+        timeFinished: Date
     },
+    // popups
+    popups: {
+        // whether the popups should show on the evaluations tab
+        evaluations: Boolean,
+        // whether the popups should show on the candidates tab
+        candidates: Boolean,
+        // whether the candidate modal should show on the candidates tab
+        candidateModal: Boolean,
+        // whether the popups should show on the employees tab
+        employees: Boolean,
+        // where the business interests should pop up or not
+        businessInterests: Boolean,
+        // whether the welcomeToMoonshotInsights should show on the dashboard
+        dashboard: Boolean
+    },
+    // if the user has confirmed that the link has been embedded
+    confirmEmbedLink: Boolean,
     // info we need to keep to access users on Intercom
     intercom: {
         // The email that they are registered with on intercom
@@ -271,10 +286,17 @@ const usersSchema = mongoose.Schema({
     businessInfo: {
         // id of the business they work for
         businessId: mongoose.Schema.Types.ObjectId,
+        // name of the business they work for
+        businessName: String,
+        // unique name of the business - used for the business application link
+        uniqueName: String,
         // their title at the company
         title: String
     },
+    // if the user should be shown a prompt to verify their email
+    showVerifyEmailBanner: Boolean,
 
+    // email notification preferences
     notifications: {
         // The time a notification email was last sent
         lastSent: Date,
@@ -542,10 +564,6 @@ const usersSchema = mongoose.Schema({
     }],
     // the position evaluation the user is currently taking
     positionInProgress: mongoose.Schema.Types.ObjectId,
-    // --->>              MANAGERS/ACCOUNT ADMINS ONLY              <<--- //
-    // if the user saw the box that says 'click candidate name for more info'
-    sawMyCandidatesInfoBox: Boolean,
-    // <<-------------------------------------------------------------->> //
 
 
     // ------------------------->> NEW EVAL FLOW <<-------------------------- //

@@ -1,0 +1,144 @@
+:root { --admin-menu-width: 140px; }
+
+.top-menu-activator { display: none; }
+.top-menu-activator + .top-menu-activator-space { display: none; }
+
+.menu, .drawer-menu {
+    height: 100%;
+    background-color: var(--black-deep-dark);
+    text-align: center;
+    color: white;
+    min-height: 300px;
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+.menu {
+    width: 140px;
+    position: fixed;
+    z-index: 100;
+    -webkit-box-shadow: 0 0 2px 1px #212121;
+       -moz-box-shadow: 0 0 2px 1px #212121;
+            box-shadow: 0 0 2px 1px #212121;
+}
+.menu.absolute {
+    position: absolute;
+    overflow-y: hidden;
+}
+.drawer-menu {
+    width: 200px;
+    position: relative;
+    min-height: var(--min-screen-height);
+}
+.menu > div {
+    position: absolute;
+    height: 100vh;
+    min-height: var(--min-screen-height);
+    width: 100%;
+    bottom: 0;
+}
+
+.moonshot-logo {
+    width: 110px;
+    margin: 16px auto;
+    cursor: pointer;
+}
+
+.user-icon { width: 50px; }
+
+.menu-option {
+    padding: 8px 0;
+    font-size: 14px;
+    cursor: pointer;
+    position: relative;
+    color: var(--secondary-gray);
+}
+.menu-bottom > .menu-option { padding: 0; }
+.menu-option.current {
+    background-color: var(--primary-black-light);
+    color: var(--primary-white)
+}
+/* .main-menu-items > .menu-option.current:hover { background-color: var(--primary-black-light); } */
+.menu-option.current::after {
+    content: "";
+    background-color: var(--primary-cyan);
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.menu-bottom .menu-option .user-name { padding: 8px 0; }
+.main-menu-items > .menu-option:hover, .menu-bottom .menu-option .user-name:hover { background-color: var(--primary-black-light); }
+.account-popup > .menu-option:hover:not(:last-child) { background-color: #525252; }
+.account-popup > .menu-option:last-child { cursor: initial; }
+
+.main-menu-items {
+    margin-top: 10px;
+}
+
+.menu-bottom {
+    bottom: 10px;
+    position: absolute;
+    width: 100%;
+}
+
+.account-popup {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background-color: var(--primary-black-light);
+    width: 90%;
+    transform: translateY(150%) translateX(-50%);
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+.account-popup.visible { transform: translateY(-100%) translateX(-50%); }
+
+.sign-out {
+    background-color: var(--secondary-red);
+    display: inline-block;
+    padding: 2px 12px;
+    cursor: pointer;
+    color: var(--primary-white);
+}
+
+
+@media screen and (max-height: 400px) {
+    .user-icon { display: none; }
+}
+
+
+@media screen and (min-width: 1001px) {
+    .hide-on-desktop { display: none; }
+}
+
+@media screen and (max-width: 1000px) {
+    :root {
+        --top-menu-activator-height: 40px;
+        --admin-menu-width: 0px;
+    }
+
+    .menu { transform: translateX(-100%); }
+
+    .top-menu-activator {
+        display: flex;
+        position: fixed;
+        align-items: center;
+        height: var(--top-menu-activator-height);
+        width: 100%;
+        padding: 0 10px;
+        background-color: var(--black-deep-dark);
+        z-index: 100;
+    }
+    .top-menu-activator + .top-menu-activator-space {
+        display: inline-block;
+        width: 100%;
+        height: var(--top-menu-activator-height);
+    }
+}

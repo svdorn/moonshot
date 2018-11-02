@@ -1,5 +1,5 @@
-"use strict"
-import React, { Component } from 'react';
+"use strict";
+import React, { Component } from "react";
 import {
     TextField,
     Divider,
@@ -10,27 +10,36 @@ import {
     CircularProgress,
     Tabs,
     Tab
-} from 'material-ui';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { browserHistory } from 'react-router';
-import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox } from "../../../actions/usersActions";
-import { Field, reduxForm } from 'redux-form';
-import MetaTags from 'react-meta-tags';
-import axios from 'axios';
+} from "material-ui";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { browserHistory } from "react-router";
+import {
+    closeNotification,
+    openAddUserModal,
+    hidePopups,
+    addNotification,
+    generalAction,
+    intercomEvent
+} from "../../../actions/usersActions";
+import { Field, reduxForm } from "redux-form";
+import MetaTags from "react-meta-tags";
+import axios from "axios";
 import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
-import AddUserDialog from '../../childComponents/addUserDialog';
-import { qualifierFromScore } from '../../../miscFunctions';
+import AddUserDialog from "../../childComponents/addUserDialog";
+import CandidatesPopupDialog from "../../childComponents/candidatesPopupDialog";
+import InviteCandidatesModal from "../dashboard/inviteCandidatesModal";
+import { qualifierFromScore } from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
 
 import "./myCandidates.css";
 
-const renderTextField = ({input, label, ...custom}) => (
+const renderTextField = ({ input, label, ...custom }) => (
     <TextField
-        style={{width: "150px"}}
+        style={{ width: "150px" }}
         hintText={label}
         floatingLabelText={label}
         {...input}
@@ -43,7 +52,10 @@ class MyCandidates extends Component {
         super(props);
 
         // if a url query is telling us which position should be selected first
-        let positionNameFromUrl = props.location.query && props.location.query.position ? props.location.query.position : undefined;
+        let positionNameFromUrl =
+            props.location.query && props.location.query.position
+                ? props.location.query.position
+                : undefined;
 
         // bind 'this' to the resize and keyup functions
         this.bound_handleResize = this.handleResize.bind(this);
@@ -74,6 +86,8 @@ class MyCandidates extends Component {
             positionNameFromUrl,
             // true if the business has no positions associated with it
             noPositions: false,
+            // true if displaying mock data
+            mockData: false,
             // if we are currently loading the positions
             loadingPositions: true,
             // if we are currently loading candidates
@@ -91,76 +105,92 @@ class MyCandidates extends Component {
             fullScreenResults: false,
             // if the user should see the mobile version instead of the desktop version
             mobile: window.innerWidth <= 800
-        }
+        };
     }
 
     componentDidMount() {
+        const { currentUser } = this.props;
         let self = this;
         // set an event listener for key presses
-        document.addEventListener('keyup', this.bound_handleKeyPress);
+        document.addEventListener("keyup", this.bound_handleKeyPress);
         // set an event listener for window resizing to see if mobile or desktop
         // view should be shown
         window.addEventListener("resize", this.bound_handleResize);
+        // see if the popup should be open
+        if (
+            this.props.currentUser &&
+            this.props.currentUser.popups &&
+            this.props.currentUser.popups.candidateModal
+        ) {
+            this.props.generalAction("OPEN_CANDIDATES_POPUP_MODAL");
+        }
         // get the open positions that this business has
-        axios.get("/api/business/positions", {
-            params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
-            }
-        })
-        .then(function (res) {
-            let positions = res.data.positions;
-            if (Array.isArray(positions) && positions.length > 0) {
-                // if the url gave us a position to select first, select that one
-                // otherwise, select the first one available
-                let firstPositionName = positions[0].name;
-                if (self.state.positionNameFromUrl && positions.some(position => {
-                    return position.name === self.state.positionNameFromUrl;
-                })) {
-                    firstPositionName = self.state.positionNameFromUrl;
+        axios
+            .get("/api/business/positions", {
+                params: {
+                    userId: this.props.currentUser._id,
+                    verificationToken: this.props.currentUser.verificationToken
                 }
+            })
+            .then(function(res) {
+                let positions = res.data.positions;
+                if (Array.isArray(positions) && positions.length > 0) {
+                    // if the url gave us a position to select first, select that one
+                    // otherwise, select the first one available
+                    let firstPositionName = positions[0].name;
+                    if (
+                        self.state.positionNameFromUrl &&
+                        positions.some(position => {
+                            return position.name === self.state.positionNameFromUrl;
+                        })
+                    ) {
+                        firstPositionName = self.state.positionNameFromUrl;
+                    }
 
-                // select this position from the dropdown if it is valid
-                let positionId = undefined;
-                if (firstPositionName) {
-                    // find the position id from the given name
-                    try {
-                        positionId = positions.find(pos => {
-                            return pos.name === firstPositionName;
-                        })._id;
-                    } catch (getPosIdErr) { /* probably chose the dropdown header */ }
+                    // select this position from the dropdown if it is valid
+                    let positionId = undefined;
+                    if (firstPositionName) {
+                        // find the position id from the given name
+                        try {
+                            positionId = positions.find(pos => {
+                                return pos.name === firstPositionName;
+                            })._id;
+                        } catch (getPosIdErr) {
+                            /* probably chose the dropdown header */
+                        }
+                    }
+
+                    self.setState(
+                        {
+                            positions,
+                            position: firstPositionName,
+                            positionId,
+                            loadingPositions: false,
+                            loadingCandidates: true
+                        },
+                        // search for candidates of first position
+                        self.findCandidates
+                    );
+                } else {
+                    self.setState({
+                        noPositions: true,
+                        positions: [{ name: "(No Positions)" }],
+                        loadingPositions: false,
+                        loadingCandidates: false
+                    });
+                    self.findCandidates();
                 }
-
-                self.setState({
-                    positions,
-                    position: firstPositionName,
-                    positionId,
-                    loadingPositions: false,
-                    loadingCandidates: true
-                },
-                    // search for candidates of first position
-                    self.findCandidates
-                );
-            } else {
-                self.setState({
-                    noPositions: true,
-                    loadingPositions: false,
-                    loadingCandidates: false
-                })
-            }
-        })
-        .catch(function (err) {
-            // console.log("error getting positions: ", err);
-        });
+            })
+            .catch(function(err) {
+                // console.log("error getting positions: ", err);
+            });
     }
-
 
     // remove all event listeners
     componentWillUnmount() {
-        document.removeEventListener('keyup', this.bound_handleKeyPress);
+        document.removeEventListener("keyup", this.bound_handleKeyPress);
         window.removeEventListener("resize", this.bound_handleResize);
     }
-
 
     goTo(route) {
         // closes any notification
@@ -171,19 +201,21 @@ class MyCandidates extends Component {
         window.scrollTo(0, 0);
     }
 
-
     // switch between mobile and desktop views if necessary
     handleResize() {
         // mobile view at and under 800px
         if (window.innerWidth <= 800) {
-            if (!this.state.mobile) { this.setState({ mobile: true }); }
+            if (!this.state.mobile) {
+                this.setState({ mobile: true });
+            }
         }
         // desktop view above 800px
         else {
-            if (this.state.mobile) { this.setState({ mobile: false }); }
+            if (this.state.mobile) {
+                this.setState({ mobile: false });
+            }
         }
     }
-
 
     // when user types into the search bar
     onSearchChange(searchTerm) {
@@ -192,7 +224,6 @@ class MyCandidates extends Component {
         }
     }
 
-
     // change the position whose candidates are being viewed
     handlePositionChange = event => {
         // find the position id from the given name
@@ -200,7 +231,7 @@ class MyCandidates extends Component {
         const position = event.target.value;
         try {
             positionId = this.state.positions.find(pos => {
-                return pos.name === position
+                return pos.name === position;
             })._id;
         } catch (getPosIdErr) {
             // chose the dropdown header
@@ -210,18 +241,20 @@ class MyCandidates extends Component {
                 candidates: []
             });
         }
-        this.setState({
-            position,
-            positionId,
-            candidates: [],
-            loadingCandidates: true,
-            showResults: false,
-            resultsCandidateId: undefined,
-            resultsCandidateIndex: undefined,
-            fullScreenResults: false
-        }, this.findCandidates);
+        this.setState(
+            {
+                position,
+                positionId,
+                candidates: [],
+                loadingCandidates: true,
+                showResults: false,
+                resultsCandidateId: undefined,
+                resultsCandidateIndex: undefined,
+                fullScreenResults: false
+            },
+            this.findCandidates
+        );
     };
-
 
     // change what is being sorted by
     handleSortByChange(sortBy) {
@@ -234,56 +267,67 @@ class MyCandidates extends Component {
         else {
             this.setState({ sortAscending: !this.state.sortAscending }, this.reorder);
         }
-    };
+    }
 
     openAddUserModal() {
         this.props.openAddUserModal();
     }
 
-
     // get candidates for the current position from the back end
     findCandidates() {
-        // need a position to search for
-        if (!this.state.noPositions && this.state.position) {
-            axios.get("/api/business/candidateSearch", {
-                params: {
-                    searchTerm: this.state.term,
-                    // searching by position name right now, could search by id if want to
-                    positionName: this.state.position,
-                    sortBy: this.state.sortBy,
-                    sortAscending: this.state.sortAscending,
-                    userId: this.props.currentUser._id,
-                    verificationToken: this.props.currentUser.verificationToken
-                }
-            }).then(res => {
-                if (res.data && res.data.length > 0) {
-                    this.setState({
-                        candidates: res.data,
-                        loadingCandidates: false
-                    }, () => {
-                        this.reorder()
-                    });
-                } else {
-                    this.setState({
-                        candidates: [],
-                        loadingCandidates: false
-                    })
-                }
-            }).catch(function (err) {
-                console.log("ERROR: ", err);
-            })
+        console.log("HERE");
+        // if there are no positions OR if there are positions and one is selected
+        if (this.state.noPositions || this.state.position) {
+            axios
+                .get("/api/business/candidateSearch", {
+                    params: {
+                        searchTerm: this.state.term,
+                        // searching by position name right now, could search by id if want to
+                        positionName: this.state.position,
+                        userId: this.props.currentUser._id,
+                        verificationToken: this.props.currentUser.verificationToken,
+                        mockData: this.state.noPositions
+                    }
+                })
+                .then(res => {
+                    if (res.data && res.data.candidates && res.data.candidates.length > 0) {
+                        this.setState(
+                            {
+                                candidates: res.data.candidates,
+                                loadingCandidates: false,
+                                mockData: false
+                            },
+                            this.reorder
+                        );
+                    } else if (res.data && res.data.mockusers) {
+                        this.setState(
+                            {
+                                candidates: res.data.mockusers,
+                                loadingCandidates: false,
+                                mockData: true
+                            },
+                            this.reorder
+                        );
+                    } else {
+                        this.setState({
+                            candidates: [],
+                            loadingCandidates: false
+                        });
+                    }
+                })
+                .catch(function(err) {
+                    console.log("ERROR: ", err);
+                });
         }
     }
-
 
     // switch between All, Reviewed, Not Reviewed, Favorites
-    handleTabChange = (tab) => {
+    handleTabChange = tab => {
         // only switch tabs and re-search if not on the tab that should be switched to
         if (this.state.tab !== tab) {
-            this.setState({tab}, this.reorder);
+            this.setState({ tab }, this.reorder);
         }
-    }
-
+    };
 
     // change hide dismissed or hide hired
     handleCheckMarkClick(checkMarkField) {
@@ -292,6 +336,9 @@ class MyCandidates extends Component {
         this.setState(state, this.reorder);
     }
 
+    openEmailTemplateModal = () => {
+        this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
+    };
 
     // reorder the candidates that are shown and hide/show any that need to be
     // hidden/shown based on options given
@@ -325,93 +372,141 @@ class MyCandidates extends Component {
         });
     }
 
-
     // filter candidates by given user-given filters
     filterCandidates(cand) {
         // filter by tab if not on "All"
-        if (this.state.tab === "Reviewed" && cand.reviewed !== true) { return false; }
-        else if (this.state.tab === "Not Reviewed" && cand.reviewed === true) { return false; }
-        else if (this.state.tab === "Favorites" && cand.favorite !== true) { return false; }
+        if (this.state.tab === "Reviewed" && cand.reviewed !== true) {
+            return false;
+        } else if (this.state.tab === "Not Reviewed" && cand.reviewed === true) {
+            return false;
+        } else if (this.state.tab === "Favorites" && cand.favorite !== true) {
+            return false;
+        }
 
         // filter by dismissed and hired status if wanted
-        if (this.state.hideDismissed && cand.isDismissed) { return false; }
-        if (this.state.hideHired && cand.hiringStage === "Hired") { return false; }
+        if (this.state.hideDismissed && cand.isDismissed) {
+            return false;
+        }
+        if (this.state.hideHired && cand.hiringStage === "Hired") {
+            return false;
+        }
 
         // filter by name if name search term provided
         if (this.state.searchTerm) {
             const nameRegExp = new RegExp(this.state.searchTerm, "i");
-            if (!nameRegExp.test(cand.name)) { return false; }
+            if (!nameRegExp.test(cand.name)) {
+                return false;
+            }
         }
 
         // candidate matches all filters
         return true;
     }
 
-
     // function to compare two candidates based on the sorting options
     compareCandidates(candA, candB) {
         switch (this.state.sortBy) {
             case "name":
-                if (candA.name > candB.name) { return -1; }
-                else if (candA.name < candB.name) { return 1; }
-                else { return 0; }
+                if (candA.name > candB.name) {
+                    return -1;
+                } else if (candA.name < candB.name) {
+                    return 1;
+                } else {
+                    return 0;
+                }
                 break;
             case "interest":
-                if (!candA.interest && !candB.interest) { return 0; }
-                else if (!candA.interest || candA.interest < candB.interest) { return -1; }
-                else if (!candB.interest || candA.interest > candB.interest) { return 1; }
-                else { return 0; }
+                if (!candA.interest && !candB.interest) {
+                    return 0;
+                } else if (!candA.interest || candA.interest < candB.interest) {
+                    return -1;
+                } else if (!candB.interest || candA.interest > candB.interest) {
+                    return 1;
+                } else {
+                    return 0;
+                }
                 break;
-            case "score": return this.compareByScore(candA, candB, "overall"); break;
-            case "growth": return this.compareByScore(candA, candB, "growth"); break;
-            case "performance": return this.compareByScore(candA, candB, "performance"); break;
-            case "stage": return this.compareByStage(candA, candB); break;
+            case "score":
+                return this.compareByScore(candA, candB, "overall");
+                break;
+            case "growth":
+                return this.compareByScore(candA, candB, "growth");
+                break;
+            case "performance":
+                return this.compareByScore(candA, candB, "performance");
+                break;
+            case "stage":
+                return this.compareByStage(candA, candB);
+                break;
             // if an invalid sort criteria is given, all candidates are of equal sorting value
-            default: return 0; break;
+            default:
+                return 0;
+                break;
         }
     }
-
 
     // compare two candidates by their stage in the hiring process
     compareByStage(candA, candB) {
         // lack of hiring stage < hiring stage exists
         const candAhasHiringStage = !!candA.hiringStage;
         const candBhasHiringStage = !!candB.hiringStage;
-        if (!candAhasHiringStage && !candBhasHiringStage) { return 0; }
-        else if (!candAhasHiringStage) { return -1; }
-        else if (!candBhasHiringStage) { return 1; }
+        if (!candAhasHiringStage && !candBhasHiringStage) {
+            return 0;
+        } else if (!candAhasHiringStage) {
+            return -1;
+        } else if (!candBhasHiringStage) {
+            return 1;
+        }
         // dismissed > any hiring stage
-        if (candA.isDismissed && candB.isDismissed) { return 0; }
-        else if (candA.isDismissed) { return 1; }
-        else if (candB.isDismissed) { return -1; }
+        if (candA.isDismissed && candB.isDismissed) {
+            return 0;
+        } else if (candA.isDismissed) {
+            return 1;
+        } else if (candB.isDismissed) {
+            return -1;
+        }
         // both candidates have a hiring stage
         const candAstageVal = hiringStageValues[candA.hiringStage];
         const candBstageVal = hiringStageValues[candB.hiringStage];
-        if (candAstageVal < candBstageVal) { return -1; }
-        else if (candAstageVal > candBstageVal) { return 1; }
-        else { return 0; }
+        if (candAstageVal < candBstageVal) {
+            return -1;
+        } else if (candAstageVal > candBstageVal) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
-
 
     // compare two candidates by one of the scores they recieved for the evaluation
     compareByScore(candA, candB, scoreType) {
-        const candAhasScore = typeof candA.scores === "object" && typeof candA.scores[scoreType] === "number";
-        const candBhasScore = typeof candB.scores === "object" && typeof candB.scores[scoreType] === "number";
-        if (!candAhasScore && !candBhasScore) { return 0; }
-        else if (!candAhasScore) { return -1; }
-        else if (!candBhasScore) { return 1; }
-        if (candA.scores[scoreType] < candB.scores[scoreType]) { return -1; }
-        else if (candA.scores[scoreType] > candB.scores[scoreType]) { return 1; }
-        else { return 0; }
+        const candAhasScore =
+            typeof candA.scores === "object" && typeof candA.scores[scoreType] === "number";
+        const candBhasScore =
+            typeof candB.scores === "object" && typeof candB.scores[scoreType] === "number";
+        if (!candAhasScore && !candBhasScore) {
+            return 0;
+        } else if (!candAhasScore) {
+            return -1;
+        } else if (!candBhasScore) {
+            return 1;
+        }
+        if (candA.scores[scoreType] < candB.scores[scoreType]) {
+            return -1;
+        } else if (candA.scores[scoreType] > candB.scores[scoreType]) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
-
 
     // select or deselect a candidate to be moved to a different tab
     handleSelectCandidate(candidateId) {
         // what the candidate's selected status should be set to
         let setTo = true;
         // if the candidate has already been selected, set their selected status to undefined
-        if (this.state.selectedCandidates[candidateId] === true) { setTo = undefined; }
+        if (this.state.selectedCandidates[candidateId] === true) {
+            setTo = undefined;
+        }
         // create a shallow copy of the selected candidates object
         let selectedCandidates = Object.assign({}, this.state.selectedCandidates);
         // set the candidate's selected status
@@ -420,11 +515,12 @@ class MyCandidates extends Component {
         this.setState({ selectedCandidates });
     }
 
-
     // escape out of a results page if escape button pressed
     handleKeyPress(e) {
         // only do any of these actions if the results popover is showing
-        if (!this.state.showResults) { return; }
+        if (!this.state.showResults) {
+            return;
+        }
         // get the code of the key that was pressed
         var key = e.which || e.keyCode;
         // if escape key was pressed ...
@@ -435,7 +531,7 @@ class MyCandidates extends Component {
         // if right key was pressed ...
         else if (key === 39) {
             // go to the next candidate's results
-            this.nextPreviousResults(true)
+            this.nextPreviousResults(true);
         }
         // if the left key was pressed ...
         else if (key === 37) {
@@ -443,7 +539,6 @@ class MyCandidates extends Component {
             this.nextPreviousResults(false);
         }
     }
-
 
     makeStars(candidateId, interest) {
         // if interest in a candidate is not valid, set to 0 stars
@@ -460,18 +555,13 @@ class MyCandidates extends Component {
                 <div
                     className={"inlineBlock clickableNoUnderline star " + colorClass}
                     onClick={() => this.rateInterest(candidateId, starNumber)}
-                    style={{marginRight: "5px"}}
+                    style={{ marginRight: "5px" }}
                     key={`${candidateId}star${starNumber}`}
                 />
             );
         }
-        return (
-            <div key={`${candidateId}stars`}>
-                {stars}
-            </div>
-        );
+        return <div key={`${candidateId}stars`}>{stars}</div>;
     }
-
 
     // change how interested the user is in the candidate (number of stars 1-5)
     rateInterest(candidateId, interest) {
@@ -480,15 +570,23 @@ class MyCandidates extends Component {
             userId: this.props.currentUser._id,
             verificationToken: this.props.currentUser.verificationToken,
             positionId: this.state.positionId,
-            candidateId, interest
+            candidateId,
+            interest
+        };
+        if (!this.state.mockData) {
+            axios.post("/api/business/rateInterest", params).catch(error => {
+                console.log("error: ", error);
+            });
         }
-        axios.post("/api/business/rateInterest", params)
-        .catch(error => { console.log("error: ", error); });
 
         // set the state so that the result is immediately visible
         let candidates = this.state.candidates.slice(0);
-        const candIndex = candidates.findIndex(cand => { return cand._id.toString() === candidateId.toString() });
-        if (candIndex < 0) { return console.log("Cannot set interest value for candidate that doesn't exist."); }
+        const candIndex = candidates.findIndex(cand => {
+            return cand._id.toString() === candidateId.toString();
+        });
+        if (candIndex < 0) {
+            return console.log("Cannot set interest value for candidate that doesn't exist.");
+        }
         // set the new interest level
         candidates[candIndex].interest = interest;
         // set as reviewed if wasn't already
@@ -496,25 +594,32 @@ class MyCandidates extends Component {
         this.setState({ candidates });
     }
 
-
     // create the dropdown for a candidate's hiring stage
     makeHiringStage(candidateId, hiringStage, isDismissed) {
-        const stageNames = ["Not Contacted", "Contacted", "Interviewing", "Offered", "Hired", "Dismissed"];
+        const stageNames = [
+            "Not Contacted",
+            "Contacted",
+            "Interviewing",
+            "Offered",
+            "Hired",
+            "Dismissed"
+        ];
         // if no stage is recorded, assume the candidate has not been contacted
-        if (!hiringStage) { hiringStage = "Not Contacted" }
+        if (!hiringStage) {
+            hiringStage = "Not Contacted";
+        }
         // if the candidate is dismissed, show that
-        if (isDismissed) { hiringStage = "Dismissed"; }
+        if (isDismissed) {
+            hiringStage = "Dismissed";
+        }
 
         // create the stage name menu items
         const stages = stageNames.map(stage => {
             return (
-                <MenuItem
-                    value={stage}
-                    key={`${candidateId}hiringStage${stage}`}
-                >
-                    { stage }
+                <MenuItem value={stage} key={`${candidateId}hiringStage${stage}`}>
+                    {stage}
                 </MenuItem>
-            )
+            );
         });
 
         return (
@@ -528,11 +633,10 @@ class MyCandidates extends Component {
                 onChange={this.handleChangeHiringStage(candidateId)}
                 key={`${candidateId}hiringStage`}
             >
-                { stages }
+                {stages}
             </Select>
         );
     }
-
 
     // change a candidate's hiring stage
     hiringStageChange(candidateId, hiringStage) {
@@ -541,15 +645,23 @@ class MyCandidates extends Component {
             userId: this.props.currentUser._id,
             verificationToken: this.props.currentUser.verificationToken,
             positionId: this.state.positionId,
-            candidateId, hiringStage
+            candidateId,
+            hiringStage
+        };
+        if (!this.state.mockData) {
+            axios.post("/api/business/changeHiringStage", params).catch(error => {
+                console.log("error: ", error);
+            });
         }
-        axios.post("/api/business/changeHiringStage", params)
-        .catch(error => { console.log("error: ", error); });
 
         // CHANGE HIRING STAGE IN FRONT END
         let candidates = this.state.candidates.slice(0);
-        const candIndex = candidates.findIndex(cand => { return cand._id.toString() === candidateId.toString() });
-        if (candIndex < 0) { return console.log("Cannot set interest value for candidate that doesn't exist."); }
+        const candIndex = candidates.findIndex(cand => {
+            return cand._id.toString() === candidateId.toString();
+        });
+        if (candIndex < 0) {
+            return console.log("Cannot set interest value for candidate that doesn't exist.");
+        }
         if (hiringStage === "Dismissed") {
             candidates[candIndex].isDismissed = true;
         } else {
@@ -562,13 +674,11 @@ class MyCandidates extends Component {
         this.setState({ candidates });
     }
 
-
     // handle a click on a hiring stage
     handleChangeHiringStage = candidateId => event => {
         const hiringStage = event.target.value;
         this.hiringStageChange(candidateId, hiringStage);
-    }
-
+    };
 
     moveCandidates(moveTo) {
         // check if there are any candidates to move
@@ -592,10 +702,14 @@ class MyCandidates extends Component {
             userId: this.props.currentUser._id,
             verificationToken: this.props.currentUser.verificationToken,
             positionId: this.state.positionId,
-            candidateIds, moveTo
+            candidateIds,
+            moveTo
+        };
+        if (!this.state.mockData) {
+            axios.post("/api/business/moveCandidates", params).catch(error => {
+                console.log(error);
+            });
         }
-        axios.post("/api/business/moveCandidates", params)
-        .catch(error => { console.log(error); });
 
         // MOVE THE CANDIDATES IN THE FRONT END
         // get a shallow editable copy of the candidates array
@@ -652,7 +766,6 @@ class MyCandidates extends Component {
         });
     }
 
-
     // move the candidate to Reviewed, Favorites, or Not Reviewed
     handleMoveTo = event => {
         const moveTo = event.target.value;
@@ -660,14 +773,7 @@ class MyCandidates extends Component {
         if (["Reviewed", "Not Reviewed", "Favorites", "Non-Favorites"].includes(moveTo)) {
             this.moveCandidates(moveTo);
         }
-    }
-
-
-    // record that the user has seen the information box at the top of the screen
-    seeInfoBox() {
-        this.props.sawMyCandidatesInfoBox(this.props.currentUser._id, this.props.currentUser.verificationToken);
-    }
-
+    };
 
     // gets the qualifier for a score and tells the user the candidate hasn't finished
     // if that is the case
@@ -676,15 +782,14 @@ class MyCandidates extends Component {
         if (qualifier === "N/A") {
             return (
                 <div>
-                    <div>{ "N/A" }</div>
+                    <div>{"N/A"}</div>
                     <HoverTip text="Candidate has not finished the evaluation." />
                 </div>
-            )
+            );
         } else {
             return qualifier;
         }
     }
-
 
     // takes a score, makes sure it is actually a score, and rounds it
     makePretty(score) {
@@ -692,7 +797,7 @@ class MyCandidates extends Component {
         if (score === undefined || score === null) {
             return (
                 <div>
-                    <div>{ "N/A" }</div>
+                    <div>{"N/A"}</div>
                     <HoverTip text="Candidate has not finished the evaluation." />
                 </div>
             );
@@ -700,7 +805,6 @@ class MyCandidates extends Component {
         // return a rounded version of the score
         return Math.round(score);
     }
-
 
     // creates the table with all the candidates
     createCandidatesTable(positionId) {
@@ -711,41 +815,49 @@ class MyCandidates extends Component {
         let candidatesContainer = null;
 
         // loading in positions or candidates
-        if (this.state.loadingPositions || this.state.loadingCandidates) {
+        if (
+            this.state.loadingPositions ||
+            this.state.loadingCandidates ||
+            (this.state.noPositions &&
+                (!Array.isArray(this.state.candidates) || this.state.candidates.length === 0))
+        ) {
             return (
                 <div key="candidatesTable">
                     <CircularProgress color="#76defe" style={style.noCandidatesMessage} />
                 </div>
-            )
-        }
-
-        else if (this.state.noPositions) {
-            return (
-                <div key="no open evals">
-                    Your business has no open evaluations.<br/>
-                    Contact us at support@moonshotinsights.io to get your first one set up.
-                </div>
             );
-        }
-        else if (this.state.position == "" && !this.state.loadingPositions) {
+        } else if (
+            this.state.position == "" &&
+            !this.state.loadingPositions &&
+            !this.state.noPositions
+        ) {
             return (
                 <div style={style.noCandidatesMessage} key="select a position">
                     Select a position.
                 </div>
             );
-        }
-        else if (this.state.candidates.length === 0) {
+        } else if (this.state.candidates.length === 0) {
             return (
                 <div style={style.noCandidatesMessage} key="no candidates started">
-                    <div className="marginBottom15px font32px font28pxUnder500 clickable primary-cyan" onClick={this.openAddUserModal.bind(this)}>
+                    <div
+                        className="marginBottom15px font32px font28pxUnder500 clickable primary-cyan"
+                        onClick={this.openAddUserModal.bind(this)}
+                    >
                         + <span className="underline">Add Candidates</span>
                     </div>
                     No candidates have started this evaluation.
-                    <div className="marginTop15px" style={{color: "rgba(255,255,255,.8)"}}>
-                        Add them <span className="clickable underline primary-cyan" onClick={this.openAddUserModal.bind(this)}>here</span> so they can get started.
+                    <div className="marginTop15px" style={{ color: "rgba(255,255,255,.8)" }}>
+                        Add them{" "}
+                        <span
+                            className="clickable underline primary-cyan"
+                            onClick={this.openAddUserModal.bind(this)}
+                        >
+                            here
+                        </span>{" "}
+                        so they can get started.
                     </div>
                 </div>
-            )
+            );
         }
         // if there are candidates in this position, but none meet the criteria
         else if (this.state.sortedCandidates.length === 0) {
@@ -758,7 +870,7 @@ class MyCandidates extends Component {
                 >
                     No candidates meet these criteria.
                 </div>
-            )
+            );
         }
 
         // there are candidates that meet these criteria, make them
@@ -771,126 +883,153 @@ class MyCandidates extends Component {
             let growth = null;
             let performance = null;
             if (typeof candidate.scores === "object") {
-                if (candidate.scores.overall) { score = candidate.scores.overall; }
-                if (candidate.scores.growth) { growth = candidate.scores.growth; }
-                if (candidate.scores.performance) { performance = candidate.scores.performance; }
+                if (candidate.scores.overall) {
+                    score = candidate.scores.overall;
+                }
+                if (candidate.scores.growth) {
+                    growth = candidate.scores.growth;
+                }
+                if (candidate.scores.performance) {
+                    performance = candidate.scores.performance;
+                }
             }
 
             // mobile view
             if (this.state.mobile) {
                 return (
-                    <tr className={"mobileCandidate"  + (isSelected ? " selected" : "")} key={candidate._id}>
+                    <tr
+                        className={"mobileCandidate" + (isSelected ? " selected" : "")}
+                        key={candidate._id}
+                    >
                         <td>
                             <div
-                                style={{marginBottom: "8px"}}
+                                style={{ marginBottom: "8px" }}
                                 onClick={() => this.showResults(candidate._id)}
                                 className="pointer"
                             >
-                                <span className={candidate.reviewed ? "secondary-gray" : "bold"}>{candidate.name}</span>
+                                <span className={candidate.reviewed ? "secondary-gray" : "bold"}>
+                                    {candidate.name}
+                                </span>
                             </div>
-                            <br/>
+                            <br />
                             <div className="interest">
                                 {this.makeStars(candidate._id, candidate.interest)}
                             </div>
                             <div className="stage">
-                                {this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}
+                                {this.makeHiringStage(
+                                    candidate._id,
+                                    candidate.hiringStage,
+                                    candidate.isDismissed
+                                )}
                             </div>
-                            <br/><div style={{height:"8px",display:"block"}}/>
+                            <br />
+                            <div style={{ height: "8px", display: "block" }} />
                             <div className="predicted">
-                                {"Growth"}<br/>
+                                {"Growth"}
+                                <br />
                                 {this.getQualifier(growth, "growth")}
                             </div>
                             <div className={"score"}>
-                                {"Score"}<br/>
+                                {"Score"}
+                                <br />
                                 {this.makePretty(score)}
                             </div>
                             <div className="skill">
-                                {"Performance"}<br/>
+                                {"Performance"}
+                                <br />
                                 {this.getQualifier(performance, "performance")}
                             </div>
                         </td>
                     </tr>
-                )
+                );
             }
 
             // desktop view
             return (
-                <tr className={"candidate"  + (isSelected ? " selected" : "")} key={candidate._id}>
+                <tr className={"candidate" + (isSelected ? " selected" : "")} key={candidate._id}>
                     <td className="selectCandidateBox inlineBlock">
-                        <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleSelectCandidate(candidate._id)}>
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={() => this.handleSelectCandidate(candidate._id)}
+                        >
                             <img
                                 alt="Checkmark icon"
-                                className={"checkMark" + !!this.state.selectedCandidates[candidate._id]}
+                                className={
+                                    "checkMark" + !!this.state.selectedCandidates[candidate._id]
+                                }
                                 src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             />
                         </div>
                     </td>
                     <td className={"name pointer"} onClick={() => this.showResults(candidate._id)}>
-                        <span className={candidate.reviewed ? "secondary-gray" : "bold"}>{candidate.name}</span>
+                        <span className={candidate.reviewed ? "secondary-gray" : "bold"}>
+                            {candidate.name}
+                        </span>
                     </td>
-                    <td className={"score"}>
-                        {this.makePretty(score)}
-                    </td>
+                    <td className={"score"}>{this.makePretty(score)}</td>
                     <td className="interest">
                         {this.makeStars(candidate._id, candidate.interest)}
                     </td>
                     <td className="stage">
-                        {this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}
+                        {this.makeHiringStage(
+                            candidate._id,
+                            candidate.hiringStage,
+                            candidate.isDismissed
+                        )}
                     </td>
-                    <td className="predicted">
-                        {this.makePretty(growth)}
-                    </td>
-                    <td className="skill">
-                        {this.makePretty(performance)}
-                    </td>
+                    <td className="predicted">{this.makePretty(growth)}</td>
+                    <td className="skill">{this.makePretty(performance)}</td>
                 </tr>
             );
         });
 
-        let headers = ["name", "score", "interest", "stage", "growth", "performance"].map(sortTerm => {
-            return (
-                <td className={sortTerm} key={"tableHeader" + sortTerm}>
-                    <div className="inlineBlock clickableNoUnderline" onClick={() => this.handleSortByChange(sortTerm)}>
-                        {sortTerm.toUpperCase()}
-                        <UpDownArrows
-                            selected={this.state.sortBy===sortTerm}
-                            sortAscending={this.state.sortAscending}
-                            style={{marginLeft: "12px"}}
-                        />
-                    </div>
-                </td>
-            );
-        });
-
-        // add in the extra area for selecting a candidate
-        headers.unshift(
-            <td className="selectCandidateBox" key={`selectAreaBlankHeader`}/>
+        let headers = ["name", "score", "interest", "stage", "growth", "performance"].map(
+            sortTerm => {
+                return (
+                    <td className={sortTerm} key={"tableHeader" + sortTerm}>
+                        <div
+                            className="inlineBlock clickableNoUnderline"
+                            onClick={() => this.handleSortByChange(sortTerm)}
+                        >
+                            {sortTerm.toUpperCase()}
+                            <UpDownArrows
+                                selected={this.state.sortBy === sortTerm}
+                                sortAscending={this.state.sortAscending}
+                                style={{ marginLeft: "12px" }}
+                            />
+                        </div>
+                    </td>
+                );
+            }
         );
 
+        // add in the extra area for selecting a candidate
+        headers.unshift(<td className="selectCandidateBox" key={`selectAreaBlankHeader`} />);
 
         // add in the column headers on desktop view
         if (!this.state.mobile) {
             candidateRows.unshift(
                 <tr className="candidate" key={`tableHeaders`}>
-                    { headers }
+                    {headers}
                 </tr>
             );
         }
 
         return (
-            <table className="candidateTable" key="candidateTable"><tbody>
-                {candidateRows}
-            </tbody></table>
+            <table className="candidateTable" key="candidateTable">
+                <tbody>{candidateRows}</tbody>
+            </table>
         );
     }
-
 
     // show a candidate's results
     showResults(candidateId) {
         let candidateIndex = this.state.sortedCandidates.findIndex(candidate => {
             return candidate._id === candidateId;
         });
-        if (candidateIndex < 0) { candidateIndex = undefined; }
+        if (candidateIndex < 0) {
+            candidateIndex = undefined;
+        }
         this.setState({
             showResults: true,
             resultsCandidateId: candidateId,
@@ -898,6 +1037,21 @@ class MyCandidates extends Component {
         });
     }
 
+    hideMessage() {
+        let popups = this.props.currentUser.popups;
+        if (popups) {
+            popups.candidates = false;
+        } else {
+            popups = {};
+            popups.candidates = false;
+        }
+
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+
+        this.props.hidePopups(userId, verificationToken, popups);
+        this.props.intercomEvent("candidates_page_first_time", userId, verificationToken, null);
+    }
 
     // the tabs at the top that say All, Favorites, etc...
     tabParts() {
@@ -910,27 +1064,22 @@ class MyCandidates extends Component {
                     className={"myCandidatesTab" + (isSelected ? " selected" : "")}
                     key={`${tabName}tab`}
                 >
-                    { tabName.toUpperCase() }
+                    {tabName.toUpperCase()}
                 </div>
             );
         });
     }
-
-
 
     // lets the user switch between positions
     positionSelector() {
         const positions = this.state.positions;
         const positionItems = positions.map(position => {
             return (
-                <MenuItem
-                    value={position.name}
-                    key={`position${position.name}`}
-                >
-                    { position.name }
+                <MenuItem value={position.name} key={`position${position.name}`}>
+                    {position.name}
                 </MenuItem>
             );
-        })
+        });
         return (
             <Select
                 disableUnderline={true}
@@ -942,22 +1091,42 @@ class MyCandidates extends Component {
                 onChange={this.handlePositionChange}
                 key="position selector"
             >
-                { positionItems }
+                {positionItems}
             </Select>
         );
     }
 
-
-    // create the box at the top of the screen that shows only for new users
-    // and tells them how to see candidate results
-    infoBox() {
-        if (!this.props.currentUser.sawMyCandidatesInfoBox) {
+    popup() {
+        if (
+            this.props.currentUser &&
+            this.props.currentUser.popups &&
+            this.props.currentUser.popups.candidates
+        ) {
             return (
-                <div className="center" key="info box">
-                    <div className="myCandidatesInfoBox font16px font12pxUnder500">
-                        Click any candidate name to see results.<br/>
-                        Hover over any category for a description.
-                        <div className="x" onClick={this.seeInfoBox.bind(this)}>x</div>
+                <div className="center" key="popup box">
+                    <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
+                        <div className="popup-frame" style={{ paddingBottom: "20px" }}>
+                            <div>
+                                <img alt="Alt" src={"/icons/candidatesBanner" + this.props.png} />
+                            </div>
+                            <div style={{ marginTop: "20px" }}>
+                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">
+                                    Improve Your Predictive Model
+                                </div>
+                                <div>
+                                    Review candidate reports and predictions, contact candidates to
+                                    invite them to interviews, track their stage or dismiss them
+                                    from consideration. You can click any candidate name to see
+                                    their results and hover over any category for a description.
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            className="hide-message font14px font12pxUnder700"
+                            onClick={this.hideMessage.bind(this)}
+                        >
+                            Hide Message
+                        </div>
                     </div>
                 </div>
             );
@@ -966,6 +1135,22 @@ class MyCandidates extends Component {
         }
     }
 
+    mockDataMemo() {
+        if (this.props.currentUser && this.state.mockData) {
+            return (
+                <div
+                    styleName="mock-data-memo"
+                    key="mock data memo"
+                    onClick={this.openEmailTemplateModal}
+                >
+                    <div styleName="info">i</div>
+                    This is mock data. <span>Start inviting your candidates.</span>
+                </div>
+            );
+        } else {
+            return null;
+        }
+    }
 
     candidatesSelected() {
         const selections = this.state.selectedCandidates;
@@ -981,33 +1166,32 @@ class MyCandidates extends Component {
         return false;
     }
 
-
     topOptions() {
         // the hint that shows up when search bar is in focus
-        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
-        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" }
-        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" }
+        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" };
+        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" };
+        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" };
         const searchFloatingLabelStyle = searchHintStyle;
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
-
         let menuItems = ["Reviewed", "Not Reviewed", "Favorites", "Non-Favorites"].map(menuItem => {
             return (
-                <MenuItem
-                    value={menuItem}
-                    key={`moveTo${menuItem}`}
-                >
-                    { menuItem }
+                <MenuItem value={menuItem} key={`moveTo${menuItem}`}>
+                    {menuItem}
                 </MenuItem>
             );
         });
-        menuItems.unshift( <Divider key="moveToDivider"/> );
-        menuItems.unshift( <MenuItem key="moveToName" value={"Move To"}>{"Move To"}</MenuItem> );
+        menuItems.unshift(<Divider key="moveToDivider" />);
+        menuItems.unshift(
+            <MenuItem key="moveToName" value={"Move To"}>
+                {"Move To"}
+            </MenuItem>
+        );
 
         const selectionsExist = this.candidatesSelected();
 
         const colorClass = selectionsExist ? " topOptionWhite" : " topOptionGray";
-        const cursorClass = selectionsExist ? " pointer" : " defaultCursor";
+        const cursorClass = selectionsExist ? " pointer" : " default-cursor";
 
         let selectAttributes = {
             disableUnderline: true,
@@ -1028,17 +1212,19 @@ class MyCandidates extends Component {
                     hintStyle={searchHintStyle}
                     floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
                     floatingLabelStyle={searchFloatingLabelStyle}
-                    underlineFocusStyle = {searchUnderlineFocusStyle}
+                    underlineFocusStyle={searchUnderlineFocusStyle}
                     label="Search"
                     onChange={event => this.onSearchChange(event.target.value)}
                     value={this.state.searchTerm}
                 />
                 <div className="inlineBlock">
-                    {selectionsExist ?
+                    {selectionsExist ? (
                         <Select {...selectAttributes}>{menuItems}</Select>
-                        : <Select disabled {...selectAttributes}>{menuItems}</Select>
-                    }
-
+                    ) : (
+                        <Select disabled {...selectAttributes}>
+                            {menuItems}
+                        </Select>
+                    )}
                 </div>
                 <div
                     className={"inlineBlock" + colorClass + cursorClass}
@@ -1050,7 +1236,10 @@ class MyCandidates extends Component {
                     {"Contact"}
                 </div>*/}
                 <div className="inlineBlock">
-                    <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleCheckMarkClick("hideDismissed")}>
+                    <div
+                        className="checkbox smallCheckbox whiteCheckbox"
+                        onClick={() => this.handleCheckMarkClick("hideDismissed")}
+                    >
                         <img
                             alt="Checkmark icon"
                             className={"checkMark" + this.state.hideDismissed}
@@ -1058,32 +1247,40 @@ class MyCandidates extends Component {
                         />
                     </div>
                     <div className="inlineBlock">
-                        {"Hide "}<i>{"Dismissed"}</i><span className="above1000only">{" Candidates"}</span>
-                    </div><br/>
+                        {"Hide "}
+                        <i>{"Dismissed"}</i>
+                        <span className="above1000only">{" Candidates"}</span>
+                    </div>
+                    <br />
                 </div>
                 <div className="inlineBlock">
-                    <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleCheckMarkClick("hideHired")}>
+                    <div
+                        className="checkbox smallCheckbox whiteCheckbox"
+                        onClick={() => this.handleCheckMarkClick("hideHired")}
+                    >
                         <img
                             alt="Checkmark icon"
                             className={"checkMark" + this.state.hideHired}
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                         />
                     </div>
-                    <div style={{display:"inline-block"}}>
-                        {"Hide "}<i>{"Hired"}</i><span className="above1000only">{" Candidates"}</span>
-                    </div><br/>
+                    <div style={{ display: "inline-block" }}>
+                        {"Hide "}
+                        <i>{"Hired"}</i>
+                        <span className="above1000only">{" Candidates"}</span>
+                    </div>
+                    <br />
                 </div>
             </div>
         );
     }
 
-
     mobileTopOptions() {
         return (
             <div>
                 <div className="mobile-top-options">
-                    { this.positionSelector() }
-                    { this.mobileSortByDropdown() }
+                    {this.positionSelector()}
+                    {this.mobileSortByDropdown()}
                 </div>
                 <div
                     className="add-candidate primary-cyan pointer font16px font14pxUnder500 font12pxUnder400"
@@ -1095,37 +1292,34 @@ class MyCandidates extends Component {
         );
     }
 
-
     // lets you choose the filters for the candidates you see on mobile
     mobileSortByDropdown() {
-        let sortItems = ["Name", "Score", "Interest", "Stage", "Growth", "Performance"].map(sortTerm => {
-            const lowercaseSortTerm = sortTerm.toLowerCase();
-            return (
-                <MenuItem
-                    value={lowercaseSortTerm}
-                    key={`position${sortTerm}`}
-                    classes={{
-                        root: "default-select-root",
-                        selected: "default-select-selected"
-                    }}
-                >
-                    { sortTerm }
-                    <UpDownArrows
-                        selected={this.state.sortBy===lowercaseSortTerm}
-                        sortAscending={this.state.sortAscending}
-                        style={{marginLeft: "12px"}}
-                    />
-                </MenuItem>
-            );
-        });
+        let sortItems = ["Name", "Score", "Interest", "Stage", "Growth", "Performance"].map(
+            sortTerm => {
+                const lowercaseSortTerm = sortTerm.toLowerCase();
+                return (
+                    <MenuItem
+                        value={lowercaseSortTerm}
+                        key={`position${sortTerm}`}
+                        classes={{
+                            root: "default-select-root",
+                            selected: "default-select-selected"
+                        }}
+                    >
+                        {sortTerm}
+                        <UpDownArrows
+                            selected={this.state.sortBy === lowercaseSortTerm}
+                            sortAscending={this.state.sortAscending}
+                            style={{ marginLeft: "12px" }}
+                        />
+                    </MenuItem>
+                );
+            }
+        );
         // add the item that says Sort By
         sortItems.unshift(
-            <MenuItem
-                disabled
-                value={"sort by"}
-                key={"candidates mobile sort by"}
-            >
-                { "Sort By" }
+            <MenuItem disabled value={"sort by"} key={"candidates mobile sort by"}>
+                {"Sort By"}
             </MenuItem>
         );
 
@@ -1141,20 +1335,18 @@ class MyCandidates extends Component {
                 onChange={this.handleMobileSortByChange}
                 key="sort selector"
             >
-                { sortItems }
+                {sortItems}
             </Select>
         );
     }
-
 
     // handle a click on a hiring stage
     handleMobileSortByChange = event => {
         const sortTerm = event.target.value;
         if (sortTerm !== "sort by") {
-            this.handleSortByChange(sortTerm)
+            this.handleSortByChange(sortTerm);
         }
-    }
-
+    };
 
     // set the results page to be full screen
     // pass in an activate boolean if you want to set full screen to true or false,
@@ -1166,7 +1358,6 @@ class MyCandidates extends Component {
         this.setState({ fullScreenResults: fullScreen });
     }
 
-
     // exits the candidate results popover
     exitResults() {
         this.setState({
@@ -1177,20 +1368,25 @@ class MyCandidates extends Component {
         });
     }
 
-
     // go to the next or previous candidate
     nextPreviousResults(next) {
-        if (!this.state.showResults) { return; }
+        if (!this.state.showResults) {
+            return;
+        }
 
         let newIndex = 0;
         // if the candidate whose results we are seeing is within the current
         // page sorted candidates ...
         if (this.state.resultsCandidateIndex !== undefined) {
             // ... get the index of the candidate whose results we want to see
-            newIndex = next ? this.state.resultsCandidateIndex + 1 : this.state.resultsCandidateIndex - 1;
+            newIndex = next
+                ? this.state.resultsCandidateIndex + 1
+                : this.state.resultsCandidateIndex - 1;
         } else {
             // if there are no candidates, do nothing
-            if (this.state.sortedCandidates.length === 0) { return console.log("no candidates here!"); }
+            if (this.state.sortedCandidates.length === 0) {
+                return console.log("no candidates here!");
+            }
             // if there are candidates, select the first one (so keep the default)
         }
 
@@ -1205,16 +1401,13 @@ class MyCandidates extends Component {
         });
     }
 
-
     render() {
         const currentUser = this.props.currentUser;
         let positionId = this.state.positionId;
 
         const tabs = (
-            <div className="center" style={{position:"relative", marginTop:"28px"}}>
-                <div className="myCandidatesTabs">
-                    { this.tabParts() }
-                </div>
+            <div className="center" style={{ position: "relative", marginTop: "28px" }}>
+                <div className="myCandidatesTabs">{this.tabParts()}</div>
             </div>
         );
 
@@ -1222,93 +1415,130 @@ class MyCandidates extends Component {
         const candidateResultsClass = "candidateResults " + resultsWidthClass;
         const leftArrowContainerClass = "left arrowContainer " + resultsWidthClass;
         const rightArrowContainerClass = "right arrowContainer " + resultsWidthClass;
+        const blurredClass = this.props.blurModal ? "dialogForBizOverlay" : "";
+
         // if the candidate is at the top of the list or not in the current list, disable the left arrow
-        const leftArrowClass = "left circleArrowIcon" + (typeof this.state.resultsCandidateIndex === "number" && this.state.resultsCandidateIndex > 0 ? "" : " disabled");
+        const leftArrowClass =
+            "left circleArrowIcon" +
+            (typeof this.state.resultsCandidateIndex === "number" &&
+            this.state.resultsCandidateIndex > 0
+                ? ""
+                : " disabled");
         // if the candidate is in the list but is the last candidate OR if there
         // are no candidates that meet the criteria, disable the right button
-        const rightArrowClass = "right circleArrowIcon" + (this.state.sortedCandidates.length === 0 || (typeof this.state.resultsCandidateIndex === "number" && this.state.resultsCandidateIndex >= this.state.sortedCandidates.length - 1) ? " disabled" : "");
+        const rightArrowClass =
+            "right circleArrowIcon" +
+            (this.state.sortedCandidates.length === 0 ||
+            (typeof this.state.resultsCandidateIndex === "number" &&
+                this.state.resultsCandidateIndex >= this.state.sortedCandidates.length - 1)
+                ? " disabled"
+                : "");
         // adds a 'mobile' class if on mobile
-        const mobileClass = this.state.mobile ? " mobile" : ""
+        const mobileClass = this.state.mobile ? " mobile" : "";
 
         return (
-            <div className={"jsxWrapper blackBackground fillScreen myCandidates primary-white" + mobileClass} style={{paddingBottom: "20px"}} ref='myCandidates'>
-                {this.props.currentUser.userType == "accountAdmin" ?
-                    <AddUserDialog position={this.state.position} tab={"Candidate"}/>
-                    : null
+            <div
+                className={
+                    "jsxWrapper blackBackground fillScreen myCandidates primary-white " +
+                    mobileClass
                 }
-                <MetaTags>
-                    <title>My Candidates | Moonshot</title>
-                    <meta name="description" content="View analytical breakdowns and manage your candidates."/>
-                </MetaTags>
+                style={{ paddingBottom: "20px" }}
+                ref="myCandidates"
+            >
+                <div className={blurredClass}>
+                    {this.props.currentUser.userType == "accountAdmin" ? (
+                        <AddUserDialog position={this.state.position} tab={"Candidate"} />
+                    ) : null}
+                    <CandidatesPopupDialog />
+                    <InviteCandidatesModal />
+                    <MetaTags>
+                        <title>My Candidates | Moonshot</title>
+                        <meta
+                            name="description"
+                            content="View analytical breakdowns and manage your candidates."
+                        />
+                    </MetaTags>
 
-                { tabs }
+                    <div className="page-line-header">
+                        <div />
+                        <div>Candidates</div>
+                    </div>
 
-                { this.infoBox() }
+                    {this.popup()}
 
-                <div className="center">
-                    <div className="candidatesAndOptions">
-                        {this.state.mobile ? null :
-                            <div className="my-candidates-position-selector">
-                                { this.positionSelector() }
-                                <br/>
-                                <div
-                                    className="add-candidate primary-cyan pointer"
-                                    onClick={this.props.openAddUserModal}
-                                >
-                                    + <span className="underline">Add Candidate</span>
-                                </div>
-                            </div>
-                        }
-                        { this.state.mobile ? this.mobileTopOptions() : this.topOptions() }
-                        <div className="candidatesContainer">
-                            <div>
-                                { this.createCandidatesTable(positionId) }
-                            </div>
-                            { this.state.showResults ?
-                                <div>
-                                    <CandidateResults
-                                        className={candidateResultsClass}
-                                        candidateId={this.state.resultsCandidateId}
-                                        positionId={this.state.positionId}
-                                        toggleFullScreen={this.toggleFullScreen.bind(this)}
-                                        exitResults={this.exitResults.bind(this)}
-                                        rateInterest={this.rateInterest.bind(this)}
-                                        hiringStageChange={this.hiringStageChange.bind(this)}
-                                        fullScreen={this.state.fullScreenResults}
-                                        mobile={this.state.mobile}
-                                        interest={this.state.interest}
-                                    />
-                                    <div className={leftArrowContainerClass} onClick={() => this.nextPreviousResults(false)}>
-                                        <div className={leftArrowClass} />
+                    {this.mockDataMemo()}
+
+                    {tabs}
+
+                    <div className="center">
+                        <div className="candidatesAndOptions">
+                            {this.state.mobile ? null : (
+                                <div className="my-candidates-position-selector">
+                                    {this.positionSelector()}
+                                    <br />
+                                    <div
+                                        className="add-candidate primary-cyan pointer"
+                                        onClick={this.props.openAddUserModal}
+                                    >
+                                        + <span className="underline">Add Candidate</span>
                                     </div>
-                                    <div className={rightArrowContainerClass} onClick={() => this.nextPreviousResults(true)}>
-                                        <div className={rightArrowClass} />
-                                    </div>
-
                                 </div>
-                                : null
-                            }
+                            )}
+                            {this.state.mobile ? this.mobileTopOptions() : this.topOptions()}
+                            <div className="candidatesContainer">
+                                <div>{this.createCandidatesTable(positionId)}</div>
+                                {this.state.showResults ? (
+                                    <div>
+                                        <CandidateResults
+                                            className={candidateResultsClass}
+                                            candidateId={this.state.resultsCandidateId}
+                                            positionId={this.state.positionId}
+                                            toggleFullScreen={this.toggleFullScreen.bind(this)}
+                                            exitResults={this.exitResults.bind(this)}
+                                            rateInterest={this.rateInterest.bind(this)}
+                                            hiringStageChange={this.hiringStageChange.bind(this)}
+                                            fullScreen={this.state.fullScreenResults}
+                                            mobile={this.state.mobile}
+                                            interest={this.state.interest}
+                                            mockData={this.state.mockData}
+                                            candidates={
+                                                this.state.mockData ? this.state.candidates : null
+                                            }
+                                        />
+                                        <div
+                                            className={leftArrowContainerClass}
+                                            onClick={() => this.nextPreviousResults(false)}
+                                        >
+                                            <div className={leftArrowClass} />
+                                        </div>
+                                        <div
+                                            className={rightArrowContainerClass}
+                                            onClick={() => this.nextPreviousResults(true)}
+                                        >
+                                            <div className={rightArrowClass} />
+                                        </div>
+                                    </div>
+                                ) : null}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div style={{height: "40px"}} />
+                    <div style={{ height: "40px" }} />
+                </div>
             </div>
         );
     }
 }
 
-
 // how far along in the hiring process each of the hiring stages is relative to the others
 const hiringStageValues = {
     "Not Contacted": 1,
-    "Contacted": 2,
-    "Interviewing": 3,
-    "Offered": 4,
-    "Hired": 5,
-    "Dismissed": 6
-}
-
+    Contacted: 2,
+    Interviewing: 3,
+    Offered: 4,
+    Hired: 5,
+    Dismissed: 6
+};
 
 const style = {
     // the top options such as search and hide hired candidates
@@ -1319,16 +1549,21 @@ const style = {
     labelStyle: {
         color: "rgba(255,255,255,.8)"
     },
-    noCandidatesMessage: {marginTop: "20px"}
-}
-
+    noCandidatesMessage: { marginTop: "20px" }
+};
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification,
-        openAddUserModal,
-        sawMyCandidatesInfoBox
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification,
+            openAddUserModal,
+            hidePopups,
+            addNotification,
+            generalAction,
+            intercomEvent
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -1336,12 +1571,17 @@ function mapStateToProps(state) {
         formData: state.form,
         notification: state.users.notification,
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        loading: state.users.loadingSomething,
+        blurModal: state.users.candidatesPopupModalOpen
     };
 }
 
 MyCandidates = reduxForm({
-    form: 'myCandidates',
+    form: "myCandidates"
 })(MyCandidates);
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyCandidates);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MyCandidates);

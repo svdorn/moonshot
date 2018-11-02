@@ -25,15 +25,11 @@ class VerifyEmail extends Component {
         const self = this;
 
         // don't try to verify the account if the user has already been verified
-        if (this.props.user.verified) {
-            if (this.props.user === "accountAdmin") {
-                if (this.props.user.onboarding && !this.props.user.onboarding.complete) {
-                    goTo("/onboarding");
-                } else {
-                    goTo("myCandidates");
-                }
+        if (this.props.user && this.props.user.verified) {
+            if (this.props.user.userType === "accountAdmin") {
+                goTo("/dashboard")
             } else {
-                goTo("myEvaluations");
+                goTo("/myEvaluations");
             }
 
             this.props.addNotification("Already verified!");

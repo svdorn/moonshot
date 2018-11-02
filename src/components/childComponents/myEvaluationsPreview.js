@@ -16,15 +16,39 @@ import { browserHistory } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { goTo } from "../../miscFunctions";
-import { openAddUserModal } from "../../actions/usersActions";
+import HoverTip from "../miscComponents/hoverTip";
+import { openAddUserModal, addNotification, updateUser } from "../../actions/usersActions";
 import axios from "axios";
 
 class MyEvaluationsPreview extends Component {
 
     // used for candidates and employees only
     continueEval = () => {
-        if (["candidate", "employee"].includes(this.props.currentUser.userType) && !this.props.completedDate) {
-            goTo(`/evaluation/${this.props.businessId}/${this.props.positionId}`);
+        const self = this;
+        const user = this.props.currentUser;
+
+        if (["candidate", "employee"].includes(user.userType) && !this.props.completedDate) {
+            // if user is verified, go right to the eval
+            if (user.verified) {
+                goTo(`/evaluation/${this.props.businessId}/${this.props.positionId}`);
+            }
+            // otherwise have to check if they have verified, and if not, tell
+            // them to verify themselves
+            else {
+                const query = { params: { userId: user._id, verificationToken: user.verificationToken } };
+                axios.get("/api/user/checkEmailVerified", query)
+                .then(response => {
+                    self.props.updateUser(response.data);
+                    goTo(`/evaluation/${self.props.businessId}/${self.props.positionId}`);
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 403) {
+                        return self.props.addNotification("Verify your email first!", "error");
+                    } else {
+                        return self.props.addNotification("Error starting evaluation, try refreshing.", "error");
+                    }
+                })
+            }
         }
     }
 
@@ -59,14 +83,28 @@ class MyEvaluationsPreview extends Component {
         let businessButton = null;
 
         if (editing) {
+            let candidateResultsOnClick = () => goTo(`/myCandidates?position=${this.props.name}`);
+            let businessButtonOnClick = this.openAddUserModal.bind(this);
+            let inviteEmployeesOnClick = this.openAddUserModal.bind(this);
+            if (this.props.buttonsNotClickable) {
+                candidateResultsOnClick = null;
+                businessButtonOnClick = null;
+                inviteEmployeesOnClick = null;
+            }
             clickableArea = (
                 <div className="secondary-gray font16px font14pxUnder800 marginTop10px">
                     <div>
-                        <div onClick={() => goTo(`/myCandidates?position=${this.props.name}`)} className="underline clickable" style={{display: "inline-block"}}>
+                        <div onClick={candidateResultsOnClick} className="underline clickable" style={{display: "inline-block"}}>
                             Candidate Results
                         </div>
-                        <div onClick={() => goTo(`/myEmployees?position=${this.props.name}`)} className="underline marginLeft20px clickable" style={{display: "inline-block"}}>
-                            Grade Employees
+                        <div onClick={inviteEmployeesOnClick} className="underline marginLeft20px clickable" style={{display: "inline-block"}}>
+                            Invite Employees
+                            <div className="info-hoverable">i</div>
+                            <HoverTip
+                                className="font10px secondary-gray"
+                                style={{marginTop: "18px", marginLeft: "-6px"}}
+                                text="Employees complete a 22-minute evaluation and their manager completes a two-minute evaluation of the employee to customize predictions."
+                            />
                         </div>
                     </div>
                 </div>
@@ -82,7 +120,7 @@ class MyEvaluationsPreview extends Component {
             );
             businessButton = (
                 <div style={{marginTop: "20px"}}>
-                        <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={this.openAddUserModal.bind(this)} style={{padding: "5px 17px"}}>
+                        <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white" onClick={businessButtonOnClick} style={{padding: "5px 17px"}}>
                             {"Invite Candidates"}
                         </button>
                 </div>
@@ -91,7 +129,7 @@ class MyEvaluationsPreview extends Component {
             if (this.props.completedDate) {
                 clickableArea = (
                     <div className="secondary-gray font16px font14pxUnder800 marginTop15px">
-                        Complete - your results are being reviewed
+                        You{"'"}re done! Your results are being reviewed. You can now safely exit this tab.
                     </div>
                 )
             } else {
@@ -133,8 +171,11 @@ class MyEvaluationsPreview extends Component {
 
         const mainClass = (["candidate", "employee"].includes(this.props.currentUser.userType) && !this.props.completedDate) ? "pointer" : "";
 
-        return(
-            <div>
+        const style = typeof this.props.style === "object" ? this.props.style : {};
+        const className = typeof this.props.className === "string" ? this.props.className : "";
+
+        return (
+            <div style={style} className={className}>
                 <div onClick={this.continueEval} className={`myEvalsBox aboutMeLi ${mainClass}`} >
                     <div className="aboutMeLiIconContainer">
                         <img alt="My Evals Company Logo" src={`/logos/${this.props.logo}`}/>
@@ -145,7 +186,7 @@ class MyEvaluationsPreview extends Component {
                     <div className="myEvalsInfo" style={{display: 'inline-block'}}>
                         { infoArea }
                         <div className="font18px font16pxUnder800 primary-cyan">{this.props.name}</div>
-                        <div className="secondary-gray">{this.props.company} Evaluation</div>
+                        <div className="secondary-gray">{this.props.company} Evaluation {this.props.currentUser.userType === "accountAdmin" ? <div className="inlineBlock">| 22 min</div> : null}</div>
                         { estimatedLength }
                         { clickableArea }
                         { businessButton }
@@ -158,7 +199,9 @@ class MyEvaluationsPreview extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openAddUserModal
+        openAddUserModal,
+        addNotification,
+        updateUser
     }, dispatch);
 }
 

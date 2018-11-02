@@ -30,7 +30,7 @@ class CognitiveTest extends Component {
 
 
     componentDidMount() {
-        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && !this.props.questionInfo.factorId) {
+        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && this.props.questionInfo.rpm) {
             this.setState({ questionId: this.props.questionInfo.questionId },() => {
                 this.getTimer(true);
             });
@@ -38,7 +38,7 @@ class CognitiveTest extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && !this.props.questionInfo.factorId) {
+        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && this.props.questionInfo.rpm) {
             this.setState({ questionId: this.props.questionInfo.questionId },() => {
                 this.getTimer(true);
             })

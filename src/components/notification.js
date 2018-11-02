@@ -1,10 +1,13 @@
-"use strict"
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { closeNotification } from '../actions/usersActions';
-import { Paper, SvgIcon } from 'material-ui';
-import ContentClear from 'material-ui/svg-icons/content/clear';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { closeNotification } from "../actions/usersActions";
+import { withRouter } from "react-router";
+import { Paper, SvgIcon } from "material-ui";
+import ContentClear from "material-ui/svg-icons/content/clear";
+
+import "./notification.css";
 
 class Notification extends Component {
     close() {
@@ -12,11 +15,13 @@ class Notification extends Component {
         // more than 4 seconds ago - this prevents the situation where a notification
         // is x'ed out, another notification comes up within 5 seconds of the first
         // one coming up, and then the new one immediately closing itself
-        if (this.props.notificationDate && (new Date()).getTime() - this.props.notificationDate.getTime() > 4000) {
+        if (
+            this.props.notificationDate &&
+            new Date().getTime() - this.props.notificationDate.getTime() > 4000
+        ) {
             this.props.closeNotification();
         }
     }
-
 
     componentDidUpdate(prevProps, prevState) {
         // close after 5 seconds as long as the notification doesn't say not to
@@ -26,50 +31,69 @@ class Notification extends Component {
         }
     }
 
-    onCloseClick() { this.props.closeNotification(); }
+    onCloseClick() {
+        this.props.closeNotification();
+    }
 
     render() {
-        const messageStyle = {
-            display: "inline-block",
-            verticalAlign: "top",
-            paddingTop: "13px",
-            marginRight: "30px",
-            marginLeft: "30px"
+        if (!this.props.notification) {
+            return null;
         }
 
-        return(
+        let pathname = "";
+        let shiftClass = "";
+        try {
+            pathname = this.props.location.pathname;
+        } catch (e) {}
+
+        if (pathname === "/") {
+            shiftClass = "shift-down";
+        }
+
+        const { user } = this.props;
+        const adminClass =
+            pathname === "/explore" || (user && user.userType === "accountAdmin")
+                ? "account-admin-notification"
+                : "";
+
+        return (
             <div>
-                {this.props.notification ?
-                    <Paper className={"messageHeader " + this.props.notification.type}>
-                        <div style={messageStyle}>{this.props.notification.message}</div>
-                        <SvgIcon
-                            id="notificationCloseButton"
-                            onClick={this.onCloseClick.bind(this)}
-                            style={{marginTop: "-3px"}}
-                            className="clickable">
-                            <ContentClear color="#66b1ff" />
-                        </SvgIcon>
-                    </Paper>
-                    :
-                    null
-                }
+                <Paper
+                    styleName={`notification ${
+                        this.props.notification.type
+                    } ${adminClass} ${shiftClass}`}
+                >
+                    <div styleName="notification-message">{this.props.notification.message}</div>
+                    <div styleName="close-button" onClick={this.onCloseClick.bind(this)}>
+                        x
+                    </div>
+                </Paper>
             </div>
         );
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
     return {
+        user: state.users.currentUser,
         notification: state.users.notification,
         notificationDate: state.users.notificationDate,
         autoCloseNotification: state.users.autoCloseNotification
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notification);
+Notification = withRouter(Notification);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Notification);

@@ -4,10 +4,12 @@ const credentials = require('../credentials');
 
 const Users = require('../models/users.js');
 const UnsubscribedEmails = require("../models/unsubscribedEmails.js");
+const UniqueEmails = require("../models/uniqueEmails.js");
 const Businesses = require('../models/businesses.js');
 const Skills = require('../models/skills.js');
 
 const errors = require("./errors");
+const crypto = require('crypto');
 
 // info for sending out emails through mailgun
 const mailDomain = "mail.moonshotinsights.io";
@@ -62,7 +64,7 @@ const FOR_USER = [
     "positions",
     "profileUrl",
     "skillTests",
-    "onboarding",
+    "onboard",
     "phoneNumber",
     "hideProfile",
     "dateSignedUp",
@@ -72,14 +74,15 @@ const FOR_USER = [
     "adminQuestions",
     "referredByCode",
     "currentPosition",
-    // "psychometricTest",
     "verificationToken",
     "firstBusinessUser",
     "agreedToSkillTerms",
     "termsAndConditions",
     "hasFinishedOnboarding",
-    "sawMyCandidatesInfoBox",
-    "intercom"
+    "showVerifyEmailBanner",
+    "intercom",
+    "popups",
+    "confirmEmbedLink"
 ];
 
 // removes information from a db user object so that it can be passed for that
@@ -597,6 +600,52 @@ function removeDuplicates(a) {
     return out;
 }
 
+// returns a new unique email for intercom events
+async function generateNewUniqueEmail() {
+    return new Promise(async function(resolve, reject) {
+        // initialize random characters string
+        let randomChars;
+        let randomEmail;
+        // see if this code already exists
+        try {
+            // will contain any code that has the same random characters
+            let foundEmail;
+            // if this gets up to 8 something is super weird
+            let counter = 0;
+            do {
+                if (counter >= 8) {
+                    throw "Too many codes found that had already been used.";
+                }
+                counter++;
+                // assign randomChars 10 random hex characters
+                randomChars = crypto.randomBytes(5).toString("hex");
+                // assign random chars to an email
+                randomEmail = randomChars + "@test.test";
+                // try to find another code with the same random characters
+                foundEmail = await UniqueEmails.findOne({ email: randomEmail });
+            } while (foundEmail);
+        } catch (findEmailError) {
+            console.log("Error looking for email with same characters.");
+            return reject(findEmailError);
+        }
+        // we are now guaranteed to have a unique code
+        const NOW = new Date();
+        // create the code
+        let uniqueEmail = {
+            email: randomEmail,
+            created: NOW,
+        };
+        // make the code in the db
+        try {
+            code = await UniqueEmails.create(uniqueEmail);
+        } catch (createEmailError) {
+            return reject(createEmailError);
+        }
+        // return the code
+        return resolve(uniqueEmail.email);
+    })
+}
+
 
 // DANGEROUS, returns user with all fields
 async function getAndVerifyUser(userId, verificationToken) {
@@ -959,6 +1008,7 @@ const helperFunctions = {
     randomInt,
     shuffle,
     frontEndUser,
+    generateNewUniqueEmail,
     getAndVerifyUser,
     getUserFromReq,
     getUserAndBusiness,
