@@ -2910,8 +2910,7 @@ async function GET_evaluationResults(req, res) {
 }
 
 async function GET_candidateSearch(req, res) {
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
+    const { userId, verificationToken, getMockData, positionName } = sanitize(req.query);
 
     // get the user who is trying to search for candidates
     let user;
@@ -2934,14 +2933,18 @@ async function GET_candidateSearch(req, res) {
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
+    // if mock users are wanted, just get those
+    try {
+        const mockusers = await Mockusers.find({});
+        return res.status(200).send({ mockusers });
+    } catch (getMockusersError) {
+        console.log("Error getting mock users: ", getMockusersError);
+        // just pretend on front end like nothing went wrong
+        return res.status(200).send({ candidates: [] });
+    }
+
     // the id of the business that the user works for
     const businessId = user.businessInfo.businessId;
-    // // the restrictions on the search
-    // const searchTerm = sanitize(req.query.searchTerm);
-    // // if a specific hiring stage is wanted
-    // const hiringStage = sanitize(req.query.hiringStage);
-    // position name is the only required input to the search
-    const positionName = sanitize(req.query.positionName);
 
     let positionRequirements = [
         { businessId: mongoose.Types.ObjectId(businessId) },

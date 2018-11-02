@@ -24,6 +24,7 @@ const renderField = ({
     label,
     placeholder,
     autoComplete,
+    autoFocus,
     type,
     style,
     className,
@@ -41,6 +42,7 @@ const renderField = ({
         className={typeof className === "string" ? className : "text-field"}
         style={typeof style === "object" ? style : {}}
         autoComplete={typeof autoComplete === "string" ? autoComplete : "on"}
+        autoFocus={typeof autoFocus === "boolean" ? autoFocus : false}
         InputLabelProps={{
             classes: { root: "input-label" },
             FormLabelClasses: {
@@ -62,7 +64,7 @@ class TextInput extends Component {
     }
 
     render() {
-        let { name, label, placeholder, required, validate, type, style } = this.props;
+        let { name, label, placeholder, required, validate, type, style, autoFocus } = this.props;
 
         return (
             <div>
@@ -76,6 +78,7 @@ class TextInput extends Component {
                         placeholder={placeholder}
                         type={type}
                         style={style}
+                        autoFocus={autoFocus}
                     />
                 </MuiThemeProvider>
             </div>
