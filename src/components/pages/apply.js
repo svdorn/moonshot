@@ -31,7 +31,7 @@ class Apply extends Component {
             position: "",
             company: "",
             logo: "",
-            noPositons: false,
+            noPositions: false,
             // if the user is an accountAdmin of this company
             admin: false,
             // if the business has set up the page
@@ -114,6 +114,7 @@ class Apply extends Component {
             }
             this.setState({ positions, position, logo, company, admin, pageSetUp });
         } else {
+            console.log("in here")
             this.setState({ noPositions: true });
         }
     }
@@ -291,7 +292,7 @@ class Apply extends Component {
     render() {
         let content = null;
 
-        const { pageSetUp, admin, company, position } = this.state;
+        const { pageSetUp, admin, company, position, noPositions } = this.state;
 
         const { currentUser } = this.props;
 
@@ -334,7 +335,16 @@ class Apply extends Component {
                 </div>
             );
         }
-
+        // the company has no positions
+        else if (noPositions) {
+            content = (
+                <div>
+                    <div className="font18px font16pxUnder700 font14pxUnder500 secondary-gray marginTop30px">
+                        This company has no active positions currently.
+                    </div>
+                </div>
+            );
+        }
         // page is still loading
         else {
             content = (
