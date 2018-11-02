@@ -23,7 +23,7 @@ class BuildTeam extends Component {
                     selected: false
                 },
                 {
-                    text: "Identifying top talent before Facebook and Google",
+                    text: "Identifying top talent before big tech companies do",
                     selected: false
                 },
                 {
