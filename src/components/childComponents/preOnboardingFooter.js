@@ -42,8 +42,7 @@ class PreOnboardingFooter extends Component {
                         <img src={`/icons/Astrobot${this.props.png}`} styleName="astrobot-img" />
                         <div className="secondary-gray" styleName="text">
                             <div styleName="desktop-text">
-                                Continue your progress <br styleName="non-big-desktop" />and start{" "}
-                                <br styleName="big-desktop" />inviting candidates.
+                                Continue your progress to start inviting candidates.
                             </div>
                         </div>
                         <div styleName="buttons">

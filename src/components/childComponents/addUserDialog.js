@@ -6,7 +6,8 @@ import {
     postEmailInvites,
     closeAddUserModal,
     emailFailureExitPage,
-    addNotification
+    addNotification,
+    openAddPositionModal
 } from "../../actions/usersActions";
 import {
     TextField,
@@ -93,6 +94,12 @@ class AddUserDialog extends Component {
                 }
             });
     }
+
+    // open the modal to add a new position
+    openAddPositionModal = () => {
+        this.handleClose();
+        this.props.openAddPositionModal();
+    };
 
     componentDidUpdate() {
         let newState = {};
@@ -515,6 +522,15 @@ class AddUserDialog extends Component {
                     <div className="primary-white font20px font16pxUnder500 marginTop20px">
                         Cannot Add Users because you have no current positions.
                     </div>
+                    <div
+                        className={
+                            "primary-white font18px font16pxUnder900 font14pxUnder600 marginTop20px " +
+                            button.cyanRound
+                        }
+                        onClick={this.openAddPositionModal}
+                    >
+                        + Add Position
+                    </div>
                 </Dialog>
             );
         } else if (this.props.userPosted) {
@@ -708,7 +724,8 @@ function mapDispatchToProps(dispatch) {
             postEmailInvites,
             closeAddUserModal,
             emailFailureExitPage,
-            addNotification
+            addNotification,
+            openAddPositionModal
         },
         dispatch
     );

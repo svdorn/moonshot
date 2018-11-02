@@ -2418,15 +2418,26 @@ async function newCandidateCountByDate(businessId, positionIds, groupBy, numData
             // get the date to end data collection at
             const now = new Date();
             let mostRecentDay = now.getDate();
-            // if grouping by months, don't get any data after the first of this month
+            let additionalMonth = 0;
+            // if grouping by months, make sure to get data for the entire month
             if (groupBy === "months") {
                 mostRecentDay = 1;
+                additionalMonth = 1;
             }
-            // if grouping by weeks, don't get any data from after Sunday (first day of the week)
+            // if grouping by weeks, get all data from before next Sunday (first day of the week)
             else if (groupBy === "weeks") {
-                mostRecentDay -= now.getDay();
+                mostRecentDay += 7 - now.getDay();
             }
-            let before = new Date(now.getFullYear(), now.getMonth(), mostRecentDay);
+            // otherwise we're grouping by day, so get all data for today
+            else {
+                mostRecentDay++;
+            }
+            let before = new Date(
+                now.getFullYear(),
+                now.getMonth() + additionalMonth, // add a month if grouping by months
+                mostRecentDay
+            );
+            // the start date for the last data point
             let after = new Date(
                 before.getFullYear(),
                 before.getMonth() - monthDifference,
@@ -2552,7 +2563,8 @@ async function GET_evaluationsGraphData(req, res) {
         date -= 7;
     }
     const earliestDate = new Date(now.getFullYear(), month, date);
-    const latestDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    // make sure we get all the data from today too
+    const latestDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
     // get counts of evaluation completions
     try {
@@ -2934,13 +2946,15 @@ async function GET_candidateSearch(req, res) {
     }
 
     // if mock users are wanted, just get those
-    try {
-        const mockusers = await Mockusers.find({});
-        return res.status(200).send({ mockusers });
-    } catch (getMockusersError) {
-        console.log("Error getting mock users: ", getMockusersError);
-        // just pretend on front end like nothing went wrong
-        return res.status(200).send({ candidates: [] });
+    if (getMockData) {
+        try {
+            const mockusers = await Mockusers.find({});
+            return res.status(200).send({ mockusers });
+        } catch (getMockusersError) {
+            console.log("Error getting mock users: ", getMockusersError);
+            // just pretend on front end like nothing went wrong
+            return res.status(200).send({ candidates: [] });
+        }
     }
 
     // the id of the business that the user works for
@@ -2950,15 +2964,11 @@ async function GET_candidateSearch(req, res) {
         { businessId: mongoose.Types.ObjectId(businessId) },
         { name: positionName }
     ];
-    // // filter by hiring stage if requested
-    // if (hiringStage) {
-    //     positionRequirements.push({ "hiringStage": hiringStage });
-    // }
 
     let query = {
         userType: "candidate",
         // only get users who have verified their email address
-        verified: "true",
+        verified: true,
         // only get the position that was asked for
         positions: {
             $elemMatch: {
@@ -2967,20 +2977,13 @@ async function GET_candidateSearch(req, res) {
         }
     };
 
-    // // search by name too if search term exists
-    // if (searchTerm) {
-    //     const nameRegex = new RegExp(searchTerm, "i");
-    //     query["name"] = nameRegex;
-    // }
-
     // the user attributes that we want to keep
     const attributes =
         "_id name profileUrl positions.reviewed positions.favorite positions.interest positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
 
     // perform the search
-    let candidates = [];
     try {
-        candidates = await Users.find(query).select(attributes);
+        var candidates = await Users.find(query).select(attributes);
     } catch (candidateSearchError) {
         console.log("Error searching for candidates: ", candidateSearchError);
         return res.status(500).send(errors.SERVER_ERROR);
@@ -2992,12 +2995,12 @@ async function GET_candidateSearch(req, res) {
         const allCandidatesQuery = {
             userType: "candidate",
             verified: true,
-            positions: { businessId: mongoose.Types.ObjectId(businessId) }
+            positions: { $elemMatch: { businessId: mongoose.Types.ObjectId(businessId) } }
         };
 
         try {
             // count all candidates for the business
-            const candidateCount = await Users.countDocuments(allCandidatesQuery);
+            var candidateCount = await Users.countDocuments(allCandidatesQuery);
             // if there aren't any, send out the mock users
             var shouldSendMockUsers = candidateCount === 0;
         } catch (countUsersError) {

@@ -30,6 +30,7 @@ import axios from "axios";
 import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
 import AddUserDialog from "../../childComponents/addUserDialog";
+import AddPositionDialog from "../../childComponents/addPositionDialog";
 import CandidatesPopupDialog from "../../childComponents/candidatesPopupDialog";
 import InviteCandidatesModal from "../dashboard/inviteCandidatesModal";
 import { qualifierFromScore } from "../../../miscFunctions";
@@ -1448,6 +1449,7 @@ class MyCandidates extends Component {
                     {this.props.currentUser.userType == "accountAdmin" ? (
                         <AddUserDialog position={this.state.position} tab={"Candidate"} />
                     ) : null}
+                    <AddPositionDialog />
                     <CandidatesPopupDialog />
                     <InviteCandidatesModal />
                     <MetaTags>
