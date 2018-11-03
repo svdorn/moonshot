@@ -87,11 +87,13 @@ const usersSchema = mongoose.Schema({
         candidateModal: Boolean,
         // whether the popups should show on the employees tab
         employees: Boolean,
-        // whether the popups should show on the dashboard
-        dashboard: Boolean,
         // where the business interests should pop up or not
-        businessInterests: Boolean
+        businessInterests: Boolean,
+        // whether the welcomeToMoonshotInsights should show on the dashboard
+        dashboard: Boolean
     },
+    // if the user has confirmed that the link has been embedded
+    confirmEmbedLink: Boolean,
     // info we need to keep to access users on Intercom
     intercom: {
         // The email that they are registered with on intercom

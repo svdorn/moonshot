@@ -124,19 +124,37 @@ async function GET_billingIsSetUp(req, res) {
 // create a business and the first account admin for that business
 async function POST_createBusinessAndUser(req, res) {
     // get necessary arguments
-    let { name, company, email, positionTitle, password, positionType, isManager } = sanitize(
-        req.body
-    );
-    isManager = !!(isManager === "YES");
+    let {
+        name,
+        company,
+        email,
+        password,
+        positions,
+        onboard,
+        welcomeToMoonshot,
+        selectedJobsToBeDone,
+        showVerifyEmailBanner
+    } = sanitize(req.body);
 
     // validate arguments
-    const stringArgs = [name, company, email, positionTitle, password, positionType];
+    const stringArgs = [name, company, email, password];
     if (!validArgs({ stringArgs })) {
+        console.log(
+            "name: ",
+            name,
+            "company: ",
+            company,
+            "email: ",
+            email,
+            "password is a string: ",
+            typeof password === "string"
+        );
         return res.status(400).send("Bad Request.");
     }
 
     // validate email
     if (!isValidEmail(email)) {
+        console.log("Invalid email format. Email: ", email);
         return res.status(400).send("Invalid email format.");
     }
 
@@ -159,23 +177,44 @@ async function POST_createBusinessAndUser(req, res) {
             .pop()
             .toLowerCase();
         if (popularProviders.includes(provider)) {
+            console.log("Given email not a work email. Email: ", email);
             return res.status(400).send("Please use your work email address.");
         }
     }
 
     // validate password
     if (!isValidPassword(password)) {
+        console.log("Password not 8 characters long. Password length: ", password.length);
         return res.status(400).send("Password needs to be at least 8 characters long.");
     }
 
+    let dashboardPopup = true;
+    businessInterestsPopup = true;
+    if (welcomeToMoonshot) {
+        dashboardPopup = false;
+    }
+    // check if positions should be added
+    if (Array.isArray(selectedJobsToBeDone)) {
+        businessInterestsPopup = false;
+    }
+
     // create the user
-    const userInfo = { name, email, password };
+    const userInfo = {
+        name,
+        email,
+        password,
+        onboard,
+        dashboardPopup,
+        businessInterestsPopup,
+        showVerifyEmailBanner
+    };
     try {
         var user = await createAccountAdmin(userInfo);
     } catch (createUserError) {
         console.log("Error creating user from business signup: ", createUserError);
         // tell the user they need a different email if this address is taken already
         if (createUserError === errors.EMAIL_TAKEN) {
+            console.log("Email already taken: ", email);
             return res.status(400).send(errors.EMAIL_TAKEN);
         }
         // otherwise return a standard server error message
@@ -185,7 +224,8 @@ async function POST_createBusinessAndUser(req, res) {
     // create business
     const newBusinessInfo = {
         name: company,
-        positions: [{ name: positionTitle, positionType, isManager }]
+        positions,
+        selectedJobsToBeDone
     };
 
     try {
@@ -258,6 +298,8 @@ async function POST_createBusinessAndUser(req, res) {
             recipients = ["stevedorn9@gmail.com"];
         }
     }
+    const positionName = business.positions ? business.positions[0].name : undefined;
+    const positionType = business.positoins ? business.positons[0].positionType : undefined;
     let subject = "New Account Admin Sign Up";
     let content =
         "<div>" +
@@ -265,8 +307,8 @@ async function POST_createBusinessAndUser(req, res) {
         `<p>Name: ${user.name}</p>` +
         `<p>Email: ${user.email}</p>` +
         `<p>Business name: ${business.name}</p>` +
-        `<p>Position name: ${business.positions[0].name}</p>` +
-        `<p>Position type: ${business.positions[0].positionType}</p>` +
+        `<p>Position name: ${positionName}</p>` +
+        `<p>Position type: ${positionType}</p>` +
         "</div>";
     try {
         await sendEmail({ recipients, subject, content });
@@ -279,7 +321,15 @@ async function POST_createBusinessAndUser(req, res) {
 async function createAccountAdmin(info) {
     return new Promise(function(resolve, reject) {
         // get needed args
-        const { name, password, email } = info;
+        const {
+            name,
+            password,
+            email,
+            onboard,
+            dashboardPopup,
+            businessInterestsPopup,
+            showVerifyEmailBanner
+        } = info;
 
         let user = {
             name,
@@ -309,9 +359,10 @@ async function createAccountAdmin(info) {
             candidateModal: true,
             employees: true,
             evaluations: true,
-            dashboard: true,
-            businessInterests: true
+            dashboard: dashboardPopup,
+            businessInterests: businessInterestsPopup
         };
+        user.confirmEmbedLink = false;
         // had to select that they agreed to the terms to sign up so must be true
         user.termsAndConditions = [
             {
@@ -340,11 +391,18 @@ async function createAccountAdmin(info) {
         user.notifications.firstTime = true;
         // user will have to do business onboarding
         user.hasFinishedOnboarding = false;
-        user.onboard = {
-            step: 1,
-            highestStep: 1,
-            actions: []
-        };
+        if (onboard) {
+            user.onboard = onboard;
+        } else {
+            user.onboard = {
+                step: 1,
+                highestStep: 1,
+                actions: []
+            };
+        }
+        if (showVerifyEmailBanner) {
+            user.showVerifyEmailBanner = true;
+        }
         // user.onboarding = {
         //     step: 0,
         //     complete: false,
@@ -453,7 +511,7 @@ async function createAccountAdmin(info) {
 async function createBusiness(info) {
     return new Promise(async function(resolve, reject) {
         // get needed args
-        const { name, positions } = info;
+        const { name, positions, selectedJobsToBeDone } = info;
         // make sure the minimum necessary args are there
         if (!name) {
             return reject("No business name provided.");
@@ -499,6 +557,11 @@ async function createBusiness(info) {
                 // add the position
                 business.positions.push(bizPos);
             }
+        }
+
+        // check if interests should be added
+        if (Array.isArray(selectedJobsToBeDone)) {
+            business.interests = selectedJobsToBeDone;
         }
 
         // create an API_Key for the business
@@ -2355,15 +2418,26 @@ async function newCandidateCountByDate(businessId, positionIds, groupBy, numData
             // get the date to end data collection at
             const now = new Date();
             let mostRecentDay = now.getDate();
-            // if grouping by months, don't get any data after the first of this month
+            let additionalMonth = 0;
+            // if grouping by months, make sure to get data for the entire month
             if (groupBy === "months") {
                 mostRecentDay = 1;
+                additionalMonth = 1;
             }
-            // if grouping by weeks, don't get any data from after Sunday (first day of the week)
+            // if grouping by weeks, get all data from before next Sunday (first day of the week)
             else if (groupBy === "weeks") {
-                mostRecentDay -= now.getDay();
+                mostRecentDay += 7 - now.getDay();
             }
-            let before = new Date(now.getFullYear(), now.getMonth(), mostRecentDay);
+            // otherwise we're grouping by day, so get all data for today
+            else {
+                mostRecentDay++;
+            }
+            let before = new Date(
+                now.getFullYear(),
+                now.getMonth() + additionalMonth, // add a month if grouping by months
+                mostRecentDay
+            );
+            // the start date for the last data point
             let after = new Date(
                 before.getFullYear(),
                 before.getMonth() - monthDifference,
@@ -2489,7 +2563,8 @@ async function GET_evaluationsGraphData(req, res) {
         date -= 7;
     }
     const earliestDate = new Date(now.getFullYear(), month, date);
-    const latestDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    // make sure we get all the data from today too
+    const latestDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
     // get counts of evaluation completions
     try {
@@ -2533,12 +2608,41 @@ async function countEvaluationCompletions(businessId, positionIds, earliestDate,
                 // group these objects by position name and count them
                 {
                     $group: {
-                        _id: { positionId: "$positions._id", name: "$positions.name" },
+                        //_id: { positionId: "$positions._id", name: "$positions.name" },
+                        _id: { name: "$positions.name" },
                         count: { $sum: 1 }
                     }
                 }
             ]);
 
+            // // TODO: REMOVE THIS AND DO IT A BETTER WAY, FIX THE EASE QUERY
+            // // create an object to keep track of used id/name combos
+            // let countsObj = {};
+            // // for every count we got ...
+            // counts.forEach(c => {
+            //     // create an id for it within the countsObj
+            //     const idString = c._id.positionId.toString() + c._id.name;
+            //     // see if that id already exists, and if so update the count for that
+            //     if (countsObj[idString]) {
+            //         countsObj[idString].count += c.count;
+            //     }
+            //     // otherwise set the count for it
+            //     else {
+            //         countsObj[idString] = {
+            //             count: c.count,
+            //             _id: c._id
+            //         };
+            //     }
+            // });
+            // // make the object into an array
+            // let countsArray = [];
+            // for (let countObj in countsObj) {
+            //     if (countsObj.hasOwnProperty(countObj)) {
+            //         countsArray.push(countsObj[countObj]);
+            //     }
+            // }
+
+            //return resolve(countsArray);
             return resolve(counts);
         } catch (e) {
             // just reject any error
@@ -2847,8 +2951,7 @@ async function GET_evaluationResults(req, res) {
 }
 
 async function GET_candidateSearch(req, res) {
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
+    const { userId, verificationToken, getMockData, positionName } = sanitize(req.query);
 
     // get the user who is trying to search for candidates
     let user;
@@ -2871,28 +2974,30 @@ async function GET_candidateSearch(req, res) {
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
+    // if mock users are wanted, just get those
+    if (getMockData) {
+        try {
+            const mockusers = await Mockusers.find({});
+            return res.status(200).send({ mockusers });
+        } catch (getMockusersError) {
+            console.log("Error getting mock users: ", getMockusersError);
+            // just pretend on front end like nothing went wrong
+            return res.status(200).send({ candidates: [] });
+        }
+    }
+
     // the id of the business that the user works for
     const businessId = user.businessInfo.businessId;
-    // // the restrictions on the search
-    // const searchTerm = sanitize(req.query.searchTerm);
-    // // if a specific hiring stage is wanted
-    // const hiringStage = sanitize(req.query.hiringStage);
-    // position name is the only required input to the search
-    const positionName = sanitize(req.query.positionName);
 
     let positionRequirements = [
         { businessId: mongoose.Types.ObjectId(businessId) },
         { name: positionName }
     ];
-    // // filter by hiring stage if requested
-    // if (hiringStage) {
-    //     positionRequirements.push({ "hiringStage": hiringStage });
-    // }
 
     let query = {
         userType: "candidate",
         // only get users who have verified their email address
-        verified: "true",
+        verified: true,
         // only get the position that was asked for
         positions: {
             $elemMatch: {
@@ -2901,20 +3006,13 @@ async function GET_candidateSearch(req, res) {
         }
     };
 
-    // // search by name too if search term exists
-    // if (searchTerm) {
-    //     const nameRegex = new RegExp(searchTerm, "i");
-    //     query["name"] = nameRegex;
-    // }
-
     // the user attributes that we want to keep
     const attributes =
         "_id name profileUrl positions.reviewed positions.favorite positions.interest positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
 
     // perform the search
-    let candidates = [];
     try {
-        candidates = await Users.find(query).select(attributes);
+        var candidates = await Users.find(query).select(attributes);
     } catch (candidateSearchError) {
         console.log("Error searching for candidates: ", candidateSearchError);
         return res.status(500).send(errors.SERVER_ERROR);
@@ -2926,12 +3024,12 @@ async function GET_candidateSearch(req, res) {
         const allCandidatesQuery = {
             userType: "candidate",
             verified: true,
-            positions: { businessId: mongoose.Types.ObjectId(businessId) }
+            positions: { $elemMatch: { businessId: mongoose.Types.ObjectId(businessId) } }
         };
 
         try {
             // count all candidates for the business
-            const candidateCount = await Users.countDocuments(allCandidatesQuery);
+            var candidateCount = await Users.countDocuments(allCandidatesQuery);
             // if there aren't any, send out the mock users
             var shouldSendMockUsers = candidateCount === 0;
         } catch (countUsersError) {
@@ -3011,12 +3109,6 @@ async function GET_employeeSearch(req, res) {
     const positionName = sanitize(req.query.positionName);
     // the thing we should sort by - default is alphabetical
     const sortBy = sanitize(req.query.sortBy);
-
-    // sort by overall score by default
-    // let sort = { }
-    // if (sortBy) {
-    //
-    // }
 
     let positionRequirements = [
         { businessId: mongoose.Types.ObjectId(businessId) },

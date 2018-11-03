@@ -1,13 +1,19 @@
-"use strict"
-import React, {Component} from 'react';
-import Notification from '../notification';
-import {getUserFromSession} from '../../actions/usersActions';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+"use strict";
+import React, { Component } from "react";
+import Notification from "../notification";
+import { getUserFromSession } from "../../actions/usersActions";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { bindActionCreators } from "redux";
 import AgreeToTerms from "./agreeToTerms";
 import { goTo } from "../../miscFunctions";
 import Error403 from "../pages/errors/error403";
 
+const homePages = {
+    accountAdmin: "/dashboard",
+    candidate: "/myEvaluations",
+    employee: "/myEvaluations"
+};
 
 class AuthenticatedComponent extends Component {
     constructor(props) {
@@ -20,22 +26,42 @@ class AuthenticatedComponent extends Component {
         };
     }
 
-
     componentWillMount() {
         this.reCheck();
     }
 
-
     componentDidUpdate(prevProps, prevState) {
+        // const prevPath = prevProps.location.pathname;
+        // const newPath = this.props.location.pathname;
+        // const userExisted = typeof prevProps.currentUser === "object";
+        // const userExists = typeof this.props.currentUser === "object";
+        // // if there used to be a user and now isn't or vise versa
+        // // OR if the path has changed, check if permissions are correct
+        // if (prevPath !== newPath || userExisted !== userExists || (prevProps.currentUser && !agreementsEqual(prevProps.currentUser, this.props.currentUser))) {
         this.reCheck();
+        //     } else if (prevProps.currentUser && prevProps.currentUser.termsAndConditions.length !== ) {
+        //
+        //     }
+        // }
+        //
+        // agreementsEqual(prevUser, newUser) {
+        //     const prevAgreements = prevUser.termsAndConditions;
+        //     const newAgreements = newUser.termsAndConditions;
+        //
+        //     if (typeof prevAgreements !== typeof newAgreements) {
+        //
+        //     }
     }
-
 
     reCheck() {
         // check if the user is logged in
         let userHasAccess = this.checkAccess();
         // if the user does not have access, the previous function call will have redirected them
-        if (!userHasAccess) { return; }
+        if (!userHasAccess) {
+            return;
+        }
+
+        console.log("HERE");
 
         // check if the user has agreed to the necessary terms and conditions
         let agreedToTerms = this.checkAgreedToTerms();
@@ -47,32 +73,39 @@ class AuthenticatedComponent extends Component {
         }
     }
 
-
     checkAgreedToTerms() {
         let agreedToTerms = true;
+        const { currentUser } = this.props;
         // if there is a current user we have to make sure they have agreed to the necessary terms
         if (this.props.currentUser) {
             agreedToTerms = false;
-            const acceptedAgreements = this.props.currentUser ? this.props.currentUser.termsAndConditions : undefined;
+            const acceptedAgreements = currentUser ? currentUser.termsAndConditions : undefined;
 
             // if the user has some terms they have agreed to
             if (Array.isArray(acceptedAgreements)) {
                 // everyone has to agree to the privacy policy
                 let necessaryAgreements = ["Privacy Policy"];
                 // candidates have to agree to to the terms of use
-                if (this.props.currentUser.userType === "candidate") {
+                if (["candidate", "employee"].includes(currentUser.userType)) {
                     necessaryAgreements.push("Terms of Use");
                 }
-                // everyone else (employees, account admins, managers) has to agree to terms and conditions
-                else { necessaryAgreements.push("Terms of Service"); }
+                // everyone else (account admins, managers) has to agree to terms and conditions
+                else {
+                    necessaryAgreements.push("Terms of Service");
+                }
                 // assume the agreements have all been agreed to
                 agreedToTerms = true;
                 // go through each necessary agreement ...
                 necessaryAgreements.forEach(necessaryAgreement => {
                     // ... make sure the agreement is contained in the agreements the user has agreed to
-                    if (!acceptedAgreements.some(acceptedAgreement => {
-                        return acceptedAgreement.name === necessaryAgreement && acceptedAgreement.agreed === true;
-                    })) {
+                    if (
+                        !acceptedAgreements.some(acceptedAgreement => {
+                            return (
+                                acceptedAgreement.name === necessaryAgreement &&
+                                acceptedAgreement.agreed === true
+                            );
+                        })
+                    ) {
                         // and if not, mark agreed-ness to false
                         agreedToTerms = false;
                     }
@@ -83,17 +116,25 @@ class AuthenticatedComponent extends Component {
         return agreedToTerms;
     }
 
-
     checkAccess() {
         // if there is no user, redirect to login page
-        const currentUser = this.props.currentUser;
+        const { currentUser } = this.props;
+        const allowedTypes = this.props.route.userType;
+        const wantsGuest =
+            (Array.isArray(allowedTypes) && allowedTypes.includes("lead")) ||
+            (typeof allowedTypes === "string" && allowedTypes === "lead");
+
         if (!currentUser) {
+            // if there is no user and that is what is wanted, user has access
+            if (wantsGuest) {
+                return true;
+            }
             // login page needs to redirect back to this page after login, so
             // get the current url
             const location = this.props.location;
             const redirect = location.pathname + location.search;
             // go to the login page with this page as the redirect
-            goTo('/login?redirect=' + redirect);
+            goTo("/login?redirect=" + redirect);
             // user does NOT have access
             return false;
         }
@@ -101,7 +142,9 @@ class AuthenticatedComponent extends Component {
         else {
             // if one of the authenticated types matches the current user's type,
             // let them see the page
-            if (this.hasAccess()) { return true; }
+            if (this.hasAccess()) {
+                return true;
+            }
             // user doesn't have access ...
             else {
                 // ... so if the state doesn't know the user doesn't have access ...
@@ -116,7 +159,6 @@ class AuthenticatedComponent extends Component {
         }
     }
 
-
     hasAccess() {
         // get the current user
         const user = this.props.currentUser;
@@ -125,8 +167,24 @@ class AuthenticatedComponent extends Component {
         // assume user can access the page
         let userHasAccess = true;
 
+        // if the page wants only someone without an account to see it
+        const wantsGuest =
+            (Array.isArray(allowedTypes) && allowedTypes.includes("lead")) ||
+            (typeof allowedTypes === "string" && allowedTypes === "lead");
+
+        // if the page wants only people who are not logged in to see it
+        if (wantsGuest) {
+            // allowed to see page if no user is logged in
+            userHasAccess = !user;
+        }
+
+        // if no one is logged in and it doesn't want a lead, access not granted
+        else if (!user) {
+            userHasAccess = false;
+        }
+
         // if the user must be the first business user to see this page but isn't ...
-        if (this.props.route.firstBusinessUser === true && !user.firstBusinessUser) {
+        else if (this.props.route.firstBusinessUser === true && !user.firstBusinessUser) {
             // ... don't give access
             userHasAccess = false;
         }
@@ -150,33 +208,34 @@ class AuthenticatedComponent extends Component {
         return userHasAccess;
     }
 
-
     // if the user doesn't have access to the page and we're not showing a 403 page
     redirect() {
-        // go to the homepage if no user is logged in
-        if (typeof this.props.currentUser !== "object") { goTo("/"); }
-        switch (this.props.currentUser.userType) {
-            case "accountAdmin": {
-                goTo("/myCandidates");
-                break;
-            }
-            case "candidate":
-            case "employee": {
-                goTo("/myEvaluations")
-                break;
-            }
-            default: {
-                goTo("/");
-                break;
-            }
-        }
-    }
+        const { currentUser } = this.props;
 
+        // go to the homepage if no user is logged in
+        if (typeof currentUser !== "object") {
+            goTo("/");
+        }
+
+        // if there is a redirect for this user type given by props
+        const specifiedRedirect = this.props[currentUser.userType + "Redirect"];
+        if (typeof specifiedRedirect === "string") {
+            return goTo(specifiedRedirect);
+        }
+
+        // if the user has an allowed user type
+        if (["accountAdmin", "candidate", "employee"].includes(currentUser.userType)) {
+            return goTo(homePages[currentUser.userType]);
+        }
+
+        // shouldn't be able to get here, but if you do, go to business home
+        return goTo("/");
+    }
 
     render() {
         // if user access has not yet been checked, show this while checking
         if (this.state.userHasAccess === undefined) {
-            return <div className="blackBackground fillScreen"/>;
+            return <div className="blackBackground fillScreen" />;
         }
 
         // if user does not have access display a 403 page
@@ -186,7 +245,9 @@ class AuthenticatedComponent extends Component {
 
         // if the user logged in has not agreed to the most updated terms,
         // ask them to agree
-        if (!this.state.agreedToTerms) { return <AgreeToTerms />; }
+        if (!this.state.agreedToTerms) {
+            return <AgreeToTerms />;
+        }
 
         // user has access to see this component;
         // clone the element so that we can put props into the element,
@@ -202,9 +263,12 @@ class AuthenticatedComponent extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        getUserFromSession
-    }, dispatch);
+    return bindActionCreators(
+        {
+            getUserFromSession
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -213,4 +277,9 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthenticatedComponent);
+AuthenticatedComponent = withRouter(AuthenticatedComponent);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AuthenticatedComponent);

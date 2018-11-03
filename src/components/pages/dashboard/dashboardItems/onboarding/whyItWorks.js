@@ -23,7 +23,7 @@ class WhyItWorks extends Component {
         this.props.updateOnboardingStep(_id, verificationToken, 4);
     }
 
-    intercomMsg = () => {
+    intercomMsgPart3 = () => {
         const { _id, verificationToken } = this.props.currentUser;
         // trigger intercom event
         this.props.intercomEvent('onboarding-step-3', _id, verificationToken, null);

@@ -15,14 +15,27 @@ class AdminView extends Component {
     constructor(props) {
         super(props);
 
-        this.next = this.next.bind(this);
-        this.intercomMsg = this.intercomMsg.bind(this);
+        this.state = {
+            // whether we're on admin or ml view
+            step: "admin"
+        };
     }
 
     next = () => {
-        const { _id, verificationToken } = this.props.currentUser;
-        // go to the next onboarding step
-        this.props.updateOnboardingStep(_id, verificationToken, 3);
+        if (this.props.currentUser) {
+            var { _id, verificationToken } = this.props.currentUser;
+        } else {
+            var _id = undefined;
+            var verificationToken = undefined;
+        }
+
+        // if currently seeing the psych info, show the gca info
+        if (this.state.step === "admin") {
+            this.setState({ step: "ml" });
+        } else {
+            // go to the next onboarding step
+            this.props.updateOnboardingStep(_id, verificationToken, 3);
+        }
     }
 
     intercomMsg = () => {
@@ -31,7 +44,13 @@ class AdminView extends Component {
         this.props.intercomEvent('onboarding-step-2', _id, verificationToken, null);
     }
 
-    render() {
+    intercomMsgPart3 = () => {
+        const { _id, verificationToken } = this.props.currentUser;
+        // trigger intercom event
+        this.props.intercomEvent('onboarding-step-3', _id, verificationToken, null);
+    }
+
+    makeAdminView() {
         return (
             <div className="inline-block" styleName="onboarding-info admin-view">
                 <div>
@@ -63,6 +82,57 @@ class AdminView extends Component {
                 </div>
             </div>
         );
+    }
+
+    makeMLView() {
+        return (
+            <div className="inline-block" styleName="onboarding-info ml-step">
+                <div>
+                    <div className="primary-cyan font16px" styleName="mobile-center title-margin">
+                        {"We Are Your Data Scientists"}
+                    </div>
+                    <div styleName="why-it-works-desc">
+                        Education and experience provide 1% and 1.1% predictive
+                        ability compared to your evaluations with us, which
+                        provide more than 50%. We then layer on machine learning
+                        to<span styleName="desktop-only"> improve your predictive model and
+                        </span> identify insights on your company to drive
+                        hyperintelligent hiring.
+                    </div>
+                    <div styleName="emoji-buttons">
+                        <div onClick={this.next}>
+                            <img
+                                src={`/icons/emojis/Sunglass${this.props.png}`}
+                            />
+                            <div>Got it!</div>
+                        </div>
+                        <div onClick={this.intercomMsgPart3}>
+                            <img
+                                src={`/icons/emojis/Face${this.props.png}`}
+                            />
+                            <div>More info</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <img
+                        src={`/icons/Astrobot${this.props.png}`}
+                        styleName="astrobot-image"
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    render() {
+        switch (this.state.step) {
+            case "admin":
+                return this.makeAdminView();
+            case "ml":
+                return this.makeMLView();
+            default:
+                return <div>Here</div>;
+        }
     }
 }
 

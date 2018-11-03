@@ -16,13 +16,15 @@ import SelectMenuItem from '@material-ui/core/MenuItem';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
-import {openAddUserModal, hidePopups} from "../../../actions/usersActions";
+import {openAddUserModal, hidePopups, openAddPositionModal} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import EmployeePreview from '../../childComponents/employeePreview';
 import AddUserDialog from '../../childComponents/addUserDialog';
+import AddPositionDialog from '../../childComponents/addPositionDialog';
 import HoverTip from "../../miscComponents/hoverTip";
+import { button } from "../../../classes.js";
 
 import './myEmployees.css';
 
@@ -151,6 +153,11 @@ class MyEmployees extends Component {
                 this.search();
             }
         });
+    }
+
+    // open the modal to add a new position
+    openAddPositionModal = () => {
+        this.props.openAddPositionModal();
     }
 
     handleStatusChange = event => {
@@ -398,19 +405,6 @@ class MyEmployees extends Component {
             )
         }
 
-        if (this.state.noPositions) {
-            employeePreviews = (
-                <div className="center employeesBox" style={{color: "rgba(255,255,255,.8)"}}>
-                    <div
-                        className="add-employee primary-cyan pointer font16px center marginTop20px"
-                        onClick={this.props.openAddUserModal}
-                    >
-                        + <span className="underline">Add Employees</span>
-                    </div>
-                    Create a position to select.
-                </div>
-            );
-        }
         if (this.state.position == "" && this.state.loadingDone) {
             employeePreviews = (
                 <div className="center employeesBox" style={{color: "rgba(255,255,255,.8)"}}>
@@ -421,6 +415,30 @@ class MyEmployees extends Component {
                         + <span className="underline">Add Employees</span>
                     </div>
                     Must select a position.
+                </div>
+            );
+        }
+        if (this.state.noPositions) {
+            employeePreviews = (
+                <div className="center employeesBox" style={{color: "rgba(255,255,255,.8)"}}>
+                    <div
+                        className="add-employee primary-cyan pointer font16px center marginTop20px"
+                        onClick={this.props.openAddUserModal}
+                    >
+                        + <span className="underline">Add Employees</span>
+                    </div>
+                    <div className="marginTop10px">
+                        Create a position to select.
+                    </div>
+                    <div
+                        className={
+                            "primary-white font18px font16pxUnder900 font14pxUnder600 marginTop20px " +
+                            button.cyanRound
+                        }
+                        onClick={this.openAddPositionModal}
+                    >
+                        + Add Position
+                    </div>
                 </div>
             );
         }
@@ -475,6 +493,8 @@ class MyEmployees extends Component {
                     <meta name="description" content="Grade your employees and see their results."/>
                 </MetaTags>
 
+                <AddPositionDialog />
+
                 <div className="page-line-header"><div/><div>Employees</div></div>
 
                 { this.popup() }
@@ -495,7 +515,8 @@ class MyEmployees extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         openAddUserModal,
-        hidePopups
+        hidePopups,
+        openAddPositionModal
     }, dispatch);
 }
 

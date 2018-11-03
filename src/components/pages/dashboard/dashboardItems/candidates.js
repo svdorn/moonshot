@@ -1,9 +1,9 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import { generalAction } from "../../../../actions/usersActions";
+import { generalAction, openSignupModal } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -14,9 +14,7 @@ import { LineChart, XAxis, YAxis, Line } from "recharts";
 
 import "../dashboard.css";
 
-
-const times = [ "Days", "Weeks", "Months" ];
-
+const times = ["Days", "Weeks", "Months"];
 
 class Candidates extends Component {
     constructor(props) {
@@ -34,71 +32,90 @@ class Candidates extends Component {
         };
     }
 
-
     // load data for the number of candidates that need review as well as the
     // graph for new candidates over the last 7 days
     componentDidMount() {
         const self = this;
         const user = this.props.currentUser;
 
-        const query = { params: {
-            userId: user._id,
-            verificationToken: user.verificationToken,
-            businessId: user.businessInfo.businessId
-        } };
+        // if there is no user, say there are no candidates waiting for review
+        if (!user) {
+            self.setState({ newCandidates: 0 });
+        }
+        // otherwise get real number of candidates who are not reviewed yet
+        else {
+            const query = {
+                params: {
+                    userId: user._id,
+                    verificationToken: user.verificationToken,
+                    businessId: user.businessInfo.businessId
+                }
+            };
 
-        axios.get("/api/business/candidatesAwaitingReview", query )
-        .then(response => {
-            if (propertyExists(response, ["data", "newCandidates"]), "number") {
-                self.setState({ newCandidates: response.data.newCandidates });
-            } else {
-                self.setState({ fetchDataError: true });
-            }
-        })
-        .catch(error => {
-            self.setState({ fetchDataError: true });
-        });
+            axios
+                .get("/api/business/candidatesAwaitingReview", query)
+                .then(response => {
+                    if ((propertyExists(response, ["data", "newCandidates"]), "number")) {
+                        self.setState({ newCandidates: response.data.newCandidates });
+                    } else {
+                        self.setState({ fetchDataError: true });
+                    }
+                })
+                .catch(error => {
+                    self.setState({ fetchDataError: true });
+                });
+        }
 
         this.getGraphData();
     }
-
 
     // change the amount of time being graphed
     handleTimeChange = () => event => {
         const self = this;
         self.setState({ timeToGraph: event.target.value }, self.getGraphData.bind(self));
-    }
-
+    };
 
     getGraphData() {
         const user = this.props.currentUser;
         const self = this;
 
-        const params = { params: {
-            userId: user._id,
-            verificationToken: user.verificationToken,
-            businessId: user.businessInfo.businessId,
-            interval: this.state.timeToGraph
-        } };
+        // if there is no user, set fake graph data instead of getting real data
+        if (!user) {
+            const fakeGraphData = Array(5).fill({ users: 0, date: "" });
+            return self.setState({ graphData: fakeGraphData });
+        }
 
-        axios.get("/api/business/newCandidateGraphData", params)
-        .then(response => {
-            if (propertyExists(response, ["data", "counts"])) {
-                self.setState({ graphData: response.data.counts });
-            } else {
-                self.setState({ fetchDataError: true });
+        const params = {
+            params: {
+                userId: user._id,
+                verificationToken: user.verificationToken,
+                businessId: user.businessInfo.businessId,
+                interval: this.state.timeToGraph
             }
-        })
-        .catch(error => {
-            this.setState({ fetchDataError: true });
-        });
-    }
+        };
 
+        axios
+            .get("/api/business/newCandidateGraphData", params)
+            .then(response => {
+                if (propertyExists(response, ["data", "counts"])) {
+                    self.setState({ graphData: response.data.counts });
+                } else {
+                    self.setState({ fetchDataError: true });
+                }
+            })
+            .catch(error => {
+                this.setState({ fetchDataError: true });
+            });
+    }
 
     render() {
         // return error message if errored out
         if (this.state.fetchDataError) {
-            return <div className="fully-center" style={{width:"100%"}}>Error fetching data.</div>;
+            return (
+                <div className="fully-center" style={{ width: "100%" }}>
+                    Error fetching data.
+                </div>
+            );
         }
 
         // return progress bar if not ready yet
@@ -111,7 +128,11 @@ class Candidates extends Component {
         }
 
         const timeOptions = times.map(time => {
-            return <MenuItem value={time} key={time}>5 { time }</MenuItem>;
+            return (
+                <MenuItem value={time} key={time}>
+                    5 {time}
+                </MenuItem>
+            );
         });
 
         // standard dashboard box header
@@ -129,7 +150,7 @@ class Candidates extends Component {
                     value={this.state.timeToGraph}
                     onChange={this.handleTimeChange()}
                 >
-                    { timeOptions }
+                    {timeOptions}
                 </Select>
             </div>
         );
@@ -140,7 +161,7 @@ class Candidates extends Component {
             transform: "translateX(-50%)",
             marginLeft: "-22px",
             marginTop: "20px"
-        }
+        };
 
         const { graphData } = this.state;
 
@@ -150,26 +171,30 @@ class Candidates extends Component {
             candidateAction = "Invite";
             onClick = () => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
         }
+        if (!this.props.currentUser) {
+            onClick = () => this.props.openSignupModal("boxes", "Candidate");
+        }
         const smallCTA = (
             <div styleName="box-cta" onClick={onClick}>
-                { candidateAction } Candidates <img src={`/icons/LineArrow${this.props.png}`} />
+                {candidateAction} Candidates <img src={`/icons/LineArrow${this.props.png}`} />
             </div>
         );
 
         const twoOrMoreCandidates = graphData.some(d => d.users > 1);
 
-        const yAxisAttrs = twoOrMoreCandidates ? {} : { ticks: [1,2] };
+        const yAxisAttrs = twoOrMoreCandidates ? {} : { ticks: [1, 2] };
 
         return (
             <div>
-                { header }
+                {header}
                 <div styleName="important-stat">
-                    <div styleName="important-number">{ this.state.newCandidates }</div> Awaiting Review
+                    <div styleName="important-number">{this.state.newCandidates}</div> Awaiting
+                    Review
                 </div>
 
                 <LineChart style={chartStyle} width={250} height={120} data={graphData}>
-                    <XAxis dataKey="date" padding={{right:10,left:10}}/>
-                    <YAxis {...yAxisAttrs}/>
+                    <XAxis dataKey="date" padding={{ right: 10, left: 10 }} />
+                    <YAxis {...yAxisAttrs} />
                     <Line
                         type="monotone"
                         dataKey="users"
@@ -179,12 +204,11 @@ class Candidates extends Component {
                     />
                 </LineChart>
 
-                { smallCTA }
+                {smallCTA}
             </div>
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -194,10 +218,16 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        generalAction
-    }, dispatch);
+    return bindActionCreators(
+        {
+            generalAction,
+            openSignupModal
+        },
+        dispatch
+    );
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Candidates);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Candidates);

@@ -188,6 +188,7 @@ app.post("/user/updateOnboardingStep", userApis.POST_updateOnboardingStep);
 app.post("/user/popups", userApis.POST_popups);
 app.post("/user/intercomEvent", userApis.POST_intercomEvent);
 app.post("/user/reSendVerificationEmail", userApis.POST_reSendVerificationEmail);
+app.post("/user/confirmEmbedLink", userApis.POST_confirmEmbedLink);
 
 app.post("/candidate/candidate", candidateApis.POST_candidate);
 
@@ -201,7 +202,6 @@ app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
 app.post("/business/inviteAdmins", businessApis.POST_inviteAdmins);
-app.post("/business/postCreateLink", businessApis.POST_createLink);
 app.post("/business/rateInterest", businessApis.POST_rateInterest);
 app.post("/business/changeHiringStage", businessApis.POST_changeHiringStage);
 app.post("/business/moveCandidates", businessApis.POST_moveCandidates);

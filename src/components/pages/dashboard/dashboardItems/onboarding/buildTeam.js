@@ -1,8 +1,12 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification, postBusinessInterests } from "../../../../../actions/usersActions";
+import {
+    addNotification,
+    postBusinessInterests,
+    updateStore
+} from "../../../../../actions/usersActions";
 import { CircularProgress } from "material-ui";
 import { button } from "../../../../../classes";
 
@@ -19,7 +23,7 @@ class BuildTeam extends Component {
                     selected: false
                 },
                 {
-                    text: "Identifying top talent before Facebook and Google",
+                    text: "Identifying top talent before big tech companies do",
                     selected: false
                 },
                 {
@@ -57,7 +61,8 @@ class BuildTeam extends Component {
     }
 
     handleClick() {
-        const choices = this.state.choices;
+        const { choices } = this.state;
+        const { currentUser } = this.props;
 
         let choiceArr = [];
 
@@ -67,42 +72,37 @@ class BuildTeam extends Component {
             }
         }
 
-        // if no choices are made
-        if (choiceArr.length === 0) {
-            this.props.addNotification("Must select at least one interest to continue.", "error");
-            return;
-        }
-
-        const userId = this.props.currentUser._id;
-        const verificationToken = this.props.currentUser.verificationToken;
-        const businessId = this.props.currentUser.businessInfo.businessId;
-        let popups = this.props.currentUser.popups;
-        if (popups) {
+        // if there is an admin logged in, save their response and move on
+        if (currentUser) {
+            let { _id, verificationToken, popups } = currentUser;
+            const businessId = currentUser.businessInfo.businessId;
+            if (!popups) {
+                popups = {};
+            }
             popups.businessInterests = false;
-        } else {
-            popups = {};
-            popups.businessInterests = false;
-        }
 
-        this.props.postBusinessInterests(userId, verificationToken, businessId, choiceArr, popups);
+            this.props.postBusinessInterests(_id, verificationToken, businessId, choiceArr, popups);
+        }
+        // if no one is logged in, move to the next step in onboarding
+        else {
+            this.props.updateStore("selectedJobsToBeDone", choiceArr);
+        }
     }
 
     makeChoices() {
         const choices = this.state.choices.map(choice => {
-            if(choice.selected) {
-                var selectedClassName = "selected";
-            }
+            const selectedClassName = choice.selected ? "selected" : "";
             return (
-                <div className={"method-box " + selectedClassName} key={choice.text} onClick={() => this.clickChoice(choice.text)}>
-                    { choice.text }
+                <div
+                    className={"method-box " + selectedClassName}
+                    key={choice.text}
+                    onClick={() => this.clickChoice(choice.text)}
+                >
+                    {choice.text}
                 </div>
             );
         });
-        return (
-            <div className="method-boxes">
-                { choices }
-            </div>
-        )
+        return <div className="method-boxes">{choices}</div>;
     }
 
     render() {
@@ -111,16 +111,18 @@ class BuildTeam extends Component {
                 <div styleName="build-team-container">
                     <div className="center">
                         Which of these is most interesting to you?
-                        <div className="primary-cyan">Your choice(s) help us know where to focus</div>
+                        <div className="primary-cyan">
+                            Your choice(s) help us know where to focus
+                        </div>
                     </div>
                     <div className="build-team">
-                        <div>{ this.makeChoices() }</div>
+                        <div>{this.makeChoices()}</div>
                     </div>
-                    {this.props.loading ?
+                    {this.props.loading ? (
                         <div className="center">
                             <CircularProgress color="#76defe" />
                         </div>
-                        :
+                    ) : (
                         <div
                             className={button.cyan}
                             styleName="got-it-button"
@@ -128,13 +130,12 @@ class BuildTeam extends Component {
                         >
                             See What{"'"}s Next &#8594;
                         </div>
-                    }
+                    )}
                 </div>
             </div>
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -144,11 +145,17 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        addNotification,
-        postBusinessInterests
-    }, dispatch);
+    return bindActionCreators(
+        {
+            addNotification,
+            postBusinessInterests,
+            updateStore
+        },
+        dispatch
+    );
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(BuildTeam);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BuildTeam);

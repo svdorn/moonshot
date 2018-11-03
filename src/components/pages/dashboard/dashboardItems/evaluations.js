@@ -1,9 +1,9 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import { generalAction, openAddPositionModal } from "../../../../actions/usersActions";
+import { generalAction, openAddPositionModal, openSignupModal } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -22,8 +22,7 @@ import { PieChart, Pie, Tooltip, Cell } from "recharts";
 
 import "../dashboard.css";
 
-
-const times = [ "Last Week", "Last Month", "Last 6 Months" ];
+const times = ["Last Week", "Last Month", "Last 6 Months"];
 const colors = [
     primaryCyan,
     lightBlue,
@@ -33,7 +32,6 @@ const colors = [
     secondaryCyan,
     lightGreen
 ];
-
 
 class Evaluations extends Component {
     constructor(props) {
@@ -49,48 +47,60 @@ class Evaluations extends Component {
         };
     }
 
-
     // load graph data for the candidate completions over last week
     componentDidMount() {
         this.getGraphData();
     }
 
-
     // change the amount of time being graphed
     handleTimeChange = () => event => {
         const self = this;
         self.setState({ timeToGraph: event.target.value }, self.getGraphData.bind(self));
-    }
-
+    };
 
     getGraphData() {
         const self = this;
         const user = this.props.currentUser;
 
-        const query = { params: {
-            userId: user._id,
-            verificationToken: user.verificationToken,
-            businessId: user.businessInfo.businessId,
-            interval: this.state.timeToGraph
-        } };
+        // if there is no user, there are no evaluations to show
+        if (!user) {
+            const fakeGraphData = [];
+            this.setState({ graphData: fakeGraphData });
+        }
+        // otherwise show the evaluations for the company
+        else {
+            const query = {
+                params: {
+                    userId: user._id,
+                    verificationToken: user.verificationToken,
+                    businessId: user.businessInfo.businessId,
+                    interval: this.state.timeToGraph
+                }
+            };
 
-        axios.get("/api/business/evaluationsGraphData", query)
-        .then(response => {
-            if (propertyExists(response, ["data", "counts"])) {
-                self.setState({ graphData: response.data.counts });
-            } else {
-                self.setState({ fetchDataError: true });
-            }
-        }).catch(error => {
-            self.setState({ fetchDataError: true });
-        })
+            axios
+                .get("/api/business/evaluationsGraphData", query)
+                .then(response => {
+                    if (propertyExists(response, ["data", "counts"])) {
+                        self.setState({ graphData: response.data.counts });
+                    } else {
+                        self.setState({ fetchDataError: true });
+                    }
+                })
+                .catch(error => {
+                    self.setState({ fetchDataError: true });
+                });
+        }
     }
-
 
     render() {
         // return error message if errored out
         if (this.state.fetchDataError) {
-            return <div className="fully-center" style={{width:"100%"}}>Error fetching data.</div>;
+            return (
+                <div className="fully-center" style={{ width: "100%" }}>
+                    Error fetching data.
+                </div>
+            );
         }
 
         // return progress bar if not ready yet
@@ -103,7 +113,11 @@ class Evaluations extends Component {
         }
 
         const timeOptions = times.map(time => {
-            return <MenuItem value={time} key={time}>{ time }</MenuItem>;
+            return (
+                <MenuItem value={time} key={time}>
+                    {time}
+                </MenuItem>
+            );
         });
 
         // standard dashboard box header
@@ -121,7 +135,7 @@ class Evaluations extends Component {
                     value={this.state.timeToGraph}
                     onChange={this.handleTimeChange()}
                 >
-                    { timeOptions }
+                    {timeOptions}
                 </Select>
             </div>
         );
@@ -132,11 +146,16 @@ class Evaluations extends Component {
             top: "50%",
             transform: "translateX(-50%) translateY(-50%)",
             margin: "4px 0 0 -6px"
+        };
+
+        let onClick = () => this.props.openAddPositionModal();
+        if (!this.props.currentUser) {
+            onClick = () => this.props.openSignupModal("boxes", "Evaluations");
         }
 
         let smallCTA = (
-            <div styleName="box-cta" onClick={() => this.props.openAddPositionModal()}>
-                Add Position <img src={`/icons/LineArrow${this.props.png}`}/>
+            <div styleName="box-cta" onClick={onClick}>
+                Add Position <img src={`/icons/LineArrow${this.props.png}`} />
             </div>
         );
 
@@ -157,7 +176,7 @@ class Evaluations extends Component {
         if (graphData.length === 0) {
             content = (
                 <div className="fully-center" style={{ width: "80%" }}>
-                    No evaluations completed in the { this.state.timeToGraph.toLowerCase() }.
+                    No evaluations completed in the {this.state.timeToGraph.toLowerCase()}.
                 </div>
             );
         }
@@ -165,14 +184,19 @@ class Evaluations extends Component {
         else {
             // get a count of the total number of completions
             let count = 0;
-            graphData.forEach(d => count += d.candidates);
+            graphData.forEach(d => (count += d.candidates));
 
             // to make keys for the pie slices
             let keyCounter = 0;
 
             content = (
                 <div>
-                    <div style={{marginTop:"9px"}} className="fully-center font32px primary-cyan">{ count }</div>
+                    <div
+                        style={{ marginTop: "9px" }}
+                        className="fully-center font32px primary-cyan"
+                    >
+                        {count}
+                    </div>
                     <div className="center font12px">Candidate Completions</div>
                     <PieChart style={chartStyle} width={200} height={200}>
                         <Pie
@@ -186,7 +210,12 @@ class Evaluations extends Component {
                             paddingAngle={3}
                             stroke="none"
                         >
-                            { graphData.map((entry, index) => <Cell key={`${entry.name} ${keyCounter++}`} fill={ colors[index % colors.length] } />) }
+                            {graphData.map((entry, index) => (
+                                <Cell
+                                    key={`${entry.name} ${keyCounter++}`}
+                                    fill={colors[index % colors.length]}
+                                />
+                            ))}
                         </Pie>
                         <Tooltip />
                     </PieChart>
@@ -196,14 +225,13 @@ class Evaluations extends Component {
 
         return (
             <div>
-                { header }
-                { content }
-                { smallCTA }
+                {header}
+                {content}
+                {smallCTA}
             </div>
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -213,11 +241,17 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        generalAction,
-        openAddPositionModal
-    }, dispatch);
+    return bindActionCreators(
+        {
+            generalAction,
+            openAddPositionModal,
+            openSignupModal
+        },
+        dispatch
+    );
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Evaluations);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Evaluations);

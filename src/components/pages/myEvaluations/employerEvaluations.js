@@ -25,6 +25,7 @@ import AddUserDialog from '../../childComponents/addUserDialog';
 import AddPositionDialog from '../../childComponents/addPositionDialog';
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists } from '../../../miscFunctions';
+import { button } from "../../../classes.js";
 
 const required = value => (value ? undefined : 'This field is required.');
 
@@ -193,7 +194,18 @@ class MyEvaluations extends Component {
         if (this.state.noPositions) {
             evaluations = (
                 <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                    No evaluations.
+                    <div>
+                        No evaluations. Add your first evaluation below.
+                    </div>
+                    <div
+                        className={
+                            "primary-white font18px font16pxUnder900 font14pxUnder600 marginTop20px " +
+                            button.cyanRound
+                        }
+                        onClick={this.openAddPositionModal}
+                    >
+                        + Add Evaluation
+                    </div>
                 </div>
             )
         }
@@ -244,7 +256,7 @@ class MyEvaluations extends Component {
             var link = (
                 <div className="secondary-gray font16px font14pxUnder900 font12pxUnder500" style={{width:"95%", margin:"20px auto 20px"}}>
                     { makePossessive(businessName) } candidate invite page&nbsp;
-                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink} style={{padding: "2px 4Spx"}}>
+                    <button className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white" onClick={this.copyLink} style={{padding: "2px 4px"}}>
                         {"Get Link"}
                     </button>
                 </div>
