@@ -2614,7 +2614,34 @@ async function countEvaluationCompletions(businessId, positionIds, earliestDate,
                 }
             ]);
 
-            return resolve(counts);
+            // TODO: REMOVE THIS AND DO IT A BETTER WAY, FIX THE EASE QUERY
+            // create an object to keep track of used id/name combos
+            let countsObj = {};
+            // for every count we got ...
+            counts.forEach(c => {
+                // create an id for it within the countsObj
+                const idString = c._id.positionId.toString() + c._id.name;
+                // see if that id already exists, and if so update the count for that
+                if (countsObj[idString]) {
+                    countsObj[idString].count += c.count;
+                }
+                // otherwise set the count for it
+                else {
+                    countsObj[idString] = {
+                        count: c.count,
+                        _id: c._id
+                    };
+                }
+            });
+            // make the object into an array
+            let countsArray = [];
+            for (let countObj in countsObj) {
+                if (countsObj.hasOwnProperty(countObj)) {
+                    countsArray.push(countsObj[countObj]);
+                }
+            }
+
+            return resolve(countsArray);
         } catch (e) {
             // just reject any error
             return reject(e);
