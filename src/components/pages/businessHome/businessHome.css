@@ -97,6 +97,7 @@
 }
 .get-started-input::placeholder {
     color: var(--secondary-gray);
+    font-style: italic;
 }
 .get-started-input:focus::placeholder {
     color: transparent;
@@ -361,6 +362,9 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%, -15%);
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
 
     -webkit-transition: transform 0.5s ease;
     -moz-transition: transform 0.5s ease;
@@ -368,9 +372,8 @@
 }
 
 .statistics-section > div {
-    /* margin: -100px auto 0; */
     margin: 0 auto;
-    padding: 0 0 100px;
+    padding: 0 0 70px;
     max-width: 1340px;
     position: relative;
 }

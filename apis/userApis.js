@@ -1,37 +1,37 @@
-const Users = require('../models/users.js');
-const Psychtests = require('../models/psychtests.js');
-const Skills = require('../models/skills.js');
-const Businesses = require('../models/businesses.js');
+const Users = require("../models/users.js");
+const Psychtests = require("../models/psychtests.js");
+const Skills = require("../models/skills.js");
+const Businesses = require("../models/businesses.js");
 const Adminquestions = require("../models/adminquestions");
-const credentials = require('../credentials');
-const Intercom = require('intercom-client');
+const credentials = require("../credentials");
+const Intercom = require("intercom-client");
 
 const client = new Intercom.Client({ token: credentials.intercomToken });
 
-const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 const mongoose = require("mongoose");
 
-
 // get helper functions
-const { sanitize,
-        removeEmptyFields,
-        verifyUser,
-        sendEmail,
-        getFirstName,
-        getAndVerifyUser,
-        getUserFromReq,
-        frontEndUser,
-        emailFooter,
-        getSkillNamesByIds,
-        generateNewUniqueEmail,
-        lastPossibleSecond,
-        findNestedValue,
-        moonshotUrl
-} = require('./helperFunctions');
+const {
+    sanitize,
+    removeEmptyFields,
+    verifyUser,
+    sendEmail,
+    getFirstName,
+    getAndVerifyUser,
+    getUserFromReq,
+    frontEndUser,
+    emailFooter,
+    getSkillNamesByIds,
+    generateNewUniqueEmail,
+    lastPossibleSecond,
+    findNestedValue,
+    moonshotUrl
+} = require("./helperFunctions");
 
-const { calculatePsychScores } = require('./psychApis');
-const errors = require('./errors.js');
+const { calculatePsychScores } = require("./psychApis");
+const errors = require("./errors.js");
 
 const { addEvaluation } = require("./evaluationApis");
 
@@ -63,24 +63,27 @@ module.exports = {
 
     // not api endpoints
     sendVerificationEmail
-}
-
+};
 
 // re-send a verification email (user didn't get the first one for some reason)
 async function POST_reSendVerificationEmail(req, res) {
     const { userId, verificationToken } = sanitize(req.body);
 
-    try { var user = await getAndVerifyUser(userId, verificationToken); }
-    catch (getUserError) {
+    try {
+        var user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
         console.log("Error getting user when sending verification email: ", getUserError);
-        return res.status(500).send({message: errors.SERVER_ERROR});
+        return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
     // if user is already verified, don't need to re-send verification email
-    if (user.verified) { return res.status(200).send({ alreadyVerified: true, user: frontEndUser(user) }); }
+    if (user.verified) {
+        return res.status(200).send({ alreadyVerified: true, user: frontEndUser(user) });
+    }
 
-    try { await sendVerificationEmail(user); }
-    catch (sendEmailError) {
+    try {
+        await sendVerificationEmail(user);
+    } catch (sendEmailError) {
         console.log("Error sending verification email: ", sendEmailError);
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
@@ -88,14 +91,12 @@ async function POST_reSendVerificationEmail(req, res) {
     return res.status(200).send({ emailSent: true, email: user.email });
 }
 
-
 // send email to verify user account
 async function sendVerificationEmail(user) {
     return new Promise(async function(resolve, reject) {
-        let recipients = [ user.email ];
-        let subject = 'Verify Email';
-        const content = (
-            `<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
+        let recipients = [user.email];
+        let subject = "Verify Email";
+        const content = `<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
                 <div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account</div>
                 <p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account.
                 <br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights!</p><br/>
@@ -106,18 +107,17 @@ async function sendVerificationEmail(user) {
                 </a>
                 <p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>
                 ${emailFooter(user.email)}
-            </div>`
-        );
+            </div>`;
 
         try {
-            await sendEmail({recipients, subject, content});
+            await sendEmail({ recipients, subject, content });
             return resolve();
+        } catch (sendEmailError) {
+            // send email error
+            return reject(sendEmailError);
         }
-        // send email error
-        catch (sendEmailError) { return reject(sendEmailError); }
     });
 }
-
 
 // gets results for a user and influencers
 async function GET_influencerResults(req, res) {
@@ -126,40 +126,42 @@ async function GET_influencerResults(req, res) {
     const businessId = sanitize(req.query.businessId);
 
     let positionRequirements = [
-        { "businessId": mongoose.Types.ObjectId(businessId) },
-        { "positionId": mongoose.Types.ObjectId(positionId) }
+        { businessId: mongoose.Types.ObjectId(businessId) },
+        { positionId: mongoose.Types.ObjectId(positionId) }
     ];
 
     const candidateQuery = {
-        "_id": mongoose.Types.ObjectId(userId),
-        "positions": {
-            "$elemMatch": {
-                "$and": positionRequirements
+        _id: mongoose.Types.ObjectId(userId),
+        positions: {
+            $elemMatch: {
+                $and: positionRequirements
             }
         }
-    }
+    };
 
     let infulencerPositionReqs = [
-        { "businessId": mongoose.Types.ObjectId(businessId) },
-        { "positionId": mongoose.Types.ObjectId(positionId) },
-        { "influencer": true }
+        { businessId: mongoose.Types.ObjectId(businessId) },
+        { positionId: mongoose.Types.ObjectId(positionId) },
+        { influencer: true }
     ];
 
     const influencersQuery = {
-        "positions": {
-            "$elemMatch": {
-                "$and": infulencerPositionReqs
+        positions: {
+            $elemMatch: {
+                $and: infulencerPositionReqs
             }
         }
-    }
+    };
 
     try {
         var [user, influencers, psychTest] = await Promise.all([
-            Users.findOne(candidateQuery).select("name email skillTests psychometricTest positions"),
+            Users.findOne(candidateQuery).select(
+                "name email skillTests psychometricTest positions"
+            ),
             Users.find(influencersQuery).select("name email skillTests psychometricTest positions"),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
-    } catch(findError) {
+    } catch (findError) {
         console.log("Error finding user or influencers: ", findError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
@@ -171,7 +173,7 @@ async function GET_influencerResults(req, res) {
         returnInfluencers.push(getResults(influencers[i], psychTest));
     }
 
-    return res.json({returnUser, returnInfluencers});
+    return res.json({ returnUser, returnInfluencers });
 }
 
 function getResults(user, psychTest) {
@@ -182,22 +184,24 @@ function getResults(user, psychTest) {
         name: user.name,
         email: user.email,
         scores: position.scores
-    }
+    };
     // get skill test scores for relevant skills
-    const skillScores = Array.isArray(user.skillTests) ? user.skillTests.filter(skill => {
-        return position.skillTestIds.some(posSkillId => {
-            return posSkillId.toString() === skill.skillId.toString();
-        });
-    }) : [];
+    const skillScores = Array.isArray(user.skillTests)
+        ? user.skillTests.filter(skill => {
+              return position.skillTestIds.some(posSkillId => {
+                  return posSkillId.toString() === skill.skillId.toString();
+              });
+          })
+        : [];
     // have to convert the factor names to what they will be displayed as
     const psychNameConversions = {
-        "Extraversion": "Dimension",
-        "Emotionality": "Temperament",
+        Extraversion: "Dimension",
+        Emotionality: "Temperament",
         "Honesty-Humility": "Viewpoint",
-        "Conscientiousness": "Methodology",
+        Conscientiousness: "Methodology",
         "Openness to Experience": "Perception",
-        "Agreeableness": "Ethos",
-        "Altruism": "Belief"
+        Agreeableness: "Ethos",
+        Altruism: "Belief"
     };
     const psychScores = user.psychometricTest.factors.map(area => {
         // find the factor within the psych test so we can get the middle 80 scores
@@ -211,7 +215,7 @@ function getResults(user, psychTest) {
             name: psychNameConversions[area.name],
             score: area.score,
             stats
-        }
+        };
     });
 
     newUser.skillScores = skillScores;
@@ -219,7 +223,6 @@ function getResults(user, psychTest) {
 
     return newUser;
 }
-
 
 // get the questions that are shown on the administrative questions portion of an evaluation
 async function GET_adminQuestions(req, res) {
@@ -237,7 +240,8 @@ async function GET_adminQuestions(req, res) {
             throw "foundQuestions was null";
         }
 
-        user = foundUser; adminQuestions = foundQuestions;
+        user = foundUser;
+        adminQuestions = foundQuestions;
     } catch (getUserError) {
         console.log("error getting user while trying to get admin questions: ", getUserError);
         return res.status(500).send(errors.PERMISSIONS_ERROR);
@@ -245,7 +249,6 @@ async function GET_adminQuestions(req, res) {
 
     return res.json(adminQuestions);
 }
-
 
 async function GET_notificationPreferences(req, res) {
     const userId = sanitize(req.query.userId);
@@ -279,13 +282,12 @@ async function POST_notificationPreferences(req, res) {
 
     try {
         user = await user.save();
-        return res.json({updatedUser: frontEndUser(user)})
+        return res.json({ updatedUser: frontEndUser(user) });
     } catch (saveError) {
         console.log("error saving user or business after submitting frq: ", saveError);
         return res.status(500).send("Server error.");
     }
 }
-
 
 // add a position without starting it
 async function POST_addPositionEval(req, res) {
@@ -296,16 +298,24 @@ async function POST_addPositionEval(req, res) {
 
     // get the user
     let user;
-    try { user = await getAndVerifyUser(userId, verificationToken); }
-    catch (getUserError) {
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
         console.log("error getting user while adding position eval: ", getUserError);
-        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
+        return res
+            .status(getUserError.status ? getUserError.status : 500)
+            .send(getUserError.message ? getUserError.message : "Server error.");
     }
 
     // add the evaluation to the user
     try {
         const startDate = new Date();
-        let { newUser, finished, positionIndex } = await addEvaluation(user, businessId, positionId, startDate);
+        let { newUser, finished, positionIndex } = await addEvaluation(
+            user,
+            businessId,
+            positionId,
+            startDate
+        );
         user = newUser;
     } catch (addEvaluationError) {
         console.log(addEvaluationError);
@@ -322,7 +332,6 @@ async function POST_addPositionEval(req, res) {
     }
 }
 
-
 async function getPosition(businessId, positionId) {
     return new Promise(async function(resolve, reject) {
         try {
@@ -330,12 +339,12 @@ async function getPosition(businessId, positionId) {
             const findById = { _id: businessId };
             // only return the position we want
             const correctPositionOnly = {
-                "positions": {
-                    "$elemMatch": {
-                        "_id": positionId
+                positions: {
+                    $elemMatch: {
+                        _id: positionId
                     }
                 }
-            }
+            };
             const business = await Businesses.findOne(findById, correctPositionOnly);
             // make sure the position exists
             if (!Array.isArray(business.positions) || business.positions.length === 0) {
@@ -345,17 +354,19 @@ async function getPosition(businessId, positionId) {
             //const position = business.positions[0].toObject();
             const position = business.positions[0];
             return resolve(position);
+        } catch (findBusinessError) {
+            return reject(findBusinessError);
         }
-        catch (findBusinessError) { return reject(findBusinessError); }
     });
 }
-
 
 async function GET_session(req, res) {
     const userId = sanitize(req.session.userId);
 
     // if there was no previous user logged in, don't return a user
-    if (typeof userId !== 'string') { return res.json(undefined); }
+    if (typeof userId !== "string") {
+        return res.json(undefined);
+    }
 
     try {
         // get the user from db
@@ -368,7 +379,9 @@ async function GET_session(req, res) {
             req.session.userId = null;
             req.session.verificationToken = null;
             req.session.save(function(saveSessionError) {
-                if (saveSessionError) { console.log("error saving session: ", saveSessionError); }
+                if (saveSessionError) {
+                    console.log("error saving session: ", saveSessionError);
+                }
                 return res.json(undefined);
             });
         }
@@ -377,21 +390,20 @@ async function GET_session(req, res) {
         else {
             // generate an hmac for the user so intercom can verify identity
             if (user.intercom && user.intercom.id) {
-                const hash = crypto.createHmac('sha256', credentials.hmacKey)
-                           .update(user.intercom.id)
-                           .digest('hex');
+                const hash = crypto
+                    .createHmac("sha256", credentials.hmacKey)
+                    .update(user.intercom.id)
+                    .digest("hex");
                 user.hmac = hash;
             }
-            res.json(frontEndUser(user)); }
+            res.json(frontEndUser(user));
         }
-
-    // on error, print the error and return as if there was no user in the session
-    catch (getUserError) {
+    } catch (getUserError) {
+        // on error, print the error and return as if there was no user in the session
         console.log("error getting user: ", getUserError);
         return res.json(undefined);
     }
 }
-
 
 async function POST_session(req, res) {
     const userId = sanitize(req.body.userId);
@@ -399,7 +411,9 @@ async function POST_session(req, res) {
 
     // check if option to stay logged in is true
     const saveSession = sanitize(req.session.stayLoggedIn);
-    if (!saveSession) { return; }
+    if (!saveSession) {
+        return;
+    }
 
     if (!userId || !verificationToken) {
         return res.json("either no userId or no verification token");
@@ -408,8 +422,9 @@ async function POST_session(req, res) {
     // get the user from the id, check the verification token to ensure they
     // have the right credentials to stay logged in
     let foundUser;
-    try { foundUser = await getAndVerifyUser(userId, verificationToken) }
-    catch (findUserError) {
+    try {
+        foundUser = await getAndVerifyUser(userId, verificationToken);
+    } catch (findUserError) {
         console.log("Error getting user when trying to save session: ", findUserError);
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
@@ -429,7 +444,6 @@ async function POST_session(req, res) {
     });
 }
 
-
 async function POST_popups(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
@@ -446,14 +460,17 @@ async function POST_popups(req, res) {
     }
 
     // if no user found from token, can't verify
-    if (!user) { return res.status(404).send("User not found"); }
+    if (!user) {
+        return res.status(404).send("User not found");
+    }
 
     // if a user was found from the token, verify them and get rid of the token
     user.popups = popups;
 
     // save the verified user
-    try { var returnedUser = await user.save(); }
-    catch (saveUserError) {
+    try {
+        var returnedUser = await user.save();
+    } catch (saveUserError) {
         console.log("Error saving user when updating onboarding info: ", saveUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
@@ -475,14 +492,17 @@ async function POST_confirmEmbedLink(req, res) {
     }
 
     // if no user found from token, can't verify
-    if (!user) { return res.status(404).send("User not found"); }
+    if (!user) {
+        return res.status(404).send("User not found");
+    }
 
     // if a user was found from the token, verify them and get rid of the token
     user.confirmEmbedLink = true;
 
     // save the verified user
-    try { var returnedUser = await user.save(); }
-    catch (saveUserError) {
+    try {
+        var returnedUser = await user.save();
+    } catch (saveUserError) {
         console.log("Error saving user when updating onboarding info: ", saveUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
@@ -517,9 +537,13 @@ module.exports.POST_intercomEvent = async function(req, res) {
             .digest("hex");
         user.hmac = hash;
     } else {
-        try { var user = await getUserFromReq(req); }
-        catch (getUserError) {
-            console.log("Error getting user while trying to update onboarding step: ", getUserError);
+        try {
+            var user = await getUserFromReq(req);
+        } catch (getUserError) {
+            console.log(
+                "Error getting user while trying to update onboarding step: ",
+                getUserError
+            );
             const status = getUserError.status ? getUserError.status : 500;
             const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
             return res.status(status).send(message);
@@ -534,21 +558,24 @@ module.exports.POST_intercomEvent = async function(req, res) {
     const created_at = Math.floor(Date.now() / 1000);
 
     // create event
-    client.events.create({
-      event_name,
-      created_at,
-      user_id: user.intercom.id,
-      email: user.intercom.email,
-      metadata
-  }, function (d) {
-        return res.status(200).send({ user, temp });
-    });
-}
-
+    client.events.create(
+        {
+            event_name,
+            created_at,
+            user_id: user.intercom.id,
+            email: user.intercom.email,
+            metadata
+        },
+        function(d) {
+            return res.status(200).send({ user, temp });
+        }
+    );
+};
 
 async function POST_updateOnboardingStep(req, res) {
-    try { var user = await getUserFromReq(req); }
-    catch (getUserError) {
+    try {
+        var user = await getUserFromReq(req);
+    } catch (getUserError) {
         console.log("Error getting user while trying to update onboarding step: ", getUserError);
         const status = getUserError.status ? getUserError.status : 500;
         const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
@@ -563,7 +590,7 @@ async function POST_updateOnboardingStep(req, res) {
             step: 1,
             highestStep: 1,
             actions: []
-        }
+        };
     }
 
     // check if the user is done with onboarding
@@ -576,18 +603,20 @@ async function POST_updateOnboardingStep(req, res) {
         // mark the new step as their current one
         user.onboard.step = newStep;
         // if this is the farthest the user has been, mark this as highest step
-        if (!user.onboard.highestStep || newStep > user.onboard.highestStep) { user.onboard.highestStep = newStep; }
+        if (!user.onboard.highestStep || newStep > user.onboard.highestStep) {
+            user.onboard.highestStep = newStep;
+        }
     }
 
-    try { await user.save(); }
-    catch (saveUserError) {
+    try {
+        await user.save();
+    } catch (saveUserError) {
         console.log("Error saving user when updating onboarding step: ", saveUserError);
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
     return res.status(200).send({});
 }
-
 
 // async function POST_updateOnboarding(req, res) {
 //     const userId = sanitize(req.body.userId);
@@ -620,23 +649,21 @@ async function POST_updateOnboardingStep(req, res) {
 //     res.json(frontEndUser(returnedUser));
 // }
 
-
 // signs the user out by destroying the user session
 function POST_signOut(req, res) {
     // remove the user id and verification token from the session
     req.session.userId = null;
     req.session.verificationToken = null;
     // save the updated session
-    req.session.save(function (err) {
+    req.session.save(function(err) {
         if (err) {
             console.log("error removing user session: ", err);
             return res.status(500).send("Error logging out.");
         } else {
             return res.json({ success: true });
         }
-    })
+    });
 }
-
 
 // change session to store whether user wants default of "Keep Me Logged In"
 // to be checked or unchecked
@@ -646,7 +673,7 @@ function POST_stayLoggedIn(req, res) {
     // if a valid argument was provided, set the session to be the argument provided
     req.session.stayLoggedIn = typeof stayLoggedIn === "boolean" ? stayLoggedIn : false;
     // save the session
-    req.session.save(function (saveSessionError) {
+    req.session.save(function(saveSessionError) {
         if (saveSessionError) {
             console.log("error saving 'keep me logged in' setting: ", saveSessionError);
             return res.status(500).send({ message: "Error saving 'keep me logged in' setting." });
@@ -656,34 +683,39 @@ function POST_stayLoggedIn(req, res) {
     });
 }
 
-
 // get the setting to stay logged in or out
 function GET_stayLoggedIn(req, res) {
     // get the setting
     let stayLoggedIn = sanitize(req.session.stayLoggedIn);
     // if it's not of the right form, assume you shouldn't stay logged in
-    if (typeof stayLoggedIn !== "boolean") { stayLoggedIn = false; }
+    if (typeof stayLoggedIn !== "boolean") {
+        stayLoggedIn = false;
+    }
     // return the found setting
     return res.status(200).send({ stayLoggedIn });
 }
-
 
 // verify user's email so they can log in
 async function POST_verifyEmail(req, res) {
     const { token, userType } = sanitize(req.body);
 
     // if url doesn't provide token, can't verify
-    if (!token || typeof token !== "string") { return res.status(400).send("Url not in the right format"); }
+    if (!token || typeof token !== "string") {
+        return res.status(400).send("Url not in the right format");
+    }
 
     let query = { emailVerificationToken: token };
-    try { var user = await Users.findOne(query); }
-    catch (findUserError) {
+    try {
+        var user = await Users.findOne(query);
+    } catch (findUserError) {
         console.log("Error trying to find user from verification token: ", findUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
     // if no user found from token, can't verify
-    if (!user) { return res.status(404).send("Invalid url."); }
+    if (!user) {
+        return res.status(404).send("Invalid url.");
+    }
 
     // if a user was found from the token, verify them and get rid of the token
     user.verified = true;
@@ -691,8 +723,9 @@ async function POST_verifyEmail(req, res) {
     user.showVerifyEmailBanner = false;
 
     // save the verified user
-    try { user = await user.save(); }
-    catch (saveUserError) {
+    try {
+        user = await user.save();
+    } catch (saveUserError) {
         console.log("Error saving user when verifying email: ", saveUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
@@ -704,13 +737,14 @@ async function POST_verifyEmail(req, res) {
     const loggedIn = req.session.userId && req.session.userId.toString() === user._id.toString();
     if (loggedIn) {
         // return the user object even if session saving didn't work
-        return res.status(200).send({user: frontEndUser(user), redirect});
+        return res.status(200).send({ user: frontEndUser(user), redirect });
     }
 
     // otherwise bring the user to the default page (which could be preceeded by login page)
-    else { return res.json({ redirect }); }
+    else {
+        return res.json({ redirect });
+    }
 }
-
 
 async function POST_changePasswordForgot(req, res) {
     let token = sanitize(req.body.token).toString();
@@ -721,18 +755,23 @@ async function POST_changePasswordForgot(req, res) {
         return res.status(400).send({ message: "Password must be 8 characters or longer." });
     }
 
-    const query = {passwordToken: token};
+    const query = { passwordToken: token };
 
     // get the user from the password token
     let user;
-    try { user = await Users.findOne(query); }
-    catch (findUserError) {
+    try {
+        user = await Users.findOne(query);
+    } catch (findUserError) {
         console.log("Error finding user from password token: ", findUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
     // if user was not found from the url
-    if (!user) { return res.status(404).send("User not found from link"); }
+    if (!user) {
+        return res
+            .status(404)
+            .send("Invalid link. This may be an old/expired link. Try resending reset email.");
+    }
 
     // if the token is expired, tell the user to try again with a new token
     const currentTime = Date.now();
@@ -746,8 +785,9 @@ async function POST_changePasswordForgot(req, res) {
         // set the new password
         user.password = hash;
         // save the user
-        try { user = await user.save(); }
-        catch (saveUserError) {
+        try {
+            user = await user.save();
+        } catch (saveUserError) {
             console.log("Error saving user with new updated password: ", saveUserError);
             return res.status(500).send(errors.SERVER_ERROR);
         }
@@ -757,7 +797,6 @@ async function POST_changePasswordForgot(req, res) {
     });
 }
 
-
 async function POST_changePassword(req, res) {
     const userId = sanitize(req.body._id);
     const oldPassword = sanitize(req.body.oldpass);
@@ -766,20 +805,26 @@ async function POST_changePassword(req, res) {
 
     // get the user from db
     let user;
-    try { user = await Users.findById(userId); }
-    catch (findUserError) {
+    try {
+        user = await Users.findById(userId);
+    } catch (findUserError) {
         console.log("");
         return res.status(500).send(COULD_NOT_CHANGE);
     }
 
     // if no user was found, can't change password
-    if (!user) { return res.status(400).send("Invalid credentials."); }
+    if (!user) {
+        return res.status(400).send("Invalid credentials.");
+    }
 
     // see if the old password is correct
-    bcrypt.compare(oldPassword, user.password, function (passwordError, passwordsMatch) {
+    bcrypt.compare(oldPassword, user.password, function(passwordError, passwordsMatch) {
         // if there was an error comparing the passwords
         if (passwordError) {
-            console.log("error comparing passwords when trying to create new password: ", passwordError);
+            console.log(
+                "error comparing passwords when trying to create new password: ",
+                passwordError
+            );
             return res.status(500).send(COULD_NOT_CHANGE);
         }
 
@@ -790,7 +835,7 @@ async function POST_changePassword(req, res) {
 
         // user gave correct old password, hash the new one
         const saltRounds = 10;
-        bcrypt.hash(newPassword, saltRounds, async function (hashError, hash) {
+        bcrypt.hash(newPassword, saltRounds, async function(hashError, hash) {
             // if there was an error hashing the new password
             if (hashError) {
                 console.log("error hashing new password: ", hashError);
@@ -799,8 +844,9 @@ async function POST_changePassword(req, res) {
 
             // all is good, set the new password and save the user
             user.password = hash;
-            try { user = await user.save() }
-            catch (saveUserError) {
+            try {
+                user = await user.save();
+            } catch (saveUserError) {
                 console.log("error saving user with new password: ", saveUserError);
                 return res.status(500).send(COULD_NOT_CHANGE);
             }
@@ -811,62 +857,78 @@ async function POST_changePassword(req, res) {
     });
 }
 
-
 // send email for password reset
 async function POST_forgotPassword(req, res) {
     let email = sanitize(req.body.email);
     let query = { email: email };
 
     let user;
-    try { user = await Users.findOne(query); }
-    catch (getUserError) {
-        console.log("Error getting user by email for sending forgot password reset email: ", getUserError);
+    try {
+        user = await Users.findOne(query);
+    } catch (getUserError) {
+        console.log(
+            "Error getting user by email for sending forgot password reset email: ",
+            getUserError
+        );
         return res.status(500).send("Cannot find user.");
     }
 
     // token that will go in the url
-    const newPasswordToken = crypto.randomBytes(64).toString('hex');
+    const newPasswordToken = crypto.randomBytes(64).toString("hex");
     // password token expires in one hour (minutes * seconds * milliseconds)
-    const expirationDate = Date.now() + (60 * 60 * 1000);
+    const expirationDate = Date.now() + 60 * 60 * 1000;
 
     // give the user the password token and expiration time
     user.passwordToken = newPasswordToken;
     user.passwordTokenExpirationTime = expirationDate;
 
     // save the user
-    try { user = await user.save(); }
-    catch (saveUserError) {
-        console.log("Error saving user when giving them a token for resetting password: ", saveUserError);
+    try {
+        user = await user.save();
+    } catch (saveUserError) {
+        console.log(
+            "Error saving user when giving them a token for resetting password: ",
+            saveUserError
+        );
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
     // if we're in development (on localhost), links go to localhost
     let moonshotUrl = "https://moonshotinsights.io/";
-    if ( process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === "development") {
         moonshotUrl = "http://localhost:8081/";
     }
-    const recipient = [ email ];
-    const subject = 'Change Password';
+    const recipient = [email];
+    const subject = "Change Password";
 
-    const content = (`
+    const content = `
         <div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">
             <div style="text-align:justify;width:80%;margin-left:10%;">
                 <p>Hi ${getFirstName(user.name)}!</p>
-                <span style='margin-bottom:20px;display:inline-block;'>We got a request to change your password. If that wasn't from you, you can ignore this email and your password will stay the same. Otherwise click here:</span><br/>
+                <span style='margin-bottom:20px;display:inline-block;'>
+                    We got a request to change your password. If that wasn't
+                    from you, you can ignore this email and your password will
+                    stay the same. Otherwise click here:
+                </span><br/>
             </div>
-            <a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:5px 20px 20px;" href="${moonshotUrl}changePassword?token=${newPasswordToken}">Change Password</a>
+            <a  style="display:inline-block;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:6px 30px;text-decoration:none;margin:20px;background:#494b4d;"
+                href="${moonshotUrl}changePassword?token=${newPasswordToken}"
+            >
+                Change Password
+            </a>
             ${emailFooter(email)}
         </div>
-    `)
+    `;
 
     sendEmail({ recipient, subject, content })
-    .then(result => { return res.status(200).send({ message: "Email sent!" }); })
-    .catch(error => {
-        console.log("Error sending email to reset password: ", error);
-        return res.status(500).send({ message: "Error sending email. Refresh and try again." });
-    });
+        .then(result => {
+            return res.status(200).send({ message: "Email sent!" });
+        })
+        .catch(error => {
+            console.log("Error sending email to reset password: ", error);
+            return res.status(500).send({ message: "Error sending email. Refresh and try again." });
+        });
 }
-
 
 // get positions for evaluations page
 async function GET_positions(req, res) {
@@ -875,9 +937,13 @@ async function GET_positions(req, res) {
         const verificationToken = sanitize(req.query.verificationToken);
 
         // get the user who is asking for their evaluations page
-        try { var user = await getAndVerifyUser(userId, verificationToken); }
-        catch (getUserError) {
-            console.log("error getting user when trying to get positions for evaluations page: ", getUserError);
+        try {
+            var user = await getAndVerifyUser(userId, verificationToken);
+        } catch (getUserError) {
+            console.log(
+                "error getting user when trying to get positions for evaluations page: ",
+                getUserError
+            );
             const status = getUserError.status ? getUserError.status : 500;
             const message = getUserError.message ? getUserError.message : errors.SERVER_ERROR;
             return res.status(status).send(message);
@@ -887,9 +953,10 @@ async function GET_positions(req, res) {
         const positions = user.positions;
         const positionIds = positions.map(p => p.positionId);
         // gets the businesses that have the wanted positions with ONLY the wanted positions
-        const query = { "positions._id": { "$in": positionIds } };
-        try { var businesses = await Businesses.find(query); }
-        catch (getBusinessesError) {
+        const query = { "positions._id": { $in: positionIds } };
+        try {
+            var businesses = await Businesses.find(query);
+        } catch (getBusinessesError) {
             console.log("Error getting businesses when getting positions: ", getBusinessesError);
             return res.status(500).send(errors.SERVER_ERROR);
         }
@@ -930,22 +997,21 @@ async function GET_positions(req, res) {
             });
         });
 
-        res.json({positions: positionsToReturn});
-    }
-
-    catch (miscError) {
+        res.json({ positions: positionsToReturn });
+    } catch (miscError) {
         console.log("error getting position for evaluations page: ", miscError);
         return res.status(500).send("Server error while getting evaluations.");
     }
 }
-
 
 async function POST_agreeToTerms(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
     const termsAndConditions = sanitize(req.body.termsAndConditions);
     if (!Array.isArray(termsAndConditions)) {
-        console.log("user tried to agree to terms and conditions with termsAndConditions value that was not an array");
+        console.log(
+            "user tried to agree to terms and conditions with termsAndConditions value that was not an array"
+        );
         return res.status(400).send("Bad request.");
     }
 
@@ -954,7 +1020,14 @@ async function POST_agreeToTerms(req, res) {
         user = await getAndVerifyUser(userId, verificationToken);
 
         // make sure the terms and conditions being agreed to are valid
-        const validAgreements = ["Privacy Policy", "Terms of Use", "Affiliate Agreement", "Service Level Agreement", "Terms and Conditions", "Terms of Service"];
+        const validAgreements = [
+            "Privacy Policy",
+            "Terms of Use",
+            "Affiliate Agreement",
+            "Service Level Agreement",
+            "Terms and Conditions",
+            "Terms of Service"
+        ];
         const agreeingTo = termsAndConditions.filter(agreement => {
             return validAgreements.includes(agreement.name);
         });
@@ -966,7 +1039,7 @@ async function POST_agreeToTerms(req, res) {
             // find the index of the agreement in the user object
             const agreementIndex = user.termsAndConditions.findIndex(agr => {
                 return agr.name === agreement.name;
-            })
+            });
             // if the user didn't already have the agreement, create it
             if (typeof agreementIndex !== "number" || agreementIndex < 0) {
                 user.termsAndConditions.push({
@@ -980,7 +1053,7 @@ async function POST_agreeToTerms(req, res) {
                 user.termsAndConditions[agreementIndex].date = NOW;
                 user.termsAndConditions[agreementIndex].agreed = true;
             }
-        })
+        });
 
         // save and return the user
         user = await user.save();
@@ -991,23 +1064,26 @@ async function POST_agreeToTerms(req, res) {
     }
 }
 
-
 // check that a user has verified their email address
 async function GET_checkUserVerified(req, res) {
     // get user that made this call
-    try { var user = await getUserFromReq(req, "GET"); }
-    catch (getUserError) {
+    try {
+        var user = await getUserFromReq(req, "GET");
+    } catch (getUserError) {
         console.log("Error getting user while trying to check verified status: ", getUserError);
-        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
+        return res
+            .status(getUserError.status ? getUserError.status : 500)
+            .send(getUserError.message ? getUserError.message : errors.SERVER_ERROR);
     }
 
     // if not verified, return unsuccessfully
-    if (!user.verified) { return res.status(403).send({ verified: false }); }
+    if (!user.verified) {
+        return res.status(403).send({ verified: false });
+    }
 
     // return user object if verified
     return res.status(200).send(frontEndUser(user));
 }
-
 
 async function POST_login(req, res) {
     const email = sanitize(req.body.user.email);
@@ -1024,27 +1100,31 @@ async function POST_login(req, res) {
     const INVALID_EMAIL = "No user with that email was found.";
 
     // searches for user by lower-case email
-    var query = { "$or": [ { "email": email }, { "email": email.toLowerCase() } ] };
+    var query = { $or: [{ email: email }, { email: email.toLowerCase() }] };
     // find the user by email
-    try { var user = await Users.findOne(query); }
-    catch (findUserError) {
+    try {
+        var user = await Users.findOne(query);
+    } catch (findUserError) {
         console.log("Couldn't find user: ", findUserError);
         return res.status(404).send(INVALID_EMAIL);
     }
 
     // if no user with that email is found
-    if (!user) { return res.status(401).send(INVALID_EMAIL); }
+    if (!user) {
+        return res.status(401).send(INVALID_EMAIL);
+    }
 
     // generate an hmac for the user so intercom can verify identity
     if (user.intercom && user.intercom.id) {
-        const hash = crypto.createHmac('sha256', credentials.hmacKey)
-                   .update(user.intercom.id)
-                   .digest('hex');
+        const hash = crypto
+            .createHmac("sha256", credentials.hmacKey)
+            .update(user.intercom.id)
+            .digest("hex");
         user.hmac = hash;
     }
 
     // see if the given password is correct
-    bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {
+    bcrypt.compare(password, user.password, async function(passwordError, passwordsMatch) {
         // if comparing passwords fails, don't log in
         if (passwordError) {
             return res.status(500).send("Error logging in, try again later.");
@@ -1058,9 +1138,11 @@ async function POST_login(req, res) {
         if (saveSession) {
             req.session.userId = user._id;
             req.session.verificationToken = user.verificationToken;
-            req.session.save(function (err) {
+            req.session.save(function(err) {
                 // if there is an error saving session, print it, but still log in
-                if (err) { console.log("error saving user session", err); }
+                if (err) {
+                    console.log("error saving user session", err);
+                }
                 return res.json(frontEndUser(user));
             });
         } else {
@@ -1068,7 +1150,6 @@ async function POST_login(req, res) {
         }
     });
 }
-
 
 // change name or email
 async function POST_changeSettings(req, res) {
@@ -1089,8 +1170,9 @@ async function POST_changeSettings(req, res) {
 
     // find the user by id
     let user;
-    try { user = await Users.findById(userId); }
-    catch (findUserError) {
+    try {
+        user = await Users.findById(userId);
+    } catch (findUserError) {
         console.log("Error finding user by id when trying to update settings: ", findUserError);
         return res.status(500).send(CANNOT_UPDATE);
     }
@@ -1101,19 +1183,24 @@ async function POST_changeSettings(req, res) {
         return res.status(500).send(CANNOT_UPDATE);
     }
 
-    bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {
+    bcrypt.compare(password, user.password, async function(passwordError, passwordsMatch) {
         // error comparing password to user's password, doesn't necessarily
         // mean that the password is wrong
         if (passwordError) {
-            console.log("Error comparing passwords when trying to update settings: ", passwordError);
+            console.log(
+                "Error comparing passwords when trying to update settings: ",
+                passwordError
+            );
             return res.status(500).send(CANNOT_UPDATE);
         }
 
         // user entered wrong password
-        if (!passwordsMatch) { return res.status(400).send("Incorrect password."); }
+        if (!passwordsMatch) {
+            return res.status(400).send("Incorrect password.");
+        }
 
         // see if there's another user with the new email
-        const emailQuery = {email: email};
+        const emailQuery = { email: email };
         try {
             const userWithSameEmail = await Users.findOne(emailQuery);
             // if there is a user who already used that email, can't let this user have it too
@@ -1121,18 +1208,24 @@ async function POST_changeSettings(req, res) {
                 return res.status(400).send("That email address is already taken.");
             }
         } catch (findUserWithSameEmailError) {
-            console.log("Error trying to find users with the same email when trying to update settings: ", findUserWithSameEmailError);
-            return res.status(500).send(CANNOT_UPDATE)
+            console.log(
+                "Error trying to find users with the same email when trying to update settings: ",
+                findUserWithSameEmailError
+            );
+            return res.status(500).send(CANNOT_UPDATE);
         }
 
         // all is good, update the user (as long as email and name are not blank)
         user.email = email;
         user.name = name;
-        if (typeof hideProfile === "boolean") { user.hideProfile = hideProfile; }
+        if (typeof hideProfile === "boolean") {
+            user.hideProfile = hideProfile;
+        }
 
         // save the user
-        try { user = await user.save(); }
-        catch (saveUserError) {
+        try {
+            user = await user.save();
+        } catch (saveUserError) {
             console.log("Error saving user when trying to update settings: ", saveUserError);
             return res.status(500).send(CANNOT_UPDATE);
         }
@@ -1142,25 +1235,35 @@ async function POST_changeSettings(req, res) {
     });
 }
 
-
 // verify that a user has a legitimate api key
 async function POST_verifyFromApiKey(req, res) {
     // get the api key from the input values
     const API_Key = sanitize(findNestedValue(req.body, "API_Key", 5, true));
-    if (!API_Key) { return res.status(401).send({error: "No API_Key provided. Make sure the attribute name is API_Key with that exact capitalization."});}
+    if (!API_Key) {
+        return res.status(401).send({
+            error:
+                "No API_Key provided. Make sure the attribute name is API_Key with that exact capitalization."
+        });
+    }
     if (typeof API_Key !== "string" || API_Key.length !== 24) {
-        return res.status(401).send({error: "Invalid API_Key. Must be 24-character string."});
+        return res.status(401).send({ error: "Invalid API_Key. Must be 24-character string." });
     }
 
     // get the business that has this api key
-    try { var business = await Businesses.find({"API_Key": API_Key})}
-    catch (findBizError) {
+    try {
+        var business = await Businesses.find({ API_Key: API_Key });
+    } catch (findBizError) {
         console.log("Error finding business from API_Key: ", findBizError);
-        return res.status(401).send({error: "Server error. This may be Moonshot's fault. Contact support@moonshotinsights.io for help."});
+        return res.status(401).send({
+            error:
+                "Server error. This may be Moonshot's fault. Contact support@moonshotinsights.io for help."
+        });
     }
 
     // if there is no business associated with that api key, return unsuccessfully
-    if (!business) { return res.status(401).send({error: "Invalid API_Key."}); }
+    if (!business) {
+        return res.status(401).send({ error: "Invalid API_Key." });
+    }
 
     // successfully verified that user has correct api key
     return res.json({ success: true });

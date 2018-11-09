@@ -31,15 +31,26 @@ class AuthenticatedComponent extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const prevPath = prevProps.location.pathname;
-        const newPath = this.props.location.pathname;
-        const userExisted = typeof prevProps.currentUser === "object";
-        const userExists = typeof this.props.currentUser === "object";
-        // if there used to be a user and now isn't or vise versa
-        // OR if the path has changed, check if permissions are correct
-        if (prevPath !== newPath || userExisted !== userExists) {
-            this.reCheck();
-        }
+        // const prevPath = prevProps.location.pathname;
+        // const newPath = this.props.location.pathname;
+        // const userExisted = typeof prevProps.currentUser === "object";
+        // const userExists = typeof this.props.currentUser === "object";
+        // // if there used to be a user and now isn't or vise versa
+        // // OR if the path has changed, check if permissions are correct
+        // if (prevPath !== newPath || userExisted !== userExists || (prevProps.currentUser && !agreementsEqual(prevProps.currentUser, this.props.currentUser))) {
+        this.reCheck();
+        //     } else if (prevProps.currentUser && prevProps.currentUser.termsAndConditions.length !== ) {
+        //
+        //     }
+        // }
+        //
+        // agreementsEqual(prevUser, newUser) {
+        //     const prevAgreements = prevUser.termsAndConditions;
+        //     const newAgreements = newUser.termsAndConditions;
+        //
+        //     if (typeof prevAgreements !== typeof newAgreements) {
+        //
+        //     }
     }
 
     reCheck() {
@@ -49,6 +60,8 @@ class AuthenticatedComponent extends Component {
         if (!userHasAccess) {
             return;
         }
+
+        console.log("HERE");
 
         // check if the user has agreed to the necessary terms and conditions
         let agreedToTerms = this.checkAgreedToTerms();
