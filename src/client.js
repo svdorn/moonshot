@@ -28,6 +28,10 @@ import reducers from './reducers/index';
 import routes from './routes'
 
 if (!shouldRedirectToHttps) {
+    let stripe_pk = "pk_test_7AHdmETWVxOeyDARcZfeWuZl";
+    if (process.env.NODE_ENV === "production") {
+        stripe_pk = "pk_live_UC72NJ4kPiHRmMM5c7cc7U63";
+    }
     // STEP 1 create the store
     const middleware = applyMiddleware(thunk);
     // WE WILL PASS INITIAL STATE FROM SERVER STORE
@@ -41,6 +45,6 @@ if (!shouldRedirectToHttps) {
     )
 
     hydrate(
-      <StripeProvider apiKey="pk_live_UC72NJ4kPiHRmMM5c7cc7U63">{Routes}</StripeProvider>, document.getElementById('app')
+      <StripeProvider apiKey={stripe_pk}>{Routes}</StripeProvider>, document.getElementById('app')
     );
 }
