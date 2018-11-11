@@ -61,8 +61,6 @@ class AuthenticatedComponent extends Component {
             return;
         }
 
-        console.log("HERE");
-
         // check if the user has agreed to the necessary terms and conditions
         let agreedToTerms = this.checkAgreedToTerms();
 

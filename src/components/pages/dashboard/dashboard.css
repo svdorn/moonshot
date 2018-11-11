@@ -569,7 +569,7 @@
     vertical-align: top;
     color: var(--secondary-gray);
     font-size: 14px;
-
+    
     -webkit-transition: -webkit-transition 0.2s;
     -moz-transition: -moz-box-shadow 0.2s;
     transition: box-shadow 0.2s;

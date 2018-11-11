@@ -1,0 +1,95 @@
+.pricing {
+    margin-top: 40px;
+    text-align: center;
+    color: var(--primary-white);
+}
+.pricing > div:first-child {
+    font-size: 26px;
+}
+.header-seperator {
+    height: 2px;
+    background: var(--primary-cyan);
+    width: 70px;
+    margin: 5px auto;
+}
+.pricing > div:nth-child(3) {
+    font-size: 16px;
+}
+.pricing > div:nth-child(4) {
+    margin-top: 20px;
+}
+.pricing-box {
+    display: inline-block;
+    width: 200px;
+    height: 240px;
+    margin: auto 10px;
+    background-color: var(--black-deep-dark);
+    vertical-align: top;
+    font-size: 14px;
+    border: 2px solid var(--secondary-dark-gray);
+
+    -webkit-transition: -webkit-transition 0.2s;
+    -moz-transition: -moz-box-shadow 0.2s;
+    transition: box-shadow 0.2s;
+}
+.pricing-box:hover {
+    cursor: pointer;
+    -moz-box-shadow: 0px 0px 50px 15px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 15px #00000073;
+    box-shadow: 0px 0px 50px 15px #00000073;
+    -moz-transition: -moz-box-shadow 0.2s;
+    -webkit-transition: -webkit-transition 0.2s;
+    transition: box-shadow 0.2s;
+}
+.pricing-box .selected {
+
+}
+.pricing-box > img {
+    margin-top: 7px;
+    margin-bottom: 7px;
+    height: 50px;
+}
+.pricing-box > div > span {
+    color: var(--primary-cyan);
+    font-size: 28px;
+}
+.seperator {
+    height: 2px;
+    background: linear-gradient(to right, var(--primary-cyan), var(--primary-white));
+    width: 50px;
+    margin: 8px auto;
+}
+
+.credit-card {
+    margin-top: 40px;
+    text-align: center;
+}
+.credit-card > div:first-child {
+    color: var(--primary-white);
+    font-size: 16px;
+}
+
+
+@media screen and (max-width: 700px) {
+    .pricing > div:first-child {
+        font-size: 22px;
+    }
+    .pricing > div:nth-child(3) {
+        font-size: 14px;
+    }
+    .credit-card > div:first-child {
+        font-size: 14px;
+    }
+    .pricing-box > div:nth-child(3) > span {
+        font-size: 22px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .pricing > div:first-child {
+        font-size: 16px;
+    }
+    .pricing-box > img {
+        height: 35px;
+    }
+}
