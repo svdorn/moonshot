@@ -71,7 +71,7 @@ async function POST_customer(req, res) {
     });
 }
 
-// TODO: METHOD DESCRIPTOR
+// add a subscription to a new customer
 async function addSubscription(customerId, subscriptionTerm) {
     return new Promise(async function(resolve, reject) {
         const index = credentials.plans.findIndex(plan => {

@@ -6,6 +6,10 @@
     cursor: pointer;
     position: relative;
 }
+.button.small-padding {
+    --top-padding: 10px;
+    --side-padding: 30px;
+}
 
 .border {
     position: absolute;
@@ -41,7 +45,7 @@
 .button:hover .border-bottom {
     width: 100%;
 }
-.button:hover .border-right,
+.button:hover .border-right
 .button:hover .border-left {
     height: 100%;
 }
@@ -89,23 +93,29 @@
 }
 
 /* HOVER ANIMATION */
+.button.active .border,
 .button:hover .border {
     -webkit-transition: 200ms;
     -ms-transition: 200ms;
     transition: 200ms;
 }
+.button.active .under-hover-content,
 .button:hover .under-hover-content {
     right: 0;
     -webkit-transition: right 300ms 200ms;
     -ms-transition: right 300ms 200ms;
     transition: right 300ms 200ms;
 }
+.button.active .hover-content ,
 .button:hover .hover-content {
     opacity: 1;
 
     -webkit-transition: 5ms 510ms;
     -ms-transition: 5ms 510ms;
     transition: 5ms 510ms;
+}
+.button.active .arrow {
+    display: none;
 }
 .button:hover .arrow {
     opacity: 1;
@@ -117,6 +127,7 @@
 
     animation: sway 1.5s infinite 720ms linear;
 }
+.button.active .above-hover-content,
 .button:hover .above-hover-content {
     opacity: 1;
     left: 100%;

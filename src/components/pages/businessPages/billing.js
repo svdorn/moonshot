@@ -25,7 +25,7 @@ class Billing extends Component {
         return (
             <div styleName="pricing">
                 <div>
-                    Choose a Plan
+                    Select a Plan
                 </div>
                 <div styleName="header-seperator">
                 </div>
@@ -44,6 +44,7 @@ class Billing extends Component {
                         </div>
                         <CornersButton
                             content="Select"
+                            size="small-padding"
                             color1={colors.primaryCyan}
                             color2={colors.primaryWhite}
                             className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
@@ -60,6 +61,7 @@ class Billing extends Component {
                         </div>
                         <CornersButton
                             content="Select"
+                            size="small-padding"
                             color1={colors.primaryCyan}
                             color2={colors.primaryWhite}
                             className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
@@ -76,6 +78,7 @@ class Billing extends Component {
                         </div>
                         <CornersButton
                             content="Select"
+                            size="small-padding"
                             color1={colors.primaryCyan}
                             color2={colors.primaryWhite}
                             className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
@@ -92,6 +95,8 @@ class Billing extends Component {
                         </div>
                         <CornersButton
                             content="Select"
+                            size="small-padding"
+                            active="active"
                             color1={colors.primaryCyan}
                             color2={colors.primaryWhite}
                             className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
