@@ -106,14 +106,8 @@ const businessesSchema = mongoose.Schema({
     logo: String,
     // the exact time the business object was created
     dateCreated: Date,
-    // DEPRECIATED: if they've set up their billing
+    // stripe billing customer id
     billingCustomerId: String,
-    // TODO: see what other billing info I need to store
-    //billing info, if I need this
-    billing: {
-        stripeId: String,
-
-    },
 
     emailNotifications: {
         time: String,

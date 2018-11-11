@@ -422,10 +422,10 @@ export function stopLoading() {
     };
 }
 
-export function setupBillingCustomer(source, email, userId, verificationToken) {
+export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
     return function(dispatch) {
         axios
-            .post("/api/billing/customer", { source, email, userId, verificationToken })
+            .post("/api/billing/customer", { source, email, userId, verificationToken, subscriptionTerm })
             .then(response => {
                 dispatch({
                     type: "SUCCESS_BILLING_CUSTOMER",

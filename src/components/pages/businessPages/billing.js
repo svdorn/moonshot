@@ -17,7 +17,7 @@ class Billing extends Component {
         super(props);
 
         this.state = {
-            selected: false
+            selected: "year"
         };
     }
 
@@ -113,7 +113,7 @@ class Billing extends Component {
                     Please enter your card information below
                 </div>
                 <Elements>
-                    <BillingForm />
+                    <BillingForm subscriptionTerm={selected} />
                 </Elements>
             </div>
         );

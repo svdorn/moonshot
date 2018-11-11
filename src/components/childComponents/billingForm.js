@@ -22,21 +22,19 @@ class BillingForm extends Component {
         this.props.startLoading();
 
         let self = this;
-        const currentUser = this.props.currentUser;
-
         // Within the context of `Elements`, this call to createToken knows which Element to
         // tokenize, since there's only one in this group.
-        const email = currentUser.email;
-        const verificationToken = currentUser.verificationToken;
-        const userId = currentUser._id;
+        const { name, email, _id, verificationToken } = this.props.currentUser;
+        const { subscriptionTerm } = this.props;
 
-        this.props.stripe.createSource({type: 'card', owner: { name: currentUser.name}}).then(function(result) {
+        this.props.stripe.createSource({type: 'card', owner: { name}}).then(function(result) {
             if (result.error) {
                 console.log(result.error);
                 self.props.stopLoading();
                 self.props.addNotification("Error adding card, please review credit card information and retry.", "error");
             } else {
-                self.props.setupBillingCustomer(result.source, email, userId, verificationToken);
+                console.log("source: ", result.source);
+                self.props.setupBillingCustomer(result.source.id, email, _id, verificationToken, subscriptionTerm);
             }
         })
     }

@@ -3,11 +3,7 @@ const Businesses = require('../models/businesses.js');
 const credentials = require('../credentials');
 
 const mongoose = require("mongoose");
-let stripe_sk = credentials.stripeTestSk;
-if (process.env.NODE_ENV === "production") {
-    stripe_sk = credentials.stripeSk;
-}
-const stripe = require("stripe")(stripe_sk);
+const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 
 // get helper functions
 const { sanitize,
@@ -23,17 +19,18 @@ const billingApis = {
 
 async function POST_customer(req, res) {
     return new Promise(async function(resolve, reject) {
-        const { email, source, userId, verificationToken } = sanitize(req.body);
+        const { email, source, userId, verificationToken, subscriptionTerm } = sanitize(req.body);
 
         // if one of the arguments doesn't exist, return with error code
-        if (!email || !source || !userId || !verificationToken) {
+        if (!email || !source || !userId || !verificationToken || !subscriptionTerm) {
             return res.status(400).send("Bad request.");
         }
 
+        console.log("source: ", source);
+
         // send source to Stripe to create person
-        let customer;
         try {
-            customer = await stripe.customers.create({
+            var customer = await stripe.customers.create({
                 email,
                 source
             });
@@ -42,11 +39,9 @@ async function POST_customer(req, res) {
             return res.status(403).send("Customer creation failed.");
         }
         // give business object the Stripe customer
-        let user;
-        let business;
         try {
-            user = await getAndVerifyUser(userId, verificationToken);
-            business = await Businesses.findById(user.businessInfo.businessId);
+            var user = await getAndVerifyUser(userId, verificationToken);
+            var business = await Businesses.findById(user.businessInfo.businessId);
             if (!business) {
                 console.log("No business found with id: ", user.businessInfo.businessId);
                 throw "No business.";
@@ -57,6 +52,13 @@ async function POST_customer(req, res) {
         }
 
         business.billingCustomerId = customer.id;
+
+        try {
+            var subscription = await addSubscription(business.billingCustomerId, subscriptionTerm);
+        } catch(error) {
+            console.log("Error adding subscription.");
+            return reject("Error adding subscription.");
+        }
 
         // save the business
         try { await business.save(); }
@@ -70,8 +72,24 @@ async function POST_customer(req, res) {
 }
 
 // TODO: METHOD DESCRIPTOR
-async function POST_customer(req, res) {
-    return new Promise(function(resolve, reject) {
+async function addSubscription(customerId, subscriptionTerm) {
+    return new Promise(async function(resolve, reject) {
+        const index = credentials.plans.findIndex(plan => {
+            return plan.period.toString() === subscriptionTerm.toString();
+        });
+
+
+        try {
+            var subscription = await stripe.subscriptions.create({
+                customer: customerId,
+                items: [{plan: process.env.NODE_ENV === "production" ? credentials.plans[index].id : credentials.plans[index].test_id}]
+            });
+        } catch(error) {
+            console.log("Error adding subscription: ", error);
+            return reject("Error adding subscription.");
+        }
+
+        return resolve(subscription);
     })
 }
 
