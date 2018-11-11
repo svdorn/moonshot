@@ -22,7 +22,7 @@ const billingApis = {
 }
 
 async function POST_customer(req, res) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(async function(resolve, reject) {
         const { email, source, userId, verificationToken } = sanitize(req.body);
 
         // if one of the arguments doesn't exist, return with error code

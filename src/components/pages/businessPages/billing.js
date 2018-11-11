@@ -15,6 +15,19 @@ class Billing extends Component {
         this.state = {};
     }
 
+    creditCardInfo() {
+        return (
+            <div className="marginTop40px">
+                <div className="center primary-white font16px font14pxUnder700">
+                    Please enter your card information below
+                </div>
+                <Elements>
+                    <BillingForm />
+                </Elements>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="fillScreen formContainer">
@@ -23,9 +36,7 @@ class Billing extends Component {
                     <meta name="description" content="Manage your current bills and enter credit card information to pay bills." />
                 </MetaTags>
                 <AddUserDialog />
-                <Elements>
-                    <BillingForm />
-                </Elements>
+                { this.creditCardInfo() }
             </div>
         );
     }

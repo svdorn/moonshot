@@ -146,7 +146,6 @@ class AccountAdminMenu extends Component {
             const popupOptions = [
                 { title: "Settings", url: "/settings" },
                 { title: "Billing", url: "/billing" },
-                { title: "Pricing", url: "/pricing" }
             ];
 
             let popupItems = popupOptions.map(popupOption => {
