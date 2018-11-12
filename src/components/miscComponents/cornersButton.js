@@ -14,7 +14,6 @@ class CornersButton extends Component {
 
     render() {
         let { className, onClick, color1, color2, style, content, png, size, active } = this.props;
-        console.log("active: ", active)
         if (typeof className !== "string") {
             className = "";
         }
@@ -36,7 +35,6 @@ class CornersButton extends Component {
         if (typeof active !== "string") {
             active = "";
         }
-        console.log("active: ", active)
 
         return (
             <div styleName={"button " + size + " " + active} className={className} onClick={onClick} style={style}>

@@ -12,13 +12,81 @@ import BillingForm from '../../childComponents/billingForm';
 
 import "./billing.css";
 
+const boxes = [
+    {
+        name: "12 MONTHS",
+        period: "year",
+        price: "$199",
+        icon: "Rocket"
+    },
+    {
+        name: "6 MONTHS",
+        period: "6mo",
+        price: "$299",
+        icon: "Airplane"
+    },
+    {
+        name: "3 MONTHS",
+        period: "3mo",
+        price: "$399",
+        icon: "Balloon"
+    },
+    {
+        name: "1 MONTH",
+        period: "1mo",
+        price: "$529",
+        icon: "PaperAirplane"
+    }
+];
+
 class Billing extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            selected: "year"
+            plan: undefined
         };
+    }
+
+    selectPlan = (plan) => {
+        if (typeof plan === "string") {
+            this.setState({ plan })
+        }
+    }
+
+    pricingBoxes() {
+        const { plan } = this.state;
+
+        const pricingBoxes = boxes.map(box => {
+            let buttonText = "Select";
+            if (plan === box.period) {
+                var active = "active";
+                buttonText = "Selected";
+            }
+            return (
+                <div styleName="pricing-box" key={`pricing-box-${box.period}`}>
+                    <img src={`/icons/pricing/${box.icon}${this.props.png}`} />
+                    <div>
+                        {box.name}
+                    </div>
+                    <div styleName="seperator" />
+                    <div>
+                        <span>{box.price}</span> / Month
+                    </div>
+                    <CornersButton
+                        onClick={() => this.selectPlan(box.period)}
+                        content={buttonText}
+                        active={active}
+                        size="small-padding"
+                        color1={colors.primaryCyan}
+                        color2={colors.primaryWhite}
+                        className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
+                    />
+                </div>
+            )
+        });
+
+        return pricingBoxes;
     }
 
     pricingSection() {
@@ -33,84 +101,16 @@ class Billing extends Component {
                     There will be text here for two lines. There will be text here for two lines. There will be text here for two lines.
                 </div>
                 <div>
-                    <div styleName="pricing-box">
-                        <img src={`/icons/pricing/Rocket${this.props.png}`} />
-                        <div>
-                            12 MONTHS
-                        </div>
-                        <div styleName="seperator" />
-                        <div>
-                            <span>$199</span> / Month
-                        </div>
-                        <CornersButton
-                            content="Select"
-                            size="small-padding"
-                            color1={colors.primaryCyan}
-                            color2={colors.primaryWhite}
-                            className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
-                        />
-                    </div>
-                    <div styleName="pricing-box">
-                        <img src={`/icons/pricing/Airplane${this.props.png}`} />
-                        <div>
-                            6 MONTHS
-                        </div>
-                        <div styleName="seperator" />
-                        <div>
-                            <span>$299</span> / Month
-                        </div>
-                        <CornersButton
-                            content="Select"
-                            size="small-padding"
-                            color1={colors.primaryCyan}
-                            color2={colors.primaryWhite}
-                            className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
-                        />
-                    </div>
-                    <div styleName="pricing-box">
-                        <img src={`/icons/pricing/Balloon${this.props.png}`} />
-                        <div>
-                            3 MONTHS
-                        </div>
-                        <div styleName="seperator" />
-                        <div>
-                            <span>$399</span> / Month
-                        </div>
-                        <CornersButton
-                            content="Select"
-                            size="small-padding"
-                            color1={colors.primaryCyan}
-                            color2={colors.primaryWhite}
-                            className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
-                        />
-                    </div>
-                    <div styleName="pricing-box">
-                        <img src={`/icons/pricing/PaperAirplane${this.props.png}`} />
-                        <div>
-                            1 MONTH
-                        </div>
-                        <div styleName="seperator" />
-                        <div>
-                            <span>$529</span> / Month
-                        </div>
-                        <CornersButton
-                            content="Select"
-                            size="small-padding"
-                            active="active"
-                            color1={colors.primaryCyan}
-                            color2={colors.primaryWhite}
-                            className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
-                        />
-                    </div>
+                    { this.pricingBoxes() }
                 </div>
             </div>
         );
     }
 
     creditCardSection() {
-        const { selected } = this.state;
+        const { plan } = this.state;
 
-        if (!selected) return null;
+        if (!plan) return null;
 
         return (
             <div styleName="credit-card">
@@ -118,7 +118,7 @@ class Billing extends Component {
                     Please enter your card information below
                 </div>
                 <Elements>
-                    <BillingForm subscriptionTerm={selected} />
+                    <BillingForm subscriptionTerm={plan} />
                 </Elements>
             </div>
         );
