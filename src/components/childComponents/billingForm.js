@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { CircularProgress, RaisedButton } from 'material-ui';
+import { CircularProgress } from 'material-ui';
 import { setupBillingCustomer, startLoading, addNotification, stopLoading } from '../../actions/usersActions';
 import { button } from "../../classes.js";
 import {injectStripe, CardElement} from 'react-stripe-elements';
