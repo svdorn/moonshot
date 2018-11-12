@@ -34,7 +34,6 @@ class BillingForm extends Component {
                 self.props.stopLoading();
                 self.props.addNotification("Error adding card, please review credit card information and retry.", "error");
             } else {
-                console.log("source: ", result.source);
                 self.props.setupBillingCustomer(result.source.id, email, _id, verificationToken, subscriptionTerm);
             }
         })
