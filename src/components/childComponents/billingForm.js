@@ -52,7 +52,7 @@ class BillingForm extends Component {
                         onClick={this.handleSubmit}
                         styleName="button"
                     >
-                        Add Card
+                        Start Plan
                     </div><br/>
                     {this.props.loading ? <CircularProgress color="white"/> : null}
                 </form>
