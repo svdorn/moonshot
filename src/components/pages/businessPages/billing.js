@@ -59,29 +59,32 @@ class Billing extends Component {
 
         const pricingBoxes = boxes.map(box => {
             let buttonText = "Select";
+            let active = "";
             if (plan === box.period) {
-                var active = "active";
+                active = "active";
                 buttonText = "Selected";
             }
             return (
-                <div styleName="pricing-box" key={`pricing-box-${box.period}`}>
-                    <img src={`/icons/pricing/${box.icon}${this.props.png}`} />
+                <div styleName={"pricing-box " + active} key={`pricing-box-${box.period}`}>
                     <div>
-                        {box.name}
+                        <img src={`/icons/pricing/${box.icon}${this.props.png}`} />
+                        <div>
+                            {box.name}
+                        </div>
+                        <div styleName="seperator" />
+                        <div>
+                            <span>{box.price}</span> / Month
+                        </div>
+                        <CornersButton
+                            onClick={() => this.selectPlan(box.period)}
+                            content={buttonText}
+                            active={active}
+                            size="small-padding"
+                            color1={colors.primaryCyan}
+                            color2={colors.primaryWhite}
+                            className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
+                        />
                     </div>
-                    <div styleName="seperator" />
-                    <div>
-                        <span>{box.price}</span> / Month
-                    </div>
-                    <CornersButton
-                        onClick={() => this.selectPlan(box.period)}
-                        content={buttonText}
-                        active={active}
-                        size="small-padding"
-                        color1={colors.primaryCyan}
-                        color2={colors.primaryWhite}
-                        className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
-                    />
                 </div>
             )
         });
