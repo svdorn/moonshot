@@ -12,9 +12,5 @@
 .button {
     margin-left: 10px;
     display: inline-block;
-}
-.button > button {
-    background-color: white !important;
-    height: 32px !important;
-    line-height: 32px !important;
+    -webkit-appearance: none !important;
 }
