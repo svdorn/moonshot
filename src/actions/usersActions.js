@@ -429,7 +429,7 @@ export function setupBillingCustomer(source, email, userId, verificationToken, s
             .then(response => {
                 dispatch({
                     type: "SUCCESS_BILLING_CUSTOMER",
-                    ...notification("Success adding credit card to company.")
+                    ...notification("You have successfully added your plan")
                 });
             })
             .catch(error => {
