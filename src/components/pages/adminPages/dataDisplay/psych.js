@@ -4,16 +4,36 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
+import { Tabs, Tab } from "@material-ui/core";
 
-class BoilerPlate extends Component {
+const sites = ["All", "Insights", "Learning"];
+
+class Psych extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            site: sites[0]
+        };
+    }
+
+    handleTabChange = (event, site) => {
+        console.log("setting from ", this.state.site, " to ", site);
+        this.setState({ site });
+    };
+
+    siteSelector() {
+        return (
+            <Tabs value={this.state.site} onChange={this.handleTabChange}>
+                {sites.map(site => (
+                    <Tab label={site} value={site} key={site} style={{ color: "white" }} />
+                ))}
+            </Tabs>
+        );
     }
 
     render() {
-        return <div style={{ height: "100vh" }}>Psych</div>;
+        return <div style={{ height: "100vh" }}>{this.siteSelector()}</div>;
     }
 }
 
@@ -30,4 +50,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(BoilerPlate);
+)(Psych);
