@@ -283,6 +283,15 @@ async function POST_createBusinessAndUser(req, res) {
     // return successfully to user
     res.status(200).send(frontEndUser(user));
 
+    // save the session so that the user stays logged in
+    req.session.userId = user._id;
+    req.session.verificationToken = user.verificationToken;
+    req.session.save(function(err) {
+        if (err) {
+            console.log("ERROR SAVING SESSION OF NEW ACCOUNT ADMIN: ", err);
+        }
+    });
+
     // send email to everyone if there's a new sign up
     // do this after sending success message to user just in case this fails
     let recipients = [
