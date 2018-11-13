@@ -23,6 +23,7 @@ class CancelPlanModal extends Component {
 
     close = () => {
         this.props.generalAction("CLOSE_CANCEL_PLAN_MODAL");
+        this.setState({ frame: "First" });
     }
 
     changeFrame = (frame) => {
