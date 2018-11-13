@@ -224,6 +224,7 @@ app.get("/business/candidatesTotal", businessApis.GET_candidatesTotal);
 app.get("/business/newCandidateGraphData", businessApis.GET_newCandidateGraphData);
 app.get("/business/evaluationsGraphData", businessApis.GET_evaluationsGraphData);
 app.get("/business/billingIsSetUp", businessApis.GET_billingIsSetUp);
+app.get("/business/billingInfo", businessApis.GET_billingInfo);
 app.get("/business/adminList", businessApis.GET_adminList);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);

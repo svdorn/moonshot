@@ -5,8 +5,10 @@ import { bindActionCreators } from 'redux';
 import {  } from '../../../actions/usersActions';
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
+import axios from "axios";
 import AddUserDialog from '../../childComponents/addUserDialog';
 import CornersButton from '../../miscComponents/cornersButton';
+import CircularProgress from "@material-ui/core/CircularProgress";
 import colors from "../../../colors";
 import BillingForm from '../../childComponents/billingForm';
 
@@ -44,8 +46,34 @@ class Billing extends Component {
         super(props);
 
         this.state = {
-            plan: undefined
+            // the plan that is selected
+            plan: undefined,
+            // billing info
+            billing: undefined
         };
+    }
+
+    componentDidMount() {
+        const self = this;
+
+        const { currentUser } = this.props;
+
+        const businessId = currentUser && currentUser.businessInfo ? currentUser.businessInfo.businessId : null;
+
+        axios.get("/api/business/billingInfo", {
+            params: {
+                userId: currentUser._id,
+                verificationToken: currentUser.verificationToken,
+                businessId
+            }
+        })
+        .then(response => {
+            self.setState({ billing: response.data });
+        })
+        .catch(error => {
+            console.log("error: ", error);
+            self.props.addNotification("Error getting billing info.", "error");
+        });
     }
 
     selectPlan = (plan) => {
@@ -128,6 +156,9 @@ class Billing extends Component {
     }
 
     render() {
+
+        const { billing } = this.state;
+
         return (
             <div className="jsxWrapper blackBackground fillScreen">
                 <AddUserDialog />
@@ -135,8 +166,14 @@ class Billing extends Component {
                     <title>Billing | Moonshot</title>
                     <meta name="description" content="Manage your current bills and enter credit card information to pay bills." />
                 </MetaTags>
-                { this.pricingSection() }
-                { this.creditCardSection() }
+                {billing ?
+                    <div>
+                        { this.pricingSection() }
+                        { this.creditCardSection() }
+                    </div>
+                :
+                    <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryCyan }} /></div>
+                }
             </div>
         );
     }

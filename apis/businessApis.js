@@ -68,6 +68,7 @@ const businessApis = {
     GET_newCandidateGraphData,
     GET_evaluationsGraphData,
     GET_billingIsSetUp,
+    GET_billingInfo,
     GET_adminList,
 
     generateApiKey,
@@ -117,6 +118,29 @@ async function GET_billingIsSetUp(req, res) {
     const billingIsSetUp = !!(business && (typeof business.billingCustomerId === "string" || typeof business.billing === "object"));
 
     return res.status(200).send({ billingIsSetUp });
+}
+
+// find out if billing has been set up for the company
+async function GET_billingInfo(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    // if one of the arguments doesn't exist, return with error code
+    if (!userId || !verificationToken || !businessId) {
+        return res.status(400).send("Bad request.");
+    }
+
+    try {
+        var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(
+            userId,
+            verificationToken,
+            businessId
+        );
+    } catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.json(business.billing);
 }
 
 // create a business and the first account admin for that business
