@@ -300,7 +300,7 @@ class Billing extends Component {
         )
 
         return (
-            <section id="learnFromHires" styleName="learn-from-hires-section">
+            <section styleName="learn-from-hires-section">
                 <div className="center">
                     <div className="primary-white inline-block" style={{maxWidth: "1200px"}}>
                         { featureBoxes }
@@ -333,7 +333,7 @@ class Billing extends Component {
                     <meta name="description" content="Manage your current bills and enter credit card information to pay bills." />
                 </MetaTags>
                 {billing ?
-                    <div>
+                    <div styleName="billing">
                         { this.pricingSection() }
                         { this.updatePlanSection() }
                         { this.learnFromHiresSection() }
