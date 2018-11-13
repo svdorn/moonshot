@@ -414,6 +414,7 @@ export function usersReducers(state = initialState, action) {
             return newState;
             break;
         case "SUCCESS_BILLING_INFO":
+        console.log("billing action: ", action.billing);
             return {
                 ...state,
                 billing: action.billing,

@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBillingInfo } from '../../../actions/usersActions';
+import { getBillingInfo, billingCardOnFileFalse } from '../../../actions/usersActions';
 import { makeSingular } from "../../../miscFunctions";
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
@@ -52,7 +52,6 @@ class Billing extends Component {
             plan: undefined,
             // if the user is currently updating their plan
             updatePlan: false,
-            // if the user is currently updating their card
             updateCard: false
         };
     }
@@ -94,7 +93,12 @@ class Billing extends Component {
     }
 
     updateCard = () => {
-        this.setState({ updateCard: true })
+        this.props.billingCardOnFileFalse(this.props.billing);
+        this.setState({updateCard: true})
+    }
+
+    updateCardFalse = () => {
+        this.setState({updateCard: false})
     }
 
     pricingBoxes() {
@@ -164,8 +168,12 @@ class Billing extends Component {
         const { billing } = this.props;
 
         if (!plan) return null;
-        if (billing && billing.cardOnFile && !updateCard) {
-            return null;
+        if (billing && billing.cardOnFile) {
+            if (!updateCard) {
+                return null;
+            } else {
+                return this.updateCardFalse();
+            }
         }
 
         if (updateCard) {
@@ -209,10 +217,10 @@ class Billing extends Component {
     }
 
     learnFromHiresSection() {
-        const { plan, updatePlan } = this.state;
+        const { plan, updatePlan, updateCard } = this.state;
         const { billing } = this.props;
         // don't show section
-        if (!plan || !billing || (billing && !billing.cardOnFile) || updatePlan) return null;
+        if (!plan || !billing || (billing && !billing.cardOnFile && !updateCard) || updatePlan) return null;
 
         const features = [
             {
@@ -350,7 +358,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getBillingInfo
+        getBillingInfo,
+        billingCardOnFileFalse
     }, dispatch);
 }
 

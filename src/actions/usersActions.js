@@ -457,6 +457,18 @@ export function setupBillingCustomer(source, email, userId, verificationToken, s
     };
 }
 
+export function billingCardOnFileFalse(billing) {
+    return function(dispatch) {
+        console.log("billing: ", billing);
+        billing.cardOnFile = false;
+        console.log("billing a: ", billing);
+        dispatch({
+            type: "SUCCESS_BILLING_INFO",
+            billing
+        });
+    };
+}
+
 export function updateBillingSource(source, userId, verificationToken) {
     return function(dispatch) {
         axios
