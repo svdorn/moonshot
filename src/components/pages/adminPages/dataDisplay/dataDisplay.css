@@ -69,4 +69,30 @@
 .content {
     width: calc(100% - var(--data-display-menu-width));
     margin-left: var(--data-display-menu-width);
+    min-height: 100vh;
+    color: white;
+    padding: 20px;
+}
+
+.psych-output-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 10px 0;
+}
+
+.psych-output-item:not(:first-child) > div::before {
+    content: "•";
+    position: absolute;
+    left: -28px;
+    top: 0;
+}
+
+.psych-output-item > div:first-child {
+    flex: 1;
+}
+
+.psych-output-item > div:not(:first-child) {
+    width: 100px;
+    text-align: center;
 }

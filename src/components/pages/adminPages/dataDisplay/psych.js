@@ -6,6 +6,8 @@ import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
 import { Tabs, Tab } from "@material-ui/core";
 
+import "./dataDisplay.css";
+
 const sites = ["All", "Insights", "Learning"];
 const categories = ["Factors", "Facets", "Questions", "Outputs"];
 
@@ -66,7 +68,51 @@ class Psych extends Component {
 
     // the display for output data
     outputs() {
-        return "outputs";
+        const outputs = [
+            {
+                text:
+                    "You love to diggity dongus, but are generally hesitant to \
+                    scrim your scrongus. You love to diggity dongus, but are \
+                    generally hesitant to scrim your scrongus.",
+                disagree: 0.05,
+                neutral: 0.12,
+                agree: 0.83,
+                proportion: 0.14
+            },
+            {
+                text:
+                    "You love to diggity dongus, but are generally hesitant to \
+                    scrim your scrongus. You love to diggity dongus, but are \
+                    generally hesitant to scrim your scrongus.",
+                disagree: 0.15,
+                neutral: 0.2,
+                agree: 0.65,
+                proportion: 0.3
+            }
+        ];
+        // map each of the outputs to a list item
+        let outputItems = outputs.map((output, index) => {
+            return (
+                <li key={`output ${index}`} styleName="psych-output-item">
+                    <div>{output.text}</div>
+                    <div>{output.disagree}</div>
+                    <div>{output.neutral}</div>
+                    <div>{output.agree}</div>
+                    <div>{output.proportion}</div>
+                </li>
+            );
+        });
+        // add in the headers
+        outputItems.unshift(
+            <li key="output titles" styleName="psych-output-item">
+                <div />
+                <div>Disagree</div>
+                <div>Neutral</div>
+                <div>Agree</div>
+                <div>Proportion</div>
+            </li>
+        );
+        return <ul>{outputItems}</ul>;
     }
 
     render() {
@@ -75,7 +121,7 @@ class Psych extends Component {
         console.log("categoryIdx: ", categoryIdx);
 
         return (
-            <div style={{ height: "100vh" }}>
+            <div>
                 {this.siteSelector()}
                 {this.categorySelector()}
                 {categoryDisplays[categoryIdx]()}
