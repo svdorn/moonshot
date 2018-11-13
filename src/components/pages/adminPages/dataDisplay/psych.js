@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
 import { Tabs, Tab } from "@material-ui/core";
+import { ScatterChart, CartesianGrid, XAxis, YAxis, Scatter, Tooltip } from "recharts";
 
 import "./dataDisplay.css";
 
@@ -58,7 +59,25 @@ class Psych extends Component {
 
     // the display for facet data
     facets() {
-        return "facets";
+        const data = [3, -2, 5, 1, -5, -4, -1, 2, 1, 1, 1];
+        const mappedData = data.map(score => {
+            return { score, y: 1 };
+        });
+
+        return (
+            <div>
+                <ScatterChart
+                    width={400}
+                    height={400}
+                    margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                >
+                    <CartesianGrid />
+                    <XAxis dataKey={"score"} type="number" name="stature" unit="cm" />
+                    <YAxis dataKey={"y"} type="number" name="weight" unit="kg" />
+                    <Scatter name="A school" data={mappedData} fill="#8884d8" />
+                </ScatterChart>
+            </div>
+        );
     }
 
     // the display for question data
