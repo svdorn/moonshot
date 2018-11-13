@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBillingInfo, billingCardOnFileFalse } from '../../../actions/usersActions';
+import { getBillingInfo, billingCardOnFileFalse, generalAction } from '../../../actions/usersActions';
 import { makeSingular } from "../../../miscFunctions";
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
@@ -13,6 +13,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import HoverTip from "../../miscComponents/hoverTip";
 import colors from "../../../colors";
 import BillingForm from '../../childComponents/billingForm';
+import CancelPlanModal from '../../childComponents/cancelPlanModal';
 
 import "./billing.css";
 
@@ -99,6 +100,10 @@ class Billing extends Component {
 
     updateCardFalse = () => {
         this.setState({updateCard: false})
+    }
+
+    cancelPlan = () => {
+        this.props.generalAction("OPEN_CANCEL_PLAN_MODAL");
     }
 
     pricingBoxes() {
@@ -319,7 +324,7 @@ class Billing extends Component {
                         <div>
                             |
                         </div>
-                        <div>
+                        <div onClick={() => this.cancelPlan()}>
                             Cancel Plan
                         </div>
                     </div>
@@ -335,6 +340,7 @@ class Billing extends Component {
         return (
             <div className="jsxWrapper blackBackground fillScreen">
                 <AddUserDialog />
+                <CancelPlanModal />
                 <MetaTags>
                     <title>Billing | Moonshot</title>
                     <meta name="description" content="Manage your current bills and enter credit card information to pay bills." />
@@ -366,7 +372,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getBillingInfo,
-        billingCardOnFileFalse
+        billingCardOnFileFalse,
+        generalAction
     }, dispatch);
 }
 

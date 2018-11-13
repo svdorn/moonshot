@@ -1,0 +1,42 @@
+.modal-container {
+    padding: 30px 40px 40px 40px;
+    background: var(--primary-black-dark);
+    color: var(--primary-white);
+    text-align: center;
+}
+.header-seperator {
+    height: 2px;
+    background: var(--primary-cyan);
+    width: 50px;
+    margin: auto;
+}
+
+.first-frame > div:not(:first-child) {
+    margin-top: 15px;
+}
+.first-frame > div:nth-child(4) > div:first-child {
+    cursor: pointer;
+    display: inline-block;
+}
+.first-frame > div:nth-child(4) > div:first-child:hover {
+    color: var(--primary-cyan);
+}
+.first-frame > div:nth-child(4) > div:nth-child(2) {
+    margin: auto 15px;
+    display: inline-block;
+}
+.first-frame > div:nth-child(4) > div:nth-child(3) {
+    cursor: pointer;
+    display: inline-block;
+}
+.first-frame > div:nth-child(4) > div:nth-child(3):hover {
+    color: var(--secondary-red);
+}
+
+.pause-plan {
+
+}
+
+.cancel-plan {
+
+}
