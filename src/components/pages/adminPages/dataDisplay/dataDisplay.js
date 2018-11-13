@@ -2,8 +2,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {} from "../../../actions/usersActions";
-import {} from "../../../miscFunctions";
+import {} from "../../../../actions/usersActions";
+import {} from "../../../../miscFunctions";
+
+import DataDisplayMenu from "./dataDisplayMenu";
+import "./dataDisplay.css";
 
 class DataDisplay extends Component {
     constructor(props) {
@@ -13,7 +16,12 @@ class DataDisplay extends Component {
     }
 
     render() {
-        return <div>Hyello</div>;
+        return (
+            <div>
+                <DataDisplayMenu />
+                <div styleName="content">{this.props.children}</div>
+            </div>
+        );
     }
 }
 

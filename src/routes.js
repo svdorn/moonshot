@@ -51,7 +51,8 @@ import BusinessEditor from "./components/pages/adminPages/businessEditor";
 import BusinessPicker from "./components/pages/adminPages/businessPicker";
 import SkillEditor from "./components/pages/adminPages/skillEditor";
 import SkillPicker from "./components/pages/adminPages/skillPicker";
-import DataDisplay from "./components/pages/adminPages/dataDisplay";
+import DataDisplay from "./components/pages/adminPages/dataDisplay/dataDisplay";
+import PsychDataDisplay from "./components/pages/adminPages/dataDisplay/psych";
 
 import ReactGA from "react-ga";
 ReactGA.initialize("UA-105560654-1");
@@ -162,7 +163,10 @@ const routes = (
                 <Route path="businessEditor/:businessId" component={BusinessEditor} />
                 <Route path="skillPicker" component={SkillPicker} />
                 <Route path="skillEditor/:skillId" component={SkillEditor} />
-                <Route path="dataDisplay" component={DataDisplay} />
+                <Route path="dataDisplay" component={DataDisplay}>
+                    <IndexRoute component={PsychDataDisplay} />
+                    <Route path="psych" component={PsychDataDisplay} />
+                </Route>
             </Route>
 
             <Route path="*" component={Error404} />

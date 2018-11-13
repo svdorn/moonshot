@@ -1,0 +1,72 @@
+:root {
+    --data-display-menu-width: 140px;
+}
+
+.menu {
+    height: 100%;
+    background-color: var(--black-deep-dark);
+    text-align: center;
+    color: white;
+    min-height: 300px;
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+.menu {
+    width: var(--data-display-menu-width);
+    position: fixed;
+    z-index: 100;
+    -webkit-box-shadow: 0 0 2px 1px #212121;
+    -moz-box-shadow: 0 0 2px 1px #212121;
+    box-shadow: 0 0 2px 1px #212121;
+}
+.menu.absolute {
+    position: absolute;
+    overflow-y: hidden;
+}
+.menu > div {
+    position: absolute;
+    height: 100vh;
+    min-height: var(--min-screen-height);
+    width: 100%;
+    bottom: 0;
+}
+
+.menu-option {
+    padding: 8px 0;
+    font-size: 14px;
+    cursor: pointer;
+    position: relative;
+    color: var(--secondary-gray);
+}
+.menu-bottom > .menu-option {
+    padding: 0;
+}
+.menu-option.current {
+    background-color: var(--primary-black-light);
+    color: var(--primary-white);
+}
+/* .main-menu-items > .menu-option.current:hover { background-color: var(--primary-black-light); } */
+.menu-option.current::after {
+    content: "";
+    background-color: var(--primary-cyan);
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.main-menu-items > .menu-option:hover {
+    background-color: var(--primary-black-light);
+}
+
+.main-menu-items {
+    margin-top: 10px;
+}
+
+.content {
+    width: calc(100% - var(--data-display-menu-width));
+    margin-left: var(--data-display-menu-width);
+}
