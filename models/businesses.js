@@ -106,8 +106,22 @@ const businessesSchema = mongoose.Schema({
     logo: String,
     // the exact time the business object was created
     dateCreated: Date,
-    // stripe billing customer id
+    // DEPRECIATED stripe billing customer id
     billingCustomerId: String,
+    // billing info for the business and their subscription plans
+    billing: {
+        // the stripe customer ID for the business
+        customerId: String,
+        // the subscription the business currently has
+        subscription: {
+            // name of the subscription
+            name: String,
+            // date the subscription was created
+            dateCreated: Date,
+            // date the subscription is ending
+            dateEnding: Date
+        }
+    },
 
     emailNotifications: {
         time: String,

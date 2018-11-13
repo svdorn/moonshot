@@ -51,14 +51,30 @@ async function POST_customer(req, res) {
             return res.status(403).send("You do not have permission to do add credit card.");
         }
 
-        business.billingCustomerId = customer.id;
+        // add billing info to the business
+        business.billing = {};
+        business.billing.customerId = customer.id;
 
         try {
-            var subscription = await addSubscription(business.billingCustomerId, subscriptionTerm);
+            var subscription = await addSubscription(business.billing.customerId, subscriptionTerm);
         } catch(error) {
             console.log("Error adding subscription.");
             return reject("Error adding subscription.");
         }
+
+        console.log("subscription: ", subscription);
+        console.log("start date: ", new Date(subscription.billing_cycle_anchor*1000));
+
+
+        // add subscription info to the user
+        business.billing.subscription = {};
+        business.billing.subscription.name = subscriptionTerm;
+        const dateCreated = new Date(subscription.billing_cycle_anchor * 1000);
+        const dateEnding = getEndDate(dateCreated, subscriptionTerm);
+        business.billing.subscription.dateCreated = dateCreated;
+        business.billing.subscription.dateEnding = dateEnding;
+
+        console.log("billing after everything: ", business.billing);
 
         // save the business
         try { await business.save(); }
@@ -91,6 +107,35 @@ async function addSubscription(customerId, subscriptionTerm) {
 
         return resolve(subscription);
     })
+}
+
+// get the end date of a subscription and return it
+function getEndDate(startDate, subscriptionTerm) {
+    // number of months the subscription lasts
+    let subscriptionLength = 0;
+
+    switch(subscriptionTerm) {
+        case "year":
+            subscriptionLength = 12;
+            break;
+        case "6 months":
+            subscriptionLength = 6;
+            break;
+        case "3 months":
+            subscriptionLength = 3;
+            break;
+        case "1 month":
+            subscriptionLength = 1;
+            break;
+        default:
+            subscriptionLength = 0;
+            break;
+    }
+    // get the end date
+    let endDate = new Date(startDate);
+    endDate = endDate.setMonth(endDate.getMonth() + subscriptionLength);
+
+    return endDate;
 }
 
 module.exports = billingApis;

@@ -21,19 +21,19 @@ const boxes = [
     },
     {
         name: "6 MONTHS",
-        period: "6mo",
+        period: "6 months",
         price: "$299",
         icon: "Airplane"
     },
     {
         name: "3 MONTHS",
-        period: "3mo",
+        period: "3 months",
         price: "$399",
         icon: "Balloon"
     },
     {
         name: "1 MONTH",
-        period: "1mo",
+        period: "1 month",
         price: "$529",
         icon: "PaperAirplane"
     }
