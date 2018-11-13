@@ -17,6 +17,7 @@ const billingApis = {
     POST_customer
 }
 
+// post a new customer with their credit card info and subscription selection
 async function POST_customer(req, res) {
     return new Promise(async function(resolve, reject) {
         const { email, source, userId, verificationToken, subscriptionTerm } = sanitize(req.body);
@@ -25,8 +26,6 @@ async function POST_customer(req, res) {
         if (!email || !source || !userId || !verificationToken || !subscriptionTerm) {
             return res.status(400).send("Bad request.");
         }
-
-        console.log("source: ", source);
 
         // send source to Stripe to create person
         try {
@@ -62,10 +61,6 @@ async function POST_customer(req, res) {
             return reject("Error adding subscription.");
         }
 
-        console.log("subscription: ", subscription);
-        console.log("start date: ", new Date(subscription.billing_cycle_anchor*1000));
-
-
         // add subscription info to the user
         business.billing.subscription = {};
         business.billing.subscription.name = subscriptionTerm;
@@ -74,8 +69,6 @@ async function POST_customer(req, res) {
         business.billing.subscription.dateCreated = dateCreated;
         business.billing.subscription.dateEnding = dateEnding;
 
-        console.log("billing after everything: ", business.billing);
-
         // save the business
         try { await business.save(); }
         catch (bizSaveError) {
@@ -83,7 +76,7 @@ async function POST_customer(req, res) {
             return res.status(500).send("Server error, try again later.");
         }
 
-        return res.json("Success");
+        return res.json(business.billing);
     });
 }
 

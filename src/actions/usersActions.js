@@ -429,7 +429,7 @@ export function setupBillingCustomer(source, email, userId, verificationToken, s
             .then(response => {
                 dispatch({
                     type: "SUCCESS_BILLING_CUSTOMER",
-                    ...notification("You have successfully added your plan")
+                    ...notification(`You have successfully added your ${subscriptionTerm} plan`)
                 });
             })
             .catch(error => {

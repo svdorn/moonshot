@@ -114,9 +114,7 @@ async function GET_billingIsSetUp(req, res) {
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
-    const billingIsSetUp = !!(business && typeof business.billingCustomerId === "string");
-
-    console.log("billing is set up: ", billingIsSetUp);
+    const billingIsSetUp = !!(business && (typeof business.billingCustomerId === "string" || typeof business.billing === "object"));
 
     return res.status(200).send({ billingIsSetUp });
 }
