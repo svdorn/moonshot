@@ -413,6 +413,21 @@ export function usersReducers(state = initialState, action) {
             }
             return newState;
             break;
+        case "SUCCESS_BILLING_INFO":
+            return {
+                ...state,
+                billing: action.billing,
+                loadingSomething: false
+            };
+            break;
+        case "SUCCESS_BILLING_CUSTOMER":
+            return {
+                ...state,
+                ...notificationInfo(action.notification),
+                billing: action.billing,
+                loadingSomething: false
+            };
+            break;
         case "CONTACT_US":
         case "FORGOT_PASSWORD":
         case "FORGOT_PASSWORD_REJECTED":
@@ -421,7 +436,6 @@ export function usersReducers(state = initialState, action) {
         case "ERROR_FINISHED_LOADING":
         case "SUCCESS_FINISHED_LOADING":
         case "START_PSYCH_EVAL_ERROR":
-        case "SUCCESS_BILLING_CUSTOMER":
         case "FAILURE_BILLING_CUSTOMER":
             return {
                 ...state,

@@ -81,6 +81,40 @@
     margin-top: 40px;
 }
 
+.learn-from-hires-section {
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
+.feature-box {
+    width: 350px;
+    height: 120px;
+    display: inline-flex;
+    vertical-align: top;
+    position: relative;
+    margin: 15px 10px;
+}
+.feature-box > div:first-child {
+    width: 100px;
+    text-align: center;
+}
+.feature-box > div:last-child {
+    width: 300px;
+    text-align: left;
+}
+.feature-box img {
+    height: 64px;
+}
+
+@media only screen and (max-width: 800px) {
+    .feature-box {
+        width: 300px;
+        margin: 10px 5px;
+    }
+    .feature-box img {
+        height: 54px;
+    }
+}
+
 
 @media screen and (max-width: 700px) {
     .pricing > div:first-child {
@@ -94,6 +128,20 @@
     }
     .pricing-box > div > div > span {
         font-size: 22px;
+    }
+
+    .feature-box {
+        width: 200px;
+    }
+    .feature-box > div:first-child {
+        width: 100px;
+        text-align: center;
+    }
+    .feature-box > div:last-child {
+        width: 200px;
+    }
+    .feature-box img {
+        height: 44px;
     }
 }
 

@@ -2,13 +2,14 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {  } from '../../../actions/usersActions';
+import { getBillingInfo } from '../../../actions/usersActions';
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
 import axios from "axios";
 import AddUserDialog from '../../childComponents/addUserDialog';
 import CornersButton from '../../miscComponents/cornersButton';
 import CircularProgress from "@material-ui/core/CircularProgress";
+import HoverTip from "../../miscComponents/hoverTip";
 import colors from "../../../colors";
 import BillingForm from '../../childComponents/billingForm';
 
@@ -47,35 +48,26 @@ class Billing extends Component {
 
         this.state = {
             // the plan that is selected
-            plan: undefined,
-            // billing info
-            billing: undefined
+            plan: undefined
         };
     }
 
     componentDidMount() {
         const self = this;
 
-        const { currentUser } = this.props;
+        const { currentUser, billing } = this.props;
+        if (billing) { return; }
 
         const businessId = currentUser && currentUser.businessInfo ? currentUser.businessInfo.businessId : null;
 
-        axios.get("/api/business/billingInfo", {
-            params: {
-                userId: currentUser._id,
-                verificationToken: currentUser.verificationToken,
-                businessId
-            }
-        })
-        .then(response => {
-            if (response.data && response.data.subscription && response.data.subscription.name) {
-                var plan = response.data.subscription.name;
-            }
-            self.setState({ billing: response.data, plan });
-        })
-        .catch(error => {
-            self.props.addNotification("Error getting billing info.", "error");
-        });
+        this.props.getBillingInfo(currentUser._id, currentUser.verificationToken, businessId);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log("next props: ", nextProps)
+      if (nextProps.billing && nextProps.billing.subscription && nextProps.billing.subscription.name !== this.state.plan) {
+        this.setState({ plan: nextProps.billing.subscription.name });
+      }
     }
 
     selectPlan = (plan) => {
@@ -85,7 +77,8 @@ class Billing extends Component {
     }
 
     pricingBoxes() {
-        const { plan, billing } = this.state;
+        const { plan } = this.state;
+        const { billing } = this.props;
 
         let baseButtonText = "Select";
         if (plan && billing && billing.subscription) {
@@ -146,7 +139,8 @@ class Billing extends Component {
     }
 
     creditCardSection() {
-        const { plan, billing } = this.state;
+        const { plan } = this.state;
+        const { billing } = this.props;
 
         if (!plan) return null;
         if (billing && billing.cardOnFile) {
@@ -165,9 +159,103 @@ class Billing extends Component {
         );
     }
 
+    learnFromHiresSection() {
+        const { plan } = this.state;
+        const { billing } = this.props;
+        // don't show section
+        if (!plan || !billing || (billing && !billing.cardOnFile)) return null;
+
+        const features = [
+            {
+                title: "Unlimited Applicants",
+                text1: "Evaluate and receive insights",
+                text2: "for any number of applicants",
+                icon: "CandidatesIcon",
+                alt: "Candidates Icon",
+                iconStyle: {}
+            },
+            {
+                title: "Any Position",
+                text1: "Evaluations for any position",
+                text2: <div>across <div className="home-pink inlineBlock">five position types</div><HoverTip
+                    style={{marginTop: "26px", marginLeft: "-70px"}}
+                    text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
+                /></div>,
+                icon: "5Icon",
+                alt: "5 Icon",
+                iconStyle: {}
+            },
+            {
+                title: "Unlimited Employees",
+                text1: "Evaluate employees to strengthen",
+                text2: "your company's predictive baseline",
+                icon: "EmployeeIcon",
+                alt: "Employee Icon",
+                iconStyle: { height: "85px" }
+            },
+            {
+                title: "Quarterly Reviews",
+                text1: "Hires are reviewed to update",
+                text2: "and improve your predictive model",
+                icon: "FlameIcon",
+                alt: "Flame Icon",
+                iconStyle: { height: "84px", marginTop: "-2px" }
+            },
+            {
+                title: "Analytics and Reporting",
+                text1: "Get in-depth breakdowns on",
+                text2: "all of your candidates and hires",
+                icon: "GraphIcon",
+                alt: "Graph Icon",
+                iconStyle: {}
+            },
+        ]
+
+        // create a box for each feature
+        let featureBoxes = features.map(feature => {
+            return (
+                <div styleName="feature-box" key={feature.title}>
+                    <div>
+                        <img
+                            src={`/images/businessHome/${feature.icon}${this.props.png}`}
+                            style={feature.iconStyle}
+                            alt={feature.alt}
+                        />
+                    </div>
+                    <div>
+                        <div className="bold font16pxUnder800 font14pxUnder700">{ feature.title }</div>
+                        <div className="secondary-gray font14pxUnder800 font12pxUnder700">{ feature.text1 }<br/>{ feature.text2 }</div>
+                    </div>
+                </div>
+            )
+        });
+
+        // add the box at the top left with the title for the whole area
+        featureBoxes.unshift(
+            <div
+                key="featuresHeader"
+                styleName="feature-box"
+                className="primary-cyan left-align font26px font22pxUnder800 font18pxUnder700"
+                style={{lineHeight: "1.3"}}
+            >
+                We learn from each hire<br/> so that we can make the next one even better.
+            </div>
+        )
+
+        return (
+            <section id="learnFromHires" styleName="learn-from-hires-section">
+                <div className="center">
+                    <div className="primary-white inline-block" style={{maxWidth: "1200px"}}>
+                        { featureBoxes }
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     render() {
 
-        const { billing } = this.state;
+        const { billing } = this.props;
 
         return (
             <div className="jsxWrapper blackBackground fillScreen">
@@ -179,6 +267,7 @@ class Billing extends Component {
                 {billing ?
                     <div>
                         { this.pricingSection() }
+                        { this.learnFromHiresSection() }
                         { this.creditCardSection() }
                     </div>
                 :
@@ -193,13 +282,14 @@ class Billing extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        billing: state.users.billing
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        getBillingInfo
     }, dispatch);
 }
 

@@ -153,7 +153,7 @@ class Billing extends Component {
                         </div>
                     </div>
                 }
-                <div style={{marginTop:"10px"}} onClick={() => goTo("/pricing")} styleName="pricing-link">See Pricing</div>
+                <div style={{marginTop:"10px"}} onClick={() => goTo("/billing")} styleName="pricing-link">See Pricing</div>
             </div>
         );
 

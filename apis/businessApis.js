@@ -123,6 +123,7 @@ async function GET_billingIsSetUp(req, res) {
 // find out if billing has been set up for the company
 async function GET_billingInfo(req, res) {
     const { userId, verificationToken, businessId } = sanitize(req.query);
+    console.log("req: ", req.query);
 
     // if one of the arguments doesn't exist, return with error code
     if (!userId || !verificationToken || !businessId) {

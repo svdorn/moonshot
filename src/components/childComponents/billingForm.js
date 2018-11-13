@@ -28,9 +28,8 @@ class BillingForm extends Component {
         const { name, email, _id, verificationToken } = this.props.currentUser;
         const { subscriptionTerm } = this.props;
 
-        this.props.stripe.createSource({type: 'card', owner: { name}}).then(function(result) {
+        this.props.stripe.createSource({type: 'card', owner: { name }}).then(function(result) {
             if (result.error) {
-                console.log(result.error);
                 self.props.stopLoading();
                 self.props.addNotification("Error adding card, please review credit card information and retry.", "error");
             } else {

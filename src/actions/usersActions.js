@@ -422,6 +422,23 @@ export function stopLoading() {
     };
 }
 
+export function getBillingInfo(userId, verificationToken, businessId) {
+    return function(dispatch) {
+        axios
+            .get("/api/business/billingInfo", { params: { userId, verificationToken, businessId }})
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_INFO",
+                    billing: response.data
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
 export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
     return function(dispatch) {
         axios
@@ -429,6 +446,7 @@ export function setupBillingCustomer(source, email, userId, verificationToken, s
             .then(response => {
                 dispatch({
                     type: "SUCCESS_BILLING_CUSTOMER",
+                    billing: response.data,
                     ...notification(`You have successfully added your ${subscriptionTerm} plan`)
                 });
             })
