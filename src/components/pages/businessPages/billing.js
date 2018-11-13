@@ -177,7 +177,7 @@ class Billing extends Component {
             {
                 title: "Any Position",
                 text1: "Evaluations for any position",
-                text2: <div>across <div className="home-pink inlineBlock">five position types</div><HoverTip
+                text2: <div>across <div className="primary-cyan inlineBlock">five position types</div><HoverTip
                     style={{marginTop: "26px", marginLeft: "-70px"}}
                     text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
                 /></div>,
@@ -217,7 +217,7 @@ class Billing extends Component {
                 <div styleName="feature-box" key={feature.title}>
                     <div>
                         <img
-                            src={`/images/businessHome/${feature.icon}${this.props.png}`}
+                            src={`/icons/billing/${feature.icon}${this.props.png}`}
                             style={feature.iconStyle}
                             alt={feature.alt}
                         />
