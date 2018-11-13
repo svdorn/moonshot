@@ -39,6 +39,20 @@
 .pause-plan {
 
 }
+.finalize-cancellation {
+    color: var(--secondary-gray);
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.textarea {
+    margin-top: 15px;
+    height: 100px;
+    width: 230px;
+    background: var(--black-deep-dark);
+    color: var(--primary-white);
+}
 
 .cancel-plan {
 

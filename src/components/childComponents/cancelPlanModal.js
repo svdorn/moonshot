@@ -8,6 +8,7 @@ import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import CornersButton from '../miscComponents/cornersButton';
 import colors from "../../colors";
 import { goTo } from "../../miscFunctions";
 import { button } from "../../classes.js";
@@ -32,6 +33,32 @@ class CancelPlanModal extends Component {
 
     changeFrame = (frame) => {
         this.setState({ frame })
+    }
+
+    pausePlan = () => {
+        console.log("pause plan");
+        const pause = document.getElementById("pause");
+        const message = pause.value;
+
+        if (!message) {
+            // error
+        }
+
+    }
+
+    cancelPlan = () => {
+        console.log("cancel plan");
+        const cancel = document.getElementById("cancel");
+        const message = cancel.value;
+
+        if (!message) {
+            // error
+        }
+
+    }
+
+    cancelPlanNoMessage = () => {
+        console.log("cancel plan no message");
     }
 
     firstFrame() {
@@ -62,7 +89,21 @@ class CancelPlanModal extends Component {
     pausePlanFrame() {
         return (
             <div styleName="pause-plan">
-                Pause
+                How long do you need to pause the plan?
+                <div>
+                    <textarea styleName="textarea" id="pause" placeholder="Type info here..." />
+                </div>
+                <CornersButton
+                    onClick={this.pausePlan}
+                    content="Request a Pause"
+                    size="small-padding"
+                    color1={colors.primaryCyan}
+                    color2={colors.primaryWhite}
+                    className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
+                />
+                <div onClick={this.cancelPlanNoMessage} styleName="finalize-cancellation">
+                    <u>Finalize Cancellation</u>
+                </div>
             </div>
         );
     }
@@ -70,7 +111,18 @@ class CancelPlanModal extends Component {
     cancelPlanFrame() {
         return (
             <div styleName="cancel-plan">
-                Cancel
+                {"What's the single biggest reason for you cancelling?"}
+                <div>
+                    <textarea styleName="textarea" id="cancel" placeholder="Type here..." />
+                </div>
+                <CornersButton
+                    onClick={this.cancelPlan}
+                    content="Finalize Cancellation"
+                    size="small-padding"
+                    color1={colors.primaryCyan}
+                    color2={colors.primaryWhite}
+                    className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
+                />
             </div>
         );
     }
