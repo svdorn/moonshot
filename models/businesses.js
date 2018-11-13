@@ -94,6 +94,15 @@ const positionSchema = mongoose.Schema({
     }
 })
 
+const subscriptionSchema = mongoose.Schema({
+    // name of the subscription
+    name: String,
+    // date the subscription was created
+    dateCreated: Date,
+    // date the subscription is ending
+    dateEnding: Date
+})
+
 
 const businessesSchema = mongoose.Schema({
     // company name
@@ -117,14 +126,11 @@ const businessesSchema = mongoose.Schema({
         // if the customer has a custom plan with us
         customPlan: Boolean,
         // the subscription the business currently has
-        subscription: {
-            // name of the subscription
-            name: String,
-            // date the subscription was created
-            dateCreated: Date,
-            // date the subscription is ending
-            dateEnding: Date
-        }
+        subscription: subscriptionSchema,
+        // the subscription the business has signed up for after the current one ends
+        newSubscription: subscriptionSchema,
+        // the old subscriptions the business has had
+        oldSubscriptions: [ subscriptionSchema ]
     },
 
     emailNotifications: {

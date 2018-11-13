@@ -1,5 +1,5 @@
 .billing {
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 .pricing {
     margin-top: 40px;
@@ -85,7 +85,8 @@
 }
 
 .learn-from-hires-section {
-    margin-top: 70px;
+    margin: 70px auto;
+    max-width: 1170px;
 }
 .feature-box {
     width: 350px;
