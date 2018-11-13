@@ -167,9 +167,9 @@ class Billing extends Component {
 
         const features = [
             {
-                title: "Unlimited Applicants",
+                title: "Unlimited Candidates",
                 text1: "Evaluate and receive insights",
-                text2: "for any number of applicants",
+                text2: "for any number of candidates",
                 icon: "CandidatesIcon",
                 alt: "Candidates Icon",
                 iconStyle: {}
