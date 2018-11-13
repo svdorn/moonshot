@@ -146,10 +146,17 @@ class Billing extends Component {
     }
 
     pricingSection() {
+        const { plan } = this.state;
+        const { billing } = this.props;
+
+        let header = "Select a Plan";
+        if (plan && billing) {
+            header = "Pricing Plans";
+        }
         return (
             <div styleName="pricing">
                 <div>
-                    Select a Plan
+                    { header }
                 </div>
                 <div styleName="header-seperator">
                 </div>
