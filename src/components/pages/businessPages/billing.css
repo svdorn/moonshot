@@ -106,6 +106,7 @@
 
 .update-cancel {
     color: var(--primary-white);
+    font-size: 16px;
 }
 .update-cancel > div:first-child {
     display: inline-block;
@@ -133,6 +134,9 @@
     }
     .feature-box img {
         height: 54px;
+    }
+    .update-cancel {
+        font-size: 14px;
     }
 }
 
