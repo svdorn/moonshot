@@ -96,3 +96,24 @@
     width: 100px;
     text-align: center;
 }
+
+.facet-graph {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+/* title and graph */
+.facet-graph > div:first-child {
+    display: inline-block;
+    text-align: center;
+}
+/* graph title */
+.facet-graph > div:first-child > div:first-child {
+    display: inline-block;
+    font-weight: bold;
+}
+/* stats */
+.facet-graph > div:nth-child(2) {
+    display: inline-block;
+}

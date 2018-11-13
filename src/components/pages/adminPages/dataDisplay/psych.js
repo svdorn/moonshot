@@ -5,8 +5,19 @@ import { bindActionCreators } from "redux";
 import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
 import { Tabs, Tab } from "@material-ui/core";
-import { ScatterChart, CartesianGrid, XAxis, YAxis, Scatter, Tooltip } from "recharts";
+import {
+    BarChart,
+    Bar,
+    Brush,
+    ReferenceLine,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend
+} from "recharts";
 
+import colors from "../../../../colors";
 import "./dataDisplay.css";
 
 const sites = ["All", "Insights", "Learning"];
@@ -59,25 +70,67 @@ class Psych extends Component {
 
     // the display for facet data
     facets() {
-        const data = [3, -2, 5, 1, -5, -4, -1, 2, 1, 1, 1];
-        const mappedData = data.map(score => {
-            return { score, y: 1 };
+        const data = [
+            { name: "-4.75", uv: 300, pv: 456 },
+            { name: "-4.25", uv: -145, pv: 230 },
+            { name: "-3.75", uv: -100, pv: 345 },
+            { name: "-3.25", uv: -8, pv: 450 },
+            { name: "-2.75", uv: 100, pv: 321 },
+            { name: "-2.25", uv: 9, pv: 235 },
+            { name: "-1.75", uv: 53, pv: 267 },
+            { name: "-1.25", uv: 252, pv: 378 },
+            { name: "-0.75", uv: 79, pv: 210 },
+            { name: "-0.25", uv: 294, pv: 23 },
+            { name: "0.25", uv: 43, pv: 45 },
+            { name: "0.75", uv: -74, pv: 90 },
+            { name: "1.25", uv: -71, pv: 130 },
+            { name: "1.75", uv: -117, pv: 11 },
+            { name: "2.25", uv: -186, pv: 107 },
+            { name: "2.75", uv: -16, pv: 926 },
+            { name: "3.25", uv: -125, pv: 653 },
+            { name: "3.75", uv: 222, pv: 366 },
+            { name: "4.25", uv: 372, pv: 486 },
+            { name: "4.75", uv: 182, pv: 512 }
+        ];
+
+        const facets = [
+            { name: "Ambiguity", dataPoints: data, average: 2.3, interRel: 0.87, stdDev: 0.41 },
+            { name: "Your Mom", dataPoints: data, average: 2.3, interRel: 0.87, stdDev: 0.41 },
+            { name: "Hope", dataPoints: data, average: -1.6, interRel: 0.82, stdDev: 0.53 }
+        ];
+
+        const facetLis = facets.map(facet => {
+            return (
+                <div styleName="facet-graph">
+                    <div>
+                        <div>{facet.name}</div>
+                        <br />
+                        <BarChart
+                            style={{ display: "inline-block" }}
+                            width={600}
+                            height={300}
+                            data={facet.dataPoints}
+                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <ReferenceLine y={0} stroke="#000" />
+                            <Brush dataKey="name" height={30} stroke={colors.primaryCyan} />
+                            <Bar dataKey="pv" fill={colors.primaryCyan} />
+                        </BarChart>
+                    </div>
+                    <div>
+                        <div>Average: {facet.average}</div>
+                        <div>Interreliability: {facet.interRel}</div>
+                        <div>Std. dev.: {facet.stdDev}</div>
+                    </div>
+                </div>
+            );
         });
 
-        return (
-            <div>
-                <ScatterChart
-                    width={400}
-                    height={400}
-                    margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-                >
-                    <CartesianGrid />
-                    <XAxis dataKey={"score"} type="number" name="stature" unit="cm" />
-                    <YAxis dataKey={"y"} type="number" name="weight" unit="kg" />
-                    <Scatter name="A school" data={mappedData} fill="#8884d8" />
-                </ScatterChart>
-            </div>
-        );
+        return facetLis;
     }
 
     // the display for question data
