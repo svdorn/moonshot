@@ -81,6 +81,27 @@ const helperFunctions = require("./apis/helperFunctions");
 require("./apis/selfActivatingFunctions");
 
 // set up the session
+// app.use(
+//     session({
+//         secret: credentials.secretString,
+//         unset: "destroy", // delete the session when set to null or req.session.destroy() used
+//         saveUninitialized: false, // doesn't save a session if it is new but not modified
+//         rolling: true, // resets maxAge on session when user uses site again
+//         proxy: true, // must be true since we are using a reverse proxy
+//         resave: true, // saves session even if un-modified
+//         name: "sessionId",
+//         cookie: {
+//             maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
+//             // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
+//             secure: process.env.NODE_ENV !== "development", // only make the cookie if accessing via https
+//             httpOnly: true, // cookie can only be sent over http(s), not client js
+//             domain: process.env.SITE_NAME, // moonshotinsights.io or frizzkitten.com or localhost:8081
+//             path: "/" // only allow access to cookie if it's on the right domain and path
+//         },
+//         store: new MongoStore({ mongooseConnection: db, ttl: 7 * 24 * 60 * 60 })
+//         // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
+//     })
+// );
 app.use(
     session({
         secret: credentials.secretString,
@@ -89,7 +110,6 @@ app.use(
         rolling: true, // resets maxAge on session when user uses site again
         proxy: true, // must be true since we are using a reverse proxy
         resave: true, // saves session even if un-modified
-        name: "sessionId",
         cookie: {
             maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
             // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
