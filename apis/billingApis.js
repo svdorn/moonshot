@@ -109,7 +109,7 @@ function getEndDate(startDate, subscriptionTerm) {
     let subscriptionLength = 0;
 
     switch(subscriptionTerm) {
-        case "year":
+        case "1 year":
             subscriptionLength = 12;
             break;
         case "6 months":

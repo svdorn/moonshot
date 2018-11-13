@@ -127,6 +127,13 @@
     color: var(--secondary-red);
 }
 
+.update-plan {
+    text-align: center;
+    color: var(--primary-white);
+    margin-top: 30px;
+    font-size: 16px;
+}
+
 @media only screen and (max-width: 800px) {
     .feature-box {
         width: 300px;
@@ -136,6 +143,9 @@
         height: 54px;
     }
     .update-cancel {
+        font-size: 14px;
+    }
+    .update-plan {
         font-size: 14px;
     }
 }

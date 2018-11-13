@@ -301,6 +301,17 @@ function makePossessive(name) {
     }
 }
 
+function makeSingular(string) {
+    if (typeof string !== "string") {
+        return string;
+    }
+    if (string.endsWith("s")) {
+        return string.slice(0, string.length - 1);
+    } else {
+        return string;
+    }
+}
+
 function replaceCharacters(oldString, characters, replacement) {
     if (
         typeof oldString !== "string" ||
@@ -362,6 +373,7 @@ const miscFunctions = {
     propertyExists,
     withinElement,
     makePossessive,
+    makeSingular,
     elementInViewport,
     elementPartiallyInViewport,
     replaceCharacters,

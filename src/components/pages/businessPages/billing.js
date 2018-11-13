@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getBillingInfo } from '../../../actions/usersActions';
+import { makeSingular } from "../../../miscFunctions";
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
 import axios from "axios";
@@ -18,7 +19,7 @@ import "./billing.css";
 const boxes = [
     {
         name: "12 MONTHS",
-        period: "year",
+        period: "1 year",
         price: "$199",
         icon: "Rocket"
     },
@@ -48,7 +49,9 @@ class Billing extends Component {
 
         this.state = {
             // the plan that is selected
-            plan: undefined
+            plan: undefined,
+            // if the user is currently updating their plan
+            updatePlan: false
         };
     }
 
@@ -71,10 +74,21 @@ class Billing extends Component {
     }
 
     selectPlan = (plan) => {
-        // TODO: put switch plan logic in here
-        if (typeof plan === "string") {
-            this.setState({ plan })
+        // check if the user is trying to update their plan
+        const statePlan = this.state.plan;
+        const { billing } = this.props;
+        let updatePlan = false;
+        if (statePlan && billing && billing.subscription) {
+            updatePlan = true;
         }
+
+        if (typeof plan === "string") {
+            this.setState({ plan, updatePlan })
+        }
+    }
+
+    updatePlan = (plan) => {
+        console.log("update plan: ", plan);
     }
 
     pricingBoxes() {
@@ -160,11 +174,35 @@ class Billing extends Component {
         );
     }
 
+    updatePlanSection() {
+        const { plan, updatePlan } = this.state;
+        const { billing } = this.props;
+
+        if (!updatePlan) return null;
+
+        const planName = makeSingular(plan);
+
+        return (
+            <div styleName="update-plan">
+                <div>
+                    {`The ${planName} plan will begin after your current plan of ${billing.subscription.name} is completed`}
+                </div>
+                <CornersButton
+                    onClick={() => this.updatePlan(plan)}
+                    content="Update Plan"
+                    color1={colors.primaryCyan}
+                    color2={colors.primaryWhite}
+                    className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
+                />
+            </div>
+        );
+    }
+
     learnFromHiresSection() {
-        const { plan } = this.state;
+        const { plan, updatePlan } = this.state;
         const { billing } = this.props;
         // don't show section
-        if (!plan || !billing || (billing && !billing.cardOnFile)) return null;
+        if (!plan || !billing || (billing && !billing.cardOnFile) || updatePlan) return null;
 
         const features = [
             {
@@ -279,6 +317,7 @@ class Billing extends Component {
                 {billing ?
                     <div>
                         { this.pricingSection() }
+                        { this.updatePlanSection() }
                         { this.learnFromHiresSection() }
                         { this.creditCardSection() }
                     </div>
