@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBillingInfo, billingCardOnFileFalse, generalAction } from '../../../actions/usersActions';
+import { getBillingInfo, billingCardOnFileFalse, generalAction, updateStore } from '../../../actions/usersActions';
 import { makeSingular } from "../../../miscFunctions";
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
@@ -104,6 +104,7 @@ class Billing extends Component {
 
     cancelPlan = () => {
         this.props.generalAction("OPEN_CANCEL_PLAN_MODAL");
+        this.props.updateStore("blurMenu", true);
     }
 
     pricingBoxes() {
@@ -335,10 +336,13 @@ class Billing extends Component {
 
     render() {
 
-        const { billing } = this.props;
+        const { billing, blur } = this.props;
+
+        const blurredClass = blur ? "dialogForBizOverlay" : "";
+
 
         return (
-            <div className="jsxWrapper blackBackground fillScreen">
+            <div className={"jsxWrapper blackBackground fillScreen " + blurredClass}>
                 <AddUserDialog />
                 <CancelPlanModal />
                 <MetaTags>
@@ -365,7 +369,8 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         png: state.users.png,
-        billing: state.users.billing
+        billing: state.users.billing,
+        blur: state.users.cancelPlanModal
     };
 }
 
@@ -373,7 +378,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getBillingInfo,
         billingCardOnFileFalse,
-        generalAction
+        generalAction,
+        updateStore
     }, dispatch);
 }
 

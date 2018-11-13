@@ -3,8 +3,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { generalAction, updateStore } from '../../actions/usersActions';
+import Button from '@material-ui/core/Button';
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 import colors from "../../colors";
 import { goTo } from "../../miscFunctions";
 import { button } from "../../classes.js";
@@ -23,6 +26,7 @@ class CancelPlanModal extends Component {
 
     close = () => {
         this.props.generalAction("CLOSE_CANCEL_PLAN_MODAL");
+        this.props.updateStore("blurMenu", false);
         this.setState({ frame: "First" });
     }
 
@@ -97,7 +101,17 @@ class CancelPlanModal extends Component {
                 onClose={this.close}
             >
                 <div styleName="modal-container">
-                    { content }
+                    <DialogContent styleName="modal">
+                        { content }
+                    </DialogContent>
+                    {frame === "First" ?
+                        <DialogActions>
+                            <Button onClick={this.close} color="inherit">
+                                Close
+                            </Button>
+                        </DialogActions>
+                        : null
+                    }
                 </div>
             </Dialog>
         );
