@@ -85,10 +85,15 @@ class Billing extends Component {
     }
 
     pricingBoxes() {
-        const { plan } = this.state;
+        const { plan, billing } = this.state;
+
+        let baseButtonText = "Select";
+        if (plan && billing && billing.subscription) {
+            baseButtonText = "Switch Plan";
+        }
 
         const pricingBoxes = boxes.map(box => {
-            let buttonText = "Select";
+            let buttonText = baseButtonText;
             let active = "";
             if (plan === box.period) {
                 active = "active";
