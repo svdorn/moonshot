@@ -56,6 +56,7 @@ class Billing extends Component {
         const self = this;
 
         const { currentUser, billing } = this.props;
+
         if (billing) { return; }
 
         const businessId = currentUser && currentUser.businessInfo ? currentUser.businessInfo.businessId : null;
@@ -64,13 +65,13 @@ class Billing extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("next props: ", nextProps)
-      if (nextProps.billing && nextProps.billing.subscription && nextProps.billing.subscription.name !== this.state.plan) {
-        this.setState({ plan: nextProps.billing.subscription.name });
-      }
+        if (nextProps.billing && nextProps.billing.subscription && nextProps.billing.subscription.name !== this.state.plan) {
+            this.setState({ plan: nextProps.billing.subscription.name });
+        }
     }
 
     selectPlan = (plan) => {
+        // TODO: put switch plan logic in here
         if (typeof plan === "string") {
             this.setState({ plan })
         }
@@ -247,6 +248,17 @@ class Billing extends Component {
                 <div className="center">
                     <div className="primary-white inline-block" style={{maxWidth: "1200px"}}>
                         { featureBoxes }
+                    </div>
+                    <div styleName="update-cancel">
+                        <div>
+                            Update Card
+                        </div>
+                        <div>
+                            |
+                        </div>
+                        <div>
+                            Cancel Plan
+                        </div>
                     </div>
                 </div>
             </section>

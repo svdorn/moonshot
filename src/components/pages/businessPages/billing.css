@@ -83,7 +83,6 @@
 
 .learn-from-hires-section {
     margin-top: 70px;
-    margin-bottom: 50px;
 }
 .feature-box {
     width: 350px;
@@ -103,6 +102,28 @@
 }
 .feature-box img {
     height: 64px;
+}
+
+.update-cancel {
+    color: var(--primary-white);
+}
+.update-cancel > div:first-child {
+    display: inline-block;
+    cursor: pointer;
+}
+.update-cancel > div:first-child:hover {
+    color: var(--primary-cyan);
+}
+.update-cancel > div:nth-child(2) {
+    display: inline-block;
+    margin: 0 15px;
+}
+.update-cancel > div:nth-child(3) {
+    display: inline-block;
+    cursor: pointer;
+}
+.update-cancel > div:nth-child(3):hover {
+    color: var(--secondary-red);
 }
 
 @media only screen and (max-width: 800px) {
