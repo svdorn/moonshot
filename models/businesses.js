@@ -114,6 +114,8 @@ const businessesSchema = mongoose.Schema({
         customerId: String,
         // whether the not the user has a valid card on file
         cardOnFile: Boolean,
+        // if the customer has a custom plan with us
+        customPlan: Boolean,
         // the subscription the business currently has
         subscription: {
             // name of the subscription
