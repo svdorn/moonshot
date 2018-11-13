@@ -51,7 +51,9 @@ class Billing extends Component {
             // the plan that is selected
             plan: undefined,
             // if the user is currently updating their plan
-            updatePlan: false
+            updatePlan: false,
+            // if the user is currently updating their card
+            updateCard: false
         };
     }
 
@@ -89,6 +91,10 @@ class Billing extends Component {
 
     updatePlan = (plan) => {
         console.log("update plan: ", plan);
+    }
+
+    updateCard = () => {
+        this.setState({ updateCard: true })
     }
 
     pricingBoxes() {
@@ -154,12 +160,16 @@ class Billing extends Component {
     }
 
     creditCardSection() {
-        const { plan } = this.state;
+        const { plan, updateCard } = this.state;
         const { billing } = this.props;
 
         if (!plan) return null;
-        if (billing && billing.cardOnFile) {
+        if (billing && billing.cardOnFile && !updateCard) {
             return null;
+        }
+
+        if (updateCard) {
+            var update = true;
         }
 
         return (
@@ -168,7 +178,7 @@ class Billing extends Component {
                     Please enter your card information below
                 </div>
                 <Elements>
-                    <BillingForm subscriptionTerm={plan} />
+                    <BillingForm subscriptionTerm={plan} update={update} />
                 </Elements>
             </div>
         );
@@ -288,7 +298,7 @@ class Billing extends Component {
                         { featureBoxes }
                     </div>
                     <div styleName="update-cancel">
-                        <div>
+                        <div onClick={() => this.updateCard()}>
                             Update Card
                         </div>
                         <div>

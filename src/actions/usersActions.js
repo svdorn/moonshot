@@ -457,6 +457,24 @@ export function setupBillingCustomer(source, email, userId, verificationToken, s
     };
 }
 
+export function updateBillingSource(source, userId, verificationToken) {
+    return function(dispatch) {
+        axios
+            .post("/api/billing/updateSource", { source, userId, verificationToken })
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_CUSTOMER",
+                    billing: response.data,
+                    ...notification(`You have successfully updated your card`)
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
 // LOG USER OUT
 export function signout() {
     return function(dispatch) {

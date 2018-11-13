@@ -14,7 +14,8 @@ const { sanitize,
 const errors = require('./errors.js');
 
 const billingApis = {
-    POST_customer
+    POST_customer,
+    POST_updateSource
 }
 
 // post a new customer with their credit card info and subscription selection
@@ -79,6 +80,52 @@ async function POST_customer(req, res) {
 
         return res.json(business.billing);
     });
+}
+
+// post a new customer with their credit card info and subscription selection
+async function POST_updateSource(req, res) {
+    return new Promise(async function(resolve, reject) {
+        const { source, userId, verificationToken } = sanitize(req.body);
+
+        // if one of the arguments doesn't exist, return with error code
+        if (!source || !userId || !verificationToken) {
+            return res.status(400).send("Bad request.");
+        }
+
+        // give business object the Stripe customer
+        try {
+            var user = await getAndVerifyUser(userId, verificationToken);
+            var business = await Businesses.findById(user.businessInfo.businessId);
+            if (!business) {
+                console.log("No business found with id: ", user.businessInfo.businessId);
+                throw "No business.";
+            }
+        } catch (getUserError) {
+            console.log("Error getting user or business from user: ", getUserError);
+            return res.status(403).send("You do not have permission to do add credit card.");
+        }
+
+        // update source in stripe
+        try {
+            var customer = await stripe.customers.update(business.billing.customerId, {
+                source
+            });
+        } catch (createCustomerError) {
+            console.log("Error creting a customer: ", createCustomerError);
+            return res.status(403).send("Customer creation failed.");
+        }
+
+        business.billing.cardOnFile = true;
+
+        // save the business
+        try { await business.save(); }
+        catch (bizSaveError) {
+            console.log("Error saving business when adding credit card: ", bizSaveError);
+            return res.status(500).send("Server error, try again later.");
+        }
+
+        return res.json(business.billing);
+    })
 }
 
 // add a subscription to a new customer

@@ -236,6 +236,7 @@ app.post("/admin/saveBusiness", adminApis.POST_saveBusiness);
 app.get("/admin/blankPosition", adminApis.GET_blankPosition);
 
 app.post("/billing/customer", billingApis.POST_customer);
+app.post("/billing/updateSource", billingApis.POST_updateSource);
 
 app.get("/evaluation/currentState", evaluationApis.GET_currentState);
 app.post("/evaluation/getInitialState", evaluationApis.POST_getInitialState);
