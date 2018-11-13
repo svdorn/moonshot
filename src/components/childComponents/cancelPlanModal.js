@@ -54,11 +54,12 @@ class CancelPlanModal extends Component {
         if (!message) {
             // error
         }
-
+        this.setState({ frame: "Cancel Confirmation" })
     }
 
     cancelPlanNoMessage = () => {
         console.log("cancel plan no message");
+        this.setState({ frame: "Cancel Confirmation" })
     }
 
     firstFrame() {
@@ -127,6 +128,20 @@ class CancelPlanModal extends Component {
         );
     }
 
+    cancelConfirmationFrame() {
+        return (
+            <div styleName="cancel-confirmation">
+                <div className="font22px font20pxUnder700 font16pxUnder500 marginBottom15px">
+                    Plan Cancelled
+                </div>
+                <div styleName="header-seperator" />
+                <div className="font18px font16pxUnder700 font14pxUnder500 marginTop15px">
+                    You{"'"}ll continue to have access <div className="br above800Only"><br/></div>until your current plan ends. All of <div className="br above800Only"><br/></div>your data will be saved for you.
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const { frame } = this.state;
 
@@ -140,6 +155,9 @@ class CancelPlanModal extends Component {
                 break;
             case "Cancel":
                 content = this.cancelPlanFrame();
+                break;
+            case "Cancel Confirmation":
+                content = this.cancelConfirmationFrame();
                 break;
             default:
                 content = this.firstFrame();
@@ -156,7 +174,7 @@ class CancelPlanModal extends Component {
                     <DialogContent styleName="modal">
                         { content }
                     </DialogContent>
-                    {frame === "First" ?
+                    {frame === "First" || frame === "Cancel Confirmation" ?
                         <DialogActions>
                             <Button onClick={this.close} color="inherit">
                                 Close
