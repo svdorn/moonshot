@@ -42,11 +42,6 @@ class DataDisplayMenu extends Component {
             pathname = "";
         }
 
-        // get the different parts of the pathname ([skillTest, front-end-developer, ...])
-        const pathnameParts = pathname.split("/").slice(1);
-        // get the first, most important part of the path first
-        const pathFirstPart = pathnameParts[0];
-
         const topOptions = [
             { title: "Psycho", url: "/admin/dataDisplay/psych" },
             { title: "GCA", url: "/admin/dataDisplay/gca" },
@@ -54,7 +49,7 @@ class DataDisplayMenu extends Component {
         ];
 
         const topItems = topOptions.map(menuOption => {
-            const isCurrentPath = pathFirstPart === menuOption.url.substring(1).toLowerCase();
+            const isCurrentPath = pathname === menuOption.url.toLowerCase();
             return (
                 <div
                     styleName={"menu-option" + (isCurrentPath ? " current" : "")}
