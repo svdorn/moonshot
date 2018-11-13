@@ -53,6 +53,7 @@ async function POST_customer(req, res) {
         // add billing info to the business
         business.billing = {};
         business.billing.customerId = customer.id;
+        business.billing.cardOnFile = true;
 
         try {
             var subscription = await addSubscription(business.billing.customerId, subscriptionTerm);

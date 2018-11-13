@@ -68,10 +68,12 @@ class Billing extends Component {
             }
         })
         .then(response => {
-            self.setState({ billing: response.data });
+            if (response.data && response.data.subscription && response.data.subscription.name) {
+                var plan = response.data.subscription.name;
+            }
+            self.setState({ billing: response.data, plan });
         })
         .catch(error => {
-            console.log("error: ", error);
             self.props.addNotification("Error getting billing info.", "error");
         });
     }
@@ -139,9 +141,12 @@ class Billing extends Component {
     }
 
     creditCardSection() {
-        const { plan } = this.state;
+        const { plan, billing } = this.state;
 
         if (!plan) return null;
+        if (billing && billing.cardOnFile) {
+            return null;
+        }
 
         return (
             <div styleName="credit-card">
@@ -172,7 +177,7 @@ class Billing extends Component {
                         { this.creditCardSection() }
                     </div>
                 :
-                    <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryCyan }} /></div>
+                    <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryWhite }} /></div>
                 }
             </div>
         );

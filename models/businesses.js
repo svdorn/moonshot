@@ -112,6 +112,8 @@ const businessesSchema = mongoose.Schema({
     billing: {
         // the stripe customer ID for the business
         customerId: String,
+        // whether the not the user has a valid card on file
+        cardOnFile: Boolean,
         // the subscription the business currently has
         subscription: {
             // name of the subscription
