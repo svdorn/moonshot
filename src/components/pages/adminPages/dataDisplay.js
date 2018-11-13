@@ -2,8 +2,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {} from "../../actions/usersActions";
-import {} from "../../miscFunctions";
+import {} from "../../../actions/usersActions";
+import {} from "../../../miscFunctions";
 
 class DataDisplay extends Component {
     constructor(props) {
