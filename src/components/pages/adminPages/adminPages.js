@@ -1,9 +1,9 @@
-"use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
-import {closeNotification} from "../../../actions/usersActions";
-import {bindActionCreators} from 'redux';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { browserHistory } from "react-router";
+import { closeNotification } from "../../../actions/usersActions";
+import { bindActionCreators } from "redux";
 
 class AdminPages extends Component {
     goTo(route) {
@@ -15,22 +15,40 @@ class AdminPages extends Component {
         window.scrollTo(0, 0);
     }
 
-
     render() {
         return (
             <div className="fullHeight">
-                <div className="clickable primary-white" onClick={() => this.goTo("/admin/skillPicker")}>Skills</div><br/>
-                <div className="clickable primary-white" onClick={() => this.goTo("/admin/businessPicker")}>Businesses</div>
+                <div
+                    className="clickable primary-white"
+                    onClick={() => this.goTo("/admin/skillPicker")}
+                >
+                    Skills
+                </div>
+                <br />
+                <div
+                    className="clickable primary-white"
+                    onClick={() => this.goTo("/admin/businessPicker")}
+                >
+                    Businesses
+                </div>
+                <div
+                    className="clickable primary-white"
+                    onClick={() => this.goTo("/admin/dataDisplay")}
+                >
+                    Data Display
+                </div>
             </div>
         );
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification,
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -39,4 +57,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminPages);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AdminPages);
