@@ -370,9 +370,6 @@ async function stripeUpdates() {
                                     return resolve();
                                 }
                             }
-                        } else {
-                            console.log(`error fetching subscriptions list from stripe for business with id ${business._id}`);
-                            return resolve();
                         }
                     }
                     // if there is a new subscription to be added after the current one, add it for its start date

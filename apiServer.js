@@ -258,6 +258,7 @@ app.post("/misc/unsubscribeEmail", miscApis.POST_unsubscribeEmail);
 app.post("/misc/resetAlan", miscApis.POST_resetAlan);
 
 app.post("/webhooks/addCandidate", webhooks.POST_addCandidate);
+app.post("/webhooks/cancelBillingSubscription", webhooks.POST_cancelBillingSubscription);
 
 // ----->> END APIs <<----- //
 

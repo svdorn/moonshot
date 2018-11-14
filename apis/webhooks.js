@@ -1,7 +1,9 @@
 const Businesses = require('../models/businesses.js');
 const Users = require('../models/users.js');
+const credentials = require('../credentials');
 
 const mongoose = require('mongoose');
+const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 const errors = require('./errors');
 
 // get helper functions
@@ -22,7 +24,8 @@ const {
 
 
 const webhooks = {
-    POST_addCandidate
+    POST_addCandidate,
+    POST_cancelBillingSubscription
 }
 
 
@@ -130,6 +133,19 @@ async function POST_addCandidate(req, res) {
             error: `Invalid ${arg}. Should be a string, but got a ${typeof value}`
         });
     }
+}
+
+async function POST_cancelBillingSubscription(req, res) {
+    // all arguments recieved
+    const body = sanitize(req.body);
+    // maximum number of levels deep the search will go
+    const nestedLevels = 3;
+    // we want to go through arrays just in case the data is hidden in one
+    const traverseArrays = true;
+    // the unique business identifier
+    const API_Key = findNestedValue(body, "API_Key", nestedLevels, traverseArrays);
+
+    res.status(200).send({});
 }
 
 module.exports = webhooks;
