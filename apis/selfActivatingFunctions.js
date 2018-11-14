@@ -41,6 +41,7 @@ async function safeStripeUpdates() {
 // global time constants
 const ONE_HOUR = 1000 * 60 * 60;
 const ONE_DAY = ONE_HOUR * 24;
+const ONE_WEEK = ONE_DAY * 7;
 const minimumTimes = {
     "Weekly": ONE_DAY * 7,
     "Every 5 Days": ONE_DAY * 5,
@@ -328,13 +329,36 @@ async function stripeUpdates() {
 
         /* INTERNAL FUNCTIONS */
 
+        // update stripe with new subscription info, changes in subscriptions,
+        // and cancellations of subscriptions
         async function stripeUpdateBusiness(business) {
             return new Promise(async function(resolve, reject) {
-                if (!business.billing.subscription) {
+                // billing info variable
+                const billing = business.billing;
+                // if the business doesn't have a subscription, can't change anything
+                if (!billing.subscription) {
                     return resolve();
                 }
 
-                
+                // see when the current subscription ends
+                const end = billing.subscription.dateEnding;
+                // compare the end date to the date today
+                const timeLeft = end - now;
+
+                // if there is less than a week left on the plan
+                if (timeLeft < ONE_WEEK) {
+                    // if the plan is going to be cancelled, cancel it
+                    if (billing.subscription.cancelled) {
+
+                    }
+                    // if there is a new subscription to be added after the current one, add it for its start date
+                    if (billing.newSubscription && billing.newSubscription.name) {
+                        // add the new subscription to stripe and add it to db as current subscription
+
+                    }
+                    // send an email telling them they have to cancel it manually
+                }
+
 
                 // save the changes to the business
                 try { await business.save(); }
