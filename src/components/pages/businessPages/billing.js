@@ -112,18 +112,26 @@ class Billing extends Component {
     }
 
     pricingBoxes() {
-        const { plan } = this.state;
+        const { plan, updatePlan } = this.state;
         const { billing } = this.props;
 
         let baseButtonText = "Select";
         if (plan && billing && billing.subscription) {
             baseButtonText = "Switch Plan";
         }
+        if (billing && billing.subscription && billing.subscription.toCancel) {
+            if (billing.newSubscription && billing.newSubscription.name) { } else {
+                baseButtonText = "Select";
+                if (!updatePlan) {
+                    var allNotActive = true;
+                }
+            }
+        }
 
         const pricingBoxes = boxes.map(box => {
             let buttonText = baseButtonText;
             let active = "";
-            if (plan === box.period) {
+            if (plan === box.period && !allNotActive) {
                 active = "active";
                 buttonText = "Selected";
             }
@@ -163,15 +171,29 @@ class Billing extends Component {
         if (plan && billing && billing.subscription && billing.subscription.id) {
             header = "Pricing Plans";
         }
+        if (billing && billing.subscription && billing.subscription.toCancel) {
+            var info = `Your current plan is ending ${new Date(billing.subscription.dateEnding).toDateString()}. Select a plan below.`
+            if (billing.newSubscription && billing.newSubscription.name) {
+                info = `Your current plan of ${billing.subscription.name} is changing to a new plan of ${billing.newSubscription.name} on ${new Date(billing.subscription.dateEnding).toDateString()}.`
+            }
+        }
         return (
             <div styleName="pricing">
                 <div>
                     { header }
                 </div>
-                <div styleName="header-seperator">
-                </div>
+                <div styleName="header-seperator" />
                 <div>
                     There will be text here for two lines. There will be text here for two lines. There will be text here for two lines.
+                </div>
+                <div>
+                    {info ?
+                        <div>
+                            <div styleName="info">i</div>
+                            { info }
+                        </div>
+                        : null
+                    }
                 </div>
                 <div>
                     { this.pricingBoxes() }
@@ -210,7 +232,7 @@ class Billing extends Component {
     }
 
     updatePlanSection() {
-        const { plan, updatePlan } = this.state;
+        let { plan, updatePlan } = this.state;
         const { billing } = this.props;
 
         if (!updatePlan) return null;
@@ -240,6 +262,12 @@ class Billing extends Component {
         console.log("loading: ", loading);
         // don't show section
         if (!plan || !billing || (billing && !billing.cardOnFile && !updateCard) || updatePlan) return null;
+
+        if (billing && billing.subscription && billing.subscription.toCancel) {
+            if (billing.newSubscription && billing.newSubscription.name) { } else {
+                return null;
+            }
+        }
 
         const features = [
             {

@@ -19,6 +19,10 @@
     font-size: 16px;
 }
 .pricing > div:nth-child(4) {
+    font-size: 16px;
+    margin-top: 15px;
+}
+.pricing > div:nth-child(5) {
     margin-top: 20px;
 }
 .pricing-box {
@@ -137,6 +141,18 @@
     margin-top: 30px;
     font-size: 16px;
 }
+.info {
+    margin-right: 2px;
+    margin-top: 1px;
+    display: inline-block;
+    border-radius: 16px;
+    width: 17px;
+    height: 17px;
+    text-align: center;
+    font-size: 12px;
+    vertical-align: top;
+    border: 2px solid white;
+}
 
 @media only screen and (max-width: 800px) {
     .feature-box {
@@ -154,12 +170,14 @@
     }
 }
 
-
 @media screen and (max-width: 700px) {
     .pricing > div:first-child {
         font-size: 22px;
     }
     .pricing > div:nth-child(3) {
+        font-size: 14px;
+    }
+    .pricing > div:nth-child(4) {
         font-size: 14px;
     }
     .credit-card > div:first-child {
@@ -181,6 +199,14 @@
     }
     .feature-box img {
         height: 44px;
+    }
+    .info {
+        width: 14px;
+        height: 14px;
+        text-align: center;
+        font-size: 12px;
+        vertical-align: top;
+        border: 1px solid white;
     }
 }
 
