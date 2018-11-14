@@ -71,6 +71,7 @@ async function POST_customer(req, res) {
 
         // add subscription info to the user
         business.billing.subscription = {};
+        business.billing.subscription.id = subscription.id;
         business.billing.subscription.name = subscriptionTerm;
         const dateCreated = new Date(subscription.billing_cycle_anchor * 1000);
         const dateEnding = getBillingEndDate(dateCreated, subscriptionTerm);

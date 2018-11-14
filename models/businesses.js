@@ -95,6 +95,8 @@ const positionSchema = mongoose.Schema({
 })
 
 const subscriptionSchema = mongoose.Schema({
+    // the id of the subscription on stripe
+    id: String,
     // name of the subscription
     name: String,
     // date the subscription is set to start, for newSubscriptions

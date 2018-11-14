@@ -138,12 +138,41 @@ async function POST_addCandidate(req, res) {
 async function POST_cancelBillingSubscription(req, res) {
     // all arguments recieved
     const body = sanitize(req.body);
-    // maximum number of levels deep the search will go
-    const nestedLevels = 3;
-    // we want to go through arrays just in case the data is hidden in one
-    const traverseArrays = true;
-    // the unique business identifier
-    const API_Key = findNestedValue(body, "API_Key", nestedLevels, traverseArrays);
+    // the id of the subscription that was cancelled
+    const subscription = body.id;
+    // customerId of stripe customer
+    const customerId = body.customer;
+
+    // query the db to find a question
+    const query = {
+        billing: { customerId: { $eq :customerId } }
+    };
+    try {
+        var business = await Businesses
+            .findOne(query)
+            .select("_id billing");
+    }
+    catch (getBusinessesError) {
+        console.log("Error getting business from customer id in cancel stripe webhook: ", getBusinessesError);
+        return res.status(500).send("Error getting business from customerId");
+    }
+
+    if (business && business.billing && business.billing.subscription && business.billing.subscription.id) {
+        if (business.billing.subscription.id.toString() === subscription.toString()) {
+            // we have the right subscription, delete it from our database
+            
+        }
+    }
+
+    // match the subscription to the current one in the user, move that to oldSubscriptions
+    // get business by stripe customer id
+    // make sure the subscription id is the same as the current subscription.id of the business
+
+    // delete that subscription from the business
+
+    // check for newSubscriptions, start that on stripe and make it subscription in our db
+
+    // save the business
 
     res.status(200).send({});
 }

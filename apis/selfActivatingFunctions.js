@@ -364,7 +364,7 @@ async function stripeUpdates() {
                             if (billing.subscription.name === subscriptionTerm && billing.subscription.dateCreated === new Date(subscription.created * 1000)) {
                                 // the plan is still active and is the correct plan and needs to be cancelled
                                 try {
-                                    var del = await stripe.subscriptions.del(subscription.id);
+                                    var del = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
                                 } catch (deleteSubscriptionError) {
                                     console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
                                     return resolve();
