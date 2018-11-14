@@ -131,3 +131,15 @@
     top: 90px;
     left: 155px;
 }
+
+.chart-type-button {
+    position: fixed;
+    top: 125px;
+    left: 155px;
+}
+
+.toggle-dots-button {
+    position: fixed;
+    top: 160px;
+    left: 155px;
+}
