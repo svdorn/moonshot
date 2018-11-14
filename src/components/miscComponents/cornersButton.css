@@ -7,7 +7,7 @@
     position: relative;
 }
 .button.small-padding {
-    --top-padding: 10px;
+    --top-padding: 7px;
     --side-padding: 30px;
 }
 

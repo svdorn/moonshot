@@ -196,7 +196,7 @@ class Billing extends Component {
         return (
             <div styleName="credit-card">
                 <div>
-                    Please enter your card information below
+                    Please enter your card information below:
                 </div>
                 <Elements>
                     <BillingForm subscriptionTerm={plan} update={update} />
