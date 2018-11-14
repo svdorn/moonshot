@@ -14,7 +14,8 @@ const { sendEmail,
         devMode,
         moonshotUrl,
         liveSite,
-        isValidEmail
+        isValidEmail,
+        getBillingSubscriptionTerm
 } = require('./helperFunctions');
 
 // run the function to send email updates once a day at 8am LA time
@@ -349,7 +350,30 @@ async function stripeUpdates() {
                 if (timeLeft < ONE_WEEK) {
                     // if the plan is going to be cancelled, cancel it
                     if (billing.subscription.cancelled) {
+                        try {
+                            var subscriptions = await stripe.subscriptions.list({ customer: billing.customerId, limit: 3 });
+                        } catch (getSubscriptionListError) {
+                            console.log("Error getting subscription lists from stripe for business with id: ", business._id, " with error: ", getSubscriptionListError);
+                            return resolve();
+                        }
 
+                        if (subscriptions && subscriptions.length === 1) {
+                            const subscription = subscriptions[0];
+                            // make sure it is the right subscription
+                            const subscriptionTerm = getBillingSubscriptionTerm(subscription.plan.nickname);
+                            if (billing.subscription.name === subscriptionTerm && billing.subscription.dateCreated === new Date(subscription.created * 1000)) {
+                                // the plan is still active and is the correct plan and needs to be cancelled
+                                try {
+                                    var del = await stripe.subscriptions.del(subscription.id);
+                                } catch (deleteSubscriptionError) {
+                                    console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
+                                    return resolve();
+                                }
+                            }
+                        } else {
+                            console.log(`error fetching subscriptions list from stripe for business with id ${business._id}`);
+                            return resolve();
+                        }
                     }
                     // if there is a new subscription to be added after the current one, add it for its start date
                     if (billing.newSubscription && billing.newSubscription.name) {

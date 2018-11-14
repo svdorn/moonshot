@@ -10,7 +10,8 @@ const { sanitize,
         getAndVerifyUser,
         frontEndUser,
         sendEmail,
-        emailFooter
+        emailFooter,
+        getBillingEndDate
 } = require('./helperFunctions');
 
 const errors = require('./errors.js');
@@ -72,7 +73,7 @@ async function POST_customer(req, res) {
         business.billing.subscription = {};
         business.billing.subscription.name = subscriptionTerm;
         const dateCreated = new Date(subscription.billing_cycle_anchor * 1000);
-        const dateEnding = getEndDate(dateCreated, subscriptionTerm);
+        const dateEnding = getBillingEndDate(dateCreated, subscriptionTerm);
         business.billing.subscription.dateCreated = dateCreated;
         business.billing.subscription.dateEnding = dateEnding;
 
@@ -232,7 +233,7 @@ async function POST_updatePlan(req, res) {
             business.billing.newSubscription.name = subscriptionTerm;
             business.billing.newSubscription.dateStarting = business.billing.subscription.dateEnding;
             business.billing.newSubscription.cancelled = false;
-            business.billing.newSubscription.dateEnding = getEndDate(business.billing.newSubscription.dateStarting, subscriptionTerm);
+            business.billing.newSubscription.dateEnding = getBillingEndDate(business.billing.newSubscription.dateStarting, subscriptionTerm);
         } else {
             return res.status(400).send("Business does not have correct billing info to change plans.");
         }
@@ -299,35 +300,6 @@ async function sendCancelEmail(type, business, email, name, message, billing) {
             return reject(sendEmailError);
         }
     });
-}
-
-// get the end date of a subscription and return it
-function getEndDate(startDate, subscriptionTerm) {
-    // number of months the subscription lasts
-    let subscriptionLength = 0;
-
-    switch(subscriptionTerm) {
-        case "1 year":
-            subscriptionLength = 12;
-            break;
-        case "6 months":
-            subscriptionLength = 6;
-            break;
-        case "3 months":
-            subscriptionLength = 3;
-            break;
-        case "1 month":
-            subscriptionLength = 1;
-            break;
-        default:
-            subscriptionLength = 0;
-            break;
-    }
-    // get the end date
-    let endDate = new Date(startDate);
-    endDate = endDate.setMonth(endDate.getMonth() + subscriptionLength);
-
-    return endDate;
 }
 
 module.exports = billingApis;

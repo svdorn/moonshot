@@ -750,6 +750,60 @@ function lastPossibleSecond(date, daysToAdd) {
     return (new Date(year, month, day, hour, minute, second));
 }
 
+// get the end date of a subscription and return it
+function getBillingEndDate(startDate, subscriptionTerm) {
+    // number of months the subscription lasts
+    let subscriptionLength = 0;
+
+    switch(subscriptionTerm) {
+        case "1 year":
+            subscriptionLength = 12;
+            break;
+        case "6 months":
+            subscriptionLength = 6;
+            break;
+        case "3 months":
+            subscriptionLength = 3;
+            break;
+        case "1 month":
+            subscriptionLength = 1;
+            break;
+        default:
+            subscriptionLength = 0;
+            break;
+    }
+    // get the end date
+    let endDate = new Date(startDate);
+    endDate = endDate.setMonth(endDate.getMonth() + subscriptionLength);
+
+    return endDate;
+}
+
+// get the end date of a subscription and return it
+function getBillingSubscriptionTerm(plan) {
+    let subscriptionTerm = null;
+
+    switch(plan) {
+        case "Yearly Plan":
+            subscriptionTerm = "1 year";
+            break;
+        case "6 Month Plan":
+            subscriptionTerm = "6 months";
+            break;
+        case "3 Month Plan":
+            subscriptionTerm = "3 months";
+            break;
+        case "1 Month Plan":
+            subscriptionTerm = "1 month";
+            break;
+        default:
+            subscriptionTerm = null;
+            break;
+    }
+
+    return subscriptionTerm;
+}
+
 
 // find the value of a certain attribute within an object
 function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
@@ -1025,6 +1079,8 @@ const helperFunctions = {
     propertyExists,
     emailFooter,
     newObjectFromProps,
+    getBillingEndDate,
+    getBillingSubscriptionTerm,
 
     Queue,
     Stack,
