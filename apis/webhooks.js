@@ -142,18 +142,22 @@ async function POST_cancelBillingSubscription(req, res) {
     const body = sanitize(req.body);
     console.log("body: ", body);
     console.log("body data?: ", body.data)
-    if (!body.data) {
+    if (!body.data || !body.data.object) {
         return res.status(500).send("Incorrect data supplied");
     }
     // the id of the subscription that was cancelled
-    const subscriptionId = body.data.id;
+    const subscriptionId = body.data.object.id;
     // customerId of stripe customer
-    const customerId = body.data.customer;
+    const customerId = body.data.object.customer;
+
+    console.log("subscriptionId: ", subscriptionId);
+    console.log("customerId: ", customerId);
 
     // query the db the business with this stripe customerId
     const query = {
-        billing: { customerId }
+        "billing.customerId": customerId
     };
+    console.log("query: ", query);
     try {
         var business = await Businesses
             .findOne(query)
@@ -163,6 +167,8 @@ async function POST_cancelBillingSubscription(req, res) {
         console.log("Error getting business from customer id in cancel stripe webhook: ", getBusinessesError);
         return res.status(500).send("Error getting business from customerId");
     }
+
+    console.log("business: ", business);
 
     if (!business || !business.billing) {
         console.log("No business or billing info for business in cancel stripe webhook.");
