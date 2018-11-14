@@ -6,8 +6,8 @@ import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
 
 import {
-    BarChart,
-    Bar,
+    LineChart,
+    Line,
     Brush,
     ReferenceLine,
     XAxis,
@@ -18,7 +18,7 @@ import {
 } from "recharts";
 
 import colors from "../../../../colors";
-const fills = [
+const strokes = [
     colors.primaryCyan,
     colors.primaryPurpleDark,
     colors.lightGreen,
@@ -55,22 +55,22 @@ class CompareFactors extends Component {
             return combinedPoint;
         });
 
-        // create the Bars for the chart
-        const bars = factors.map((f, idx) => (
-            <Bar key={`${f.name} Bar`} dataKey={f.name} fill={fills[idx]} />
+        // create the Lines for the chart
+        const lines = factors.map((f, idx) => (
+            <Line key={`${f.name} Line`} type="monotone" dataKey={f.name} stroke={strokes[idx]} />
         ));
 
         return (
             <div className="background-primary-black-dark">
-                <BarChart
+                <LineChart
                     width={600}
                     height={300}
                     data={data}
                     margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
+                    <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip />
                     <Legend
                         verticalAlign="top"
@@ -79,8 +79,8 @@ class CompareFactors extends Component {
                     />
                     <ReferenceLine y={0} stroke="#000" />
                     <Brush dataKey="name" height={30} stroke="#8884d8" />
-                    {bars}
-                </BarChart>
+                    {lines}
+                </LineChart>
             </div>
         );
     }
