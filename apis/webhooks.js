@@ -14,7 +14,9 @@ const { sanitize,
         frontEndUser,
         getAndVerifyUser,
         findNestedValue,
-        isValidEmail
+        isValidEmail,
+        addSubscription,
+        getBillingEndDate
 } = require('./helperFunctions');
 
 const {
@@ -139,13 +141,13 @@ async function POST_cancelBillingSubscription(req, res) {
     // all arguments recieved
     const body = sanitize(req.body);
     // the id of the subscription that was cancelled
-    const subscription = body.id;
+    const subscriptionId = body.id;
     // customerId of stripe customer
     const customerId = body.customer;
 
-    // query the db to find a question
+    // query the db the business with this stripe customerId
     const query = {
-        billing: { customerId: { $eq :customerId } }
+        billing: { customerId }
     };
     try {
         var business = await Businesses
@@ -158,21 +160,47 @@ async function POST_cancelBillingSubscription(req, res) {
     }
 
     if (business && business.billing && business.billing.subscription && business.billing.subscription.id) {
-        if (business.billing.subscription.id.toString() === subscription.toString()) {
-            // we have the right subscription, delete it from our database
-            
+        if (business.billing.subscription.id.toString() === subscriptionId.toString()) {
+            // we have the right subscription, push it onto oldSubscriptions, and delete it from our database
+            if (!business.billing.oldSubscriptions) {
+                business.billing.oldSubscriptions = [];
+            }
+            business.billing.oldSubscriptions.push(business.billing.subscription);
+            business.billing.subscription = { };
         }
     }
 
-    // match the subscription to the current one in the user, move that to oldSubscriptions
-    // get business by stripe customer id
-    // make sure the subscription id is the same as the current subscription.id of the business
-
-    // delete that subscription from the business
-
-    // check for newSubscriptions, start that on stripe and make it subscription in our db
+    // if the subscription was deleted
+    if (business.billing.subscription === { }) {
+        // check for newSubscriptions, start that on stripe and make it subscription in our db
+        if (business.billing.newSubscription && business.billing.newSubscription.name) {
+            const subscriptionTerm = business.billing.newSubscription.name;
+            try {
+                var subscription = await addSubscription(customerId, subscriptionTerm);
+            } catch(error) {
+                console.log("Error adding subscription.");
+                return res.status(500).send("Error adding subscription inside cancel subscription webhook");
+            }
+            // set the newSubscription to undefined
+            business.billing.newSubscription = undefined;
+            // give the subscription the right info returned from the addSubscription method
+            business.billing.subscription.id = subscription.id;
+            business.billing.name = subscriptionTerm;
+            const dateCreated = new Date(subscription.billing_cycle_anchor * 1000);
+            const dateEnding = getBillingEndDate(dateCreated, subscriptionTerm);
+            business.billing.subscription.dateCreated = dateCreated;
+            business.billing.subscription.dateEnding = dateEnding;
+        }
+    } else {
+        return res.status(500).send("Error deleting the right subscription from our database");
+    }
 
     // save the business
+    try { await business.save(); }
+    catch (bizSaveError) {
+        console.log("Error saving business in cancel subscription webhook: ", bizSaveError);
+        return res.status(500).send("Server error saving the business after updating subscription from webhook.");
+    }
 
     res.status(200).send({});
 }

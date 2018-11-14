@@ -7,6 +7,7 @@ const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credent
 
 // get helper functions
 const { sanitize,
+        addSubscription,
         getAndVerifyUser,
         frontEndUser,
         sendEmail,
@@ -248,28 +249,6 @@ async function POST_updatePlan(req, res) {
 
         return res.json(business.billing);
     });
-}
-
-// add a subscription to a new customer
-async function addSubscription(customerId, subscriptionTerm) {
-    return new Promise(async function(resolve, reject) {
-        const index = credentials.plans.findIndex(plan => {
-            return plan.period.toString() === subscriptionTerm.toString();
-        });
-
-
-        try {
-            var subscription = await stripe.subscriptions.create({
-                customer: customerId,
-                items: [{plan: process.env.NODE_ENV === "production" ? credentials.plans[index].id : credentials.plans[index].test_id}]
-            });
-        } catch(error) {
-            console.log("Error adding subscription: ", error);
-            return reject("Error adding subscription.");
-        }
-
-        return resolve(subscription);
-    })
 }
 
 // send email to verify user account

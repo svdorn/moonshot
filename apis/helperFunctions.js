@@ -7,6 +7,7 @@ const UnsubscribedEmails = require("../models/unsubscribedEmails.js");
 const UniqueEmails = require("../models/uniqueEmails.js");
 const Businesses = require('../models/businesses.js');
 const Skills = require('../models/skills.js');
+const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 
 const errors = require("./errors");
 const crypto = require('crypto');
@@ -804,6 +805,28 @@ function getBillingSubscriptionTerm(plan) {
     return subscriptionTerm;
 }
 
+// add a subscription to a customer
+async function addSubscription(customerId, subscriptionTerm) {
+    return new Promise(async function(resolve, reject) {
+        const index = credentials.plans.findIndex(plan => {
+            return plan.period.toString() === subscriptionTerm.toString();
+        });
+
+
+        try {
+            var subscription = await stripe.subscriptions.create({
+                customer: customerId,
+                items: [{plan: process.env.NODE_ENV === "production" ? credentials.plans[index].id : credentials.plans[index].test_id}]
+            });
+        } catch(error) {
+            console.log("Error adding subscription: ", error);
+            return reject("Error adding subscription.");
+        }
+
+        return resolve(subscription);
+    })
+}
+
 
 // find the value of a certain attribute within an object
 function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
@@ -1081,6 +1104,7 @@ const helperFunctions = {
     newObjectFromProps,
     getBillingEndDate,
     getBillingSubscriptionTerm,
+    addSubscription,
 
     Queue,
     Stack,
