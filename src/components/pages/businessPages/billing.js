@@ -94,6 +94,7 @@ class Billing extends Component {
         const { _id, verificationToken } = this.props.currentUser;
 
         this.props.updateBillingPlan(_id, verificationToken, plan);
+        this.setState({ updatePlan: false });
     }
 
     updateCard = () => {
@@ -234,7 +235,8 @@ class Billing extends Component {
 
     learnFromHiresSection() {
         const { plan, updatePlan, updateCard } = this.state;
-        const { billing } = this.props;
+        const { billing, loading } = this.props;
+        console.log("loading: ", loading);
         // don't show section
         if (!plan || !billing || (billing && !billing.cardOnFile && !updateCard) || updatePlan) return null;
 
@@ -317,22 +319,26 @@ class Billing extends Component {
 
         return (
             <section styleName="learn-from-hires-section">
-                <div className="center">
-                    <div className="primary-white inline-block" style={{maxWidth: "1200px"}}>
-                        { featureBoxes }
+                {!loading ?
+                    <div className="center">
+                        <div className="primary-white inline-block" style={{maxWidth: "1200px"}}>
+                            { featureBoxes }
+                        </div>
+                        <div styleName="update-cancel">
+                            <div onClick={() => this.updateCard()}>
+                                Update Card
+                            </div>
+                            <div>
+                                |
+                            </div>
+                            <div onClick={() => this.cancelPlan()}>
+                                Cancel Plan
+                            </div>
+                        </div>
                     </div>
-                    <div styleName="update-cancel">
-                        <div onClick={() => this.updateCard()}>
-                            Update Card
-                        </div>
-                        <div>
-                            |
-                        </div>
-                        <div onClick={() => this.cancelPlan()}>
-                            Cancel Plan
-                        </div>
-                    </div>
-                </div>
+                    :
+                    <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryWhite }} /></div>
+                }
             </section>
         );
     }
@@ -373,7 +379,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         png: state.users.png,
         billing: state.users.billing,
-        blur: state.users.cancelPlanModal
+        blur: state.users.cancelPlanModal,
+        loading: state.users.loadingSomething
     };
 }
 

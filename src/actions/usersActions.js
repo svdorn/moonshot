@@ -529,13 +529,15 @@ export function pauseBillingPlan(userId, verificationToken, message) {
 // update a billing plan
 export function updateBillingPlan(userId, verificationToken, subscriptionTerm) {
     return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
         axios
             .post("/api/billing/updatePlan", { userId, verificationToken, subscriptionTerm })
             .then(response => {
                 dispatch({
                     type: "SUCCESS_BILLING_CUSTOMER",
                     billing: response.data,
-                    ...notification(`Our team will contact you shortly`)
+                    ...notification(`You have successfully updated your plan`)
                 });
             })
             .catch(error => {
