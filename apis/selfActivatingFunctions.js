@@ -311,8 +311,6 @@ async function stripeUpdates() {
             return reject(getBusinessesError);
         }
 
-        console.log("businesses: ", businesses);
-
         // millis for current time
         const now = (new Date()).getTime();
 
@@ -323,8 +321,6 @@ async function stripeUpdates() {
         for (let bizIdx = 0; bizIdx < businesses.length; bizIdx++) {
             let biz = businesses[bizIdx];
             if (biz && biz.billing) {
-                console.log("updating business: ", biz);
-
                 stripePromises.push(stripeUpdateBusiness(biz));
             }
         }
@@ -354,9 +350,6 @@ async function stripeUpdates() {
                 const end = billing.subscription.dateEnding;
                 // compare the end date to the date today
                 const timeLeft = end - now;
-                console.log("end: ", end);
-                console.log("timeLeft: ", timeLeft);
-                console.log("ONE_WEEK: ", ONE_WEEK);
 
                 // if there is less than a week left on the plan
                 if (timeLeft < ONE_WEEK) {
@@ -370,8 +363,6 @@ async function stripeUpdates() {
                             console.log("Error getting subscription lists from stripe for business with id: ", business._id, " with error: ", getSubscriptionListError);
                             return resolve();
                         }
-
-                        console.log("subscriptions: ", subscriptions);
 
                         if (subscriptions && subscriptions.data && subscriptions.data.length > 0) {
                             subIdx = subscriptions.data.findIndex(sub => { return sub.id === billing.subscription.id})
@@ -389,8 +380,6 @@ async function stripeUpdates() {
                                 console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
                                 return resolve();
                             }
-
-                            console.log("updatedSubscription: ", updatedSubscription);
 
                             // the subscription has been set to be cancelled in stripe
                             billing.subscription.cancelled = true;

@@ -140,10 +140,12 @@ async function POST_addCandidate(req, res) {
 async function POST_cancelBillingSubscription(req, res) {
     // all arguments recieved
     const body = sanitize(req.body);
+    console.log("body: ", body);
+    console.log("body data?: ", body.data)
     // the id of the subscription that was cancelled
-    const subscriptionId = body.id;
+    const subscriptionId = body.data.id;
     // customerId of stripe customer
-    const customerId = body.customer;
+    const customerId = body.data.customer;
 
     // query the db the business with this stripe customerId
     const query = {
