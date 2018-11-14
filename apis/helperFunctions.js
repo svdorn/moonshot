@@ -775,7 +775,10 @@ function getBillingEndDate(startDate, subscriptionTerm) {
     }
     // get the end date
     let endDate = new Date(startDate);
-    endDate = endDate.setMonth(endDate.getMonth() + subscriptionLength);
+    // TODO: delete, this is test stripe shit on localhost
+    // endDate = endDate.setMonth(endDate.getMonth() + subscriptionLength);
+    endDate = endDate.setMinutes(endDate.getMinutes() + subscriptionLength);
+
 
     return endDate;
 }
