@@ -142,6 +142,9 @@ async function POST_cancelBillingSubscription(req, res) {
     const body = sanitize(req.body);
     console.log("body: ", body);
     console.log("body data?: ", body.data)
+    if (!body.data) {
+        return res.status(500).send("Incorrect data supplied");
+    }
     // the id of the subscription that was cancelled
     const subscriptionId = body.data.id;
     // customerId of stripe customer
@@ -161,7 +164,12 @@ async function POST_cancelBillingSubscription(req, res) {
         return res.status(500).send("Error getting business from customerId");
     }
 
-    if (business && business.billing && business.billing.subscription && business.billing.subscription.id) {
+    if (!business || !business.billing) {
+        console.log("No business or billing info for business in cancel stripe webhook.");
+        return res.status(500).send("No business or billing info for business.");
+    }
+
+    if (business.billing.subscription && business.billing.subscription.id) {
         if (business.billing.subscription.id.toString() === subscriptionId.toString()) {
             // we have the right subscription, push it onto oldSubscriptions, and delete it from our database
             if (!business.billing.oldSubscriptions) {

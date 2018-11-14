@@ -375,7 +375,9 @@ async function stripeUpdates() {
                             // the plan is still active and is the correct plan
                             // cancel the plan at the end of the period
                             try {
-                                var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
+                                // TODO: switch back to update instead of delete, this is just used to test
+                                // var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
+                                var updatedSubscription = await stripe.subscriptions.del(subscription.id);
                             } catch (deleteSubscriptionError) {
                                 console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
                                 return resolve();
