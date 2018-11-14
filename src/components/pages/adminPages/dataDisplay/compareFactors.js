@@ -86,10 +86,9 @@ class CompareFactors extends Component {
     }
 }
 
+// make the legend (had to custom-make it so the text color would be white)
 const renderLegend = props => {
     const { payload } = props;
-
-    console.log("payload: ", payload);
 
     return (
         <div style={styles.legend}>

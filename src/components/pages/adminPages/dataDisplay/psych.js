@@ -247,38 +247,29 @@ class Psych extends Component {
 
     // the display for facet data
     facets = () => {
-        const data = [
-            { name: "-4.75", uv: 300, pv: 456 },
-            { name: "-4.25", uv: -145, pv: 230 },
-            { name: "-3.75", uv: -100, pv: 345 },
-            { name: "-3.25", uv: -8, pv: 450 },
-            { name: "-2.75", uv: 100, pv: 321 },
-            { name: "-2.25", uv: 9, pv: 235 },
-            { name: "-1.75", uv: 53, pv: 267 },
-            { name: "-1.25", uv: 252, pv: 378 },
-            { name: "-0.75", uv: 79, pv: 210 },
-            { name: "-0.25", uv: 294, pv: 23 },
-            { name: "0.25", uv: 43, pv: 45 },
-            { name: "0.75", uv: -74, pv: 90 },
-            { name: "1.25", uv: -71, pv: 130 },
-            { name: "1.75", uv: -117, pv: 11 },
-            { name: "2.25", uv: -186, pv: 107 },
-            { name: "2.75", uv: -16, pv: 926 },
-            { name: "3.25", uv: -125, pv: 653 },
-            { name: "3.75", uv: 222, pv: 366 },
-            { name: "4.25", uv: 372, pv: 486 },
-            { name: "4.75", uv: 182, pv: 512 }
-        ];
+        const self = this;
 
         const facets = [
-            { name: "Ambiguity", dataPoints: data, average: 2.3, interRel: 0.87, stdDev: 0.41 },
-            { name: "Your Mom", dataPoints: data, average: 2.3, interRel: 0.87, stdDev: 0.41 },
-            { name: "Hope", dataPoints: data, average: -1.6, interRel: 0.82, stdDev: 0.53 }
+            {
+                name: "Ambiguity",
+                dataPoints: randomData[3],
+                average: 2.3,
+                interRel: 0.87,
+                stdDev: 0.41
+            },
+            {
+                name: "Your Mom",
+                dataPoints: randomData[4],
+                average: 2.3,
+                interRel: 0.87,
+                stdDev: 0.41
+            },
+            { name: "Hope", dataPoints: randomData[5], average: -1.6, interRel: 0.82, stdDev: 0.53 }
         ];
 
-        const facetLis = facets.map(facet => {
-            return (
-                <div styleName="facet-graph">
+        const facetLis = facets.map((facet, fIdx) => {
+            return [
+                <div styleName="facet-graph" key={`facet ${fIdx}`}>
                     <div>
                         <div>{facet.name}</div>
                         <br />
@@ -295,7 +286,7 @@ class Psych extends Component {
                             <Tooltip />
                             <ReferenceLine y={0} stroke="#000" />
                             <Brush dataKey="name" height={30} stroke={colors.primaryCyan} />
-                            <Bar dataKey="pv" fill={colors.primaryCyan} />
+                            <Bar dataKey="quantity" fill={colors.primaryCyan} />
                         </BarChart>
                     </div>
                     <div>
@@ -303,11 +294,32 @@ class Psych extends Component {
                         <div>Interreliability: {facet.interRel}</div>
                         <div>Std. dev.: {facet.stdDev}</div>
                     </div>
-                </div>
-            );
+                    <div
+                        className="checkbox smallCheckbox whiteCheckbox"
+                        onClick={() => self.handleCheckMarkClick(facet)}
+                    >
+                        <img
+                            alt=""
+                            className={
+                                "checkMark" +
+                                self.state.comparableFacets.some(cf => cf.name === facet.name)
+                            }
+                            src={"/icons/CheckMarkRoundedWhite" + self.props.png}
+                        />
+                    </div>
+                </div>,
+                <br key={`facet ${fIdx} br`} />
+            ];
         });
 
-        return facetLis;
+        return (
+            <div>
+                <div className={button.cyan} styleName="compare-button" onClick={this.compare}>
+                    Compare
+                </div>
+                {facetLis}
+            </div>
+        );
     };
 
     // the display for question data
@@ -380,7 +392,13 @@ class Psych extends Component {
                     {this.categorySelector()}
                     {categoryDisplays[categoryIdx]()}
                     <Dialog open={compareOpen} onClose={this.closeCompare}>
-                        <CompareFactors factors={this.state.comparableFactors} />
+                        <CompareFactors
+                            factors={
+                                categoryIdx === 0
+                                    ? this.state.comparableFactors
+                                    : this.state.comparableFacets
+                            }
+                        />
                     </Dialog>
                 </div>
             </MuiThemeProvider>
