@@ -24,6 +24,7 @@ if (liveSite) {
     const onStart = true;
     const timezone = "America/Los_Angeles";
     new CronJob("0 0 8 * * *", safeSendUpdateEmails, onComplete, onStart, timezone);
+    new CronJob("0 0 6 * * *", safeStripeUpdates, onComplete, onStart, timezone);
 }
 
 async function safeSendUpdateEmails() {
@@ -383,7 +384,6 @@ async function stripeUpdates() {
                     }
                     // send an email telling them they have to cancel it manually
                 }
-
                 return resolve();
             })
         }
