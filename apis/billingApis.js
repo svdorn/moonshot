@@ -154,11 +154,18 @@ async function POST_cancelPlan(req, res) {
             return res.status(403).send("You do not have permission to do add credit card.");
         }
 
-        if (business.billing) {
-            business.billing.cancelled = true;
+        if (business.billing && business.billing.subscription) {
+            business.billing.subscription.cancelled = true;
             sendCancelEmail("cancel", business.name, message, business.billing)
         } else {
             return res.status(400).send("Business does not have any billing info.");
+        }
+
+        // save the business
+        try { await business.save(); }
+        catch (bizSaveError) {
+            console.log("Error saving business when adding credit card: ", bizSaveError);
+            return res.status(500).send("Server error, try again later.");
         }
 
         return res.json(business.billing);
