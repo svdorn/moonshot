@@ -1,7 +1,9 @@
 const Users = require('../models/users.js');
 const Businesses = require('../models/businesses.js');
+const credentials = require('../credentials');
 
 const mongoose = require("mongoose");
+const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 var CronJob = require("cron").CronJob;
 
 // get helper functions
@@ -28,6 +30,12 @@ async function safeSendUpdateEmails() {
     try { await sendUpdateEmails(); }
     catch (sendEmailsError) { console.log("Error sending emails: ", sendEmailsError); }
     console.log("Email updates sent!");
+}
+
+async function safeStripeUpdates() {
+    try { await stripeUpdates(); }
+    catch (stripeUpdatesError) { console.log("Error sending emails: ", stripeUpdatesError); }
+    console.log("Stripe updates completed!");
 }
 
 // global time constants
@@ -277,6 +285,73 @@ async function sendUpdateEmails() {
             const failRecipients = devMode ? devEmail :["ameyer24@wisc.edu", "stevedorn9@gmail.com"];
             try { await sendEmail({ subject: failSubject, recipients: failRecipients, content: failContent}) }
             catch (sendFailEmailFail) { console.log("Also failed sending the email telling us the email failed :("); }
+        }
+    });
+}
+
+// function that runs once a day and updates stripe with cancellations and new subscriptions
+async function stripeUpdates() {
+    return new Promise(async function(resolve, reject) {
+        // go through every business and find out how many new candidates have
+        // completed their evaluations in
+        try {
+            var businesses = await Businesses
+                .find({})
+                .select("_id billing");
+        }
+        catch (getBusinessesError) {
+            handleError(getBusinessesError);
+            return reject(getBusinessesError);
+        }
+
+        // millis for current time
+        const now = (new Date()).getTime();
+
+        // contains one promise for stripe update
+        let stripePromises = [];
+
+        // go through every business and see if their subscriptions on stripe need to be updated
+        for (let bizIdx = 0; bizIdx < businesses.length; bizIdx++) {
+            let biz = businesses[bizIdx];
+            if (biz && biz.billing) {
+                stripePromises.push(stripeUpdateBusiness(biz));
+            }
+        }
+
+        // wait for all the stripe updates to finish
+        try { await Promise.all(stripePromises); }
+        catch (stripePromisesError) { return handleError(stripePromisesError); }
+
+        // end the function
+        return resolve();
+
+
+        /* INTERNAL FUNCTIONS */
+
+        async function stripeUpdateBusiness(business) {
+            return new Promise(async function(resolve, reject) {
+                if (!business.billing.subscription) {
+                    return resolve();
+                }
+
+                
+
+                // save the changes to the business
+                try { await business.save(); }
+                catch (saveBusinessError) { console.log("Error saving business with id: ", business._id, " after updating stripe info: " , saveBusinessError); }
+
+                return resolve();
+            })
+        }
+
+        // handles generic errors
+        async function handleError(error) {
+            console.log("Error updating stripe: ", error);
+            const failSubject = "MOONSHOT - IMPORTANT - Error sending stripe updates";
+            const failContent = "Check logs for specific error.";
+            const failRecipients = devMode ? devEmail :["ameyer24@wisc.edu", "stevedorn9@gmail.com"];
+            try { await sendEmail({ subject: failSubject, recipients: failRecipients, content: failContent}) }
+            catch (sendFailEmailFail) { console.log("Also failed sending the email telling us the stripe update failed :("); }
         }
     });
 }
