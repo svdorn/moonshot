@@ -150,14 +150,11 @@ async function POST_cancelBillingSubscription(req, res) {
     // customerId of stripe customer
     const customerId = body.data.object.customer;
 
-    console.log("subscriptionId: ", subscriptionId);
-    console.log("customerId: ", customerId);
-
     // query the db the business with this stripe customerId
     const query = {
         "billing.customerId": customerId
     };
-    console.log("query: ", query);
+
     try {
         var business = await Businesses
             .findOne(query)
@@ -167,8 +164,6 @@ async function POST_cancelBillingSubscription(req, res) {
         console.log("Error getting business from customer id in cancel stripe webhook: ", getBusinessesError);
         return res.status(500).send("Error getting business from customerId");
     }
-
-    console.log("business: ", business);
 
     if (!business || !business.billing) {
         console.log("No business or billing info for business in cancel stripe webhook.");
@@ -183,32 +178,31 @@ async function POST_cancelBillingSubscription(req, res) {
             }
             business.billing.oldSubscriptions.push(business.billing.subscription);
             business.billing.subscription = { };
-        }
-    }
-
-    // if the subscription was deleted
-    if (business.billing.subscription === { }) {
-        // check for newSubscriptions, start that on stripe and make it subscription in our db
-        if (business.billing.newSubscription && business.billing.newSubscription.name) {
-            const subscriptionTerm = business.billing.newSubscription.name;
-            try {
-                var subscription = await addSubscription(customerId, subscriptionTerm);
-            } catch(error) {
-                console.log("Error adding subscription.");
-                return res.status(500).send("Error adding subscription inside cancel subscription webhook");
-            }
-            // set the newSubscription to undefined
-            business.billing.newSubscription = undefined;
-            // give the subscription the right info returned from the addSubscription method
-            business.billing.subscription.id = subscription.id;
-            business.billing.name = subscriptionTerm;
-            const dateCreated = new Date(subscription.billing_cycle_anchor * 1000);
-            const dateEnding = getBillingEndDate(dateCreated, subscriptionTerm);
-            business.billing.subscription.dateCreated = dateCreated;
-            business.billing.subscription.dateEnding = dateEnding;
+        } else {
+            return res.status(500).send("Error deleting the right subscription from our database");
         }
     } else {
         return res.status(500).send("Error deleting the right subscription from our database");
+    }
+
+    // check for newSubscriptions, start that on stripe and make it subscription in our db
+    if (business.billing.newSubscription && business.billing.newSubscription.name) {
+        const subscriptionTerm = business.billing.newSubscription.name;
+        try {
+            var subscription = await addSubscription(customerId, subscriptionTerm);
+        } catch(error) {
+            console.log("Error adding subscription.");
+            return res.status(500).send("Error adding subscription inside cancel subscription webhook");
+        }
+        // set the newSubscription to undefined
+        business.billing.newSubscription = undefined;
+        // give the subscription the right info returned from the addSubscription method
+        business.billing.subscription.id = subscription.id;
+        business.billing.name = subscriptionTerm;
+        const dateCreated = new Date(subscription.billing_cycle_anchor * 1000);
+        const dateEnding = getBillingEndDate(dateCreated, subscriptionTerm);
+        business.billing.subscription.dateCreated = dateCreated;
+        business.billing.subscription.dateEnding = dateEnding;
     }
 
     // save the business

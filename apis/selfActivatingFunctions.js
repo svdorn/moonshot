@@ -26,10 +26,11 @@ if (liveSite) {
     new CronJob("0 0 8 * * *", safeSendUpdateEmails, onComplete, onStart, timezone);
     new CronJob("0 0 6 * * *", safeStripeUpdates, onComplete, onStart, timezone);
 }
-const onComplete = null;
-const onStart = true;
-const timezone = "America/Los_Angeles";
-new CronJob("0 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
+// Test stripe shit
+// const onComplete = null;
+// const onStart = true;
+// const timezone = "America/Los_Angeles";
+// new CronJob("0 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
 
 
 async function safeSendUpdateEmails() {
@@ -375,9 +376,7 @@ async function stripeUpdates() {
                             // the plan is still active and is the correct plan
                             // cancel the plan at the end of the period
                             try {
-                                // TODO: switch back to update instead of delete, this is just used to test
-                                // var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
-                                var updatedSubscription = await stripe.subscriptions.del(subscription.id);
+                                var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
                             } catch (deleteSubscriptionError) {
                                 console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
                                 return resolve();
