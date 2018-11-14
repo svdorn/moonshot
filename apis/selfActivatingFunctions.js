@@ -336,7 +336,7 @@ async function stripeUpdates() {
                 // billing info variable
                 const billing = business.billing;
                 // if the business doesn't have a subscription, can't change anything
-                if (!billing.subscription) {
+                if (!billing.subscription || !billing.subscription.id) {
                     return resolve();
                 }
 
