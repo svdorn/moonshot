@@ -97,6 +97,8 @@ const positionSchema = mongoose.Schema({
 const subscriptionSchema = mongoose.Schema({
     // name of the subscription
     name: String,
+    // date the subscription is set to start, for newSubscriptions 
+    dateStarting: Date,
     // date the subscription was created
     dateCreated: Date,
     // date the subscription is ending

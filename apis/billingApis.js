@@ -19,7 +19,8 @@ const billingApis = {
     POST_customer,
     POST_updateSource,
     POST_cancelPlan,
-    POST_pausePlan
+    POST_pausePlan,
+    POST_updatePlan
 }
 
 // post a new customer with their credit card info and subscription selection
@@ -198,6 +199,49 @@ async function POST_pausePlan(req, res) {
             sendCancelEmail("pause", business.name, user.email, user.name, message, business.billing)
         } else {
             return res.status(400).send("Business does not have any billing info.");
+        }
+
+        return res.json(business.billing);
+    });
+}
+
+async function POST_updatePlan(req, res) {
+    return new Promise(async function(resolve, reject) {
+        const { userId, verificationToken, subscriptionTerm } = sanitize(req.body);
+
+        // if one of the arguments doesn't exist, return with error code
+        if (!userId || !verificationToken || !subscriptionTerm) {
+            return res.status(400).send("Bad request.");
+        }
+
+        // give business object the Stripe customer
+        try {
+            var user = await getAndVerifyUser(userId, verificationToken);
+            var business = await Businesses.findById(user.businessInfo.businessId);
+            if (!business) {
+                console.log("No business found with id: ", user.businessInfo.businessId);
+                throw "No business.";
+            }
+        } catch (getUserError) {
+            console.log("Error getting user or business from user: ", getUserError);
+            return res.status(403).send("You do not have permission to do add credit card.");
+        }
+
+        if (business.billing && business.billing.subscription && business.billing.subscription.dateEnding) {
+            business.billing.newSubscription = {};
+            business.billing.newSubscription.name = subscriptionTerm;
+            business.billing.newSubscription.dateStarting = business.billing.subscription.dateEnding;
+            business.billing.newSubscription.cancelled = false;
+            business.billing.newSubscription.dateEnding = getEndDate(business.billing.newSubscription.dateStarting, subscriptionTerm);
+        } else {
+            return res.status(400).send("Business does not have correct billing info to change plans.");
+        }
+
+        // save the business
+        try { await business.save(); }
+        catch (bizSaveError) {
+            console.log("Error saving business when adding credit card: ", bizSaveError);
+            return res.status(500).send("Server error, try again later.");
         }
 
         return res.json(business.billing);

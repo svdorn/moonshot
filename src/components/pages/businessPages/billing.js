@@ -53,6 +53,7 @@ class Billing extends Component {
             plan: undefined,
             // if the user is currently updating their plan
             updatePlan: false,
+            // if the user is currently updating their card
             updateCard: false
         };
     }
@@ -90,7 +91,7 @@ class Billing extends Component {
     }
 
     updatePlan = (plan) => {
-        console.log("update plan: ", plan);
+         
     }
 
     updateCard = () => {

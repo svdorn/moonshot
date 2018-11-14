@@ -526,6 +526,25 @@ export function pauseBillingPlan(userId, verificationToken, message) {
     };
 }
 
+// update a billing plan
+export function updateBillingPlan(userId, verificationToken, subscriptionTerm) {
+    return function(dispatch) {
+        axios
+            .post("/api/billing/updatePlan", { userId, verificationToken, subscriptionTerm })
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_CUSTOMER",
+                    billing: response.data,
+                    ...notification(`Our team will contact you shortly`)
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
 // LOG USER OUT
 export function signout() {
     return function(dispatch) {

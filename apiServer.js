@@ -239,6 +239,7 @@ app.post("/billing/customer", billingApis.POST_customer);
 app.post("/billing/updateSource", billingApis.POST_updateSource);
 app.post("/billing/cancelPlan", billingApis.POST_cancelPlan);
 app.post("/billing/pausePlan", billingApis.POST_pausePlan);
+app.post("/billing/updatePlan", billingApis.POST_updatePlan);
 
 app.get("/evaluation/currentState", evaluationApis.GET_currentState);
 app.post("/evaluation/getInitialState", evaluationApis.POST_getInitialState);
