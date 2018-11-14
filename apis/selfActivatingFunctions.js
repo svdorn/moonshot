@@ -348,7 +348,7 @@ async function stripeUpdates() {
                 // if there is less than a week left on the plan
                 if (timeLeft < ONE_WEEK) {
                     // if the plan is going to be cancelled, cancel it
-                    if (billing.subscription.cancelled) {
+                    if (billing.subscription.toCancel && !billing.subscription.cancelled) {
                         try {
                             var subscriptions = await stripe.subscriptions.list({ customer: billing.customerId, limit: 3 });
                         } catch (getSubscriptionListError) {
@@ -360,11 +360,23 @@ async function stripeUpdates() {
 
                         if (subIdx !== -1) {
                             const subscription = subscriptions[subIdx];
-                            // the plan is still active and is the correct plan and needs to be cancelled
+                            // the plan is still active and is the correct plan
+                            // cancel the plan at the end of the period
                             try {
                                 var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
                             } catch (deleteSubscriptionError) {
                                 console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
+                                return resolve();
+                            }
+
+                            // the subscription has been set to be cancelled in stripe
+                            billing.subscription.cancelled = true;
+
+                            // save the business
+                            // save the business
+                            try { await business.save(); }
+                            catch (bizSaveError) {
+                                console.log("Error saving business when updating cancelled status of subscription from stripe: ", bizSaveError);
                                 return resolve();
                             }
                         }

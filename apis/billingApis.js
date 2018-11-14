@@ -159,7 +159,7 @@ async function POST_cancelPlan(req, res) {
         }
 
         if (business.billing && business.billing.subscription) {
-            business.billing.subscription.cancelled = true;
+            business.billing.subscription.toCancel = true;
             sendCancelEmail("cancel", business.name, user.email, user.name, message, business.billing)
         } else {
             return res.status(400).send("Business does not have any billing info.");

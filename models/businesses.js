@@ -105,6 +105,8 @@ const subscriptionSchema = mongoose.Schema({
     dateCreated: Date,
     // date the subscription is ending
     dateEnding: Date,
+    // if the subscription is set to be cancelled but hasn't been in stripe yet
+    toCancel: Boolean,
     // if the subscription has been cancelled
     cancelled: Boolean,
     // the number of reminder emails sent telling them their plan is about to expire
