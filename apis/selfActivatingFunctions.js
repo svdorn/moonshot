@@ -14,8 +14,7 @@ const { sendEmail,
         devMode,
         moonshotUrl,
         liveSite,
-        isValidEmail,
-        getBillingSubscriptionTerm
+        isValidEmail
 } = require('./helperFunctions');
 
 // run the function to send email updates once a day at 8am LA time
@@ -360,22 +359,16 @@ async function stripeUpdates() {
                         if (subscriptions && subscriptions.length === 1) {
                             const subscription = subscriptions[0];
                             // make sure it is the right subscription
-                            const subscriptionTerm = getBillingSubscriptionTerm(subscription.plan.nickname);
-                            if (billing.subscription.name === subscriptionTerm && billing.subscription.dateCreated === new Date(subscription.created * 1000)) {
+                            if (billing.subscription.id === subscription.id) {
                                 // the plan is still active and is the correct plan and needs to be cancelled
                                 try {
-                                    var del = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
+                                    var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
                                 } catch (deleteSubscriptionError) {
                                     console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
                                     return resolve();
                                 }
                             }
                         }
-                    }
-                    // if there is a new subscription to be added after the current one, add it for its start date
-                    if (billing.newSubscription && billing.newSubscription.name) {
-                        // add the new subscription to stripe and add it to db as current subscription
-
                     }
                     // send an email telling them they have to cancel it manually
                 }

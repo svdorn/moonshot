@@ -780,31 +780,6 @@ function getBillingEndDate(startDate, subscriptionTerm) {
     return endDate;
 }
 
-// get the end date of a subscription and return it
-function getBillingSubscriptionTerm(plan) {
-    let subscriptionTerm = null;
-
-    switch(plan) {
-        case "Yearly Plan":
-            subscriptionTerm = "1 year";
-            break;
-        case "6 Month Plan":
-            subscriptionTerm = "6 months";
-            break;
-        case "3 Month Plan":
-            subscriptionTerm = "3 months";
-            break;
-        case "1 Month Plan":
-            subscriptionTerm = "1 month";
-            break;
-        default:
-            subscriptionTerm = null;
-            break;
-    }
-
-    return subscriptionTerm;
-}
-
 // add a subscription to a customer
 async function addSubscription(customerId, subscriptionTerm) {
     return new Promise(async function(resolve, reject) {
@@ -1103,7 +1078,6 @@ const helperFunctions = {
     emailFooter,
     newObjectFromProps,
     getBillingEndDate,
-    getBillingSubscriptionTerm,
     addSubscription,
 
     Queue,
