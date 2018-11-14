@@ -356,27 +356,21 @@ async function stripeUpdates() {
                             return resolve();
                         }
 
-                        if (subscriptions && subscriptions.length === 1) {
-                            const subscription = subscriptions[0];
-                            // make sure it is the right subscription
-                            if (billing.subscription.id === subscription.id) {
-                                // the plan is still active and is the correct plan and needs to be cancelled
-                                try {
-                                    var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
-                                } catch (deleteSubscriptionError) {
-                                    console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
-                                    return resolve();
-                                }
+                        subIdx = subscriptions.findIndex(sub => { return sub.id.toString() === billing.subscription.id.toString()})
+
+                        if (subIdx !== -1) {
+                            const subscription = subscriptions[subIdx];
+                            // the plan is still active and is the correct plan and needs to be cancelled
+                            try {
+                                var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
+                            } catch (deleteSubscriptionError) {
+                                console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
+                                return resolve();
                             }
                         }
                     }
                     // send an email telling them they have to cancel it manually
                 }
-
-
-                // save the changes to the business
-                try { await business.save(); }
-                catch (saveBusinessError) { console.log("Error saving business with id: ", business._id, " after updating stripe info: " , saveBusinessError); }
 
                 return resolve();
             })
