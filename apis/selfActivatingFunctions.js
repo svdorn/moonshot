@@ -14,7 +14,8 @@ const { sendEmail,
         devMode,
         moonshotUrl,
         liveSite,
-        isValidEmail
+        isValidEmail,
+        getBillingEndDate
 } = require('./helperFunctions');
 
 // run the function to send email updates once a day at 8am LA time
@@ -352,10 +353,21 @@ async function stripeUpdates() {
                 // compare the end date to the date today
                 const timeLeft = end - now;
 
+                // need to renew stuff by updating endingDate if timeLeft is negative and toCancel is not set
+                if (timeLeft < 0 && !billing.subscription.toCancel && !billing.subscription.cancelled) {
+                    // set the new billing end date to be this enddate plus the subscription term (essentially we are renewing for a new term)
+                    billing.subscription.endDate = getBillingEndDate(billing.subscription.endDate, billing.subscription.name);
+                    // refresh the reminder emails count
+                    billing.reminderEmails = 0;
+                    // save the business
+                    try { await business.save(); }
+                    catch (bizSaveError) {
+                        console.log("Error saving business when renewing subscription term: ", bizSaveError);
+                        return resolve();
+                    }
+                }
                 // if there is less than a week left on the plan
-                if (timeLeft < ONE_WEEK) {
-                    // TODO: need to renew stuff by updating endingDate if timeLeft is negative and toCancel is not set
-
+                else if (timeLeft < ONE_WEEK) {
                     // if the plan is going to be cancelled, cancel it
                     if (billing.subscription.toCancel && !billing.subscription.cancelled) {
                         try {
@@ -385,7 +397,6 @@ async function stripeUpdates() {
                             // the subscription has been set to be cancelled in stripe
                             billing.subscription.cancelled = true;
 
-                            // save the business
                             // save the business
                             try { await business.save(); }
                             catch (bizSaveError) {
