@@ -160,7 +160,7 @@ class Billing extends Component {
         const { billing } = this.props;
 
         let header = "Select a Plan";
-        if (plan && billing) {
+        if (plan && billing && billing.subscription && billing.subscription.id) {
             header = "Pricing Plans";
         }
         return (
@@ -225,9 +225,10 @@ class Billing extends Component {
                 <CornersButton
                     onClick={() => this.updatePlan(plan)}
                     content="Update Plan"
+                    size="small-padding"
                     color1={colors.primaryCyan}
                     color2={colors.primaryWhite}
-                    className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
+                    className="font18px font16pxUnder900 font12pxUnder400 marginTop20px"
                 />
             </div>
         );
