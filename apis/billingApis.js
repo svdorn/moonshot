@@ -156,7 +156,7 @@ async function POST_cancelPlan(req, res) {
 
         if (business.billing && business.billing.subscription) {
             business.billing.subscription.cancelled = true;
-            sendCancelEmail("cancel", business.name, message, business.billing)
+            sendCancelEmail("cancel", business.name, user.email, user.name, message, business.billing)
         } else {
             return res.status(400).send("Business does not have any billing info.");
         }
@@ -195,7 +195,7 @@ async function POST_pausePlan(req, res) {
         }
 
         if (business.billing) {
-            sendCancelEmail("pause", business.name, message, business.billing)
+            sendCancelEmail("pause", business.name, user.email, user.name, message, business.billing)
         } else {
             return res.status(400).send("Business does not have any billing info.");
         }
@@ -227,7 +227,7 @@ async function addSubscription(customerId, subscriptionTerm) {
 }
 
 // send email to verify user account
-async function sendCancelEmail(type, business, message, billing) {
+async function sendCancelEmail(type, business, email, name, message, billing) {
     return new Promise(async function(resolve, reject) {
         let recipients = ["kyle@moonshotinsights.io", "stevedorn9@gmail.com"];
         let subject = "Cancel/Pausing of Plan";
@@ -237,6 +237,10 @@ async function sendCancelEmail(type, business, message, billing) {
                 <p>${type}</p>
                 <h3>Business Name</h3>
                 <p>${business}</p>
+                <h3>User Email</h3>
+                <p>${email}</p>
+                <h3>User Name</h3>
+                <p>${name}</p>
                 <h3>Message</h3>
                 <p>${message}</p>
                 <h3>Billing Info</h3>

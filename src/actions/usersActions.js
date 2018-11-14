@@ -514,8 +514,9 @@ export function pauseBillingPlan(userId, verificationToken, message) {
             .post("/api/billing/pausePlan", { userId, verificationToken, message })
             .then(response => {
                 dispatch({
-                    type: "SUCCESS_BILLING_INFO",
-                    billing: response.data
+                    type: "SUCCESS_BILLING_CUSTOMER",
+                    billing: response.data,
+                    ...notification(`Our team will contact you shortly`)
                 });
             })
             .catch(error => {
