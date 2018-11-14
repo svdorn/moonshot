@@ -356,7 +356,7 @@ async function stripeUpdates() {
                             return resolve();
                         }
 
-                        subIdx = subscriptions.findIndex(sub => { return sub.id.toString() === billing.subscription.id.toString()})
+                        subIdx = subscriptions.findIndex(sub => { return sub.id === billing.subscription.id})
 
                         if (subIdx !== -1) {
                             const subscription = subscriptions[subIdx];
