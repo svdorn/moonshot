@@ -94,7 +94,7 @@ class AccountAdminMenu extends Component {
         }
     };
 
-    openSignUpModal = (name) => {
+    openSignUpModal = name => {
         this.props.openSignupModal("menu", name);
     };
 
@@ -191,9 +191,7 @@ class AccountAdminMenu extends Component {
                 <div>
                     <img src={`/icons/User${png}`} styleName="user-icon" />
                     <div styleName="menu-option" onClick={() => this.openSignUpModal("Button")}>
-                        <div
-                            className={button.purpleBlue}
-                        >
+                        <div className={button.cyan} style={{ color: "white" }}>
                             Create Account
                         </div>
                     </div>

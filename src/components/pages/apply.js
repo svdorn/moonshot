@@ -20,6 +20,7 @@ import AddPositionDialog from "../childComponents/addPositionDialog";
 import InviteCandidatesModal from "./dashboard/inviteCandidatesModal";
 import axios from "axios";
 
+import { button } from "../../classes";
 import "./apply.css";
 
 class Apply extends Component {
@@ -114,7 +115,7 @@ class Apply extends Component {
             }
             this.setState({ positions, position, logo, company, admin, pageSetUp });
         } else {
-            console.log("in here")
+            console.log("in here");
             this.setState({ noPositions: true });
         }
     }
@@ -181,20 +182,43 @@ class Apply extends Component {
 
     // info for an admin coming to preview this page
     adminInformation() {
-        if (!this.props.currentUser.confirmEmbedLink) {
-            var buttonText = "Continue To Invite Candidates ";
-            var onClick = () => this.dashboardAndModal();
+        const { currentUser } = this.props;
+        if (currentUser) {
+            if (!this.props.currentUser.confirmEmbedLink) {
+                var buttonText = "Continue To Invite Candidates ";
+                var onClick = () => this.dashboardAndModal();
+            } else {
+                var buttonText = "Invite Candidates ";
+                var onClick = () => this.openInviteCandidatesModal();
+            }
+            var description = (
+                <div>
+                    This is {makePossessive(this.state.company)} candidate invite page. When
+                    candidates click on your link, they will be taken here. New evaluations will
+                    automatically be added to your dropdown list above.{" "}
+                    <span className="primary-cyan clickable" onClick={this.openAddPositionModal}>
+                        Add evaluations
+                    </span>{" "}
+                    for other open positions.
+                </div>
+            );
         } else {
-            var buttonText = "Invite Candidates ";
-            var onClick = () => this.openInviteCandidatesModal();
+            var buttonText = "Claim This Page";
+            var onClick = this.openClaimPageModal;
+            var description = (
+                <div>
+                    Candidates will see the above when they click{" "}
+                    {makePossessive(this.state.company)} invite link.
+                </div>
+            );
         }
+
         return (
             <div>
                 <div>
                     <button
-                        className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
-                        styleName="next-button"
-                        style={{ padding: "6px 20px" }}
+                        className="button noselect round-6px background-secondary-gray primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
+                        style={{ padding: "6px 20px", cursor: "initial" }}
                     >
                         <span>Next &#8594;</span>
                     </button>
@@ -205,25 +229,64 @@ class Apply extends Component {
                     />
                 </div>
                 <div styleName="employer-box">
-                    <div>
-                        This is {makePossessive(this.state.company)} candidate invite page. When
-                        candidates click on your link, they will be taken here. New evaluations will
-                        automatically be added to your dropdown list above.{" "}
-                        <span
-                            className="primary-cyan clickable"
-                            onClick={this.openAddPositionModal}
-                        >
-                            Add evaluations
-                        </span>{" "}
-                        for other open positions.
-                    </div>
-                    <div onClick={onClick}>
-                        {buttonText} <img src={`/icons/ArrowBlue${this.props.png}`} />
+                    {description}
+                    <div
+                        onClick={onClick}
+                        className={button.cyan}
+                        style={{ marginTop: "20px", color: "white" }}
+                    >
+                        {buttonText} <img src={`/icons/LineArrow${this.props.png}`} />
                     </div>
                 </div>
             </div>
         );
     }
+
+    // // info for an admin coming to preview this page
+    // adminInformation() {
+    //     if (!this.props.currentUser.confirmEmbedLink) {
+    //         var buttonText = "Continue To Invite Candidates ";
+    //         var onClick = () => this.dashboardAndModal();
+    //     } else {
+    //         var buttonText = "Invite Candidates ";
+    //         var onClick = () => this.openInviteCandidatesModal();
+    //     }
+    //     return (
+    //         <div>
+    //             <div>
+    //                 <button
+    //                     className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
+    //                     styleName="next-button"
+    //                     style={{ padding: "6px 20px" }}
+    //                 >
+    //                     <span>Next &#8594;</span>
+    //                 </button>
+    //                 <HoverTip
+    //                     className="font14px secondary-gray"
+    //                     style={{ marginTop: "40px", marginLeft: "-6px" }}
+    //                     text="After candidates press next, they sign up to complete your evaluation."
+    //                 />
+    //             </div>
+    //             <div styleName="employer-box">
+    //                 <div>
+    //                     This is {makePossessive(this.state.company)} candidate invite page. When
+    //                     candidates click on your link, they will be taken here. New evaluations will
+    //                     automatically be added to your dropdown list above.{" "}
+    //                     <span
+    //                         className="primary-cyan clickable"
+    //                         onClick={this.openAddPositionModal}
+    //                     >
+    //                         Add evaluations
+    //                     </span>{" "}
+    //                     for other open positions.
+    //                 </div>
+    //                 <div onClick={onClick}>
+    //                     {buttonText} <img src={`/icons/ArrowBlue${this.props.png}`} />
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     // info for somebody about to create an account
     claimPage() {
@@ -299,10 +362,8 @@ class Apply extends Component {
         // company has loaded
         if (company) {
             let actionsToTake = null;
-            if (admin && currentUser) {
+            if (admin) {
                 actionsToTake = this.adminInformation();
-            } else if (admin && !currentUser) {
-                actionsToTake = this.claimPage();
             } else if (pageSetUp === false) {
                 actionsToTake = this.pageNotSetUp();
             } else {
