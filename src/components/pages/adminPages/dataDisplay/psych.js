@@ -2,8 +2,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { addNotification } from "../../../../actions/usersActions";
-import {} from "../../../../miscFunctions";
+import { randomInt } from "../../../../miscFunctions";
 import { Tabs, Tab, Dialog } from "@material-ui/core";
 import {
     BarChart,
@@ -24,6 +25,43 @@ import "./dataDisplay.css";
 
 const sites = ["All", "Insights", "Learning"];
 const categories = ["Factors", "Facets", "Questions", "Outputs"];
+
+const theme = createMuiTheme({
+    palette: {
+        primary: { main: "#76defe", dark: "#76defe", light: "#76defe" },
+        secondary: { main: "#76defe", dark: "#76defe", light: "#76defe" },
+        error: { main: "#eb394f", dark: "#eb394f", light: "#eb394f" },
+        type: "dark"
+    },
+    typography: { fontFamily: "Muli,sans-serif" }
+});
+
+const nums = [
+    "-4.75",
+    "-4.25",
+    "-3.75",
+    "-3.25",
+    "-2.75",
+    "-2.25",
+    "-1.75",
+    "-1.25",
+    "-0.75",
+    "-0.25",
+    "0.25",
+    "0.75",
+    "1.25",
+    "1.75",
+    "2.25",
+    "2.75",
+    "3.25",
+    "3.75",
+    "4.25",
+    "4.75"
+];
+
+const randomData = [0, 1, 2, 3, 4, 5, 6].map(n =>
+    nums.map(num => ({ name: num, quantity: randomInt(0, 400) }))
+);
 
 class Psych extends Component {
     constructor(props) {
@@ -104,44 +142,43 @@ class Psych extends Component {
     }
 
     // the display for factor data
-    // the display for facet data
     factors = () => {
         const self = this;
 
         const data = [
-            { name: "-4.75", uv: 300, pv: 456 },
-            { name: "-4.25", uv: -145, pv: 230 },
-            { name: "-3.75", uv: -100, pv: 345 },
-            { name: "-3.25", uv: -8, pv: 450 },
-            { name: "-2.75", uv: 100, pv: 321 },
-            { name: "-2.25", uv: 9, pv: 235 },
-            { name: "-1.75", uv: 53, pv: 267 },
-            { name: "-1.25", uv: 252, pv: 378 },
-            { name: "-0.75", uv: 79, pv: 210 },
-            { name: "-0.25", uv: 294, pv: 23 },
-            { name: "0.25", uv: 43, pv: 45 },
-            { name: "0.75", uv: -74, pv: 90 },
-            { name: "1.25", uv: -71, pv: 130 },
-            { name: "1.75", uv: -117, pv: 11 },
-            { name: "2.25", uv: -186, pv: 107 },
-            { name: "2.75", uv: -16, pv: 926 },
-            { name: "3.25", uv: -125, pv: 653 },
-            { name: "3.75", uv: 222, pv: 366 },
-            { name: "4.25", uv: 372, pv: 486 },
-            { name: "4.75", uv: 182, pv: 512 }
+            { name: "-4.75", quantity: 456 },
+            { name: "-4.25", quantity: 230 },
+            { name: "-3.75", quantity: 345 },
+            { name: "-3.25", quantity: 450 },
+            { name: "-2.75", quantity: 321 },
+            { name: "-2.25", quantity: 235 },
+            { name: "-1.75", quantity: 267 },
+            { name: "-1.25", quantity: 378 },
+            { name: "-0.75", quantity: 210 },
+            { name: "-0.25", quantity: 23 },
+            { name: "0.25", quantity: 45 },
+            { name: "0.75", quantity: 90 },
+            { name: "1.25", quantity: 130 },
+            { name: "1.75", quantity: 11 },
+            { name: "2.25", quantity: 107 },
+            { name: "2.75", quantity: 926 },
+            { name: "3.25", quantity: 653 },
+            { name: "3.75", quantity: 366 },
+            { name: "4.25", quantity: 486 },
+            { name: "4.75", quantity: 512 }
         ];
 
         const factors = [
             {
                 name: "Honesty-Humility",
-                dataPoints: data,
+                dataPoints: randomData[0],
                 average: 2.3,
                 stdDev: 0.41
             },
-            { name: "Extraversion", dataPoints: data, average: 2.3, stdDev: 0.41 },
+            { name: "Extraversion", dataPoints: randomData[1], average: 2.3, stdDev: 0.41 },
             {
                 name: "Dinglification",
-                dataPoints: data,
+                dataPoints: randomData[2],
                 average: -1.6,
                 stdDev: 0.53
             }
@@ -166,7 +203,7 @@ class Psych extends Component {
                             <Tooltip />
                             <ReferenceLine y={0} stroke="#000" />
                             <Brush dataKey="name" height={30} stroke={colors.primaryCyan} />
-                            <Bar dataKey="pv" fill={colors.primaryCyan} />
+                            <Bar dataKey="quantity" fill={colors.primaryCyan} />
                         </BarChart>
                     </div>
                     <div>
@@ -282,7 +319,8 @@ class Psych extends Component {
                 disagree: 0.05,
                 neutral: 0.12,
                 agree: 0.83,
-                proportion: 0.14
+                proportion: 0.14,
+                n: 403
             },
             {
                 text:
@@ -292,7 +330,8 @@ class Psych extends Component {
                 disagree: 0.15,
                 neutral: 0.2,
                 agree: 0.65,
-                proportion: 0.3
+                proportion: 0.3,
+                n: 64
             }
         ];
         // map each of the outputs to a list item
@@ -304,6 +343,7 @@ class Psych extends Component {
                     <div>{output.neutral}</div>
                     <div>{output.agree}</div>
                     <div>{output.proportion}</div>
+                    <div>{output.n}</div>
                 </li>
             );
         });
@@ -315,6 +355,7 @@ class Psych extends Component {
                 <div>Neutral</div>
                 <div>Agree</div>
                 <div>Proportion</div>
+                <div style={{ fontStyle: "italic" }}>n = </div>
             </li>
         );
         return <ul>{outputItems}</ul>;
@@ -326,14 +367,16 @@ class Psych extends Component {
         console.log("categoryIdx: ", categoryIdx);
 
         return (
-            <div style={{ textAlign: "center" }}>
-                {this.siteSelector()}
-                {this.categorySelector()}
-                {categoryDisplays[categoryIdx]()}
-                <Dialog open={compareFactorsOpen} onClose={this.closeCompare}>
-                    <CompareFactors factors={this.state.comparableFactors} />
-                </Dialog>
-            </div>
+            <MuiThemeProvider theme={theme}>
+                <div style={{ textAlign: "center" }}>
+                    {this.siteSelector()}
+                    {this.categorySelector()}
+                    {categoryDisplays[categoryIdx]()}
+                    <Dialog open={compareFactorsOpen} onClose={this.closeCompare}>
+                        <CompareFactors factors={this.state.comparableFactors} />
+                    </Dialog>
+                </div>
+            </MuiThemeProvider>
         );
     }
 }

@@ -345,6 +345,11 @@ function copyFromPage(identifier) {
     document.execCommand("copy");
 }
 
+function randomInt(lowBound, highBound) {
+    const range = highBound - lowBound;
+    return Math.floor(Math.random() * (range + 1)) + lowBound;
+}
+
 function noop() {}
 
 const miscFunctions = {
@@ -368,6 +373,7 @@ const miscFunctions = {
     copyCustomLink,
     copyFromPage,
     noop,
+    randomInt,
 
     Queue,
     Stack

@@ -5,7 +5,28 @@ import { bindActionCreators } from "redux";
 import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
 
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import {
+    BarChart,
+    Bar,
+    Brush,
+    ReferenceLine,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend
+} from "recharts";
+
+import colors from "../../../../colors";
+const fills = [
+    colors.primaryCyan,
+    colors.primaryPurpleDark,
+    colors.lightGreen,
+    colors.primaryPeach,
+    colors.primaryPurpleLight,
+    colors.secondaryRed,
+    colors.magenta
+];
 
 class CompareFactors extends Component {
     constructor(props) {
@@ -15,31 +36,83 @@ class CompareFactors extends Component {
     }
 
     render() {
-        const data = [
-            { x: 100, y: 200, z: 200 },
-            { x: 120, y: 100, z: 260 },
-            { x: 170, y: 300, z: 400 },
-            { x: 140, y: 250, z: 280 },
-            { x: 150, y: 400, z: 500 },
-            { x: 110, y: 280, z: 200 }
-        ];
+        const { factors } = this.props;
+
+        if (factors.length < 2) {
+            return "Cannot compare fewer than 2 factors.";
+        }
+
+        // create a list of the combined data points
+        const data = factors[0].dataPoints.map((point, pointIdx) => {
+            let combinedPoint = {
+                // "3.75" or "-2.25" etc
+                name: point.name
+            };
+            // add the quantity for each factor
+            factors.forEach(factor => {
+                combinedPoint[factor.name] = factor.dataPoints[pointIdx].quantity;
+            });
+            return combinedPoint;
+        });
+
+        // create the Bars for the chart
+        const bars = factors.map((f, idx) => (
+            <Bar key={`${f.name} Bar`} dataKey={f.name} fill={fills[idx]} />
+        ));
+
         return (
-            <div>
-                <ScatterChart
-                    width={400}
-                    height={400}
-                    margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+            <div className="background-primary-black-dark">
+                <BarChart
+                    width={600}
+                    height={300}
+                    data={data}
+                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
-                    <CartesianGrid />
-                    <XAxis dataKey={"x"} type="number" name="stature" unit="cm" />
-                    <YAxis dataKey={"y"} type="number" name="weight" unit="kg" />
-                    <Scatter name="A school" data={data} fill="#8884d8" />
-                    <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                </ScatterChart>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend
+                        verticalAlign="top"
+                        wrapperStyle={{ lineHeight: "40px" }}
+                        content={renderLegend}
+                    />
+                    <ReferenceLine y={0} stroke="#000" />
+                    <Brush dataKey="name" height={30} stroke="#8884d8" />
+                    {bars}
+                </BarChart>
             </div>
         );
     }
 }
+
+const renderLegend = props => {
+    const { payload } = props;
+
+    console.log("payload: ", payload);
+
+    return (
+        <div style={styles.legend}>
+            {payload.map((entry, index) => (
+                <div key={`item-${index}`} style={styles.legendItem}>
+                    <div style={{ ...styles.legendColor, backgroundColor: entry.color }} />
+                    {entry.value}
+                </div>
+            ))}
+        </div>
+    );
+};
+
+const styles = {
+    legend: { color: "white", textAlign: "center" },
+    legendItem: { display: "inline-block", margin: "0 10px" },
+    legendColor: {
+        width: "16px",
+        height: "16px",
+        display: "inline-block",
+        marginRight: "5px"
+    }
+};
 
 function mapStateToProps(state) {
     return {
