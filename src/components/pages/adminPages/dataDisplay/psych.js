@@ -2,9 +2,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {} from "../../../../actions/usersActions";
+import { addNotification } from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
-import { Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab, Dialog } from "@material-ui/core";
 import {
     BarChart,
     Bar,
@@ -16,8 +16,10 @@ import {
     Tooltip,
     Legend
 } from "recharts";
+import CompareFactors from "./compareFactors";
 
 import colors from "../../../../colors";
+import { button } from "../../../../classes";
 import "./dataDisplay.css";
 
 const sites = ["All", "Insights", "Learning"];
@@ -30,7 +32,8 @@ class Psych extends Component {
         this.state = {
             site: sites[0],
             categoryIdx: 0,
-            comparableFactors: []
+            comparableFactors: [],
+            compareFactorsOpen: false
         };
     }
 
@@ -62,6 +65,22 @@ class Psych extends Component {
         // if the factor didn't exists within the array, add it, then set state
         comparableFactors.push(factor);
         this.setState({ comparableFactors });
+    };
+
+    // pop up a modal comparing two factors
+    compare = () => {
+        const { comparableFactors: factors } = this.state;
+        // can't compare one factor to itself
+        if (factors.length < 2) {
+            return this.props.addNotification("Need at least two factors to compare", "error");
+        }
+        // pop up a modal with the comparison
+        this.setState({ compareFactorsOpen: true });
+    };
+
+    // close the comparison dialog
+    closeCompare = () => {
+        this.setState({ compareFactorsOpen: false });
     };
 
     // the tabs that show the different sites you can choose from
@@ -172,7 +191,14 @@ class Psych extends Component {
             ];
         });
 
-        return factorGraphs;
+        return (
+            <div>
+                <div className={button.cyan} styleName="compare-button" onClick={this.compare}>
+                    Compare
+                </div>
+                {factorGraphs}
+            </div>
+        );
     };
 
     // the display for facet data
@@ -295,7 +321,7 @@ class Psych extends Component {
     };
 
     render() {
-        const { categoryIdx } = this.state;
+        const { categoryIdx, compareFactorsOpen } = this.state;
         const categoryDisplays = [this.factors, this.facets, this.questions, this.outputs];
         console.log("categoryIdx: ", categoryIdx);
 
@@ -304,6 +330,9 @@ class Psych extends Component {
                 {this.siteSelector()}
                 {this.categorySelector()}
                 {categoryDisplays[categoryIdx]()}
+                <Dialog open={compareFactorsOpen} onClose={this.closeCompare}>
+                    <CompareFactors factors={this.state.comparableFactors} />
+                </Dialog>
             </div>
         );
     }
@@ -317,7 +346,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({ addNotification }, dispatch);
 }
 
 export default connect(

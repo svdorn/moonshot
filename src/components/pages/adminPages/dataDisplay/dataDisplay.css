@@ -90,6 +90,7 @@
 
 .psych-output-item > div:first-child {
     flex: 1;
+    text-align: left;
 }
 
 .psych-output-item > div:not(:first-child) {
@@ -123,4 +124,10 @@
     position: absolute;
     top: 10px;
     left: 0;
+}
+
+.compare-button {
+    position: fixed;
+    top: 90px;
+    left: 155px;
 }
