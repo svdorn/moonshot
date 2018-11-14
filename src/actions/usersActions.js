@@ -459,9 +459,7 @@ export function setupBillingCustomer(source, email, userId, verificationToken, s
 
 export function billingCardOnFileFalse(billing) {
     return function(dispatch) {
-        console.log("billing: ", billing);
         billing.cardOnFile = false;
-        console.log("billing a: ", billing);
         dispatch({
             type: "SUCCESS_BILLING_INFO",
             billing
@@ -478,6 +476,46 @@ export function updateBillingSource(source, userId, verificationToken) {
                     type: "SUCCESS_BILLING_CUSTOMER",
                     billing: response.data,
                     ...notification(`You have successfully updated your card`)
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
+// cancel a billing plan
+export function cancelBillingPlan(userId, verificationToken, message) {
+    return function(dispatch) {
+        axios
+            .post("/api/billing/cancelPlan", { userId, verificationToken, message })
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_INFO",
+                    billing: response.data
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
+// pause a billing plan
+export function pauseBillingPlan(userId, verificationToken, message) {
+    return function(dispatch) {
+        dispatch({
+            type: "CLOSE_CANCEL_PLAN_MODAL"
+        });
+
+        axios
+            .post("/api/billing/pausePlan", { userId, verificationToken, message })
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_INFO",
+                    billing: response.data
                 });
             })
             .catch(error => {

@@ -100,7 +100,9 @@ const subscriptionSchema = mongoose.Schema({
     // date the subscription was created
     dateCreated: Date,
     // date the subscription is ending
-    dateEnding: Date
+    dateEnding: Date,
+    // if the subscription has been cancelled
+    cancelled: Boolean
 })
 
 

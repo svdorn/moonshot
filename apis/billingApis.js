@@ -8,14 +8,18 @@ const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credent
 // get helper functions
 const { sanitize,
         getAndVerifyUser,
-        frontEndUser
+        frontEndUser,
+        sendEmail,
+        emailFooter
 } = require('./helperFunctions');
 
 const errors = require('./errors.js');
 
 const billingApis = {
     POST_customer,
-    POST_updateSource
+    POST_updateSource,
+    POST_cancelPlan,
+    POST_pausePlan
 }
 
 // post a new customer with their credit card info and subscription selection
@@ -128,6 +132,71 @@ async function POST_updateSource(req, res) {
     })
 }
 
+async function POST_cancelPlan(req, res) {
+    return new Promise(async function(resolve, reject) {
+        const { userId, verificationToken, message } = sanitize(req.body);
+
+        // if one of the arguments doesn't exist, return with error code
+        if (!userId || !verificationToken) {
+            return res.status(400).send("Bad request.");
+        }
+
+        // give business object the Stripe customer
+        try {
+            var user = await getAndVerifyUser(userId, verificationToken);
+            var business = await Businesses.findById(user.businessInfo.businessId);
+            if (!business) {
+                console.log("No business found with id: ", user.businessInfo.businessId);
+                throw "No business.";
+            }
+        } catch (getUserError) {
+            console.log("Error getting user or business from user: ", getUserError);
+            return res.status(403).send("You do not have permission to do add credit card.");
+        }
+
+        if (business.billing) {
+            business.billing.cancelled = true;
+            sendCancelEmail("cancel", business.name, message, business.billing)
+        } else {
+            return res.status(400).send("Business does not have any billing info.");
+        }
+
+        return res.json(business.billing);
+    });
+}
+
+async function POST_pausePlan(req, res) {
+    return new Promise(async function(resolve, reject) {
+        const { userId, verificationToken, message } = sanitize(req.body);
+
+        // if one of the arguments doesn't exist, return with error code
+        if (!userId || !verificationToken) {
+            return res.status(400).send("Bad request.");
+        }
+
+        // give business object the Stripe customer
+        try {
+            var user = await getAndVerifyUser(userId, verificationToken);
+            var business = await Businesses.findById(user.businessInfo.businessId);
+            if (!business) {
+                console.log("No business found with id: ", user.businessInfo.businessId);
+                throw "No business.";
+            }
+        } catch (getUserError) {
+            console.log("Error getting user or business from user: ", getUserError);
+            return res.status(403).send("You do not have permission to do add credit card.");
+        }
+
+        if (business.billing) {
+            sendCancelEmail("pause", business.name, message, business.billing)
+        } else {
+            return res.status(400).send("Business does not have any billing info.");
+        }
+
+        return res.json(business.billing);
+    });
+}
+
 // add a subscription to a new customer
 async function addSubscription(customerId, subscriptionTerm) {
     return new Promise(async function(resolve, reject) {
@@ -148,6 +217,33 @@ async function addSubscription(customerId, subscriptionTerm) {
 
         return resolve(subscription);
     })
+}
+
+// send email to verify user account
+async function sendCancelEmail(type, business, message, billing) {
+    return new Promise(async function(resolve, reject) {
+        let recipients = ["kyle@moonshotinsights.io", "stevedorn9@gmail.com"];
+        let subject = "Cancel/Pausing of Plan";
+        const content = `<div>
+                <h2>Cancel/Pausing of a Plan</h2>
+                <h3>Type</h3>
+                <p>${type}</p>
+                <h3>Business Name</h3>
+                <p>${business}</p>
+                <h3>Message</h3>
+                <p>${message}</p>
+                <h3>Billing Info</h3>
+                <p>${billing}</p>
+            </div>`;
+
+        try {
+            await sendEmail({ recipients, subject, content });
+            return resolve();
+        } catch (sendEmailError) {
+            // send email error
+            return reject(sendEmailError);
+        }
+    });
 }
 
 // get the end date of a subscription and return it

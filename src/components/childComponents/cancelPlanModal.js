@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { generalAction, updateStore } from '../../actions/usersActions';
+import { addNotification, cancelBillingPlan, generalAction, pauseBillingPlan, updateStore } from '../../actions/usersActions';
 import Button from '@material-ui/core/Button';
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -21,45 +21,54 @@ class CancelPlanModal extends Component {
         super(props);
 
         this.state = {
-            frame: "First"
+            frame: "First",
+            error: undefined
         };
     }
 
     close = () => {
         this.props.generalAction("CLOSE_CANCEL_PLAN_MODAL");
         this.props.updateStore("blurMenu", false);
-        this.setState({ frame: "First" });
+        this.setState({ frame: "First", error: undefined });
     }
 
     changeFrame = (frame) => {
-        this.setState({ frame })
+        this.setState({ frame, error: undefined })
     }
 
     pausePlan = () => {
-        console.log("pause plan");
         const pause = document.getElementById("pause");
         const message = pause.value;
 
+        const { _id, verificationToken } = this.props.currentUser;
+
         if (!message) {
             // error
+            return this.setState({ error: "Must add a message to pause plan." });
         }
-
+        this.props.pauseBillingPlan(_id, verificationToken, message);
+        this.setState({ frame: "First" });
     }
 
     cancelPlan = () => {
-        console.log("cancel plan");
         const cancel = document.getElementById("cancel");
         const message = cancel.value;
 
+        const { _id, verificationToken } = this.props.currentUser;
+
         if (!message) {
             // error
+            return this.setState({ error: "Must add a message to cancel plan." });
         }
-        this.setState({ frame: "Cancel Confirmation" })
+        this.props.cancelBillingPlan(_id, verificationToken, message);
+        this.setState({ frame: "Cancel Confirmation" });
     }
 
     cancelPlanNoMessage = () => {
-        console.log("cancel plan no message");
-        this.setState({ frame: "Cancel Confirmation" })
+        const { _id, verificationToken } = this.props.currentUser;
+
+        this.props.cancelBillingPlan(_id, verificationToken, null);
+        this.setState({ frame: "Cancel Confirmation" });
     }
 
     firstFrame() {
@@ -91,6 +100,12 @@ class CancelPlanModal extends Component {
         return (
             <div styleName="pause-plan">
                 How long do you need to pause the plan?
+                {this.state.error ?
+                    <div className="font14px secondary-red">
+                        {this.state.error}
+                    </div>
+                    : null
+                }
                 <div>
                     <textarea styleName="textarea" id="pause" placeholder="Type info here..." />
                 </div>
@@ -113,6 +128,12 @@ class CancelPlanModal extends Component {
         return (
             <div styleName="cancel-plan">
                 {"What's the single biggest reason for you cancelling?"}
+                {this.state.error ?
+                    <div className="font14px secondary-red">
+                        {this.state.error}
+                    </div>
+                    : null
+                }
                 <div>
                     <textarea styleName="textarea" id="cancel" placeholder="Type here..." />
                 </div>
@@ -190,7 +211,10 @@ class CancelPlanModal extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        addNotification,
+        cancelBillingPlan,
         generalAction,
+        pauseBillingPlan,
         updateStore
     }, dispatch);
 }
