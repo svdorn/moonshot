@@ -98,10 +98,11 @@
 }
 
 .facet-graph {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     margin: 20px 0;
+    position: relative;
 }
 /* title and graph */
 .facet-graph > div:first-child {
@@ -116,4 +117,10 @@
 /* stats */
 .facet-graph > div:nth-child(2) {
     display: inline-block;
+}
+/* factor check box */
+.facet-graph > div:nth-child(3) {
+    position: absolute;
+    top: 10px;
+    left: 0;
 }
