@@ -207,26 +207,44 @@ class Psych extends Component {
         ];
 
         const factorGraphs = factors.map(factor => {
+            // the parts of the chart that are common to Bar and Line Charts
+            const chartParts = [
+                <CartesianGrid strokeDasharray="3 3" />,
+                <XAxis dataKey="name" />,
+                <YAxis />,
+                <Tooltip />,
+                <ReferenceLine y={0} stroke="#000" />,
+                <Brush dataKey="name" height={30} stroke={colors.primaryCyan} />
+            ];
+            // the attributes for the overall chart
+            const chartAttrs = {
+                style: { display: "inline-block" },
+                width: 600,
+                height: 300,
+                data: factor.dataPoints,
+                margin: { top: 5, right: 30, left: 20, bottom: 5 }
+            };
+            if (this.state.chartType === "bar") {
+                chartParts.push(<Bar dataKey="quantity" fill={colors.primaryCyan} />);
+                var chart = <BarChart {...chartAttrs}>{chartParts}</BarChart>;
+            } else {
+                chartParts.push(
+                    <Line
+                        type="monotone"
+                        dataKey="quantity"
+                        stroke={colors.primaryCyan}
+                        dot={this.state.dots ? undefined : null}
+                    />
+                );
+                var chart = <LineChart {...chartAttrs}>{chartParts}</LineChart>;
+            }
+
             return [
                 <div styleName="facet-graph" key={factor.name}>
                     <div>
                         <div>{factor.name}</div>
                         <br />
-                        <BarChart
-                            style={{ display: "inline-block" }}
-                            width={600}
-                            height={300}
-                            data={factor.dataPoints}
-                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <ReferenceLine y={0} stroke="#000" />
-                            <Brush dataKey="name" height={30} stroke={colors.primaryCyan} />
-                            <Bar dataKey="quantity" fill={colors.primaryCyan} />
-                        </BarChart>
+                        {chart}
                     </div>
                     <div>
                         <div>Average: {factor.average}</div>
@@ -255,6 +273,22 @@ class Psych extends Component {
                 <div className={button.cyan} styleName="compare-button" onClick={this.compare}>
                     Compare
                 </div>
+                <div
+                    styleName="chart-type-button"
+                    className={button.cyan}
+                    onClick={this.changeChartType}
+                >
+                    {this.state.chartType === "bar" ? "Switch to Lines" : "Switch to Bars"}
+                </div>
+                {this.state.chartType === "line" ? (
+                    <div
+                        styleName="toggle-dots-button"
+                        className={button.cyan}
+                        onClick={this.toggleDots}
+                    >
+                        Toggle Dots
+                    </div>
+                ) : null}
                 {factorGraphs}
             </div>
         );
