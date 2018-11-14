@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
+import { button } from "../../../../classes";
 
 import {
     LineChart,
@@ -32,8 +33,13 @@ class CompareFactors extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = { dot: false };
     }
+
+    // turn on/off the dots on the graph
+    toggleDots = () => {
+        this.setState({ dot: !this.state.dot });
+    };
 
     render() {
         const { factors } = this.props;
@@ -57,7 +63,13 @@ class CompareFactors extends Component {
 
         // create the Lines for the chart
         const lines = factors.map((f, idx) => (
-            <Line key={`${f.name} Line`} type="monotone" dataKey={f.name} stroke={strokes[idx]} />
+            <Line
+                key={`${f.name} Line`}
+                type="monotone"
+                dataKey={f.name}
+                stroke={strokes[idx]}
+                dot={this.state.dot ? undefined : null}
+            />
         ));
 
         return (
@@ -81,6 +93,15 @@ class CompareFactors extends Component {
                     <Brush dataKey="name" height={30} stroke="#8884d8" />
                     {lines}
                 </LineChart>
+                <div style={{ textAlign: "center" }}>
+                    <div
+                        className={`font12px ${button.cyan}`}
+                        style={{ display: "inline-block", margin: "10px 0", color: "white" }}
+                        onClick={this.toggleDots}
+                    >
+                        Toggle Dots
+                    </div>
+                </div>
             </div>
         );
     }
