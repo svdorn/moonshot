@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBillingInfo, billingCardOnFileFalse, generalAction, updateStore } from '../../../actions/usersActions';
+import { getBillingInfo, billingCardOnFileFalse, generalAction, updateStore, updateBillingPlan } from '../../../actions/usersActions';
 import { makeSingular } from "../../../miscFunctions";
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
@@ -91,7 +91,9 @@ class Billing extends Component {
     }
 
     updatePlan = (plan) => {
-         
+        const { _id, verificationToken } = this.props.currentUser;
+
+        this.props.updateBillingPlan(_id, verificationToken, plan);
     }
 
     updateCard = () => {
@@ -380,7 +382,8 @@ function mapDispatchToProps(dispatch) {
         getBillingInfo,
         billingCardOnFileFalse,
         generalAction,
-        updateStore
+        updateStore,
+        updateBillingPlan
     }, dispatch);
 }
 

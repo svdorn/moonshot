@@ -773,6 +773,8 @@ function getBillingEndDate(startDate, subscriptionTerm) {
             subscriptionLength = 0;
             break;
     }
+    // TODO: take this out
+    subscriptionLength = 0;
     // get the end date
     let endDate = new Date(startDate);
     endDate = endDate.setMonth(endDate.getMonth() + subscriptionLength);

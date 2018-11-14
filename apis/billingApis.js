@@ -231,6 +231,8 @@ async function POST_updatePlan(req, res) {
         }
 
         if (business.billing && business.billing.subscription && business.billing.subscription.dateEnding) {
+            business.billing.subscription.toCancel = true;
+
             business.billing.newSubscription = {};
             business.billing.newSubscription.name = subscriptionTerm;
             business.billing.newSubscription.dateStarting = business.billing.subscription.dateEnding;
