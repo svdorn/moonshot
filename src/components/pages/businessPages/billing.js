@@ -189,7 +189,7 @@ class Billing extends Component {
         if (billing && billing.subscription && billing.subscription.toCancel) {
             var info = `Your current plan is ending ${new Date(billing.subscription.dateEnding).toDateString()}. Select a new plan below.`
             if (billing.newSubscription && billing.newSubscription.name) {
-                info = `Your current plan of ${billing.subscription.name} is changing to a new plan of ${billing.newSubscription.name} on ${new Date(billing.subscription.dateEnding).toDateString()}.`
+                info = `Your current ${makeSingular(billing.subscription.name)} plan is changing to a ${makeSingular(billing.newSubscription.name)} on ${new Date(billing.subscription.dateEnding).toDateString()}.`
             }
         }
         return (

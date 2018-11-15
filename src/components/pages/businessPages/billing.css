@@ -13,7 +13,7 @@
     height: 2px;
     background: var(--primary-cyan);
     width: 70px;
-    margin: 5px auto;
+    margin: 15px auto;
 }
 .pricing > div:nth-child(3) {
     font-size: 16px;
