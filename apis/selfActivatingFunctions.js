@@ -27,11 +27,11 @@ if (liveSite) {
     new CronJob("0 0 8 * * *", safeSendUpdateEmails, onComplete, onStart, timezone);
     new CronJob("0 0 6 * * *", safeStripeUpdates, onComplete, onStart, timezone);
 }
-// TODO: delete, this is test stripe shit on localhost
-const onComplete = null;
-const onStart = true;
-const timezone = "America/Los_Angeles";
-new CronJob("0 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
+// testing for stripe stuff
+// const onComplete = null;
+// const onStart = true;
+// const timezone = "America/Los_Angeles";
+// new CronJob("0 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
 
 
 async function safeSendUpdateEmails() {
@@ -301,11 +301,9 @@ async function sendUpdateEmails() {
 // function that runs once a day and updates stripe with cancellations and new subscriptions
 async function stripeUpdates() {
     return new Promise(async function(resolve, reject) {
-        // go through every business and find out how many new candidates have
-        // completed their evaluations in
         try {
             var businesses = await Businesses
-                .find({})
+                .find({ billing: { $exists: true } })
                 .select("_id billing");
         }
         catch (getBusinessesError) {
@@ -389,10 +387,10 @@ async function stripeUpdates() {
                             // the plan is still active and is the correct plan
                             // cancel the plan at the end of the period
                             try {
-                                // TODO: delete after testing
-                                var updatedSubscription = await stripe.subscriptions.del(subscription.id);
+                                // for testing:
+                                // var updatedSubscription = await stripe.subscriptions.del(subscription.id);
 
-                                // var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
+                                var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
                             } catch (deleteSubscriptionError) {
                                 console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
                                 return resolve();
