@@ -51,6 +51,8 @@ class Billing extends Component {
         this.state = {
             // the plan that is selected
             plan: undefined,
+            // currentPlan
+            currentPlan: undefined,
             // if the user is currently updating their plan
             updatePlan: false,
             // if the user is currently updating their card
@@ -63,8 +65,8 @@ class Billing extends Component {
 
         const { currentUser, billing } = this.props;
 
-        // need to set plan here
-        if (billing && billing.subscription) { return this.setState({ plan: billing.subscription.name }); }
+        // if already have billng
+        if (billing && billing.subscription) { return this.setState({ plan: billing.subscription.name, currentPlan: billing.subscription.name }); }
 
         const businessId = currentUser && currentUser.businessInfo ? currentUser.businessInfo.businessId : null;
 
@@ -73,7 +75,11 @@ class Billing extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.billing && nextProps.billing.subscription && nextProps.billing.subscription.name !== this.state.plan) {
-            this.setState({ plan: nextProps.billing.subscription.name });
+            const plan = nextProps.billing.subscription.name;
+            if (!this.state.plan) {
+                var currentPlan = plan;
+            }
+            this.setState({ plan, currentPlan });
         }
     }
 
@@ -113,10 +119,8 @@ class Billing extends Component {
     }
 
     pricingBoxes() {
-        const { plan, updatePlan } = this.state;
+        const { plan, currentPlan, updatePlan } = this.state;
         const { billing } = this.props;
-
-        console.log("billing: ", billing);
 
         let baseButtonText = "Select";
         if (plan && billing && billing.subscription) {
@@ -131,15 +135,23 @@ class Billing extends Component {
             }
         }
 
+        console.log("plan: ", plan);
+        console.log("currentPlan: ", currentPlan);
+
         const pricingBoxes = boxes.map(box => {
             let buttonText = baseButtonText;
-            let active = "";
+            let shadowActive = "";
             if (plan === box.period && !allNotActive) {
-                active = "active";
+                var active = "active";
+                shadowActive = "active";
                 buttonText = "Selected";
             }
+            if (currentPlan === box.period && !allNotActive) {
+                var active = "active";
+                buttonText = "Current Plan";
+            }
             return (
-                <div styleName={"pricing-box " + active} key={`pricing-box-${box.period}`}>
+                <div styleName={"pricing-box " + shadowActive} key={`pricing-box-${box.period}`}>
                     <div>
                         <img src={`/icons/pricing/${box.icon}${this.props.png}`} />
                         <div>
