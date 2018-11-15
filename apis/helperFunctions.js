@@ -776,7 +776,7 @@ function getBillingEndDate(startDate, subscriptionTerm) {
     // get the end date
     let endDate = new Date(startDate);
     //endDate = endDate.setMonth(endDate.getMonth() + subscriptionLength);
-    // testing stuff
+    // STRIPE TESTING
     endDate = endDate.setMinutes(endDate.getMinutes() + subscriptionLength);
 
     return endDate;

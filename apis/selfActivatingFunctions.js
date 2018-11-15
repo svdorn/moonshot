@@ -27,7 +27,7 @@ if (liveSite) {
     new CronJob("0 0 8 * * *", safeSendUpdateEmails, onComplete, onStart, timezone);
     new CronJob("0 0 6 * * *", safeStripeUpdates, onComplete, onStart, timezone);
 }
-// testing for stripe stuff
+// STRIPE TESTING
 const onComplete = null;
 const onStart = true;
 const timezone = "America/Los_Angeles";
@@ -387,7 +387,7 @@ async function stripeUpdates() {
                             // the plan is still active and is the correct plan
                             // cancel the plan at the end of the period
                             try {
-                                // for testing:
+                                // STRIPE TESTING
                                 var updatedSubscription = await stripe.subscriptions.del(subscription.id);
 
                                 // var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
