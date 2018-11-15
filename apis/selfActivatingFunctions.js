@@ -356,7 +356,7 @@ async function stripeUpdates() {
                 // need to renew stuff by updating endingDate if timeLeft is negative and toCancel is not set
                 if (timeLeft < 0 && !billing.subscription.toCancel && !billing.subscription.cancelled) {
                     // set the new billing end date to be this enddate plus the subscription term (essentially we are renewing for a new term)
-                    billing.subscription.endDate = getBillingEndDate(billing.subscription.endDate, billing.subscription.name);
+                    billing.subscription.dateEnding = getBillingEndDate(billing.subscription.dateEnding, billing.subscription.name);
                     // refresh the reminder emails count
                     billing.reminderEmails = 0;
                     // save the business
