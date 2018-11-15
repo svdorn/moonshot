@@ -115,6 +115,8 @@ class Billing extends Component {
         const { plan, updatePlan } = this.state;
         const { billing } = this.props;
 
+        console.log("billing: ", billing);
+
         let baseButtonText = "Select";
         if (plan && billing && billing.subscription) {
             baseButtonText = "Switch Plan";

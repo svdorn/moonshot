@@ -198,7 +198,7 @@ async function POST_cancelBillingSubscription(req, res) {
         business.billing.newSubscription = undefined;
         // give the subscription the right info returned from the addSubscription method
         business.billing.subscription.id = subscription.id;
-        business.billing.name = subscriptionTerm;
+        business.billing.subscription.name = subscriptionTerm;
         const dateCreated = new Date(subscription.billing_cycle_anchor * 1000);
         const dateEnding = getBillingEndDate(dateCreated, subscriptionTerm);
         business.billing.subscription.dateCreated = dateCreated;
