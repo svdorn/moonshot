@@ -91,6 +91,7 @@
 .update-cancel {
     color: var(--primary-white);
     font-size: 16px;
+    margin-top: 40px;
 }
 .update-cancel > div:first-child {
     display: inline-block;
