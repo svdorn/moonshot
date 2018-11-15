@@ -82,6 +82,12 @@
     color: var(--primary-white);
     font-size: 16px;
 }
+.close-section {
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--primary-white);
+    margin-top: -10px;
+}
 
 .circular-progress {
     text-align: center;
@@ -151,6 +157,9 @@
         font-size: 14px;
     }
     .credit-card > div:first-child {
+        font-size: 14px;
+    }
+    .close-section {
         font-size: 14px;
     }
     .pricing-box > div > div > span {

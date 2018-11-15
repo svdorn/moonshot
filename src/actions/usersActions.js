@@ -466,6 +466,15 @@ export function billingCardOnFileFalse(billing) {
         });
     };
 }
+export function billingCardOnFileTrue(billing) {
+    return function(dispatch) {
+        billing.cardOnFile = true;
+        dispatch({
+            type: "SUCCESS_BILLING_INFO",
+            billing
+        });
+    };
+}
 
 export function updateBillingSource(source, userId, verificationToken) {
     return function(dispatch) {

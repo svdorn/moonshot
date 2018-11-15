@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBillingInfo, billingCardOnFileFalse, generalAction, updateStore, updateBillingPlan } from '../../../actions/usersActions';
+import { getBillingInfo, billingCardOnFileFalse, billingCardOnFileTrue, generalAction, updateStore, updateBillingPlan } from '../../../actions/usersActions';
 import { makeSingular } from "../../../miscFunctions";
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
@@ -110,6 +110,7 @@ class Billing extends Component {
     }
 
     updateCardFalse = () => {
+        this.props.billingCardOnFileTrue(this.props.billing);
         this.setState({updateCard: false})
     }
 
@@ -134,9 +135,6 @@ class Billing extends Component {
                 }
             }
         }
-
-        console.log("plan: ", plan);
-        console.log("currentPlan: ", currentPlan);
 
         const pricingBoxes = boxes.map(box => {
             let buttonText = baseButtonText;
@@ -242,6 +240,12 @@ class Billing extends Component {
                 <Elements>
                     <BillingForm subscriptionTerm={plan} update={update} />
                 </Elements>
+                {update ?
+                    <div styleName="close-section" onClick={this.updateCardFalse}>
+                        x Close
+                    </div>
+                    : null
+                }
             </div>
         );
     }
@@ -272,10 +276,10 @@ class Billing extends Component {
     }
 
     updateOrCancelSection() {
-        const { plan, updatePlan, updateCard } = this.state;
+        const { plan } = this.state;
         const { billing, loading } = this.props;
         // don't show section
-        if (!plan || !billing || (billing && !billing.cardOnFile && !updateCard) || updatePlan) return null;
+        if (!plan || !billing || (billing && !billing.cardOnFile)) return null;
 
         if (billing && billing.subscription && billing.subscription.toCancel) {
             if (billing.newSubscription && billing.newSubscription.name) { } else {
@@ -349,6 +353,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getBillingInfo,
         billingCardOnFileFalse,
+        billingCardOnFileTrue,
         generalAction,
         updateStore,
         updateBillingPlan
