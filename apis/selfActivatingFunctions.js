@@ -376,6 +376,7 @@ async function stripeUpdates() {
                             console.log("Error getting subscription lists from stripe for business with id: ", business._id, " with error: ", getSubscriptionListError);
                             return resolve();
                         }
+                        console.log("subscriptions: ", subscriptions);
 
                         if (subscriptions && subscriptions.data && subscriptions.data.length > 0) {
                             subIdx = subscriptions.data.findIndex(sub => { return sub.id === billing.subscription.id})
@@ -396,6 +397,8 @@ async function stripeUpdates() {
                                 console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
                                 return resolve();
                             }
+
+                            console.log("DELETED");
 
                             // the subscription has been set to be cancelled in stripe
                             billing.subscription.cancelled = true;

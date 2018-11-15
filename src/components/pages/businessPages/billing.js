@@ -149,7 +149,7 @@ class Billing extends Component {
                             <span>{box.price}</span> / Month
                         </div>
                         <CornersButton
-                            onClick={() => this.selectPlan(box.period)}
+                            onClick={active ? null : () => this.selectPlan(box.period)}
                             content={buttonText}
                             active={active}
                             size="small-padding"
