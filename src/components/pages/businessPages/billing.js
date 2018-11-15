@@ -258,10 +258,9 @@ class Billing extends Component {
         );
     }
 
-    learnFromHiresSection() {
+    updateOrCancelSection() {
         const { plan, updatePlan, updateCard } = this.state;
         const { billing, loading } = this.props;
-        console.log("loading: ", loading);
         // don't show section
         if (!plan || !billing || (billing && !billing.cardOnFile && !updateCard) || updatePlan) return null;
 
@@ -271,106 +270,24 @@ class Billing extends Component {
             }
         }
 
-        const features = [
-            {
-                title: "Unlimited Candidates",
-                text1: "Evaluate and receive insights",
-                text2: "for any number of candidates",
-                icon: "CandidatesIcon",
-                alt: "Candidates Icon",
-                iconStyle: {}
-            },
-            {
-                title: "Any Position",
-                text1: "Evaluations for any position",
-                text2: <div>across <div className="primary-cyan inlineBlock">five position types</div><HoverTip
-                    style={{marginTop: "26px", marginLeft: "-70px"}}
-                    text={<div>Development<br/>Sales<br/>Support<br/>Marketing<br/>Product</div>}
-                /></div>,
-                icon: "5Icon",
-                alt: "5 Icon",
-                iconStyle: {}
-            },
-            {
-                title: "Unlimited Employees",
-                text1: "Evaluate employees to strengthen",
-                text2: "your company's predictive baseline",
-                icon: "EmployeeIcon",
-                alt: "Employee Icon",
-                iconStyle: { height: "85px" }
-            },
-            {
-                title: "Quarterly Reviews",
-                text1: "Hires are reviewed to update",
-                text2: "and improve your predictive model",
-                icon: "FlameIcon",
-                alt: "Flame Icon",
-                iconStyle: { height: "84px", marginTop: "-2px" }
-            },
-            {
-                title: "Analytics and Reporting",
-                text1: "Get in-depth breakdowns on",
-                text2: "all of your candidates and hires",
-                icon: "GraphIcon",
-                alt: "Graph Icon",
-                iconStyle: {}
-            },
-        ]
-
-        // create a box for each feature
-        let featureBoxes = features.map(feature => {
-            return (
-                <div styleName="feature-box" key={feature.title}>
-                    <div>
-                        <img
-                            src={`/icons/billing/${feature.icon}${this.props.png}`}
-                            style={feature.iconStyle}
-                            alt={feature.alt}
-                        />
-                    </div>
-                    <div>
-                        <div className="bold font16pxUnder800 font14pxUnder700">{ feature.title }</div>
-                        <div className="secondary-gray font14pxUnder800 font12pxUnder700">{ feature.text1 }<br/>{ feature.text2 }</div>
-                    </div>
-                </div>
-            )
-        });
-
-        // add the box at the top left with the title for the whole area
-        featureBoxes.unshift(
-            <div
-                key="featuresHeader"
-                styleName="feature-box"
-                className="primary-cyan left-align font26px font22pxUnder800 font18pxUnder700"
-                style={{lineHeight: "1.3"}}
-            >
-                We learn from each hire<br/> so that we can make the next one even better.
-            </div>
-        )
-
         return (
-            <section styleName="learn-from-hires-section">
+            <div className="center">
                 {!loading ?
-                    <div className="center">
-                        <div className="primary-white inline-block" style={{maxWidth: "1200px"}}>
-                            { featureBoxes }
+                    <div styleName="update-cancel">
+                        <div onClick={() => this.updateCard()}>
+                            Update Card
                         </div>
-                        <div styleName="update-cancel">
-                            <div onClick={() => this.updateCard()}>
-                                Update Card
-                            </div>
-                            <div>
-                                |
-                            </div>
-                            <div onClick={() => this.cancelPlan()}>
-                                Cancel Plan
-                            </div>
+                        <div>
+                            |
+                        </div>
+                        <div onClick={() => this.cancelPlan()}>
+                            Cancel Plan
                         </div>
                     </div>
                     :
                     <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryWhite }} /></div>
                 }
-            </section>
+            </div>
         );
     }
 
@@ -393,7 +310,7 @@ class Billing extends Component {
                     <div styleName="billing">
                         { this.pricingSection() }
                         { this.updatePlanSection() }
-                        { this.learnFromHiresSection() }
+                        { this.updateOrCancelSection() }
                         { this.creditCardSection() }
                     </div>
                 :

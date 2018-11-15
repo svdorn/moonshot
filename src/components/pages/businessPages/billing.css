@@ -88,30 +88,6 @@
     margin-top: 40px;
 }
 
-.learn-from-hires-section {
-    margin: 70px auto;
-    max-width: 1170px;
-}
-.feature-box {
-    width: 350px;
-    height: 120px;
-    display: inline-flex;
-    vertical-align: top;
-    position: relative;
-    margin: 15px 10px;
-}
-.feature-box > div:first-child {
-    width: 100px;
-    text-align: center;
-}
-.feature-box > div:last-child {
-    width: 300px;
-    text-align: left;
-}
-.feature-box img {
-    height: 64px;
-}
-
 .update-cancel {
     color: var(--primary-white);
     font-size: 16px;
@@ -155,13 +131,6 @@
 }
 
 @media only screen and (max-width: 800px) {
-    .feature-box {
-        width: 300px;
-        margin: 10px 5px;
-    }
-    .feature-box img {
-        height: 54px;
-    }
     .update-cancel {
         font-size: 14px;
     }
@@ -187,19 +156,6 @@
         font-size: 22px;
     }
 
-    .feature-box {
-        width: 200px;
-    }
-    .feature-box > div:first-child {
-        width: 100px;
-        text-align: center;
-    }
-    .feature-box > div:last-child {
-        width: 200px;
-    }
-    .feature-box img {
-        height: 44px;
-    }
     .info {
         width: 14px;
         height: 14px;
