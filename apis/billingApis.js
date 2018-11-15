@@ -239,7 +239,7 @@ async function POST_updatePlan(req, res) {
             business.billing.newSubscription.cancelled = false;
             business.billing.newSubscription.dateEnding = getBillingEndDate(business.billing.newSubscription.dateStarting, subscriptionTerm);
         } else {
-            return res.status(400).send("Business does not have correct billing info to change plans.");
+            return res.status(400).send("Something went wrong processing your request, please refresh and try again or contact us!");
         }
 
         // save the business

@@ -276,10 +276,10 @@ class Billing extends Component {
     }
 
     updateOrCancelSection() {
-        const { plan } = this.state;
+        const { plan, updatePlan } = this.state;
         const { billing, loading } = this.props;
         // don't show section
-        if (!plan || !billing || (billing && !billing.cardOnFile)) return null;
+        if (!plan || !billing || (billing && !billing.cardOnFile) || updatePlan) return null;
 
         if (billing && billing.subscription && billing.subscription.toCancel) {
             if (billing.newSubscription && billing.newSubscription.name) { } else {

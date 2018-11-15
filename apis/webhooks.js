@@ -177,7 +177,7 @@ async function POST_cancelBillingSubscription(req, res) {
                 business.billing.oldSubscriptions = [];
             }
             business.billing.oldSubscriptions.push(business.billing.subscription);
-            business.billing.subscription = { };
+            business.billing.subscription = undefined;
         } else {
             return res.status(500).send("Error deleting the right subscription from our database");
         }
@@ -197,6 +197,7 @@ async function POST_cancelBillingSubscription(req, res) {
         // set the newSubscription to undefined
         business.billing.newSubscription = undefined;
         // give the subscription the right info returned from the addSubscription method
+        business.billing.subscription = { };
         business.billing.subscription.id = subscription.id;
         business.billing.subscription.name = subscriptionTerm;
         const dateCreated = new Date(subscription.billing_cycle_anchor * 1000);
