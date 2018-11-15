@@ -63,7 +63,8 @@ class Billing extends Component {
 
         const { currentUser, billing } = this.props;
 
-        if (billing) { return; }
+        // need to set plan here
+        if (billing && billing.subscription) { return this.setState({ plan: billing.subscription.name }); }
 
         const businessId = currentUser && currentUser.businessInfo ? currentUser.businessInfo.businessId : null;
 
