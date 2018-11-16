@@ -132,6 +132,18 @@
     display: inline-block;
 }
 
+.rpm > img:first-child {
+    width: 560px;
+    height: 366px;
+}
+.rpm > img:not(:first-child) {
+    width: 64px;
+    height: 64px;
+}
+.rpm > img.correct {
+    border: 1px solid var(--primary-cyan);
+}
+
 .compare-button {
     position: fixed;
     top: 90px;

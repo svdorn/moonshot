@@ -22,11 +22,14 @@ import {
     Legend
 } from "recharts";
 
-class BoilerPlate extends Component {
+const sites = ["All", "Insights", "Learning"];
+
+class GCA extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            site: sites[0],
             tab: "distribution",
             dots: false,
             chartType: "line",
@@ -48,16 +51,18 @@ class BoilerPlate extends Component {
     getGcaData() {
         const rpms = [
             {
-                name: "RPM-1",
+                name: "RPM1",
                 proportion: 0.23,
                 time: 38,
-                n: 400
+                n: 400,
+                correct: 4
             },
             {
-                name: "RPM-2",
+                name: "RPM2",
                 proportion: 0.49,
                 time: 23,
-                n: 506
+                n: 506,
+                correct: 7
             }
         ];
 
@@ -79,10 +84,20 @@ class BoilerPlate extends Component {
 
     rpmsDisplay = () => {
         const { png } = this.props;
-        this.state.rpms.map(rpm => {
+
+        const rpms = this.state.rpms.map(rpm => {
             return (
-                <div>
-                    <img src={`/images/cognitiveTest/${name}${png}`} />
+                <div styleName="facet-graph">
+                    <div styleName="rpm">
+                        <img src={`/images/cognitiveTest/${rpm.name}${png}`} />
+                        <br />
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                            <img
+                                src={`/images/cognitiveTest/${rpm.name}-${num}${png}`}
+                                styleName={rpm.correct == num ? "correct" : ""}
+                            />
+                        ))}
+                    </div>
                     <div>
                         <div>Name: {rpm.name}</div>
                         <div>N = {rpm.n}</div>
@@ -92,6 +107,8 @@ class BoilerPlate extends Component {
                 </div>
             );
         });
+
+        return <div>{rpms}</div>;
     };
 
     distributionGraph() {
@@ -145,7 +162,7 @@ class BoilerPlate extends Component {
         );
 
         return (
-            <div style={{ textAlign: "center" }}>
+            <div>
                 <div
                     styleName="chart-type-button"
                     className={button.cyan}
@@ -183,11 +200,21 @@ class BoilerPlate extends Component {
         this.setState({ dots: !this.state.dots });
     };
 
+    // change the site we're getting data from (All, Insights, Learning)
+    handleSiteChange = (event, site) => {
+        this.setState({ site });
+    };
+
     render() {
         const { tab } = this.state;
 
         return (
-            <div style={{ height: "100vh" }}>
+            <div style={{ minHeight: "100vh", textAlign: "center" }}>
+                <Tabs value={this.state.site} onChange={this.handleSiteChange} centered>
+                    {sites.map(site => (
+                        <Tab label={site} value={site} key={site} style={{ color: "white" }} />
+                    ))}
+                </Tabs>
                 <Tabs value={tab} onChange={this.handleTabChange} centered>
                     <Tab
                         label="Distribution"
@@ -218,4 +245,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(BoilerPlate);
+)(GCA);

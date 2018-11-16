@@ -2,7 +2,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { addNotification } from "../../../../actions/usersActions";
 import { randomInt } from "../../../../miscFunctions";
 import { Tabs, Tab, Dialog } from "@material-ui/core";
@@ -27,16 +26,6 @@ import "./dataDisplay.css";
 
 const sites = ["All", "Insights", "Learning"];
 const categories = ["Factors", "Facets", "Questions", "Outputs"];
-
-const theme = createMuiTheme({
-    palette: {
-        primary: { main: "#76defe", dark: "#76defe", light: "#76defe" },
-        secondary: { main: "#76defe", dark: "#76defe", light: "#76defe" },
-        error: { main: "#eb394f", dark: "#eb394f", light: "#eb394f" },
-        type: "dark"
-    },
-    typography: { fontFamily: "Muli,sans-serif" }
-});
 
 const nums = [
     "-4.75",
@@ -521,22 +510,20 @@ class Psych extends Component {
         console.log("categoryIdx: ", categoryIdx);
 
         return (
-            <MuiThemeProvider theme={theme}>
-                <div style={{ textAlign: "center" }}>
-                    {this.siteSelector()}
-                    {this.categorySelector()}
-                    {categoryDisplays[categoryIdx]()}
-                    <Dialog open={compareOpen} onClose={this.closeCompare}>
-                        <CompareFactors
-                            factors={
-                                categoryIdx === 0
-                                    ? this.state.comparableFactors
-                                    : this.state.comparableFacets
-                            }
-                        />
-                    </Dialog>
-                </div>
-            </MuiThemeProvider>
+            <div style={{ textAlign: "center" }}>
+                {this.siteSelector()}
+                {this.categorySelector()}
+                {categoryDisplays[categoryIdx]()}
+                <Dialog open={compareOpen} onClose={this.closeCompare}>
+                    <CompareFactors
+                        factors={
+                            categoryIdx === 0
+                                ? this.state.comparableFactors
+                                : this.state.comparableFacets
+                        }
+                    />
+                </Dialog>
+            </div>
         );
     }
 }
