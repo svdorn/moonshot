@@ -199,8 +199,9 @@ export function login(user, saveSession, navigateBackUrl) {
         axios
             .post("/api/user/login", { user, saveSession })
             .then(function(response) {
-                const returnedUser = response.data;
-                dispatch({ type: "LOGIN", user: returnedUser });
+                const returnedUser = response.data.user;
+                const fullAccess = response.data.fullAccess;
+                dispatch({ type: "LOGIN", user: returnedUser, fullAccess });
                 let nextUrl = "/myEvaluations";
                 if (returnedUser && returnedUser.userType === "accountAdmin") {
                     nextUrl = "/dashboard";

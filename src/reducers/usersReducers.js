@@ -236,7 +236,8 @@ export function usersReducers(state = initialState, action) {
         case "GET_USER_FROM_SESSION":
             return {
                 ...state,
-                currentUser: action.payload,
+                currentUser: action.payload.user,
+                fullAccess: action.payload.fullAccess,
                 isFetching: action.isFetching,
                 errorMessage: undefined
             };
@@ -271,6 +272,7 @@ export function usersReducers(state = initialState, action) {
                 notification: action.notification,
                 notificationDate: new Date(),
                 currentUser: action.user,
+                fullAccess: action.fullAccess,
                 loadingSomething: false
             };
             break;
