@@ -1,0 +1,6 @@
+.modal-container {
+    padding: 30px 50px;
+    background: var(--primary-black-dark);
+    color: var(--primary-white);
+    text-align: center;
+}

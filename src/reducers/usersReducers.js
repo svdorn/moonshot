@@ -44,6 +44,18 @@ export function usersReducers(state = initialState, action) {
                 verificationModal: false,
             };
             break;
+        case "OPEN_LOCKED_ACCOUNT_MODAL":
+            return {
+                ...state,
+                lockedAccountModal: true
+            };
+            break;
+        case "CLOSE_LOCKED_ACCOUNT_MODAL":
+            return {
+                ...state,
+                lockedAccountModal: false,
+            };
+            break;
         case "OPEN_CANCEL_PLAN_MODAL":
             return {
                 ...state,
