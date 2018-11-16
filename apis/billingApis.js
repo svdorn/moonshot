@@ -22,7 +22,8 @@ const billingApis = {
     POST_updateSource,
     POST_cancelPlan,
     POST_pausePlan,
-    POST_updatePlan
+    POST_updatePlan,
+    POST_newPlan
 }
 
 // post a new customer with their credit card info and subscription selection
@@ -240,6 +241,59 @@ async function POST_updatePlan(req, res) {
             business.billing.newSubscription.dateEnding = getBillingEndDate(business.billing.newSubscription.dateStarting, subscriptionTerm);
         } else {
             return res.status(400).send("Something went wrong processing your request, please refresh and try again or contact us!");
+        }
+
+        // save the business
+        try { await business.save(); }
+        catch (bizSaveError) {
+            console.log("Error saving business when adding credit card: ", bizSaveError);
+            return res.status(500).send("Server error, try again later.");
+        }
+
+        return res.json(business.billing);
+    });
+}
+
+async function POST_newPlan(req, res) {
+    return new Promise(async function(resolve, reject) {
+        const { userId, verificationToken, subscriptionTerm } = sanitize(req.body);
+
+        // if one of the arguments doesn't exist, return with error code
+        if (!userId || !verificationToken || !subscriptionTerm) {
+            return res.status(400).send("Bad request.");
+        }
+
+        // give business object the Stripe customer
+        try {
+            var user = await getAndVerifyUser(userId, verificationToken);
+            var business = await Businesses.findById(user.businessInfo.businessId);
+            if (!business) {
+                console.log("No business found with id: ", user.businessInfo.businessId);
+                throw "No business.";
+            }
+        } catch (getUserError) {
+            console.log("Error getting user or business from user: ", getUserError);
+            return res.status(403).send("You do not have permission to do add credit card.");
+        }
+
+        if (business.billing && business.billing.customerId && !business.billing.subscription) {
+            try {
+                var subscription = await addSubscription(business.billing.customerId, subscriptionTerm);
+            } catch(error) {
+                console.log("Error adding subscription.");
+                return reject("Error adding subscription.");
+            }
+
+            // add subscription info to the user
+            business.billing.subscription = {};
+            business.billing.subscription.id = subscription.id;
+            business.billing.subscription.name = subscriptionTerm;
+            const dateCreated = new Date(subscription.billing_cycle_anchor * 1000);
+            const dateEnding = getBillingEndDate(dateCreated, subscriptionTerm);
+            business.billing.subscription.dateCreated = dateCreated;
+            business.billing.subscription.dateEnding = dateEnding;
+        } else {
+            return res.status(400).send("Something went wrong processing your request, please contact us!");
         }
 
         // save the business

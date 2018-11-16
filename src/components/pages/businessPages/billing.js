@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBillingInfo, billingCardOnFileFalse, billingCardOnFileTrue, generalAction, updateStore, updateBillingPlan } from '../../../actions/usersActions';
+import { getBillingInfo, billingCardOnFileFalse, billingCardOnFileTrue, generalAction, updateStore, updateBillingPlan, newBillingPlan } from '../../../actions/usersActions';
 import { makeSingular } from "../../../miscFunctions";
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
@@ -102,6 +102,12 @@ class Billing extends Component {
 
         this.props.updateBillingPlan(_id, verificationToken, plan);
         this.setState({ updatePlan: false });
+    }
+
+    confirmPlan = (plan) => {
+        const { _id, verificationToken } = this.props.currentUser;
+
+        this.props.newBillingPlan(_id, verificationToken, plan);
     }
 
     updateCard = () => {
@@ -279,7 +285,7 @@ class Billing extends Component {
         const { plan, updatePlan } = this.state;
         const { billing, loading } = this.props;
         // don't show section
-        if (!plan || !billing || (billing && !billing.cardOnFile) || updatePlan) return null;
+        if (!plan || !billing || (billing && !billing.cardOnFile) || updatePlan || (billing && billing.cardOnFile && !billing.subscription)) return null;
 
         if (billing && billing.subscription && billing.subscription.toCancel) {
             if (billing.newSubscription && billing.newSubscription.name) { } else {
@@ -300,6 +306,39 @@ class Billing extends Component {
                         <div onClick={() => this.cancelPlan()}>
                             Cancel Plan
                         </div>
+                    </div>
+                    :
+                    <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryWhite }} /></div>
+                }
+            </div>
+        );
+    }
+
+    confirmNewSubscriptionSection() {
+        const { plan, updatePlan } = this.state;
+        const { billing, loading } = this.props;
+
+        if (!plan || !billing || updatePlan || !(billing && billing.cardOnFile && !billing.subscription)) {
+            return null;
+        }
+
+        const planName = makeSingular(plan);
+
+        return (
+            <div styleName="update-plan">
+                {!loading ?
+                    <div>
+                        <div>
+                            {`Please confirm that you are signing up for a ${planName} plan.`}
+                        </div>
+                        <CornersButton
+                            onClick={() => this.confirmPlan(plan)}
+                            content="Confirm"
+                            size="small-padding"
+                            color1={colors.primaryCyan}
+                            color2={colors.primaryWhite}
+                            className="font18px font16pxUnder900 font12pxUnder400 marginTop20px"
+                        />
                     </div>
                     :
                     <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryWhite }} /></div>
@@ -329,6 +368,7 @@ class Billing extends Component {
                         { this.updatePlanSection() }
                         { this.updateOrCancelSection() }
                         { this.creditCardSection() }
+                        { this.confirmNewSubscriptionSection() }
                     </div>
                 :
                     <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryWhite }} /></div>
@@ -356,7 +396,8 @@ function mapDispatchToProps(dispatch) {
         billingCardOnFileTrue,
         generalAction,
         updateStore,
-        updateBillingPlan
+        updateBillingPlan,
+        newBillingPlan
     }, dispatch);
 }
 
