@@ -396,7 +396,20 @@ async function GET_session(req, res) {
                     .digest("hex");
                 user.hmac = hash;
             }
-            res.json(frontEndUser(user));
+            if (user.userType === "accountAdmin") {
+                // get whether the accountAdmin has full access or not
+                if (user.businessInfo && user.businessInfo.businessId) {
+                    try {
+                        var business = Businesses.findById(user.businessInfo.businessId).select("fullAccess");
+                    } catch(getBusinessError) {
+                        console.log("error getting business to find fullAccess: ", getBusinessError);
+                    }
+
+                    var fullAccess = business.fullAccess;
+                }
+            }
+
+            return res.json({ user:frontEndUser(user), fullAccess });
         }
     } catch (getUserError) {
         // on error, print the error and return as if there was no user in the session
@@ -1122,6 +1135,18 @@ async function POST_login(req, res) {
             .digest("hex");
         user.hmac = hash;
     }
+    if (user.userType === "accountAdmin") {
+        // get whether the accountAdmin has full access or not
+        if (user.businessInfo && user.businessInfo.businessId) {
+            try {
+                var business = Businesses.findById(user.businessInfo.businessId).select("fullAccess");
+            } catch(getBusinessError) {
+                console.log("error getting business to find fullAccess: ", getBusinessError);
+            }
+
+            var fullAccess = business.fullAccess;
+        }
+    }
 
     // see if the given password is correct
     bcrypt.compare(password, user.password, async function(passwordError, passwordsMatch) {
@@ -1143,10 +1168,10 @@ async function POST_login(req, res) {
                 if (err) {
                     console.log("error saving user session", err);
                 }
-                return res.json(frontEndUser(user));
+                return res.json({ user: frontEndUser(user), fullAccess });
             });
         } else {
-            return res.json(frontEndUser(user));
+            return res.json({ user: frontEndUser(user), fullAccess });
         }
     });
 }
