@@ -149,3 +149,15 @@
     top: 160px;
     left: 155px;
 }
+
+.x-label {
+    text-align: center;
+    margin: -20px 0 10px;
+}
+.y-label {
+    transform: rotate(-90deg);
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: -33px;
+}

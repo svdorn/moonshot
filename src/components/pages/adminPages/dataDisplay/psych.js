@@ -117,11 +117,8 @@ class Psych extends Component {
         const facType = this.state.categoryIdx === 0 ? "comparableFactors" : "comparableFacets";
         const facArray = this.state[facType];
         // can't compare one factor to itself
-        if (facArray.length < 2) {
-            return this.props.addNotification(
-                "Need at least two factors/facets to compare",
-                "error"
-            );
+        if (facArray.length < 1) {
+            return this.props.addNotification("Need something to compare", "error");
         }
         // pop up a modal with the comparison
         this.setState({ compareOpen: true });

@@ -5,17 +5,23 @@ import { bindActionCreators } from "redux";
 import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
 import { button } from "../../../../classes";
+import { Tabs, Tab } from "@material-ui/core";
+
+import "./dataDisplay.css";
 
 import {
     LineChart,
     Line,
+    ScatterChart,
+    Scatter,
     Brush,
     ReferenceLine,
     XAxis,
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend
+    Legend,
+    Label
 } from "recharts";
 
 import colors from "../../../../colors";
@@ -33,7 +39,27 @@ class CompareFactors extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { dot: false };
+        this.state = {
+            dot: false,
+            chartType: "line",
+            scatter: {
+                points: [],
+                bflPoints: [],
+                x: "x",
+                y: "y"
+            },
+            gcaScatterFacs: [
+                {
+                    name: "x",
+                    points: []
+                }
+            ]
+        };
+    }
+
+    componentDidMount() {
+        this.getScatterData();
+        this.getGcaScatterData();
     }
 
     // turn on/off the dots on the graph
@@ -41,12 +67,61 @@ class CompareFactors extends Component {
         this.setState({ dot: !this.state.dot });
     };
 
-    render() {
-        const { factors } = this.props;
+    // get data for the scatter plot
+    getScatterData() {
+        console.log("getting scatter data");
 
-        if (factors.length < 2) {
-            return "Cannot compare fewer than 2 factors.";
-        }
+        const points = [
+            { x: 1, y: 3 },
+            { x: 4, y: -2 },
+            { x: -3, y: 1 },
+            { x: 1, y: 5 },
+            { x: 2.4, y: -3 },
+            { x: -4.6, y: 5 }
+        ];
+        const bflPoints = [{ x: -6, y: -4 }, { x: 6, y: 4 }];
+
+        const x = "Agreeableness";
+        const y = "Honesty-Humility";
+
+        const scatter = { points, bflPoints, x, y };
+
+        this.setState({ scatter });
+    }
+
+    // get data for the GCA scatter plot
+    getGcaScatterData() {
+        console.log("getting gca scatter data");
+
+        const gcaScatterFacs = [
+            {
+                name: "Honesty-Humility",
+                points: [
+                    { score: 4, gca: 110 },
+                    { score: 0, gca: 90 },
+                    { score: -3, gca: 100 },
+                    { score: 2, gca: 120 },
+                    { score: -5, gca: 80 }
+                ]
+            },
+            {
+                name: "Agreeableness",
+                points: [
+                    { score: 1, gca: 105 },
+                    { score: -2, gca: 100 },
+                    { score: 5, gca: 70 },
+                    { score: 1, gca: 90 },
+                    { score: 3, gca: 100 }
+                ]
+            }
+        ];
+
+        this.setState({ gcaScatterFacs });
+    }
+
+    // return a line chart comparison between the factors
+    lineChart = () => {
+        const { factors } = this.props;
 
         // create a list of the combined data points
         const data = factors[0].dataPoints.map((point, pointIdx) => {
@@ -72,36 +147,137 @@ class CompareFactors extends Component {
             />
         ));
 
-        return (
-            <div className="background-primary-black-dark">
-                <LineChart
-                    width={600}
-                    height={300}
-                    data={data}
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        return [
+            <LineChart
+                width={600}
+                height={300}
+                data={data}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                key="line chart"
+            >
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend
+                    verticalAlign="top"
+                    wrapperStyle={{ lineHeight: "40px" }}
+                    content={renderLegend}
+                />
+                <ReferenceLine y={0} stroke="#000" />
+                <Brush dataKey="name" height={30} stroke="#8884d8" />
+                {lines}
+            </LineChart>,
+            <div style={{ textAlign: "center" }} key="line chart toggle dots">
+                <div
+                    className={`font12px ${button.cyan}`}
+                    style={{ display: "inline-block", margin: "10px 0", color: "white" }}
+                    onClick={this.toggleDots}
                 >
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <Tooltip />
-                    <Legend
-                        verticalAlign="top"
-                        wrapperStyle={{ lineHeight: "40px" }}
-                        content={renderLegend}
-                    />
-                    <ReferenceLine y={0} stroke="#000" />
-                    <Brush dataKey="name" height={30} stroke="#8884d8" />
-                    {lines}
-                </LineChart>
-                <div style={{ textAlign: "center" }}>
-                    <div
-                        className={`font12px ${button.cyan}`}
-                        style={{ display: "inline-block", margin: "10px 0", color: "white" }}
-                        onClick={this.toggleDots}
-                    >
-                        Toggle Dots
-                    </div>
+                    Toggle Dots
                 </div>
+            </div>
+        ];
+    };
+
+    // return a scatter plot comparison between two factors (if there are exactly 2)
+    scatterPlot = () => {
+        if (this.props.factors.length !== 2) {
+            return null;
+        }
+
+        const { scatter } = this.state;
+
+        return [
+            <ScatterChart
+                width={600}
+                height={400}
+                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                key="scatter 1"
+            >
+                <CartesianGrid />
+                <XAxis domain={[-6, 6]} type="number" dataKey={"x"} name={scatter.x} />
+                <YAxis domain={[-6, 6]} type="number" dataKey={"y"} name={scatter.y} />
+
+                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                <Scatter data={scatter.points} fill={strokes[0]} />
+                <Scatter
+                    name="Best Fit Line"
+                    data={scatter.bflPoints}
+                    fill={strokes[1]}
+                    line
+                    shape={() => null}
+                />
+            </ScatterChart>,
+            <div key="scatter x label" styleName="x-label">
+                {scatter.x}
+            </div>,
+            <div key="scatter y label" styleName="y-label">
+                {scatter.y}
+            </div>
+        ];
+    };
+
+    // compare the 1+ factors to GCA
+    compareToGCA = () => {
+        return null;
+
+        const scatters = this.state.gcaScatterFacs.map((fac, idx) => (
+            <Scatter
+                key={`${fac.name} gca scatter`}
+                name={fac.name}
+                data={fac.points}
+                fill={strokes[idx]}
+            />
+        ));
+
+        return [
+            <div key="gca graph title">Vs. GCA</div>,
+            <ScatterChart
+                width={600}
+                height={400}
+                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                key="gca graph"
+            >
+                <CartesianGrid />
+                <XAxis domain={[-6, 6]} type="number" dataKey={"score"} name="Factor/Facet Score" />
+                <YAxis domain={[-6, 6]} type="number" dataKey={"gca"} name="GCA" />
+
+                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                <Legend />
+                {scatters}
+            </ScatterChart>,
+            <div key="gca scatter x label" styleName="x-label">
+                Score
+            </div>,
+            <div key="gca scatter y label" styleName="y-label">
+                GCA
+            </div>
+        ];
+    };
+
+    // change the chart being shown
+    handleChartChange = (event, chartType) => {
+        this.setState({ chartType });
+    };
+
+    render() {
+        if (this.props.factors.length < 1) {
+            return "Need at least one factor/facet to show.";
+        }
+
+        const { chartType } = this.state;
+
+        return (
+            <div className="background-primary-black-dark primary-white">
+                <Tabs value={chartType} onChange={this.handleChartChange} centered>
+                    <Tab label="Line" value="line" style={{ color: "white" }} />
+                    <Tab label="Scatter" value="scatter" style={{ color: "white" }} />
+                    <Tab label="GCA" value="gca" style={{ color: "white" }} />
+                </Tabs>
+                {chartType === "line" ? this.lineChart() : null}
+                {chartType === "scatter" ? this.scatterPlot() : null}
+                {chartType === "gca" ? this.compareToGCA() : null}
             </div>
         );
     }
