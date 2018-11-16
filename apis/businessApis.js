@@ -573,7 +573,7 @@ async function createBusiness(info) {
             positions: [],
             logo: "hr.png",
             dateCreated: NOW,
-            candidatesSignedUp: 0,
+            candidateCount: 0,
             fullAccess: true
         };
 

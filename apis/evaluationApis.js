@@ -1562,17 +1562,17 @@ async function advance(user, businessId, positionId) {
                     // update the business candidate count
                     var business = await Businesses.findOneAndUpdate(
                         {_id: mongoose.Types.ObjectId(businessId) },
-                        { $inc: { candidatesSignedUp: 1 } }
+                        { $inc: { candidateCount: 1 } }
                     );
                 } catch (updateBusinessError) {
                     console.log(
-                        "error updating a business candidatesSignedUp: ",
+                        "error updating a business candidateCount: ",
                         updateBusinessError
                     );
                 }
 
                 // if trial has ended and need to restrict access, restrict access
-                if (business && business.candidatesSignedUp && business.candidatesSignedUp > 20 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                if (business && business.candidateCount && business.candidateCount > 20 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
                     // restrict the fullAccess of the business
                     business.fullAccess = false;
 

@@ -129,8 +129,8 @@ const businessesSchema = mongoose.Schema({
     billingCustomerId: String,
     // whether the user has full access to the site with a trial or paid subscription
     fullAccess: Boolean,
-    // the number of candidates that have signed up 
-    candidatesSignedUp: Number,
+    // the number of candidates that have completed an eval
+    candidateCount: Number,
     // billing info for the business and their subscription plans
     billing: {
         // the stripe customer ID for the business
