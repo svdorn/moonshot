@@ -159,5 +159,28 @@
     display: inline-block;
     position: absolute;
     top: 50%;
-    left: -33px;
+    left: -75px;
+    width: 200px;
+    text-align: center;
+}
+
+.fac-scatter {
+    text-align: center;
+}
+.fac-scatter span {
+    color: var(--primary-cyan);
+}
+.all-compare-gca-stats {
+    display: flex;
+    justify-content: space-around;
+}
+.compare-gca-stats {
+    min-width: 200px;
+}
+.compare-gca-stats > div:first-child {
+    text-align: center;
+}
+.compare-gca-stats span {
+    float: right;
+    color: var(--primary-cyan);
 }

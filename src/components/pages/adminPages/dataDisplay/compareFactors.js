@@ -46,12 +46,19 @@ class CompareFactors extends Component {
                 points: [],
                 bflPoints: [],
                 x: "x",
-                y: "y"
+                y: "y",
+                slope: 1,
+                intercept: 0,
+                correlation: 0
             },
             gcaScatterFacs: [
                 {
-                    name: "x",
-                    points: []
+                    name: "",
+                    points: [],
+                    bflPoints: [],
+                    slope: 1,
+                    intercept: 0,
+                    correlation: 0
                 }
             ]
         };
@@ -84,7 +91,11 @@ class CompareFactors extends Component {
         const x = "Agreeableness";
         const y = "Honesty-Humility";
 
-        const scatter = { points, bflPoints, x, y };
+        const slope = 2.3;
+        const intercept = 1.9;
+        const correlation = 0.55;
+
+        const scatter = { points, bflPoints, x, y, slope, intercept, correlation };
 
         this.setState({ scatter });
     }
@@ -102,7 +113,11 @@ class CompareFactors extends Component {
                     { score: -3, gca: 100 },
                     { score: 2, gca: 120 },
                     { score: -5, gca: 80 }
-                ]
+                ],
+                bflPoints: [{ score: -6, gca: 75 }, { score: 6, gca: 125 }],
+                slope: 2,
+                intercept: 1,
+                correlation: 0.34
             },
             {
                 name: "Agreeableness",
@@ -112,7 +127,11 @@ class CompareFactors extends Component {
                     { score: 5, gca: 70 },
                     { score: 1, gca: 90 },
                     { score: 3, gca: 100 }
-                ]
+                ],
+                bflPoints: [{ score: -6, gca: 60 }, { score: 6, gca: 140 }],
+                slope: 1,
+                intercept: -2,
+                correlation: 0.88
             }
         ];
 
@@ -214,25 +233,64 @@ class CompareFactors extends Component {
             </div>,
             <div key="scatter y label" styleName="y-label">
                 {scatter.y}
+            </div>,
+            <div styleName="fac-scatter">
+                <div>
+                    Best Fit Line:
+                    <span style={{ marginLeft: "10px" }}>
+                        {scatter.y} = {scatter.slope}
+                        {scatter.x} + {scatter.intercept}
+                    </span>
+                </div>
+                <div>
+                    Slope: <span>{scatter.slope}</span>
+                </div>
+                <div>
+                    Intercept: <span>{scatter.intercept}</span>
+                </div>
+                <div>
+                    Correlation: <span>{scatter.correlation}</span>
+                </div>
             </div>
         ];
     };
 
     // compare the 1+ factors to GCA
     compareToGCA = () => {
-        return null;
-
-        const scatters = this.state.gcaScatterFacs.map((fac, idx) => (
-            <Scatter
-                key={`${fac.name} gca scatter`}
-                name={fac.name}
-                data={fac.points}
-                fill={strokes[idx]}
-            />
-        ));
+        let stats = [];
+        const scatters = this.state.gcaScatterFacs.map((fac, idx) => {
+            stats.push(
+                <div styleName="compare-gca-stats">
+                    <div>{fac.name} vs GCA</div>
+                    <div>
+                        Best Fit Line:
+                        <span>
+                            gca = {fac.slope}x + {fac.intercept}
+                        </span>
+                    </div>
+                    <div>
+                        Correlation: <span>{fac.correlation}</span>
+                    </div>
+                </div>
+            );
+            return [
+                <Scatter
+                    key={`${fac.name} gca scatter`}
+                    name={fac.name}
+                    data={fac.points}
+                    fill={strokes[idx]}
+                />,
+                <Scatter
+                    key={`${fac.name} gca scatter bfl`}
+                    data={fac.bflPoints}
+                    fill={strokes[idx]}
+                    line
+                    shape={() => null}
+                />
+            ];
+        });
 
         return [
-            <div key="gca graph title">Vs. GCA</div>,
             <ScatterChart
                 width={600}
                 height={400}
@@ -241,7 +299,7 @@ class CompareFactors extends Component {
             >
                 <CartesianGrid />
                 <XAxis domain={[-6, 6]} type="number" dataKey={"score"} name="Factor/Facet Score" />
-                <YAxis domain={[-6, 6]} type="number" dataKey={"gca"} name="GCA" />
+                <YAxis domain={[50, 150]} type="number" dataKey={"gca"} name="GCA" />
 
                 <Tooltip cursor={{ strokeDasharray: "3 3" }} />
                 <Legend />
@@ -252,7 +310,8 @@ class CompareFactors extends Component {
             </div>,
             <div key="gca scatter y label" styleName="y-label">
                 GCA
-            </div>
+            </div>,
+            <div styleName="all-compare-gca-stats">{stats}</div>
         ];
     };
 
