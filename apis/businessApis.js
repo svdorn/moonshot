@@ -1673,6 +1673,30 @@ async function POST_changeHiringStage(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // if they set somebody to hired, lock them out of the account if they're done
+    if (hiringStage === "Hired") {
+        try {
+            var business = await Businesses.findById(bizUser.businessInfo.businessId);
+        } catch (getBusinessError) {
+            console.log("Error getting business when trying to update hiring stuff: ", getBusinessError);
+        }
+
+        // check if need to lock them out of their account
+        if (business && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+            business.fullAccess = false;
+        }
+
+        try {
+            await business.save();
+        }
+        catch (updateBusinessError) {
+            console.log(
+                "error updating a business to have full access: ",
+                updateBusinessError
+            );
+        }
+    }
+
     // return successfully
     return res.json(true);
 }

@@ -28,10 +28,10 @@ if (liveSite) {
     new CronJob("0 0 6 * * *", safeStripeUpdates, onComplete, onStart, timezone);
 }
 // STRIPE TESTING
-const onComplete = null;
-const onStart = true;
-const timezone = "America/Los_Angeles";
-new CronJob("0 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
+// const onComplete = null;
+// const onStart = true;
+// const timezone = "America/Los_Angeles";
+// new CronJob("0 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
 
 
 async function safeSendUpdateEmails() {
