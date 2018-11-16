@@ -1558,6 +1558,34 @@ async function advance(user, businessId, positionId) {
             if (!user.positions[positionIndex].appliedEndDate) {
                 // give it an end date
                 user.positions[positionIndex].appliedEndDate = new Date();
+                try {
+                    // update the business candidate count
+                    var business = await Businesses.findOneAndUpdate(
+                        {_id: mongoose.Types.ObjectId(businessId) },
+                        { $inc: { candidatesSignedUp: 1 } }
+                    );
+                } catch (updateBusinessError) {
+                    console.log(
+                        "error updating a business candidatesSignedUp: ",
+                        updateBusinessError
+                    );
+                }
+
+                // if trial has ended and need to restrict access, restrict access 
+                if (business && business.candidatesSignedUp && business.candidatesSignedUp > 20 && !business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                    try {
+                        // update the business candidate count
+                        var business = await Businesses.findOneAndUpdate(
+                            {_id: mongoose.Types.ObjectId(businessId) },
+                            { fullAccess: true }
+                        );
+                    } catch (updateBusinessError) {
+                        console.log(
+                            "error updating a business to have full access: ",
+                            updateBusinessError
+                        );
+                    }
+                }
 
                 // // get business from position and then update that business in intercom
                 // // TODO: update candidates to be the correct # of candidates, 1 works for now

@@ -185,6 +185,8 @@ async function POST_cancelBillingSubscription(req, res) {
         return res.status(500).send("Error deleting the right subscription from our database");
     }
 
+    // TODO: if don't have new subscriptions, then there is no subscription so make sure to lock them out of their account
+
     // check for newSubscriptions, start that on stripe and make it subscription in our db
     if (business.billing.newSubscription && business.billing.newSubscription.name) {
         const subscriptionTerm = business.billing.newSubscription.name;
