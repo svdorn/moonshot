@@ -572,7 +572,9 @@ async function createBusiness(info) {
             uniqueNameLowerCase: uniqueName.toLowerCase(),
             positions: [],
             logo: "hr.png",
-            dateCreated: NOW
+            dateCreated: NOW,
+            candidatesSignedUp: 0,
+            fullAccess: true
         };
 
         // check if positions should be added

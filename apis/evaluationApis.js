@@ -1571,15 +1571,15 @@ async function advance(user, businessId, positionId) {
                     );
                 }
 
-                // if trial has ended and need to restrict access, restrict access 
-                if (business && business.candidatesSignedUp && business.candidatesSignedUp > 20 && !business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                // if trial has ended and need to restrict access, restrict access
+                if (business && business.candidatesSignedUp && business.candidatesSignedUp > 20 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                    // restrict the fullAccess of the business
+                    business.fullAccess = false;
+
                     try {
-                        // update the business candidate count
-                        var business = await Businesses.findOneAndUpdate(
-                            {_id: mongoose.Types.ObjectId(businessId) },
-                            { fullAccess: true }
-                        );
-                    } catch (updateBusinessError) {
+                        await business.save();
+                    }
+                    catch (updateBusinessError) {
                         console.log(
                             "error updating a business to have full access: ",
                             updateBusinessError
