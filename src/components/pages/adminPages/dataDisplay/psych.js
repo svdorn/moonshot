@@ -406,7 +406,63 @@ class Psych extends Component {
 
     // the display for question data
     questions = () => {
-        return "questions";
+        const data = [
+            {
+                question: "What's yo poison?",
+                rightOption: "moydah",
+                leftOption: "luv",
+                interRel: 0.3,
+                average: 1.3,
+                stdDev: 2,
+                factor: "Honesty-Humility",
+                facet: "Shamefulness"
+            },
+            {
+                question:
+                    "aa pa paweiflnj asdp asfkajsdlfj anjwodfipa 8sijahowpf9 adisfjlahsof awefpi auhwef lasjdf a?",
+                rightOption: "auhsd98fpuia nawf awef pawe",
+                leftOption: "aweoifhuawe falsdawef awefasdw awef wef wef",
+                interRel: 0.5,
+                average: -0.8,
+                stdDev: 1.69,
+                factor: "Emotionality",
+                facet: "Crybabiness"
+            }
+        ];
+
+        return data.map((q, qIdx) => {
+            return [
+                <div styleName="facet-graph" key={`facet ${qIdx}`}>
+                    <div style={{ marginRight: "20px", textAlign: "left", width: "600px" }}>
+                        <div style={{ fontWeight: "initial" }}>
+                            <span>Question:</span> {q.question}
+                        </div>
+                        <div>
+                            <span>Left: </span>
+                            {q.leftOption}
+                        </div>
+                        <div>
+                            <span>Right: </span>
+                            {q.rightOption}
+                        </div>
+                        <div>
+                            <span>Factor: </span>
+                            {q.factor}
+                        </div>
+                        <div>
+                            <span>Facet: </span>
+                            {q.facet}
+                        </div>
+                    </div>
+                    <div>
+                        <div>Average: {q.average}</div>
+                        <div>Interreliability: {q.interRel}</div>
+                        <div>Std. dev.: {q.stdDev}</div>
+                    </div>
+                </div>,
+                <br key={`facet ${qIdx} br`} />
+            ];
+        });
     };
 
     // the display for output data

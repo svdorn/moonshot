@@ -125,6 +125,12 @@
     top: 10px;
     left: 0;
 }
+/* question titles */
+.facet-graph span {
+    color: var(--primary-cyan);
+    width: 80px;
+    display: inline-block;
+}
 
 .compare-button {
     position: fixed;
