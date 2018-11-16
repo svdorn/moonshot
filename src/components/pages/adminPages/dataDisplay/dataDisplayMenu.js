@@ -43,7 +43,7 @@ class DataDisplayMenu extends Component {
         }
 
         const topOptions = [
-            { title: "Psycho", url: "/admin/dataDisplay/psych" },
+            { title: "Personality", url: "/admin/dataDisplay/psych" },
             { title: "GCA", url: "/admin/dataDisplay/gca" },
             { title: "Business", url: "/admin/dataDisplay/business" }
         ];
