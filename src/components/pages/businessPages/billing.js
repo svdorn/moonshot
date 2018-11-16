@@ -353,7 +353,6 @@ class Billing extends Component {
 
         const blurredClass = blur ? "dialogForBizOverlay" : "";
 
-
         return (
             <div className={"jsxWrapper blackBackground fillScreen " + blurredClass}>
                 <AddUserDialog />

@@ -324,7 +324,7 @@ export function usersReducers(state = initialState, action) {
             Intercom("boot", {
                 app_id: "xki3jtkg"
             });
-            return { ...state, currentUser: undefined };
+            return { ...state, currentUser: undefined, billing: undefined };
             break;
         case "FORGOT_PASSWORD_REQUESTED":
         case "POST_USER_REQUESTED":
