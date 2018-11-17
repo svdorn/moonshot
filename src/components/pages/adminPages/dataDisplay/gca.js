@@ -6,7 +6,7 @@ import {} from "../../../../actions/usersActions";
 import { randomInt } from "../../../../miscFunctions";
 import colors from "../../../../colors";
 import { button } from "../../../../classes";
-import { Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab, MenuItem, Select } from "@material-ui/core";
 import "./dataDisplay.css";
 import {
     BarChart,
@@ -39,17 +39,88 @@ class GCA extends Component {
             dots: false,
             average: 0,
             stdDev: 1,
-            tab: "distribution"
+            tab: "distribution",
+            sortBy: "Name"
         };
     }
 
     componentDidMount() {
         this.getGcaData();
+        this.getRpmData();
     }
 
-    // get the data for all the RPMs
+    // get the data for overall gca distribution
     getGcaData() {
+        let distribution = [];
+        for (let i = 50; i <= 150; i += 5) {
+            distribution.push({
+                score: i,
+                quantity: randomInt(0, 1000)
+            });
+        }
+
+        this.setState({ distribution });
+    }
+
+    // get data for all the individual rpms
+    getRpmData() {
         const rpms = [
+            {
+                name: "RPM1",
+                proportion: 0.23,
+                time: 38,
+                n: 400,
+                correct: 4
+            },
+            {
+                name: "RPM2",
+                proportion: 0.49,
+                time: 23,
+                n: 506,
+                correct: 7
+            },
+            {
+                name: "RPM1",
+                proportion: 0.23,
+                time: 38,
+                n: 400,
+                correct: 4
+            },
+            {
+                name: "RPM2",
+                proportion: 0.49,
+                time: 23,
+                n: 506,
+                correct: 7
+            },
+            {
+                name: "RPM1",
+                proportion: 0.23,
+                time: 38,
+                n: 400,
+                correct: 4
+            },
+            {
+                name: "RPM2",
+                proportion: 0.49,
+                time: 23,
+                n: 506,
+                correct: 7
+            },
+            {
+                name: "RPM1",
+                proportion: 0.23,
+                time: 38,
+                n: 400,
+                correct: 4
+            },
+            {
+                name: "RPM2",
+                proportion: 0.49,
+                time: 23,
+                n: 506,
+                correct: 7
+            },
             {
                 name: "RPM1",
                 proportion: 0.23,
@@ -66,28 +137,113 @@ class GCA extends Component {
             }
         ];
 
-        let distribution = [];
-        for (let i = 50; i <= 150; i += 5) {
-            distribution.push({
-                score: i,
-                quantity: randomInt(0, 1000)
-            });
+        this.setState({ rpms });
+    }
+
+    // sort the rpms by some criteria
+    sortRpms = () => {
+        let { rpms, sortBy } = this.state;
+
+        let sortFunc;
+        if (sortBy === "Number") {
+            sortFunc = this.numberSort;
+        } else if (sortBy === "Time") {
+            sortFunc = this.timeSort;
+        } else if (sortBy === "Correct") {
+            sortFunc = this.proportionSort;
+        } else {
+            sortFunc = this.nameSort;
         }
 
-        this.setState({ rpms, distribution });
-    }
+        rpms = rpms.sort(sortFunc);
+
+        this.setState({ rpms });
+    };
+
+    // sort the rpms by name
+    nameSort = (rpm1, rpm2) => {
+        if (rpm1.name > rpm2.name) {
+            return -1;
+        } else if (rpm1.name < rpm2.name) {
+            return 1;
+        } else {
+            return 0;
+        }
+    };
+
+    // sort the rpms by the number of people who have done it
+    numberSort = (rpm1, rpm2) => {
+        return rpm1.n - rpm2.n;
+    };
+
+    // sort by the average amount of time it takes to complete the rpm
+    timeSort = (rpm1, rpm2) => {
+        return rpm1.time - rpm2.time;
+    };
+
+    // sort by the proportion of people who got the rpm correct
+    proportionSort = (rpm1, rpm2) => {
+        return rpm1.proportion - rpm2.proportion;
+    };
 
     // toggle whether you can see line chart dots
     toggleDots = () => {
         this.setState({ dots: !this.state.dots });
     };
 
+    // change the sorting dropdown item that is selected
+    handleChangeSortBy = event => {
+        const sortBy = event.target.value;
+        this.setState({ sortBy }, this.sortRpms);
+    };
+
+    // makes a dropdown to select how the rpms should be sorted
+    sortDropDown() {
+        const sortTerms = ["Time", "Correct", "Number", "Name"];
+
+        // create the stage name menu items
+        const sortItems = sortTerms.map(sortTerm => {
+            return (
+                <MenuItem value={sortTerm} key={sortTerm}>
+                    {sortTerm}
+                </MenuItem>
+            );
+        });
+
+        return (
+            <Select
+                disableUnderline={true}
+                classes={{
+                    root: "selectRootWhite myCandidatesSelect",
+                    icon: "selectIconWhiteImportant"
+                }}
+                style={{ marginTop: "20px" }}
+                value={this.state.sortBy}
+                onChange={this.handleChangeSortBy}
+            >
+                {sortItems}
+            </Select>
+        );
+    }
+
     rpmsDisplay = () => {
         const { png } = this.props;
 
         const rpms = this.state.rpms.map(rpm => {
             return (
-                <div styleName="facet-graph">
+                <div styleName="rpm-display">
+                    <div>
+                        <div>Name: {rpm.name}</div>
+                        <div>
+                            N = <span>{rpm.n}</span>
+                        </div>
+                        <div>
+                            Correct: <span>{rpm.proportion}%</span>
+                        </div>
+                        <div>
+                            Average time: <span>{rpm.time}</span>
+                        </div>
+                    </div>
                     <div styleName="rpm">
                         <img src={`/images/cognitiveTest/${rpm.name}${png}`} />
                         <br />
@@ -98,17 +254,17 @@ class GCA extends Component {
                             />
                         ))}
                     </div>
-                    <div>
-                        <div>Name: {rpm.name}</div>
-                        <div>N = {rpm.n}</div>
-                        <div>Correct: {rpm.proportion}%</div>
-                        <div>Average time: {rpm.time}</div>
-                    </div>
                 </div>
             );
         });
 
-        return <div>{rpms}</div>;
+        return (
+            <div>
+                {this.sortDropDown()}
+                <br />
+                {rpms}
+            </div>
+        );
     };
 
     distributionGraph() {

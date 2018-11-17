@@ -132,18 +132,6 @@
     display: inline-block;
 }
 
-.rpm > img:first-child {
-    width: 560px;
-    height: 366px;
-}
-.rpm > img:not(:first-child) {
-    width: 64px;
-    height: 64px;
-}
-.rpm > img.correct {
-    border: 1px solid var(--primary-cyan);
-}
-
 .compare-button {
     position: fixed;
     top: 90px;
@@ -195,4 +183,24 @@
 .compare-gca-stats span {
     float: right;
     color: var(--primary-cyan);
+}
+
+.rpm > img:first-child {
+    width: 160px;
+}
+.rpm > img:not(:first-child) {
+    width: 35px;
+}
+.rpm > img.correct {
+    border: 1px solid var(--primary-cyan);
+}
+.rpm-display {
+    width: 170px;
+    display: inline-block;
+    margin: 20px;
+}
+.rpm-display span {
+    color: var(--primary-cyan);
+}
+.rpm-displays {
 }

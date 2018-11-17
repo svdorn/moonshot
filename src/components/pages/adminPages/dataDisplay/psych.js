@@ -60,6 +60,10 @@ class Psych extends Component {
 
         this.state = {
             site: sites[0],
+            factors: [],
+            facets: [],
+            questions: [],
+            outputs: [],
             categoryIdx: 0,
             comparableFactors: [],
             comparableFacets: [],
@@ -67,6 +71,139 @@ class Psych extends Component {
             chartType: "line",
             dots: false
         };
+    }
+
+    componentDidMount() {
+        this.getFactorData();
+        this.getFacetData();
+        this.getQuestionData();
+        this.getOutputData();
+    }
+
+    // get data about every factor
+    getFactorData() {
+        const data = [
+            { name: "-4.75", quantity: 456 },
+            { name: "-4.25", quantity: 230 },
+            { name: "-3.75", quantity: 345 },
+            { name: "-3.25", quantity: 450 },
+            { name: "-2.75", quantity: 321 },
+            { name: "-2.25", quantity: 235 },
+            { name: "-1.75", quantity: 267 },
+            { name: "-1.25", quantity: 378 },
+            { name: "-0.75", quantity: 210 },
+            { name: "-0.25", quantity: 23 },
+            { name: "0.25", quantity: 45 },
+            { name: "0.75", quantity: 90 },
+            { name: "1.25", quantity: 130 },
+            { name: "1.75", quantity: 11 },
+            { name: "2.25", quantity: 107 },
+            { name: "2.75", quantity: 926 },
+            { name: "3.25", quantity: 653 },
+            { name: "3.75", quantity: 366 },
+            { name: "4.25", quantity: 486 },
+            { name: "4.75", quantity: 512 }
+        ];
+
+        const factors = [
+            {
+                name: "Honesty-Humility",
+                dataPoints: randomData[0],
+                average: 2.3,
+                stdDev: 0.41
+            },
+            { name: "Extraversion", dataPoints: randomData[1], average: 2.3, stdDev: 0.41 },
+            {
+                name: "Dinglification",
+                dataPoints: randomData[2],
+                average: -1.6,
+                stdDev: 0.53
+            }
+        ];
+
+        this.setState({ factors });
+    }
+
+    // get data about every facet
+    getFacetData() {
+        const facets = [
+            {
+                name: "Ambiguity",
+                dataPoints: randomData[3],
+                average: 2.3,
+                interRel: 0.87,
+                stdDev: 0.41
+            },
+            {
+                name: "Your Mom",
+                dataPoints: randomData[4],
+                average: 2.3,
+                interRel: 0.87,
+                stdDev: 0.41
+            },
+            { name: "Hope", dataPoints: randomData[5], average: -1.6, interRel: 0.82, stdDev: 0.53 }
+        ];
+
+        this.setState({ facets });
+    }
+
+    // get data about the questions that are asked in the test
+    getQuestionData() {
+        const questions = [
+            {
+                question: "What's yo poison?",
+                rightOption: "moydah",
+                leftOption: "luv",
+                interRel: 0.3,
+                average: 1.3,
+                stdDev: 2,
+                factor: "Honesty-Humility",
+                facet: "Shamefulness"
+            },
+            {
+                question:
+                    "aa pa paweiflnj asdp asfkajsdlfj anjwodfipa 8sijahowpf9 adisfjlahsof awefpi auhwef lasjdf a?",
+                rightOption: "auhsd98fpuia nawf awef pawe",
+                leftOption: "aweoifhuawe falsdawef awefasdw awef wef wef",
+                interRel: 0.5,
+                average: -0.8,
+                stdDev: 1.69,
+                factor: "Emotionality",
+                facet: "Crybabiness"
+            }
+        ];
+
+        this.setState({ questions });
+    }
+
+    // get data about the outputs that are given to people who take the test for fun
+    getOutputData() {
+        const outputs = [
+            {
+                text:
+                    "You love to diggity dongus, but are generally hesitant to \
+                    scrim your scrongus. You love to diggity dongus, but are \
+                    generally hesitant to scrim your scrongus.",
+                disagree: 0.05,
+                neutral: 0.12,
+                agree: 0.83,
+                proportion: 0.14,
+                n: 403
+            },
+            {
+                text:
+                    "You love to diggity dongus, but are generally hesitant to \
+                    scrim your scrongus. You love to diggity dongus, but are \
+                    generally hesitant to scrim your scrongus.",
+                disagree: 0.15,
+                neutral: 0.2,
+                agree: 0.65,
+                proportion: 0.3,
+                n: 64
+            }
+        ];
+
+        this.setState({ outputs });
     }
 
     // change the site we're getting data from (All, Insights, Learning)
@@ -153,46 +290,7 @@ class Psych extends Component {
     factors = () => {
         const self = this;
 
-        const data = [
-            { name: "-4.75", quantity: 456 },
-            { name: "-4.25", quantity: 230 },
-            { name: "-3.75", quantity: 345 },
-            { name: "-3.25", quantity: 450 },
-            { name: "-2.75", quantity: 321 },
-            { name: "-2.25", quantity: 235 },
-            { name: "-1.75", quantity: 267 },
-            { name: "-1.25", quantity: 378 },
-            { name: "-0.75", quantity: 210 },
-            { name: "-0.25", quantity: 23 },
-            { name: "0.25", quantity: 45 },
-            { name: "0.75", quantity: 90 },
-            { name: "1.25", quantity: 130 },
-            { name: "1.75", quantity: 11 },
-            { name: "2.25", quantity: 107 },
-            { name: "2.75", quantity: 926 },
-            { name: "3.25", quantity: 653 },
-            { name: "3.75", quantity: 366 },
-            { name: "4.25", quantity: 486 },
-            { name: "4.75", quantity: 512 }
-        ];
-
-        const factors = [
-            {
-                name: "Honesty-Humility",
-                dataPoints: randomData[0],
-                average: 2.3,
-                stdDev: 0.41
-            },
-            { name: "Extraversion", dataPoints: randomData[1], average: 2.3, stdDev: 0.41 },
-            {
-                name: "Dinglification",
-                dataPoints: randomData[2],
-                average: -1.6,
-                stdDev: 0.53
-            }
-        ];
-
-        const factorGraphs = factors.map(factor => {
+        const factorGraphs = this.state.factors.map(factor => {
             // the parts of the chart that are common to Bar and Line Charts
             const chartParts = [
                 <CartesianGrid strokeDasharray="3 3" />,
@@ -284,25 +382,7 @@ class Psych extends Component {
     facets = () => {
         const self = this;
 
-        const facets = [
-            {
-                name: "Ambiguity",
-                dataPoints: randomData[3],
-                average: 2.3,
-                interRel: 0.87,
-                stdDev: 0.41
-            },
-            {
-                name: "Your Mom",
-                dataPoints: randomData[4],
-                average: 2.3,
-                interRel: 0.87,
-                stdDev: 0.41
-            },
-            { name: "Hope", dataPoints: randomData[5], average: -1.6, interRel: 0.82, stdDev: 0.53 }
-        ];
-
-        const facetLis = facets.map((facet, fIdx) => {
+        const facetLis = this.state.facets.map((facet, fIdx) => {
             // the parts of the chart that are common to Bar and Line Charts
             const chartParts = [
                 <CartesianGrid strokeDasharray="3 3" />,
@@ -392,31 +472,7 @@ class Psych extends Component {
 
     // the display for question data
     questions = () => {
-        const data = [
-            {
-                question: "What's yo poison?",
-                rightOption: "moydah",
-                leftOption: "luv",
-                interRel: 0.3,
-                average: 1.3,
-                stdDev: 2,
-                factor: "Honesty-Humility",
-                facet: "Shamefulness"
-            },
-            {
-                question:
-                    "aa pa paweiflnj asdp asfkajsdlfj anjwodfipa 8sijahowpf9 adisfjlahsof awefpi auhwef lasjdf a?",
-                rightOption: "auhsd98fpuia nawf awef pawe",
-                leftOption: "aweoifhuawe falsdawef awefasdw awef wef wef",
-                interRel: 0.5,
-                average: -0.8,
-                stdDev: 1.69,
-                factor: "Emotionality",
-                facet: "Crybabiness"
-            }
-        ];
-
-        return data.map((q, qIdx) => {
+        return this.state.questions.map((q, qIdx) => {
             return [
                 <div styleName="facet-graph" key={`facet ${qIdx}`}>
                     <div style={{ marginRight: "20px", textAlign: "left", width: "600px" }}>
@@ -453,32 +509,8 @@ class Psych extends Component {
 
     // the display for output data
     outputs = () => {
-        const outputs = [
-            {
-                text:
-                    "You love to diggity dongus, but are generally hesitant to \
-                    scrim your scrongus. You love to diggity dongus, but are \
-                    generally hesitant to scrim your scrongus.",
-                disagree: 0.05,
-                neutral: 0.12,
-                agree: 0.83,
-                proportion: 0.14,
-                n: 403
-            },
-            {
-                text:
-                    "You love to diggity dongus, but are generally hesitant to \
-                    scrim your scrongus. You love to diggity dongus, but are \
-                    generally hesitant to scrim your scrongus.",
-                disagree: 0.15,
-                neutral: 0.2,
-                agree: 0.65,
-                proportion: 0.3,
-                n: 64
-            }
-        ];
         // map each of the outputs to a list item
-        let outputItems = outputs.map((output, index) => {
+        let outputItems = this.state.outputs.map((output, index) => {
             return (
                 <li key={`output ${index}`} styleName="psych-output-item">
                     <div>{output.text}</div>
