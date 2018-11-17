@@ -450,7 +450,7 @@ class Activity extends Component {
         this.setState({ tab, numUsers: undefined }, getData);
     };
 
-    makeDropdown() {
+    makeDropdown(currTab) {
         const tabOptions = tabs.map(tab => {
             return (
                 <MenuItem value={tab} key={tab}>
@@ -469,7 +469,7 @@ class Activity extends Component {
                     select: "no-focus-change-important"
                 }}
                 value={this.state.tab}
-                onChange={this.handleTabChange}
+                onChange={this.handleTabChange(currTab)}
             >
                 {tabOptions}
             </Select>
@@ -534,7 +534,7 @@ class Activity extends Component {
     }
 
     render() {
-        const { frame, fetchDataError, numUsers } = this.state;
+        const { frame, fetchDataError, numUsers, tab } = this.state;
         try {
             var possessiveBusinessName = makePossessive(
                 this.props.currentUser.businessInfo.businessName
@@ -567,7 +567,11 @@ class Activity extends Component {
                 // if there are any candidates, show number of unreviewed ones
                 case "Awaiting Review": {
                     content = this.awaitingReview();
-                    dropdown = this.makeDropdown();
+                    dropdown = this.makeDropdown(tab);
+                    break;
+                }
+                case "Billing Update": {
+                    content = this.billingUpdate();
                     break;
                 }
                 default: {
