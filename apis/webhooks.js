@@ -206,6 +206,9 @@ async function POST_cancelBillingSubscription(req, res) {
         const dateEnding = getBillingEndDate(dateCreated, subscriptionTerm);
         business.billing.subscription.dateCreated = dateCreated;
         business.billing.subscription.dateEnding = dateEnding;
+    } else {
+        // if there is no new subscription, lock the user out of their account
+        business.fullAccess = false;
     }
 
     // save the business
