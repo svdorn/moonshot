@@ -896,6 +896,10 @@ form > h1 {
     background-position-x: 100%;
 }
 
+.no-focus-outline button:focus {
+    outline: none;
+}
+
 .gradient-1-orange {
     --gradient-color-1: var(--primary-orange);
 }

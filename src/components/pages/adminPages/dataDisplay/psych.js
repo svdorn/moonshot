@@ -269,7 +269,12 @@ class Psych extends Component {
     // the tabs that show the different sites you can choose from
     siteSelector() {
         return (
-            <Tabs value={this.state.site} onChange={this.handleSiteChange} centered>
+            <Tabs
+                value={this.state.site}
+                onChange={this.handleSiteChange}
+                centered
+                className="no-focus-outline"
+            >
                 {sites.map(site => (
                     <Tab label={site} value={site} key={site} style={{ color: "white" }} />
                 ))}
@@ -280,7 +285,12 @@ class Psych extends Component {
     // the tabs to show the different categories you can choose from
     categorySelector() {
         return (
-            <Tabs value={this.state.categoryIdx} onChange={this.handleCategoryChange} centered>
+            <Tabs
+                value={this.state.categoryIdx}
+                onChange={this.handleCategoryChange}
+                centered
+                className="no-focus-outline"
+            >
                 {categories.map(cat => <Tab label={cat} key={cat} style={{ color: "white" }} />)}
             </Tabs>
         );

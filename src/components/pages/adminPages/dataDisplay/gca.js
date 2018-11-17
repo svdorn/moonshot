@@ -366,12 +366,22 @@ class GCA extends Component {
 
         return (
             <div style={{ minHeight: "100vh", textAlign: "center" }}>
-                <Tabs value={this.state.site} onChange={this.handleSiteChange} centered>
+                <Tabs
+                    value={this.state.site}
+                    onChange={this.handleSiteChange}
+                    centered
+                    className="no-focus-outline"
+                >
                     {sites.map(site => (
                         <Tab label={site} value={site} key={site} style={{ color: "white" }} />
                     ))}
                 </Tabs>
-                <Tabs value={tab} onChange={this.handleTabChange} centered>
+                <Tabs
+                    value={tab}
+                    onChange={this.handleTabChange}
+                    centered
+                    className="no-focus-outline"
+                >
                     <Tab
                         label="Distribution"
                         value="distribution"
