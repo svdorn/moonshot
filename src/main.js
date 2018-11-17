@@ -17,6 +17,7 @@ import LockedAccountModal from "./components/childComponents/lockedAccountModal"
 import PreOnboardingFooter from "./components/childComponents/preOnboardingFooter";
 import OnboardingStepsFooter from "./components/childComponents/onboardingStepsFooter";
 import AdminVerifyEmail from "./components/childComponents/adminVerifyEmail";
+import BillingBanners from "./components/childComponents/billingBanners";
 import ReactGA from "react-ga";
 
 import "./main.css";
@@ -215,6 +216,7 @@ class Main extends Component {
                         <div styleName={adminDisplay ? "admin-content" : ""}>
                             <Notification />
                             <AdminVerifyEmail />
+                            <BillingBanners />
                             <LockedAccountModal />
                             <AddAdminDialog />
                             <ContactUsDialog />

@@ -70,6 +70,7 @@ const businessApis = {
     GET_billingIsSetUp,
     GET_billingInfo,
     GET_adminList,
+    GET_candidateCount,
 
     generateApiKey,
     createEmailInfo,
@@ -141,6 +142,29 @@ async function GET_billingInfo(req, res) {
     }
 
     return res.json(business.billing);
+}
+
+// find the candidate count of the company
+async function GET_candidateCount(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    // if one of the arguments doesn't exist, return with error code
+    if (!userId || !verificationToken || !businessId) {
+        return res.status(400).send("Bad request.");
+    }
+
+    try {
+        var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(
+            userId,
+            verificationToken,
+            businessId
+        );
+    } catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.json(business.candidateCount);
 }
 
 // create a business and the first account admin for that business
