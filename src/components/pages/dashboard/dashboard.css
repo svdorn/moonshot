@@ -267,6 +267,11 @@
     padding: var(--item-margin) var(--item-margin) 0;
     position: relative;
 }
+.billing-activity > div:first-child {
+    flex: 1;
+    padding: calc(2 * var(--item-margin));
+    position: relative;
+}
 .embed-link > div:first-child {
     flex: 1;
     padding: calc(2 * var(--item-margin));
@@ -569,7 +574,7 @@
     vertical-align: top;
     color: var(--secondary-gray);
     font-size: 14px;
-    
+
     -webkit-transition: -webkit-transition 0.2s;
     -moz-transition: -moz-box-shadow 0.2s;
     transition: box-shadow 0.2s;
