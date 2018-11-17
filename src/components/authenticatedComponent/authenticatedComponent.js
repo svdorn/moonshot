@@ -1,7 +1,7 @@
 "use strict";
 import React, { Component } from "react";
 import Notification from "../notification";
-import { getUserFromSession, generalAction } from "../../actions/usersActions";
+import { getUserFromSession, generalAction, updateStore } from "../../actions/usersActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
@@ -75,15 +75,18 @@ class AuthenticatedComponent extends Component {
     }
 
     checkLockedAccount() {
-        const { currentUser, fullAccess, generalAction, location } = this.props;
+        const { currentUser, fullAccess, generalAction, location, updateStore } = this.props;
 
         if (currentUser && currentUser.userType === "accountAdmin" && !fullAccess) {
             // if we are on a page that we can't be on
             if (location.pathname !== "/dashboard" && location.pathname !== "/billing") {
                 // set the  modal here
                 generalAction("OPEN_LOCKED_ACCOUNT_MODAL");
+                updateStore("blurMenu", true);
             } else {
+                // unset the modal if go to a page where the modal should be unset
                 generalAction("CLOSE_LOCKED_ACCOUNT_MODAL");
+                updateStore("blurMenu", false);
             }
         }
     }
@@ -281,7 +284,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             getUserFromSession,
-            generalAction
+            generalAction,
+            updateStore
         },
         dispatch
     );

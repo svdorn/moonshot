@@ -482,8 +482,10 @@ class MyEmployees extends Component {
 
         }
 
+        const blurredClass = this.props.blur ? "dialogForBizOverlay" : "";
+
         return (
-            <div className="jsxWrapper blackBackground fillScreen my-employees" style={{paddingBottom: "20px"}} ref='myEmployees'>
+            <div className={"jsxWrapper blackBackground fillScreen my-employees " + blurredClass} style={{paddingBottom: "20px"}} ref='myEmployees'>
                 {this.props.currentUser.userType == "accountAdmin" ?
                     <AddUserDialog position={this.state.position} tab="Employee" />
                     : null
@@ -525,6 +527,7 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         loading: state.users.loadingSomething,
         png: state.users.png,
+        blur: state.users.lockedAccountModal
     };
 }
 

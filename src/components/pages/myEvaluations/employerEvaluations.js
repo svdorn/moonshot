@@ -297,8 +297,10 @@ class MyEvaluations extends Component {
             );
         }
 
+        const blurredClass = this.props.blur ? "dialogForBizOverlay" : "";
+
         return(
-            <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEvaluations'>
+            <div className={"jsxWrapper blackBackground fillScreen " + blurredClass} style={{paddingBottom: "20px"}} ref='myEvaluations'>
                 {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>My Evaluations | Moonshot</title>
@@ -338,7 +340,8 @@ function mapStateToProps(state) {
         formData: state.form,
         currentUser: state.users.currentUser,
         loading: state.users.loadingSomething,
-        png: state.users.png
+        png: state.users.png,
+        blur: state.users.lockedAccountModal
     };
 }
 

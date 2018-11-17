@@ -46,8 +46,11 @@ class Settings extends Component {
 
             }
         };
+
+        const blurredClass = this.props.blur ? "dialogForBizOverlay" : "";
+
         return (
-            <div className="fillScreen">
+            <div className={"fillScreen " + blurredClass}>
                 {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>Settings | Moonshot</title>
@@ -101,7 +104,8 @@ class Settings extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        blur: state.users.lockedAccountModal
     };
 }
 
