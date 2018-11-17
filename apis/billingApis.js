@@ -80,6 +80,9 @@ async function POST_customer(req, res) {
         business.billing.subscription.dateCreated = dateCreated;
         business.billing.subscription.dateEnding = dateEnding;
 
+        // set the business to fullAccess mode
+        business.fullAccess = true;
+
         // save the business
         try { await business.save(); }
         catch (bizSaveError) {
@@ -292,6 +295,9 @@ async function POST_newPlan(req, res) {
             const dateEnding = getBillingEndDate(dateCreated, subscriptionTerm);
             business.billing.subscription.dateCreated = dateCreated;
             business.billing.subscription.dateEnding = dateEnding;
+
+            // set the business to fullAccess mode
+            business.fullAccess = true;
         } else {
             return res.status(400).send("Something went wrong processing your request, please contact us!");
         }
