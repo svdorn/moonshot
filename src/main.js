@@ -13,6 +13,7 @@ import Notification from "./components/notification";
 import ContactUsDialog from "./components/childComponents/contactUsDialog";
 import AddAdminDialog from "./components/childComponents/addAdminDialog";
 import CopyLinkFooter from "./components/childComponents/copyLinkFooter";
+import LockedAccountModal from "./components/childComponents/lockedAccountModal";
 import PreOnboardingFooter from "./components/childComponents/preOnboardingFooter";
 import OnboardingStepsFooter from "./components/childComponents/onboardingStepsFooter";
 import AdminVerifyEmail from "./components/childComponents/adminVerifyEmail";
@@ -214,6 +215,7 @@ class Main extends Component {
                         <div styleName={adminDisplay ? "admin-content" : ""}>
                             <Notification />
                             <AdminVerifyEmail />
+                            <LockedAccountModal />
                             <AddAdminDialog />
                             <ContactUsDialog />
                             {this.props.children}

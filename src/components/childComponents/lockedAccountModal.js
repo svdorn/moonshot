@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import colors from "../../colors";
-import { goTo } from "../../miscFunctions";
+import { goTo, makePossessive } from "../../miscFunctions";
 import { button } from "../../classes.js";
 import axios from 'axios';
 
@@ -16,8 +16,6 @@ import "./lockedAccountModal.css";
 class LockedAccountModal extends Component {
     constructor(props) {
         super(props);
-
-        this.state = { };
     }
 
     close = () => {
@@ -25,6 +23,7 @@ class LockedAccountModal extends Component {
     }
 
     render() {
+        const { currentUser } = this.props;
 
         return (
             <Dialog
@@ -32,7 +31,12 @@ class LockedAccountModal extends Component {
                 maxWidth={false}
             >
                 <div styleName="modal-container">
-                    { content }
+                    <div>
+                        {`${makePossessive(currentUser.businessInfo.businessName)} plan has ended but everything has been saved for you. ` }<span styleName="select-plan"><span onClick={() => goTo("/billing")}>Select a plan</span> to continue.</span>
+                    </div>
+                    <div styleName="blue-arrow" onClick={() => goTo("/billing")}>
+                        See Plans <img src={`/icons/ArrowBlue${this.props.png}`} />
+                    </div>
                 </div>
             </Dialog>
         );

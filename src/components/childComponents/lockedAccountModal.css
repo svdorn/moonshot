@@ -1,6 +1,46 @@
 .modal-container {
-    padding: 30px 50px;
+    padding: 50px 70px;
     background: var(--primary-black-dark);
     color: var(--primary-white);
-    text-align: center;
+    font-size: 16px;
+    text-align: left;
+    max-width: 600px;
+    margin: auto;
+}
+
+.select-plan {
+    color: var(--primary-white);
+    cursor: default;
+}
+.select-plan > span {
+    color: var(--primary-cyan);
+    cursor: pointer;
+}
+.select-plan > span:hover {
+    text-decoration: underline;
+}
+.blue-arrow {
+    margin-top: 25px;
+    cursor: pointer;
+    color: var(--primary-cyan);
+}
+.blue-arrow > img {
+    width: 15px;
+    margin: 0 5px 2px 2px;
+    margin-bottom: 4px;
+    transform: translateX(0%);
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+.blue-arrow:hover > img {
+    transform: translateX(50%);
+}
+
+@media only screen and (max-width: 800px) {
+    .modal-container {
+        font-size: 14px;
+        padding: 20px 40px;
+    }
 }

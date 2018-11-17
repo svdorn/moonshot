@@ -79,7 +79,7 @@ class AuthenticatedComponent extends Component {
 
         if (currentUser && currentUser.userType === "accountAdmin" && !fullAccess) {
             // if we are on a page that we can't be on
-            if (location.pathname !== "dashboard" && location.pathname !== "billing") {
+            if (location.pathname !== "/dashboard" && location.pathname !== "/billing") {
                 // set the  modal here
                 generalAction("OPEN_LOCKED_ACCOUNT_MODAL");
             } else {
