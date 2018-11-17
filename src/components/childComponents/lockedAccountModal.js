@@ -18,12 +18,10 @@ class LockedAccountModal extends Component {
         super(props);
     }
 
-    close = () => {
-        this.props.generalAction("CLOSE_LOCKED_ACCOUNT_MODAL");
-    }
-
     render() {
         const { currentUser } = this.props;
+
+        if (!currentUser || currentUser.userType !== "accountAdmin" || !currentUser.businessInfo) return null;
 
         return (
             <Dialog
