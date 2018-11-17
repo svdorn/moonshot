@@ -45,8 +45,22 @@ class GCA extends Component {
     }
 
     componentDidMount() {
-        this.getGcaData();
-        this.getRpmData();
+        this.updateData();
+    }
+
+    // when tab or site is updated, update the data shown
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.tab !== this.state.tab || prevState.site !== this.state.site) {
+            this.updateData();
+        }
+    }
+
+    updateData() {
+        if (this.state.tab === "distribution") {
+            this.getGcaData();
+        } else {
+            this.getRpmData();
+        }
     }
 
     // get the data for overall gca distribution
