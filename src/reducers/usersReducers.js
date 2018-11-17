@@ -348,7 +348,6 @@ export function usersReducers(state = initialState, action) {
         case "COMPLETE_PATHWAY_REQUESTED":
         case "START_LOADING":
         case "BILLING_CUSTOMER_LOADING":
-            console.log("setting loading to true: ");
             return {
                 ...state,
                 loadingSomething: true

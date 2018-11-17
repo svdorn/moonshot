@@ -58,6 +58,7 @@ class WhatToDo extends Component {
 
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, -1);
+        this.props.addNotification("Free until you make your first hire or evaluate 20 candidates, whichever comes first.", "info");
     };
 
     intercomMsg = () => {
