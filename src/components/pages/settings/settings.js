@@ -47,7 +47,7 @@ class Settings extends Component {
             }
         };
 
-        const blurredClass = this.props.blur ? "dialogForBizOverlay" : "";
+        const blurredClass = this.props.blurModal ? "dialogForBizOverlay" : "";
 
         return (
             <div className={"fillScreen " + blurredClass}>
@@ -105,7 +105,7 @@ class Settings extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        blur: state.users.lockedAccountModal
+        blurModal: state.users.lockedAccountModal
     };
 }
 

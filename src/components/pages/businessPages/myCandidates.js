@@ -1415,7 +1415,7 @@ class MyCandidates extends Component {
         const candidateResultsClass = "candidateResults " + resultsWidthClass;
         const leftArrowContainerClass = "left arrowContainer " + resultsWidthClass;
         const rightArrowContainerClass = "right arrowContainer " + resultsWidthClass;
-        const blurredClass = this.props.blurModal || this.props.blur ? "dialogForBizOverlay" : "";
+        const blurredClass = this.props.blurModal || this.props.lockedAccountModal ? "dialogForBizOverlay" : "";
 
         // if the candidate is at the top of the list or not in the current list, disable the left arrow
         const leftArrowClass =
@@ -1575,7 +1575,7 @@ function mapStateToProps(state) {
         png: state.users.png,
         loading: state.users.loadingSomething,
         blurModal: state.users.candidatesPopupModalOpen,
-        blur: state.users.lockedAccountModal
+        lockedAccountModal: state.users.lockedAccountModal
 
     };
 }

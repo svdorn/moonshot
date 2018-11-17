@@ -400,7 +400,7 @@ async function GET_session(req, res) {
                 // get whether the accountAdmin has full access or not
                 if (user.businessInfo && user.businessInfo.businessId) {
                     try {
-                        var business = Businesses.findById(user.businessInfo.businessId).select("fullAccess");
+                        var business = await Businesses.findById(user.businessInfo.businessId);
                     } catch(getBusinessError) {
                         console.log("error getting business to find fullAccess: ", getBusinessError);
                     }
@@ -1139,7 +1139,7 @@ async function POST_login(req, res) {
         // get whether the accountAdmin has full access or not
         if (user.businessInfo && user.businessInfo.businessId) {
             try {
-                var business = Businesses.findById(user.businessInfo.businessId).select("fullAccess");
+                var business = await Businesses.findById(user.businessInfo.businessId);
             } catch(getBusinessError) {
                 console.log("error getting business to find fullAccess: ", getBusinessError);
             }
