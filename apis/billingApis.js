@@ -90,7 +90,7 @@ async function POST_customer(req, res) {
             return res.status(500).send("Server error, try again later.");
         }
 
-        return res.json(business.billing);
+        return res.json({ billing: business.billing, fullAccess: business.fullAccess });
     });
 }
 
@@ -309,7 +309,7 @@ async function POST_newPlan(req, res) {
             return res.status(500).send("Server error, try again later.");
         }
 
-        return res.json(business.billing);
+        return res.json({ billing: business.billing, fullAccess: business.fullAccess });
     });
 }
 

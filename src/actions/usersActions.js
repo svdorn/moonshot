@@ -447,7 +447,8 @@ export function setupBillingCustomer(source, email, userId, verificationToken, s
             .then(response => {
                 dispatch({
                     type: "SUCCESS_BILLING_CUSTOMER",
-                    billing: response.data,
+                    billing: response.data.billing,
+                    fullAccess: response.data.fullAccess,
                     ...notification(`You have successfully added your ${subscriptionTerm} plan`)
                 });
             })
@@ -483,7 +484,7 @@ export function updateBillingSource(source, userId, verificationToken) {
             .post("/api/billing/updateSource", { source, userId, verificationToken })
             .then(response => {
                 dispatch({
-                    type: "SUCCESS_BILLING_CUSTOMER",
+                    type: "SUCCESS_BILLING_INFO",
                     billing: response.data,
                     ...notification(`You have successfully updated your card`)
                 });
@@ -524,7 +525,7 @@ export function pauseBillingPlan(userId, verificationToken, message) {
             .post("/api/billing/pausePlan", { userId, verificationToken, message })
             .then(response => {
                 dispatch({
-                    type: "SUCCESS_BILLING_CUSTOMER",
+                    type: "SUCCESS_BILLING_INFO",
                     billing: response.data,
                     ...notification(`Our team will contact you shortly`)
                 });
@@ -545,7 +546,7 @@ export function updateBillingPlan(userId, verificationToken, subscriptionTerm) {
             .post("/api/billing/updatePlan", { userId, verificationToken, subscriptionTerm })
             .then(response => {
                 dispatch({
-                    type: "SUCCESS_BILLING_CUSTOMER",
+                    type: "SUCCESS_BILLING_INFO",
                     billing: response.data,
                     ...notification(`You have successfully updated your plan`)
                 });
@@ -566,8 +567,9 @@ export function newBillingPlan(userId, verificationToken, subscriptionTerm) {
             .post("/api/billing/newPlan", { userId, verificationToken, subscriptionTerm })
             .then(response => {
                 dispatch({
-                    type: "SUCCESS_BILLING_CUSTOMER",
-                    billing: response.data,
+                    type: "SUCCESS_BILLING_INFO",
+                    billing: response.data.billing,
+                    fullAccess: response.data.fullAccess,
                     ...notification(`You have successfully updated your plan`)
                 });
             })

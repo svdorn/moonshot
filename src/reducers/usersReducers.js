@@ -442,6 +442,7 @@ export function usersReducers(state = initialState, action) {
         case "SUCCESS_BILLING_INFO":
             return {
                 ...state,
+                ...notificationInfo(action.notification),
                 billing: action.billing,
                 loadingSomething: false
             };
@@ -451,6 +452,7 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 ...notificationInfo(action.notification),
                 billing: action.billing,
+                fullAccess: action.fullAccess,
                 loadingSomething: false
             };
             break;
