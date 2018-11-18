@@ -567,7 +567,7 @@ export function newBillingPlan(userId, verificationToken, subscriptionTerm) {
             .post("/api/billing/newPlan", { userId, verificationToken, subscriptionTerm })
             .then(response => {
                 dispatch({
-                    type: "SUCCESS_BILLING_INFO",
+                    type: "SUCCESS_BILLING_CUSTOMER",
                     billing: response.data.billing,
                     fullAccess: response.data.fullAccess,
                     ...notification(`You have successfully updated your plan`)
