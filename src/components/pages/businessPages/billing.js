@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBillingInfo, billingCardOnFileFalse, billingCardOnFileTrue, generalAction, updateStore, updateBillingPlan, newBillingPlan } from '../../../actions/usersActions';
+import { getBillingInfo, billingCardOnFileFalse, billingCardOnFileTrue, generalAction, updateStore, updateBillingPlan, newBillingPlan, intercomEvent } from '../../../actions/usersActions';
 import { makeSingular } from "../../../miscFunctions";
 import {Elements} from 'react-stripe-elements';
 import MetaTags from 'react-meta-tags';
@@ -82,6 +82,12 @@ class Billing extends Component {
             this.setState({ plan, currentPlan });
         }
     }
+
+    intercomMsg = () => {
+        const { _id, verificationToken } = this.props.currentUser;
+        // trigger intercom event
+        this.props.intercomEvent(`billing-help`, _id, verificationToken, null);
+    };
 
     selectPlan = (plan) => {
         // check if the user is trying to update their plan
@@ -203,7 +209,7 @@ class Billing extends Component {
                 </div>
                 <div styleName="header-seperator" />
                 <div>
-                    There will be text here for two lines. There will be text here for two lines. There will be text here for two lines.
+                    Invite unlimited candidates, create evaluations for any of your open positions and evaluate any number of employees to customize and improve your candidate predictions with any plan.
                 </div>
                 <div>
                     {info ?
@@ -296,15 +302,20 @@ class Billing extends Component {
         return (
             <div className="center">
                 {!loading ?
-                    <div styleName="update-cancel">
-                        <div onClick={() => this.updateCard()}>
-                            Update Card
+                    <div>
+                        <div styleName="message-us" onClick={this.intercomMsg}>
+                            <span>Message</span> us if you have any questions
                         </div>
-                        <div>
-                            |
-                        </div>
-                        <div onClick={() => this.cancelPlan()}>
-                            Cancel Plan
+                        <div styleName="update-cancel">
+                            <div onClick={() => this.updateCard()}>
+                                Update Card
+                            </div>
+                            <div>
+                                |
+                            </div>
+                            <div onClick={() => this.cancelPlan()}>
+                                Cancel Plan
+                            </div>
                         </div>
                     </div>
                     :
@@ -396,7 +407,8 @@ function mapDispatchToProps(dispatch) {
         generalAction,
         updateStore,
         updateBillingPlan,
-        newBillingPlan
+        newBillingPlan,
+        intercomEvent
     }, dispatch);
 }
 

@@ -17,6 +17,9 @@
 }
 .pricing > div:nth-child(3) {
     font-size: 16px;
+    margin: auto;
+    max-width: 700px;
+    width: 95%;
 }
 .pricing > div:nth-child(4) {
     font-size: 16px;
@@ -94,6 +97,15 @@
     margin-top: 40px;
 }
 
+.message-us {
+    color: var(--primary-white);
+    font-size: 16px;
+    margin-top: 30px;
+    cursor: pointer;
+}
+.message-us:hover > span {
+    color: var(--primary-cyan);
+}
 .update-cancel {
     color: var(--primary-white);
     font-size: 16px;
@@ -140,6 +152,9 @@
 @media only screen and (max-width: 800px) {
     .update-cancel {
         font-size: 14px;
+    }
+    .message-us {
+        font-size: 12px;
     }
     .update-plan {
         font-size: 14px;
