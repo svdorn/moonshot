@@ -374,7 +374,6 @@ async function stripeUpdates() {
                             console.log("Error getting subscription lists from stripe for business with id: ", business._id, " with error: ", getSubscriptionListError);
                             return resolve();
                         }
-                        console.log("subscriptions: ", subscriptions);
 
                         if (subscriptions && subscriptions.data && subscriptions.data.length > 0) {
                             subIdx = subscriptions.data.findIndex(sub => { return sub.id === billing.subscription.id})
@@ -396,8 +395,6 @@ async function stripeUpdates() {
                                 return resolve();
                             }
 
-                            console.log("DELETED");
-
                             // the subscription has been set to be cancelled in stripe
                             billing.subscription.cancelled = true;
 
@@ -411,6 +408,7 @@ async function stripeUpdates() {
                     }
                     // send an email telling them they have to cancel it manually
                 }
+                // check if we need to send them emails
                 return resolve();
             })
         }
