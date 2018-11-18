@@ -116,7 +116,10 @@ async function GET_billingIsSetUp(req, res) {
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
-    const billingIsSetUp = !!(business && (typeof business.billingCustomerId === "string" || typeof business.billing === "object"));
+    const billingIsSetUp = !!(
+        business &&
+        (typeof business.billingCustomerId === "string" || typeof business.billing === "object")
+    );
 
     return res.status(200).send({ billingIsSetUp });
 }
@@ -1702,22 +1705,25 @@ async function POST_changeHiringStage(req, res) {
         try {
             var business = await Businesses.findById(bizUser.businessInfo.businessId);
         } catch (getBusinessError) {
-            console.log("Error getting business when trying to update hiring stuff: ", getBusinessError);
+            console.log(
+                "Error getting business when trying to update hiring stuff: ",
+                getBusinessError
+            );
         }
 
         // check if need to lock them out of their account
-        if (business && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+        if (
+            business &&
+            business.fullAccess &&
+            (!business.billing || (business.billing && !business.billing.subscription))
+        ) {
             business.fullAccess = false;
         }
 
         try {
             await business.save();
-        }
-        catch (updateBusinessError) {
-            console.log(
-                "error updating a business to have full access: ",
-                updateBusinessError
-            );
+        } catch (updateBusinessError) {
+            console.log("error updating a business to have full access: ", updateBusinessError);
         }
     }
 
@@ -2968,6 +2974,17 @@ async function GET_evaluationResults(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(bizUser.businessInfo.businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Upgrade to a paid plan to see this report.");
+    }
+
     let userPosition = user.positions[userPositionIndex];
 
     // --->>              FORMAT THE DATA FOR THE FRONT END             <<--- //
@@ -3034,25 +3051,17 @@ async function GET_evaluationResults(req, res) {
 async function GET_candidateSearch(req, res) {
     const { userId, verificationToken, getMockData, positionName } = sanitize(req.query);
 
-    // get the user who is trying to search for candidates
-    let user;
+    // get the user and business who are trying to search for candidates
     try {
-        user = await getAndVerifyUser(userId, verificationToken);
+        var { user, business } = await getUserAndBusiness(userId, verificationToken);
     } catch (getUserError) {
         console.log("error getting business user while searching for candidates: ", getUserError);
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
-    // if the user is not an admin or manager, they can't search for candidates
-    if (!["accountAdmin", "manager"].includes(user.userType)) {
-        console.log("User is type: ", user.userType);
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
-    }
-
-    // if the user doesn't have an associated business, error
-    if (!user.businessInfo || !user.businessInfo.businessId) {
-        console.log("User doesn't have associated business.");
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    // if the business isn't on a plan, don't show them their candidates
+    if (!business.fullAccess) {
+        return res.status(200).send({ candidates: [] });
     }
 
     // if mock users are wanted, just get those
@@ -3159,25 +3168,17 @@ async function GET_employeeSearch(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
-    // get the user who is trying to search for candidates
-    let user;
+    // get the user who is trying to search for employees
     try {
-        user = await getAndVerifyUser(userId, verificationToken);
+        var { user, business } = await getUserAndBusiness(userId, verificationToken);
     } catch (getUserError) {
         console.log("error getting business user while searching for candidates: ", getUserError);
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
-    // if the user is not an admin or manager, they can't search for candidates
-    if (!["accountAdmin", "manager"].includes(user.userType)) {
-        console.log("User is type: ", user.userType);
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
-    }
-
-    // if the user doesn't have an associated business, error
-    if (!user.businessInfo || !user.businessInfo.businessId) {
-        console.log("User doesn't have associated business.");
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    // if the business isn't on a plan, don't show them their employees
+    if (!business.fullAccess) {
+        return res.status(200).send([]);
     }
 
     // the id of the business that the user works for
