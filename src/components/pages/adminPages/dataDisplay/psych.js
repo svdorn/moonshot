@@ -74,14 +74,35 @@ class Psych extends Component {
     }
 
     componentDidMount() {
-        this.getFactorData();
-        this.getFacetData();
-        this.getQuestionData();
-        this.getOutputData();
+        this.updateData();
     }
 
+    // when tab or site is updated, update the data shown
+    componentDidUpdate(prevProps, prevState) {
+        if (
+            prevState.categoryIdx !== this.state.categoryIdx ||
+            prevState.site !== this.state.site
+        ) {
+            this.updateData();
+        }
+    }
+
+    // the functions used to update each category
+    updateData = () => {
+        const updateFunctions = [
+            this.getFactorData,
+            this.getFacetData,
+            this.getQuestionData,
+            this.getOutputData
+        ];
+
+        console.log("updating");
+
+        updateFunctions[this.state.categoryIdx]();
+    };
+
     // get data about every factor
-    getFactorData() {
+    getFactorData = () => {
         const data = [
             { name: "-4.75", quantity: 456 },
             { name: "-4.25", quantity: 230 },
@@ -122,10 +143,10 @@ class Psych extends Component {
         ];
 
         this.setState({ factors });
-    }
+    };
 
     // get data about every facet
-    getFacetData() {
+    getFacetData = () => {
         const facets = [
             {
                 name: "Ambiguity",
@@ -145,10 +166,10 @@ class Psych extends Component {
         ];
 
         this.setState({ facets });
-    }
+    };
 
     // get data about the questions that are asked in the test
-    getQuestionData() {
+    getQuestionData = () => {
         const questions = [
             {
                 question: "What's yo poison?",
@@ -174,10 +195,10 @@ class Psych extends Component {
         ];
 
         this.setState({ questions });
-    }
+    };
 
     // get data about the outputs that are given to people who take the test for fun
-    getOutputData() {
+    getOutputData = () => {
         const outputs = [
             {
                 text:
@@ -204,7 +225,7 @@ class Psych extends Component {
         ];
 
         this.setState({ outputs });
-    }
+    };
 
     // change the site we're getting data from (All, Insights, Learning)
     handleSiteChange = (event, site) => {
