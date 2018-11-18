@@ -15,7 +15,10 @@ const { sendEmail,
         moonshotUrl,
         liveSite,
         isValidEmail,
-        getBillingEndDate
+        getBillingEndDate,
+        makePossessive,
+        makeSingular,
+        getFormattedDate
 } = require('./helperFunctions');
 
 // run the function to send email updates once a day at 8am LA time
@@ -28,10 +31,10 @@ if (liveSite) {
     new CronJob("0 0 6 * * *", safeStripeUpdates, onComplete, onStart, timezone);
 }
 // STRIPE TESTING
-// const onComplete = null;
-// const onStart = true;
-// const timezone = "America/Los_Angeles";
-// new CronJob("0 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
+const onComplete = null;
+const onStart = true;
+const timezone = "America/Los_Angeles";
+new CronJob("0 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
 
 
 async function safeSendUpdateEmails() {
@@ -50,6 +53,8 @@ async function safeStripeUpdates() {
 const ONE_HOUR = 1000 * 60 * 60;
 const ONE_DAY = ONE_HOUR * 24;
 const ONE_WEEK = ONE_DAY * 7;
+const EMAIL_ONE_TIME = ONE_DAY * 45;
+const EMAIL_TWO_TIME = ONE_DAY * 21;
 const minimumTimes = {
     "Weekly": ONE_DAY * 7,
     "Every 5 Days": ONE_DAY * 5,
@@ -304,7 +309,7 @@ async function stripeUpdates() {
         try {
             var businesses = await Businesses
                 .find({ billing: { $exists: true } })
-                .select("_id billing");
+                .select("_id name billing");
         }
         catch (getBusinessesError) {
             handleError(getBusinessesError);
@@ -364,9 +369,52 @@ async function stripeUpdates() {
                         return resolve();
                     }
                 }
-                // if there is less than a week left on the plan
+                // see if need to send first renewal reminder
+                else if (timeLeft < EMAIL_ONE_TIME && timeLeft > EMAIL_TWO_TIME) {
+                    // see if need to send first email
+                    if (billing.subscription.name === "1 year" && (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 1)) {
+                        // send first email
+                        sendRenewalEmails();
+                        // set reminder emails to 1
+                        billing.subscription.reminderEmails = 1;
+                        try { await business.save(); }
+                        catch (bizSaveError) {
+                            console.log("Error saving business when updating reminder email count for 45 days: ", bizSaveError);
+                            return resolve();
+                        }
+                    }
+                }
+                // see if need to send second renewal reminder
+                else if (timeLeft < EMAIL_TWO_TIME && timeLeft > ONE_WEEK) {
+                    if (billing.subscription.name === "1 year") {
+                        // send second email
+                        if (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 2) {
+                            // send second email
+                            sendRenewalEmails();
+                            // set reminder emails to 2
+                            billing.subscription.reminderEmails = 2;
+                            try { await business.save(); }
+                            catch (bizSaveError) {
+                                console.log("Error saving business when updating reminder email count for 21 days: ", bizSaveError);
+                                return resolve();
+                            }
+                        }
+                    } else if (billing.subscription.name === "6 months" || billing.subscription.name === "3 months") {
+                        if (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 1) {
+                            // send first email
+                            sendRenewalEmails();
+                            // set reminder emails to 1
+                            billing.subscription.reminderEmails = 1;
+                            try { await business.save(); }
+                            catch (bizSaveError) {
+                                console.log("Error saving business when updating reminder email count for 21 days: ", bizSaveError);
+                                return resolve();
+                            }
+                        }
+                    }
+                }
+                // if the plan is going to be cancelled, cancel it
                 else if (timeLeft < ONE_WEEK) {
-                    // if the plan is going to be cancelled, cancel it
                     if (billing.subscription.toCancel && !billing.subscription.cancelled) {
                         try {
                             var subscriptions = await stripe.subscriptions.list({ customer: billing.customerId, limit: 3 });
@@ -406,10 +454,104 @@ async function stripeUpdates() {
                             }
                         }
                     }
-                    // send an email telling them they have to cancel it manually
+                    // else see if need to send final renewal reminder
+                    if (billing.subscription.name === "1 year") {
+                        // send second email
+                        if (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 3) {
+                            // send third email
+                            sendRenewalEmails();
+                            // set reminder emails to 3
+                            billing.subscription.reminderEmails = 3;
+                            try { await business.save(); }
+                            catch (bizSaveError) {
+                                console.log("Error saving business when updating reminder email count for 21 days: ", bizSaveError);
+                                return resolve();
+                            }
+                        }
+                    } else if (billing.subscription.name === "6 months" || billing.subscription.name === "3 months") {
+                        if (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 2) {
+                            // send second email
+                            sendRenewalEmails();
+                            // set reminder emails to 2
+                            billing.subscription.reminderEmails = 2;
+                            try { await business.save(); }
+                            catch (bizSaveError) {
+                                console.log("Error saving business when updating reminder email count for 21 days: ", bizSaveError);
+                                return resolve();
+                            }
+                        }
+                    } else if (billing.subscription.name === "1 month") {
+                        if (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 1) {
+                            // send first email
+                            sendRenewalEmails();
+                            // set reminder emails to 2
+                            billing.subscription.reminderEmails = 1;
+                            try { await business.save(); }
+                            catch (bizSaveError) {
+                                console.log("Error saving business when updating reminder email count for 21 days: ", bizSaveError);
+                                return resolve();
+                            }
+                        }
+                    }
                 }
-                // check if we need to send them emails
+
                 return resolve();
+
+                async function sendRenewalEmails() {
+                    return new Promise(async function(resolve, reject) {
+                        // get all account admins for this business
+                        try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("email"); }
+                        catch(getUsersError) {
+                            handleError(getUsersError);
+                            return resolve();
+                        }
+                        // will contain all the promises for sending emails
+                        let emailPromises = [];
+
+                        // add a promise to create a code and send an email for each given address
+                        admins.forEach(admin => {
+                            emailPromises.push(
+                                sendRenewalEmail(admin.email, business.name, billing.subscription.name, billing.subscription.dateEnding)
+                            );
+                        });
+
+                        // wait for all the emails to send
+                        try {
+                            await Promise.all(emailPromises);
+                        } catch (sendEmailsError) {
+                            handleError(sendEmailsError);
+                            return resolve();
+                        }
+
+                        return resolve();
+                    })
+                }
+
+                async function sendRenewalEmail(recipient, companyName, plan, endDate) {
+                    return new Promise(async function(resolve, reject) {
+                        subject = "Plan Info from Moonshot Insights";
+                        const content = `<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
+                                <div style="font-size:28px;color:#0c0c0c;"><b>Plan Info</b></div><br/>
+                                <p style="width:95%; display:inline-block; margin:auto; max-width:800px;">We wanted to let you know that ${makePossessive(companyName)} ${makeSingular(plan)} plan is nearing
+                                its end, but not to worry, you will continue to have unlimited access as your plan is set to renew to another ${makeSingular(plan)} plan on ${getFormattedDate(endDate)}.</p><br/>
+                                <br/><p style="width:95%; display:inline-block; margin:auto; max-width:800px;">Reply to this email with any questions.</p><br/>
+                                <br/><p style="width:95%; display:inline-block; margin:auto; max-width:800px;">Cheers,<br/>Moonshot Team</p><br/>
+                                <br/><p style="width:95%; display:inline-block; margin:auto; max-width:500px;"><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b> or <b><a style="color:#FF0000" href="https://moonshotinsights.io/billing">review your billing information</a></b>.</p><br/>
+                                ${emailFooter(recipient)}
+                            </div>`;
+                        // send the email and then return successfully
+                        try {
+                            await sendEmail({
+                                recipient, subject, content,
+                                senderName: "Moonshot",
+                                senderAddress: "support"
+                            });
+                        } catch(sendEmailError) {
+                            console.log("error sending emails about renewal period")
+                            return resolve();
+                        }
+                    })
+                }
             })
         }
 

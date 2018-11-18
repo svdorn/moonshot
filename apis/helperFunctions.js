@@ -1046,6 +1046,82 @@ function emailFooter(userEmail, extraInfo) {
     );
 }
 
+function makePossessive(name) {
+    if (typeof name !== "string") {
+        return name;
+    }
+    const possessivePronouns = ["your", "her", "his", "their", "our"];
+    if (name.endsWith("'s") || possessivePronouns.includes(name.toLowerCase())) {
+        return name;
+    } else {
+        return name + "'s";
+    }
+}
+
+function makeSingular(string) {
+    if (typeof string !== "string") {
+        return string;
+    }
+    if (string.endsWith("s")) {
+        return string.slice(0, string.length - 1);
+    } else {
+        return string;
+    }
+}
+
+function getMonthText(month) {
+    switch(month) {
+        case 0:
+            return "January";
+            break;
+        case 1:
+            return "February";
+            break;
+        case 2:
+            return "March";
+            break;
+        case 3:
+            return "April";
+            break;
+        case 4:
+            return "May";
+            break;
+        case 5:
+            return "June";
+            break;
+        case 6:
+            return "July";
+            break;
+        case 7:
+            return "August";
+            break;
+        case 8:
+            return "September";
+            break;
+        case 9:
+            return "October";
+            break;
+        case 10:
+            return "November";
+            break;
+        case 11:
+            return "December";
+            break;
+        default:
+            return "January";
+            break;
+    }
+}
+
+function getFormattedDate(date) {
+    const newDate = new Date(date);
+    let year = newDate.getFullYear();
+    let month = getMonthText(newDate.getMonth());
+    let day = newDate.getDate() + 1;
+
+    return month + " " + day + ", " + year;
+}
+
 
 // create a new object from the properties of another
 // e.g. const cat = { weight: 26, name: "Mitsy", height: 8 }
@@ -1084,6 +1160,9 @@ const helperFunctions = {
     newObjectFromProps,
     getBillingEndDate,
     addSubscription,
+    makePossessive,
+    makeSingular,
+    getFormattedDate,
 
     Queue,
     Stack,
