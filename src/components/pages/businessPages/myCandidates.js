@@ -33,6 +33,7 @@ import AddUserDialog from "../../childComponents/addUserDialog";
 import AddPositionDialog from "../../childComponents/addPositionDialog";
 import CandidatesPopupDialog from "../../childComponents/candidatesPopupDialog";
 import InviteCandidatesModal from "../dashboard/inviteCandidatesModal";
+import HireVerificationModal from "../../childComponents/hireVerificationModal";
 import { qualifierFromScore } from "../../../miscFunctions";
 import HoverTip from "../../miscComponents/hoverTip";
 
@@ -677,6 +678,10 @@ class MyCandidates extends Component {
     // handle a click on a hiring stage
     handleChangeHiringStage = candidateId => event => {
         const hiringStage = event.target.value;
+        if (hiringStage === "Hired") {
+            // open hire verification modal
+            this.props.generalAction("OPEN_HIRE_VERIFICATION_MODAL");
+        }
         this.hiringStageChange(candidateId, hiringStage);
     };
 
@@ -1452,6 +1457,7 @@ class MyCandidates extends Component {
                     <AddPositionDialog />
                     <CandidatesPopupDialog />
                     <InviteCandidatesModal />
+                    <HireVerificationModal next={this.handleChangeHiringStage} />
                     <MetaTags>
                         <title>My Candidates | Moonshot</title>
                         <meta
