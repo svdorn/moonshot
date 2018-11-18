@@ -374,7 +374,7 @@ async function stripeUpdates() {
                     // see if need to send first email
                     if (billing.subscription.name === "1 year" && (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 1)) {
                         // send first email
-                        sendRenewalEmails();
+                        sendRenewalEmails(1);
                         // set reminder emails to 1
                         billing.subscription.reminderEmails = 1;
                         try { await business.save(); }
@@ -390,7 +390,7 @@ async function stripeUpdates() {
                         // send second email
                         if (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 2) {
                             // send second email
-                            sendRenewalEmails();
+                            sendRenewalEmails(2);
                             // set reminder emails to 2
                             billing.subscription.reminderEmails = 2;
                             try { await business.save(); }
@@ -402,7 +402,7 @@ async function stripeUpdates() {
                     } else if (billing.subscription.name === "6 months" || billing.subscription.name === "3 months") {
                         if (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 1) {
                             // send first email
-                            sendRenewalEmails();
+                            sendRenewalEmails(1);
                             // set reminder emails to 1
                             billing.subscription.reminderEmails = 1;
                             try { await business.save(); }
@@ -459,7 +459,7 @@ async function stripeUpdates() {
                         // send second email
                         if (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 3) {
                             // send third email
-                            sendRenewalEmails();
+                            sendRenewalEmails(3);
                             // set reminder emails to 3
                             billing.subscription.reminderEmails = 3;
                             try { await business.save(); }
@@ -471,7 +471,7 @@ async function stripeUpdates() {
                     } else if (billing.subscription.name === "6 months" || billing.subscription.name === "3 months") {
                         if (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 2) {
                             // send second email
-                            sendRenewalEmails();
+                            sendRenewalEmails(2);
                             // set reminder emails to 2
                             billing.subscription.reminderEmails = 2;
                             try { await business.save(); }
@@ -483,7 +483,7 @@ async function stripeUpdates() {
                     } else if (billing.subscription.name === "1 month") {
                         if (!billing.subscription.reminderEmails || billing.subscription.reminderEmails < 1) {
                             // send first email
-                            sendRenewalEmails();
+                            sendRenewalEmails(1);
                             // set reminder emails to 2
                             billing.subscription.reminderEmails = 1;
                             try { await business.save(); }
@@ -497,7 +497,7 @@ async function stripeUpdates() {
 
                 return resolve();
 
-                async function sendRenewalEmails() {
+                async function sendRenewalEmails(reminderNumber) {
                     return new Promise(async function(resolve, reject) {
                         // get all account admins for this business
                         try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("email"); }
@@ -511,7 +511,7 @@ async function stripeUpdates() {
                         // add a promise to create a code and send an email for each given address
                         admins.forEach(admin => {
                             emailPromises.push(
-                                sendRenewalEmail(admin.email, business.name, billing.subscription.name, billing.subscription.dateEnding)
+                                sendRenewalEmail(admin.email, business.name, billing.subscription.name, billing.subscription.dateEnding, reminderNumber)
                             );
                         });
 
@@ -527,16 +527,22 @@ async function stripeUpdates() {
                     })
                 }
 
-                async function sendRenewalEmail(recipient, companyName, plan, endDate) {
+                async function sendRenewalEmail(recipient, companyName, plan, endDate, reminderNumber) {
                     return new Promise(async function(resolve, reject) {
+                        let header = "Plan Info";
+                        if (reminderNumber === 2) {
+                            header = "Plan Info: Second Notification";
+                        } else if (reminderNumber === 3) {
+                            header = "Plan Info: Third Notification";
+                        }
                         subject = "Plan Info from Moonshot Insights";
                         const content = `<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#0c0c0c">
-                                <div style="font-size:28px;color:#0c0c0c;"><b>Plan Info</b></div><br/>
+                                <div style="font-size:28px;"><b>${header}</b></div><br/>
                                 <p style="width:95%; display:inline-block; margin:auto; max-width:800px;">We wanted to let you know that ${makePossessive(companyName)} ${makeSingular(plan)} plan is nearing
                                 its end, but not to worry, you will continue to have unlimited access as your plan is set to renew to another ${makeSingular(plan)} plan on ${getFormattedDate(endDate)}.</p><br/>
                                 <br/><p style="width:95%; display:inline-block; margin:auto; max-width:800px;">Reply to this email with any questions.</p><br/>
                                 <br/><p style="width:95%; display:inline-block; margin:auto; max-width:800px;">Cheers,<br/>Moonshot Team</p><br/>
-                                <br/><p style="width:95%; display:inline-block; margin:auto; max-width:500px;"><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b> or <b><a href="https://moonshotinsights.io/billing">review your billing information</a></b>.</p><br/>
+                                <br/><p style="width:95%; display:inline-block; margin:auto; max-width:500px;"><b>Questions?</b> Shoot an email to <b>support@moonshotinsights.io</b> or <b><a href="https://moonshotinsights.io/billing">review your billing information</a></b>.</p><br/>
                                 ${emailFooter(recipient)}
                             </div>`;
                         // send the email and then return successfully
