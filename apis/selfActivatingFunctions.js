@@ -542,7 +542,7 @@ async function stripeUpdates() {
                                 its end, but not to worry, you will continue to have unlimited access as your plan is set to renew to another ${makeSingular(plan)} plan on ${getFormattedDate(endDate)}.</p><br/>
                                 <br/><p style="width:95%; display:inline-block; margin:auto; max-width:800px;">Reply to this email with any questions.</p><br/>
                                 <br/><p style="width:95%; display:inline-block; margin:auto; max-width:800px;">Cheers,<br/>Moonshot Team</p><br/>
-                                <br/><p style="width:95%; display:inline-block; margin:auto; max-width:500px;"><b>Questions?</b> Shoot an email to <b>support@moonshotinsights.io</b> or <b><a href="https://moonshotinsights.io/billing">review your billing information</a></b>.</p><br/>
+                                <br/><p style="width:95%; display:inline-block; margin:auto; max-width:450px;"><b>Questions?</b> Shoot an email to <b>support@moonshotinsights.io</b> or <b><a href="https://moonshotinsights.io/billing">review your billing information</a></b>.</p><br/>
                                 ${emailFooter(recipient)}
                             </div>`;
                         // send the email and then return successfully
