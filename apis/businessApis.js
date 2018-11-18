@@ -3157,25 +3157,17 @@ async function GET_employeeSearch(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
-    // get the user who is trying to search for candidates
-    let user;
+    // get the user who is trying to search for employees
     try {
-        user = await getAndVerifyUser(userId, verificationToken);
+        var { user, business } = await getUserAndBusiness(userId, verificationToken);
     } catch (getUserError) {
         console.log("error getting business user while searching for candidates: ", getUserError);
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
-    // if the user is not an admin or manager, they can't search for candidates
-    if (!["accountAdmin", "manager"].includes(user.userType)) {
-        console.log("User is type: ", user.userType);
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
-    }
-
-    // if the user doesn't have an associated business, error
-    if (!user.businessInfo || !user.businessInfo.businessId) {
-        console.log("User doesn't have associated business.");
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    // if the business isn't on a plan, don't show them their employees
+    if (!business.fullAccess) {
+        return res.status(200).send([]);
     }
 
     // the id of the business that the user works for
