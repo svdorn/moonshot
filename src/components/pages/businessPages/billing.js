@@ -203,7 +203,7 @@ class Billing extends Component {
             if (billing.newSubscription && billing.newSubscription.name) {
                 info = `Your current ${makeSingular(billing.subscription.name)} plan is changing to a ${makeSingular(billing.newSubscription.name)} on ${endDate}.`
             }
-        } else if (billing && billing.subscription) {
+        } else if (billing && billing.subscription && billing.subscription.id) {
             let endDate = getFormattedDate(billing.subscription.dateEnding);
             headerText = `Your current plan of ${billing.subscription.name} ends ${endDate}; this plan is set to auto renew on that date. Any new plan will start on ${endDate} in place of your current plan of ${billing.subscription.name}.`;
         }
