@@ -304,7 +304,7 @@ class Billing extends Component {
                 {!loading ?
                     <div>
                         <div styleName="message-us" onClick={this.intercomMsg}>
-                            <span>Message</span> us if you have any questions
+                            <img src={`/icons/billing/SpeechBubble${this.props.png}`} /><span>Message</span> us if you have any questions
                         </div>
                         <div styleName="update-cancel">
                             <div onClick={() => this.updateCard()}>
