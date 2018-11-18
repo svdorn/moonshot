@@ -2974,6 +2974,17 @@ async function GET_evaluationResults(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(bizUser.businessInfo.businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Upgrade to a paid plan to see this report.");
+    }
+
     let userPosition = user.positions[userPositionIndex];
 
     // --->>              FORMAT THE DATA FOR THE FRONT END             <<--- //
