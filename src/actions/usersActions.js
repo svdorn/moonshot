@@ -58,6 +58,12 @@ export function closeAddPositionModal() {
     };
 }
 
+export function openHireVerificationModal(candidateId, candidateName) {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_HIRE_VERIFICATION_MODAL", candidateId, candidateName })
+    }
+}
+
 export function openClaimPageModal() {
     return function(dispatch) {
         dispatch({ type: "OPEN_CLAIM_PAGE_MODAL" });

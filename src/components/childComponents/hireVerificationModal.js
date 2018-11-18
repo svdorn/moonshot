@@ -23,8 +23,15 @@ class HireVerificationModal extends Component {
         this.props.updateStore("blurMenu", false);
     }
 
+    next = () => {
+        const { candidateId } = this.props;
+
+        this.props.hiringStageChange(candidateId, "Hired");
+        this.close();
+    }
+
     render() {
-        const { currentUser, open, candidateName, next } = this.props;
+        const { currentUser, open, candidateName } = this.props;
 
         if (!currentUser || currentUser.userType !== "accountAdmin" || !currentUser.businessInfo) return null;
 
@@ -41,7 +48,7 @@ class HireVerificationModal extends Component {
                         Did you hire {candidateName}?
                     </div>
                     <div>
-                        <div onClick={next}>
+                        <div onClick={this.next}>
                             Yes
                         </div>
                         <div>
@@ -68,7 +75,9 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         png: state.users.png,
-        open: state.users.hireVerificationModal
+        open: state.users.hireVerificationModal,
+        candidateId: state.users.hireVerificationCandidateId,
+        candidateName: state.users.hireVerificationName
     };
 }
 

@@ -22,7 +22,8 @@ import {
     hidePopups,
     addNotification,
     generalAction,
-    intercomEvent
+    intercomEvent,
+    openHireVerificationModal
 } from "../../../actions/usersActions";
 import { Field, reduxForm } from "redux-form";
 import MetaTags from "react-meta-tags";
@@ -596,7 +597,7 @@ class MyCandidates extends Component {
     }
 
     // create the dropdown for a candidate's hiring stage
-    makeHiringStage(candidateId, hiringStage, isDismissed) {
+    makeHiringStage(candidateId, hiringStage, isDismissed, candidateName) {
         const stageNames = [
             "Not Contacted",
             "Contacted",
@@ -631,7 +632,7 @@ class MyCandidates extends Component {
                     icon: "selectIconWhiteImportant"
                 }}
                 value={hiringStage}
-                onChange={this.handleChangeHiringStage(candidateId)}
+                onChange={this.handleChangeHiringStage(candidateId, candidateName)}
                 key={`${candidateId}hiringStage`}
             >
                 {stages}
@@ -676,13 +677,14 @@ class MyCandidates extends Component {
     }
 
     // handle a click on a hiring stage
-    handleChangeHiringStage = candidateId => event => {
+    handleChangeHiringStage = (candidateId, candidateName) => event => {
         const hiringStage = event.target.value;
         if (hiringStage === "Hired") {
             // open hire verification modal
-            this.props.generalAction("OPEN_HIRE_VERIFICATION_MODAL");
+            this.props.openHireVerificationModal(candidateId, candidateName);
+        } else {
+            this.hiringStageChange(candidateId, hiringStage);
         }
-        this.hiringStageChange(candidateId, hiringStage);
     };
 
     moveCandidates(moveTo) {
@@ -924,7 +926,8 @@ class MyCandidates extends Component {
                                 {this.makeHiringStage(
                                     candidate._id,
                                     candidate.hiringStage,
-                                    candidate.isDismissed
+                                    candidate.isDismissed,
+                                    candidate.name
                                 )}
                             </div>
                             <br />
@@ -979,7 +982,8 @@ class MyCandidates extends Component {
                         {this.makeHiringStage(
                             candidate._id,
                             candidate.hiringStage,
-                            candidate.isDismissed
+                            candidate.isDismissed,
+                            candidate.name
                         )}
                     </td>
                     <td className="predicted">{this.makePretty(growth)}</td>
@@ -1457,7 +1461,7 @@ class MyCandidates extends Component {
                     <AddPositionDialog />
                     <CandidatesPopupDialog />
                     <InviteCandidatesModal />
-                    <HireVerificationModal next={this.handleChangeHiringStage} />
+                    <HireVerificationModal hiringStageChange={this.hiringStageChange.bind(this)} />
                     <MetaTags>
                         <title>My Candidates | Moonshot</title>
                         <meta
@@ -1567,7 +1571,8 @@ function mapDispatchToProps(dispatch) {
             hidePopups,
             addNotification,
             generalAction,
-            intercomEvent
+            intercomEvent,
+            openHireVerificationModal
         },
         dispatch
     );

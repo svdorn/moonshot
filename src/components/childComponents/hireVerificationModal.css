@@ -1,5 +1,5 @@
 .modal-container {
-    padding: 50px 70px;
+    padding: 40px 70px 50px 70px;
     background: var(--primary-black-dark);
     color: var(--secondary-gray);
     font-size: 18px;
@@ -9,10 +9,10 @@
 }
 .modal-container > div:first-child {
     color: var(--primary-cyan);
-    font-size: 22px;
+    font-size: 24px;
 }
 .modal-container > div:not(:first-child) {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 .modal-container > div:nth-child(3) >div {
     display: inline-block;

@@ -59,7 +59,9 @@ export function usersReducers(state = initialState, action) {
         case "OPEN_HIRE_VERIFICATION_MODAL":
             return {
                 ...state,
-                hireVerificationModal: true
+                hireVerificationModal: true,
+                hireVerificationCandidateId: action.candidateId,
+                hireVerificationName: action.candidateName
             };
             break;
         case "CLOSE_HIRE_VERIFICATION_MODAL":
