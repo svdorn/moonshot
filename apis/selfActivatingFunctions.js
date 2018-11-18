@@ -530,13 +530,13 @@ async function stripeUpdates() {
                 async function sendRenewalEmail(recipient, companyName, plan, endDate) {
                     return new Promise(async function(resolve, reject) {
                         subject = "Plan Info from Moonshot Insights";
-                        const content = `<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">
+                        const content = `<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#0c0c0c">
                                 <div style="font-size:28px;color:#0c0c0c;"><b>Plan Info</b></div><br/>
                                 <p style="width:95%; display:inline-block; margin:auto; max-width:800px;">We wanted to let you know that ${makePossessive(companyName)} ${makeSingular(plan)} plan is nearing
                                 its end, but not to worry, you will continue to have unlimited access as your plan is set to renew to another ${makeSingular(plan)} plan on ${getFormattedDate(endDate)}.</p><br/>
                                 <br/><p style="width:95%; display:inline-block; margin:auto; max-width:800px;">Reply to this email with any questions.</p><br/>
                                 <br/><p style="width:95%; display:inline-block; margin:auto; max-width:800px;">Cheers,<br/>Moonshot Team</p><br/>
-                                <br/><p style="width:95%; display:inline-block; margin:auto; max-width:500px;"><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b> or <b><a style="color:#FF0000" href="https://moonshotinsights.io/billing">review your billing information</a></b>.</p><br/>
+                                <br/><p style="width:95%; display:inline-block; margin:auto; max-width:500px;"><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b> or <b><a href="https://moonshotinsights.io/billing">review your billing information</a></b>.</p><br/>
                                 ${emailFooter(recipient)}
                             </div>`;
                         // send the email and then return successfully
