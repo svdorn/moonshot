@@ -1608,7 +1608,7 @@ async function advance(user, businessId, positionId) {
                     // add a promise to create a code and send an email for each given address
                     admins.forEach(admin => {
                         intercomPromises.push(
-                            sendIntercomPlanUpdate(admin.intercom, "ended");
+                            sendIntercomPlanUpdate(admin.intercom, "ended")
                         );
                     });
 
@@ -1644,7 +1644,7 @@ async function advance(user, businessId, positionId) {
                     // add a promise to create a code and send an email for each given address
                     admins.forEach(admin => {
                         intercomPromises.push(
-                            sendIntercomPlanUpdate(admin.intercom, "ending");
+                            sendIntercomPlanUpdate(admin.intercom, "ending")
                         );
                     });
 
