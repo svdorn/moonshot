@@ -54,7 +54,15 @@ class WhatToDo extends Component {
     }
 
     next = () => {
-        const { _id, verificationToken, verified } = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
+        const { _id, verificationToken, verified } = currentUser;
 
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, -1);
@@ -112,7 +120,7 @@ class WhatToDo extends Component {
         const { currentUser } = this.props;
         let possessiveBusinessName = "Your";
         let uniqueName = "";
-        if (typeof currentUser.businessInfo === "object") {
+        if (currentUser && typeof currentUser.businessInfo === "object") {
             const { businessInfo } = currentUser;
             uniqueName = businessInfo.uniqueName;
             if (businessInfo.businessName.length < 8) {
