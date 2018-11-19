@@ -417,6 +417,24 @@ class Billing extends Component {
         );
     }
 
+    customPlanSection() {
+        return (
+            <div styleName="custom-plan">
+                <div>
+                    Custom Plan
+                </div>
+                <div styleName="header-seperator" />
+                <div>
+                    You have a custom plan with Moonshot Insights, for more information or to change your plan, please message us and we are happy to help out.
+                </div>
+                <div styleName="message-us" onClick={this.intercomMsg}>
+                    <img src={`/icons/billing/SpeechBubble${this.props.png}`} />
+                    <span>Message</span> us if you have any questions
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const { billing, blur } = this.props;
 
@@ -435,11 +453,19 @@ class Billing extends Component {
                 </MetaTags>
                 {billing ? (
                     <div styleName="billing">
-                        {this.pricingSection()}
-                        {this.updatePlanSection()}
-                        {this.updateOrCancelSection()}
-                        {this.creditCardSection()}
-                        {this.confirmNewSubscriptionSection()}
+                        {billing.customPlan ?
+                            <div>
+                                { this.customPlanSection() }
+                            </div>
+                            :
+                            <div>
+                                {this.pricingSection()}
+                                {this.updatePlanSection()}
+                                {this.updateOrCancelSection()}
+                                {this.creditCardSection()}
+                                {this.confirmNewSubscriptionSection()}
+                            </div>
+                        }
                     </div>
                 ) : (
                     <div styleName="circular-progress">
