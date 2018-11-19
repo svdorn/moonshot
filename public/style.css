@@ -429,16 +429,6 @@ form > h1 {
     position: relative;
     background-color: #cbcbcb;
 }
-.progressBarDialog {
-    width: 60%;
-    margin-left: 20%;
-    margin-top: 10px;
-    margin-bottom: 15px;
-    height: 6px;
-    --stepCircleWidth: 18px;
-    position: relative;
-    background-color: #cbcbcb;
-}
 .progressStepBars {
     width: 100%;
     display: flex;
