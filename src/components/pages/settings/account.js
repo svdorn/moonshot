@@ -158,6 +158,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
+        initialValues: state.users.currentUser, // initial form values
         formData: state.form,
         currentUser: state.users.currentUser,
         loadingUpdateSettings: state.users.loadingSomething,
