@@ -23,15 +23,18 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        if (
-            this.props.location &&
-            this.props.location.query &&
-            this.props.location.query.inviteCandidates === "open"
-        ) {
+        const { currentUser, positionCount, location } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
+        if (location && location.query && location.query.inviteCandidates === "open") {
             this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
         }
         let self = this;
-        const { currentUser, positionCount } = this.props;
         if (!positionCount || positionCount < 1) {
             // get all the positions they're evaluating for
             axios
@@ -59,9 +62,15 @@ class Dashboard extends Component {
     }
 
     componentDidUpdate() {
-        const { positionCount } = this.props;
+        const { positionCount, currentUser } = this.props;
         if (!positionCount || positionCount < 1) {
-            const currentUser = this.props.currentUser;
+            if (!currentUser) {
+                return this.props.addNotification(
+                    "You aren't logged in! Try refreshing the page.",
+                    "error"
+                );
+            }
+
             // get all the positions they're evaluating for
             axios
                 .get("/api/business/positions", {
