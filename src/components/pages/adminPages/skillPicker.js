@@ -1,12 +1,11 @@
-"use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
-import {addNotification} from "../../../actions/usersActions";
-import {bindActionCreators} from 'redux';
-import axios from 'axios';
-import {CircularProgress, RaisedButton} from 'material-ui';
-
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { browserHistory } from "react-router";
+import { addNotification } from "../../../actions/usersActions";
+import { bindActionCreators } from "redux";
+import axios from "axios";
+import { CircularProgress, RaisedButton } from "material-ui";
 
 class SkillPicker extends Component {
     constructor(props) {
@@ -17,26 +16,33 @@ class SkillPicker extends Component {
         };
     }
 
-
     componentDidMount() {
         const self = this;
-        axios.get("/api/admin/allSkills", {
-            params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
-            }
-        })
-        .then(response => {
-            self.setState({ skills: response.data });
-        })
-        .catch(error => {
-            console.log("error: ", error);
-            // set skills to empty array to get rid of loader
-            self.setState({ skills: [] });
-            self.props.addNotification("Error getting skills.", "error");
-        });
-    }
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
 
+        axios
+            .get("/api/admin/allSkills", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
+                }
+            })
+            .then(response => {
+                self.setState({ skills: response.data });
+            })
+            .catch(error => {
+                console.log("error: ", error);
+                // set skills to empty array to get rid of loader
+                self.setState({ skills: [] });
+                self.props.addNotification("Error getting skills.", "error");
+            });
+    }
 
     goTo(route) {
         // goes to the wanted page
@@ -45,16 +51,20 @@ class SkillPicker extends Component {
         window.scrollTo(0, 0);
     }
 
-
     render() {
         const self = this;
+        const { currentUser } = this.props;
 
-        if (!self.props.currentUser.admin === true) {
+        if (!currentUser || !currentUser.admin === true) {
             return null;
         }
 
         if (!Array.isArray(this.state.skills)) {
-            return (<div className="fillScreen"><CircularProgress /></div>);
+            return (
+                <div className="fillScreen">
+                    <CircularProgress />
+                </div>
+            );
         }
 
         // show all the current skills
@@ -82,18 +92,20 @@ class SkillPicker extends Component {
         );
 
         return (
-            <div className="fillScreen primary-white" style={{margin: "30px"}}>
+            <div className="fillScreen primary-white" style={{ margin: "30px" }}>
                 {skills}
             </div>
         );
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        addNotification
-    }, dispatch);
+    return bindActionCreators(
+        {
+            addNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -102,4 +114,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SkillPicker);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SkillPicker);
