@@ -1254,15 +1254,6 @@ form > h1 {
     margin: 0 20px 0 40px;
 }
 
-/* make the results slider have normal cursor */
-.candidatePreviewSlider > div > div > div:nth-child(3) {
-    cursor: default !important;
-}
-
-.candidatePreviewSlider > div > div > div {
-    background: linear-gradient(to right, #983cc9, #e36273) !important;
-}
-
 .predictiveGraphTitle {
     margin-bottom: 25px;
 }
@@ -2203,84 +2194,6 @@ button.link {
 }
 .employeePreview > .completionStage {
     margin-top: 15px;
-}
-
-.candidatePreview {
-    position: relative;
-    width: 335px;
-    height: 400px;
-    -moz-box-shadow: 0px 0px 50px 1px #00000073;
-    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
-    box-shadow: 0px 0px 50px 1px #00000073;
-    -moz-transition: -moz-box-shadow 0.2s;
-    -webkit-transition: -webkit-transition 0.2s;
-    transition: box-shadow 0.2s;
-    color: white;
-    display: inline-block;
-    margin: 15px 25px;
-    background-color: #333333;
-}
-.candidatePreview:hover {
-    -moz-box-shadow: 0px 0px 50px 15px #00000073;
-    -webkit-box-shadow: 0px 0px 50px 15px #00000073;
-    box-shadow: 0px 0px 50px 15px #00000073;
-    -moz-transition: -moz-box-shadow 0.2s;
-    -webkit-transition: -webkit-transition 0.2s;
-    transition: box-shadow 0.2s;
-}
-.candidatePreview > .candidateName {
-    margin: 10px 0 0;
-    display: inline-block;
-}
-.candidatePreview > .candidateLocation {
-    display: inline-block;
-}
-.candidatePreview .hiringStageCircle {
-    display: inline-block;
-    width: 86px;
-    height: 86px;
-    border-radius: 100%;
-    position: relative;
-    background: linear-gradient(to top left, #983cc9, #e36273);
-    margin-top: 20px;
-}
-.hiringStageCircle .circleCover {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    background-color: #333333;
-}
-.circleCover.right {
-    right: 0;
-}
-.circleCover.left {
-    left: 0;
-}
-.circleCover.top {
-    top: 0;
-}
-.circleCover.bottom {
-    bottom: 0;
-}
-.circleCover.interior {
-    border-radius: 100%;
-    width: 80%;
-    height: 80%;
-    left: 10%;
-    top: 10%;
-}
-.circleCover.interior > div {
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-}
-.candidatePreviewPredictiveSection {
-    width: 38%;
-    position: absolute;
-    display: inline-block;
-    height: 110px;
-    bottom: 30px;
 }
 
 .employerDiv {
@@ -3518,14 +3431,6 @@ button.link {
 .adminQuestions.question {
     margin: 0 20% 20px;
 }
-
-/* .candidatePreviewLiLeftContainer {
-    width: 160px;
-    position: relative;
-    float: left;
-    text-align: center;
-} */
-
 .aboutMeLiIconContainer {
     height: calc(100% - 40px);
     width: 70px;
@@ -3540,9 +3445,6 @@ button.link {
 }
 .myEvalsInfoRight {
     float: right;
-}
-.candidatePreviewLiInfo {
-    margin-left: 215px;
 }
 
 .aboutMeLiIconContainer > img:first-of-type {
@@ -5360,9 +5262,6 @@ textarea.multipleChoiceCustomAnswer {
     .myEvalsInfoRight {
         display: none;
     }
-    .candidatePreviewLiInfo {
-        margin-left: 0;
-    }
     .aboutMeLiIconContainer {
         display: none;
     }
@@ -5370,9 +5269,6 @@ textarea.multipleChoiceCustomAnswer {
         display: none;
     }
     .verticalDivider {
-        display: none;
-    }
-    .verticalDividerCandidatePreview {
         display: none;
     }
     .aboutMeLi > div:nth-child(2) {
