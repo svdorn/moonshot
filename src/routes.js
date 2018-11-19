@@ -14,9 +14,6 @@ import MyEvaluations from "./components/pages/myEvaluations/myEvaluations";
 import Results from "./components/pages/businessPages/results";
 import EmployeeResults from "./components/pages/businessPages/employeeResults";
 import Billing from "./components/pages/businessPages/billing";
-//import Onboarding from './components/pages/businessPages/onboarding/onboarding';
-import BusinessSignup from "./components/pages/businessPages/businessSignup";
-import Chatbot from "./components/pages/businessPages/landbot";
 
 import BusinessHome from "./components/pages/businessHome/businessHome";
 import Influencer from "./components/pages/influencer";
@@ -112,10 +109,7 @@ const routes = (
                 page={<Billing />}
                 userType={accountAdmin}
             />
-            {/*<Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={accountAdmin} firstBusinessUser={true} /> */}
-            <Route path="businessSignup" component={BusinessSignup} />
             <Route path="ease" component={Ease} />
-            <Route path="chatbot" component={Chatbot} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings />} />
             <Route path="listing" component={Listing} />
             <Route path="influencer" component={Influencer} />

@@ -227,7 +227,6 @@ app.post("/business/changeHiringStage", businessApis.POST_changeHiringStage);
 app.post("/business/moveCandidates", businessApis.POST_moveCandidates);
 app.post("/business/resetApiKey", businessApis.POST_resetApiKey);
 app.post("/business/uploadCandidateCSV", businessApis.POST_uploadCandidateCSV);
-app.post("/business/chatbotData", businessApis.POST_chatbotData);
 app.post("/business/createBusinessAndUser", businessApis.POST_createBusinessAndUser);
 app.post("/business/interests", businessApis.POST_interests);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);

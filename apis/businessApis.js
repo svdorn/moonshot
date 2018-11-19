@@ -51,7 +51,6 @@ const businessApis = {
     POST_moveCandidates,
     POST_resetApiKey,
     POST_uploadCandidateCSV,
-    POST_chatbotData,
     POST_createBusinessAndUser,
     POST_interests,
     GET_candidateSearch,
@@ -3383,41 +3382,6 @@ async function POST_uploadCandidateCSV(req, res) {
             console.log("Error sending email with candidates file: ", error);
             return res.status(500).send({ message: "Error uploading candidates file." });
         });
-}
-
-// send Kyle the info for a new chatbot sign up
-async function POST_chatbotData(req, res) {
-    const name = sanitize(req.body.name);
-    const company = sanitize(req.body.company);
-    const positionType = sanitize(req.body.positionType);
-    const title = sanitize(req.body.title);
-    const email = sanitize(req.body.email);
-
-    const recipients = ["ameyer24@wisc.edu"];
-    const subject = "New Signup from Chatbot";
-    const content =
-        "<div>" +
-        "<h3>Name</h3>" +
-        `<p>${name}</p>` +
-        "<h3>Company</h3>" +
-        `<p>${company}</p>` +
-        "<h3>Position Type</h3>" +
-        `<p>${positionType}</p>` +
-        "<h3>Title</h3>" +
-        `<p>${title}</p>` +
-        "<h3>Email</h3>" +
-        `<p>${email}</p>` +
-        "</div>";
-
-    // send Kyle the email
-    try {
-        await sendEmail({ recipients, subject, content });
-    } catch (sendEmailError) {
-        console.log("Error sending email on chatbot signup: ", sendEmailError);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    return res.status(200).send({ success: true });
 }
 
 // creates a unique api key for a business

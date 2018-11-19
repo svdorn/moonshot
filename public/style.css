@@ -1230,12 +1230,6 @@ form > h1 {
     width: 400px;
 }
 
-.landbot-container {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-}
-
 .stepNumber {
     background: -webkit-linear-gradient(right, #da5f7b, #b130d3);
     -webkit-background-clip: text;

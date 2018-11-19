@@ -530,7 +530,7 @@ class BusinessHome extends Component {
                                     <button
                                         styleName="video-button"
                                         className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font16pxUnder950 font14pxUnder400 primary-white"
-                                        onClick={() => goTo("/chatbot")}
+                                        onClick={() => goTo("/explore")}
                                     >
                                         Try for Free
                                     </button>
