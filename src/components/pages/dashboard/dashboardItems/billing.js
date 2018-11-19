@@ -103,7 +103,7 @@ class Billing extends Component {
         return (
             <div>
                 {
-                    "You have a custom plan with Moonshot Insights, for more information or to change your plan, please message us and we are happy to help out."
+                    "You have a custom pricing plan with Moonshot Insights. For more information or to change your plan, please message us and we will be happy to help."
                 }
             </div>
         );

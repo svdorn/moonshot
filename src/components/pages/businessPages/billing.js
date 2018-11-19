@@ -425,7 +425,7 @@ class Billing extends Component {
                 </div>
                 <div styleName="header-seperator" />
                 <div>
-                    You have a custom plan with Moonshot Insights, for more information or to change your plan, please message us and we are happy to help out.
+                    You have a custom plan with Moonshot Insights. For more information or to change your plan, please message us and we will be happy to help.
                 </div>
                 <div styleName="message-us" onClick={this.intercomMsg}>
                     <img src={`/icons/billing/SpeechBubble${this.props.png}`} />
