@@ -81,7 +81,7 @@ class BillingBanners extends Component {
         let html = null;
 
         if (!billing || !billing.subscription) {
-            if (!billing || fullAccess) {
+            if (fullAccess) {
                 // on free plan, if 13-19 candidates
                 if (typeof candidateCount !== "number") {
                     const query = {
