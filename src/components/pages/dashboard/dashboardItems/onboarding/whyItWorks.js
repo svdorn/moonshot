@@ -22,7 +22,15 @@ class WhyItWorks extends Component {
     }
 
     next = () => {
-        const { _id, verificationToken } = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
+        const { _id, verificationToken } = currentUser;
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, 4);
     };
