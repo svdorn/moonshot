@@ -1,19 +1,29 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { getBillingInfo, billingCardOnFileFalse, billingCardOnFileTrue, generalAction, updateStore, updateBillingPlan, newBillingPlan, intercomEvent } from '../../../actions/usersActions';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+    getBillingInfo,
+    billingCardOnFileFalse,
+    billingCardOnFileTrue,
+    generalAction,
+    updateStore,
+    updateBillingPlan,
+    newBillingPlan,
+    intercomEvent,
+    addNotification
+} from "../../../actions/usersActions";
 import { makeSingular } from "../../../miscFunctions";
-import {Elements} from 'react-stripe-elements';
-import MetaTags from 'react-meta-tags';
+import { Elements } from "react-stripe-elements";
+import MetaTags from "react-meta-tags";
 import axios from "axios";
-import AddUserDialog from '../../childComponents/addUserDialog';
-import CornersButton from '../../miscComponents/cornersButton';
+import AddUserDialog from "../../childComponents/addUserDialog";
+import CornersButton from "../../miscComponents/cornersButton";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import HoverTip from "../../miscComponents/hoverTip";
 import colors from "../../../colors";
-import BillingForm from '../../childComponents/billingForm';
-import CancelPlanModal from '../../childComponents/cancelPlanModal';
+import BillingForm from "../../childComponents/billingForm";
+import CancelPlanModal from "../../childComponents/cancelPlanModal";
 
 import "./billing.css";
 
@@ -66,15 +76,25 @@ class Billing extends Component {
         const { currentUser, billing } = this.props;
 
         // if already have billng
-        if (billing && billing.subscription) { return this.setState({ plan: billing.subscription.name, currentPlan: billing.subscription.name }); }
+        if (billing && billing.subscription) {
+            return this.setState({
+                plan: billing.subscription.name,
+                currentPlan: billing.subscription.name
+            });
+        }
 
-        const businessId = currentUser && currentUser.businessInfo ? currentUser.businessInfo.businessId : null;
+        const businessId =
+            currentUser && currentUser.businessInfo ? currentUser.businessInfo.businessId : null;
 
         this.props.getBillingInfo(currentUser._id, currentUser.verificationToken, businessId);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.billing && nextProps.billing.subscription && nextProps.billing.subscription.name !== this.state.plan) {
+        if (
+            nextProps.billing &&
+            nextProps.billing.subscription &&
+            nextProps.billing.subscription.name !== this.state.plan
+        ) {
             const plan = nextProps.billing.subscription.name;
             if (!this.state.plan) {
                 var currentPlan = plan;
@@ -84,12 +104,19 @@ class Billing extends Component {
     }
 
     intercomMsg = () => {
-        const { _id, verificationToken } = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+        const { _id, verificationToken } = currentUser;
         // trigger intercom event
         this.props.intercomEvent(`billing-help`, _id, verificationToken, null);
     };
 
-    selectPlan = (plan) => {
+    selectPlan = plan => {
         // check if the user is trying to update their plan
         const statePlan = this.state.plan;
         const { billing } = this.props;
@@ -99,37 +126,53 @@ class Billing extends Component {
         }
 
         if (typeof plan === "string") {
-            this.setState({ plan, updatePlan })
+            this.setState({ plan, updatePlan });
         }
-    }
+    };
 
-    updatePlan = (plan) => {
-        const { _id, verificationToken } = this.props.currentUser;
+    updatePlan = plan => {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
+        const { _id, verificationToken } = currentUser;
 
         this.props.updateBillingPlan(_id, verificationToken, plan);
         this.setState({ updatePlan: false });
-    }
+    };
 
-    confirmPlan = (plan) => {
-        const { _id, verificationToken } = this.props.currentUser;
+    confirmPlan = plan => {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
+        const { _id, verificationToken } = currentUser;
 
         this.props.newBillingPlan(_id, verificationToken, plan);
-    }
+    };
 
     updateCard = () => {
         this.props.billingCardOnFileFalse(this.props.billing);
-        this.setState({updateCard: true})
-    }
+        this.setState({ updateCard: true });
+    };
 
     updateCardFalse = () => {
         this.props.billingCardOnFileTrue(this.props.billing);
-        this.setState({updateCard: false})
-    }
+        this.setState({ updateCard: false });
+    };
 
     cancelPlan = () => {
         this.props.generalAction("OPEN_CANCEL_PLAN_MODAL");
         this.props.updateStore("blurMenu", true);
-    }
+    };
 
     pricingBoxes() {
         const { plan, currentPlan, updatePlan } = this.state;
@@ -140,7 +183,8 @@ class Billing extends Component {
             baseButtonText = "Switch Plan";
         }
         if (billing && billing.subscription && billing.subscription.toCancel) {
-            if (billing.newSubscription && billing.newSubscription.name) { } else {
+            if (billing.newSubscription && billing.newSubscription.name) {
+            } else {
                 baseButtonText = "Select";
                 if (!updatePlan) {
                     var allNotActive = true;
@@ -164,9 +208,7 @@ class Billing extends Component {
                 <div styleName={"pricing-box " + shadowActive} key={`pricing-box-${box.period}`}>
                     <div>
                         <img src={`/icons/pricing/${box.icon}${this.props.png}`} />
-                        <div>
-                            {box.name}
-                        </div>
+                        <div>{box.name}</div>
                         <div styleName="seperator" />
                         <div>
                             <span>{box.price}</span> / Month
@@ -182,7 +224,7 @@ class Billing extends Component {
                         />
                     </div>
                 </div>
-            )
+            );
         });
 
         return pricingBoxes;
@@ -197,32 +239,35 @@ class Billing extends Component {
             header = "Pricing Plans";
         }
         if (billing && billing.subscription && billing.subscription.toCancel) {
-            var info = `Your current plan is ending ${new Date(billing.subscription.dateEnding).toDateString()}. Select a new plan below.`
+            var info = `Your current plan is ending ${new Date(
+                billing.subscription.dateEnding
+            ).toDateString()}. Select a new plan below.`;
             if (billing.newSubscription && billing.newSubscription.name) {
-                info = `Your current ${makeSingular(billing.subscription.name)} plan is changing to a ${makeSingular(billing.newSubscription.name)} on ${new Date(billing.subscription.dateEnding).toDateString()}.`
+                info = `Your current ${makeSingular(
+                    billing.subscription.name
+                )} plan is changing to a ${makeSingular(
+                    billing.newSubscription.name
+                )} on ${new Date(billing.subscription.dateEnding).toDateString()}.`;
             }
         }
         return (
             <div styleName="pricing">
-                <div>
-                    { header }
-                </div>
+                <div>{header}</div>
                 <div styleName="header-seperator" />
                 <div>
-                    Invite unlimited candidates, create evaluations for any of your open positions and evaluate any number of employees to customize and improve your candidate predictions with any plan.
+                    Invite unlimited candidates, create evaluations for any of your open positions
+                    and evaluate any number of employees to customize and improve your candidate
+                    predictions with any plan.
                 </div>
                 <div>
-                    {info ?
+                    {info ? (
                         <div>
                             <div styleName="info">i</div>
-                            { info }
+                            {info}
                         </div>
-                        : null
-                    }
+                    ) : null}
                 </div>
-                <div>
-                    { this.pricingBoxes() }
-                </div>
+                <div>{this.pricingBoxes()}</div>
             </div>
         );
     }
@@ -246,18 +291,15 @@ class Billing extends Component {
 
         return (
             <div styleName="credit-card">
-                <div>
-                    Please enter your card information below:
-                </div>
+                <div>Please enter your card information below:</div>
                 <Elements>
                     <BillingForm subscriptionTerm={plan} update={update} />
                 </Elements>
-                {update ?
+                {update ? (
                     <div styleName="close-section" onClick={this.updateCardFalse}>
                         x Close
                     </div>
-                    : null
-                }
+                ) : null}
             </div>
         );
     }
@@ -273,7 +315,9 @@ class Billing extends Component {
         return (
             <div styleName="update-plan">
                 <div>
-                    {`The ${planName} plan will begin after your current plan of ${billing.subscription.name} is completed`}
+                    {`The ${planName} plan will begin after your current plan of ${
+                        billing.subscription.name
+                    } is completed`}
                 </div>
                 <CornersButton
                     onClick={() => this.updatePlan(plan)}
@@ -291,36 +335,41 @@ class Billing extends Component {
         const { plan, updatePlan } = this.state;
         const { billing, loading } = this.props;
         // don't show section
-        if (!plan || !billing || (billing && !billing.cardOnFile) || updatePlan || (billing && billing.cardOnFile && !billing.subscription)) return null;
+        if (
+            !plan ||
+            !billing ||
+            (billing && !billing.cardOnFile) ||
+            updatePlan ||
+            (billing && billing.cardOnFile && !billing.subscription)
+        )
+            return null;
 
         if (billing && billing.subscription && billing.subscription.toCancel) {
-            if (billing.newSubscription && billing.newSubscription.name) { } else {
+            if (billing.newSubscription && billing.newSubscription.name) {
+            } else {
                 return null;
             }
         }
 
         return (
             <div className="center">
-                {!loading ?
+                {!loading ? (
                     <div>
                         <div styleName="message-us" onClick={this.intercomMsg}>
-                            <img src={`/icons/billing/SpeechBubble${this.props.png}`} /><span>Message</span> us if you have any questions
+                            <img src={`/icons/billing/SpeechBubble${this.props.png}`} />
+                            <span>Message</span> us if you have any questions
                         </div>
                         <div styleName="update-cancel">
-                            <div onClick={() => this.updateCard()}>
-                                Update Card
-                            </div>
-                            <div>
-                                |
-                            </div>
-                            <div onClick={() => this.cancelPlan()}>
-                                Cancel Plan
-                            </div>
+                            <div onClick={() => this.updateCard()}>Update Card</div>
+                            <div>|</div>
+                            <div onClick={() => this.cancelPlan()}>Cancel Plan</div>
                         </div>
                     </div>
-                    :
-                    <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryWhite }} /></div>
-                }
+                ) : (
+                    <div styleName="circular-progress">
+                        <CircularProgress style={{ color: colors.primaryWhite }} />
+                    </div>
+                )}
             </div>
         );
     }
@@ -329,7 +378,12 @@ class Billing extends Component {
         const { plan, updatePlan } = this.state;
         const { billing, loading } = this.props;
 
-        if (!plan || !billing || updatePlan || !(billing && billing.cardOnFile && !billing.subscription)) {
+        if (
+            !plan ||
+            !billing ||
+            updatePlan ||
+            !(billing && billing.cardOnFile && !billing.subscription)
+        ) {
             return null;
         }
 
@@ -337,7 +391,7 @@ class Billing extends Component {
 
         return (
             <div styleName="update-plan">
-                {!loading ?
+                {!loading ? (
                     <div>
                         <div>
                             {`Please confirm that you are signing up for a ${planName} plan.`}
@@ -351,15 +405,16 @@ class Billing extends Component {
                             className="font18px font16pxUnder900 font12pxUnder400 marginTop20px"
                         />
                     </div>
-                    :
-                    <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryWhite }} /></div>
-                }
+                ) : (
+                    <div styleName="circular-progress">
+                        <CircularProgress style={{ color: colors.primaryWhite }} />
+                    </div>
+                )}
             </div>
         );
     }
 
     render() {
-
         const { billing, blur } = this.props;
 
         const blurredClass = blur ? "dialogForBizOverlay" : "";
@@ -370,24 +425,28 @@ class Billing extends Component {
                 <CancelPlanModal />
                 <MetaTags>
                     <title>Billing | Moonshot</title>
-                    <meta name="description" content="Manage your current bills and enter credit card information to pay bills." />
+                    <meta
+                        name="description"
+                        content="Manage your current bills and enter credit card information to pay bills."
+                    />
                 </MetaTags>
-                {billing ?
+                {billing ? (
                     <div styleName="billing">
-                        { this.pricingSection() }
-                        { this.updatePlanSection() }
-                        { this.updateOrCancelSection() }
-                        { this.creditCardSection() }
-                        { this.confirmNewSubscriptionSection() }
+                        {this.pricingSection()}
+                        {this.updatePlanSection()}
+                        {this.updateOrCancelSection()}
+                        {this.creditCardSection()}
+                        {this.confirmNewSubscriptionSection()}
                     </div>
-                :
-                    <div styleName="circular-progress"><CircularProgress style={{ color: colors.primaryWhite }} /></div>
-                }
+                ) : (
+                    <div styleName="circular-progress">
+                        <CircularProgress style={{ color: colors.primaryWhite }} />
+                    </div>
+                )}
             </div>
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -400,17 +459,23 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        getBillingInfo,
-        billingCardOnFileFalse,
-        billingCardOnFileTrue,
-        generalAction,
-        updateStore,
-        updateBillingPlan,
-        newBillingPlan,
-        intercomEvent
-    }, dispatch);
+    return bindActionCreators(
+        {
+            getBillingInfo,
+            billingCardOnFileFalse,
+            billingCardOnFileTrue,
+            generalAction,
+            updateStore,
+            updateBillingPlan,
+            newBillingPlan,
+            intercomEvent,
+            addNotification
+        },
+        dispatch
+    );
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Billing);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Billing);
