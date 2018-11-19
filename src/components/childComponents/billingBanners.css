@@ -5,7 +5,7 @@
     padding: 10px 0;
     color: white;
     position: fixed;
-    width: 100%;
+    width: calc(100% - 140px);
     z-index: 50;
     border-bottom: 1px solid var(--primary-black-dark);
 }
@@ -21,7 +21,7 @@
 
 .banner-space {
     position: relative;
-    width: 100%;
+    width: calc(100% - 140px);
     height: 58px;
 }
 
@@ -29,7 +29,13 @@
 .second-break { display: none; }
 
 @media screen and (max-width: 1000px) {
-    .banner { margin-top: -6px; }
+    .banner {
+        margin-top: -6px;
+        width: 100px;
+    }
+    .banner-space {
+        width: 100%;
+    }
 }
 
 @media screen and (max-width: 800px) {
