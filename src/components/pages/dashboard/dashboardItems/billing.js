@@ -99,6 +99,16 @@ class Billing extends Component {
         );
     }
 
+    customPlan() {
+        return (
+            <div>
+                {
+                    "You have a custom plan with Moonshot Insights, for more information or to change your plan, please message us and we are happy to help out."
+                }
+            </div>
+        );
+    }
+
     unlimited() {
         return (
             <div>
@@ -115,8 +125,10 @@ class Billing extends Component {
         let currentPlan = "";
         let html = null;
         let CTA = "See Plans";
-
-        if (!billing || !billing.subscription) {
+        if (billing && billing.customPlan) {
+            currentPlan = "Custom";
+            html = this.customPlan();
+        } else if (!billing || !billing.subscription) {
             if (!billing || fullAccess) {
                 // on free plan
                 currentPlan = "Free";
