@@ -130,8 +130,9 @@ class Menu extends Component {
         switch (value) {
             case "Sign Out":
                 // always sign out when sign out clicked
-                this.props.signout();
-                goTo("/");
+                this.props.signout(() => {
+                    goTo("/");
+                });
                 break;
             case "Settings":
                 goTo("/settings");
@@ -164,12 +165,9 @@ class Menu extends Component {
     }
 
     signOut() {
-        // if (this.props.location.pathname === '/onboarding') {
-        //     const markOnboardingComplete = false;
-        //     this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
-        // }
-        this.props.signout();
-        goTo("/");
+        this.props.signout(() => {
+            goTo("/");
+        });
     }
 
     // handleAnchorClick(anchor, wantedPath) {

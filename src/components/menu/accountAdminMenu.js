@@ -38,8 +38,9 @@ class AccountAdminMenu extends Component {
     // sign out of user's account
     signOut = () => {
         this.removePopup();
-        this.props.signout();
-        goTo("/");
+        this.props.signout(() => {
+            goTo("/");
+        });
     };
 
     // open the box that has the options to sign out and go to other account pages
@@ -145,7 +146,7 @@ class AccountAdminMenu extends Component {
         if (user) {
             const popupOptions = [
                 { title: "Settings", url: "/settings" },
-                { title: "Billing", url: "/billing" },
+                { title: "Billing", url: "/billing" }
             ];
 
             let popupItems = popupOptions.map(popupOption => {

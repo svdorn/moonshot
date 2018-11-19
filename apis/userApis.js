@@ -361,6 +361,8 @@ async function getPosition(businessId, positionId) {
 }
 
 async function GET_session(req, res) {
+    console.log("req.session: ", req.session);
+
     const userId = sanitize(req.session.userId);
 
     // if there was no previous user logged in, don't return a user
@@ -401,15 +403,18 @@ async function GET_session(req, res) {
                 if (user.businessInfo && user.businessInfo.businessId) {
                     try {
                         var business = await Businesses.findById(user.businessInfo.businessId);
-                    } catch(getBusinessError) {
-                        console.log("error getting business to find fullAccess: ", getBusinessError);
+                    } catch (getBusinessError) {
+                        console.log(
+                            "error getting business to find fullAccess: ",
+                            getBusinessError
+                        );
                     }
 
                     var fullAccess = business.fullAccess;
                 }
             }
 
-            return res.json({ user:frontEndUser(user), fullAccess });
+            return res.json({ user: frontEndUser(user), fullAccess });
         }
     } catch (getUserError) {
         // on error, print the error and return as if there was no user in the session
@@ -665,15 +670,17 @@ async function POST_updateOnboardingStep(req, res) {
 // signs the user out by destroying the user session
 function POST_signOut(req, res) {
     // remove the user id and verification token from the session
-    req.session.userId = null;
+    req.session.userId = "DIGGLEDY DANGLE";
     req.session.verificationToken = null;
     // save the updated session
     req.session.save(function(err) {
+        console.log("HERE. req.session: ", req.session);
         if (err) {
             console.log("error removing user session: ", err);
             return res.status(500).send("Error logging out.");
         } else {
-            return res.json({ success: true });
+            //return res.json({ success: true });
+            return res.status(200).send({ success: true });
         }
     });
 }
@@ -1140,7 +1147,7 @@ async function POST_login(req, res) {
         if (user.businessInfo && user.businessInfo.businessId) {
             try {
                 var business = await Businesses.findById(user.businessInfo.businessId);
-            } catch(getBusinessError) {
+            } catch (getBusinessError) {
                 console.log("error getting business to find fullAccess: ", getBusinessError);
             }
 
