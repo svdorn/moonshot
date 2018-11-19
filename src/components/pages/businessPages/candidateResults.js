@@ -536,7 +536,9 @@ class CandidateResults extends Component {
 
         // if there was an error getting the user's results
         if (this.state.error) {
-            content = "Error getting results.";
+            content = (
+                <div style={{ marginTop: "20px" }}>Error getting results. Try refreshing.</div>
+            );
         }
 
         // if loading the user's results
