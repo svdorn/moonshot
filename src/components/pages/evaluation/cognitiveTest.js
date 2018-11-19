@@ -1,9 +1,14 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { closeNotification, answerEvaluationQuestion, answerOutOfTimeCognitive, addNotification } from "../../../actions/usersActions";
+import {
+    closeNotification,
+    answerEvaluationQuestion,
+    answerOutOfTimeCognitive,
+    addNotification
+} from "../../../actions/usersActions";
 import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { htmlDecode } from "../../../miscFunctions";
@@ -28,40 +33,50 @@ class CognitiveTest extends Component {
         };
     }
 
-
     componentDidMount() {
-        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && this.props.questionInfo.rpm) {
-            this.setState({ questionId: this.props.questionInfo.questionId },() => {
+        if (
+            this.props.questionInfo &&
+            !(this.props.questionInfo.questionId === this.state.questionId) &&
+            this.props.questionInfo.rpm
+        ) {
+            this.setState({ questionId: this.props.questionInfo.questionId }, () => {
                 this.getTimer(true);
             });
         }
     }
 
     componentDidUpdate() {
-        if (this.props.questionInfo && !(this.props.questionInfo.questionId === this.state.questionId) && this.props.questionInfo.rpm) {
-            this.setState({ questionId: this.props.questionInfo.questionId },() => {
+        if (
+            this.props.questionInfo &&
+            !(this.props.questionInfo.questionId === this.state.questionId) &&
+            this.props.questionInfo.rpm
+        ) {
+            this.setState({ questionId: this.props.questionInfo.questionId }, () => {
                 this.getTimer(true);
-            })
+            });
         }
     }
 
     // when any answer is clicked
-    selectAnswer(selectedId) { this.setState({...this.state, selectedId}); }
-
+    selectAnswer(selectedId) {
+        this.setState({ ...this.state, selectedId });
+    }
 
     // move on to the next question (or start/finish the test)
     nextQuestion() {
-        if ((typeof this.state.selectedId !== "undefined" || this.state.outOfTime) && !this.props.loading) {
+        if (
+            (typeof this.state.selectedId !== "undefined" || this.state.outOfTime) &&
+            !this.props.loading
+        ) {
             const selectedId = this.state.selectedId;
             this.resetTimer(() => {
                 this.props.answerEvaluationQuestion("Cognitive", {
                     ...this.props.credentials,
                     selectedId
-                })
+                });
             });
         }
     }
-
 
     startTest() {
         // can only start test if have agreed to cognitive terms
@@ -70,7 +85,6 @@ class CognitiveTest extends Component {
         }
     }
 
-
     // agree to the terms to taking the test
     agreeToTerms() {
         if (this.state.agreedToTerms) {
@@ -78,13 +92,14 @@ class CognitiveTest extends Component {
         }
     }
 
-
     handleCheckMarkClick() {
         this.setState({ agreedToTerms: !this.state.agreedToTerms });
     }
 
     // generic error
-    errorPage() { return <div>Something is wrong. Try refreshing.</div>; }
+    errorPage() {
+        return <div>Something is wrong. Try refreshing.</div>;
+    }
 
     // rendered if the user is on the first skill test of an eval and hasn't agreed to the test terms
     introPage() {
@@ -92,82 +107,125 @@ class CognitiveTest extends Component {
         if (this.state.showExample) {
             return (
                 <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
-                    <div className="font24px"><span>Pattern Recognition</span></div>
+                    <div className="font24px">
+                        <span>Pattern Recognition</span>
+                    </div>
                     <div>
-                        <p>You will be given a series of problems. Each will contain 8 images arranged in a 3 x 3 grid. These shapes make up some pattern. The grid is missing an the image in the bottom right.</p>
-                        <p>Your goal is to find the image that matches the pattern. In the example there are only two options to choose from, but in the real test there will be 8 options.</p>
-                        <p>Click the option that you think is correct and click the {"\"Next\""} button before time runs out.</p>
-                        <p>Once you click {"\"Start\""} you have to finish the full test at the same time or you will lose points.</p>
-                        <p>The test is meant to be very difficult, so do your best but don{"'"}t worry if you don{"'"}t get them all!</p>
+                        <p>
+                            You will be given a series of problems. Each will contain 8 images
+                            arranged in a 3 x 3 grid. These shapes make up some pattern. The grid is
+                            missing an the image in the bottom right.
+                        </p>
+                        <p>
+                            Your goal is to find the image that matches the pattern. In the example
+                            there are only two options to choose from, but in the real test there
+                            will be 8 options.
+                        </p>
+                        <p>
+                            Click the option that you think is correct and click the {'"Next"'}{" "}
+                            button before time runs out.
+                        </p>
+                        <p>
+                            Once you click {'"Start"'} you have to finish the full test at the same
+                            time or you will lose points.
+                        </p>
+                        <p>
+                            The test is meant to be very difficult, so do your best but don{"'"}t
+                            worry if you don{"'"}t get them all!
+                        </p>
                         <p>Good luck!</p>
-                        <p style={{marginBottom: "0"}}>(P.S. The process of elimination doesn{"'"}t usually work out so great. It{"'"}s generally better to figure out what you think the answer should be before looking at the solutions.)</p>
+                        <p style={{ marginBottom: "0" }}>
+                            (P.S. The process of elimination doesn{"'"}t usually work out so great.
+                            It{"'"}s generally better to figure out what you think the answer should
+                            be before looking at the solutions.)
+                        </p>
                     </div>
                     <img
                         src={"/images/cognitiveTest/RPM-Example" + this.props.png}
                         styleName="example-rpm"
-                    /><br/>
-                    {this.props.loading ?
-                        <CircularProgress color="secondary" style={{marginBottom: "40px"}} />
-                        :
+                    />
+                    <br />
+                    {this.props.loading ? (
+                        <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                    ) : (
                         <div
-                            style={{marginBottom: "40px", width: "initial"}}
+                            style={{ marginBottom: "40px", width: "initial" }}
                             className="noselect skillContinueButton"
                             onClick={this.startTest.bind(this)}
                         >
                             Start
                         </div>
-                    }
+                    )}
                 </div>
             );
         }
         // if the user needs to agree to the user agreement first
         else {
-            const buttonClass = "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
+            const buttonClass =
+                "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
 
             return (
                 <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
-                    <div className="font24px"><span>Pattern Recognition</span></div>
+                    <div className="font24px">
+                        <span>Pattern Recognition</span>
+                    </div>
                     <div>
-                        <p>This is the pattern recognition portion of the evaluation. Here you will be tested on your aptitude in problem solving.</p>
-                        <p><span>TIME IS A FACTOR.</span> You have 60 seconds to complete each question. After this, whatever answer you have will be saved. If you have no answer, the question will be marked wrong.</p>
-                        <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
+                        <p>
+                            This is the pattern recognition portion of the evaluation. Here you will
+                            be tested on your aptitude in problem solving.
+                        </p>
+                        <p>
+                            <span>TIME IS A FACTOR.</span> You have 60 seconds to complete each
+                            question. After this, whatever answer you have will be saved. If you
+                            have no answer, the question will be marked wrong.
+                        </p>
+                        <p>
+                            <span>DO NOT</span> exit this tab, go to another tab, or leave this
+                            window. Each time you do, your overall score will decrease.
+                        </p>
                         <p>The test will take no more than 12 minutes.</p>
                     </div>
-                    <br/>
+                    <br />
                     <div>
-                        <div className="checkbox mediumCheckbox whiteCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                        <div
+                            className="checkbox mediumCheckbox whiteCheckbox"
+                            onClick={this.handleCheckMarkClick.bind(this)}
+                        >
                             <img
                                 alt=""
                                 className={"checkMark" + this.state.agreedToTerms}
                                 src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             />
                         </div>
-                        <p style={{padding: "0 40px"}}>By checking this box, I agree that I will answer the questions without help from anyone or any external resources and that if I were to be discovered doing so, at any point, all my results are void.</p>
+                        <p style={{ padding: "0 40px" }}>
+                            By checking this box, I agree that I will answer the questions without
+                            help from anyone or any external resources and that if I were to be
+                            discovered doing so, at any point, all my results are void.
+                        </p>
                     </div>
-                    <br/>
-                    {this.props.loading ?
-                        <CircularProgress color="secondary" style={{marginBottom: "40px"}} />
-                        :
+                    <br />
+                    {this.props.loading ? (
+                        <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                    ) : (
                         <div
-                            style={{marginBottom: "40px", width: "initial"}}
+                            style={{ marginBottom: "40px", width: "initial" }}
                             className={buttonClass}
                             onClick={this.agreeToTerms.bind(this)}
                         >
                             Continue
                         </div>
-                    }
+                    )}
                 </div>
             );
         }
     }
-
 
     // get the time remaining for the question - initial call is a boolean for
     // whether this is being called on page load
     getTimer(initialCall) {
         if (!this.state.timer) {
             const questionInfo = this.props.questionInfo;
-            const time = (new Date()).getTime() - new Date(questionInfo.startDate).getTime();
+            const time = new Date().getTime() - new Date(questionInfo.startDate).getTime();
             var seconds = 60 - Math.floor(time / 1000);
         } else {
             var seconds = this.state.timer - 1;
@@ -186,31 +244,37 @@ class CognitiveTest extends Component {
             });
         } else {
             let self = this;
-            this.setState({
-                timer: seconds,
-                outOfTime: false,
-                loading: false
-            }, () => {
-                self.state.timeouts.push(setTimeout(function() {
-                    self.getTimer(false);
-                }, 1000));
-            });
+            this.setState(
+                {
+                    timer: seconds,
+                    outOfTime: false,
+                    loading: false
+                },
+                () => {
+                    self.state.timeouts.push(
+                        setTimeout(function() {
+                            self.getTimer(false);
+                        }, 1000)
+                    );
+                }
+            );
         }
     }
-
 
     resetTimer(callback) {
         for (let i = 0; i < this.state.timeouts.length; i++) {
             clearTimeout(this.state.timeouts[i]);
         }
-        this.setState({
-            timer: undefined,
-            outOfTime: false,
-            selectedId: undefined,
-            loading: true
-        }, callback);
+        this.setState(
+            {
+                timer: undefined,
+                outOfTime: false,
+                selectedId: undefined,
+                loading: true
+            },
+            callback
+        );
     }
-
 
     // main content with the quiz and questions
     createContent() {
@@ -224,17 +288,23 @@ class CognitiveTest extends Component {
             const outOfTimeClass = this.state.outOfTime ? " outOfTime" : "";
             const imgSrc = option.src + this.props.png;
             return (
-                <div key={option.src}
-                     onClick={this.state.outOfTime? null : () => self.selectAnswer(option._id)}
-                     styleName={"multipleChoiceAnswer" + selectedClass + outOfTimeClass}
+                <div
+                    key={option.src}
+                    onClick={this.state.outOfTime ? null : () => self.selectAnswer(option._id)}
+                    styleName={"multipleChoiceAnswer" + selectedClass + outOfTimeClass}
                 >
-                    <div styleName={"multipleChoiceCircle" + selectedClass + outOfTimeClass}><div/></div>
-                    <div styleName="answersImg"><img src={imgSrc} /></div>
+                    <div styleName={"multipleChoiceCircle" + selectedClass + outOfTimeClass}>
+                        <div />
+                    </div>
+                    <div styleName="answersImg">
+                        <img src={imgSrc} />
+                    </div>
                 </div>
             );
         });
 
-        const canContinue = !this.props.loading && (!!this.state.selectedId || this.state.outOfTime);
+        const canContinue =
+            !this.props.loading && (!!this.state.selectedId || this.state.outOfTime);
         const buttonClass = "skillContinueButton" + (!canContinue ? " disabled" : "");
 
         const rpmSrc = questionInfo.rpm + this.props.png;
@@ -251,50 +321,81 @@ class CognitiveTest extends Component {
 
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
-                {this.state.loading ? <div className="secondary-gray">Loading next question...</div> :<div>
-                {this.state.outOfTime ? <div styleName="error-red">Out of time - please advance to the next question.</div> : <div className="secondary-gray">0:{timer}</div> }
-                <div className="marginBottom40px"><img styleName="rpmImg" src={rpmSrc} /></div>
-                <div className="center" style={{maxWidth: "1000px", margin:"auto"}}>
-                    { answers }
-                </div>
-                <div className={"marginBottom50px marginTop30px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div></div>
-            }
+                {this.state.loading ? (
+                    <div className="secondary-gray">Loading next question...</div>
+                ) : (
+                    <div>
+                        {this.state.outOfTime ? (
+                            <div styleName="error-red">
+                                Out of time - please advance to the next question.
+                            </div>
+                        ) : (
+                            <div className="secondary-gray">0:{timer}</div>
+                        )}
+                        <div className="marginBottom40px">
+                            <img styleName="rpmImg" src={rpmSrc} />
+                        </div>
+                        <div className="center" style={{ maxWidth: "1000px", margin: "auto" }}>
+                            {answers}
+                        </div>
+                        <div
+                            className={"marginBottom50px marginTop30px " + buttonClass}
+                            onClick={this.nextQuestion.bind(this)}
+                        >
+                            Next
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }
 
-
     render() {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return null;
+        }
+
         // all info about the current question to answer
         const questionInfo = this.props.questionInfo;
 
         // if user has never done a cognitive test before, show them the legalese stuff
-        if (this.props.showIntro && !this.props.currentUser.agreedToSkillTerms) {
+        if (this.props.showIntro && !currentUser.agreedToSkillTerms) {
             return this.introPage(true);
         }
 
         // if the user has taken a cognitive test before
-        else if (this.props.showIntro) { return this.introPage(false); }
+        else if (this.props.showIntro) {
+            return this.introPage(false);
+        }
 
         // if the question has not been loaded yet
-        else if (!questionInfo) { return <CircularProgress color="secondary" />; }
+        else if (!questionInfo) {
+            return <CircularProgress color="secondary" />;
+        }
 
         // the typical interface with the slider
-        else if (questionInfo.rpm) { return this.createContent(); }
+        else if (questionInfo.rpm) {
+            return this.createContent();
+        }
 
         // something is up if we get here
-        else { return this.errorPage(); }
+        else {
+            return this.errorPage();
+        }
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification,
-        answerEvaluationQuestion,
-        answerOutOfTimeCognitive,
-        addNotification
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification,
+            answerEvaluationQuestion,
+            answerOutOfTimeCognitive,
+            addNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -308,5 +409,7 @@ function mapStateToProps(state) {
     };
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(CognitiveTest);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CognitiveTest);
