@@ -70,11 +70,15 @@ class AddUserDialog extends Component {
 
     getPositions() {
         let self = this;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return;
+        }
         axios
             .get("/api/business/positions", {
                 params: {
-                    userId: this.props.currentUser._id,
-                    verificationToken: this.props.currentUser.verificationToken
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
                 }
             })
             .then(function(res) {
@@ -199,7 +203,13 @@ class AddUserDialog extends Component {
             }
         }
 
-        const currentUser = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
 
         const currentUserInfo = {
             userId: currentUser._id,
@@ -302,6 +312,12 @@ class AddUserDialog extends Component {
         this.setState({ loadingSendVerificationEmail: true });
 
         const user = this.props.currentUser;
+        if (!user) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page",
+                "error"
+            );
+        }
         const credentials = {
             userId: user._id,
             verificationToken: user.verificationToken
