@@ -13,7 +13,7 @@ import {
     intercomEvent,
     addNotification
 } from "../../../actions/usersActions";
-import { makeSingular } from "../../../miscFunctions";
+import { getFormattedDate, makeSingular } from "../../../miscFunctions";
 import { Elements } from "react-stripe-elements";
 import MetaTags from "react-meta-tags";
 import axios from "axios";
@@ -235,30 +235,34 @@ class Billing extends Component {
         const { billing } = this.props;
 
         let header = "Select a Plan";
+        let headerText =
+            "Invite unlimited candidates, create evaluations for any of your open positions and evaluate any number of employees to customize and improve your candidate predictions with any plan.";
         if (plan && billing && billing.subscription && billing.subscription.id) {
             header = "Pricing Plans";
         }
         if (billing && billing.subscription && billing.subscription.toCancel) {
-            var info = `Your current plan is ending ${new Date(
-                billing.subscription.dateEnding
-            ).toDateString()}. Select a new plan below.`;
+            let endDate = getFormattedDate(billing.subscription.dateEnding);
+            var info = `Your current plan is ending ${endDate}. Select a new plan below.`;
             if (billing.newSubscription && billing.newSubscription.name) {
                 info = `Your current ${makeSingular(
                     billing.subscription.name
                 )} plan is changing to a ${makeSingular(
                     billing.newSubscription.name
-                )} on ${new Date(billing.subscription.dateEnding).toDateString()}.`;
+                )} on ${endDate}.`;
             }
+        } else if (billing && billing.subscription && billing.subscription.id) {
+            let endDate = getFormattedDate(billing.subscription.dateEnding);
+            headerText = `Your current plan of ${
+                billing.subscription.name
+            } ends ${endDate}; this plan is set to auto renew on that date. Any new plan will start on ${endDate} in place of your current plan of ${
+                billing.subscription.name
+            }.`;
         }
         return (
             <div styleName="pricing">
                 <div>{header}</div>
                 <div styleName="header-seperator" />
-                <div>
-                    Invite unlimited candidates, create evaluations for any of your open positions
-                    and evaluate any number of employees to customize and improve your candidate
-                    predictions with any plan.
-                </div>
+                <div>{headerText}</div>
                 <div>
                     {info ? (
                         <div>

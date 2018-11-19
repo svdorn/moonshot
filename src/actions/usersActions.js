@@ -636,7 +636,8 @@ export function createBusinessAndUser(userInfo, customErrorAction) {
             .then(response => {
                 dispatch({
                     type: "LOGIN",
-                    user: response.data,
+                    user: response.data.user,
+                    fullAccess: response.data.fullAccess,
                     ...notification("Your account has been activated! Thanks for signing up!")
                 });
                 dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
@@ -697,7 +698,7 @@ export function postUser(user) {
         axios
             .post("/api/candidate/candidate", user)
             .then(response => {
-                dispatch({ type: "POST_USER", user: response.data.user });
+                dispatch({ type: "POST_USER", user: response.data.user, fullAccess: response.data.fullAccess });
                 goTo("/myEvaluations");
             })
             .catch(error => {

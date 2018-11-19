@@ -195,7 +195,7 @@ function POST_candidate(req, res) {
         if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl || errored) { return; }
 
         // get the business that is offering the position
-        try { var business = await Businesses.findById(businessId).select("intercomId name uniqueName"); }
+        try { var business = await Businesses.findById(businessId).select("intercomId name uniqueName fullAccess"); }
         catch (findBusinessError) {
             console.log(findBusinessError);
             return res.status(500).send({ message: errors.SERVER_ERROR });
@@ -207,6 +207,7 @@ function POST_candidate(req, res) {
             user.businessInfo.businessName = business.name;
             user.businessInfo.uniqueName = business.uniqueName;
             user.confirmEmbedLink = true;
+            var fullAccess = business.fullAccess;
         }
 
         if (process.env.NODE_ENV === "production") {
@@ -300,7 +301,7 @@ function POST_candidate(req, res) {
         }
 
         // user was successfully created
-        return res.status(200).send({ user: frontEndUser(user) });
+        return res.status(200).send({ user: frontEndUser(user), fullAccess });
 
         // THESE TWO WILL NOT RUN - there are guaranteed return statements beforehand
         // add the user to the referrer's list of referred users

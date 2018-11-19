@@ -330,7 +330,7 @@ async function POST_createBusinessAndUser(req, res) {
     }
 
     // return successfully to user
-    res.status(200).send(frontEndUser(user));
+    res.status(200).send({ user: frontEndUser(user), fullAccess: true });
 
     // save the session so that the user stays logged in
     req.session.userId = user._id;

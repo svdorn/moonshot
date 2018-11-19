@@ -1571,8 +1571,54 @@ async function advance(user, businessId, positionId) {
                     );
                 }
 
+                // update candidate count in intercom
+                try {
+                    if (business.intercomId) {
+                        // update business candidate count in intercom
+                        try {
+                            var intercom = await client.companies.update({
+                                company_id: business.intercomId,
+                                custom_attributes: {
+                                    candidates: business.candidateCount ? business.candidateCount : 1
+                                }
+                            });
+                        } catch (createIntercomError) {
+                            console.log(
+                                "error updating an intercom company: ",
+                                createIntercomError
+                            );
+                        }
+                    }
+                } catch (getBusinessError) {
+                    console.log(
+                        "error getting a business when trying to update business in intercom: ",
+                        getBusinessError
+                    );
+                }
+
                 // if trial has ended and need to restrict access, restrict access
-                if (business && business.candidateCount && business.candidateCount > 20 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                if (business && business.candidateCount && business.candidateCount > 18 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                    // get all account admins for this business
+                    try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
+                    catch(getUsersError) {
+                        console.log("error getting admins when trying to send them free trial ending message");
+                    }
+                    // will contain all the promises for sending emails
+                    let intercomPromises = [];
+
+                    // add a promise to create a code and send an email for each given address
+                    admins.forEach(admin => {
+                        intercomPromises.push(
+                            sendIntercomPlanUpdate(admin.intercom, "ended")
+                        );
+                    });
+
+                    // wait for all the emails to send
+                    try {
+                        await Promise.all(intercomPromises);
+                    } catch (sendEmailsError) {
+                        console.log("error getting admins when trying to send them free trial ending message");
+                    }
                     // restrict the fullAccess of the business
                     business.fullAccess = false;
 
@@ -1586,36 +1632,30 @@ async function advance(user, businessId, positionId) {
                         );
                     }
                 }
+                // if trial is coming to an end, send email
+                else if (business && business.candidateCount && business.candidateCount === 12 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                    // get all account admins for this business
+                    try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
+                    catch(getUsersError) {
+                        console.log("error getting admins when trying to send them free trial ending message");
+                    }
+                    // will contain all the promises for sending emails
+                    let intercomPromises = [];
 
-                // // get business from position and then update that business in intercom
-                // // TODO: update candidates to be the correct # of candidates, 1 works for now
-                // // TODO: in future, track each position seperately and the number of candidates in each position so that we can have all necessary data in intercom
-                // if (process.env.NODE_ENV === "production") {
-                //     try {
-                //         // get business from position
-                //         var business = await Businesses.findById(businessId);
-                //
-                //         // update business candidate count in intercom
-                //         try {
-                //             var intercom = await client.companies.update({
-                //                 company_id: business.intercomId,
-                //                 custom_attributes: {
-                //                     candidates: 1
-                //                 }
-                //             });
-                //         } catch (createIntercomError) {
-                //             console.log(
-                //                 "error updating an intercom company: ",
-                //                 createIntercomError
-                //             );
-                //         }
-                //     } catch (getBusinessError) {
-                //         console.log(
-                //             "error getting a business when trying to update business in intercom: ",
-                //             getBusinessError
-                //         );
-                //     }
-                // }
+                    // add a promise to create a code and send an email for each given address
+                    admins.forEach(admin => {
+                        intercomPromises.push(
+                            sendIntercomPlanUpdate(admin.intercom, "ending")
+                        );
+                    });
+
+                    // wait for all the emails to send
+                    try {
+                        await Promise.all(intercomPromises);
+                    } catch (sendEmailsError) {
+                        console.log("error getting admins when trying to send them free trial ending message");
+                    }
+                }
 
                 // score the user
                 try {
@@ -1632,6 +1672,39 @@ async function advance(user, businessId, positionId) {
 
         resolve({ user, evaluationState });
     });
+}
+
+async function sendIntercomPlanUpdate(intercom, update) {
+    return new Promise(async function(resolve, reject) {
+        if (typeof update !== "string") {
+            console.log("error in send intercom plan update, insufficient arguments");
+            return resolve();
+        }
+        if (!intercom || !intercom.id) {
+            console.log("error in send intercom plan update, insufficient arguments");
+            return resolve();
+        }
+        if (update === "ending") {
+            var event_name = "free-plan-ending";
+        } else if (update === "ended") {
+            var event_name = "free-plan-ended";
+        } else {
+            console.log("error in send intercom plan update, insufficient arguments");
+            return resolve();
+        }
+
+        const created_at = Math.floor(Date.now() / 1000);
+
+        // create event
+        try {
+            await client.events.create({ event_name, created_at, user_id: intercom.id });
+        } catch(createIntercomEventError) {
+            console.log("error creating intercom event for sending plan update emails: ", createIntercomEventError);
+            return resolve();
+        }
+
+        return resolve();
+    })
 }
 
 // get the current state of an evaluation, including the current stage, what
