@@ -597,6 +597,10 @@ class MyCandidates extends Component {
         if (!this.state.mockData) {
             axios.post("/api/business/rateInterest", params).catch(error => {
                 console.log("error: ", error);
+                return this.props.addNotification(
+                    "Something went wrong, try refreshing the page.",
+                    "error"
+                );
             });
         }
 

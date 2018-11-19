@@ -1608,6 +1608,17 @@ async function POST_rateInterest(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(bizUser.businessInfo.businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Choose a payment plan to change interest level.");
+    }
+
     // update the business' interest in the candidate, making sure it is an integer
     candidate.positions[candidatePositionIndex].interest = Math.round(interest);
     // mark the candidate as reviewed, in case they weren't already
