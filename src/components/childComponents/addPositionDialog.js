@@ -113,6 +113,12 @@ class AddPositionDialog extends Component {
 
             // get all necessary params
             const user = this.props.currentUser;
+            if (!user) {
+                return this.props.addNotification(
+                    "You aren't logged in! Try refreshing the page.",
+                    "error"
+                );
+            }
             const userId = user._id;
             const businessId = user.businessInfo.businessId;
             const verificationToken = user.verificationToken;
