@@ -758,6 +758,7 @@ class MyCandidates extends Component {
         if (!this.state.mockData) {
             axios.post("/api/business/moveCandidates", params).catch(error => {
                 console.log(error);
+                self.props.addNotification("To do that, please choose a payment plan.", "error");
             });
         }
 
