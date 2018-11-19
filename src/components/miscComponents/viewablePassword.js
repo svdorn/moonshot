@@ -48,17 +48,4 @@ class ViewablePassword extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        currentUser: state.users.currentUser
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
-}
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ViewablePassword);
+export default ViewablePassword;
