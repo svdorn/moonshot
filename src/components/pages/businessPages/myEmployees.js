@@ -1,5 +1,5 @@
-"use strict"
-import React, {Component} from 'react';
+"use strict";
+import React, { Component } from "react";
 import {
     TextField,
     DropDownMenu,
@@ -10,38 +10,41 @@ import {
     Dialog,
     FlatButton,
     CircularProgress
-} from 'material-ui';
-import Select from '@material-ui/core/Select';
-import SelectMenuItem from '@material-ui/core/MenuItem';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {browserHistory} from 'react-router';
-import {openAddUserModal, hidePopups, openAddPositionModal} from "../../../actions/usersActions";
-import {Field, reduxForm} from 'redux-form';
-import MetaTags from 'react-meta-tags';
-import axios from 'axios';
-import EmployeePreview from '../../childComponents/employeePreview';
-import AddUserDialog from '../../childComponents/addUserDialog';
-import AddPositionDialog from '../../childComponents/addPositionDialog';
+} from "material-ui";
+import Select from "@material-ui/core/Select";
+import SelectMenuItem from "@material-ui/core/MenuItem";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { browserHistory } from "react-router";
+import {
+    openAddUserModal,
+    hidePopups,
+    openAddPositionModal,
+    addNotification
+} from "../../../actions/usersActions";
+import { Field, reduxForm } from "redux-form";
+import MetaTags from "react-meta-tags";
+import axios from "axios";
+import EmployeePreview from "../../childComponents/employeePreview";
+import AddUserDialog from "../../childComponents/addUserDialog";
+import AddPositionDialog from "../../childComponents/addPositionDialog";
 import HoverTip from "../../miscComponents/hoverTip";
 import { button } from "../../../classes.js";
 
-import './myEmployees.css';
+import "./myEmployees.css";
 
-const renderTextField = ({input, label, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        {...input}
-        {...custom}
-    />
+const renderTextField = ({ input, label, ...custom }) => (
+    <TextField hintText={label} floatingLabelText={label} {...input} {...custom} />
 );
 
 class MyEmployees extends Component {
     constructor(props) {
         super(props);
 
-        let positionNameFromUrl = props.location.query && props.location.query.position ? props.location.query.position : undefined;
+        let positionNameFromUrl =
+            props.location.query && props.location.query.position
+                ? props.location.query.position
+                : undefined;
 
         this.state = {
             searchTerm: "",
@@ -56,99 +59,121 @@ class MyEmployees extends Component {
             // true if the position has no employees associated with it
             noEmployees: false,
             loadingDone: false
-        }
+        };
     }
-
-
 
     componentDidMount() {
         let self = this;
-
-        axios.get("/api/business/positions", {
-            params: {
-                userId: self.props.currentUser._id,
-                verificationToken: self.props.currentUser.verificationToken
-            }
-        })
-        .then(function (res) {
-            let positions = res.data.positions;
-            let firstPositionName = "";
-            let noPositions = false;
-            if (Array.isArray(positions) && positions.length > 0) {
-                // if the url gave us a position to select first, select that one
-                // otherwise, select the first one available
-                firstPositionName = positions[0].name;
-                if (self.state.positionNameFromUrl && positions.some(position => {
-                    return position.name === self.state.positionNameFromUrl;
-                })) {
-                    firstPositionName = self.state.positionNameFromUrl;
-                }
-
-                // select this position from the dropdown if it is valid
-                if (firstPositionName) {
-                    let selectedPosition = firstPositionName;
-                }
-            } else {
-                noPositions = true;
-            }
-
-            axios.get("/api/business/employeeQuestions", {
-                params: {
-                    userId: self.props.currentUser._id,
-                    verificationToken: self.props.currentUser.verificationToken
-                }
-            })
-            .then (function (response) {
-                const questions = response.data.employeeQuestions;
-                self.setState({
-                    positions: positions,
-                    position: firstPositionName,
-                    questions: questions,
-                    noPositions: noPositions,
-                    loadingDone: true
-                },
-                // search for candidates of first position
-                self.search
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
             );
+        }
+
+        axios
+            .get("/api/business/positions", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
+                }
             })
-            .catch(function(err) {
-                // console.log("error getting the employee questions: ", err);
+            .then(function(res) {
+                let positions = res.data.positions;
+                let firstPositionName = "";
+                let noPositions = false;
+                if (Array.isArray(positions) && positions.length > 0) {
+                    // if the url gave us a position to select first, select that one
+                    // otherwise, select the first one available
+                    firstPositionName = positions[0].name;
+                    if (
+                        self.state.positionNameFromUrl &&
+                        positions.some(position => {
+                            return position.name === self.state.positionNameFromUrl;
+                        })
+                    ) {
+                        firstPositionName = self.state.positionNameFromUrl;
+                    }
+
+                    // select this position from the dropdown if it is valid
+                    if (firstPositionName) {
+                        let selectedPosition = firstPositionName;
+                    }
+                } else {
+                    noPositions = true;
+                }
+
+                axios
+                    .get("/api/business/employeeQuestions", {
+                        params: {
+                            userId: currentUser._id,
+                            verificationToken: currentUser.verificationToken
+                        }
+                    })
+                    .then(function(response) {
+                        const questions = response.data.employeeQuestions;
+                        self.setState(
+                            {
+                                positions: positions,
+                                position: firstPositionName,
+                                questions: questions,
+                                noPositions: noPositions,
+                                loadingDone: true
+                            },
+                            // search for candidates of first position
+                            self.search
+                        );
+                    })
+                    .catch(function(err) {
+                        // console.log("error getting the employee questions: ", err);
+                    });
             })
-        })
-        .catch (function(error) {
-            // console.log("error getting the positions: ", error);
-        })
+            .catch(function(error) {
+                // console.log("error getting the positions: ", error);
+            });
     }
 
     search() {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         // need a position to search for
         if (!this.state.noPositions && this.state.position) {
-            axios.get("/api/business/employeeSearch", {
-                params: {
-                    searchTerm: this.state.term,
-                    // searching by position name right now, could search by id if want to
-                    positionName: this.state.position === "Position" ? "" : this.state.position,
-                    userId: this.props.currentUser._id,
-                    status: this.state.status === "Status" ? "" : this.state.status,
-                    verificationToken: this.props.currentUser.verificationToken
-                }
-            }).then(res => {
-                // make sure component is mounted before changing state
-                if (this.refs.myEmployees) {
-                    if (res.data && res.data.length > 0) {
-                        this.setState({ employees: res.data, noEmployees: false });
-                    } else {
-                        this.setState({noEmployees: true, employees: []})
+            axios
+                .get("/api/business/employeeSearch", {
+                    params: {
+                        searchTerm: this.state.term,
+                        // searching by position name right now, could search by id if want to
+                        positionName: this.state.position === "Position" ? "" : this.state.position,
+                        userId: currentUser._id,
+                        status: this.state.status === "Status" ? "" : this.state.status,
+                        verificationToken: currentUser.verificationToken
                     }
-                }
-            }).catch(function (err) {
-                // console.log("ERROR with Employee search: ", err);
-            })
+                })
+                .then(res => {
+                    // make sure component is mounted before changing state
+                    if (this.refs.myEmployees) {
+                        if (res.data && res.data.length > 0) {
+                            this.setState({ employees: res.data, noEmployees: false });
+                        } else {
+                            this.setState({ noEmployees: true, employees: [] });
+                        }
+                    }
+                })
+                .catch(function(err) {
+                    // console.log("ERROR with Employee search: ", err);
+                });
         }
     }
 
     onSearchChange(term) {
-        this.setState({...this.state, term: term}, () => {
+        this.setState({ ...this.state, term: term }, () => {
             if (term !== undefined) {
                 this.search();
             }
@@ -158,14 +183,20 @@ class MyEmployees extends Component {
     // open the modal to add a new position
     openAddPositionModal = () => {
         this.props.openAddPositionModal();
-    }
+    };
 
     handleStatusChange = event => {
-        this.setState({status: event.target.value, employees: [], noEmployees: false}, this.search);
+        this.setState(
+            { status: event.target.value, employees: [], noEmployees: false },
+            this.search
+        );
     };
 
     handlePositionChange = event => {
-        this.setState({position: event.target.value, employees: [], noEmployees: false}, this.search);
+        this.setState(
+            { position: event.target.value, employees: [], noEmployees: false },
+            this.search
+        );
     };
 
     openAddUserModal() {
@@ -173,7 +204,15 @@ class MyEmployees extends Component {
     }
 
     hideMessage() {
-        let popups = this.props.currentUser.popups;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
+        let popups = currentUser.popups;
         if (popups) {
             popups.employees = false;
         } else {
@@ -181,33 +220,41 @@ class MyEmployees extends Component {
             popups.employees = false;
         }
 
-        const userId = this.props.currentUser._id;
-        const verificationToken = this.props.currentUser.verificationToken;
+        const userId = currentUser._id;
+        const verificationToken = currentUser.verificationToken;
 
         this.props.hidePopups(userId, verificationToken, popups);
     }
 
     popup() {
-        if (this.props.currentUser && this.props.currentUser.popups && this.props.currentUser.popups.employees) {
+        const { currentUser } = this.props;
+
+        if (currentUser && currentUser.popups && currentUser.popups.employees) {
             return (
                 <div className="center" key="popup box">
                     <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
-                        <div className="popup-frame" style={{paddingBottom:"20px"}}>
+                        <div className="popup-frame" style={{ paddingBottom: "20px" }}>
                             <div>
-                                <img
-                                    alt="Alt"
-                                    src={"/icons/employeesBanner" + this.props.png}
-                                />
+                                <img alt="Alt" src={"/icons/employeesBanner" + this.props.png} />
                             </div>
-                            <div style={{marginTop:"20px"}}>
-                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">Improve Your Predictive Model</div>
+                            <div style={{ marginTop: "20px" }}>
+                                <div className="primary-cyan font20px font18pxUnder700 font16pxUnder500">
+                                    Improve Your Predictive Model
+                                </div>
                                 <div>
-                                Invite employees to complete an evaluation and then complete a two-minute evaluation of each employee to
-                                customize your predictive model and enable Longevity/tenure and Culture Fit predictions for your candidates.
+                                    Invite employees to complete an evaluation and then complete a
+                                    two-minute evaluation of each employee to customize your
+                                    predictive model and enable Longevity/tenure and Culture Fit
+                                    predictions for your candidates.
                                 </div>
                             </div>
                         </div>
-                        <div className="hide-message font14px font12pxUnder700" onClick={this.hideMessage.bind(this)}>Hide Message</div>
+                        <div
+                            className="hide-message font14px font12pxUnder700"
+                            onClick={this.hideMessage.bind(this)}
+                        >
+                            Hide Message
+                        </div>
                     </div>
                 </div>
             );
@@ -217,6 +264,11 @@ class MyEmployees extends Component {
     }
 
     render() {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return null;
+        }
+
         const style = {
             separator: {
                 width: "70%",
@@ -253,23 +305,31 @@ class MyEmployees extends Component {
             menuLabelStyle: {
                 color: "rgba(255,255,255,.8)"
             }
-        }
+        };
 
         const statuses = ["Complete", "Incomplete"];
-        const statusItems = statuses.map(function (status) {
-            return <SelectMenuItem value={status} key={status}>{ status }</SelectMenuItem>
-        })
+        const statusItems = statuses.map(function(status) {
+            return (
+                <SelectMenuItem value={status} key={status}>
+                    {status}
+                </SelectMenuItem>
+            );
+        });
 
         const positions = this.state.positions;
-        const positionItems = positions.map(function (position) {
-            return <SelectMenuItem value={position.name} key={position.name}>{ position.name }</SelectMenuItem>
-        })
+        const positionItems = positions.map(function(position) {
+            return (
+                <SelectMenuItem value={position.name} key={position.name}>
+                    {position.name}
+                </SelectMenuItem>
+            );
+        });
 
         // the hint that shows up when search bar is in focus
-        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
-        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" }
+        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" };
+        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" };
 
-        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" }
+        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" };
         const searchFloatingLabelStyle = searchHintStyle;
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
@@ -284,14 +344,14 @@ class MyEmployees extends Component {
                             hintStyle={searchHintStyle}
                             floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
                             floatingLabelStyle={searchFloatingLabelStyle}
-                            underlineFocusStyle = {searchUnderlineFocusStyle}
+                            underlineFocusStyle={searchUnderlineFocusStyle}
                             label="Search"
                             onChange={event => this.onSearchChange(event.target.value)}
                             value={this.state.searchTerm}
                         />
                     </ToolbarGroup>
 
-                    <ToolbarGroup style={{alignItems: "flex-end"}}>
+                    <ToolbarGroup style={{ alignItems: "flex-end" }}>
                         <Select
                             disableUnderline={true}
                             classes={{
@@ -301,10 +361,10 @@ class MyEmployees extends Component {
                             value={this.state.status}
                             onChange={this.handleStatusChange}
                             key="status selector"
-                            style={{marginRight:"30px"}}
+                            style={{ marginRight: "30px" }}
                         >
                             <SelectMenuItem value={"Status"}>{"Status"}</SelectMenuItem>
-                            <Divider/>
+                            <Divider />
                             {statusItems}
                         </Select>
 
@@ -319,7 +379,7 @@ class MyEmployees extends Component {
                             key="position selector"
                         >
                             <SelectMenuItem value="Position">{"Position"}</SelectMenuItem>
-                            <Divider/>
+                            <Divider />
                             {positionItems}
                         </Select>
                     </ToolbarGroup>
@@ -332,14 +392,14 @@ class MyEmployees extends Component {
                         hintStyle={searchHintStyle}
                         floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
                         floatingLabelStyle={searchFloatingLabelStyle}
-                        underlineFocusStyle = {searchUnderlineFocusStyle}
+                        underlineFocusStyle={searchUnderlineFocusStyle}
                         component={renderTextField}
                         label="Search"
                         onChange={event => this.onSearchChange(event.target.value)}
                         value={this.state.searchTerm}
                     />
 
-                    <br/>
+                    <br />
 
                     <Select
                         disableUnderline={true}
@@ -352,10 +412,12 @@ class MyEmployees extends Component {
                         key="status selector"
                     >
                         <SelectMenuItem value={"Status"}>{"Status"}</SelectMenuItem>
-                        <Divider/>
+                        <Divider />
                         {statusItems}
                     </Select>
-                    <div><br/></div>
+                    <div>
+                        <br />
+                    </div>
                     <Select
                         disableUnderline={true}
                         classes={{
@@ -367,7 +429,7 @@ class MyEmployees extends Component {
                         key="position selector"
                     >
                         <SelectMenuItem value="Position">{"Position"}</SelectMenuItem>
-                        <Divider/>
+                        <Divider />
                         {positionItems}
                     </Select>
                 </div>
@@ -375,7 +437,7 @@ class MyEmployees extends Component {
         );
 
         let employeePreviews = (
-            <div className="center employeesBox" style={{color: "rgba(255,255,255,.8)"}}>
+            <div className="center employeesBox" style={{ color: "rgba(255,255,255,.8)" }}>
                 <div
                     className="add-employee primary-cyan pointer font16px center marginTop20px"
                     onClick={this.props.openAddUserModal}
@@ -384,30 +446,40 @@ class MyEmployees extends Component {
                 </div>
                 Loading employees...
             </div>
-        )
+        );
         if (this.state.noEmployees) {
             employeePreviews = (
                 <div className="center secondary-gray employeesBox">
-                    <div className="marginTop20px marginBottom15px font32px font28pxUnder500 clickable primary-cyan" onClick={this.props.openAddUserModal}>
+                    <div
+                        className="marginTop20px marginBottom15px font32px font28pxUnder500 clickable primary-cyan"
+                        onClick={this.props.openAddUserModal}
+                    >
                         + <span className="underline">Add Employees</span>
                     </div>
                     Improve your predictive model with employee data.
-                    <div className="marginTop15px" style={{color: "rgba(255,255,255,.8)"}}>
-                        Add employees <span className="clickable underline primary-cyan" onClick={this.props.openAddUserModal}>here</span> so they can get started.
+                    <div className="marginTop15px" style={{ color: "rgba(255,255,255,.8)" }}>
+                        Add employees{" "}
+                        <span
+                            className="clickable underline primary-cyan"
+                            onClick={this.props.openAddUserModal}
+                        >
+                            here
+                        </span>{" "}
+                        so they can get started.
                         <div className="info-hoverable">i</div>
                         <HoverTip
                             className="font12px secondary-gray"
-                            style={{marginTop: "18px", marginLeft: "-6px"}}
+                            style={{ marginTop: "18px", marginLeft: "-6px" }}
                             text="Employees complete a 22-minute evaluation and their manager completes a two-minute evaluation of the employee to improve predictions. Enable Longevity and Culture Fit predictions for candidates after 16 employee evaluations."
                         />
                     </div>
                 </div>
-            )
+            );
         }
 
         if (this.state.position == "" && this.state.loadingDone) {
             employeePreviews = (
-                <div className="center employeesBox" style={{color: "rgba(255,255,255,.8)"}}>
+                <div className="center employeesBox" style={{ color: "rgba(255,255,255,.8)" }}>
                     <div
                         className="add-employee primary-cyan pointer font16px center marginTop20px"
                         onClick={this.props.openAddUserModal}
@@ -420,16 +492,14 @@ class MyEmployees extends Component {
         }
         if (this.state.noPositions) {
             employeePreviews = (
-                <div className="center employeesBox" style={{color: "rgba(255,255,255,.8)"}}>
+                <div className="center employeesBox" style={{ color: "rgba(255,255,255,.8)" }}>
                     <div
                         className="add-employee primary-cyan pointer font16px center marginTop20px"
                         onClick={this.props.openAddUserModal}
                     >
                         + <span className="underline">Add Employees</span>
                     </div>
-                    <div className="marginTop10px">
-                        Create a position to select.
-                    </div>
+                    <div className="marginTop10px">Create a position to select.</div>
                     <div
                         className={
                             "primary-white font18px font16pxUnder900 font14pxUnder600 marginTop20px " +
@@ -451,7 +521,9 @@ class MyEmployees extends Component {
             positionId = this.state.positions.find(pos => {
                 return pos.name === this.state.position;
             })._id;
-        } catch (getPosIdErr) { /* probably just haven't chosen a position yet */ }
+        } catch (getPosIdErr) {
+            /* probably just haven't chosen a position yet */
+        }
 
         // create the employee previews
         let key = 0;
@@ -459,12 +531,13 @@ class MyEmployees extends Component {
             employeePreviews = this.state.employees.map(employee => {
                 key++;
 
-                const score = employee.scores && employee.scores.overall ? employee.scores.overall : undefined;
+                const score =
+                    employee.scores && employee.scores.overall
+                        ? employee.scores.overall
+                        : undefined;
 
                 return (
-                    <li style={{marginTop: '15px'}}
-                        key={key}
-                    >
+                    <li style={{ marginTop: "15px" }} key={key}>
                         <EmployeePreview
                             gradingComplete={employee.gradingComplete}
                             answers={employee.answers}
@@ -479,47 +552,56 @@ class MyEmployees extends Component {
                     </li>
                 );
             });
-
         }
 
         const blurredClass = this.props.blurModal ? "dialogForBizOverlay" : "";
 
         return (
-            <div className={"jsxWrapper blackBackground fillScreen my-employees " + blurredClass} style={{paddingBottom: "20px"}} ref='myEmployees'>
-                {this.props.currentUser.userType == "accountAdmin" ?
+            <div
+                className={"jsxWrapper blackBackground fillScreen my-employees " + blurredClass}
+                style={{ paddingBottom: "20px" }}
+                ref="myEmployees"
+            >
+                {currentUser.userType == "accountAdmin" ? (
                     <AddUserDialog position={this.state.position} tab="Employee" />
-                    : null
-                }
+                ) : null}
                 <MetaTags>
                     <title>My Employees | Moonshot</title>
-                    <meta name="description" content="Grade your employees and see their results."/>
+                    <meta
+                        name="description"
+                        content="Grade your employees and see their results."
+                    />
                 </MetaTags>
 
                 <AddPositionDialog />
 
-                <div className="page-line-header"><div/><div>Employees</div></div>
-
-                { this.popup() }
-
-                { searchBar }
-
-                <div>
-                    <ul className="horizCenteredList myEmployeesWidth">
-                        {employeePreviews}
-                    </ul>
+                <div className="page-line-header">
+                    <div />
+                    <div>Employees</div>
                 </div>
 
+                {this.popup()}
+
+                {searchBar}
+
+                <div>
+                    <ul className="horizCenteredList myEmployeesWidth">{employeePreviews}</ul>
+                </div>
             </div>
         );
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        openAddUserModal,
-        hidePopups,
-        openAddPositionModal
-    }, dispatch);
+    return bindActionCreators(
+        {
+            openAddUserModal,
+            hidePopups,
+            openAddPositionModal,
+            addNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -532,7 +614,10 @@ function mapStateToProps(state) {
 }
 
 MyEmployees = reduxForm({
-    form: 'myEmployees',
+    form: "myEmployees"
 })(MyEmployees);
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyEmployees);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MyEmployees);
