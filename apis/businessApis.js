@@ -1459,8 +1459,14 @@ async function POST_emailInvites(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // check if the user has verified their email
     if (!user.verified) {
         return res.status(500).send("Email not yet verified. Do that first!");
+    }
+
+    // check if the business has a paid plan (or free trial)
+    if (!business.fullAccess) {
+        return res.status(401).send("Select a payment plan before sending invites!");
     }
 
     // find the position within the business
