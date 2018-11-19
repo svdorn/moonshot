@@ -247,7 +247,7 @@ class Billing extends Component {
                     billing.subscription.name
                 )} plan is changing to a ${makeSingular(
                     billing.newSubscription.name
-                )} on ${endDate}.`;
+                )} plan on ${endDate}.`;
             }
         } else if (billing && billing.subscription && billing.subscription.id) {
             let endDate = getFormattedDate(billing.subscription.dateEnding);

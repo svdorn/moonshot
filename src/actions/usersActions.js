@@ -1,7 +1,7 @@
 "use strict";
 import axios from "axios";
 import { reset } from "redux-form";
-import { goTo, propertyExists } from "../miscFunctions";
+import { goTo, propertyExists, makeSingular } from "../miscFunctions";
 
 // GET USER FROM SESSION
 export function getUserFromSession(callback) {
@@ -461,7 +461,7 @@ export function setupBillingCustomer(source, email, userId, verificationToken, s
                     type: "SUCCESS_BILLING_CUSTOMER",
                     billing: response.data.billing,
                     fullAccess: response.data.fullAccess,
-                    ...notification(`You have successfully added your ${subscriptionTerm} plan`)
+                    ...notification(`You have successfully added your ${makeSingular(subscriptionTerm)} plan`)
                 });
             })
             .catch(error => {
