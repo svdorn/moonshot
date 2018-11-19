@@ -62,6 +62,13 @@ class Activity extends Component {
         const user = this.props.currentUser;
         const fullAccess = this.props.fullAccess;
 
+        if (!user) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         const countQuery = {
             params: {
                 userId: user._id,
@@ -106,6 +113,13 @@ class Activity extends Component {
         const self = this;
         const user = this.props.currentUser;
 
+        if (!user) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         const query = {
             params: {
                 userId: user._id,
@@ -132,6 +146,13 @@ class Activity extends Component {
     getEmployeeData() {
         const self = this;
         const user = this.props.currentUser;
+
+        if (!user) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
 
         const query = {
             params: {
@@ -174,6 +195,12 @@ class Activity extends Component {
 
     confirmEmbedLink = () => {
         const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
 
         const userId = currentUser._id;
         const verificationToken = currentUser.verificationToken;
@@ -230,7 +257,15 @@ class Activity extends Component {
     };
 
     needHelpIntercomEvent = () => {
-        const { _id, verificationToken } = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
+        const { _id, verificationToken } = currentUser;
 
         this.props.intercomEvent("need_help_embedding_link", _id, verificationToken, null);
     };
@@ -357,6 +392,10 @@ class Activity extends Component {
 
     embedLink() {
         const { currentUser } = this.props;
+        if (!currentUser) {
+            return null;
+        }
+
         let businessName = undefined;
         let uniqueName = "";
         if (typeof currentUser.businessInfo === "object") {
@@ -451,28 +490,60 @@ class Activity extends Component {
     billingUpdate() {
         const { billing, currentUser } = this.props;
 
-        if (!billing) return <div className="fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>;
+        if (!currentUser) {
+            return null;
+        }
+        if (!billing)
+            return (
+                <div className="fully-center">
+                    <CircularProgress style={{ color: primaryCyan }} />
+                </div>
+            );
 
         let content = null;
 
         if (billing.oldSubscriptions && billing.oldSubscriptions.length > 0) {
             // had a previous plan
-            content = <div>{makePossessive(currentUser.businessInfo.businessName)} plan has ended but everything has been saved for you. <span className="primary-cyan clickableNoUnderline" onClick={() => goTo("/billing")}>Select a new plan</span> to continue.</div>;
+            content = (
+                <div>
+                    {makePossessive(currentUser.businessInfo.businessName)} plan has ended but
+                    everything has been saved for you.{" "}
+                    <span
+                        className="primary-cyan clickableNoUnderline"
+                        onClick={() => goTo("/billing")}
+                    >
+                        Select a new plan
+                    </span>{" "}
+                    to continue.
+                </div>
+            );
         } else {
             // just got off of free trial
-            content = <div>{makePossessive(currentUser.businessInfo.businessName)} free plan has ended but everything has been saved for you. <span className="primary-cyan clickableNoUnderline" onClick={() => goTo("/billing")}>Select a plan</span> to continue.</div>;
+            content = (
+                <div>
+                    {makePossessive(currentUser.businessInfo.businessName)} free plan has ended but
+                    everything has been saved for you.{" "}
+                    <span
+                        className="primary-cyan clickableNoUnderline"
+                        onClick={() => goTo("/billing")}
+                    >
+                        Select a plan
+                    </span>{" "}
+                    to continue.
+                </div>
+            );
         }
 
         return (
-            <div className="inline-block center primary-white font18px font16pxUnder900 font14pxUnder600" styleName="onboarding-info billing-activity">
-                <div style={{maxWidth: "500px", margin:"auto"}}>
-                    { content }
+            <div
+                className="inline-block center primary-white font18px font16pxUnder900 font14pxUnder600"
+                styleName="onboarding-info billing-activity"
+            >
+                <div style={{ maxWidth: "500px", margin: "auto" }}>
+                    {content}
                     <div
-                        className={
-                            "marginTop30px " +
-                            button.cyanRound
-                        }
-                        style={{padding: "6px 12px"}}
+                        className={"marginTop30px " + button.cyanRound}
+                        style={{ padding: "6px 12px" }}
                         onClick={() => goTo("/billing")}
                     >
                         See Plans
@@ -576,10 +647,12 @@ class Activity extends Component {
 
     render() {
         const { frame, fetchDataError, numUsers, tab } = this.state;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return null;
+        }
         try {
-            var possessiveBusinessName = makePossessive(
-                this.props.currentUser.businessInfo.businessName
-            );
+            var possessiveBusinessName = makePossessive(currentUser.businessInfo.businessName);
         } catch (e) {
             possessiveBusinessName = "Your";
         }
@@ -631,15 +704,15 @@ class Activity extends Component {
                         ) : (
                             <div styleName="activity-container">
                                 <div styleName="activity-title">
-                                    {frame === "Billing Update" ?
+                                    {frame === "Billing Update" ? (
                                         <div>Plan Update</div>
-                                        :
+                                    ) : (
                                         <div>
                                             <span styleName="not-small-mobile">
                                                 {possessiveBusinessName}{" "}
                                             </span>Activity
                                         </div>
-                                    }
+                                    )}
                                 </div>
                                 {dropdown}
                                 {content}
