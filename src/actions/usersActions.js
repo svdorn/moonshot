@@ -697,7 +697,7 @@ export function postUser(user) {
         axios
             .post("/api/candidate/candidate", user)
             .then(response => {
-                dispatch({ type: "POST_USER", user: response.data.user });
+                dispatch({ type: "POST_USER", user: response.data.user, fullAccess: response.data.fullAccess });
                 goTo("/myEvaluations");
             })
             .catch(error => {

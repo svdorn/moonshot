@@ -380,6 +380,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 currentUser: action.user,
+                fullAccess: action.fullAccess,
                 userPosted: true,
                 loadingSomething: false
             };
