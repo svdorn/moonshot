@@ -460,7 +460,6 @@ class Influencer extends Component {
             />
         ];
 
-        const user = this.props.currentUser;
         const candidate = this.state.candidate;
         const hardSkills = this.state.hardSkills;
         const predictiveInsights = this.state.predictiveInsights;
