@@ -470,7 +470,7 @@ class CandidateResults extends Component {
             candidate.hiringStage = hiringStage;
         }
         // set as reviewed if wasn't already
-        candidates[candIndex].reviewed = true;
+        //candidates[candIndex].reviewed = true;
         // make the changes visible
         this.setState({ candidate });
     };

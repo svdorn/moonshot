@@ -1654,6 +1654,17 @@ async function POST_changeHiringStage(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(bizUser.businessInfo.businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Upgrade to a paid plan to change hiring stages.");
+    }
+
     // if dismissing a candidate
     let hiringStageChanges = candidate.positions[candidatePositionIndex].hiringStageChanges;
     // the hiring stage before it was changed
