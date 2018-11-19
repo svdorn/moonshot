@@ -31,7 +31,7 @@
 @media screen and (max-width: 1000px) {
     .banner {
         margin-top: -6px;
-        width: 100px;
+        width: 100%;
     }
     .banner-space {
         width: 100%;
