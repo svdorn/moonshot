@@ -41,7 +41,7 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_VERIFICATION_MODAL":
             return {
                 ...state,
-                verificationModal: false,
+                verificationModal: false
             };
             break;
         case "OPEN_LOCKED_ACCOUNT_MODAL":
@@ -53,7 +53,7 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_LOCKED_ACCOUNT_MODAL":
             return {
                 ...state,
-                lockedAccountModal: false,
+                lockedAccountModal: false
             };
             break;
         case "OPEN_HIRE_VERIFICATION_MODAL":
@@ -79,7 +79,7 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_CANCEL_PLAN_MODAL":
             return {
                 ...state,
-                cancelPlanModal: false,
+                cancelPlanModal: false
             };
             break;
         case "OPEN_CLAIM_PAGE_MODAL":
@@ -91,7 +91,7 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_CLAIM_PAGE_MODAL":
             return {
                 ...state,
-                claimPageModal: false,
+                claimPageModal: false
             };
             break;
         case "OPEN_INTRODUCTION_MODAL":
@@ -103,7 +103,7 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_INTRODUCTION_MODAL":
             return {
                 ...state,
-                introductionModal: false,
+                introductionModal: false
             };
             break;
         case "OPEN_CANDIDATES_POPUP_MODAL":

@@ -11,7 +11,7 @@ import InviteCandidatesModal from "./inviteCandidatesModal";
 import AddPositionDialog from "../../childComponents/addPositionDialog";
 import AddUserDialog from "../../childComponents/addUserDialog";
 import VerificationModal from "./dashboardItems/onboarding/childComponents/verificationModal";
-import axios from 'axios';
+import axios from "axios";
 
 import "./dashboard.css";
 
@@ -34,24 +34,27 @@ class Dashboard extends Component {
         const { currentUser, positionCount } = this.props;
         if (!positionCount || positionCount < 1) {
             // get all the positions they're evaluating for
-            axios.get("/api/business/positions", {
-                params: {
-                    userId: currentUser._id,
-                    verificationToken: currentUser.verificationToken
-                }
-            })
-            .then(res => {
-                const positions = res.data.positions;
-                if (positions && Array.isArray(positions) && positions.length > 0) {
-                    this.props.updatePositionCount(positions.length);
-                } else {
-                    this.props.updatePositionCount(0);
-                }
-            })
-            .catch(err => {
-                console.log("error getting positions: ", err);
-                if (err.response && err.response.data) { console.log(err.response.data); }
-            });
+            axios
+                .get("/api/business/positions", {
+                    params: {
+                        userId: currentUser._id,
+                        verificationToken: currentUser.verificationToken
+                    }
+                })
+                .then(res => {
+                    const positions = res.data.positions;
+                    if (positions && Array.isArray(positions) && positions.length > 0) {
+                        this.props.updatePositionCount(positions.length);
+                    } else {
+                        this.props.updatePositionCount(0);
+                    }
+                })
+                .catch(err => {
+                    console.log("error getting positions: ", err);
+                    if (err.response && err.response.data) {
+                        console.log(err.response.data);
+                    }
+                });
         }
     }
 
@@ -60,30 +63,37 @@ class Dashboard extends Component {
         if (!positionCount || positionCount < 1) {
             const currentUser = this.props.currentUser;
             // get all the positions they're evaluating for
-            axios.get("/api/business/positions", {
-                params: {
-                    userId: currentUser._id,
-                    verificationToken: currentUser.verificationToken
-                }
-            })
-            .then(res => {
-                const positions = res.data.positions;
-                if (positions && Array.isArray(positions) && positions.length > 0) {
-                    this.props.updatePositionCount(positions.length);
-                } else {
-                    this.props.updatePositionCount(0);
-                }
-            })
-            .catch(err => {
-                console.log("error getting positions: ", err);
-                if (err.response && err.response.data) { console.log(err.response.data); }
-            });
+            axios
+                .get("/api/business/positions", {
+                    params: {
+                        userId: currentUser._id,
+                        verificationToken: currentUser.verificationToken
+                    }
+                })
+                .then(res => {
+                    const positions = res.data.positions;
+                    if (positions && Array.isArray(positions) && positions.length > 0) {
+                        this.props.updatePositionCount(positions.length);
+                    } else {
+                        this.props.updatePositionCount(0);
+                    }
+                })
+                .catch(err => {
+                    console.log("error getting positions: ", err);
+                    if (err.response && err.response.data) {
+                        console.log(err.response.data);
+                    }
+                });
         }
     }
 
     render() {
         const user = this.props.currentUser;
         const positionCount = this.props.positionCount;
+
+        if (!user) {
+            return null;
+        }
 
         let activity = <DashboardItem type="Activity" width={3} />;
         if (user && user.popups && user.popups.dashboard) {

@@ -60,8 +60,8 @@ export function closeAddPositionModal() {
 
 export function openHireVerificationModal(candidateId, candidateName) {
     return function(dispatch) {
-        dispatch({ type: "OPEN_HIRE_VERIFICATION_MODAL", candidateId, candidateName })
-    }
+        dispatch({ type: "OPEN_HIRE_VERIFICATION_MODAL", candidateId, candidateName });
+    };
 }
 
 export function openClaimPageModal() {
@@ -432,7 +432,7 @@ export function stopLoading() {
 export function getBillingInfo(userId, verificationToken, businessId) {
     return function(dispatch) {
         axios
-            .get("/api/business/billingInfo", { params: { userId, verificationToken, businessId }})
+            .get("/api/business/billingInfo", { params: { userId, verificationToken, businessId } })
             .then(response => {
                 dispatch({
                     type: "SUCCESS_BILLING_INFO",
@@ -449,7 +449,13 @@ export function getBillingInfo(userId, verificationToken, businessId) {
 export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
     return function(dispatch) {
         axios
-            .post("/api/billing/customer", { source, email, userId, verificationToken, subscriptionTerm })
+            .post("/api/billing/customer", {
+                source,
+                email,
+                userId,
+                verificationToken,
+                subscriptionTerm
+            })
             .then(response => {
                 dispatch({
                     type: "SUCCESS_BILLING_CUSTOMER",
@@ -587,13 +593,31 @@ export function newBillingPlan(userId, verificationToken, subscriptionTerm) {
 }
 
 // LOG USER OUT
-export function signout() {
+export function signout(callback) {
     return function(dispatch) {
-        dispatch({ type: "SIGNOUT" });
+        // dispatch({ type: "SIGNOUT" });
         axios
             .post("/api/user/signOut")
-            .then(function(response) {})
-            .catch(function(err) {});
+            .then(function(response) {
+                dispatch({ type: "SIGNOUT" });
+                if (typeof callback === "function") {
+                    callback();
+                }
+            })
+            .catch(function(err) {
+                console.log("error signing out: ", err);
+                dispatch({
+                    type: "ADD_NOTIFICATION",
+                    ...notification(
+                        "There was an error signing you out, let us know by using the bubble on the bottom right.",
+                        "error"
+                    )
+                });
+                dispatch({ type: "SIGNOUT" });
+                if (typeof callback === "function") {
+                    callback();
+                }
+            });
     };
 }
 
