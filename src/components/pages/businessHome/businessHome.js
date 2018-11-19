@@ -507,42 +507,6 @@ class BusinessHome extends Component {
         );
     }
 
-    videoSection() {
-        return (
-            <section id="video-section">
-                <div
-                    styleName="video-container"
-                    className="font22px font18pxUnder950 font16pxUnder400"
-                >
-                    <div>
-                        <div styleName="video-screenshot">
-                            <div />
-                            <img src={"/images/businessHome/ListViewScreenshot" + this.props.png} />
-                        </div>
-                        <div styleName="skew-image-cover" />
-                        <div styleName="video-companion">
-                            <div>
-                                <div styleName="video-text">
-                                    We predict how successful your candidates will be before you
-                                    hire them.
-                                </div>
-                                <div>
-                                    <button
-                                        styleName="video-button"
-                                        className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font18px font16pxUnder950 font14pxUnder400 primary-white"
-                                        onClick={() => goTo("/explore")}
-                                    >
-                                        Try for Free
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
     render() {
         return (
             <div>
