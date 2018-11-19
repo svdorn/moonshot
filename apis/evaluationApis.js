@@ -1570,6 +1570,7 @@ async function advance(user, businessId, positionId) {
                         updateBusinessError
                     );
                 }
+
                 // update candidate count in intercom
                 try {
                     if (business.intercomId) {
@@ -1596,7 +1597,7 @@ async function advance(user, businessId, positionId) {
                 }
 
                 // if trial has ended and need to restrict access, restrict access
-                if (business && business.candidateCount && business.candidateCount > 19 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                if (business && business.candidateCount && business.candidateCount > 18 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
                     // get all account admins for this business
                     try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
                     catch(getUsersError) {
@@ -1632,7 +1633,7 @@ async function advance(user, businessId, positionId) {
                     }
                 }
                 // if trial is coming to an end, send email
-                else if (business && business.candidateCount && business.candidateCount === 13 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                else if (business && business.candidateCount && business.candidateCount === 12 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
                     // get all account admins for this business
                     try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
                     catch(getUsersError) {
@@ -1684,9 +1685,9 @@ async function sendIntercomPlanUpdate(intercom, update) {
             return resolve();
         }
         if (update === "ending") {
-            var event_name = "freePlanEnding";
+            var event_name = "free-plan-ending";
         } else if (update === "ended") {
-            var event_name = "freePlanEnded";
+            var event_name = "free-plan-ended";
         } else {
             console.log("error in send intercom plan update, insufficient arguments");
             return resolve();
@@ -1696,9 +1697,10 @@ async function sendIntercomPlanUpdate(intercom, update) {
 
         // create event
         try {
-            await client.events.create({ event_name, created_at, user_id: user.intercom.id });
+            await client.events.create({ event_name, created_at, user_id: intercom.id });
         } catch(createIntercomEventError) {
             console.log("error creating intercom event for sending plan update emails: ", createIntercomEventError);
+            return resolve();
         }
 
         return resolve();

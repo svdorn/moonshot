@@ -77,8 +77,6 @@ class AuthenticatedComponent extends Component {
     checkLockedAccount() {
         const { currentUser, fullAccess, generalAction, location, updateStore } = this.props;
 
-        console.log("fullAccess: ", fullAccess)
-
         if (currentUser && currentUser.userType === "accountAdmin" && !fullAccess) {
             // if we are on a page that we can't be on
             if (location.pathname !== "/dashboard" && location.pathname !== "/billing") {
