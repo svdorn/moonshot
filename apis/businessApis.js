@@ -40,7 +40,6 @@ const errors = require("./errors.js");
 const businessApis = {
     POST_addEvaluation,
     POST_contactUsEmail,
-    POST_updateHiringStage,
     POST_answerQuestion,
     POST_googleJobsLinks,
     POST_emailInvites,
@@ -1462,8 +1461,14 @@ async function POST_emailInvites(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // check if the user has verified their email
     if (!user.verified) {
         return res.status(500).send("Email not yet verified. Do that first!");
+    }
+
+    // check if the business has a paid plan (or free trial)
+    if (!business.fullAccess) {
+        return res.status(401).send("Select a payment plan before sending invites!");
     }
 
     // find the position within the business
@@ -1606,6 +1611,17 @@ async function POST_rateInterest(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(bizUser.businessInfo.businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Choose a payment plan to change interest level.");
+    }
+
     // update the business' interest in the candidate, making sure it is an integer
     candidate.positions[candidatePositionIndex].interest = Math.round(interest);
     // mark the candidate as reviewed, in case they weren't already
@@ -1655,6 +1671,17 @@ async function POST_changeHiringStage(req, res) {
     } catch (error) {
         console.log("Error verifying business user or getting candidate position index: ", error);
         return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(bizUser.businessInfo.businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Upgrade to a paid plan to change hiring stages.");
     }
 
     // if dismissing a candidate
@@ -1787,6 +1814,17 @@ async function POST_moveCandidates(req, res) {
     }
     if (!businessId) {
         return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Upgrade to a paid plan to change hiring stages.");
     }
 
     // find all candidates that should be altered
@@ -2064,62 +2102,6 @@ async function POST_contactUsEmail(req, res) {
     }
 
     return res.status(200).send({ success: true });
-}
-
-// updates a candidate for a business as Contacted, Interviewing, Dismissed, etc
-async function POST_updateHiringStage(req, res) {
-    const body = req.body;
-    const bizUserId = sanitize(body.userId);
-    const verificationToken = sanitize(body.verificationToken);
-    const userId = sanitize(body.candidateId);
-    const hiringStage = sanitize(body.hiringStage);
-    const isDismissed = sanitize(body.isDismissed);
-    const positionId = sanitize(body.positionId);
-
-    // verify biz user, get candidate, find and verify candidate's position
-    let bizUser, user, userPositionIndex;
-    try {
-        let results = await verifyBizUserAndFindUserPosition(
-            bizUserId,
-            verificationToken,
-            positionId,
-            userId
-        );
-        bizUser = results.bizUser;
-        user = results.user;
-        userPositionIndex = results.userPositionIndex;
-    } catch (error) {
-        console.log("Error verifying business user or getting user position index: ", error);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    let userPosition = user.positions[userPositionIndex];
-
-    // update all new hiring stage info
-    userPosition.hiringStage = hiringStage;
-    userPosition.isDismissed = isDismissed;
-    // make sure hiring stage changes array exists
-    if (!Array.isArray(userPosition.hiringStageChanges)) {
-        userPosition.hiringStageChanges = [];
-    }
-    userPosition.hiringStageChanges.push({
-        hiringStage,
-        isDismissed,
-        dateChanged: new Date()
-    });
-
-    // save the new info into the candidate object
-    user.positions[userPositionIndex] = userPosition;
-
-    // save the user
-    try {
-        user = await user.save();
-    } catch (saveUserError) {
-        console.log("Error saving user while trying to update hiring stage: ", saveUserError);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    res.json(true);
 }
 
 // returns the business user object, the candidate/employee, and the index of
