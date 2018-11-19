@@ -113,6 +113,13 @@ class MyCandidates extends Component {
 
     componentDidMount() {
         const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         let self = this;
         // set an event listener for key presses
         document.addEventListener("keyup", this.bound_handleKeyPress);
@@ -120,19 +127,15 @@ class MyCandidates extends Component {
         // view should be shown
         window.addEventListener("resize", this.bound_handleResize);
         // see if the popup should be open
-        if (
-            this.props.currentUser &&
-            this.props.currentUser.popups &&
-            this.props.currentUser.popups.candidateModal
-        ) {
+        if (currentUser && currentUser.popups && currentUser.popups.candidateModal) {
             this.props.generalAction("OPEN_CANDIDATES_POPUP_MODAL");
         }
         // get the open positions that this business has
         axios
             .get("/api/business/positions", {
                 params: {
-                    userId: this.props.currentUser._id,
-                    verificationToken: this.props.currentUser.verificationToken
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
                 }
             })
             .then(function(res) {
@@ -278,6 +281,14 @@ class MyCandidates extends Component {
 
     // get candidates for the current position from the back end
     findCandidates() {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         // if there are no positions OR if there are positions and one is selected
         if (this.state.noPositions || this.state.position) {
             axios
@@ -286,8 +297,8 @@ class MyCandidates extends Component {
                         searchTerm: this.state.term,
                         // searching by position name right now, could search by id if want to
                         positionName: this.state.position,
-                        userId: this.props.currentUser._id,
-                        verificationToken: this.props.currentUser.verificationToken,
+                        userId: currentUser._id,
+                        verificationToken: currentUser.verificationToken,
                         mockData: this.state.noPositions
                     }
                 })
@@ -567,10 +578,18 @@ class MyCandidates extends Component {
 
     // change how interested the user is in the candidate (number of stars 1-5)
     rateInterest(candidateId, interest) {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         // set the result in the database
         const params = {
-            userId: this.props.currentUser._id,
-            verificationToken: this.props.currentUser.verificationToken,
+            userId: currentUser._id,
+            verificationToken: currentUser.verificationToken,
             positionId: this.state.positionId,
             candidateId,
             interest
@@ -642,10 +661,18 @@ class MyCandidates extends Component {
 
     // change a candidate's hiring stage
     hiringStageChange(candidateId, hiringStage) {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         // CHANGE HIRING STAGE IN BACK END
         const params = {
-            userId: this.props.currentUser._id,
-            verificationToken: this.props.currentUser.verificationToken,
+            userId: currentUser._id,
+            verificationToken: currentUser.verificationToken,
             positionId: this.state.positionId,
             candidateId,
             hiringStage
@@ -693,6 +720,14 @@ class MyCandidates extends Component {
             return;
         }
 
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         // copy "this"
         const self = this;
         // get the ids of every selected candidate
@@ -706,8 +741,8 @@ class MyCandidates extends Component {
 
         // MOVE THE CANDIDATE IN THE BACK END
         const params = {
-            userId: this.props.currentUser._id,
-            verificationToken: this.props.currentUser.verificationToken,
+            userId: currentUser._id,
+            verificationToken: currentUser.verificationToken,
             positionId: this.state.positionId,
             candidateIds,
             moveTo
@@ -1047,7 +1082,15 @@ class MyCandidates extends Component {
     }
 
     hideMessage() {
-        let popups = this.props.currentUser.popups;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
+        let popups = currentUser.popups;
         if (popups) {
             popups.candidates = false;
         } else {
@@ -1055,8 +1098,8 @@ class MyCandidates extends Component {
             popups.candidates = false;
         }
 
-        const userId = this.props.currentUser._id;
-        const verificationToken = this.props.currentUser.verificationToken;
+        const userId = currentUser._id;
+        const verificationToken = currentUser.verificationToken;
 
         this.props.hidePopups(userId, verificationToken, popups);
         this.props.intercomEvent("candidates_page_first_time", userId, verificationToken, null);
@@ -1106,11 +1149,9 @@ class MyCandidates extends Component {
     }
 
     popup() {
-        if (
-            this.props.currentUser &&
-            this.props.currentUser.popups &&
-            this.props.currentUser.popups.candidates
-        ) {
+        const { currentUser } = this.props;
+
+        if (currentUser && currentUser.popups && currentUser.popups.candidates) {
             return (
                 <div className="center" key="popup box">
                     <div className="popup-box font16px font14pxUnder700 font12pxUnder500">
@@ -1411,7 +1452,10 @@ class MyCandidates extends Component {
     }
 
     render() {
-        const currentUser = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return null;
+        }
         let positionId = this.state.positionId;
 
         const tabs = (
@@ -1424,7 +1468,8 @@ class MyCandidates extends Component {
         const candidateResultsClass = "candidateResults " + resultsWidthClass;
         const leftArrowContainerClass = "left arrowContainer " + resultsWidthClass;
         const rightArrowContainerClass = "right arrowContainer " + resultsWidthClass;
-        const blurredClass = this.props.blurModal || this.props.lockedAccountModal ? "dialogForBizOverlay" : "";
+        const blurredClass =
+            this.props.blurModal || this.props.lockedAccountModal ? "dialogForBizOverlay" : "";
 
         // if the candidate is at the top of the list or not in the current list, disable the left arrow
         const leftArrowClass =
@@ -1455,7 +1500,7 @@ class MyCandidates extends Component {
                 ref="myCandidates"
             >
                 <div className={blurredClass}>
-                    {this.props.currentUser.userType == "accountAdmin" ? (
+                    {currentUser.userType == "accountAdmin" ? (
                         <AddUserDialog position={this.state.position} tab={"Candidate"} />
                     ) : null}
                     <AddPositionDialog />
@@ -1587,7 +1632,6 @@ function mapStateToProps(state) {
         loading: state.users.loadingSomething,
         blurModal: state.users.candidatesPopupModalOpen,
         lockedAccountModal: state.users.lockedAccountModal
-
     };
 }
 
