@@ -43,28 +43,24 @@ class AdminView extends Component {
 
     intercomMsg = () => {
         const { currentUser } = this.props;
-        if (!currentUser) {
-            return this.props.addNotification(
-                "You aren't logged in! Try refreshing the page.",
-                "error"
-            );
+        if (currentUser) {
+            var { _id, verificationToken } = currentUser;
+        } else {
+            var _id = undefined;
+            var verificationToken = undefined;
         }
-
-        const { _id, verificationToken } = currentUser;
         // trigger intercom event
         this.props.intercomEvent("onboarding-step-2", _id, verificationToken, null);
     };
 
     intercomMsgPart3 = () => {
         const { currentUser } = this.props;
-        if (!currentUser) {
-            return this.props.addNotification(
-                "You aren't logged in! Try refreshing the page.",
-                "error"
-            );
+        if (currentUser) {
+            var { _id, verificationToken } = currentUser;
+        } else {
+            var _id = undefined;
+            var verificationToken = undefined;
         }
-
-        const { _id, verificationToken } = currentUser;
         // trigger intercom event
         this.props.intercomEvent("onboarding-step-3", _id, verificationToken, null);
     };

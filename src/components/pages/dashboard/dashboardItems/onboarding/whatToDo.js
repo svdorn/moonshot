@@ -58,11 +58,20 @@ class WhatToDo extends Component {
 
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, -1);
-        this.props.addNotification("Free until you make your first hire or evaluate 20 candidates, whichever comes first.", "info");
+        this.props.addNotification(
+            "Free until you make your first hire or evaluate 20 candidates, whichever comes first.",
+            "info"
+        );
     };
 
     intercomMsg = () => {
-        const { _id, verificationToken } = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (currentUser) {
+            var { _id, verificationToken } = currentUser;
+        } else {
+            var _id = undefined;
+            var verificationToken = undefined;
+        }
         // trigger intercom event
         this.props.intercomEvent("onboarding-step-4", _id, verificationToken, null);
     };

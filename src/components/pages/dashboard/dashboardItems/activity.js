@@ -258,14 +258,12 @@ class Activity extends Component {
 
     needHelpIntercomEvent = () => {
         const { currentUser } = this.props;
-        if (!currentUser) {
-            return this.props.addNotification(
-                "You aren't logged in! Try refreshing the page.",
-                "error"
-            );
+        if (currentUser) {
+            var { _id, verificationToken } = currentUser;
+        } else {
+            var _id = undefined;
+            var verificationToken = undefined;
         }
-
-        const { _id, verificationToken } = currentUser;
 
         this.props.intercomEvent("need_help_embedding_link", _id, verificationToken, null);
     };
