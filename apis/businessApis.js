@@ -1744,7 +1744,7 @@ async function POST_changeHiringStage(req, res) {
         if (
             business &&
             business.fullAccess &&
-            (!business.billing || (business.billing && !business.billing.subscription)) &&
+            (!business.billing || (business.billing && !business.billing.subscription && !business.billing.customPlan)) &&
             (business.candidateCount && business.candidateCount < 20)
         ) {
             business.fullAccess = false;

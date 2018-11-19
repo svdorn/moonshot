@@ -1599,7 +1599,7 @@ async function advance(user, businessId, positionId) {
                 }
 
                 // if trial has ended and need to restrict access, restrict access
-                if (business && business.candidateCount && business.candidateCount > 18 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                if (business && business.candidateCount && business.candidateCount > 18 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription && !business.billing.customPlan)) {
                     // get all account admins for this business
                     try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
                     catch(getUsersError) {
@@ -1635,7 +1635,7 @@ async function advance(user, businessId, positionId) {
                     }
                 }
                 // if trial is coming to an end, send email
-                else if (business && business.candidateCount && business.candidateCount === 12 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription))) {
+                else if (business && business.candidateCount && business.candidateCount === 12 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription && !business.billing.customPlan))) {
                     // get all account admins for this business
                     try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
                     catch(getUsersError) {
