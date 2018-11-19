@@ -73,7 +73,7 @@ class InviteCandidatesModal extends Component {
                         </div>
                         <div>
                             All the best,
-                            <div>{getFirstName(currentUser.name)}</div>
+                            <div>{currentUser ? getFirstName(currentUser.name) : ""}</div>
                         </div>
                     </div>
                 </div>
