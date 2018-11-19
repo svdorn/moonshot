@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -12,7 +12,6 @@ import { primaryCyan } from "../../../../colors";
 
 import "../dashboard.css";
 
-
 class Billing extends Component {
     constructor(props) {
         super(props);
@@ -25,16 +24,25 @@ class Billing extends Component {
         };
     }
 
-
     // load graph data for the candidate completions over last week
     componentDidMount() {
         const self = this;
         const { currentUser, billing, fullAccess, getBillingInfo } = this.props;
 
-        // if already have billng
-        if (billing) { return this.getState(billing); }
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
 
-        const businessId = currentUser && currentUser.businessInfo ? currentUser.businessInfo.businessId : null;
+        // if already have billng
+        if (billing) {
+            return this.getState(billing);
+        }
+
+        const businessId =
+            currentUser && currentUser.businessInfo ? currentUser.businessInfo.businessId : null;
 
         getBillingInfo(currentUser._id, currentUser.verificationToken, businessId);
     }
@@ -48,7 +56,9 @@ class Billing extends Component {
     freeContent() {
         return (
             <div>
-                {"It's free until you make your first hire or evaluate 20 candidates, whichever comes first."}
+                {
+                    "It's free until you make your first hire or evaluate 20 candidates, whichever comes first."
+                }
             </div>
         );
     }
@@ -56,8 +66,11 @@ class Billing extends Component {
     freePlanEnded() {
         return (
             <div>
-                Your free plan has ended but everything has been saved for you. <span className="primary-cyan clickable" onClick={() => goTo("/billing")}>Select a plan</span> to continue
-                using your account.
+                Your free plan has ended but everything has been saved for you.{" "}
+                <span className="primary-cyan clickable" onClick={() => goTo("/billing")}>
+                    Select a plan
+                </span>{" "}
+                to continue using your account.
             </div>
         );
     }
@@ -65,8 +78,11 @@ class Billing extends Component {
     currentPlanEnded() {
         return (
             <div>
-                Your current plan has ended but everything has been saved for you. <span className="primary-cyan clickable" onClick={() => goTo("/billing")}>Select a new plan</span> to continue
-                using your account.
+                Your current plan has ended but everything has been saved for you.{" "}
+                <span className="primary-cyan clickable" onClick={() => goTo("/billing")}>
+                    Select a new plan
+                </span>{" "}
+                to continue using your account.
             </div>
         );
     }
@@ -74,8 +90,11 @@ class Billing extends Component {
     currentPlanEnding(date) {
         return (
             <div>
-                Your current plan is ending {new Date(date).toDateString()}. <span className="primary-cyan clickable" onClick={() => goTo("/billing")}>Select a new plan</span> to continue
-                using your account.
+                Your current plan is ending {new Date(date).toDateString()}.{" "}
+                <span className="primary-cyan clickable" onClick={() => goTo("/billing")}>
+                    Select a new plan
+                </span>{" "}
+                to continue using your account.
             </div>
         );
     }
@@ -83,12 +102,14 @@ class Billing extends Component {
     unlimited() {
         return (
             <div>
-                {"Invite unlimited candidates, create evaluations for all your open positions and evaluate employees to customize and improve your candidate predictions."}
+                {
+                    "Invite unlimited candidates, create evaluations for all your open positions and evaluate employees to customize and improve your candidate predictions."
+                }
             </div>
         );
     }
 
-    getState = (billing) => {
+    getState = billing => {
         const { fullAccess } = this.props;
 
         let currentPlan = "";
@@ -122,8 +143,8 @@ class Billing extends Component {
             }
         }
 
-        return this.setState({ billing, currentPlan, html, CTA })
-    }
+        return this.setState({ billing, currentPlan, html, CTA });
+    };
 
     render() {
         const { billing } = this.props;
@@ -142,16 +163,18 @@ class Billing extends Component {
         const header = (
             <div styleName="box-header">
                 <div styleName="box-title">
-                    Plan: <span className="primary-cyan clickableNoUnderline" onClick={() => goTo("/billing")}>{ currentPlan }</span>
+                    Plan:{" "}
+                    <span
+                        className="primary-cyan clickableNoUnderline"
+                        onClick={() => goTo("/billing")}
+                    >
+                        {currentPlan}
+                    </span>
                 </div>
             </div>
         );
 
-        const content = (
-            <div style={{padding: "20px 14px"}}>
-                { html }
-            </div>
-        );
+        const content = <div style={{ padding: "20px 14px" }}>{html}</div>;
 
         const smallCTA = (
             <div styleName="box-cta" onClick={() => goTo("/billing")}>
@@ -161,14 +184,13 @@ class Billing extends Component {
 
         return (
             <div>
-                { header }
-                { content }
-                { smallCTA }
+                {header}
+                {content}
+                {smallCTA}
             </div>
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -180,11 +202,16 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        generalAction,
-        getBillingInfo
-    }, dispatch);
+    return bindActionCreators(
+        {
+            generalAction,
+            getBillingInfo
+        },
+        dispatch
+    );
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Billing);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Billing);
