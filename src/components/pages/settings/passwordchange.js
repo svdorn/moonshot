@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { changePassword } from "../../../actions/usersActions";
+import { changePassword, addNotification } from "../../../actions/usersActions";
 import { TextField, RaisedButton, Paper, CircularProgress } from "material-ui";
 import { Field, reduxForm } from "redux-form";
 
@@ -49,6 +49,15 @@ const validate = values => {
 class PasswordChange extends Component {
     handleSubmit(e) {
         e.preventDefault();
+
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         // values that were entered in the form
         const vals = this.props.formData.changePassword.values;
         // Form validation before submit
@@ -70,7 +79,7 @@ class PasswordChange extends Component {
 
         // info the server needs to change the password
         const user = {
-            _id: this.props.currentUser._id,
+            _id: currentUser._id,
             oldpass: this.props.formData.changePassword.values.oldpass,
             password: this.props.formData.changePassword.values.password
         };
@@ -129,7 +138,8 @@ class PasswordChange extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            changePassword
+            changePassword,
+            addNotification
         },
         dispatch
     );

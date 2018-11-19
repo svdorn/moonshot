@@ -37,10 +37,18 @@ class Settings extends Component {
     };
 
     resetAlan = () => {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         axios
             .post("/api/misc/resetAlan", {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
+                userId: currentUser._id,
+                verificationToken: currentUser.verificationToken
             })
             .then(response => {
                 this.props.addNotification("Reset!", "info");
