@@ -1,5 +1,6 @@
 "use strict";
 import React, { Component } from "react";
+import axios from "axios";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification } from "../../../../actions/usersActions";
@@ -58,6 +59,14 @@ class Psych extends Component {
     constructor(props) {
         super(props);
 
+        const { currentUser } = props;
+        if (currentUser) {
+            var { _id: userId, verificationToken } = currentUser;
+        } else {
+            var userId = undefined;
+            var verificationToken = undefined;
+        }
+
         this.state = {
             site: sites[0],
             factors: [],
@@ -69,7 +78,8 @@ class Psych extends Component {
             comparableFacets: [],
             compareOpen: false,
             chartType: "line",
-            dots: false
+            dots: false,
+            standardGETparams: { params: { userId, verificationToken } }
         };
     }
 
@@ -103,46 +113,15 @@ class Psych extends Component {
 
     // get data about every factor
     getFactorData = () => {
-        const data = [
-            { name: "-4.75", quantity: 456 },
-            { name: "-4.25", quantity: 230 },
-            { name: "-3.75", quantity: 345 },
-            { name: "-3.25", quantity: 450 },
-            { name: "-2.75", quantity: 321 },
-            { name: "-2.25", quantity: 235 },
-            { name: "-1.75", quantity: 267 },
-            { name: "-1.25", quantity: 378 },
-            { name: "-0.75", quantity: 210 },
-            { name: "-0.25", quantity: 23 },
-            { name: "0.25", quantity: 45 },
-            { name: "0.75", quantity: 90 },
-            { name: "1.25", quantity: 130 },
-            { name: "1.75", quantity: 11 },
-            { name: "2.25", quantity: 107 },
-            { name: "2.75", quantity: 926 },
-            { name: "3.25", quantity: 653 },
-            { name: "3.75", quantity: 366 },
-            { name: "4.25", quantity: 486 },
-            { name: "4.75", quantity: 512 }
-        ];
-
-        const factors = [
-            {
-                name: "Honesty-Humility",
-                dataPoints: randomData[0],
-                average: 2.3,
-                stdDev: 0.41
-            },
-            { name: "Extraversion", dataPoints: randomData[1], average: 2.3, stdDev: 0.41 },
-            {
-                name: "Dinglification",
-                dataPoints: randomData[2],
-                average: -1.6,
-                stdDev: 0.53
-            }
-        ];
-
-        this.setState({ factors });
+        const self = this;
+        axios
+            .get("/api/admin/dataDisplay/factors", this.state.standardGETparams)
+            .then(result => {
+                self.setState({ factors: result.data.factors });
+            })
+            .catch(error => {
+                console.log("error getting factor data: ", error);
+            });
     };
 
     // get data about every facet
