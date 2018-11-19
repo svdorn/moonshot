@@ -698,7 +698,11 @@ export function postUser(user) {
         axios
             .post("/api/candidate/candidate", user)
             .then(response => {
-                dispatch({ type: "POST_USER", user: response.data.user, fullAccess: response.data.fullAccess });
+                dispatch({
+                    type: "POST_USER",
+                    user: response.data.user,
+                    fullAccess: response.data.fullAccess
+                });
                 goTo("/myEvaluations");
             })
             .catch(error => {
@@ -864,40 +868,6 @@ export function changePasswordForgot(user) {
     };
 }
 
-// Send an email when somebody completes a pathway
-export function completePathway(user) {
-    return function(dispatch) {
-        // dispatch({type: "COMPLETE_PATHWAY_REQUESTED"});
-        //
-        // axios.post("api/candidate/completePathway", user)
-        //     .then(function(response) {
-        //         dispatch({ type:"COMPLETE_PATHWAY", user: response.data.user, ...notification(response) });
-        //         browserHistory.push('/');
-        //         window.scrollTo(0, 0);
-        //     })
-        //     .catch(function(err) {
-        //         // info we get back from the error
-        //         const errData = err.response.data;
-        //         // if the error is due to the user not having all steps complete
-        //         if (typeof errData === "object" && errData.incompleteSteps) {
-        //             dispatch({type: "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS", incompleteSteps: errData.incompleteSteps});
-        //             return;
-        //         }
-        //
-        //         // if there is a notification message, show that
-        //         let notification = undefined;
-        //         if (typeof errData === "string") {
-        //             notification = {
-        //                 message: errData,
-        //                 type: "errorHeader"
-        //             }
-        //         }
-        //
-        //         dispatch({ type:"COMPLETE_PATHWAY_REJECTED", notification })
-        //     })
-    };
-}
-
 // get rid of any old incomplete steps that would prevent the user from
 // completing a pathway
 export function resetIncompleteSteps() {
@@ -978,59 +948,6 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
             });
     };
 }
-
-// export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
-//     return function(dispatch) {
-//         axios.post("/api/candidate/updateAllOnboarding", {
-//             params: { userId, verificationToken, interests, goals, info }
-//         })
-//         .then(function(response) {
-//             dispatch({type: "UPDATE_USER_ONBOARDING", user: response.data});
-//         })
-//         .catch(function(err) {
-//             // console.log("Error updating onboarding info: ", err);
-//         })
-//     }
-// }
-
-// export function startOnboarding(){
-//     return function(dispatch) {
-//         dispatch({type: "START_ONBOARDING"});
-//     }
-// }
-
-// export function endOnboarding(user, markOnboardingComplete, removeRedirectField){
-//     return function(dispatch) {
-//         if (markOnboardingComplete) {
-//             axios.post("/api/candidate/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
-//             .then(function(response) {
-//                 dispatch({type: "END_ONBOARDING", user: response.data});
-//             })
-//             .catch(function(err) {
-//                 // onboarding setting not able to be turned off for some reason
-//                 // console.log("onboarding mark complete error: ", err);
-//                 dispatch({type: "END_ONBOARDING_REJECTED"});
-//             })
-//         } else {
-//             dispatch({type: "END_ONBOARDING"});
-//         }
-//
-//     }
-// }
-
-// // change info during onboarding for automating candidate emails
-// export function changeAutomateInvites(args) {
-//     return function (dispatch) {
-//         dispatch({ type: "CHANGE_AUTOMATE_INVITES", args });
-//     }
-// }
-
-// // removes the top step for going back from the stack of Back options
-// export function popGoBackStack() {
-//     return function(dispatch) {
-//         dispatch({ type: "POP_GO_BACK_STACK" });
-//     }
-// }
 
 // set the state of the current position evaluation
 export function setEvaluationState(evaluationState) {
