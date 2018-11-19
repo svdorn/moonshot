@@ -36,7 +36,9 @@ const {
 const { calculatePsychScores } = require("./psychApis");
 
 // will contain all the exports
-module.exports = {};
+module.exports = {
+    sendIntercomPlanUpdate
+};
 
 // answer a question that is shown on the administrative questions portion of an evaluation
 module.exports.POST_answerAdminQuestion = async function(req, res) {
@@ -1678,6 +1680,7 @@ async function sendIntercomPlanUpdate(intercom, update) {
     return new Promise(async function(resolve, reject) {
         if (typeof update !== "string") {
             console.log("error in send intercom plan update, insufficient arguments");
+            console.log("update not a string")
             return resolve();
         }
         if (!intercom || !intercom.id) {

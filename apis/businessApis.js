@@ -76,6 +76,9 @@ const businessApis = {
     sendEmailInvite
 };
 
+const { sendIntercomPlanUpdate } = require("./evaluationApis");
+
+
 // ----->> START APIS <<----- //
 
 async function GET_adminList(req, res) {
@@ -1710,13 +1713,36 @@ async function POST_changeHiringStage(req, res) {
             );
         }
 
-        // check if need to lock them out of their account
+        // check if need to lock them out of their account if free trial ends because they hired their first person
         if (
             business &&
             business.fullAccess &&
-            (!business.billing || (business.billing && !business.billing.subscription))
+            (!business.billing || (business.billing && !business.billing.subscription)) &&
+            (business.candidateCount && business.candidateCount < 20)
         ) {
             business.fullAccess = false;
+
+            // get all account admins for this business
+            try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
+            catch(getUsersError) {
+                console.log("error getting admins when trying to send them free trial ending message");
+            }
+            // will contain all the promises for sending emails
+            let intercomPromises = [];
+
+            // add a promise to create a code and send an email for each given address
+            admins.forEach(admin => {
+                intercomPromises.push(
+                    sendIntercomPlanUpdate(admin.intercom, "ended")
+                );
+            });
+
+            // wait for all the emails to send
+            try {
+                await Promise.all(intercomPromises);
+            } catch (sendEmailsError) {
+                console.log("error getting admins when trying to send them free trial ending message");
+            }
         }
 
         try {
