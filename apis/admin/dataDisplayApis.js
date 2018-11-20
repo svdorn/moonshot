@@ -1,5 +1,6 @@
 const app = require("../../apiServer");
 const Users = require("../../models/users");
+const PsychUsers = require("../../models/psychUsers");
 const { getAndVerifyUser, sanitize } = require("../helperFunctions");
 const errors = require("../errors");
 
@@ -43,18 +44,26 @@ async function GET_factors(req, res, next) {
         return res.status(403).send({ message: errors.PERMISSIONS_ERROR });
     }
 
+    console.log("site: ", site);
+
     // get all the factors
     try {
-        var insightsFactors = await Users.aggregate(factorsAggregation);
+        let insightsFactors = ["All", "Insights"].includes(site)
+            ? await Users.aggregate(factorsAggregation)
+            : [];
+
+        let learningFactors = ["All", "Learning"].includes(site)
+            ? await PsychUsers.aggregate(factorsAggregation)
+            : [];
+
+        var allFactors = insightsFactors.concat(learningFactors);
     } catch (e) {
         console.log("Error getting factor data: ", e);
         return res.status(500).send({ message: "Error getting data :(" });
     }
 
     // go through each factor, group factors by factor name
-    let factorArraysObj = makeFactorArraysObj(insightsFactors);
-
-    console.log("factorArraysObj: ", factorArraysObj);
+    let factorArraysObj = makeFactorArraysObj(allFactors);
 
     // an array that will contain the factors that will be returned to the front end
     let newFactorObjs = [];

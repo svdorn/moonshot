@@ -79,7 +79,7 @@ class Psych extends Component {
             compareOpen: false,
             chartType: "line",
             dots: false,
-            standardGETparams: { params: { userId, verificationToken } }
+            GETparams: { userId, verificationToken }
         };
     }
 
@@ -115,7 +115,9 @@ class Psych extends Component {
     getFactorData = () => {
         const self = this;
         axios
-            .get("/api/admin/dataDisplay/factors", this.state.standardGETparams)
+            .get("/api/admin/dataDisplay/factors", {
+                params: { ...this.state.GETparams, site: this.state.site }
+            })
             .then(result => {
                 self.setState({ factors: result.data.factors });
             })
