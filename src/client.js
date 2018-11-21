@@ -29,9 +29,10 @@ import routes from './routes'
 
 if (!shouldRedirectToHttps) {
     let stripe_pk = "pk_test_7AHdmETWVxOeyDARcZfeWuZl";
-    if (window.location.hostname !== "localhost") {
-        stripe_pk = "pk_live_UC72NJ4kPiHRmMM5c7cc7U63";
-    }
+    // STRIPE TESTING
+    // if (window.location.hostname !== "localhost") {
+    //     stripe_pk = "pk_live_UC72NJ4kPiHRmMM5c7cc7U63";
+    // }
     // STEP 1 create the store
     const middleware = applyMiddleware(thunk);
     // WE WILL PASS INITIAL STATE FROM SERVER STORE

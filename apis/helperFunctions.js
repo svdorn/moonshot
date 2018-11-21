@@ -7,7 +7,9 @@ const UnsubscribedEmails = require("../models/unsubscribedEmails.js");
 const UniqueEmails = require("../models/uniqueEmails.js");
 const Businesses = require('../models/businesses.js');
 const Skills = require('../models/skills.js');
-const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
+// STRIPE TESTING
+const stripe = require("stripe")(credentials.stripeTestSk);
+//const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 
 const errors = require("./errors");
 const crypto = require('crypto');

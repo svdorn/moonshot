@@ -3,7 +3,9 @@ const Users = require('../models/users.js');
 const credentials = require('../credentials');
 
 const mongoose = require('mongoose');
-const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
+// STRIPE TESTING
+const stripe = require("stripe")(credentials.stripeTestSk);
+//const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 const errors = require('./errors');
 
 // get helper functions

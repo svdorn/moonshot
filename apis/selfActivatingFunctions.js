@@ -3,7 +3,9 @@ const Businesses = require('../models/businesses.js');
 const credentials = require('../credentials');
 
 const mongoose = require("mongoose");
-const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
+// STRIPE TESTING
+const stripe = require("stripe")(credentials.stripeTestSk);
+//const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 var CronJob = require("cron").CronJob;
 
 // get helper functions
@@ -31,10 +33,10 @@ if (liveSite) {
     new CronJob("0 0 6 * * *", safeStripeUpdates, onComplete, onStart, timezone);
 }
 // STRIPE TESTING
-// const onComplete = null;
-// const onStart = true;
-// const timezone = "America/Los_Angeles";
-// new CronJob("0 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
+const onComplete = null;
+const onStart = true;
+const timezone = "America/Los_Angeles";
+new CronJob("5 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
 
 
 async function safeSendUpdateEmails() {
@@ -432,11 +434,8 @@ async function stripeUpdates() {
                         if (subIdx !== -1) {
                             const subscription = subscriptions.data[subIdx];
                             // the plan is still active and is the correct plan
-                            // cancel the plan at the end of the period
                             try {
-                                // STRIPE TESTING
-                                // var updatedSubscription = await stripe.subscriptions.del(subscription.id);
-
+                                // cancel the plan at the end of the period
                                 var updatedSubscription = await stripe.subscriptions.update(subscription.id, {cancel_at_period_end: true});
                             } catch (deleteSubscriptionError) {
                                 console.log("Error deleting subscription from stripe for business with id: ", business._id, " with error: ", deleteSubscriptionError);
