@@ -1,9 +1,9 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
 import MetaTags from "react-meta-tags";
 import { addNotification, setEvaluationState } from "../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../miscFunctions";
@@ -16,7 +16,6 @@ import PsychTest from "./psychTest";
 import CognitiveTest from "./cognitiveTest";
 import SkillTest from "./skillTest";
 
-
 class Evaluation extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +23,12 @@ class Evaluation extends Component {
         // get position and business ids from url
         const { businessId, positionId } = props.params;
         // get user credentials
-        const { _id, verificationToken } = props.currentUser;
+        if (props.currentUser) {
+            var { _id, verificationToken } = props.currentUser;
+        } else {
+            var _id = undefined;
+            var verificationToken = undefined;
+        }
         // general arguments for post api call
         const generalApiPostArgs = {
             userId: _id,
@@ -66,16 +70,15 @@ class Evaluation extends Component {
         };
     }
 
-
     // check that the user has permission to be here and where they currently
     // are in their evaluation
     componentWillMount() {
         // get the current stage so we can see what user wants to do
-        axios.post("/api/evaluation/getInitialState", this.state.generalApiPostArgs)
-        .then(this.handleInitialState.bind(this))
-        .catch(this.handleError.bind(this));
+        axios
+            .post("/api/evaluation/getInitialState", this.state.generalApiPostArgs)
+            .then(this.handleInitialState.bind(this))
+            .catch(this.handleError.bind(this));
     }
-
 
     // handle the response with initial state data
     handleInitialState(response) {
@@ -99,12 +102,15 @@ class Evaluation extends Component {
             }
             // if the user has not started this and is not in the middle of
             // a different eval, ask if ready to start this
-            else { this.setState({ readyToStart: true, initialLoad: false }); }
+            else {
+                this.setState({ readyToStart: true, initialLoad: false });
+            }
         }
         // no information was returned, show that something went wrong
-        else { throw("No position state."); }
+        else {
+            throw "No position state.";
+        }
     }
-
 
     // handle any error returned when getting initial evaluation state
     handleError(error) {
@@ -128,12 +134,15 @@ class Evaluation extends Component {
                 });
             }
             // any other error
-            else { this.setErrorState(); }
+            else {
+                this.setErrorState();
+            }
         }
         // unknown error
-        else { this.setErrorState(); }
+        else {
+            this.setErrorState();
+        }
     }
-
 
     setErrorState() {
         // add notification telling user to try again
@@ -145,15 +154,14 @@ class Evaluation extends Component {
         });
     }
 
-
     // gets the current state of the evaluation
     getEvalState = () => {
         this.setState({ loading: true });
-        axios.get("/api/evaluation/currentState", this.state.generalApiGetArgs)
-        .then(this.setEvalState.bind(this))
-        .catch(this.handleError.bind(this));
-    }
-
+        axios
+            .get("/api/evaluation/currentState", this.state.generalApiGetArgs)
+            .then(this.setEvalState.bind(this))
+            .catch(this.handleError.bind(this));
+    };
 
     // displays an error page telling the user to try again or go home
     createErrorPage() {
@@ -161,13 +169,15 @@ class Evaluation extends Component {
         if (this.state.errorMessage) {
             return (
                 <div className="center primary-white">
-                    <div className="font20px" style={{margin: "20px"}}>Something went wrong.</div>
+                    <div className="font20px" style={{ margin: "20px" }}>
+                        Something went wrong.
+                    </div>
                     <div className="font14px">
                         {this.state.errorMessage} Try refreshing or contacting support.
                     </div>
                     <div
                         className="button medium round-4px background-primary-cyan"
-                        style={{margin: "20px"}}
+                        style={{ margin: "20px" }}
                         onClick={() => goTo("/myEvaluations")}
                     >
                         Take Me Home
@@ -180,7 +190,6 @@ class Evaluation extends Component {
         return <MiscError />;
     }
 
-
     // user is not doing psych test or gca test or anything at this moment, ask
     // them what they want to do now
     createPreTestContent() {
@@ -189,19 +198,19 @@ class Evaluation extends Component {
                 <div>
                     <p>You{"'"}ve already started this evaluation.</p>
                     <p>Ready to get back into it?</p>
-                    {this.state.loading ?
+                    {this.state.loading ? (
                         <CircularProgress color="secondary" />
-                        :
+                    ) : (
                         <div className={button.purpleBlue} onClick={this.getEvalState}>
                             Let{"'"}s Go!
                         </div>
-                    }
+                    )}
                 </div>
             );
         }
         // TODO: if the user is in the middle of a different eval already
         else if (this.state.evalInProgress) {
-            return <div>Want to switch to your other eval?</div>
+            return <div>Want to switch to your other eval?</div>;
         }
         // TODO: if the user is ready to start the eval, ask them if they want
         // to start it
@@ -215,41 +224,42 @@ class Evaluation extends Component {
         }
     }
 
-
     // the screen that shows up telling the user they can start whenever ready
     startEvalPrompt() {
         return (
             <div>
-                <p>This evaluation consists of some quick administrative questions, a personality evaluation, and a pattern recognition test.</p>
+                <p>
+                    This evaluation consists of some quick administrative questions, a personality
+                    evaluation, and a pattern recognition test.
+                </p>
                 <p>Employers cannot see your answers to any of these questions.</p>
                 <p>There will be a progress bar so you can see how much you have completed.</p>
-                <p>Before every section there will be an introduction with instructions. Read them carefully.</p>
+                <p>
+                    Before every section there will be an introduction with instructions. Read them
+                    carefully.
+                </p>
                 <p>Click the button to start once you are ready.</p>
-                { this.state.loadingNextPage ?
+                {this.state.loadingNextPage ? (
                     <CircularProgress color="secondary" />
-                    :
-                    <div
-                        className={button.purpleBlue}
-                        onClick={this.startEval}
-                    >
+                ) : (
+                    <div className={button.purpleBlue} onClick={this.startEval}>
                         Start
                     </div>
-                }
+                )}
             </div>
-        )
+        );
     }
-
 
     // start the evaluation!
     startEval = () => {
         // replace the Start button with a loading circle
         this.setState({ loading: true });
 
-        axios.post("/api/evaluation/start", this.state.generalApiPostArgs)
-        .then(this.setEvalState.bind(this))
-        .catch(this.handleError.bind(this));
-    }
-
+        axios
+            .post("/api/evaluation/start", this.state.generalApiPostArgs)
+            .then(this.setEvalState.bind(this))
+            .catch(this.handleError.bind(this));
+    };
 
     // set the new state of an eval from an api call
     setEvalState(response) {
@@ -264,7 +274,6 @@ class Evaluation extends Component {
         }
     }
 
-
     // page to show if a user comes here after already having finished the eval
     finishedPage() {
         return (
@@ -272,11 +281,12 @@ class Evaluation extends Component {
                 <h3>Congratulations!</h3>
                 <p>You finished the evaluation!</p>
                 <p>You can safely exit this tab.</p>
-                <div className={button.purpleBlue} onClick={() => goTo("/myEvaluations")}>Take Me Home</div>
+                <div className={button.purpleBlue} onClick={() => goTo("/myEvaluations")}>
+                    Take Me Home
+                </div>
             </div>
         );
     }
-
 
     // create the content that is shown when the user is in the middle of a stage
     // e.g. they are taking the psych analysis, cognitive test, etc...
@@ -290,22 +300,43 @@ class Evaluation extends Component {
 
         // switch block to determine which component type to show
         switch (evaluation.component) {
-            case "Admin Questions": { content = <AdminQuestions {...attrs} />; break; }
-            case "Psychometrics": { content = <PsychTest {...attrs} />; break; }
-            case "Cognitive": { content = <div><CognitiveTest {...attrs} /></div>; break; }
-            case "Skill": { content = <SkillTest {...attrs} />; break; }
-            case "Finished": { content = this.finishedPage(); break; }
-            default: { content = <div>Hmm. Something is wrong. Try refreshing.</div>; break; }
+            case "Admin Questions": {
+                content = <AdminQuestions {...attrs} />;
+                break;
+            }
+            case "Psychometrics": {
+                content = <PsychTest {...attrs} />;
+                break;
+            }
+            case "Cognitive": {
+                content = (
+                    <div>
+                        <CognitiveTest {...attrs} />
+                    </div>
+                );
+                break;
+            }
+            case "Skill": {
+                content = <SkillTest {...attrs} />;
+                break;
+            }
+            case "Finished": {
+                content = this.finishedPage();
+                break;
+            }
+            default: {
+                content = <div>Hmm. Something is wrong. Try refreshing.</div>;
+                break;
+            }
         }
 
         return (
             <div>
                 <ProgressBar />
-                { content }
+                {content}
             </div>
-        )
+        );
     }
-
 
     render() {
         // what will be shown to the user
@@ -313,35 +344,51 @@ class Evaluation extends Component {
 
         // if loading the page, show loading spinner
         if (this.state.initialLoad) {
-            content = <div className="center"><CircularProgress color="secondary" /></div>;
+            content = (
+                <div className="center">
+                    <CircularProgress color="secondary" />
+                </div>
+            );
         }
         // if there is an error loading the eval, show error page
-        else if (this.state.miscError) { return <MiscError />; }
+        else if (this.state.miscError) {
+            return <MiscError />;
+        }
 
         // if there is some error, show an error page
-        else if (this.state.errorMessage) { content = this.createErrorPage(); }
+        else if (this.state.errorMessage) {
+            content = this.createErrorPage();
+        }
 
         // if the test is finished
-        else if (this.state.finished) { content = this.finishedPage(); }
+        else if (this.state.finished) {
+            content = this.finishedPage();
+        }
 
         // if a component is not currently in progress, ask what to do
-        else if (!this.state.inProgress) { content = this.createPreTestContent(); }
+        else if (!this.state.inProgress) {
+            content = this.createPreTestContent();
+        }
 
         // if the user is taking a part of the eval
-        else { content = this.createEvalContent(); }
+        else {
+            content = this.createEvalContent();
+        }
 
         return (
             <div className="fillScreen primary-white center">
                 <MetaTags>
                     <title>Evaluation | Moonshot</title>
-                    <meta name="description" content="Take a position evaluation to see if you and the position make a good match." />
+                    <meta
+                        name="description"
+                        content="Take a position evaluation to see if you and the position make a good match."
+                    />
                 </MetaTags>
-                { content }
+                {content}
             </div>
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -352,11 +399,16 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        addNotification,
-        setEvaluationState
-    }, dispatch);
+    return bindActionCreators(
+        {
+            addNotification,
+            setEvaluationState
+        },
+        dispatch
+    );
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Evaluation);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Evaluation);

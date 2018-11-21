@@ -93,7 +93,13 @@ class CandidateView extends Component {
     };
 
     intercomMsg = instance => {
-        const { _id, verificationToken } = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (currentUser) {
+            var { _id, verificationToken } = currentUser;
+        } else {
+            var _id = undefined;
+            var verificationToken = undefined;
+        }
         // trigger intercom event
         this.props.intercomEvent(`onboarding-step-1${instance}`, _id, verificationToken, null);
     };

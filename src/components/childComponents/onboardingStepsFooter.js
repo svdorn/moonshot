@@ -1,13 +1,13 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification, postBusinessInterests } from '../../actions/usersActions';
-import { withRouter } from 'react-router';
+import { addNotification, postBusinessInterests } from "../../actions/usersActions";
+import { withRouter } from "react-router";
 import { goTo } from "../../miscFunctions";
-import axios from 'axios';
+import axios from "axios";
 
-import './onboardingStepsFooter.css';
+import "./onboardingStepsFooter.css";
 
 const checklistInfo = [
     {
@@ -33,11 +33,18 @@ class OnboardingStepsFooter extends Component {
 
     startOnboarding = () => {
         goTo("/dashboard");
-        const userId = this.props.currentUser._id;
-        const verificationToken = this.props.currentUser.verificationToken;
-        const businessId = this.props.currentUser.businessInfo.businessId;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+        const userId = currentUser._id;
+        const verificationToken = currentUser.verificationToken;
+        const businessId = currentUser.businessInfo.businessId;
         const choiceArr = [];
-        let popups = this.props.currentUser.popups;
+        let popups = currentUser.popups;
         if (popups) {
             popups.businessInterests = false;
         } else {
@@ -46,15 +53,18 @@ class OnboardingStepsFooter extends Component {
         }
 
         this.props.postBusinessInterests(userId, verificationToken, businessId, choiceArr, popups);
-    }
+    };
 
     makeChecklist() {
         const user = this.props.currentUser;
-        if (!user || !user.onboard) { return null; }
+        if (!user || !user.onboard) {
+            return null;
+        }
         const onboard = user.onboard;
         const popups = user.popups;
         const step = onboard && typeof onboard.step === "number" ? onboard.step : 1;
-        const highestStep = onboard && typeof onboard.highestStep === "number" ? onboard.highestStep : 1;
+        const highestStep =
+            onboard && typeof onboard.highestStep === "number" ? onboard.highestStep : 1;
         if (onboard.timeFinished) {
             return null;
         }
@@ -67,51 +77,57 @@ class OnboardingStepsFooter extends Component {
         // create the item list shown on the left
         const checklistItems = checklistInfo.map(info => {
             return (
-                <div
-                    styleName={`checklist-item`}
-                    key={info.title}
-                >
-                    <div styleName={`complete-mark ${info.step < highestStep ? "complete" : "incomplete"}`}><div/></div>
+                <div styleName={`checklist-item`} key={info.title}>
+                    <div
+                        styleName={`complete-mark ${
+                            info.step < highestStep ? "complete" : "incomplete"
+                        }`}
+                    >
+                        <div />
+                    </div>
                     <div>{info.title}</div>
-                    {info.step === onboard.highestStep ?
+                    {info.step === onboard.highestStep ? (
                         <div styleName="box-cta" onClick={onClick}>
                             {buttonText} <img src={`/icons/ArrowBlue${this.props.png}`} />
                         </div>
-                         : null
-                     }
+                    ) : null}
                 </div>
             );
         });
 
         return (
             <div styleName={"checklist-container" + (this.props.footerOnScreen ? " absolute" : "")}>
-                <div styleName="checklist">
-                    { checklistItems }
-                </div>
+                <div styleName="checklist">{checklistItems}</div>
             </div>
         );
     }
 
     render() {
-        const popups = this.props.currentUser.popups;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return null;
+        }
+
+        const popups = currentUser.popups;
         // get the current path from the url
         let pathname = undefined;
         // try to get the path; lowercased because capitalization will vary
-        try { pathname = this.props.location.pathname.toLowerCase(); }
-        // if the pathname is not yet defined, don't do anything, this will be executed again later
-        catch (e) { pathname = ""; }
+        try {
+            pathname = this.props.location.pathname.toLowerCase();
+        } catch (e) {
+            // if the pathname is not yet defined, don't do anything, this will be executed again later
+            pathname = "";
+        }
 
         const showFooter = pathname !== "/dashboard" || (popups && popups.businessInterests);
 
-        if (!showFooter) { return null; }
-        else {
-            return (
-                <div style={{zIndex: "100"}}>{ this.makeChecklist() }</div>
-            );
+        if (!showFooter) {
+            return null;
+        } else {
+            return <div style={{ zIndex: "100" }}>{this.makeChecklist()}</div>;
         }
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -122,12 +138,18 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        addNotification,
-        postBusinessInterests
-    }, dispatch);
+    return bindActionCreators(
+        {
+            addNotification,
+            postBusinessInterests
+        },
+        dispatch
+    );
 }
 
 OnboardingStepsFooter = withRouter(OnboardingStepsFooter);
 
-export default connect(mapStateToProps, mapDispatchToProps)(OnboardingStepsFooter);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(OnboardingStepsFooter);

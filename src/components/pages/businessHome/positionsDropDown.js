@@ -2,7 +2,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addNotification, closeNotification, openIntroductionModal } from "../../../actions/usersActions";
+import {
+    addNotification,
+    closeNotification,
+    openIntroductionModal
+} from "../../../actions/usersActions";
 import { goTo, replaceCharacters } from "../../../miscFunctions";
 
 import "./businessHome.css";
@@ -170,13 +174,14 @@ class PositionsDropDown extends Component {
 }
 
 function mapStateToProps(state) {
-    return {
-        currentUser: state.users.currentUser
-    };
+    return {};
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ addNotification, closeNotification, openIntroductionModal }, dispatch);
+    return bindActionCreators(
+        { addNotification, closeNotification, openIntroductionModal },
+        dispatch
+    );
 }
 
 export default connect(

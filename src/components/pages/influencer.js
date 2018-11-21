@@ -1,16 +1,16 @@
-"use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
-import {closeNotification} from "../../actions/usersActions";
-import {bindActionCreators} from 'redux';
-import {Tabs, Tab, Slider, CircularProgress,Divider, Dialog, FlatButton} from 'material-ui';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import axios from 'axios';
-import MetaTags from 'react-meta-tags';
-import InfluencerPredictiveGraph from '../miscComponents/influencerPredictiveGraph';
-import InfluencerPsychBreakdown from '../childComponents/influencerPsychBreakdown';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { browserHistory } from "react-router";
+import { closeNotification } from "../../actions/usersActions";
+import { bindActionCreators } from "redux";
+import { Tabs, Tab, Slider, CircularProgress, Divider, Dialog, FlatButton } from "material-ui";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import axios from "axios";
+import MetaTags from "react-meta-tags";
+import InfluencerPredictiveGraph from "../miscComponents/influencerPredictiveGraph";
+import InfluencerPsychBreakdown from "../childComponents/influencerPsychBreakdown";
 import HoverTip from "../miscComponents/hoverTip";
 
 class Influencer extends Component {
@@ -43,10 +43,9 @@ class Influencer extends Component {
         };
     }
 
-
     componentDidMount() {
         // set resize listener
-        window.addEventListener('resize', this.bound_updateWindowDimensions);
+        window.addEventListener("resize", this.bound_updateWindowDimensions);
 
         let userId = "";
         let businessId = "";
@@ -63,168 +62,177 @@ class Influencer extends Component {
         //     this.goTo("/");
         // }
 
-        axios.get("/api/user/influencerResults", {
-            params : {
-                userId, businessId, positionId
-            }
-        })
-        .then(res => {
-            const user = res.data.returnUser;
-            let influencers = res.data.returnInfluencers;
-
-            let name;
-            if (this.props.currentUser && (this.props.currentUser._id === userId)) {
-                name = "you";
-            } else {
-                name = user.name;
-            }
-
-            const candidate = {
-                name: user.name,
-                email: user.email
-            }
-            const hardSkillPoints = user.skillScores.map(skill => {
-                return {
-                    x: skill.name,
-                    y: this.round(skill.mostRecentScore),
-                    confidenceInterval: 16
+        axios
+            .get("/api/user/influencerResults", {
+                params: {
+                    userId,
+                    businessId,
+                    positionId
                 }
-            });
-            // they all have a confidence interval of 16 for now
-            const predictivePoints = [
-                {
-                    x: "Growth",
-                    y: this.round(user.scores.growth),
-                    confidenceInterval: 16
-                },
-                {
-                    x: "Performance",
-                    y: this.round(user.scores.performance),
-                    confidenceInterval: 16
-                }
-            ];
+            })
+            .then(res => {
+                const user = res.data.returnUser;
+                let influencers = res.data.returnInfluencers;
 
-            // Get influencers names
-            let influencerPsychScores = [];
-            let influencerSkillScores = [];
-            let growth = 0;
-            let performance = 0;
-            let longevity = 0;
-            for (let i = 0; i < influencers.length; i++) {
-                const inf = influencers[i];
-                // get predictive points
-                growth += inf.scores.growth;
-                performance += inf.scores.performance;
-                longevity += inf.scores.longevity;
-                // get psych scores
-                for (let i = 0; i < inf.psychScores.length; i++) {
-                    const factor = inf.psychScores[i];
-                    // match factors we already have
-                    const factorIndex = influencerPsychScores.findIndex(fac => {
-                        return fac.name.toString() === factor.name.toString();
-                    });
-                    const foundFactor = typeof factorIndex === "number" && factorIndex >= 0;
-                    if (foundFactor) {
-                        // Add info to that skill
-                        influencerPsychScores[factorIndex].score += factor.score;
-                        influencerPsychScores[factorIndex].stats.median += factor.stats.median;
-                        influencerPsychScores[factorIndex].stats.middle80.maximum = factor.stats.middle80.maximum;
-                        influencerPsychScores[factorIndex].stats.middle80.minimum = factor.stats.middle80.minimum;
-                        influencerPsychScores[factorIndex].timesSeen++;
-                    } else {
-                        // Add new skill
-                        factor.timesSeen = 1;
-                        influencerPsychScores.push(factor);
+                let name;
+                if (this.props.currentUser && this.props.currentUser._id === userId) {
+                    name = "you";
+                } else {
+                    name = user.name;
+                }
+
+                const candidate = {
+                    name: user.name,
+                    email: user.email
+                };
+                const hardSkillPoints = user.skillScores.map(skill => {
+                    return {
+                        x: skill.name,
+                        y: this.round(skill.mostRecentScore),
+                        confidenceInterval: 16
+                    };
+                });
+                // they all have a confidence interval of 16 for now
+                const predictivePoints = [
+                    {
+                        x: "Growth",
+                        y: this.round(user.scores.growth),
+                        confidenceInterval: 16
+                    },
+                    {
+                        x: "Performance",
+                        y: this.round(user.scores.performance),
+                        confidenceInterval: 16
+                    }
+                ];
+
+                // Get influencers names
+                let influencerPsychScores = [];
+                let influencerSkillScores = [];
+                let growth = 0;
+                let performance = 0;
+                let longevity = 0;
+                for (let i = 0; i < influencers.length; i++) {
+                    const inf = influencers[i];
+                    // get predictive points
+                    growth += inf.scores.growth;
+                    performance += inf.scores.performance;
+                    longevity += inf.scores.longevity;
+                    // get psych scores
+                    for (let i = 0; i < inf.psychScores.length; i++) {
+                        const factor = inf.psychScores[i];
+                        // match factors we already have
+                        const factorIndex = influencerPsychScores.findIndex(fac => {
+                            return fac.name.toString() === factor.name.toString();
+                        });
+                        const foundFactor = typeof factorIndex === "number" && factorIndex >= 0;
+                        if (foundFactor) {
+                            // Add info to that skill
+                            influencerPsychScores[factorIndex].score += factor.score;
+                            influencerPsychScores[factorIndex].stats.median += factor.stats.median;
+                            influencerPsychScores[factorIndex].stats.middle80.maximum =
+                                factor.stats.middle80.maximum;
+                            influencerPsychScores[factorIndex].stats.middle80.minimum =
+                                factor.stats.middle80.minimum;
+                            influencerPsychScores[factorIndex].timesSeen++;
+                        } else {
+                            // Add new skill
+                            factor.timesSeen = 1;
+                            influencerPsychScores.push(factor);
+                        }
+                    }
+                    // get hard skill scores
+                    for (let i = 0; i < inf.skillScores.length; i++) {
+                        const skill = inf.skillScores[i];
+                        // match skills we already have
+                        const skillIndex = influencerSkillScores.findIndex(sk => {
+                            return sk.name.toString() === skill.name.toString();
+                        });
+                        const foundSkill = typeof skillIndex === "number" && skillIndex >= 0;
+                        if (foundSkill) {
+                            // Add info to that skill
+                            influencerSkillScores[skillIndex].mostRecentScore +=
+                                skill.mostRecentScore;
+                            influencerSkillScores[skillIndex].timesSeen++;
+                        } else {
+                            // Add new skill
+                            skill.timesSeen = 1;
+                            influencerSkillScores.push(skill);
+                        }
                     }
                 }
-                // get hard skill scores
-                for (let i = 0; i < inf.skillScores.length; i++) {
-                    const skill = inf.skillScores[i];
-                    // match skills we already have
-                    const skillIndex = influencerSkillScores.findIndex(sk => {
-                        return sk.name.toString() === skill.name.toString();
-                    });
-                    const foundSkill = typeof skillIndex === "number" && skillIndex >= 0;
-                    if (foundSkill) {
-                        // Add info to that skill
-                        influencerSkillScores[skillIndex].mostRecentScore += skill.mostRecentScore;
-                        influencerSkillScores[skillIndex].timesSeen++;
-                    } else {
-                        // Add new skill
-                        skill.timesSeen = 1;
-                        influencerSkillScores.push(skill);
+
+                // get averages for the hard skill scores
+                for (let i = 0; i < influencerSkillScores.length; i++) {
+                    influencerSkillScores[i].mostRecentScore =
+                        influencerSkillScores[i].mostRecentScore /
+                        influencerSkillScores[i].timesSeen;
+                }
+                // Give the skill scores the correct formatting
+                const influencerHardSkillPoints = influencerSkillScores.map(skill => {
+                    return {
+                        x: skill.name,
+                        y: this.round(skill.mostRecentScore),
+                        confidenceInterval: 16
+                    };
+                });
+
+                // get averages of psych scores
+                for (let i = 0; i < influencerPsychScores.length; i++) {
+                    let times = influencerPsychScores[i].timesSeen;
+                    influencerPsychScores[i].score = influencerPsychScores[i].score / times;
+                    influencerPsychScores[i].stats.median =
+                        influencerPsychScores[i].stats.median / times;
+                    influencerPsychScores[i].stats.middle80.maximum =
+                        influencerPsychScores[i].stats.middle80.maximum / times;
+                    influencerPsychScores[i].stats.middle80.minimum =
+                        influencerPsychScores[i].stats.middle80.minimum / times;
+                }
+
+                // get averages of scores
+                growth = growth / influencers.length;
+                performance = performance / influencers.length;
+                longevity = longevity / influencers.length;
+
+                const influencerPredictivePoints = [
+                    {
+                        x: "Growth",
+                        y: this.round(growth),
+                        confidenceInterval: 8
+                    },
+                    {
+                        x: "Performance",
+                        y: this.round(performance),
+                        confidenceInterval: 8
                     }
-                }
-            }
+                ];
 
-            // get averages for the hard skill scores
-            for (let i = 0; i < influencerSkillScores.length; i++) {
-                influencerSkillScores[i].mostRecentScore = influencerSkillScores[i].mostRecentScore/influencerSkillScores[i].timesSeen;
-            }
-            // Give the skill scores the correct formatting
-            const influencerHardSkillPoints = influencerSkillScores.map(skill => {
-                return {
-                    x: skill.name,
-                    y: this.round(skill.mostRecentScore),
-                    confidenceInterval: 16
-                }
+                let self = this;
+                self.setState({
+                    ...self.state,
+                    loading: false,
+                    influencers,
+                    avgInfluencerPredictivePoints: influencerPredictivePoints,
+                    avgInfluencerHardSkillPoints: influencerHardSkillPoints,
+                    avgInfluencerPsychScores: influencerPsychScores,
+                    psychScores: user.psychScores,
+                    candidate,
+                    predicted: user.scores.predicted,
+                    skill: user.scores.skill,
+                    hardSkillPoints,
+                    predictivePoints,
+                    windowWidth: window.innerWidth,
+                    name
+                });
+            })
+            .catch(error => {
+                console.log("error: ", error);
             });
-
-            // get averages of psych scores
-            for (let i = 0; i < influencerPsychScores.length; i++) {
-                let times = influencerPsychScores[i].timesSeen;
-                influencerPsychScores[i].score = influencerPsychScores[i].score/times;
-                influencerPsychScores[i].stats.median = influencerPsychScores[i].stats.median/times;
-                influencerPsychScores[i].stats.middle80.maximum = influencerPsychScores[i].stats.middle80.maximum/times;
-                influencerPsychScores[i].stats.middle80.minimum = influencerPsychScores[i].stats.middle80.minimum/times;
-            }
-
-            // get averages of scores
-            growth = growth/influencers.length;
-            performance = performance/influencers.length;
-            longevity = longevity/influencers.length;
-
-            const influencerPredictivePoints = [
-                {
-                    x: "Growth",
-                    y: this.round(growth),
-                    confidenceInterval: 8
-                },
-                {
-                    x: "Performance",
-                    y: this.round(performance),
-                    confidenceInterval: 8
-                }
-            ];
-
-            let self = this;
-            self.setState({
-                ...self.state,
-                loading: false,
-                influencers,
-                avgInfluencerPredictivePoints: influencerPredictivePoints,
-                avgInfluencerHardSkillPoints: influencerHardSkillPoints,
-                avgInfluencerPsychScores: influencerPsychScores,
-                psychScores: user.psychScores,
-                candidate,
-                predicted: user.scores.predicted,
-                skill: user.scores.skill,
-                hardSkillPoints,
-                predictivePoints,
-                windowWidth: window.innerWidth,
-                name,
-            });
-        })
-        .catch(error => {
-            console.log("error: ", error);
-        });
     }
-
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.bound_updateWindowDimensions);
+        window.removeEventListener("resize", this.bound_updateWindowDimensions);
     }
-
 
     updateWindowDimensions() {
         this.setState({ windowWidth: window.innerWidth });
@@ -239,10 +247,11 @@ class Influencer extends Component {
         window.scrollTo(0, 0);
     }
 
-
     round(number) {
         const rounded = Math.round(number);
-        if (isNaN(rounded)) { return number; }
+        if (isNaN(rounded)) {
+            return number;
+        }
         return rounded;
     }
 
@@ -272,7 +281,7 @@ class Influencer extends Component {
                         x: skill.name,
                         y: this.round(skill.mostRecentScore),
                         confidenceInterval: 16
-                    }
+                    };
                 });
                 const influencerPredictivePoints = [
                     {
@@ -290,14 +299,14 @@ class Influencer extends Component {
                     influencerHardSkillPoints,
                     influencerPsychScores,
                     influencerPredictivePoints,
-                    influencer,
-                })
+                    influencer
+                });
             } else {
                 self.setState({
                     influencerHardSkillPoints: self.state.avgInfluencerHardSkillPoints,
                     influencerPsychScores: self.state.avgInfluencerPsychScores,
                     influencerPredictivePoints: self.state.avgInfluencerPredictivePointsm,
-                    influencer: "Select an influencer",
+                    influencer: "Select an influencer"
                 });
             }
         }
@@ -308,41 +317,48 @@ class Influencer extends Component {
         const businessId = this.props.location.query.businessId;
         const positionId = this.props.location.query.positionId;
         const description = "Share your results to social media by copy and pasting this link:";
-        const link = "https://moonshotinsights.io/influencer?user=" + userId + "&businessId=" + businessId + "&positionId=" + positionId;
-        this.setState({open: true, description, link});
+        const link =
+            "https://moonshotinsights.io/influencer?user=" +
+            userId +
+            "&businessId=" +
+            businessId +
+            "&positionId=" +
+            positionId;
+        this.setState({ open: true, description, link });
     }
 
     handleInviteFriends() {
-        const description = "Invite your friends to take the Ease Content Marketer evaluation with this link:";
+        const description =
+            "Invite your friends to take the Ease Content Marketer evaluation with this link:";
         const link = "https://moonshotinsights.io/signup?code=46ddd01e7e";
-        this.setState({open: true, description, link});
+        this.setState({ open: true, description, link });
     }
 
     handleClose = () => {
-        this.setState({open: false, description: "", link: ""});
-    }
+        this.setState({ open: false, description: "", link: "" });
+    };
 
     dropdown(type) {
         // the hint that shows up when search bar is in focus
-        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
-        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" }
-        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" }
+        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" };
+        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" };
+        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" };
         const searchFloatingLabelStyle = searchHintStyle;
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
-
         let menuItems = this.state.influencers.map(menuItem => {
             return (
-                <MenuItem
-                    value={menuItem.name}
-                    key={`moveTo${menuItem.name}`}
-                >
-                    { menuItem.name }
+                <MenuItem value={menuItem.name} key={`moveTo${menuItem.name}`}>
+                    {menuItem.name}
                 </MenuItem>
             );
         });
-        menuItems.unshift( <Divider key="divider"/> );
-        menuItems.unshift( <MenuItem key="selectInfluencer" value={"Select an influencer"}>{"Select an influencer"}</MenuItem> );
+        menuItems.unshift(<Divider key="divider" />);
+        menuItems.unshift(
+            <MenuItem key="selectInfluencer" value={"Select an influencer"}>
+                {"Select an influencer"}
+            </MenuItem>
+        );
 
         const colorClass = " secondary-gray";
         const cursorClass = " pointer";
@@ -354,20 +370,24 @@ class Influencer extends Component {
                 icon: "selectIconGrayImportant"
             },
             value: this.state.influencer,
-            onChange: (event) => this.handleInfluencer(event, type)
+            onChange: event => this.handleInfluencer(event, type)
         };
 
         return (
             <div className="" key="top options">
                 <div className="inlineBlock">
-                    <Select className="influencerSelection" {...selectAttributes}>{menuItems}</Select>
+                    <Select className="influencerSelection" {...selectAttributes}>
+                        {menuItems}
+                    </Select>
                 </div>
             </div>
         );
     }
 
     makeAnalysisSection() {
-        if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
+        if (!Array.isArray(this.state.hardSkillPoints)) {
+            return null;
+        }
 
         const windowWidth = window.innerWidth;
         let graphHeight;
@@ -382,7 +402,11 @@ class Influencer extends Component {
         }
 
         return (
-            <div className="analysis center aboutMeSection marginTop40px" style={style.tabContent} key={"analysisSection"}>
+            <div
+                className="analysis center aboutMeSection marginTop40px"
+                style={style.tabContent}
+                key={"analysisSection"}
+            >
                 <div>
                     <div className="secondary-gray center font24px font20pxUnder700 font16pxUnder500 marginBottom10px">
                         Predictive Insights
@@ -403,14 +427,14 @@ class Influencer extends Component {
                     </div>
                     {this.dropdown("Psych Breakdown")}
                     <InfluencerPsychBreakdown
-                         psychScores={this.state.psychScores}
-                         influencerPsychScores={this.state.influencerPsychScores}
-                         forCandidate={false}
-                         name={this.state.name}
-                     />
-                 </div>
+                        psychScores={this.state.psychScores}
+                        influencerPsychScores={this.state.influencerPsychScores}
+                        forCandidate={false}
+                        name={this.state.name}
+                    />
+                </div>
 
-                 <div className="influencerPageSpacer" />
+                <div className="influencerPageSpacer" />
 
                 <div>
                     <div className="secondary-gray center font24px font20pxUnder700 font16pxUnder500 marginBottom10px">
@@ -433,26 +457,32 @@ class Influencer extends Component {
                 label="Close"
                 onClick={this.handleClose}
                 className="primary-white-important"
-            />,
+            />
         ];
 
-        const user = this.props.currentUser;
         const candidate = this.state.candidate;
         const hardSkills = this.state.hardSkills;
         const predictiveInsights = this.state.predictiveInsights;
 
         const loading = this.state.loading;
-        const loadingArea = <div className="center fillScreen" style={{marginTop: "40px"}} key="loadingArea"><CircularProgress color="secondary-gray" /></div>
+        const loadingArea = (
+            <div className="center fillScreen" style={{ marginTop: "40px" }} key="loadingArea">
+                <CircularProgress color="secondary-gray" />
+            </div>
+        );
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
 
         return (
             <div key="results">
                 <MetaTags>
                     <title>Influencer Results | Moonshot</title>
-                    <meta name="description" content="See how your results compare to influencers in the field."/>
+                    <meta
+                        name="description"
+                        content="See how your results compare to influencers in the field."
+                    />
                 </MetaTags>
                 <div>
-                    {candidate ?
+                    {candidate ? (
                         <div className="marginTop20px">
                             <Dialog
                                 actions={actions}
@@ -464,10 +494,20 @@ class Influencer extends Component {
                                 contentClassName="center"
                                 overlayClassName="dialogOverlay"
                             >
-                                <div className="font16px secondary-gray" style={{width:"95%", margin: "30px auto"}}>
+                                <div
+                                    className="font16px secondary-gray"
+                                    style={{ width: "95%", margin: "30px auto" }}
+                                >
                                     {this.state.description}
                                 </div>
-                                <div className="font16px primary-cyan" style={{width:"99%", margin: "30px auto", wordBreak: "break-all"}}>
+                                <div
+                                    className="font16px primary-cyan"
+                                    style={{
+                                        width: "99%",
+                                        margin: "30px auto",
+                                        wordBreak: "break-all"
+                                    }}
+                                >
                                     {this.state.link}
                                 </div>
                             </Dialog>
@@ -476,75 +516,95 @@ class Influencer extends Component {
                                     Ease Standard
                                 </div>
                                 <div className="secondary-gray font18px font16pxUnder700 font14pxUnder500 marginBottom20px marginTop10px">
-                                    {this.state.name === "you" ?
-                                        <div>See how {this.state.name} compare to top Content Marketing Influencers.</div>
-                                    :
-                                        <div>See how {this.state.name} compares to top Content Marketing Influencers.</div>
-                                    }
-                                </div>
-                                {this.state.name === "you" ?
-                                <ul className="horizCenteredList marginBottom20px">
-                                    <li className="center">
-                                        <div style={{marginTop: "10px"}}>
-                                            <div className="secondary-gray font16px marginBottom5px">
-                                                Share Results
-                                            </div>
-                                            <div className="clickable inline" onClick={this.handleShareResults.bind(this)}>
-                                                <img
-                                                    alt="Facebook Logo"
-                                                    width={13}
-                                                    height={20}
-                                                    src={"/logos/Facebook" + this.props.png}/>
-                                            </div>
-                                            <div className="clickable marginLeft20px inline" onClick={this.handleShareResults.bind(this)}>
-                                                <img
-                                                    alt="Twitter Logo"
-                                                    width={20}
-                                                    height={20}
-                                                    src={"/logos/Twitter" + this.props.png}/>
-                                            </div>
-                                            <div className="clickable marginLeft20px inline" onClick={this.handleShareResults.bind(this)}>
-                                                <img
-                                                    alt="LinkedIn Logo"
-                                                    width={20}
-                                                    height={20}
-                                                    src={"/logos/LinkedIn" + this.props.png}/>
-                                            </div>
+                                    {this.state.name === "you" ? (
+                                        <div>
+                                            See how {this.state.name} compare to top Content
+                                            Marketing Influencers.
                                         </div>
-                                    </li>
-                                    <li className="center">
-                                    <div className="marginTop10px marginLeft30px">
-                                    <div className="secondary-gray font16px marginBottom5px">
-                                        Invite Friends
-                                    </div>
-                                    <div className="clickable" onClick={this.handleInviteFriends.bind(this)}>
-                                        <img
-                                            alt="Mail Icon"
-                                            width={30}
-                                            height={20}
-                                            src={"/icons/Mail" + this.props.png}/>
-                                    </div>
-                                    </div>
-                                    </li>
-                                </ul>
-                                : null }
+                                    ) : (
+                                        <div>
+                                            See how {this.state.name} compares to top Content
+                                            Marketing Influencers.
+                                        </div>
+                                    )}
+                                </div>
+                                {this.state.name === "you" ? (
+                                    <ul className="horizCenteredList marginBottom20px">
+                                        <li className="center">
+                                            <div style={{ marginTop: "10px" }}>
+                                                <div className="secondary-gray font16px marginBottom5px">
+                                                    Share Results
+                                                </div>
+                                                <div
+                                                    className="clickable inline"
+                                                    onClick={this.handleShareResults.bind(this)}
+                                                >
+                                                    <img
+                                                        alt="Facebook Logo"
+                                                        width={13}
+                                                        height={20}
+                                                        src={"/logos/Facebook" + this.props.png}
+                                                    />
+                                                </div>
+                                                <div
+                                                    className="clickable marginLeft20px inline"
+                                                    onClick={this.handleShareResults.bind(this)}
+                                                >
+                                                    <img
+                                                        alt="Twitter Logo"
+                                                        width={20}
+                                                        height={20}
+                                                        src={"/logos/Twitter" + this.props.png}
+                                                    />
+                                                </div>
+                                                <div
+                                                    className="clickable marginLeft20px inline"
+                                                    onClick={this.handleShareResults.bind(this)}
+                                                >
+                                                    <img
+                                                        alt="LinkedIn Logo"
+                                                        width={20}
+                                                        height={20}
+                                                        src={"/logos/LinkedIn" + this.props.png}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li className="center">
+                                            <div className="marginTop10px marginLeft30px">
+                                                <div className="secondary-gray font16px marginBottom5px">
+                                                    Invite Friends
+                                                </div>
+                                                <div
+                                                    className="clickable"
+                                                    onClick={this.handleInviteFriends.bind(this)}
+                                                >
+                                                    <img
+                                                        alt="Mail Icon"
+                                                        width={30}
+                                                        height={20}
+                                                        src={"/icons/Mail" + this.props.png}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                ) : null}
                                 {analysisSection}
                             </div>
-
                         </div>
-                        :
+                    ) : (
                         <div>
-                            <div className="blackBackground halfHeight"/>
-                            <div className="fullHeight"/>
-                            <div className="fullHeight"/>
+                            <div className="blackBackground halfHeight" />
+                            <div className="fullHeight" />
+                            <div className="fullHeight" />
                         </div>
-                    }
+                    )}
                 </div>
             </div>
         );
     }
 }
-
 
 const style = {
     imgContainer: {
@@ -564,32 +624,32 @@ const style = {
         height: "100%"
     },
     locationImg: {
-        display: 'inline-block',
-        height: '15px',
-        marginBottom: '5px',
-        marginRight: '5px'
+        display: "inline-block",
+        height: "15px",
+        marginBottom: "5px",
+        marginRight: "5px"
     },
     tabs: {
-        marginTop: '20px',
+        marginTop: "20px"
     },
     topTabs: {
-        marginTop: '20px',
+        marginTop: "20px"
     },
     topTab: {
-        color: 'white',
+        color: "white"
     },
     tabContent: {
-        paddingBottom: '30px',
+        paddingBottom: "30px"
     },
     lightBlue: {
-        color: '#75dcfc'
+        color: "#75dcfc"
     },
     horizListIcon: {
         height: "50px",
         marginTop: "-5px"
     },
     candidateScore: {
-        minHeight: '200px',
+        minHeight: "200px",
         padding: "20px",
         overflow: "auto"
     },
@@ -608,11 +668,13 @@ const style = {
     }
 };
 
-
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification,
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -622,4 +684,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Influencer);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Influencer);

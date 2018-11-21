@@ -389,7 +389,6 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         loadingCreateBusiness: state.users.loadingSomething,
-        currentUser: state.users.currentUser,
         png: state.users.png,
         onboardingPositions: state.users.onboardingPositions,
         onboard: state.users.guestOnboard,

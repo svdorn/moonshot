@@ -1,15 +1,15 @@
-"use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
-import {closeNotification} from "../../../actions/usersActions";
-import {bindActionCreators} from 'redux';
-import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
-import axios from 'axios';
-import MetaTags from 'react-meta-tags';
-import PredictiveGraph from '../../miscComponents/predictiveGraph';
-import AddUserDialog from '../../childComponents/addUserDialog';
-import PsychBreakdown from '../../childComponents/psychBreakdown';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { browserHistory } from "react-router";
+import { closeNotification, addNotification } from "../../../actions/usersActions";
+import { bindActionCreators } from "redux";
+import { Tabs, Tab, Slider, CircularProgress } from "material-ui";
+import axios from "axios";
+import MetaTags from "react-meta-tags";
+import PredictiveGraph from "../../miscComponents/predictiveGraph";
+import AddUserDialog from "../../childComponents/addUserDialog";
+import PsychBreakdown from "../../childComponents/psychBreakdown";
 import HoverTip from "../../miscComponents/hoverTip";
 import { qualifierFromScore } from "../../../miscFunctions";
 
@@ -32,10 +32,17 @@ class EmployeeResults extends Component {
         };
     }
 
-
     componentDidMount() {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         // set resize listener
-        window.addEventListener('resize', this.bound_updateWindowDimensions);
+        window.addEventListener("resize", this.bound_updateWindowDimensions);
 
         let candidateId = "";
         let businessId = "";
@@ -43,96 +50,94 @@ class EmployeeResults extends Component {
         console.log(this.props.params);
         try {
             candidateId = this.props.params.employeeId;
-            businessId = this.props.currentUser.businessInfo.businessId;
+            businessId = currentUser.businessInfo.businessId;
             positionId = this.props.params.positionId;
         } catch (e) {
             this.goTo("/myEmployees");
         }
 
-        console.log("candidateId: ", candidateId);
-
         // backend call to get results info
-        axios.get("/api/business/evaluationResults", {
-            params : {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken,
-                candidateId, businessId, positionId
-            }
-        })
-        .then(res => {
-            const candidate = {
-                name: res.data.name,
-                title: res.data.title ? res.data.title : "",
-                email: res.data.email
-            }
-            const hardSkillPoints = res.data.skillScores.map(skill => {
-                return {
-                    x: skill.name,
-                    y: this.round(skill.mostRecentScore),
-                    confidenceInterval: 16
+        axios
+            .get("/api/business/evaluationResults", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken,
+                    candidateId,
+                    businessId,
+                    positionId
                 }
-            });
-            const freeResponses = res.data.frqs;
-            const overallScore = res.data.performanceScores.overall;
-            // they all have a confidence interval of 16 for now
-            const predictivePoints = [
-                {
-                    x: "Growth",
-                    y: this.round(res.data.performanceScores.growth),
-                    confidenceInterval: 16
-                },
-                {
-                    x: "Performance",
-                    y: this.round(res.data.performanceScores.performance),
-                    confidenceInterval: 16
-                },
-                {
-                    x: "Longevity",
-                    y: this.round(res.data.performanceScores.longevity),
-                    confidenceInterval: 0,
-                    unavailable: true
-                },
-                {
-                    x: "Culture",
-                    y: this.round(res.data.performanceScores.culture),
-                    confidenceInterval: 0,
-                    unavailable: true
-                }
-            ];
+            })
+            .then(res => {
+                const candidate = {
+                    name: res.data.name,
+                    title: res.data.title ? res.data.title : "",
+                    email: res.data.email
+                };
+                const hardSkillPoints = res.data.skillScores.map(skill => {
+                    return {
+                        x: skill.name,
+                        y: this.round(skill.mostRecentScore),
+                        confidenceInterval: 16
+                    };
+                });
+                const freeResponses = res.data.frqs;
+                const overallScore = res.data.performanceScores.overall;
+                // they all have a confidence interval of 16 for now
+                const predictivePoints = [
+                    {
+                        x: "Growth",
+                        y: this.round(res.data.performanceScores.growth),
+                        confidenceInterval: 16
+                    },
+                    {
+                        x: "Performance",
+                        y: this.round(res.data.performanceScores.performance),
+                        confidenceInterval: 16
+                    },
+                    {
+                        x: "Longevity",
+                        y: this.round(res.data.performanceScores.longevity),
+                        confidenceInterval: 0,
+                        unavailable: true
+                    },
+                    {
+                        x: "Culture",
+                        y: this.round(res.data.performanceScores.culture),
+                        confidenceInterval: 0,
+                        unavailable: true
+                    }
+                ];
 
-            let self = this;
-            self.setState({
-                ...self.state,
-                loading: false,
-                psychScores: res.data.psychScores,
-                candidate,
-                overallScore,
-                predicted: res.data.performanceScores.predicted,
-                skill: res.data.performanceScores.skill,
-                hardSkillPoints,
-                predictivePoints,
-                freeResponses,
-                windowWidth: window.innerWidth
+                let self = this;
+                self.setState({
+                    ...self.state,
+                    loading: false,
+                    psychScores: res.data.psychScores,
+                    candidate,
+                    overallScore,
+                    predicted: res.data.performanceScores.predicted,
+                    skill: res.data.performanceScores.skill,
+                    hardSkillPoints,
+                    predictivePoints,
+                    freeResponses,
+                    windowWidth: window.innerWidth
+                });
+            })
+            .catch(error => {
+                // console.log("error: ", error);
+                // if (error.response && error.response.data) {
+                //     console.log(error.response.data);
+                // }
             });
-        })
-        .catch(error => {
-            // console.log("error: ", error);
-            // if (error.response && error.response.data) {
-            //     console.log(error.response.data);
-            // }
-        });
     }
-
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.bound_updateWindowDimensions);
+        window.removeEventListener("resize", this.bound_updateWindowDimensions);
     }
-
 
     updateWindowDimensions() {
         this.setState({ windowWidth: window.innerWidth });
     }
-
 
     goTo(route) {
         // closes any notification
@@ -143,24 +148,28 @@ class EmployeeResults extends Component {
         window.scrollTo(0, 0);
     }
 
-
     round(number) {
         const rounded = Math.round(number);
-        if (isNaN(rounded)) { return number; }
+        if (isNaN(rounded)) {
+            return number;
+        }
         return rounded;
     }
 
-
     getSliderValue(score) {
         let value = score;
-        if (score > 150) { value = 150; }
-        else if (value < 50) { value = 50; }
+        if (score > 150) {
+            value = 150;
+        } else if (value < 50) {
+            value = 50;
+        }
         return value;
     }
 
-
     makeAnalysisSection() {
-        if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
+        if (!Array.isArray(this.state.hardSkillPoints)) {
+            return null;
+        }
 
         const hardSkillsDataPoints = this.state.hardSkillPoints;
 
@@ -178,23 +187,31 @@ class EmployeeResults extends Component {
 
         return (
             <div className="analysis center aboutMeSection" style={style.tabContent}>
-                <div className="center" style={{backgroundColor:"#393939"}}>
+                <div className="center" style={{ backgroundColor: "#393939" }}>
                     <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
-                        Employee Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
+                        Employee Score{" "}
+                        <b style={style.lightBlue}>
+                            <u>{this.round(this.state.overallScore)}</u>
+                        </b>
                     </div>
-                    <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
+                    <HoverTip
+                        style={{ marginTop: "65px", marginLeft: "-14px" }}
+                        text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average."
+                    />
                     <div className="resultsSlidersContainer">
                         <div>
-                            <div
-                                className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                Performance<br/>
-                                <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted)}</p>
+                            <div className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
+                                Performance<br />
+                                <p style={style.lightBlue}>
+                                    {qualifierFromScore(this.state.predicted)}
+                                </p>
                             </div>
-                            <Slider disabled={true}
-                                    value={this.getSliderValue(this.state.predicted)}
-                                    min={50}
-                                    max={150}
-                                    className="resultsSlider"
+                            <Slider
+                                disabled={true}
+                                value={this.getSliderValue(this.state.predicted)}
+                                min={50}
+                                max={150}
+                                className="resultsSlider"
                             />
                         </div>
                     </div>
@@ -210,27 +227,19 @@ class EmployeeResults extends Component {
 
                 <div className="resultsPageSpacer" />
 
-                 <PsychBreakdown
-                     psychScores={this.state.psychScores}
-                     forCandidate={false}
-                 />
+                <PsychBreakdown psychScores={this.state.psychScores} forCandidate={false} />
 
-                 <div className="resultsPageSpacer" />
+                <div className="resultsPageSpacer" />
 
-                <div
-                    className="primary-white center font24px font20pxUnder700 font16pxUnder500">
+                <div className="primary-white center font24px font20pxUnder700 font16pxUnder500">
                     Skills Evaluation
                 </div>
                 <div>
-                    <PredictiveGraph
-                        dataPoints={this.state.hardSkillPoints}
-                        height={graphHeight}
-                    />
+                    <PredictiveGraph dataPoints={this.state.hardSkillPoints} height={graphHeight} />
                 </div>
             </div>
         );
     }
-
 
     makeResponsesSection() {
         let freeResponses = [];
@@ -244,7 +253,7 @@ class EmployeeResults extends Component {
                     <span className="primary-cyan">{freeResponse.question}</span>
                     <div className="answer">{freeResponse.answer}</div>
                 </div>
-            )
+            );
         });
 
         // if there are no frqs for this position eval
@@ -252,16 +261,14 @@ class EmployeeResults extends Component {
             responses = <div className="primary-white center">No responses for this position.</div>;
         }
 
-        return (
-            <div className="fillScreen candidateResponses">
-                {responses}
-            </div>
-        )
+        return <div className="fillScreen candidateResponses">{responses}</div>;
     }
-
 
     render() {
         const user = this.props.currentUser;
+        if (!user) {
+            return null;
+        }
         const candidate = this.state.candidate;
         const hardSkills = this.state.hardSkills;
         const predictiveInsights = this.state.predictiveInsights;
@@ -272,19 +279,23 @@ class EmployeeResults extends Component {
         }
 
         const loading = this.state.loading;
-        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="secondary-gray" /></div>
+        const loadingArea = (
+            <div className="center fillScreen" style={{ paddingTop: "40px" }}>
+                <CircularProgress color="secondary-gray" />
+            </div>
+        );
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
         const responsesSection = loading ? loadingArea : this.makeResponsesSection();
 
         return (
             <div>
-                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
+                {user.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>{candidate.name} | Moonshot</title>
-                    <meta name="description" content="Results user view."/>
+                    <meta name="description" content="Results user view." />
                 </MetaTags>
                 <div>
-                    {candidate ?
+                    {candidate ? (
                         <div>
                             <div className="blackBackground paddingBottom40px">
                                 <div className="profileInfoSkills">
@@ -302,50 +313,58 @@ class EmployeeResults extends Component {
                                             />
                                         </div>
                                         <div>
-                                            {candidate.name ? <div><div
-                                                className="secondary-gray font26px font14pxUnder700">{candidate.name}
-                                            </div>
-                                            <a className="font18px font12pxUnder500 secondary-gray grayTextOnHover underline"
-                                               href={mailtoEmail}>Contact</a></div>
-                                           : null}
+                                            {candidate.name ? (
+                                                <div>
+                                                    <div className="secondary-gray font26px font14pxUnder700">
+                                                        {candidate.name}
+                                                    </div>
+                                                    <a
+                                                        className="font18px font12pxUnder500 secondary-gray grayTextOnHover underline"
+                                                        href={mailtoEmail}
+                                                    >
+                                                        Contact
+                                                    </a>
+                                                </div>
+                                            ) : null}
                                         </div>
                                     </div>
                                     <Tabs
                                         style={style.topTabs}
-                                        inkBarStyle={{background: 'white'}}
-                                        tabItemContainerStyle={{width: '40%'}}
+                                        inkBarStyle={{ background: "white" }}
+                                        tabItemContainerStyle={{ width: "40%" }}
                                         className="myPathwaysTabs"
                                     >
                                         <Tab label="Analysis" style={style.topTab}>
-                                            <div className="top-shadow" style={{position:"absolute"}}>
-                                                <div/>
+                                            <div
+                                                className="top-shadow"
+                                                style={{ position: "absolute" }}
+                                            >
+                                                <div />
                                             </div>
                                             {analysisSection}
                                         </Tab>
                                         <Tab label="Responses" style={style.topTab}>
                                             <div className="top-shadow">
-                                                <div/>
+                                                <div />
                                             </div>
                                             {responsesSection}
                                         </Tab>
                                     </Tabs>
                                 </div>
                             </div>
-
                         </div>
-                        :
+                    ) : (
                         <div>
-                            <div className="blackBackground halfHeight"/>
-                            <div className="fullHeight"/>
-                            <div className="fullHeight"/>
+                            <div className="blackBackground halfHeight" />
+                            <div className="fullHeight" />
+                            <div className="fullHeight" />
                         </div>
-                    }
+                    )}
                 </div>
             </div>
         );
     }
 }
-
 
 const style = {
     imgContainer: {
@@ -365,25 +384,25 @@ const style = {
         height: "100%"
     },
     locationImg: {
-        display: 'inline-block',
-        height: '15px',
-        marginBottom: '5px',
-        marginRight: '5px'
+        display: "inline-block",
+        height: "15px",
+        marginBottom: "5px",
+        marginRight: "5px"
     },
     tabs: {
-        marginTop: '20px',
+        marginTop: "20px"
     },
     topTabs: {
-        marginTop: '20px',
+        marginTop: "20px"
     },
     topTab: {
-        color: 'white',
+        color: "white"
     },
     tabContent: {
-        paddingBottom: '30px',
+        paddingBottom: "30px"
     },
     lightBlue: {
-        color: '#75dcfc'
+        color: "#75dcfc"
     },
     horizListIcon: {
         height: "50px",
@@ -404,11 +423,14 @@ const style = {
     }
 };
 
-
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification,
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification,
+            addNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -418,4 +440,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeeResults);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(EmployeeResults);

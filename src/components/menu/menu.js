@@ -45,7 +45,7 @@ const noShadowPages = [];
 // pages where the menu scrolls with the page
 const nonFixedMenuPages = ["evaluation"];
 // pages that don't have a header at all
-const noMenuPages = ["chatbot"];
+const noMenuPages = [];
 
 class Menu extends Component {
     constructor(props) {
@@ -130,8 +130,9 @@ class Menu extends Component {
         switch (value) {
             case "Sign Out":
                 // always sign out when sign out clicked
-                this.props.signout();
-                goTo("/");
+                this.props.signout(() => {
+                    goTo("/");
+                });
                 break;
             case "Settings":
                 goTo("/settings");
@@ -164,12 +165,9 @@ class Menu extends Component {
     }
 
     signOut() {
-        // if (this.props.location.pathname === '/onboarding') {
-        //     const markOnboardingComplete = false;
-        //     this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
-        // }
-        this.props.signout();
-        goTo("/");
+        this.props.signout(() => {
+            goTo("/");
+        });
     }
 
     // handleAnchorClick(anchor, wantedPath) {
@@ -322,7 +320,6 @@ class Menu extends Component {
         // some element from the dropDown menu is selected
         let underlineWidth = "53px";
         // whether
-        let hideUnderline = {};
         let additionalHeaderClass = "";
 
         const onHome = pathname === "/";
@@ -407,18 +404,8 @@ class Menu extends Component {
         // used for menu divider
         let loggedInClass = " loggedIn";
 
-        // if on business signup page, menu is v sparse
-        if (pathFirstPart === "businesssignup") {
-            // don't show the underline thing
-            hideUnderline = { display: "none" };
-            // don't let the user click back to home via the logo
-            logoIsLink = false;
-            menuOptions = [
-                /* nothing in the menu */
-            ];
-        }
         // if there is no user logged in
-        else if (!currentUser) {
+        if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
                 {
@@ -669,38 +656,6 @@ class Menu extends Component {
                         />
                     );
                     break;
-                // case "button":
-                //     // add the menu item to the dropDown
-                //     let positionUrl = "";
-                //     if (self.state.position) {
-                //         positionUrl = "?position=" + self.state.position;
-                //     }
-                //     desktopMenu.push(
-                //         <div
-                //             key="tryForFreeButton"
-                //             className={
-                //                 "menuButtonArea font14px primary-white font14pxUnder900 noWrap wideScreenMenuItem menuItem above850OnlyImportant"
-                //             }
-                //         >
-                //             <input
-                //                 className="blackInput secondary-gray-important"
-                //                 type="text"
-                //                 placeholder="Enter a position..."
-                //                 name="position"
-                //                 value={self.state.position}
-                //                 onChange={self.onChange.bind(self)}
-                //             />
-                //             <div
-                //                 className="menuButton button medium round-8px gradient-transition gradient-1-purple-light gradient-2-cyan"
-                //                 style={{ marginLeft: "5px" }}
-                //                 onClick={() => goTo("/chatbot" + positionUrl)}
-                //             >
-                //                 Try for Free
-                //             </div>
-                //         </div>
-                //     );
-                //     // no button on mobile menu
-                //     break;
                 default:
                     break;
             }
@@ -713,7 +668,7 @@ class Menu extends Component {
                 <div
                     key={"underline"}
                     className="menuUnderline"
-                    style={{ width: underlineWidth, ...hideUnderline }}
+                    style={{ width: underlineWidth }}
                 />
             );
         }

@@ -54,14 +54,32 @@ class WhatToDo extends Component {
     }
 
     next = () => {
-        const { _id, verificationToken, verified } = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
+        const { _id, verificationToken, verified } = currentUser;
 
         // go to the next onboarding step
         this.props.updateOnboardingStep(_id, verificationToken, -1);
+        this.props.addNotification(
+            "Free until you make your first hire or evaluate 20 candidates, whichever comes first.",
+            "info"
+        );
     };
 
     intercomMsg = () => {
-        const { _id, verificationToken } = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (currentUser) {
+            var { _id, verificationToken } = currentUser;
+        } else {
+            var _id = undefined;
+            var verificationToken = undefined;
+        }
         // trigger intercom event
         this.props.intercomEvent("onboarding-step-4", _id, verificationToken, null);
     };
@@ -102,7 +120,7 @@ class WhatToDo extends Component {
         const { currentUser } = this.props;
         let possessiveBusinessName = "Your";
         let uniqueName = "";
-        if (typeof currentUser.businessInfo === "object") {
+        if (currentUser && typeof currentUser.businessInfo === "object") {
             const { businessInfo } = currentUser;
             uniqueName = businessInfo.uniqueName;
             if (businessInfo.businessName.length < 8) {

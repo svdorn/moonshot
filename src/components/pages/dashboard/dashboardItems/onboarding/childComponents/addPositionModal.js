@@ -228,7 +228,6 @@ class AddPositionModal extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
         formData: state.form,
         userPosted: state.users.positionPosted,
         userPostedFailed: state.users.positionPostedFailed,

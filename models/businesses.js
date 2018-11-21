@@ -94,6 +94,25 @@ const positionSchema = mongoose.Schema({
     }
 })
 
+const subscriptionSchema = mongoose.Schema({
+    // the id of the subscription on stripe
+    id: String,
+    // name of the subscription
+    name: String,
+    // date the subscription is set to start, for newSubscriptions
+    dateStarting: Date,
+    // date the subscription was created
+    dateCreated: Date,
+    // date the subscription is ending
+    dateEnding: Date,
+    // if the subscription is set to be cancelled but hasn't been in stripe yet
+    toCancel: Boolean,
+    // if the subscription has been cancelled
+    cancelled: Boolean,
+    // the number of reminder emails sent telling them their plan is about to expire
+    reminderEmails: Number
+})
+
 
 const businessesSchema = mongoose.Schema({
     // company name
@@ -106,8 +125,27 @@ const businessesSchema = mongoose.Schema({
     logo: String,
     // the exact time the business object was created
     dateCreated: Date,
-    // if they've set up their billing
+    // DEPRECIATED stripe billing customer id
     billingCustomerId: String,
+    // whether the user has full access to the site with a trial or paid subscription
+    fullAccess: Boolean,
+    // the number of candidates that have completed an eval
+    candidateCount: Number,
+    // billing info for the business and their subscription plans
+    billing: {
+        // the stripe customer ID for the business
+        customerId: String,
+        // whether the not the user has a valid card on file
+        cardOnFile: Boolean,
+        // if the customer has a custom plan with us
+        customPlan: Boolean,
+        // the subscription the business currently has
+        subscription: subscriptionSchema,
+        // the subscription the business has signed up for after the current one ends
+        newSubscription: subscriptionSchema,
+        // the old subscriptions the business has had
+        oldSubscriptions: [ subscriptionSchema ]
+    },
 
     emailNotifications: {
         time: String,
