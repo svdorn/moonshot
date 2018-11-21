@@ -798,7 +798,9 @@ async function addSubscription(customerId, subscriptionTerm) {
         try {
             var subscription = await stripe.subscriptions.create({
                 customer: customerId,
-                items: [{plan: process.env.NODE_ENV === "production" ? credentials.plans[index].id : credentials.plans[index].test_id}]
+                // STRIPE TEST
+                items: [{credentials.plans[index].test_id}]
+                // items: [{plan: process.env.NODE_ENV === "production" ? credentials.plans[index].id : credentials.plans[index].test_id}]
             });
         } catch(error) {
             console.log("Error adding subscription: ", error);
