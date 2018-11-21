@@ -140,15 +140,17 @@ async function POST_addCandidate(req, res) {
 async function POST_cancelBillingSubscription(req, res) {
     // all arguments recieved
     const body = sanitize(req.body);
-    console.log("body: ", body);
-    console.log("body data?: ", body.data)
     if (!body.data || !body.data.object) {
-        return res.status(500).send("Incorrect data supplied");
+        return res.status(400).send("Incorrect data supplied");
     }
     // the id of the subscription that was cancelled
     const subscriptionId = body.data.object.id;
     // customerId of stripe customer
     const customerId = body.data.object.customer;
+
+    if (!subscriptionId || !customerId) {
+        return res.status(400).send("Incorrect data supplied");
+    }
 
     // query the db the business with this stripe customerId
     const query = {
@@ -167,7 +169,7 @@ async function POST_cancelBillingSubscription(req, res) {
 
     if (!business || !business.billing) {
         console.log("No business or billing info for business in cancel stripe webhook.");
-        return res.status(500).send("No business or billing info for business.");
+        return res.status(400).send("No business or billing info for business.");
     }
 
     if (business.billing.subscription && business.billing.subscription.id) {
@@ -179,13 +181,11 @@ async function POST_cancelBillingSubscription(req, res) {
             business.billing.oldSubscriptions.push(business.billing.subscription);
             business.billing.subscription = undefined;
         } else {
-            return res.status(500).send("Error deleting the right subscription from our database");
+            return res.status(400).send("Error deleting the right subscription from our database");
         }
     } else {
-        return res.status(500).send("Error deleting the right subscription from our database");
+        return res.status(400).send("Error deleting the right subscription from our database");
     }
-
-    // TODO: if don't have new subscriptions, then there is no subscription so make sure to lock them out of their account
 
     // check for newSubscriptions, start that on stripe and make it subscription in our db
     if (business.billing.newSubscription && business.billing.newSubscription.name) {
