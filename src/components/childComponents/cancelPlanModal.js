@@ -57,7 +57,7 @@ class CancelPlanModal extends Component {
 
         if (!message) {
             // error
-            return this.setState({ error: "Before you cancel, please let us know why." });
+            return this.setState({ error: "Before you pause, please let us know why." });
         }
         this.props.pauseBillingPlan(_id, verificationToken, message);
         this.setState({ frame: "First" });
