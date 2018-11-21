@@ -42,6 +42,11 @@ class DataDisplayMenu extends Component {
             pathname = "";
         }
 
+        const menuItems = ["psych", "gca", "business"];
+        if (!menuItems.includes(pathname.split("/").pop())) {
+            goTo("/admin/dataDisplay/psych");
+        }
+
         const topOptions = [
             { title: "Personality", url: "/admin/dataDisplay/psych" },
             { title: "GCA", url: "/admin/dataDisplay/gca" },

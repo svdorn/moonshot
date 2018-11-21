@@ -106,8 +106,6 @@ class Psych extends Component {
             this.getOutputData
         ];
 
-        console.log("updating");
-
         updateFunctions[this.state.categoryIdx]();
     };
 
@@ -180,32 +178,17 @@ class Psych extends Component {
 
     // get data about the outputs that are given to people who take the test for fun
     getOutputData = () => {
-        const outputs = [
-            {
-                text:
-                    "You love to diggity dongus, but are generally hesitant to \
-                    scrim your scrongus. You love to diggity dongus, but are \
-                    generally hesitant to scrim your scrongus.",
-                disagree: 0.05,
-                neutral: 0.12,
-                agree: 0.83,
-                proportion: 0.14,
-                n: 403
-            },
-            {
-                text:
-                    "You love to diggity dongus, but are generally hesitant to \
-                    scrim your scrongus. You love to diggity dongus, but are \
-                    generally hesitant to scrim your scrongus.",
-                disagree: 0.15,
-                neutral: 0.2,
-                agree: 0.65,
-                proportion: 0.3,
-                n: 64
-            }
-        ];
-
-        this.setState({ outputs });
+        const self = this;
+        axios
+            .get("/api/admin/dataDisplay/outputs", {
+                params: { ...this.state.GETparams, site: this.state.site }
+            })
+            .then(result => {
+                self.setState({ outputs: result.data.outputs });
+            })
+            .catch(error => {
+                console.log("error getting factor data: ", error);
+            });
     };
 
     // change the site we're getting data from (All, Insights, Learning)
@@ -523,16 +506,32 @@ class Psych extends Component {
     outputs = () => {
         // map each of the outputs to a list item
         let outputItems = this.state.outputs.map((output, index) => {
-            return (
-                <li key={`output ${index}`} styleName="psych-output-item">
-                    <div>{output.text}</div>
-                    <div>{output.disagree}</div>
-                    <div>{output.neutral}</div>
-                    <div>{output.agree}</div>
-                    <div>{output.proportion}</div>
-                    <div>{output.n}</div>
+            let levels = ["high", "medium", "low"].map(level => {
+                const levelInfo = output[level];
+
+                return (
+                    <li key={`output ${index} ${level}`} styleName="psych-output-item">
+                        <div>{levelInfo.text}</div>
+                        <div>{levelInfo.disagree}</div>
+                        <div>{levelInfo.neutral}</div>
+                        <div>{levelInfo.agree}</div>
+                        <div>{levelInfo.proportion}</div>
+                        <div>{levelInfo.n}</div>
+                    </li>
+                );
+            });
+            // add in the header
+            levels.unshift(
+                <li
+                    key={`output ${index} header`}
+                    styleName="psych-output-item"
+                    style={{ listStyleType: "none" }}
+                >
+                    <div style={{ color: colors.primaryCyan }}>{output.name}</div>
                 </li>
             );
+
+            return levels;
         });
         // add in the headers
         outputItems.unshift(
@@ -551,7 +550,6 @@ class Psych extends Component {
     render() {
         const { categoryIdx, compareOpen } = this.state;
         const categoryDisplays = [this.factors, this.facets, this.questions, this.outputs];
-        console.log("categoryIdx: ", categoryIdx);
 
         return (
             <div style={{ textAlign: "center" }}>
