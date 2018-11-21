@@ -30,6 +30,44 @@ const {
 
 const { gradeEval, getCognitiveScore } = require("./evaluationApis");
 
+// give all businesses fullAccess and the right candidateCount
+async function billingUpdate() {
+    try {
+        var businesses = await Businesses.find({});
+    } catch (e) {
+        console.log("Error getting all the businesses: ", e);
+        return;
+    }
+
+    for (let bizIdx = 0; bizIdx < businesses.length; bizIdx++) {
+        let business = businesses[bizIdx];
+        // give the business full access
+        business.fullAccess = true;
+        // get the correct candidate count for the business
+        try {
+            var count = await Users.countDocuments({
+                userType: "candidate",
+                positions: {
+                    $elemMatch: { businessId: business._id, appliedEndDate: { $exists: true } }
+                }
+            }).select("name _id");
+        } catch (e) {
+            console.log(`Candidate count error for ${business.name} with id ${business._id}: `, e);
+            return;
+        }
+        business.candidateCount = count;
+
+        console.log("business name: ", business.name, " count: ", count);
+
+        try {
+            await business.save();
+        } catch (e) {
+            console.log(`Error saving business ${business.name} with id ${business._id}: `, e);
+            return;
+        }
+    }
+}
+
 // give all account admins the business id and unique name of their business
 async function accountAdminBusinessInfo() {
     try {
