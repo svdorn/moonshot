@@ -11,9 +11,8 @@ match = obj => ({ $match: obj });
 group = obj => ({ $group: obj });
 const psychExists = match({ "psychometricTest.endDate": { $exists: true } });
 
-const outputDescriptions = [
-    {
-        name: "Sincerity",
+const outputDescriptions = {
+    Sincerity: {
         high:
             "You believe in having relationships that are real. You dislike individuals who are fake and in turn, dislike being fake yourself. If a friend asks you if they have something in their teeth, you’re the type that would tell them without hesitation. People come to you for your advice and opinions, knowing that you’ll say what needs to be said, even if it’s not what they want to hear.",
         med:
@@ -21,8 +20,7 @@ const outputDescriptions = [
         low:
             "You love to play games. Your favorite one? People. You do what it takes to maintain an edge over others, flattering and conning your way through situations to come out on top. You won’t hesitate to say whatever needs to be said to achieve what you want."
     },
-    {
-        name: "Fairness",
+    Fairness: {
         high:
             "Your moral compass is impeccable. You would never cheat your way through any situation unless absolutely necessary, if at all, and stealing is out of the question. You dislike those that would take advantage of others for their own personal gain.",
         med:
@@ -30,8 +28,7 @@ const outputDescriptions = [
         low:
             "For you, everything is a means to an end. You’ll do what it takes to get ahead, whether it’s cheating or stealing, especially if someone deserves it. Doing something that helps your prosper, especially if you never get caught, is a no-brainer."
     },
-    {
-        name: "Greed-Avoidance",
+    "Greed-Avoidance": {
         high:
             "For you, experiences are worth far more than material goods. Your social status is unimportant, as long as you are happy with who you are. Money? It doesn’t buy your happiness. Being rich and famous? Overrated.",
         med:
@@ -39,8 +36,7 @@ const outputDescriptions = [
         low:
             "You tend to have the impulsive shopping spree, buying everything that you like. You see something that looks nice? Amazon it. Your dream home? A mansion full of nice cars and expensive things. You want people to know who you are and love feeling like you’re a part of exclusive groups. Appearance is key, and you’re happy when your appearance is pretty damn good."
     },
-    {
-        name: "Modesty",
+    Modesty: {
         high:
             "You believe that even if you were the President, you should be treated just like everyone else. You don’t like to have your name in lights, and although you appreciate it when people acknowledge your accomplishments, you rarely advertise them, if ever.",
         med:
@@ -48,8 +44,7 @@ const outputDescriptions = [
         low:
             "You love when people acknowledge your accomplishments. While some people might say you’re cocky or brag a lot, you know that you worked hard to achieve what you have. You don’t like when your achievements are overlooked and never overlook others’ achievements either. One of your mottos? Credit is given when credit is due."
     },
-    {
-        name: "Fearfulness",
+    Fearfulness: {
         high:
             "Your body’s well being is a priority to you. You avoid doing things that might get you seriously hurt or injured. Getting a motorcycle is out of the question and skydiving is not on your bucket list -- probably due to your fear of heights.",
         med:
@@ -57,16 +52,14 @@ const outputDescriptions = [
         low:
             "You’re an adrenaline seeker. While you may have a random fear of bugs or close spaces, a fear of heights is not one of those. If you haven’t done it already, skydiving is definitely on your bucket list. You’re the type of person that would run into a burning building to save someone without a second thought."
     },
-    {
-        name: "Anxiety",
+    Anxiety: {
         high:
             "You tend to stress a lot over the little things and constantly wonder why other people don’t. While some people might thrive in high stress environments, you prefer taking things on in small, manageable bites. Whether you turned the lights off or remembered to lock your door are some of the many concerns that are always on your mind throughout the day.",
         med: null,
         low:
             "and collected. Even when things do become difficult, stress is a feeling that you aren’t very familiar with."
     },
-    {
-        name: "Dependence",
+    Dependence: {
         high:
             "You are the type of person that works best by having people by your side. No problem is too difficult and no difficulty is a problem as long as you have people to talk to about it and rely on. You’ll go to your friends for a variety of reasons, from advice to help you make difficult decisions or simply just a shoulder to cry on.",
         med:
@@ -74,8 +67,7 @@ const outputDescriptions = [
         low:
             "Self assured, you rarely feel the need to burden others with your problems. Any obstacle that comes up in your life, you can deal with on your own. While there might be one or two people that you go to when you need to talk to someone, you rarely do so. Some might consider you emotionally distant, but you know that it’s just because you’re able to deal with problems yourself."
     },
-    {
-        name: "Sentimentality",
+    Sentimentality: {
         high:
             "You’re the type of person that gets very emotional at anything that involves emotion. Sad Facebook video? Tears. Happy ending to a movie? Tears of joy. Weddings? Tears. While others might think that you’re too emotional, they don’t understand. You have an extremely strong bond with other people and animals and sympathy and empathy beyond what many others are capable of.",
         med:
@@ -83,8 +75,7 @@ const outputDescriptions = [
         low:
             "You’re not the greatest at good-byes. It’s not because you won’t miss the person or anything, you just don’t get as emotional as others. Some might think you’re distant or cold, but you’re not emotionless, it just takes a lot to evoke visible sadness out of you. Sad movies do make you sad, just nowhere near the point of tears like they would for many others."
     },
-    {
-        name: "Social Self Esteem",
+    "Social Self Esteem": {
         high:
             "You have a confidence in yourself that many others lack. When it comes to difficult situations, you know that no matter what, you’ll make it to the other side. This self-confidence naturally draws people towards you, strangers and friends alike, and allows for greater ease in social situations.",
         med:
@@ -92,8 +83,7 @@ const outputDescriptions = [
         low:
             "Most times, if not all, you lack confidence. This lack of confidence tends to stem from a belief that you aren’t anything special and most people have more to offer than you. However, you overlook your own unique and likeable qualities, in favour of the ones that you believe to be dislikeable. But they are one in the same. While you might see yourself as shy and unpopular, others may see you as reserved, calm and someone with hidden depths."
     },
-    {
-        name: "Social Boldness",
+    "Social Boldness": {
         high:
             "You’re a natural leader. You thrive most in positions where you’re able to take charge. Even in situations where there is no formal leader, people tend to look to you for guidance and naturally follow your cues. If a situation were to spiral out of control, you would be the first one to step up to the plate, and others would gladly let you.",
         med:
@@ -101,8 +91,7 @@ const outputDescriptions = [
         low:
             "You have a tendency to avoid leadership roles. And while some, including yourself, may believe this is due to a lack of confidence in leading the charge, it’s because your talents are best utilized in a support role. A team cannot function without individuals like you and you are crucial for any teams success, filling roles that leader types cannot do."
     },
-    {
-        name: "Sociability",
+    Sociability: {
         high:
             "Navigating social situations is one of your many talents. People naturally gravitate towards you and find many aspects of your personality likeable. You thrive on being around people, constantly looking for reasons to celebrate or spend time with friends. You dislike being alone as socializing is your life blood.",
         med:
@@ -110,8 +99,7 @@ const outputDescriptions = [
         low:
             "You proposer best on your own. Being around people often drains you, and while you do enjoy people’s company, after a certain point you need to be alone to recharge. It allows for you to do what you want, without worrying about others, and reflect by yourself. While some may see you as shy or even antisocial, you know it’s not true, you simply prefer for others to make introductions first."
     },
-    {
-        name: "Forgiveness",
+    Forgiveness: {
         high:
             "You’re the type of person that easily forgives. Even if someone has wronged you in the past, you see the good in others and believe they always deserve another chance. As such, you are slow to judge others and always give them the benefit of the doubt. You’re more likely to attribute someone doing something negative as a slip up, rather than a fault in their character.",
         med:
@@ -119,8 +107,7 @@ const outputDescriptions = [
         low:
             "Many others might think you’re critical or judgemental. And while you are quick to judge, you know it’s because you’re a good judge of character and can read people better than most others. As such, if someone has wronged you, you often hold a grudge and will be extremely reluctant to forgive, as you know they are likely to do something like that again in the future."
     },
-    {
-        name: "Flexibility",
+    Flexibility: {
         high:
             "You are the bringer of peace. When things get to heated, you’re often the one to compromise, knowing that most times it’s just not worth it to argue. You’re always willing to hear others out and make sure their opinions are considered.",
         med:
@@ -128,8 +115,7 @@ const outputDescriptions = [
         low:
             "You are steadfast in standing by your beliefs and values. If you believe or know you are right, no one can change your mind. But being stubborn as a mule isn’t a bad thing, it shows you will always fight for your side and that you are someone that can be relied upon to carry something through."
     },
-    {
-        name: "Organization",
+    Organization: {
         high:
             "You live by order. Everything must be neat and organized, planned and laid out. You can’t stand messes and like to tackle tasks with a structured methodology. Nothing is ever out of place, not on your watch.",
         med:
@@ -137,8 +123,7 @@ const outputDescriptions = [
         low:
             "You tend to have spaces that other people may consider extremely messy. However, you tend to know exactly where everything is, and actually find yourself lost if everything is neat and organized. It’s simply how you function best."
     },
-    {
-        name: "Perfectionism",
+    Perfectionism: {
         high:
             "Ever the perfectionist, you make sure every detail is exactly the way you want it. Double checking is never enough, and you can’t stand when you think you’ve made a mistake. You push yourself to make everything you do the very best and always strive to improve, because sometimes the best just isn’t good enough.",
         med:
@@ -146,8 +131,7 @@ const outputDescriptions = [
         low:
             "You strive for efficiency. While others waste time doing more than is necessary, you know you can get ahead by doing what is needed and moving on to the next ask. Although sometimes the efficiency mentality leads to mistakes, the overall benefits of being efficient outweighs the risks."
     },
-    {
-        name: "Prudence",
+    Prudence: {
         high:
             "Everything needs a plan. You believe that there is a proper way to do most things and that you should always think carefully before you act. You rarely let impulses guide you, preferring to think through everything.",
         med:
@@ -155,21 +139,19 @@ const outputDescriptions = [
         low:
             "Impulsive. That word embodies you. You love to live life in the moment more than anything, going with your gut feeling rather than planning things out. Sometimes structure and planning can help, but for the most part, going with what you feel in the moment is the way to go. Only when you live life on the edge do you feel like you’re truly living."
     },
-    {
-        name: "Aesthetic Appreciation",
+    "Aesthetic Appreciation": {
         high:
             "You appreciate art and nature more than most others. Where others might be bored out of their minds in art museums, you find them fascinating and can lose yourself in art. You are the modern embodiment of the Renaissance, appreciating classical art, music and theatre and the world around you.",
         med: null,
         low: null
     },
-    {
-        name: "Inquisitiveness",
+    Inquisitiveness: {
         high:
             "Ever curious, you constantly wonder about everything around you. You love the sciences and the way they are able to explain why things happen. You know that all your questions could never be answered, but you’ll try your best to find answers for them. This curiosity in everything manifests itself in an urge to travel, giving you an indescribable wanderlust.",
         med: null,
         low: null
     }
-];
+};
 
 // get distribution and stats for each factor
 async function GET_factors(req, res, next) {
@@ -347,48 +329,96 @@ async function GET_outputs(req, res, next) {
 
     console.log("facets: ", facets);
 
-    // const asdf = facets.map(facet => {
-    //     return {
-    //         name: facet._id.name,
-    //         high: ,
-    //         medium: ,
-    //         low:
-    //     }
-    // })
+    const levels = ["high", "med", "low"];
+    const outputs = facets.map(facet => {
+        let output = { name: facet._id.name };
+
+        // if this facet doesn't have a corresponding output
+        if (!outputDescriptions[output.name]) {
+            output.high = { text: "no output" };
+            output.med = { text: "no output" };
+            output.low = { text: "no output" };
+        }
+        // if this facet DOES have a corresponding output
+        else {
+            // assign initial values for counts for each facet level
+            levels.forEach(level => {
+                output[level] = {
+                    text: outputDescriptions[output.name][level],
+                    Yes: 0,
+                    Neutral: 0,
+                    No: 0,
+                    n: 0,
+                    responded: 0
+                };
+            });
+            facet.instances.forEach(instance => {
+                let calculatedLevel = "low";
+                if (instance.score > -3) {
+                    calculatedLevel = "med";
+                }
+                if (instance.score >= 3) {
+                    calculatedLevel = "high";
+                }
+                if (["Yes", "Neutral", "No"].includes(instance.describesMe)) {
+                    // increase the "Yes", "No", or "Neutral" count for the facet level
+                    output[calculatedLevel][instance.describesMe]++;
+                    // increase the count of people who responded to the output
+                    output[calculatedLevel].responded++;
+                }
+                // increase the count of people who had this level
+                output[calculatedLevel].n++;
+            });
+
+            // calculate final values for each facet level
+            levels.forEach(level => {
+                const oLvl = output[level];
+                const r = oLvl.responded;
+                const { n } = oLvl;
+                output[level].disagree = oLvl.n === 0 ? "" : oLvl.No / r;
+                output[level].neutral = oLvl.n === 0 ? "" : oLvl.Neutral / r;
+                output[level].agree = oLvl.n === 0 ? "" : oLvl.Yes / r;
+                output[level].proportion =
+                    facet.instances.length === "" ? 0 : n / facet.instances.length;
+            });
+        }
+
+        return output;
+    });
 
     // high, neutral, agree = number of people with that answer (in this score range) / number of people in this score range
     // proportion = number of people in this score range / number of people in all score ranges for this facet
     // n = number of people in all score ranges for this facet
 
-    const outputs = [
-        {
-            name: "Sincerity",
-            high: {
-                text: "you dingle",
-                disagree: 0.05,
-                neutral: 0.12,
-                agree: 0.83,
-                proportion: 0.14,
-                n: 403
-            },
-            medium: {
-                text: "you dangle",
-                disagree: 0.05,
-                neutral: 0.12,
-                agree: 0.83,
-                proportion: 0.14,
-                n: 403
-            },
-            low: {
-                text: "you dwong",
-                disagree: 0.05,
-                neutral: 0.12,
-                agree: 0.83,
-                proportion: 0.14,
-                n: 403
-            }
-        }
-    ];
+    // const outputs = [
+    //     {
+    //         name: "Sincerity",
+    //         high: {
+    //             text: "you dingle",
+    //             disagree: 0.05,
+    //             neutral: 0.12,
+    //             agree: 0.83,
+    //             proportion: 0.14,
+    //             n: 403
+    //         },
+    //         med: {
+    //             text: "you dangle",
+    //             disagree: 0.05,
+    //             neutral: 0.12,
+    //             agree: 0.83,
+    //             proportion: 0.14,
+    //             n: 403
+    //         },
+    //         low: {
+    //             text: "you dwong",
+    //             disagree: 0.05,
+    //             neutral: 0.12,
+    //             agree: 0.83,
+    //             proportion: 0.14,
+    //             n: 403
+    //         }
+    //     }
+    // ];
 
     return res.status(200).send({ outputs });
 }

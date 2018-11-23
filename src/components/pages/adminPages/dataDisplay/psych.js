@@ -54,6 +54,15 @@ const nums = [
 const randomData = [0, 1, 2, 3, 4, 5, 6].map(n =>
     nums.map(num => ({ name: num, quantity: randomInt(0, 400) }))
 );
+const makePercent = num => {
+    if (typeof num !== "number") {
+        return "";
+    }
+    num *= 1000;
+    num = Math.round(num);
+    num /= 10;
+    return `${num}%`;
+};
 
 class Psych extends Component {
     constructor(props) {
@@ -506,16 +515,17 @@ class Psych extends Component {
     outputs = () => {
         // map each of the outputs to a list item
         let outputItems = this.state.outputs.map((output, index) => {
-            let levels = ["high", "medium", "low"].map(level => {
+            let levels = ["high", "med", "low"].map(level => {
                 const levelInfo = output[level];
 
                 return (
                     <li key={`output ${index} ${level}`} styleName="psych-output-item">
                         <div>{levelInfo.text}</div>
-                        <div>{levelInfo.disagree}</div>
-                        <div>{levelInfo.neutral}</div>
-                        <div>{levelInfo.agree}</div>
-                        <div>{levelInfo.proportion}</div>
+                        <div>{makePercent(levelInfo.disagree)}</div>
+                        <div>{makePercent(levelInfo.neutral)}</div>
+                        <div>{makePercent(levelInfo.agree)}</div>
+                        <div>{makePercent(levelInfo.proportion)}</div>
+                        <div>{levelInfo.responded}</div>
                         <div>{levelInfo.n}</div>
                     </li>
                 );
@@ -541,6 +551,7 @@ class Psych extends Component {
                 <div>Neutral</div>
                 <div>Agree</div>
                 <div>Proportion</div>
+                <div>Responded</div>
                 <div style={{ fontStyle: "italic" }}>n = </div>
             </li>
         );
