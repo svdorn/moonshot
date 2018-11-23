@@ -198,8 +198,6 @@ async function GET_factors(req, res, next) {
     // go through each factor, group factors by factor name
     let factorArraysObj = makeFactorArraysObj(allFactors);
 
-    console.log("factorArraysObj: ", factorArraysObj);
-
     // an array that will contain the factors that will be returned to the front end
     let newFactorObjs = [];
 
