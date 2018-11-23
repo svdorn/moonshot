@@ -404,7 +404,7 @@ function getFormattedDate(date) {
     const newDate = new Date(date);
     let year = newDate.getFullYear();
     let month = getMonthText(newDate.getMonth());
-    let day = newDate.getDate() + 1;
+    let day = newDate.getDate();
 
     return month + " " + day + ", " + year;
 }
