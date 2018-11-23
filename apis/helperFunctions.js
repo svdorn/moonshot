@@ -7,6 +7,7 @@ const UnsubscribedEmails = require("../models/unsubscribedEmails.js");
 const UniqueEmails = require("../models/uniqueEmails.js");
 const Businesses = require('../models/businesses.js');
 const Skills = require('../models/skills.js');
+const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 
 const errors = require("./errors");
 const crypto = require('crypto');
@@ -750,6 +751,59 @@ function lastPossibleSecond(date, daysToAdd) {
     return (new Date(year, month, day, hour, minute, second));
 }
 
+// get the end date of a subscription and return it
+function getBillingEndDate(startDate, subscriptionTerm) {
+    // number of months the subscription lasts
+    let subscriptionLength = 0;
+
+    switch(subscriptionTerm) {
+        case "1 year":
+            subscriptionLength = 12;
+            break;
+        case "6 months":
+            subscriptionLength = 6;
+            break;
+        case "3 months":
+            subscriptionLength = 3;
+            break;
+        case "1 month":
+            subscriptionLength = 1;
+            break;
+        default:
+            subscriptionLength = 0;
+            break;
+    }
+    // get the end date
+    let endDate = new Date(startDate);
+
+    // set end date to be x months ahead of the startdate
+    endDate = endDate.setMonth(endDate.getMonth() + subscriptionLength);
+
+    return endDate;
+}
+
+// add a subscription to a customer
+async function addSubscription(customerId, subscriptionTerm) {
+    return new Promise(async function(resolve, reject) {
+        const index = credentials.plans.findIndex(plan => {
+            return plan.period.toString() === subscriptionTerm.toString();
+        });
+
+
+        try {
+            var subscription = await stripe.subscriptions.create({
+                customer: customerId,
+                items: [{plan: process.env.NODE_ENV === "production" ? credentials.plans[index].id : credentials.plans[index].test_id}]
+            });
+        } catch(error) {
+            console.log("Error adding subscription: ", error);
+            return reject("Error adding subscription.");
+        }
+
+        return resolve(subscription);
+    })
+}
+
 
 // find the value of a certain attribute within an object
 function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
@@ -989,6 +1043,82 @@ function emailFooter(userEmail, extraInfo) {
     );
 }
 
+function makePossessive(name) {
+    if (typeof name !== "string") {
+        return name;
+    }
+    const possessivePronouns = ["your", "her", "his", "their", "our"];
+    if (name.endsWith("'s") || possessivePronouns.includes(name.toLowerCase())) {
+        return name;
+    } else {
+        return name + "'s";
+    }
+}
+
+function makeSingular(string) {
+    if (typeof string !== "string") {
+        return string;
+    }
+    if (string.endsWith("s")) {
+        return string.slice(0, string.length - 1);
+    } else {
+        return string;
+    }
+}
+
+function getMonthText(month) {
+    switch(month) {
+        case 0:
+            return "January";
+            break;
+        case 1:
+            return "February";
+            break;
+        case 2:
+            return "March";
+            break;
+        case 3:
+            return "April";
+            break;
+        case 4:
+            return "May";
+            break;
+        case 5:
+            return "June";
+            break;
+        case 6:
+            return "July";
+            break;
+        case 7:
+            return "August";
+            break;
+        case 8:
+            return "September";
+            break;
+        case 9:
+            return "October";
+            break;
+        case 10:
+            return "November";
+            break;
+        case 11:
+            return "December";
+            break;
+        default:
+            return "January";
+            break;
+    }
+}
+
+function getFormattedDate(date) {
+    const newDate = new Date(date);
+    let year = newDate.getFullYear();
+    let month = getMonthText(newDate.getMonth());
+    let day = newDate.getDate();
+
+    return month + " " + day + ", " + year;
+}
+
 
 // create a new object from the properties of another
 // e.g. const cat = { weight: 26, name: "Mitsy", height: 8 }
@@ -1025,6 +1155,11 @@ const helperFunctions = {
     propertyExists,
     emailFooter,
     newObjectFromProps,
+    getBillingEndDate,
+    addSubscription,
+    makePossessive,
+    makeSingular,
+    getFormattedDate,
 
     Queue,
     Stack,

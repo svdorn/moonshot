@@ -1,8 +1,8 @@
-"use strict"
-import React, { Component } from 'react';
-import { agreeToTerms, addNotification } from '../../actions/usersActions';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+"use strict";
+import React, { Component } from "react";
+import { agreeToTerms, addNotification } from "../../actions/usersActions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { CircularProgress } from "material-ui";
 
 class AgreeToTerms extends Component {
@@ -10,36 +10,42 @@ class AgreeToTerms extends Component {
         super(props);
 
         // figure out which agreements are necessary
-        let agreements = [
-            {name: "Privacy Policy", link: "privacyPolicy", type: "local"}
-        ];
+        let agreements = [{ name: "Privacy Policy", link: "privacyPolicy", type: "local" }];
         // agreement to add for candidates
-        if (this.props.currentUser.userType === "candidate") {
-            agreements.push({name: "Terms of Use", link: "termsOfUse", type: "local"});
+        const { currentUser } = this.props;
+        if (currentUser && currentUser.userType === "candidate") {
+            agreements.push({ name: "Terms of Use", link: "termsOfUse", type: "local" });
         }
         // agreement to add for non-candidates (account admins, managers, employees)
         else {
-            agreements.push({name: "Terms of Service", link: "https://www.docdroid.net/pGBcFSh/moonshot-insights-agreement.pdf", type: "foreign"});
+            agreements.push({
+                name: "Terms of Service",
+                link: "https://www.docdroid.net/pGBcFSh/moonshot-insights-agreement.pdf",
+                type: "foreign"
+            });
         }
 
         // if userChecked is true, render the child component
         this.state = { agreedToTerms: false, agreements };
     }
 
-
     handleCheckMarkClick() {
         this.setState({ agreedToTerms: !this.state.agreedToTerms });
     }
 
-
     agreeToTerms() {
-        if (this.state.agreedToTerms) {
-            this.props.agreeToTerms(this.props.currentUser._id, this.props.currentUser.verificationToken, this.state.agreements);
+        const { currentUser } = this.props;
+
+        if (this.state.agreedToTerms && currentUser) {
+            this.props.agreeToTerms(
+                currentUser._id,
+                currentUser.verificationToken,
+                this.state.agreements
+            );
         } else {
             this.props.addNotification("Must agree to terms and conditions to continue.", "error");
         }
     }
-
 
     createAgreementLinks() {
         const agreements = this.state.agreements;
@@ -56,7 +62,8 @@ class AgreeToTerms extends Component {
             links.push(comma + and);
             // if linking to local, push to /{link}, otherwise push to the entire link
             links.push(
-                <a  key={agreement.name}
+                <a
+                    key={agreement.name}
                     className="primary-cyan"
                     href={agreement.type === "local" ? `/${agreement.link}` : agreement.link}
                     target="_blank"
@@ -69,16 +76,18 @@ class AgreeToTerms extends Component {
         return links;
     }
 
-
     render() {
         return (
             <div>
                 <div className="headerSpace" />
                 <div className="fillScreen center">
-                    <div className="form lightBlackForm" style={{padding: "10px 20px 20px"}}>
-                        <h1 className="primary-white" style={{margin: "20px 0 40px"}}>Terms and Conditions</h1>
-                        <div className="checkbox smallCheckbox whiteCheckbox"
-                             onClick={this.handleCheckMarkClick.bind(this)}
+                    <div className="form lightBlackForm" style={{ padding: "10px 20px 20px" }}>
+                        <h1 className="primary-white" style={{ margin: "20px 0 40px" }}>
+                            Terms and Conditions
+                        </h1>
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={this.handleCheckMarkClick.bind(this)}
                         >
                             <img
                                 alt=""
@@ -87,12 +96,18 @@ class AgreeToTerms extends Component {
                             />
                         </div>
                         I have read and agree to the Moonshot Insights {this.createAgreementLinks()}.
-                        <br/>
-                        {this.props.loading ?
-                            <CircularProgress style={{margin: "20px 0"}} color="white" />
-                            : <div style={{margin: "20px 0"}} className="skillContinueButton" onClick={this.agreeToTerms.bind(this)}>Continue</div>
-                        }
-
+                        <br />
+                        {this.props.loading ? (
+                            <CircularProgress style={{ margin: "20px 0" }} color="white" />
+                        ) : (
+                            <div
+                                style={{ margin: "20px 0" }}
+                                className="skillContinueButton"
+                                onClick={this.agreeToTerms.bind(this)}
+                            >
+                                Continue
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -101,10 +116,13 @@ class AgreeToTerms extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        agreeToTerms,
-        addNotification
-    }, dispatch);
+    return bindActionCreators(
+        {
+            agreeToTerms,
+            addNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -115,4 +133,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AgreeToTerms);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AgreeToTerms);

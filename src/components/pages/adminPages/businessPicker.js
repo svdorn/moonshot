@@ -1,12 +1,11 @@
-"use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
-import {addNotification} from "../../../actions/usersActions";
-import {bindActionCreators} from 'redux';
-import axios from 'axios';
-import {CircularProgress, RaisedButton} from 'material-ui';
-
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { browserHistory } from "react-router";
+import { addNotification } from "../../../actions/usersActions";
+import { bindActionCreators } from "redux";
+import axios from "axios";
+import { CircularProgress, RaisedButton } from "material-ui";
 
 class BusinessPicker extends Component {
     constructor(props) {
@@ -17,26 +16,32 @@ class BusinessPicker extends Component {
         };
     }
 
-
     componentDidMount() {
         const self = this;
-        axios.get("/api/admin/allBusinesses", {
-            params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
-            }
-        })
-        .then(response => {
-            self.setState({ businesses: response.data });
-        })
-        .catch(error => {
-            console.log("error: ", error);
-            // set businesses to empty array to get rid of loader
-            self.setState({ businesses: [] });
-            self.props.addNotification("Error getting businesses.", "error");
-        });
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+        axios
+            .get("/api/admin/allBusinesses", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
+                }
+            })
+            .then(response => {
+                self.setState({ businesses: response.data });
+            })
+            .catch(error => {
+                console.log("error: ", error);
+                // set businesses to empty array to get rid of loader
+                self.setState({ businesses: [] });
+                self.props.addNotification("Error getting businesses.", "error");
+            });
     }
-
 
     goTo(route) {
         // goes to the wanted page
@@ -45,16 +50,20 @@ class BusinessPicker extends Component {
         window.scrollTo(0, 0);
     }
 
-
     render() {
         const self = this;
+        const { currentUser } = this.props;
 
-        if (!self.props.currentUser.admin === true) {
+        if (!currentUser || !currentUser.admin === true) {
             return null;
         }
 
         if (!Array.isArray(this.state.businesses)) {
-            return (<div className="fillScreen"><CircularProgress /></div>);
+            return (
+                <div className="fillScreen">
+                    <CircularProgress />
+                </div>
+            );
         }
 
         // show all the current businesses
@@ -82,18 +91,20 @@ class BusinessPicker extends Component {
         );
 
         return (
-            <div className="fillScreen primary-white" style={{margin: "30px"}}>
+            <div className="fillScreen primary-white" style={{ margin: "30px" }}>
                 {businesses}
             </div>
         );
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        addNotification
-    }, dispatch);
+    return bindActionCreators(
+        {
+            addNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -102,4 +113,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessPicker);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BusinessPicker);

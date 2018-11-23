@@ -11,7 +11,7 @@ import InviteCandidatesModal from "./inviteCandidatesModal";
 import AddPositionDialog from "../../childComponents/addPositionDialog";
 import AddUserDialog from "../../childComponents/addUserDialog";
 import VerificationModal from "./dashboardItems/onboarding/childComponents/verificationModal";
-import axios from 'axios';
+import axios from "axios";
 
 import "./dashboard.css";
 
@@ -23,67 +23,86 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-        if (
-            this.props.location &&
-            this.props.location.query &&
-            this.props.location.query.inviteCandidates === "open"
-        ) {
+        const { currentUser, positionCount, location } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
+        if (location && location.query && location.query.inviteCandidates === "open") {
             this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL");
         }
         let self = this;
-        const { currentUser, positionCount } = this.props;
         if (!positionCount || positionCount < 1) {
             // get all the positions they're evaluating for
-            axios.get("/api/business/positions", {
-                params: {
-                    userId: currentUser._id,
-                    verificationToken: currentUser.verificationToken
-                }
-            })
-            .then(res => {
-                const positions = res.data.positions;
-                if (positions && Array.isArray(positions) && positions.length > 0) {
-                    this.props.updatePositionCount(positions.length);
-                } else {
-                    this.props.updatePositionCount(0);
-                }
-            })
-            .catch(err => {
-                console.log("error getting positions: ", err);
-                if (err.response && err.response.data) { console.log(err.response.data); }
-            });
+            axios
+                .get("/api/business/positions", {
+                    params: {
+                        userId: currentUser._id,
+                        verificationToken: currentUser.verificationToken
+                    }
+                })
+                .then(res => {
+                    const positions = res.data.positions;
+                    if (positions && Array.isArray(positions) && positions.length > 0) {
+                        this.props.updatePositionCount(positions.length);
+                    } else {
+                        this.props.updatePositionCount(0);
+                    }
+                })
+                .catch(err => {
+                    console.log("error getting positions: ", err);
+                    if (err.response && err.response.data) {
+                        console.log(err.response.data);
+                    }
+                });
         }
     }
 
     componentDidUpdate() {
-        const { positionCount } = this.props;
+        const { positionCount, currentUser } = this.props;
         if (!positionCount || positionCount < 1) {
-            const currentUser = this.props.currentUser;
+            if (!currentUser) {
+                return this.props.addNotification(
+                    "You aren't logged in! Try refreshing the page.",
+                    "error"
+                );
+            }
+
             // get all the positions they're evaluating for
-            axios.get("/api/business/positions", {
-                params: {
-                    userId: currentUser._id,
-                    verificationToken: currentUser.verificationToken
-                }
-            })
-            .then(res => {
-                const positions = res.data.positions;
-                if (positions && Array.isArray(positions) && positions.length > 0) {
-                    this.props.updatePositionCount(positions.length);
-                } else {
-                    this.props.updatePositionCount(0);
-                }
-            })
-            .catch(err => {
-                console.log("error getting positions: ", err);
-                if (err.response && err.response.data) { console.log(err.response.data); }
-            });
+            axios
+                .get("/api/business/positions", {
+                    params: {
+                        userId: currentUser._id,
+                        verificationToken: currentUser.verificationToken
+                    }
+                })
+                .then(res => {
+                    const positions = res.data.positions;
+                    if (positions && Array.isArray(positions) && positions.length > 0) {
+                        this.props.updatePositionCount(positions.length);
+                    } else {
+                        this.props.updatePositionCount(0);
+                    }
+                })
+                .catch(err => {
+                    console.log("error getting positions: ", err);
+                    if (err.response && err.response.data) {
+                        console.log(err.response.data);
+                    }
+                });
         }
     }
 
     render() {
         const user = this.props.currentUser;
         const positionCount = this.props.positionCount;
+
+        if (!user) {
+            return null;
+        }
 
         let activity = <DashboardItem type="Activity" width={3} />;
         if (user && user.popups && user.popups.dashboard) {

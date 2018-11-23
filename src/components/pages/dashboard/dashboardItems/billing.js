@@ -1,9 +1,9 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import { generalAction } from "../../../../actions/usersActions";
+import { generalAction, getBillingInfo } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -12,100 +12,158 @@ import { primaryCyan } from "../../../../colors";
 
 import "../dashboard.css";
 
-
 class Billing extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            // whether the business has billing set up for their account
-            billingIsSetUp: undefined,
-            // the length of time the user selected to pay for new hires
-            pricing: "24 Months",
-            // what the user will pay per month
-            price: 80
+            billing: undefined,
+            currentPlan: undefined,
+            html: undefined,
+            CTA: undefined
         };
     }
-
 
     // load graph data for the candidate completions over last week
     componentDidMount() {
         const self = this;
-        const user = this.props.currentUser;
+        const { currentUser, billing, fullAccess, getBillingInfo } = this.props;
 
-        const query = { params: {
-            userId: user._id,
-            verificationToken: user.verificationToken,
-            businessId: user.businessInfo.businessId
-        } };
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
 
-        // find out whether billing is set up, if error assume not
-        axios.get("/api/business/billingIsSetUp", query)
-        .then(response => {
-            if (propertyExists(response, ["data", "billingIsSetUp"])) {
-                self.setState({ billingIsSetUp: response.data.billingIsSetUp });
-            } else {
-                self.setState({ billingIsSetUp: false });
-            }
-        })
-        .catch(error => {
-            self.setState({ billingIsSetUp: false });
-        });
+        // if already have billng
+        if (billing) {
+            return this.getState(billing);
+        }
+
+        const businessId =
+            currentUser && currentUser.businessInfo ? currentUser.businessInfo.businessId : null;
+
+        getBillingInfo(currentUser._id, currentUser.verificationToken, businessId);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.billing != this.state.billing) {
+            this.getState(nextProps.billing);
+        }
+    }
 
-    // create the dropdown for a candidate's hiring stage
-    makePricingDropdown(pricingValue) {
-        const monthNumbers = ["24 Months", "18 Months", "12 Months", "6 Months"];
-
-        // create the stage name menu items
-        const monthNumberItems = monthNumbers.map(monthNumber => {
-            return (
-                <MenuItem
-                    value={monthNumber}
-                    key={`pricing ${monthNumber}`}
-                >
-                    { monthNumber }
-                </MenuItem>
-            )
-        });
-
+    freeContent() {
         return (
-            <Select
-                disableUnderline={true}
-                classes={{
-                    root: "selectRootBlue home-pricing-select underline",
-                    icon: "selectIconWhiteImportant"
-                }}
-                style={{width: "110px"}}
-                value={pricingValue}
-                onChange={this.handleChangePricingValue(pricingValue)}
-                key={`pricingValue`}
-            >
-                { monthNumberItems }
-            </Select>
+            <div>
+                {
+                    "It's free until you make your first hire or evaluate 20 candidates, whichever comes first."
+                }
+            </div>
         );
     }
 
-
-    // handle a click on a hiring stage
-    handleChangePricingValue = pricing => event => {
-        const pricingValue = event.target.value;
-        let price = 80;
-        switch (pricingValue) {
-            case "24 Months": { price = 80; break; }
-            case "18 Months": { price = 105; break; }
-            case "12 Months": { price = 150; break; }
-            case "6 Months": { price = 300; break; }
-            default: { break; }
-        }
-        this.setState({pricing: pricingValue, price});
+    freePlanEnded() {
+        return (
+            <div>
+                Your free plan has ended but everything has been saved for you.{" "}
+                <span className="primary-cyan clickable" onClick={() => goTo("/billing")}>
+                    Select a plan
+                </span>{" "}
+                to continue using your account.
+            </div>
+        );
     }
 
+    currentPlanEnded() {
+        return (
+            <div>
+                Your current plan has ended but everything has been saved for you.{" "}
+                <span className="primary-cyan clickable" onClick={() => goTo("/billing")}>
+                    Select a new plan
+                </span>{" "}
+                to continue using your account.
+            </div>
+        );
+    }
+
+    currentPlanEnding(date) {
+        return (
+            <div>
+                Your current plan is ending {new Date(date).toDateString()}.{" "}
+                <span className="primary-cyan clickable" onClick={() => goTo("/billing")}>
+                    Select a new plan
+                </span>{" "}
+                to continue using your account.
+            </div>
+        );
+    }
+
+    customPlan() {
+        return (
+            <div>
+                {
+                    "You have a custom pricing plan with Moonshot Insights. For more information or to change your plan, please message us and we will be happy to help."
+                }
+            </div>
+        );
+    }
+
+    unlimited() {
+        return (
+            <div>
+                {
+                    "Invite unlimited candidates, create evaluations for all your open positions and evaluate employees to customize and improve your candidate predictions."
+                }
+            </div>
+        );
+    }
+
+    getState = billing => {
+        const { fullAccess } = this.props;
+
+        let currentPlan = "";
+        let html = null;
+        let CTA = "See Plans";
+        if (billing && billing.customPlan) {
+            currentPlan = "Custom";
+            html = this.customPlan();
+        } else if (!billing || !billing.subscription) {
+            if (!billing || fullAccess) {
+                // on free plan
+                currentPlan = "Free";
+                html = this.freeContent();
+                CTA = "See Pricing";
+            } else {
+                currentPlan = "Select One";
+                if (billing.oldSubscriptions && billing.oldSubscriptions.length > 0) {
+                    // cancelled and old subscription is over
+                    html = this.currentPlanEnded();
+                } else {
+                    // never added a subscription after free trial
+                    html = this.freePlanEnded();
+                }
+            }
+        } else {
+            if (billing.subscription.toCancel && !billing.newSubscription) {
+                // subscription still active but set to cancel
+                currentPlan = "Select One";
+                html = this.currentPlanEnding(billing.subscription.dateEnding);
+            } else {
+                currentPlan = "Unlimited";
+                html = this.unlimited();
+            }
+        }
+
+        return this.setState({ billing, currentPlan, html, CTA });
+    };
 
     render() {
+        const { billing } = this.props;
+        const { currentPlan, html, CTA } = this.state;
+
         // return progress bar if not ready yet
-        if (typeof this.state.billingIsSetUp !== "boolean") {
+        if (!billing) {
             return (
                 <div className="fully-center">
                     <CircularProgress style={{ color: primaryCyan }} />
@@ -113,80 +171,59 @@ class Billing extends Component {
             );
         }
 
-        // by default show that we're going to be adding billing info
-        let currentPlan = "Starter";
-        if (this.state.billingIsSetUp) { currentPlan = "Pro"; }
-
         // standard dashboard box header
         const header = (
             <div styleName="box-header">
                 <div styleName="box-title">
-                    Current Plan: <span className="primary-cyan">{ currentPlan }</span>
+                    Plan:{" "}
+                    <span
+                        className="primary-cyan clickableNoUnderline"
+                        onClick={() => goTo("/billing")}
+                    >
+                        {currentPlan}
+                    </span>
                 </div>
             </div>
         );
 
-        const content = (
-            <div style={{padding: "5px 14px"}}>
-                { this.state.billingIsSetUp ?
-                    <div styleName="payment-plan">
-                        Only Pay When You Hire
-                    </div>
-                    : null
-                }
-                <ul styleName="pricing-list">
-                    <li>Unlimited candidates, positions, and employees</li>
-                    <li>
-                        { this.state.billingIsSetUp ?
-                            "Only pay us when you hire a top performer who stays at your company"
-                            : "Your first hire is free, each additional hire:"
-                        }
-                    </li>
-                </ul>
-                { this.state.billingIsSetUp ? null :
-                    <div className="primary-white center">
-                        <span className="font30px font24pxUnder400 home-blue" style={{fontWeight:"bold"}}>${this.state.price}</span>
-                        <span className="font16px font14pxUnder400">&nbsp;/ month</span>
-                        <div className="font16px font14pxUnder400" style={{marginTop:"-10px"}}>
-                            <span>for up to&nbsp;</span>
-                            {this.makePricingDropdown(this.state.pricing)}
-                        </div>
-                    </div>
-                }
-                <div style={{marginTop:"10px"}} onClick={() => goTo("/pricing")} styleName="pricing-link">See Pricing</div>
-            </div>
-        );
+        const content = <div style={{ padding: "20px 14px" }}>{html}</div>;
 
         const smallCTA = (
             <div styleName="box-cta" onClick={() => goTo("/billing")}>
-                { this.state.billingIsSetUp ? "" : "Add" } Billing
-                Info <img src={`/icons/LineArrow${this.props.png}`} />
+                {CTA} <img src={`/icons/LineArrow${this.props.png}`} />
             </div>
         );
 
         return (
             <div>
-                { header }
-                { content }
-                { smallCTA }
+                {header}
+                {content}
+                {smallCTA}
             </div>
         );
     }
 }
 
-
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        billing: state.users.billing,
+        fullAccess: state.users.fullAccess,
         png: state.users.png
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        generalAction
-    }, dispatch);
+    return bindActionCreators(
+        {
+            generalAction,
+            getBillingInfo
+        },
+        dispatch
+    );
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Billing);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Billing);

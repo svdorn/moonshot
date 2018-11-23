@@ -7,6 +7,7 @@ module.exports = {
         disabled: "button medium round-4px gradient-transition disabled",
         cyan: "button medium round-4px background-primary-cyan",
         cyanRound: "button medium round-6px background-primary-cyan",
-        lightBlack: "button medium round-6px background-secondary-dark-gray"
+        lightBlack: "button medium round-6px background-secondary-dark-gray",
+        white: "button medium round-6px background-primary-white"
     }
 }

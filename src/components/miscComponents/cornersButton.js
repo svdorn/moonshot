@@ -13,7 +13,7 @@ class CornersButton extends Component {
     }
 
     render() {
-        let { className, onClick, color1, color2, style, content, png } = this.props;
+        let { className, onClick, color1, color2, style, content, png, size, active } = this.props;
         if (typeof className !== "string") {
             className = "";
         }
@@ -29,8 +29,15 @@ class CornersButton extends Component {
         if (typeof style !== "object") {
             style = {};
         }
+        if (typeof size !== "string") {
+            size = "";
+        }
+        if (typeof active !== "string") {
+            active = "";
+        }
+
         return (
-            <div styleName="button" className={className} onClick={onClick} style={style}>
+            <div styleName={"button " + size + " " + active} className={className} onClick={onClick} style={style}>
                 <div styleName="content" style={{ color: color1 }}>
                     {content}
                 </div>

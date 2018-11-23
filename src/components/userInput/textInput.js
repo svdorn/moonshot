@@ -1,7 +1,5 @@
 "use strict";
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { Field } from "redux-form";
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
@@ -84,16 +82,6 @@ class TextInput extends Component {
             </div>
         );
     }
-}
-
-function mapStateToProps(state) {
-    return {
-        currentUser: state.users.currentUser
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
 }
 
 export default TextInput;

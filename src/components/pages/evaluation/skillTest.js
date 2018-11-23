@@ -1,9 +1,13 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { closeNotification, answerEvaluationQuestion, addNotification } from "../../../actions/usersActions";
+import {
+    closeNotification,
+    answerEvaluationQuestion,
+    addNotification
+} from "../../../actions/usersActions";
 import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import StyledContent from "../../childComponents/styledContent";
@@ -18,7 +22,6 @@ class SkillTest extends Component {
             agreedToTerms: false
         };
     }
-
 
     // shuffles a general array, used for shuffling questions around
     shuffle(arr) {
@@ -42,10 +45,10 @@ class SkillTest extends Component {
         return array;
     }
 
-
     // when any answer is clicked
-    selectAnswer(selectedId) { this.setState({...this.state, selectedId}); }
-
+    selectAnswer(selectedId) {
+        this.setState({ ...this.state, selectedId });
+    }
 
     // move on to the next question (or start/finish the test)
     nextQuestion() {
@@ -57,30 +60,28 @@ class SkillTest extends Component {
         }
     }
 
-
     // when new question is here, set the current answer as nonexistent
     componentDidUpdate(prevProps, prevState) {
         try {
             if (prevProps.questionInfo._id !== this.props.questionInfo._id) {
                 this.setState({ selectedId: undefined });
             }
+        } catch (e) {
+            /* if this fails it's probably because there is no question info */
         }
-        catch (e) { /* if this fails it's probably because there is no question info */ }
     }
-
 
     startTest() {
         // can only start test if have agreed to skill terms now or in past
-        if (this.props.currentUser.agreedToSkillTerms || this.state.agreedToTerms) {
+        const { currentUser } = this.props;
+        if ((currentUser && currentUser.agreedToSkillTerms) || this.state.agreedToTerms) {
             this.props.answerEvaluationQuestion("Skill", this.props.credentials);
         }
     }
 
-
     handleCheckMarkClick() {
         this.setState({ agreedToTerms: !this.state.agreedToTerms });
     }
-
 
     // used if the user has been through a skill in the past but hasn't started this one yet
     introPage() {
@@ -88,64 +89,90 @@ class SkillTest extends Component {
             <div className="center primary-white">
                 <h4>Skill Test</h4>
                 <p>Ready for another skill test?</p>
-                <p>Don{"'"}t forget, your questions are timed, so don{"'"}t take a nap in the middle.</p>
-                <p>Let{"'"}s see what you{"'"}ve got!</p>
-                {this.props.loading ?
-                    <CircularProgress color="secondary" style={{marginBottom: "40px"}} />
-                    :
+                <p>
+                    Don{"'"}t forget, your questions are timed, so don{"'"}t take a nap in the
+                    middle.
+                </p>
+                <p>
+                    Let{"'"}s see what you{"'"}ve got!
+                </p>
+                {this.props.loading ? (
+                    <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                ) : (
                     <div
-                        style={{marginBottom: "40px", width: "initial"}}
+                        style={{ marginBottom: "40px", width: "initial" }}
                         className="noselect skillContinueButton"
                         onClick={this.startTest.bind(this)}
                     >
                         Begin
                     </div>
-                }
+                )}
             </div>
-        )
+        );
     }
-
 
     // rendered if the user is on the first skill test of an eval and hasn't agreed to the test terms
     userAgreementPage() {
-        const buttonClass = "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
+        const buttonClass =
+            "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
 
         return (
             <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
-                <div className="font24px" style={{marginBottom: "20px"}}><span>Skills</span></div>
-                <div>
-                    <p>This is the skills portion of the evaluation. Here you will be tested on your aptitude in one or more skills.</p>
-                    <p><span>TIME IS A FACTOR.</span> After 60 seconds for each question, your score for that question will decrease as time goes on.</p>
-                    <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
-                    <p>The number of questions in the skills test will change as you go depending on a number of factors. It will end once a score has been determined, but each test should take no more than ten minutes.</p>
+                <div className="font24px" style={{ marginBottom: "20px" }}>
+                    <span>Skills</span>
                 </div>
-                <br/>
                 <div>
-                    <div className="checkbox mediumCheckbox whiteCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                    <p>
+                        This is the skills portion of the evaluation. Here you will be tested on
+                        your aptitude in one or more skills.
+                    </p>
+                    <p>
+                        <span>TIME IS A FACTOR.</span> After 60 seconds for each question, your
+                        score for that question will decrease as time goes on.
+                    </p>
+                    <p>
+                        <span>DO NOT</span> exit this tab, go to another tab, or leave this window.
+                        Each time you do, your overall score will decrease.
+                    </p>
+                    <p>
+                        The number of questions in the skills test will change as you go depending
+                        on a number of factors. It will end once a score has been determined, but
+                        each test should take no more than ten minutes.
+                    </p>
+                </div>
+                <br />
+                <div>
+                    <div
+                        className="checkbox mediumCheckbox whiteCheckbox"
+                        onClick={this.handleCheckMarkClick.bind(this)}
+                    >
                         <img
                             alt=""
                             className={"checkMark" + this.state.agreedToTerms}
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                         />
                     </div>
-                    <p style={{padding: "0 40px"}}>By checking this box, I agree that I will answer the questions without help from anyone or any external resources and that if I were to be discovered doing so, at any point, all my results are void.</p>
+                    <p style={{ padding: "0 40px" }}>
+                        By checking this box, I agree that I will answer the questions without help
+                        from anyone or any external resources and that if I were to be discovered
+                        doing so, at any point, all my results are void.
+                    </p>
                 </div>
-                <br/>
-                {this.props.loading ?
-                    <CircularProgress color="secondary" style={{marginBottom: "40px"}} />
-                    :
+                <br />
+                {this.props.loading ? (
+                    <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                ) : (
                     <div
-                        style={{marginBottom: "40px", width: "initial"}}
+                        style={{ marginBottom: "40px", width: "initial" }}
                         className={buttonClass}
                         onClick={this.startTest.bind(this)}
                     >
                         Begin
                     </div>
-                }
+                )}
             </div>
         );
     }
-
 
     // main content with the quiz and questions
     createContent() {
@@ -157,11 +184,14 @@ class SkillTest extends Component {
             const isSelected = this.state.selectedId === option._id;
             const selectedClass = isSelected ? " selected" : "";
             return (
-                <div key={option.body}
-                     onClick={() => self.selectAnswer(option._id)}
-                     className={"skillMultipleChoiceAnswer" + selectedClass}
+                <div
+                    key={option.body}
+                    onClick={() => self.selectAnswer(option._id)}
+                    className={"skillMultipleChoiceAnswer" + selectedClass}
                 >
-                    <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
+                    <div className={"skillMultipleChoiceCircle" + selectedClass}>
+                        <div />
+                    </div>
                     <div className="skillMultipleChoiceOptionText">{htmlDecode(option.body)}</div>
                 </div>
             );
@@ -173,44 +203,60 @@ class SkillTest extends Component {
         // otherwise, good to go - show them the question
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
-                <StyledContent contentArray={questionInfo.body} style={{marginBottom:"40px"}} />
-                { answers }
-                <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
+                <StyledContent contentArray={questionInfo.body} style={{ marginBottom: "40px" }} />
+                {answers}
+                <div
+                    className={"marginBottom50px " + buttonClass}
+                    onClick={this.nextQuestion.bind(this)}
+                >
+                    Next
+                </div>
             </div>
         );
     }
 
-
     render() {
+        const { currentUser } = this.props;
+
         // all info about the current question to answer
         const questionInfo = this.props.questionInfo;
 
         // if user has never done a skill test before, show them the legalese stuff
-        if (this.props.showIntro && !this.props.currentUser.agreedToSkillTerms) {
+        if (this.props.showIntro && (!currentUser || !currentUser.agreedToSkillTerms)) {
             return this.userAgreementPage();
         }
 
         // if the user has taken a skill test before
-        else if (this.props.showIntro) { return this.introPage(); }
+        else if (this.props.showIntro) {
+            return this.introPage();
+        }
 
         // if the question has not been loaded yet
-        else if (!questionInfo) { return <CircularProgress color="secondary" />; }
+        else if (!questionInfo) {
+            return <CircularProgress color="secondary" />;
+        }
 
         // the typical interface with the slider
-        else if (questionInfo.body) { return this.createContent(); }
+        else if (questionInfo.body) {
+            return this.createContent();
+        }
 
         // something is up if we get here
-        else { return this.errorPage(); }
+        else {
+            return this.errorPage();
+        }
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification,
-        answerEvaluationQuestion,
-        addNotification
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification,
+            answerEvaluationQuestion,
+            addNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -223,5 +269,7 @@ function mapStateToProps(state) {
     };
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(SkillTest);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SkillTest);

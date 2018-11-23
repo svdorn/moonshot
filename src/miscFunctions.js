@@ -301,6 +301,17 @@ function makePossessive(name) {
     }
 }
 
+function makeSingular(string) {
+    if (typeof string !== "string") {
+        return string;
+    }
+    if (string.endsWith("s")) {
+        return string.slice(0, string.length - 1);
+    } else {
+        return string;
+    }
+}
+
 function replaceCharacters(oldString, characters, replacement) {
     if (
         typeof oldString !== "string" ||
@@ -345,6 +356,59 @@ function copyFromPage(identifier) {
     document.execCommand("copy");
 }
 
+function getMonthText(month) {
+    switch (month) {
+        case 0:
+            return "January";
+            break;
+        case 1:
+            return "February";
+            break;
+        case 2:
+            return "March";
+            break;
+        case 3:
+            return "April";
+            break;
+        case 4:
+            return "May";
+            break;
+        case 5:
+            return "June";
+            break;
+        case 6:
+            return "July";
+            break;
+        case 7:
+            return "August";
+            break;
+        case 8:
+            return "September";
+            break;
+        case 9:
+            return "October";
+            break;
+        case 10:
+            return "November";
+            break;
+        case 11:
+            return "December";
+            break;
+        default:
+            return "January";
+            break;
+    }
+}
+
+function getFormattedDate(date) {
+    const newDate = new Date(date);
+    let year = newDate.getFullYear();
+    let month = getMonthText(newDate.getMonth());
+    let day = newDate.getDate();
+
+    return month + " " + day + ", " + year;
+}
+
 function randomInt(lowBound, highBound) {
     const range = highBound - lowBound;
     return Math.floor(Math.random() * (range + 1)) + lowBound;
@@ -367,11 +431,13 @@ const miscFunctions = {
     propertyExists,
     withinElement,
     makePossessive,
+    makeSingular,
     elementInViewport,
     elementPartiallyInViewport,
     replaceCharacters,
     copyCustomLink,
     copyFromPage,
+    getFormattedDate,
     noop,
     randomInt,
 

@@ -13,9 +13,11 @@ import Notification from "./components/notification";
 import ContactUsDialog from "./components/childComponents/contactUsDialog";
 import AddAdminDialog from "./components/childComponents/addAdminDialog";
 import CopyLinkFooter from "./components/childComponents/copyLinkFooter";
+import LockedAccountModal from "./components/childComponents/lockedAccountModal";
 import PreOnboardingFooter from "./components/childComponents/preOnboardingFooter";
 import OnboardingStepsFooter from "./components/childComponents/onboardingStepsFooter";
 import AdminVerifyEmail from "./components/childComponents/adminVerifyEmail";
+import BillingBanners from "./components/childComponents/billingBanners";
 import ReactGA from "react-ga";
 
 import "./main.css";
@@ -98,18 +100,19 @@ class Main extends Component {
         this.props.getUserFromSession(function(work) {
             if (work) {
                 self.setState({ loadedUser: true }, () => {
+                    const { currentUser } = self.props;
                     // get the user type
                     let userType = "lead";
-                    if (self.props.currentUser) {
-                        userType = self.props.currentUser.userType;
+                    if (currentUser) {
+                        userType = currentUser.userType;
                     }
                     // pass the user type to google analytics
                     ReactGA.set({ dimension1: userType });
 
-                    if (self.props.currentUser && self.props.currentUser.intercom) {
-                        var email = self.props.currentUser.intercom.email;
-                        var user_id = self.props.currentUser.intercom.id;
-                        var user_hash = self.props.currentUser.hmac;
+                    if (currentUser && currentUser.intercom) {
+                        var email = currentUser.intercom.email;
+                        var user_id = currentUser.intercom.id;
+                        var user_hash = currentUser.hmac;
                     }
                     window.Intercom("boot", {
                         app_id: "xki3jtkg",
@@ -214,6 +217,8 @@ class Main extends Component {
                         <div styleName={adminDisplay ? "admin-content" : ""}>
                             <Notification />
                             <AdminVerifyEmail />
+                            <BillingBanners />
+                            <LockedAccountModal />
                             <AddAdminDialog />
                             <ContactUsDialog />
                             {this.props.children}

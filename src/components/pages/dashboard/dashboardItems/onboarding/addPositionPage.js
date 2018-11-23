@@ -45,7 +45,6 @@ class AddPositionPage extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
         loading: state.users.loadingSomething,
         png: state.users.png,
         onboardingPositions: state.users.onboardingPositions

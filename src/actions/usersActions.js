@@ -1,7 +1,7 @@
 "use strict";
 import axios from "axios";
 import { reset } from "redux-form";
-import { goTo, propertyExists } from "../miscFunctions";
+import { goTo, propertyExists, makeSingular } from "../miscFunctions";
 
 // GET USER FROM SESSION
 export function getUserFromSession(callback) {
@@ -55,6 +55,12 @@ export function openAddPositionModal() {
 export function closeAddPositionModal() {
     return function(dispatch) {
         dispatch({ type: "CLOSE_ADD_POSITION_MODAL" });
+    };
+}
+
+export function openHireVerificationModal(candidateId, candidateName) {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_HIRE_VERIFICATION_MODAL", candidateId, candidateName });
     };
 }
 
@@ -199,8 +205,9 @@ export function login(user, saveSession, navigateBackUrl) {
         axios
             .post("/api/user/login", { user, saveSession })
             .then(function(response) {
-                const returnedUser = response.data;
-                dispatch({ type: "LOGIN", user: returnedUser });
+                const returnedUser = response.data.user;
+                const fullAccess = response.data.fullAccess;
+                dispatch({ type: "LOGIN", user: returnedUser, fullAccess });
                 let nextUrl = "/myEvaluations";
                 if (returnedUser && returnedUser.userType === "accountAdmin") {
                     nextUrl = "/dashboard";
@@ -422,14 +429,160 @@ export function stopLoading() {
     };
 }
 
-export function setupBillingCustomer(source, email, userId, verificationToken) {
+export function getBillingInfo(userId, verificationToken, businessId) {
     return function(dispatch) {
         axios
-            .post("/api/billing/customer", { source, email, userId, verificationToken })
+            .get("/api/business/billingInfo", { params: { userId, verificationToken, businessId } })
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_INFO",
+                    billing: response.data
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
+export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
+    return function(dispatch) {
+        axios
+            .post("/api/billing/customer", {
+                source,
+                email,
+                userId,
+                verificationToken,
+                subscriptionTerm
+            })
             .then(response => {
                 dispatch({
                     type: "SUCCESS_BILLING_CUSTOMER",
-                    ...notification("Success adding credit card to company.")
+                    billing: response.data.billing,
+                    fullAccess: response.data.fullAccess,
+                    ...notification(`You have successfully added your ${makeSingular(subscriptionTerm)} plan`)
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
+export function billingCardOnFileFalse(billing) {
+    return function(dispatch) {
+        billing.cardOnFile = false;
+        dispatch({
+            type: "SUCCESS_BILLING_INFO",
+            billing
+        });
+    };
+}
+export function billingCardOnFileTrue(billing) {
+    return function(dispatch) {
+        billing.cardOnFile = true;
+        dispatch({
+            type: "SUCCESS_BILLING_INFO",
+            billing
+        });
+    };
+}
+
+export function updateBillingSource(source, userId, verificationToken) {
+    return function(dispatch) {
+        axios
+            .post("/api/billing/updateSource", { source, userId, verificationToken })
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_INFO",
+                    billing: response.data,
+                    ...notification(`You have successfully updated your card`)
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
+// cancel a billing plan
+export function cancelBillingPlan(userId, verificationToken, message) {
+    return function(dispatch) {
+        axios
+            .post("/api/billing/cancelPlan", { userId, verificationToken, message })
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_INFO",
+                    billing: response.data
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
+// pause a billing plan
+export function pauseBillingPlan(userId, verificationToken, message) {
+    return function(dispatch) {
+        dispatch({
+            type: "CLOSE_CANCEL_PLAN_MODAL"
+        });
+
+        axios
+            .post("/api/billing/pausePlan", { userId, verificationToken, message })
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_INFO",
+                    billing: response.data,
+                    ...notification(`Our team will contact you shortly`)
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
+// update a billing plan
+export function updateBillingPlan(userId, verificationToken, subscriptionTerm) {
+    return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
+        axios
+            .post("/api/billing/updatePlan", { userId, verificationToken, subscriptionTerm })
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_INFO",
+                    billing: response.data,
+                    ...notification(`You have successfully updated your plan`)
+                });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
+// post a new billing plan
+export function newBillingPlan(userId, verificationToken, subscriptionTerm) {
+    return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
+        axios
+            .post("/api/billing/newPlan", { userId, verificationToken, subscriptionTerm })
+            .then(response => {
+                dispatch({
+                    type: "SUCCESS_BILLING_CUSTOMER",
+                    billing: response.data.billing,
+                    fullAccess: response.data.fullAccess,
+                    ...notification(`You have successfully updated your plan`)
                 });
             })
             .catch(error => {
@@ -440,13 +593,31 @@ export function setupBillingCustomer(source, email, userId, verificationToken) {
 }
 
 // LOG USER OUT
-export function signout() {
+export function signout(callback) {
     return function(dispatch) {
-        dispatch({ type: "SIGNOUT" });
+        // dispatch({ type: "SIGNOUT" });
         axios
             .post("/api/user/signOut")
-            .then(function(response) {})
-            .catch(function(err) {});
+            .then(function(response) {
+                dispatch({ type: "SIGNOUT" });
+                if (typeof callback === "function") {
+                    callback();
+                }
+            })
+            .catch(function(err) {
+                console.log("error signing out: ", err);
+                dispatch({
+                    type: "ADD_NOTIFICATION",
+                    ...notification(
+                        "There was an error signing you out, let us know by using the bubble on the bottom right.",
+                        "error"
+                    )
+                });
+                dispatch({ type: "SIGNOUT" });
+                if (typeof callback === "function") {
+                    callback();
+                }
+            });
     };
 }
 
@@ -465,7 +636,8 @@ export function createBusinessAndUser(userInfo, customErrorAction) {
             .then(response => {
                 dispatch({
                     type: "LOGIN",
-                    user: response.data,
+                    user: response.data.user,
+                    fullAccess: response.data.fullAccess,
                     ...notification("Your account has been activated! Thanks for signing up!")
                 });
                 dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
@@ -526,7 +698,11 @@ export function postUser(user) {
         axios
             .post("/api/candidate/candidate", user)
             .then(response => {
-                dispatch({ type: "POST_USER", user: response.data.user });
+                dispatch({
+                    type: "POST_USER",
+                    user: response.data.user,
+                    fullAccess: response.data.fullAccess
+                });
                 goTo("/myEvaluations");
             })
             .catch(error => {
@@ -692,40 +868,6 @@ export function changePasswordForgot(user) {
     };
 }
 
-// Send an email when somebody completes a pathway
-export function completePathway(user) {
-    return function(dispatch) {
-        // dispatch({type: "COMPLETE_PATHWAY_REQUESTED"});
-        //
-        // axios.post("api/candidate/completePathway", user)
-        //     .then(function(response) {
-        //         dispatch({ type:"COMPLETE_PATHWAY", user: response.data.user, ...notification(response) });
-        //         browserHistory.push('/');
-        //         window.scrollTo(0, 0);
-        //     })
-        //     .catch(function(err) {
-        //         // info we get back from the error
-        //         const errData = err.response.data;
-        //         // if the error is due to the user not having all steps complete
-        //         if (typeof errData === "object" && errData.incompleteSteps) {
-        //             dispatch({type: "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS", incompleteSteps: errData.incompleteSteps});
-        //             return;
-        //         }
-        //
-        //         // if there is a notification message, show that
-        //         let notification = undefined;
-        //         if (typeof errData === "string") {
-        //             notification = {
-        //                 message: errData,
-        //                 type: "errorHeader"
-        //             }
-        //         }
-        //
-        //         dispatch({ type:"COMPLETE_PATHWAY_REJECTED", notification })
-        //     })
-    };
-}
-
 // get rid of any old incomplete steps that would prevent the user from
 // completing a pathway
 export function resetIncompleteSteps() {
@@ -806,59 +948,6 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
             });
     };
 }
-
-// export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
-//     return function(dispatch) {
-//         axios.post("/api/candidate/updateAllOnboarding", {
-//             params: { userId, verificationToken, interests, goals, info }
-//         })
-//         .then(function(response) {
-//             dispatch({type: "UPDATE_USER_ONBOARDING", user: response.data});
-//         })
-//         .catch(function(err) {
-//             // console.log("Error updating onboarding info: ", err);
-//         })
-//     }
-// }
-
-// export function startOnboarding(){
-//     return function(dispatch) {
-//         dispatch({type: "START_ONBOARDING"});
-//     }
-// }
-
-// export function endOnboarding(user, markOnboardingComplete, removeRedirectField){
-//     return function(dispatch) {
-//         if (markOnboardingComplete) {
-//             axios.post("/api/candidate/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
-//             .then(function(response) {
-//                 dispatch({type: "END_ONBOARDING", user: response.data});
-//             })
-//             .catch(function(err) {
-//                 // onboarding setting not able to be turned off for some reason
-//                 // console.log("onboarding mark complete error: ", err);
-//                 dispatch({type: "END_ONBOARDING_REJECTED"});
-//             })
-//         } else {
-//             dispatch({type: "END_ONBOARDING"});
-//         }
-//
-//     }
-// }
-
-// // change info during onboarding for automating candidate emails
-// export function changeAutomateInvites(args) {
-//     return function (dispatch) {
-//         dispatch({ type: "CHANGE_AUTOMATE_INVITES", args });
-//     }
-// }
-
-// // removes the top step for going back from the stack of Back options
-// export function popGoBackStack() {
-//     return function(dispatch) {
-//         dispatch({ type: "POP_GO_BACK_STACK" });
-//     }
-// }
 
 // set the state of the current position evaluation
 export function setEvaluationState(evaluationState) {

@@ -1,7 +1,7 @@
 "use strict";
 import React, { Component } from "react";
 import Notification from "../notification";
-import { getUserFromSession } from "../../actions/usersActions";
+import { getUserFromSession, generalAction, updateStore } from "../../actions/usersActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
@@ -64,10 +64,30 @@ class AuthenticatedComponent extends Component {
         // check if the user has agreed to the necessary terms and conditions
         let agreedToTerms = this.checkAgreedToTerms();
 
+        // check if the user has a locked account
+        this.checkLockedAccount();
+
         // if we get here then we know the user has access
         // set state determining if they have to agree to terms to see the page
         if (!this.state.userHasAccess || this.state.agreedToTerms !== agreedToTerms) {
             this.setState({ userHasAccess: true, agreedToTerms });
+        }
+    }
+
+    checkLockedAccount() {
+        const { currentUser, fullAccess, generalAction, location, updateStore } = this.props;
+
+        if (currentUser && currentUser.userType === "accountAdmin" && !fullAccess) {
+            // if we are on a page that we can't be on
+            if (location.pathname !== "/dashboard" && location.pathname !== "/billing") {
+                // set the  modal here
+                generalAction("OPEN_LOCKED_ACCOUNT_MODAL");
+                updateStore("blurMenu", true);
+            } else {
+                // unset the modal if go to a page where the modal should be unset
+                generalAction("CLOSE_LOCKED_ACCOUNT_MODAL");
+                updateStore("blurMenu", false);
+            }
         }
     }
 
@@ -263,7 +283,9 @@ class AuthenticatedComponent extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            getUserFromSession
+            getUserFromSession,
+            generalAction,
+            updateStore
         },
         dispatch
     );
@@ -271,7 +293,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        fullAccess: state.users.fullAccess
     };
 }
 

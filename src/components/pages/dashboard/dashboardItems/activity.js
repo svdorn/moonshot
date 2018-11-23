@@ -9,7 +9,8 @@ import {
     updateUser,
     generalAction,
     confirmEmbedLink,
-    intercomEvent
+    intercomEvent,
+    getBillingInfo
 } from "../../../../actions/usersActions";
 import {
     propertyExists,
@@ -44,7 +45,9 @@ class Activity extends Component {
             // if there was an error getting any candidates or employees data
             fetchDataError: false,
             // the tab either Candidates or Employees
-            tab: "Candidates"
+            tab: "Candidates",
+            // the billing info for the business
+            billing: undefined
         };
 
         this.getCandidateData = this.getCandidateData.bind(this);
@@ -57,6 +60,14 @@ class Activity extends Component {
     componentDidMount() {
         let self = this;
         const user = this.props.currentUser;
+        const fullAccess = this.props.fullAccess;
+
+        if (!user) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
 
         const countQuery = {
             params: {
@@ -73,6 +84,9 @@ class Activity extends Component {
                     let frame = "Tips For Hiring";
                     if (!user.confirmEmbedLink) {
                         frame = "Embed Link";
+                        this.setState({ frame, numUsers: 0 });
+                    } else if (!fullAccess) {
+                        frame = "Billing Update";
                         this.setState({ frame, numUsers: 0 });
                     } else if (response.data.totalCandidates > 0) {
                         frame = "Awaiting Review";
@@ -98,6 +112,13 @@ class Activity extends Component {
     getCandidateData() {
         const self = this;
         const user = this.props.currentUser;
+
+        if (!user) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
 
         const query = {
             params: {
@@ -125,6 +146,13 @@ class Activity extends Component {
     getEmployeeData() {
         const self = this;
         const user = this.props.currentUser;
+
+        if (!user) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
 
         const query = {
             params: {
@@ -167,6 +195,12 @@ class Activity extends Component {
 
     confirmEmbedLink = () => {
         const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
 
         const userId = currentUser._id;
         const verificationToken = currentUser.verificationToken;
@@ -223,7 +257,13 @@ class Activity extends Component {
     };
 
     needHelpIntercomEvent = () => {
-        const { _id, verificationToken } = this.props.currentUser;
+        const { currentUser } = this.props;
+        if (currentUser) {
+            var { _id, verificationToken } = currentUser;
+        } else {
+            var _id = undefined;
+            var verificationToken = undefined;
+        }
 
         this.props.intercomEvent("need_help_embedding_link", _id, verificationToken, null);
     };
@@ -350,6 +390,10 @@ class Activity extends Component {
 
     embedLink() {
         const { currentUser } = this.props;
+        if (!currentUser) {
+            return null;
+        }
+
         let businessName = undefined;
         let uniqueName = "";
         if (typeof currentUser.businessInfo === "object") {
@@ -441,6 +485,72 @@ class Activity extends Component {
         );
     }
 
+    billingUpdate() {
+        const { billing, currentUser } = this.props;
+
+        if (!currentUser) {
+            return null;
+        }
+        if (!billing)
+            return (
+                <div className="fully-center">
+                    <CircularProgress style={{ color: primaryCyan }} />
+                </div>
+            );
+
+        let content = null;
+
+        if (billing.oldSubscriptions && billing.oldSubscriptions.length > 0) {
+            // had a previous plan
+            content = (
+                <div>
+                    {makePossessive(currentUser.businessInfo.businessName)} plan has ended but
+                    everything has been saved for you.{" "}
+                    <span
+                        className="primary-cyan clickableNoUnderline"
+                        onClick={() => goTo("/billing")}
+                    >
+                        Select a new plan
+                    </span>{" "}
+                    to continue.
+                </div>
+            );
+        } else {
+            // just got off of free trial
+            content = (
+                <div>
+                    {makePossessive(currentUser.businessInfo.businessName)} free plan has ended but
+                    everything has been saved for you.{" "}
+                    <span
+                        className="primary-cyan clickableNoUnderline"
+                        onClick={() => goTo("/billing")}
+                    >
+                        Select a plan
+                    </span>{" "}
+                    to continue.
+                </div>
+            );
+        }
+
+        return (
+            <div
+                className="inline-block center primary-white font18px font16pxUnder900 font14pxUnder600"
+                styleName="onboarding-info billing-activity"
+            >
+                <div style={{ maxWidth: "500px", margin: "auto" }}>
+                    {content}
+                    <div
+                        className={"marginTop30px " + button.cyanRound}
+                        style={{ padding: "6px 12px" }}
+                        onClick={() => goTo("/billing")}
+                    >
+                        See Plans
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     handleTabChange = () => event => {
         const tab = event.target.value;
         let getData = this.getCandidateData;
@@ -450,7 +560,7 @@ class Activity extends Component {
         this.setState({ tab, numUsers: undefined }, getData);
     };
 
-    makeDropdown() {
+    makeDropdown(currTab) {
         const tabOptions = tabs.map(tab => {
             return (
                 <MenuItem value={tab} key={tab}>
@@ -469,7 +579,7 @@ class Activity extends Component {
                     select: "no-focus-change-important"
                 }}
                 value={this.state.tab}
-                onChange={this.handleTabChange}
+                onChange={this.handleTabChange(currTab)}
             >
                 {tabOptions}
             </Select>
@@ -534,11 +644,13 @@ class Activity extends Component {
     }
 
     render() {
-        const { frame, fetchDataError, numUsers } = this.state;
+        const { frame, fetchDataError, numUsers, tab } = this.state;
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return null;
+        }
         try {
-            var possessiveBusinessName = makePossessive(
-                this.props.currentUser.businessInfo.businessName
-            );
+            var possessiveBusinessName = makePossessive(currentUser.businessInfo.businessName);
         } catch (e) {
             possessiveBusinessName = "Your";
         }
@@ -567,7 +679,11 @@ class Activity extends Component {
                 // if there are any candidates, show number of unreviewed ones
                 case "Awaiting Review": {
                     content = this.awaitingReview();
-                    dropdown = this.makeDropdown();
+                    dropdown = this.makeDropdown(tab);
+                    break;
+                }
+                case "Billing Update": {
+                    content = this.billingUpdate();
                     break;
                 }
                 default: {
@@ -586,9 +702,15 @@ class Activity extends Component {
                         ) : (
                             <div styleName="activity-container">
                                 <div styleName="activity-title">
-                                    <span styleName="not-small-mobile">
-                                        {possessiveBusinessName}{" "}
-                                    </span>Activity
+                                    {frame === "Billing Update" ? (
+                                        <div>Plan Update</div>
+                                    ) : (
+                                        <div>
+                                            <span styleName="not-small-mobile">
+                                                {possessiveBusinessName}{" "}
+                                            </span>Activity
+                                        </div>
+                                    )}
                                 </div>
                                 {dropdown}
                                 {content}
@@ -607,7 +729,9 @@ class Activity extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        fullAccess: state.users.fullAccess,
+        billing: state.users.billing
     };
 }
 
@@ -620,7 +744,8 @@ function mapDispatchToProps(dispatch) {
             updateUser,
             generalAction,
             confirmEmbedLink,
-            intercomEvent
+            intercomEvent,
+            getBillingInfo
         },
         dispatch
     );

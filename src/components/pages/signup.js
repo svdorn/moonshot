@@ -57,14 +57,17 @@ class Signup extends Component {
         };
     }
 
-    componentWillMount() {
-        // shouldn't be able to be on sign up page if logged in
-        if (this.props.currentUser) {
-            goTo("/myEvaluations");
-        }
-    }
-
     componentDidMount() {
+        // shouldn't be able to be on sign up page if logged in
+        const { currentUser } = this.props;
+        if (currentUser) {
+            if (currentUser.userType === "accountAdmin") {
+                return goTo("/dashboard");
+            } else {
+                return goTo("/myEvaluations");
+            }
+        }
+
         // add listener for keyboard enter key
         document.addEventListener("keypress", this.bound_handleKeyPress);
 

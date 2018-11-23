@@ -1,29 +1,26 @@
-"use strict"
-import React, {Component} from 'react';
-import {TextField, CircularProgress, RaisedButton} from 'material-ui';
-import {forgotPassword} from '../../actions/usersActions';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {Field, reduxForm} from 'redux-form';
-import MetaTags from 'react-meta-tags';
-import { renderTextField, isValidEmail } from  "../../miscFunctions";
-
+"use strict";
+import React, { Component } from "react";
+import { TextField, CircularProgress, RaisedButton } from "material-ui";
+import { forgotPassword } from "../../actions/usersActions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Field, reduxForm } from "redux-form";
+import MetaTags from "react-meta-tags";
+import { renderTextField, isValidEmail } from "../../miscFunctions";
 
 const validate = values => {
     const errors = {};
-    const requiredFields = [
-        'email',
-    ];
+    const requiredFields = ["email"];
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'This field is required'
+            errors[field] = "This field is required";
         }
     });
     if (values.email && !isValidEmail(values.email)) {
-        errors.email = 'Invalid email address';
+        errors.email = "Invalid email address";
     }
 
-    return errors
+    return errors;
 };
 
 class ForgotPassword extends Component {
@@ -33,9 +30,7 @@ class ForgotPassword extends Component {
 
         // Form validation before submit
         let notValid = false;
-        const requiredFields = [
-            'email'
-        ];
+        const requiredFields = ["email"];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
                 this.props.touch(field);
@@ -56,7 +51,10 @@ class ForgotPassword extends Component {
             <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
                     <title>Forgot Password | Moonshot</title>
-                    <meta name="description" content="Reset your Moonshot password. It's okay - we all forget things sometimes." />
+                    <meta
+                        name="description"
+                        content="Reset your Moonshot password. It's okay - we all forget things sometimes."
+                    />
                 </MetaTags>
                 <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
@@ -67,16 +65,21 @@ class ForgotPassword extends Component {
                                 component={renderTextField}
                                 label="Email"
                                 className="lightBlueInputText"
-                            /><br/>
+                            />
+                            <br />
                         </div>
                         <RaisedButton
                             label="Send Email"
                             type="submit"
                             className="raisedButtonBusinessHome"
-                            style={{margin: '30px 0'}}
+                            style={{ margin: "30px 0" }}
                         />
                     </form>
-                    {this.props.loading ? <CircularProgress color="white" style={{marginTop: "20px"}}/> : ""}
+                    {this.props.loading ? (
+                        <CircularProgress color="white" style={{ marginTop: "20px" }} />
+                    ) : (
+                        ""
+                    )}
                 </div>
             </div>
         );
@@ -84,22 +87,27 @@ class ForgotPassword extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        forgotPassword,
-    }, dispatch);
+    return bindActionCreators(
+        {
+            forgotPassword
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
         formData: state.form,
         loading: state.users.loadingSomething
     };
 }
 
 ForgotPassword = reduxForm({
-    form: 'forgot',
-    validate,
+    form: "forgot",
+    validate
 })(ForgotPassword);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ForgotPassword);

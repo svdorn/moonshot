@@ -218,7 +218,6 @@ app.post("/accountAdmin/showVerifyEmailBanner", accountAdminApis.POST_showVerify
 app.post("/business/googleJobsLinks", businessApis.POST_googleJobsLinks);
 app.post("/business/contactUsEmail", businessApis.POST_contactUsEmail);
 app.post("/business/addEvaluation", businessApis.POST_addEvaluation);
-app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
 app.post("/business/inviteAdmins", businessApis.POST_inviteAdmins);
@@ -227,7 +226,6 @@ app.post("/business/changeHiringStage", businessApis.POST_changeHiringStage);
 app.post("/business/moveCandidates", businessApis.POST_moveCandidates);
 app.post("/business/resetApiKey", businessApis.POST_resetApiKey);
 app.post("/business/uploadCandidateCSV", businessApis.POST_uploadCandidateCSV);
-app.post("/business/chatbotData", businessApis.POST_chatbotData);
 app.post("/business/createBusinessAndUser", businessApis.POST_createBusinessAndUser);
 app.post("/business/interests", businessApis.POST_interests);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
@@ -244,7 +242,9 @@ app.get("/business/candidatesTotal", businessApis.GET_candidatesTotal);
 app.get("/business/newCandidateGraphData", businessApis.GET_newCandidateGraphData);
 app.get("/business/evaluationsGraphData", businessApis.GET_evaluationsGraphData);
 app.get("/business/billingIsSetUp", businessApis.GET_billingIsSetUp);
+app.get("/business/billingInfo", businessApis.GET_billingInfo);
 app.get("/business/adminList", businessApis.GET_adminList);
+app.get("/business/candidateCount", businessApis.GET_candidateCount);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);
@@ -255,6 +255,11 @@ app.post("/admin/saveBusiness", adminApis.POST_saveBusiness);
 app.get("/admin/blankPosition", adminApis.GET_blankPosition);
 
 app.post("/billing/customer", billingApis.POST_customer);
+app.post("/billing/updateSource", billingApis.POST_updateSource);
+app.post("/billing/cancelPlan", billingApis.POST_cancelPlan);
+app.post("/billing/pausePlan", billingApis.POST_pausePlan);
+app.post("/billing/updatePlan", billingApis.POST_updatePlan);
+app.post("/billing/newPlan", billingApis.POST_newPlan);
 
 app.get("/evaluation/currentState", evaluationApis.GET_currentState);
 app.post("/evaluation/getInitialState", evaluationApis.POST_getInitialState);
@@ -273,6 +278,7 @@ app.post("/misc/unsubscribeEmail", miscApis.POST_unsubscribeEmail);
 app.post("/misc/resetAlan", miscApis.POST_resetAlan);
 
 app.post("/webhooks/addCandidate", webhooks.POST_addCandidate);
+app.post("/webhooks/cancelBillingSubscription", webhooks.POST_cancelBillingSubscription);
 
 // ----->> END APIs <<----- //
 

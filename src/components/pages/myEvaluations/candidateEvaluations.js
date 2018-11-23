@@ -1,5 +1,5 @@
-"use strict"
-import React, {Component} from 'react';
+"use strict";
+import React, { Component } from "react";
 import {
     TextField,
     DropDownMenu,
@@ -12,19 +12,23 @@ import {
     CircularProgress,
     RaisedButton,
     Paper
-} from 'material-ui';
-import {connect} from 'react-redux';
+} from "material-ui";
+import { connect } from "react-redux";
 import { browserHistory } from "react-router";
-import {bindActionCreators} from 'redux';
-import { addNotification, startLoading, stopLoading, updateUser } from '../../../actions/usersActions';
-import MetaTags from 'react-meta-tags';
-import axios from 'axios';
-import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
-import { goTo } from '../../../miscFunctions';
+import { bindActionCreators } from "redux";
+import {
+    addNotification,
+    startLoading,
+    stopLoading,
+    updateUser
+} from "../../../actions/usersActions";
+import MetaTags from "react-meta-tags";
+import axios from "axios";
+import MyEvaluationsPreview from "../../childComponents/myEvaluationsPreview";
+import { goTo } from "../../../miscFunctions";
 import { button } from "../../../classes";
 
 import "./candidateEvaluations.css";
-
 
 class MyEvaluations extends Component {
     constructor(props) {
@@ -32,28 +36,33 @@ class MyEvaluations extends Component {
 
         this.state = {
             positions: []
-        }
+        };
     }
-
 
     componentDidMount() {
         let self = this;
-        const currentUser = this.props.currentUser;
-        // if the user is here to go through an evaluation, get the positions
-        // they are currently enrolled in
-        axios.get("/api/user/positions", {
-            params: {
-                userId: currentUser._id,
-                verificationToken: currentUser.verificationToken
-            }
-        })
-        .then(res => {
-            self.positionsFound(res.data.positions);
-        })
-        .catch(error => {
-            console.log("error getting positions: ", error);
-            self.props.addNotification("Error getting evaluations, try refreshing.", "error");
-        });
+        const { currentUser } = this.props;
+        if (currentUser) {
+            // if the user is here to go through an evaluation, get the positions
+            // they are currently enrolled in
+            axios
+                .get("/api/user/positions", {
+                    params: {
+                        userId: currentUser._id,
+                        verificationToken: currentUser.verificationToken
+                    }
+                })
+                .then(res => {
+                    self.positionsFound(res.data.positions);
+                })
+                .catch(error => {
+                    console.log("error getting positions: ", error);
+                    self.props.addNotification(
+                        "Error getting evaluations, try refreshing.",
+                        "error"
+                    );
+                });
+        }
     }
 
     // call this after positions are found from back end
@@ -65,26 +74,40 @@ class MyEvaluations extends Component {
         }
     }
 
-
     reSendVerification() {
-        const { _id: userId, verificationToken, email } = this.props.currentUser;
-        axios.post("/api/user/reSendVerificationEmail", {userId, verificationToken})
-        .then(response => {
-            if (response.data.alreadyVerified) {
-                if (response.data.user) { this.props.updateUser(response.data.user); }
-                this.props.addNotification("Email already verified, take your evaluation whenever you're ready!", "info");
-            }
-            else if (response.data.emailSent) {
-                const usedEmail = response.data.email ? response.data.email : email;
-                this.props.addNotification(`Email sent to ${usedEmail} - if this is the wrong email, change it in Settings.`, "info");
-            }
-        })
-        .catch(error => {
-            this.props.addNotification("Error sending verification email, try refreshing the page.", "error");
-            console.log(error);
-        })
+        const { currentUser } = this.props;
+        if (currentUser) {
+            const { _id: userId, verificationToken, email } = currentUser;
+            axios
+                .post("/api/user/reSendVerificationEmail", { userId, verificationToken })
+                .then(response => {
+                    if (response.data.alreadyVerified) {
+                        if (response.data.user) {
+                            this.props.updateUser(response.data.user);
+                        }
+                        this.props.addNotification(
+                            "Email already verified, take your evaluation whenever you're ready!",
+                            "info"
+                        );
+                    } else if (response.data.emailSent) {
+                        const usedEmail = response.data.email ? response.data.email : email;
+                        this.props.addNotification(
+                            `Email sent to ${usedEmail} - if this is the wrong email, change it in Settings.`,
+                            "info"
+                        );
+                    }
+                })
+                .catch(error => {
+                    this.props.addNotification(
+                        "Error sending verification email, try refreshing the page.",
+                        "error"
+                    );
+                    console.log(error);
+                });
+        } else {
+            this.props.addNotification("You aren't logged in! Try refreshing the page.", "error");
+        }
     }
-
 
     render() {
         const style = {
@@ -115,39 +138,38 @@ class MyEvaluations extends Component {
                 horizontal: "left"
             },
             menuLabelStyle: {
-
                 fontSize: "18px",
                 color: "white"
             }
-        }
+        };
 
         const actions = [
             <FlatButton
                 label="Close"
                 onClick={this.handleClose}
                 className="primary-white-important"
-            />,
+            />
         ];
 
         let evaluations = (
-            <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+            <div className="center" style={{ color: "rgba(255,255,255,.8)" }}>
                 Loading evaluations...
             </div>
         );
 
         if (this.state.noPositions) {
             evaluations = (
-                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                <div className="center" style={{ color: "rgba(255,255,255,.8)" }}>
                     No evaluations.
                 </div>
-            )
+            );
         }
 
         // create the evaluation previews
         let key = 0;
         let self = this;
 
-        const currentUser = this.props.currentUser;
+        const { currentUser } = this.props;
 
         if (currentUser && this.state.positions.length !== 0) {
             const userType = currentUser.userType;
@@ -179,9 +201,7 @@ class MyEvaluations extends Component {
                     }
 
                     return (
-                        <li style={{marginTop: '35px', listStyleType:"none"}}
-                            key={key}
-                        >
+                        <li style={{ marginTop: "35px", listStyleType: "none" }} key={key}>
                             <MyEvaluationsPreview {...attributes} />
                         </li>
                     );
@@ -194,51 +214,62 @@ class MyEvaluations extends Component {
         }
 
         let verifyBanner = null;
-        if (!currentUser.verified) {
+        if (currentUser && !currentUser.verified) {
             verifyBanner = (
                 <div styleName="unverified-email-banner">
-                    A verification email was sent to { currentUser.email } - verify it to take your evaluation!
-                    <br/>
-                    <span className="primary-cyan clickable" onClick={() => goTo("/settings")}>Change email address</span>
+                    A verification email was sent to {currentUser.email} - verify it to take your
+                    evaluation!
+                    <br />
+                    <span className="primary-cyan clickable" onClick={() => goTo("/settings")}>
+                        Change email address
+                    </span>
                     {" or "}
-                    <span className="primary-cyan clickable" onClick={this.reSendVerification.bind(this)}>Re-send verification email</span>
+                    <span
+                        className="primary-cyan clickable"
+                        onClick={this.reSendVerification.bind(this)}
+                    >
+                        Re-send verification email
+                    </span>
                 </div>
-            )
+            );
         }
 
-        return(
-            <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEvaluations'>
+        return (
+            <div
+                className="jsxWrapper blackBackground fillScreen"
+                style={{ paddingBottom: "20px" }}
+                ref="myEvaluations"
+            >
                 <MetaTags>
                     <title>My Evaluations | Moonshot</title>
-                    <meta name="description" content="See and take your active evaluations!"/>
+                    <meta name="description" content="See and take your active evaluations!" />
                 </MetaTags>
 
                 <div style={style.separator}>
-                    <div style={style.separatorLine}/>
+                    <div style={style.separatorLine} />
                 </div>
-                <div className="center" style={{margin: "-42px auto 20px"}}>
-                    <div style={style.separatorText}>
-                        My Evaluations
-                    </div>
+                <div className="center" style={{ margin: "-42px auto 20px" }}>
+                    <div style={style.separatorText}>My Evaluations</div>
                 </div>
 
-                { verifyBanner }
+                {verifyBanner}
 
-                <div className="marginBottom60px">
-                    {evaluations}
-                </div>
+                <div className="marginBottom60px">{evaluations}</div>
             </div>
         );
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        addNotification,
-        startLoading,
-        stopLoading,
-        updateUser
-    }, dispatch);
+    return bindActionCreators(
+        {
+            addNotification,
+            startLoading,
+            stopLoading,
+            updateUser
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -250,4 +281,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyEvaluations);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MyEvaluations);

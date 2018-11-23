@@ -1,11 +1,11 @@
-"use strict"
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { changePasswordForgot, addNotification } from '../../actions/usersActions';
-import { TextField, CircularProgress, RaisedButton } from 'material-ui';
-import { Field, reduxForm } from 'redux-form';
-import MetaTags from 'react-meta-tags';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { changePasswordForgot, addNotification } from "../../actions/usersActions";
+import { TextField, CircularProgress, RaisedButton } from "material-ui";
+import { Field, reduxForm } from "redux-form";
+import MetaTags from "react-meta-tags";
 
 import { isValidPassword } from "../../miscFunctions";
 
@@ -19,7 +19,7 @@ const style = {
     searchUnderlineFocusStyle: { color: "green" }
 };
 
-const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
+const renderPasswordField = ({ input, label, meta: { touched, error }, ...custom }) => (
     <TextField
         hintText={label}
         floatingLabelText={label}
@@ -28,7 +28,7 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
         hintStyle={style.searchHintStyle}
         floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
         floatingLabelStyle={style.searchFloatingLabelStyle}
-        underlineFocusStyle = {style.searchUnderlineFocusStyle}
+        underlineFocusStyle={style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
         type="password"
@@ -37,26 +37,22 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
 
 const validate = values => {
     const errors = {};
-    const requiredFields = [
-        'password',
-        'password2',
-    ];
+    const requiredFields = ["password", "password2"];
     if (!isValidPassword(values.password)) {
-        errors.password = 'Password must be at least 8 characters long';
+        errors.password = "Password must be at least 8 characters long";
     }
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'This field is required'
+            errors[field] = "This field is required";
         }
     });
-    if (values.password && values.password2 && (values.password != values.password2)) {
-        errors.password2 = 'Passwords must match';
+    if (values.password && values.password2 && values.password != values.password2) {
+        errors.password2 = "Passwords must match";
     }
     return errors;
 };
 
 class PasswordChange extends Component {
-
     handleSubmit(e) {
         e.preventDefault();
 
@@ -64,10 +60,7 @@ class PasswordChange extends Component {
         const vals = this.props.formData.forgotPassChange.values;
         // Form validation before submit
         let notValid = false;
-        const requiredFields = [
-            'password',
-            'password2',
-        ];
+        const requiredFields = ["password", "password2"];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
                 this.props.touch(field);
@@ -78,13 +71,16 @@ class PasswordChange extends Component {
         if (vals.password != vals.password2) return;
 
         if (!isValidPassword(vals.password)) {
-            return this.props.addNotification("Password must be at least 8 characters long", "error");
+            return this.props.addNotification(
+                "Password must be at least 8 characters long",
+                "error"
+            );
         }
 
         const token = this.props.location.query.token;
         const user = {
             token: token,
-            password: vals.password,
+            password: vals.password
         };
         this.props.changePasswordForgot(user);
     }
@@ -95,36 +91,38 @@ class PasswordChange extends Component {
             <div className="fillScreen formContainer">
                 <MetaTags>
                     <title>New Password | Moonshot</title>
-                    <meta name="description" content="Reset your Moonshot password. It's okay - we all forget things sometimes." />
+                    <meta
+                        name="description"
+                        content="Reset your Moonshot password. It's okay - we all forget things sometimes."
+                    />
                 </MetaTags>
                 <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1 style={{marginTop:"15px"}}>Change Password</h1>
+                        <h1 style={{ marginTop: "15px" }}>Change Password</h1>
                         <div className="inputContainer">
                             <Field
                                 name="password"
                                 component={renderPasswordField}
                                 label="New Password"
-                            /><br/>
+                            />
+                            <br />
                         </div>
                         <div className="inputContainer">
                             <Field
                                 name="password2"
                                 component={renderPasswordField}
                                 label="Confirm New Password"
-                            /><br/>
+                            />
+                            <br />
                         </div>
                         <RaisedButton
                             label="Change Password"
                             type="submit"
                             className="raisedButtonBusinessHome"
-                            style={{margin: '10px 0'}}
+                            style={{ margin: "10px 0" }}
                         />
-                        <br/>
-                        {this.props.loadingChangePassword ?
-                            <CircularProgress />
-                            : null
-                        }
+                        <br />
+                        {this.props.loadingChangePassword ? <CircularProgress /> : null}
                     </form>
                 </div>
             </div>
@@ -133,23 +131,28 @@ class PasswordChange extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        changePasswordForgot,
-        addNotification
-    }, dispatch);
+    return bindActionCreators(
+        {
+            changePasswordForgot,
+            addNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
     return {
         formData: state.form,
-        currentUser: state.users.currentUser,
         loadingChangePassword: state.users.loadingSomething
     };
 }
 
 PasswordChange = reduxForm({
-    form: 'forgotPassChange',
-    validate,
+    form: "forgotPassChange",
+    validate
 })(PasswordChange);
 
-export default connect(mapStateToProps, mapDispatchToProps)(PasswordChange);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PasswordChange);
