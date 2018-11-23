@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
 import { getBillingInfo } from "../../actions/usersActions";
-import { goTo } from "../../miscFunctions";
+import { goTo, getFormattedDate } from "../../miscFunctions";
 import { withRouter } from "react-router";
 
 import "./billingBanners.css";
@@ -59,7 +59,7 @@ class BillingBanners extends Component {
     currentPlanEnding(date) {
         return (
             <div className="secondary-gray">
-                Your plan is ending {new Date(date).toDateString()}.{" "}
+                Your plan is ending {getFormattedDate(date)}.{" "}
                 <span className="primary-cyan clickable" onClick={() => goTo("/billing")}>
                     Select a new plan
                 </span>{" "}
