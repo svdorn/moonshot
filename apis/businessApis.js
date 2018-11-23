@@ -40,7 +40,6 @@ const errors = require("./errors.js");
 const businessApis = {
     POST_addEvaluation,
     POST_contactUsEmail,
-    POST_updateHiringStage,
     POST_answerQuestion,
     POST_googleJobsLinks,
     POST_emailInvites,
@@ -51,7 +50,6 @@ const businessApis = {
     POST_moveCandidates,
     POST_resetApiKey,
     POST_uploadCandidateCSV,
-    POST_chatbotData,
     POST_createBusinessAndUser,
     POST_interests,
     GET_candidateSearch,
@@ -68,12 +66,17 @@ const businessApis = {
     GET_newCandidateGraphData,
     GET_evaluationsGraphData,
     GET_billingIsSetUp,
+    GET_billingInfo,
     GET_adminList,
+    GET_candidateCount,
 
     generateApiKey,
     createEmailInfo,
     sendEmailInvite
 };
+
+const { sendIntercomPlanUpdate } = require("./evaluationApis");
+
 
 // ----->> START APIS <<----- //
 
@@ -114,11 +117,58 @@ async function GET_billingIsSetUp(req, res) {
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
-    const billingIsSetUp = !!(business && typeof business.billingCustomerId === "string");
-
-    console.log("billing is set up: ", billingIsSetUp);
+    const billingIsSetUp = !!(
+        business &&
+        (typeof business.billingCustomerId === "string" || typeof business.billing === "object")
+    );
 
     return res.status(200).send({ billingIsSetUp });
+}
+
+// find out if billing has been set up for the company
+async function GET_billingInfo(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    // if one of the arguments doesn't exist, return with error code
+    if (!userId || !verificationToken || !businessId) {
+        return res.status(400).send("Bad request.");
+    }
+
+    try {
+        var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(
+            userId,
+            verificationToken,
+            businessId
+        );
+    } catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.json(business.billing);
+}
+
+// find the candidate count of the company
+async function GET_candidateCount(req, res) {
+    const { userId, verificationToken, businessId } = sanitize(req.query);
+
+    // if one of the arguments doesn't exist, return with error code
+    if (!userId || !verificationToken || !businessId) {
+        return res.status(400).send("Bad request.");
+    }
+
+    try {
+        var { business, user } = await verifyAccountAdminAndReturnBusinessAndUser(
+            userId,
+            verificationToken,
+            businessId
+        );
+    } catch (verifyError) {
+        console.log("Error verifying user's identity and getting business: ", verifyError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    return res.json(business.candidateCount);
 }
 
 // create a business and the first account admin for that business
@@ -281,7 +331,7 @@ async function POST_createBusinessAndUser(req, res) {
     }
 
     // return successfully to user
-    res.status(200).send(frontEndUser(user));
+    res.status(200).send({ user: frontEndUser(user), fullAccess: true });
 
     // save the session so that the user stays logged in
     req.session.userId = user._id;
@@ -550,7 +600,9 @@ async function createBusiness(info) {
             uniqueNameLowerCase: uniqueName.toLowerCase(),
             positions: [],
             logo: "hr.png",
-            dateCreated: NOW
+            dateCreated: NOW,
+            candidateCount: 0,
+            fullAccess: true
         };
 
         // check if positions should be added
@@ -1409,8 +1461,14 @@ async function POST_emailInvites(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // check if the user has verified their email
     if (!user.verified) {
         return res.status(500).send("Email not yet verified. Do that first!");
+    }
+
+    // check if the business has a paid plan (or free trial)
+    if (!business.fullAccess) {
+        return res.status(401).send("Select a payment plan before sending invites!");
     }
 
     // find the position within the business
@@ -1553,6 +1611,17 @@ async function POST_rateInterest(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(bizUser.businessInfo.businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Choose a payment plan to change interest level.");
+    }
+
     // update the business' interest in the candidate, making sure it is an integer
     candidate.positions[candidatePositionIndex].interest = Math.round(interest);
     // mark the candidate as reviewed, in case they weren't already
@@ -1604,6 +1673,17 @@ async function POST_changeHiringStage(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(bizUser.businessInfo.businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Upgrade to a paid plan to change hiring stages.");
+    }
+
     // if dismissing a candidate
     let hiringStageChanges = candidate.positions[candidatePositionIndex].hiringStageChanges;
     // the hiring stage before it was changed
@@ -1649,6 +1729,56 @@ async function POST_changeHiringStage(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // if they set somebody to hired, lock them out of the account if they're done
+    if (hiringStage === "Hired") {
+        try {
+            var business = await Businesses.findById(bizUser.businessInfo.businessId);
+        } catch (getBusinessError) {
+            console.log(
+                "Error getting business when trying to update hiring stuff: ",
+                getBusinessError
+            );
+        }
+
+        // check if need to lock them out of their account if free trial ends because they hired their first person
+        if (
+            business &&
+            business.fullAccess &&
+            (!business.billing || (business.billing && !business.billing.subscription && !business.billing.customPlan)) &&
+            (business.candidateCount && business.candidateCount < 20)
+        ) {
+            business.fullAccess = false;
+
+            // get all account admins for this business
+            try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
+            catch(getUsersError) {
+                console.log("error getting admins when trying to send them free trial ending message");
+            }
+            // will contain all the promises for sending emails
+            let intercomPromises = [];
+
+            // add a promise to create a code and send an email for each given address
+            admins.forEach(admin => {
+                intercomPromises.push(
+                    sendIntercomPlanUpdate(admin.intercom, "ended")
+                );
+            });
+
+            // wait for all the emails to send
+            try {
+                await Promise.all(intercomPromises);
+            } catch (sendEmailsError) {
+                console.log("error getting admins when trying to send them free trial ending message");
+            }
+        }
+
+        try {
+            await business.save();
+        } catch (updateBusinessError) {
+            console.log("error updating a business to have full access: ", updateBusinessError);
+        }
+    }
+
     // return successfully
     return res.json(true);
 }
@@ -1684,6 +1814,17 @@ async function POST_moveCandidates(req, res) {
     }
     if (!businessId) {
         return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Upgrade to a paid plan to change hiring stages.");
     }
 
     // find all candidates that should be altered
@@ -1961,62 +2102,6 @@ async function POST_contactUsEmail(req, res) {
     }
 
     return res.status(200).send({ success: true });
-}
-
-// updates a candidate for a business as Contacted, Interviewing, Dismissed, etc
-async function POST_updateHiringStage(req, res) {
-    const body = req.body;
-    const bizUserId = sanitize(body.userId);
-    const verificationToken = sanitize(body.verificationToken);
-    const userId = sanitize(body.candidateId);
-    const hiringStage = sanitize(body.hiringStage);
-    const isDismissed = sanitize(body.isDismissed);
-    const positionId = sanitize(body.positionId);
-
-    // verify biz user, get candidate, find and verify candidate's position
-    let bizUser, user, userPositionIndex;
-    try {
-        let results = await verifyBizUserAndFindUserPosition(
-            bizUserId,
-            verificationToken,
-            positionId,
-            userId
-        );
-        bizUser = results.bizUser;
-        user = results.user;
-        userPositionIndex = results.userPositionIndex;
-    } catch (error) {
-        console.log("Error verifying business user or getting user position index: ", error);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    let userPosition = user.positions[userPositionIndex];
-
-    // update all new hiring stage info
-    userPosition.hiringStage = hiringStage;
-    userPosition.isDismissed = isDismissed;
-    // make sure hiring stage changes array exists
-    if (!Array.isArray(userPosition.hiringStageChanges)) {
-        userPosition.hiringStageChanges = [];
-    }
-    userPosition.hiringStageChanges.push({
-        hiringStage,
-        isDismissed,
-        dateChanged: new Date()
-    });
-
-    // save the new info into the candidate object
-    user.positions[userPositionIndex] = userPosition;
-
-    // save the user
-    try {
-        user = await user.save();
-    } catch (saveUserError) {
-        console.log("Error saving user while trying to update hiring stage: ", saveUserError);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    res.json(true);
 }
 
 // returns the business user object, the candidate/employee, and the index of
@@ -2896,6 +2981,17 @@ async function GET_evaluationResults(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // get the business so we can check if they have full access
+    try {
+        var business = await Businesses.findById(bizUser.businessInfo.businessId);
+    } catch (findBizError) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    // if they don't have full access, don't return any report data
+    if (!business.fullAccess) {
+        return res.status(401).send("Upgrade to a paid plan to see this report.");
+    }
+
     let userPosition = user.positions[userPositionIndex];
 
     // --->>              FORMAT THE DATA FOR THE FRONT END             <<--- //
@@ -2962,25 +3058,17 @@ async function GET_evaluationResults(req, res) {
 async function GET_candidateSearch(req, res) {
     const { userId, verificationToken, getMockData, positionName } = sanitize(req.query);
 
-    // get the user who is trying to search for candidates
-    let user;
+    // get the user and business who are trying to search for candidates
     try {
-        user = await getAndVerifyUser(userId, verificationToken);
+        var { user, business } = await getUserAndBusiness(userId, verificationToken);
     } catch (getUserError) {
         console.log("error getting business user while searching for candidates: ", getUserError);
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
-    // if the user is not an admin or manager, they can't search for candidates
-    if (!["accountAdmin", "manager"].includes(user.userType)) {
-        console.log("User is type: ", user.userType);
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
-    }
-
-    // if the user doesn't have an associated business, error
-    if (!user.businessInfo || !user.businessInfo.businessId) {
-        console.log("User doesn't have associated business.");
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    // if the business isn't on a plan, don't show them their candidates
+    if (!business.fullAccess) {
+        return res.status(200).send({ candidates: [] });
     }
 
     // if mock users are wanted, just get those
@@ -3087,25 +3175,17 @@ async function GET_employeeSearch(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
-    // get the user who is trying to search for candidates
-    let user;
+    // get the user who is trying to search for employees
     try {
-        user = await getAndVerifyUser(userId, verificationToken);
+        var { user, business } = await getUserAndBusiness(userId, verificationToken);
     } catch (getUserError) {
         console.log("error getting business user while searching for candidates: ", getUserError);
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
-    // if the user is not an admin or manager, they can't search for candidates
-    if (!["accountAdmin", "manager"].includes(user.userType)) {
-        console.log("User is type: ", user.userType);
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
-    }
-
-    // if the user doesn't have an associated business, error
-    if (!user.businessInfo || !user.businessInfo.businessId) {
-        console.log("User doesn't have associated business.");
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    // if the business isn't on a plan, don't show them their employees
+    if (!business.fullAccess) {
+        return res.status(200).send([]);
     }
 
     // the id of the business that the user works for
@@ -3310,41 +3390,6 @@ async function POST_uploadCandidateCSV(req, res) {
             console.log("Error sending email with candidates file: ", error);
             return res.status(500).send({ message: "Error uploading candidates file." });
         });
-}
-
-// send Kyle the info for a new chatbot sign up
-async function POST_chatbotData(req, res) {
-    const name = sanitize(req.body.name);
-    const company = sanitize(req.body.company);
-    const positionType = sanitize(req.body.positionType);
-    const title = sanitize(req.body.title);
-    const email = sanitize(req.body.email);
-
-    const recipients = ["ameyer24@wisc.edu"];
-    const subject = "New Signup from Chatbot";
-    const content =
-        "<div>" +
-        "<h3>Name</h3>" +
-        `<p>${name}</p>` +
-        "<h3>Company</h3>" +
-        `<p>${company}</p>` +
-        "<h3>Position Type</h3>" +
-        `<p>${positionType}</p>` +
-        "<h3>Title</h3>" +
-        `<p>${title}</p>` +
-        "<h3>Email</h3>" +
-        `<p>${email}</p>` +
-        "</div>";
-
-    // send Kyle the email
-    try {
-        await sendEmail({ recipients, subject, content });
-    } catch (sendEmailError) {
-        console.log("Error sending email on chatbot signup: ", sendEmailError);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    return res.status(200).send({ success: true });
 }
 
 // creates a unique api key for a business

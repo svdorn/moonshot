@@ -1,0 +1,239 @@
+.billing {
+    margin-bottom: 40px;
+}
+.pricing {
+    margin-top: 40px;
+    text-align: center;
+    color: var(--primary-white);
+}
+.pricing > div:first-child {
+    font-size: 26px;
+}
+.header-seperator {
+    height: 2px;
+    background: var(--primary-cyan);
+    width: 70px;
+    margin: 15px auto;
+}
+.pricing > div:nth-child(3) {
+    font-size: 16px;
+    margin: auto;
+    max-width: 700px;
+    width: 95%;
+}
+.pricing > div:nth-child(4) {
+    font-size: 16px;
+    margin-top: 15px;
+}
+.pricing > div:nth-child(5) {
+    margin-top: 20px;
+}
+.pricing-box {
+    display: inline-block;
+    width: 200px;
+    height: 240px;
+    margin: 10px;
+    background-color: var(--black-deep-dark);
+    vertical-align: top;
+    font-size: 14px;
+    border: 2px solid var(--secondary-dark-gray);
+
+    -webkit-transition: -webkit-transition 0.2s;
+    -moz-transition: -moz-box-shadow 0.2s;
+    transition: box-shadow 0.2s;
+}
+.pricing-box.active {
+    background: linear-gradient(to bottom right, var(--primary-cyan), var(--white));
+    padding: 2px;
+    border: none;
+}
+.pricing-box.active > div {
+    background: var(--black-deep-dark);
+    height: 100%;
+    width: 100%;
+}
+.pricing-box:hover {
+    cursor: pointer;
+    -moz-box-shadow: 0px 0px 50px 15px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 15px #00000073;
+    box-shadow: 0px 0px 50px 15px #00000073;
+    -moz-transition: -moz-box-shadow 0.2s;
+    -webkit-transition: -webkit-transition 0.2s;
+    transition: box-shadow 0.2s;
+}
+.pricing-box > div > img {
+    margin-top: 15px;
+    margin-bottom: 7px;
+    height: 50px;
+}
+.pricing-box > div > div > span {
+    color: var(--primary-cyan);
+    font-size: 28px;
+}
+.seperator {
+    height: 2px;
+    background: linear-gradient(to right, var(--primary-cyan), var(--primary-white));
+    width: 50px;
+    margin: 8px auto;
+}
+
+.credit-card {
+    margin-top: 40px;
+    text-align: center;
+}
+.credit-card > div:first-child {
+    color: var(--primary-white);
+    font-size: 16px;
+}
+.close-section {
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--primary-white);
+    margin-top: -10px;
+}
+
+.circular-progress {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.custom-plan {
+    color: var(--primary-white);
+    margin-top: 40px;
+    font-size: 16px;
+    text-align: center;
+}
+.custom-plan > div:first-child {
+    color: var(--primary-cyan);
+    font-size: 26px;
+}
+.custom-plan > div:nth-child(3) {
+    margin: 20px auto 0 auto;
+    width: 95%;
+    max-width: 800px;
+}
+
+.message-us {
+    color: var(--primary-white);
+    font-size: 16px;
+    margin-top: 40px;
+    cursor: pointer;
+}
+.message-us:hover > span {
+    color: var(--primary-cyan);
+}
+.message-us > img {
+    height: 25px;
+    margin-right: 10px;
+}
+
+.update-cancel {
+    color: var(--primary-white);
+    font-size: 16px;
+    margin-top: 60px;
+}
+.update-cancel > div:first-child {
+    display: inline-block;
+    cursor: pointer;
+}
+.update-cancel > div:first-child:hover {
+    color: var(--primary-cyan);
+}
+.update-cancel > div:nth-child(2) {
+    display: inline-block;
+    margin: 0 15px;
+}
+.update-cancel > div:nth-child(3) {
+    display: inline-block;
+    cursor: pointer;
+}
+.update-cancel > div:nth-child(3):hover {
+    color: var(--secondary-red);
+}
+
+.update-plan {
+    text-align: center;
+    color: var(--primary-white);
+    margin-top: 30px;
+    font-size: 16px;
+}
+.info {
+    margin-right: 2px;
+    margin-top: 4px;
+    display: inline-block;
+    border-radius: 16px;
+    width: 17px;
+    height: 17px;
+    text-align: center;
+    font-size: 12px;
+    vertical-align: top;
+    border: 2px solid white;
+}
+
+@media only screen and (max-width: 800px) {
+    .update-cancel {
+        font-size: 14px;
+    }
+    .custom-plan {
+        font-size: 14px;
+    }
+    .custom-plan > div:nth-child(3) {
+        margin-top: 10px auto 0 auto;
+    }
+    .message-us {
+        font-size: 14px;
+        margin-top: 30px;
+    }
+    .message-us > img {
+        height: 23px;
+        margin-right: 8px;
+    }
+    .update-plan {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .pricing > div:first-child {
+        font-size: 22px;
+    }
+    .pricing > div:nth-child(3) {
+        font-size: 14px;
+    }
+    .pricing > div:nth-child(4) {
+        font-size: 14px;
+    }
+    .custom-plan > div:first-child {
+        font-size: 22px;
+    }
+    .credit-card > div:first-child {
+        font-size: 14px;
+    }
+    .close-section {
+        font-size: 14px;
+    }
+    .pricing-box > div > div > span {
+        font-size: 22px;
+    }
+
+    .info {
+        width: 14px;
+        height: 14px;
+        text-align: center;
+        font-size: 12px;
+        vertical-align: top;
+        border: 1px solid white;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .pricing > div:first-child {
+        font-size: 16px;
+    }
+    .custom-plan > div:first-child {
+        font-size: 16px;
+    }
+    .pricing-box > div > img {
+        height: 35px;
+    }
+}

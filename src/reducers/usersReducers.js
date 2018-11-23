@@ -41,7 +41,45 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_VERIFICATION_MODAL":
             return {
                 ...state,
-                verificationModal: false,
+                verificationModal: false
+            };
+            break;
+        case "OPEN_LOCKED_ACCOUNT_MODAL":
+            return {
+                ...state,
+                lockedAccountModal: true
+            };
+            break;
+        case "CLOSE_LOCKED_ACCOUNT_MODAL":
+            return {
+                ...state,
+                lockedAccountModal: false
+            };
+            break;
+        case "OPEN_HIRE_VERIFICATION_MODAL":
+            return {
+                ...state,
+                hireVerificationModal: true,
+                hireVerificationCandidateId: action.candidateId,
+                hireVerificationName: action.candidateName
+            };
+            break;
+        case "CLOSE_HIRE_VERIFICATION_MODAL":
+            return {
+                ...state,
+                hireVerificationModal: false
+            };
+            break;
+        case "OPEN_CANCEL_PLAN_MODAL":
+            return {
+                ...state,
+                cancelPlanModal: true
+            };
+            break;
+        case "CLOSE_CANCEL_PLAN_MODAL":
+            return {
+                ...state,
+                cancelPlanModal: false
             };
             break;
         case "OPEN_CLAIM_PAGE_MODAL":
@@ -53,7 +91,7 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_CLAIM_PAGE_MODAL":
             return {
                 ...state,
-                claimPageModal: false,
+                claimPageModal: false
             };
             break;
         case "OPEN_INTRODUCTION_MODAL":
@@ -65,7 +103,7 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_INTRODUCTION_MODAL":
             return {
                 ...state,
-                introductionModal: false,
+                introductionModal: false
             };
             break;
         case "OPEN_CANDIDATES_POPUP_MODAL":
@@ -224,7 +262,8 @@ export function usersReducers(state = initialState, action) {
         case "GET_USER_FROM_SESSION":
             return {
                 ...state,
-                currentUser: action.payload,
+                currentUser: action.payload.user,
+                fullAccess: action.payload.fullAccess,
                 isFetching: action.isFetching,
                 errorMessage: undefined
             };
@@ -259,6 +298,7 @@ export function usersReducers(state = initialState, action) {
                 notification: action.notification,
                 notificationDate: new Date(),
                 currentUser: action.user,
+                fullAccess: action.fullAccess,
                 loadingSomething: false
             };
             break;
@@ -312,7 +352,7 @@ export function usersReducers(state = initialState, action) {
             Intercom("boot", {
                 app_id: "xki3jtkg"
             });
-            return { ...state, currentUser: undefined };
+            return { ...state, currentUser: undefined, billing: undefined, fullAccess: undefined };
             break;
         case "FORGOT_PASSWORD_REQUESTED":
         case "POST_USER_REQUESTED":
@@ -340,6 +380,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 currentUser: action.user,
+                fullAccess: action.fullAccess,
                 userPosted: true,
                 loadingSomething: false
             };
@@ -413,6 +454,23 @@ export function usersReducers(state = initialState, action) {
             }
             return newState;
             break;
+        case "SUCCESS_BILLING_INFO":
+            return {
+                ...state,
+                ...notificationInfo(action.notification),
+                billing: action.billing,
+                loadingSomething: false
+            };
+            break;
+        case "SUCCESS_BILLING_CUSTOMER":
+            return {
+                ...state,
+                ...notificationInfo(action.notification),
+                billing: action.billing,
+                fullAccess: action.fullAccess,
+                loadingSomething: false
+            };
+            break;
         case "CONTACT_US":
         case "FORGOT_PASSWORD":
         case "FORGOT_PASSWORD_REJECTED":
@@ -421,7 +479,6 @@ export function usersReducers(state = initialState, action) {
         case "ERROR_FINISHED_LOADING":
         case "SUCCESS_FINISHED_LOADING":
         case "START_PSYCH_EVAL_ERROR":
-        case "SUCCESS_BILLING_CUSTOMER":
         case "FAILURE_BILLING_CUSTOMER":
             return {
                 ...state,

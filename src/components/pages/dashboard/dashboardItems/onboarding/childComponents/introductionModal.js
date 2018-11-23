@@ -1,15 +1,19 @@
-"use strict"
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { withRouter } from "react-router";
-import { generalAction, closeIntroductionModal, updateStore } from '../../../../../../actions/usersActions';
+import {
+    generalAction,
+    closeIntroductionModal,
+    updateStore
+} from "../../../../../../actions/usersActions";
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import colors from "../../../../../../colors";
 import { goTo } from "../../../../../../miscFunctions";
 import { button } from "../../../../../../classes.js";
-import axios from 'axios';
+import axios from "axios";
 import AddPositionModal from "./addPositionModal";
 
 import "../../../dashboard.css";
@@ -34,17 +38,17 @@ class IntroductionModal extends Component {
                 return this.setState({ frame: "addPosition", title: query.title });
             }
         }
-        this.setState({ frame: "welcome" })
+        this.setState({ frame: "welcome" });
     }
 
     close = () => {
         this.props.closeIntroductionModal();
-    }
+    };
 
     welcomeFrameClick = () => {
         this.props.updateStore("welcomeToMoonshot", true);
         this.close();
-    }
+    };
 
     makeWelcomeFrame() {
         return (
@@ -53,9 +57,10 @@ class IntroductionModal extends Component {
                     Welcome to Moonshot Insights!
                 </div>
                 <div className="font16px font14pxUnder700 font12pxUnder500 marginTop10px">
-                    We created a 22-minute evaluation that you can share with your candidates to understand their personality,
-                    ability to learn, adapt and problem solve. This data enables us to predict each candidate{"'"}s job performance,
-                    growth potential, longevity or tenure, and culture fit at your company.
+                    We created a 22-minute evaluation that you can share with your candidates to
+                    understand their personality, ability to learn, adapt and problem solve. This
+                    data enables us to predict each candidate{"'"}s job performance, growth
+                    potential, longevity or tenure, and culture fit at your company.
                 </div>
                 <div styleName="blue-arrow" onClick={this.welcomeFrameClick}>
                     Continue <img src={`/icons/ArrowBlue${this.props.png}`} />
@@ -67,36 +72,38 @@ class IntroductionModal extends Component {
     render() {
         let frame = null;
         if (this.state.frame === "addPosition") {
-            frame = <AddPositionModal close={this.close} title={this.state.title} role={this.state.role} />
+            frame = (
+                <AddPositionModal
+                    close={this.close}
+                    title={this.state.title}
+                    role={this.state.role}
+                />
+            );
         } else {
             frame = this.makeWelcomeFrame();
         }
 
         return (
-            <Dialog
-                open={!!this.props.open}
-                maxWidth={false}
-                onClose={this.close}
-            >
-                <div styleName="modal-signup">
-                    { frame }
-                </div>
+            <Dialog open={!!this.props.open} maxWidth={false} onClose={this.close}>
+                <div styleName="modal-signup">{frame}</div>
             </Dialog>
         );
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        generalAction,
-        closeIntroductionModal,
-        updateStore
-    }, dispatch);
+    return bindActionCreators(
+        {
+            generalAction,
+            closeIntroductionModal,
+            updateStore
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
         png: state.users.png,
         open: state.users.introductionModal
     };
@@ -104,4 +111,7 @@ function mapStateToProps(state) {
 
 IntroductionModal = withRouter(IntroductionModal);
 
-export default connect(mapStateToProps, mapDispatchToProps)(IntroductionModal);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(IntroductionModal);

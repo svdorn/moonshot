@@ -1,10 +1,9 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {  } from "../../actions/usersActions";
-import {  } from "../../miscFunctions";
-
+import {} from "../../actions/usersActions";
+import {} from "../../miscFunctions";
 
 class GeneralApply extends Component {
     constructor(props) {
@@ -14,25 +13,19 @@ class GeneralApply extends Component {
     }
 
     render() {
-        return (
-            <div>
-            </div>
-        );
+        return <div />;
     }
 }
 
-
 function mapStateToProps(state) {
-    return {
-        currentUser: state.users.currentUser
-    };
+    return {};
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-
-    }, dispatch);
+    return bindActionCreators({}, dispatch);
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(GeneralApply);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(GeneralApply);

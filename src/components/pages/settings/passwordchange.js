@@ -1,10 +1,10 @@
-"use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {changePassword} from '../../../actions/usersActions';
-import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
-import {Field, reduxForm} from 'redux-form';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { changePassword, addNotification } from "../../../actions/usersActions";
+import { TextField, RaisedButton, Paper, CircularProgress } from "material-ui";
+import { Field, reduxForm } from "redux-form";
 
 const style = {
     // the hint that shows up when search bar is in focus
@@ -16,7 +16,7 @@ const style = {
     searchUnderlineFocusStyle: { color: "green" }
 };
 
-const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
+const renderPasswordField = ({ input, label, meta: { touched, error }, ...custom }) => (
     <TextField
         hintText={label}
         floatingLabelText={label}
@@ -25,7 +25,7 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
         hintStyle={style.searchHintStyle}
         floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
         floatingLabelStyle={style.searchFloatingLabelStyle}
-        underlineFocusStyle = {style.searchUnderlineFocusStyle}
+        underlineFocusStyle={style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
         type="password"
@@ -34,36 +34,36 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
 
 const validate = values => {
     const errors = {};
-    const requiredFields = [
-        'oldpass',
-        'password',
-        'password2',
-    ];
+    const requiredFields = ["oldpass", "password", "password2"];
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'This field is required'
+            errors[field] = "This field is required";
         }
     });
-    if (values.password && values.password2 && (values.password != values.password2)) {
-        errors.password2 = 'Passwords must match';
+    if (values.password && values.password2 && values.password != values.password2) {
+        errors.password2 = "Passwords must match";
     }
-    return errors
+    return errors;
 };
 
 class PasswordChange extends Component {
-
     handleSubmit(e) {
         e.preventDefault();
+
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return this.props.addNotification(
+                "You aren't logged in! Try refreshing the page.",
+                "error"
+            );
+        }
+
         // values that were entered in the form
         const vals = this.props.formData.changePassword.values;
         // Form validation before submit
         let notValid = false;
         // user required to enter all three fields
-        const requiredFields = [
-            'oldpass',
-            'password',
-            'password2',
-        ];
+        const requiredFields = ["oldpass", "password", "password2"];
         // if nothing is entered in one of the required fields, touch it to
         // bring up the warning that says you have to enter something
         requiredFields.forEach(field => {
@@ -79,7 +79,7 @@ class PasswordChange extends Component {
 
         // info the server needs to change the password
         const user = {
-            _id: this.props.currentUser._id,
+            _id: currentUser._id,
             oldpass: this.props.formData.changePassword.values.oldpass,
             password: this.props.formData.changePassword.values.password
         };
@@ -88,49 +88,61 @@ class PasswordChange extends Component {
         this.props.changePassword(user);
     }
 
-
     render() {
         return (
-                    <form onSubmit={this.handleSubmit.bind(this)}>
-                        <div className="inputContainer">
-                        <Field
-                            name="oldpass"
-                            component={renderPasswordField}
-                            label="Old Password"
-                            className="lightBlueInputText"
-                        /></div><br/>
-                        <div className="inputContainer">
-                        <Field
-                            name="password"
-                            component={renderPasswordField}
-                            label="New Password"
-                            className="lightBlueInputText"
-                        /></div><br/>
-                        <div className="inputContainer">
-                        <Field
-                            name="password2"
-                            component={renderPasswordField}
-                            label="Confirm New Password"
-                            className="lightBlueInputText"
-                        /></div>
-                        <div className="center">
-                        <RaisedButton
-                            label="Change Password"
-                            type="submit"
-                            className="raisedButtonBusinessHome"
-                            style={{margin: '30px auto 0px'}}
-                        />
-                        </div>
-                        {this.props.loadingChangePassword ? <div className="center"><CircularProgress color="white" style={{marginTop: "10px"}}/></div> : null}
-                    </form>
+            <form onSubmit={this.handleSubmit.bind(this)}>
+                <div className="inputContainer">
+                    <Field
+                        name="oldpass"
+                        component={renderPasswordField}
+                        label="Old Password"
+                        className="lightBlueInputText"
+                    />
+                </div>
+                <br />
+                <div className="inputContainer">
+                    <Field
+                        name="password"
+                        component={renderPasswordField}
+                        label="New Password"
+                        className="lightBlueInputText"
+                    />
+                </div>
+                <br />
+                <div className="inputContainer">
+                    <Field
+                        name="password2"
+                        component={renderPasswordField}
+                        label="Confirm New Password"
+                        className="lightBlueInputText"
+                    />
+                </div>
+                <div className="center">
+                    <RaisedButton
+                        label="Change Password"
+                        type="submit"
+                        className="raisedButtonBusinessHome"
+                        style={{ margin: "30px auto 0px" }}
+                    />
+                </div>
+                {this.props.loadingChangePassword ? (
+                    <div className="center">
+                        <CircularProgress color="white" style={{ marginTop: "10px" }} />
+                    </div>
+                ) : null}
+            </form>
         );
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        changePassword,
-    }, dispatch);
+    return bindActionCreators(
+        {
+            changePassword,
+            addNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -142,8 +154,11 @@ function mapStateToProps(state) {
 }
 
 PasswordChange = reduxForm({
-    form: 'changePassword',
-    validate,
+    form: "changePassword",
+    validate
 })(PasswordChange);
 
-export default connect(mapStateToProps, mapDispatchToProps)(PasswordChange);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PasswordChange);

@@ -108,7 +108,6 @@ class InvitePage extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
         loading: state.users.loadingSomething,
         formData: state.form
     };

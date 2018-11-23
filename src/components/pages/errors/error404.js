@@ -1,18 +1,23 @@
-"use strict"
-import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
-import { connect } from 'react-redux';
-import MetaTags from 'react-meta-tags';
+"use strict";
+import React, { Component } from "react";
+import { browserHistory } from "react-router";
+import { connect } from "react-redux";
+import MetaTags from "react-meta-tags";
 import { goTo } from "../../../miscFunctions";
 
 class Error404 extends Component {
-    render () {
-        let route = '/';
-        if (this.props.currentUser) {
-            route = '/myEvaluations';
+    render() {
+        let route = "/";
+        const { currentUser } = this.props;
+        if (currentUser) {
+            if (currentUser.userType === "accountAdmin") {
+                route = "/dashboard";
+            } else {
+                route = "/myEvaluations";
+            }
         }
         return (
-            <div className="fillScreen formContainer" style={{textAlign:"center"}}>
+            <div className="fillScreen formContainer" style={{ textAlign: "center" }}>
                 <MetaTags>
                     <title>404 | Moonshot</title>
                     <meta name="description" content="You are lost but we can show you the way." />
@@ -24,10 +29,10 @@ class Error404 extends Component {
                             alt="404 Image - Rocket Doing Loops"
                             src={"/images/404" + this.props.png}
                             id="image404"
-                        /><br/>
-                        You seem a little lost,<br/> but we can show you the way!
-                        <p  className="clickable primary-cyan underline"
-                            onClick={() => goTo(route)}>
+                        />
+                        <br />
+                        You seem a little lost,<br /> but we can show you the way!
+                        <p className="clickable primary-cyan underline" onClick={() => goTo(route)}>
                             Follow Me
                         </p>
                     </form>

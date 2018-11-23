@@ -46,10 +46,16 @@ class EmployeePreview extends Component {
     handleSubmit() {
         // Post the answer in the database
         let self = this;
+
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return;
+        }
+
         const user = {
-            userId: this.props.currentUser._id,
+            userId: currentUser._id,
             employeeId: this.props.employeeId,
-            verificationToken: this.props.currentUser.verificationToken,
+            verificationToken: currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
             positionId: this.props.positionId,
@@ -116,10 +122,16 @@ class EmployeePreview extends Component {
     handlePreviousQuestion() {
         // Post the answer in the database
         let self = this;
+
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return;
+        }
+
         const user = {
-            userId: this.props.currentUser._id,
+            userId: currentUser._id,
             employeeId: this.props.employeeId,
-            verificationToken: this.props.currentUser.verificationToken,
+            verificationToken: currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
             positionId: this.props.positionId,
