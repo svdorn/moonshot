@@ -198,6 +198,8 @@ async function GET_factors(req, res, next) {
     // go through each factor, group factors by factor name
     let factorArraysObj = makeFactorArraysObj(allFactors);
 
+    console.log("factorArraysObj: ", factorArraysObj);
+
     // an array that will contain the factors that will be returned to the front end
     let newFactorObjs = [];
 
@@ -326,8 +328,6 @@ async function GET_outputs(req, res, next) {
         console.log("Error getting data for outputs: ", e);
         return res.status(500).send({ message: "Error getting your data :(" });
     }
-
-    console.log("facets: ", facets);
 
     const levels = ["high", "med", "low"];
     const outputs = facets.map(facet => {
@@ -477,12 +477,15 @@ function standardDeviation(values, average) {
 function makeFactorArraysObj(factors) {
     let factorObjs = {};
     factors.forEach(factor => {
-        // if the array for this factor doesn't exist already, initialize it
-        if (!factorObjs[factor.name]) {
-            factorObjs[factor.name] = [];
+        // check that the factor is valid
+        if (factor.name && factor.score) {
+            // if the array for this factor doesn't exist already, initialize it
+            if (!factorObjs[factor.name]) {
+                factorObjs[factor.name] = [];
+            }
+            // add the factor score to the list of scores
+            factorObjs[factor.name].push(factor.score);
         }
-        // add the factor score to the list of scores
-        factorObjs[factor.name].push(factor.score);
     });
 
     return factorObjs;
