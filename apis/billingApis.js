@@ -3,9 +3,7 @@ const Businesses = require('../models/businesses.js');
 const credentials = require('../credentials');
 
 const mongoose = require("mongoose");
-// STRIPE TESTING
-const stripe = require("stripe")(credentials.stripeTestSk);
-//const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
+const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 
 // get helper functions
 const { sanitize,

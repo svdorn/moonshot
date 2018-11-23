@@ -3,9 +3,7 @@ const Businesses = require('../models/businesses.js');
 const credentials = require('../credentials');
 
 const mongoose = require("mongoose");
-// STRIPE TESTING
-const stripe = require("stripe")(credentials.stripeTestSk);
-//const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
+const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 var CronJob = require("cron").CronJob;
 
 // get helper functions
@@ -32,11 +30,6 @@ if (liveSite) {
     new CronJob("0 0 8 * * *", safeSendUpdateEmails, onComplete, onStart, timezone);
     new CronJob("0 0 6 * * *", safeStripeUpdates, onComplete, onStart, timezone);
 }
-// STRIPE TESTING
-const onComplete = null;
-const onStart = true;
-const timezone = "America/Los_Angeles";
-new CronJob("5 * * * * *", safeStripeUpdates, onComplete, onStart, timezone);
 
 
 async function safeSendUpdateEmails() {

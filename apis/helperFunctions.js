@@ -7,9 +7,7 @@ const UnsubscribedEmails = require("../models/unsubscribedEmails.js");
 const UniqueEmails = require("../models/uniqueEmails.js");
 const Businesses = require('../models/businesses.js');
 const Skills = require('../models/skills.js');
-// STRIPE TESTING
-const stripe = require("stripe")(credentials.stripeTestSk);
-//const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
+const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
 
 const errors = require("./errors");
 const crypto = require('crypto');
@@ -778,11 +776,8 @@ function getBillingEndDate(startDate, subscriptionTerm) {
     // get the end date
     let endDate = new Date(startDate);
 
-    // STRIPE REAL ONE
-    // endDate = endDate.setMonth(endDate.getMonth() + subscriptionLength);
-    // STRIPE TESTING
-    // endDate = endDate.setMinutes(endDate.getMinutes() + subscriptionLength);
-    endDate = endDate.setDate(endDate.getDate() + subscriptionLength);
+    // set end date to be x months ahead of the startdate
+    endDate = endDate.setMonth(endDate.getMonth() + subscriptionLength);
 
     return endDate;
 }
@@ -798,9 +793,7 @@ async function addSubscription(customerId, subscriptionTerm) {
         try {
             var subscription = await stripe.subscriptions.create({
                 customer: customerId,
-                // STRIPE TEST
-                items: [{plan: credentials.plans[index].test_id}]
-                // items: [{plan: process.env.NODE_ENV === "production" ? credentials.plans[index].id : credentials.plans[index].test_id}]
+                items: [{plan: process.env.NODE_ENV === "production" ? credentials.plans[index].id : credentials.plans[index].test_id}]
             });
         } catch(error) {
             console.log("Error adding subscription: ", error);
