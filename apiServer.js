@@ -303,3 +303,7 @@ app.listen(3001, function(err) {
         return console.log(err);
     }
 });
+
+module.exports = app;
+
+require("./apis/admin/dataDisplayApis");

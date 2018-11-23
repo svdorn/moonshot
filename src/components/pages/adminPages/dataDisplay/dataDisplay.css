@@ -1,0 +1,206 @@
+:root {
+    --data-display-menu-width: 140px;
+}
+
+.menu {
+    height: 100%;
+    background-color: var(--black-deep-dark);
+    text-align: center;
+    color: white;
+    min-height: 300px;
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+.menu {
+    width: var(--data-display-menu-width);
+    position: fixed;
+    z-index: 100;
+    -webkit-box-shadow: 0 0 2px 1px #212121;
+    -moz-box-shadow: 0 0 2px 1px #212121;
+    box-shadow: 0 0 2px 1px #212121;
+}
+.menu.absolute {
+    position: absolute;
+    overflow-y: hidden;
+}
+.menu > div {
+    position: absolute;
+    height: 100vh;
+    min-height: var(--min-screen-height);
+    width: 100%;
+    bottom: 0;
+}
+
+.menu-option {
+    padding: 8px 0;
+    font-size: 14px;
+    cursor: pointer;
+    position: relative;
+    color: var(--secondary-gray);
+}
+.menu-bottom > .menu-option {
+    padding: 0;
+}
+.menu-option.current {
+    background-color: var(--primary-black-light);
+    color: var(--primary-white);
+}
+/* .main-menu-items > .menu-option.current:hover { background-color: var(--primary-black-light); } */
+.menu-option.current::after {
+    content: "";
+    background-color: var(--primary-cyan);
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.main-menu-items > .menu-option:hover {
+    background-color: var(--primary-black-light);
+}
+
+.main-menu-items {
+    margin-top: 10px;
+}
+
+.content {
+    width: calc(100% - var(--data-display-menu-width));
+    margin-left: var(--data-display-menu-width);
+    min-height: 100vh;
+    color: white;
+    padding: 20px;
+}
+
+.psych-output-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 10px 0;
+}
+
+.psych-output-item:not(:first-child) > div::before {
+    content: "•";
+    position: absolute;
+    left: -28px;
+    top: 0;
+}
+
+.psych-output-item > div:first-child {
+    flex: 1;
+    text-align: left;
+}
+
+.psych-output-item > div:not(:first-child) {
+    width: 100px;
+    text-align: center;
+}
+
+.facet-graph {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    position: relative;
+}
+/* title and graph */
+.facet-graph > div:first-child {
+    display: inline-block;
+    text-align: center;
+}
+/* graph title */
+.facet-graph > div:first-child > div:first-child {
+    display: inline-block;
+    font-weight: bold;
+}
+/* stats */
+.facet-graph > div:nth-child(2) {
+    display: inline-block;
+}
+/* factor check box */
+.facet-graph > div:nth-child(3) {
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+/* question titles */
+.facet-graph span {
+    color: var(--primary-cyan);
+    width: 80px;
+    display: inline-block;
+}
+
+.compare-button {
+    position: fixed;
+    top: 90px;
+    left: 155px;
+}
+
+.chart-type-button {
+    position: fixed;
+    top: 125px;
+    left: 155px;
+}
+
+.toggle-dots-button {
+    position: fixed;
+    top: 160px;
+    left: 155px;
+}
+
+.x-label {
+    text-align: center;
+    margin: -20px 0 10px;
+}
+.y-label {
+    transform: rotate(-90deg);
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: -75px;
+    width: 200px;
+    text-align: center;
+}
+
+.fac-scatter {
+    text-align: center;
+}
+.fac-scatter span {
+    color: var(--primary-cyan);
+}
+.all-compare-gca-stats {
+    display: flex;
+    justify-content: space-around;
+}
+.compare-gca-stats {
+    min-width: 200px;
+}
+.compare-gca-stats > div:first-child {
+    text-align: center;
+}
+.compare-gca-stats span {
+    float: right;
+    color: var(--primary-cyan);
+}
+
+.rpm > img:first-child {
+    width: 160px;
+}
+.rpm > img:not(:first-child) {
+    width: 35px;
+}
+.rpm > img.correct {
+    border: 1px solid var(--primary-cyan);
+}
+.rpm-display {
+    width: 170px;
+    display: inline-block;
+    margin: 20px;
+}
+.rpm-display span {
+    color: var(--primary-cyan);
+}
+.rpm-displays {
+}

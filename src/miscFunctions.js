@@ -357,7 +357,7 @@ function copyFromPage(identifier) {
 }
 
 function getMonthText(month) {
-    switch(month) {
+    switch (month) {
         case 0:
             return "January";
             break;
@@ -409,6 +409,11 @@ function getFormattedDate(date) {
     return month + " " + day + ", " + year;
 }
 
+function randomInt(lowBound, highBound) {
+    const range = highBound - lowBound;
+    return Math.floor(Math.random() * (range + 1)) + lowBound;
+}
+
 function noop() {}
 
 const miscFunctions = {
@@ -434,6 +439,7 @@ const miscFunctions = {
     copyFromPage,
     getFormattedDate,
     noop,
+    randomInt,
 
     Queue,
     Stack

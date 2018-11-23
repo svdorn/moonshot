@@ -31,6 +31,12 @@ class AdminPages extends Component {
                 >
                     Businesses
                 </div>
+                <div
+                    className="clickable primary-white"
+                    onClick={() => this.goTo("/admin/dataDisplay")}
+                >
+                    Data Display
+                </div>
             </div>
         );
     }
