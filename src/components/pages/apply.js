@@ -335,6 +335,13 @@ class Apply extends Component {
         );
     }
 
+    // add a newly-added position to the list of positions
+    addPositionToParentState = newPosition => {
+        let { positions } = this.state;
+        positions.unshift({ name: newPosition });
+        this.setState({ positions });
+    };
+
     // for a candidate seeing this page before it has been set up
     pageNotSetUp() {
         return (
@@ -436,7 +443,7 @@ class Apply extends Component {
             >
                 <ClaimPageModal company={this.state.company} />
                 <ModalSignup />
-                <AddPositionDialog />
+                <AddPositionDialog addPositionToParentState={this.addPositionToParentState} />
                 <InviteCandidatesModal />
                 {content}
             </div>

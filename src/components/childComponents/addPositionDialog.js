@@ -148,8 +148,14 @@ class AddPositionDialog extends Component {
                 .then(res => {
                     self.setState({ positionType: "Position Type", newPosIsManager: false });
                     self.handleNextScreen();
+                    // hide the circular progress bar
                     self.props.stopLoading();
+                    // reset the form
                     self.props.reset();
+                    // if there's a function to add the position to the parent local state, do it
+                    if (typeof self.props.addPositionToParentState === "function") {
+                        self.props.addPositionToParentState(positionName);
+                    }
                 })
                 .catch(error => {
                     self.props.stopLoading();
