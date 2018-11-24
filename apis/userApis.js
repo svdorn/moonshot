@@ -698,6 +698,8 @@ function POST_stayLoggedIn(req, res) {
             console.log("error saving 'keep me logged in' setting: ", saveSessionError);
             return res.status(500).send({ message: "Error saving 'keep me logged in' setting." });
         } else {
+            console.log("req.session is now: ", req.session);
+            console.log("req.session.id: ", req.session.id);
             return res.status(200).send({});
         }
     });
@@ -705,6 +707,8 @@ function POST_stayLoggedIn(req, res) {
 
 // get the setting to stay logged in or out
 function GET_stayLoggedIn(req, res) {
+    console.log("req.session is: ", req.session);
+    console.log("req.session.id is: ", req.session.id);
     // get the setting
     let stayLoggedIn = sanitize(req.session.stayLoggedIn);
     // if it's not of the right form, assume you shouldn't stay logged in

@@ -1,5 +1,5 @@
 const express = require("express");
-const cookieParser = require("cookie-parser");
+// const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
 const session = require("express-session");
@@ -9,6 +9,9 @@ const fileUpload = require("express-fileupload");
 const mongoose = require("mongoose");
 const prerenderNode = require("prerender-node");
 const helmet = require("helmet");
+const chalk = require("chalk");
+const success = chalk.cyan;
+const error = chalk.red;
 
 var app = express();
 
@@ -23,7 +26,7 @@ if (process.env.NODE_ENV !== "test") {
 app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
 var prerender = prerenderNode.set("prerenderToken", "LYjJ7i8UHyhooHVMA3bB");
 prerender.crawlerUserAgents.push("googlebot");
 prerender.crawlerUserAgents.push("bingbot");
@@ -58,6 +61,9 @@ mongoose.connect(
 );
 
 var db = mongoose.connection;
+db.on("connected", function() {
+    console.log(success("Connected to MongoDB."));
+});
 db.on("error", console.error.bind(console, "# MongoDB - connection error: "));
 
 // import all the api functions
