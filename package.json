@@ -4,8 +4,12 @@
     "private": true,
     "scripts": {
         "dev": "webpack --config ./webpack/dev.config.js --watch",
+        "nodemon": "lsof -t -i tcp:3001 | xargs kill ; lsof -t -i tcp:8081 | xargs kill ; nodemon --delay 1500ms",
         "start": "node ./bin/www & node apiServer.js",
         "deploy": "webpack --config ./webpack/prod.config.js && eb deploy"
+    },
+    "events": {
+        "restart": "lsof -t -i tcp:3001 | xargs kill ; lsof -t -i tcp:8081 | xargs kill"
     },
     "directories": {
         "test": "test"
