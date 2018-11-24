@@ -62,7 +62,15 @@ class AddPositionDialog extends Component {
         }
     }
 
+    // reset the state and close the dialog
     handleClose = () => {
+        this.setState({
+            screen: 1,
+            addPositionError: undefined,
+            mustSelectTypeError: false,
+            positionType: this.state.positionTypes[0],
+            newPosIsManager: false
+        });
         this.props.closeAddPositionModal();
     };
 
@@ -154,9 +162,9 @@ class AddPositionDialog extends Component {
         }
     }
 
-    inviteCandidates() {
-        this.props.closeAddPositionModal();
-    }
+    // inviteCandidates() {
+    //     this.props.closeAddPositionModal();
+    // }
 
     render() {
         const style = {

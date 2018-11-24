@@ -54,6 +54,9 @@ export function openAddPositionModal() {
 
 export function closeAddPositionModal() {
     return function(dispatch) {
+        // reset the form
+        dispatch(reset("addPosition"));
+        // close the modal
         dispatch({ type: "CLOSE_ADD_POSITION_MODAL" });
     };
 }
@@ -461,7 +464,9 @@ export function setupBillingCustomer(source, email, userId, verificationToken, s
                     type: "SUCCESS_BILLING_CUSTOMER",
                     billing: response.data.billing,
                     fullAccess: response.data.fullAccess,
-                    ...notification(`You have successfully added your ${makeSingular(subscriptionTerm)} plan`)
+                    ...notification(
+                        `You have successfully added your ${makeSingular(subscriptionTerm)} plan`
+                    )
                 });
             })
             .catch(error => {

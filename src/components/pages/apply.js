@@ -107,7 +107,7 @@ class Apply extends Component {
 
     // call this after positions are found from back end
     positionsFound(positions, logo, company, admin, pageSetUp) {
-        const addMoreLater = "Add more positions later";
+        const addMoreLater = "Add more below";
         if (Array.isArray(positions) && positions.length > 0) {
             const position = positions[0].name;
             if (admin && !positions.some(p => p.name === addMoreLater)) {
