@@ -347,14 +347,6 @@ footer {
     color: rgb(114, 214, 245);
 }
 
-.formSubmitButton {
-    padding: 0px 25px 3px;
-    border: 2px solid var(--primary-cyan);
-    background-color: rgba(255, 255, 255, 0.4);
-    color: var(--primary-cyan);
-    margin: 10px auto;
-    cursor: pointer;
-}
 .formContainer {
     text-align: center;
 }
@@ -471,46 +463,6 @@ form > h1 {
     height: 100%;
 }
 
-.freeResponseQuestions {
-    width: 70%;
-    margin-left: 15%;
-}
-.freeResponseQuestions textarea {
-    width: 100%;
-    height: 120px;
-    background: #242424;
-    border: none;
-    padding: 5px;
-    color: #dcdcdc;
-    margin-top: 10px;
-    margin-bottom: 40px;
-}
-.freeResponseQuestions textarea::placeholder {
-    font-style: italic;
-}
-
-.blur3px {
-    filter: blur(3px);
-}
-
-.build-team-container {
-    height: 310px;
-    width: 760px;
-    display: inline-block;
-    position: relative;
-    margin: 10px;
-    background-color: var(--primary-black-light);
-    vertical-align: top;
-    color: var(--secondary-gray);
-    font-size: 14px;
-
-    -webkit-box-shadow: 0 0 4px 0px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0 0 4px 0px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 4px 0px rgba(0, 0, 0, 0.5);
-    -webkit-transition: -webkit-transition 0.2s;
-    -moz-transition: -moz-box-shadow 0.2s;
-    transition: box-shadow 0.2s;
-}
 .build-team {
     position: relative;
     padding: 5px 20px;
@@ -551,50 +503,6 @@ form > h1 {
     color: var(--black-deep-dark);
 }
 
-.automate-invites .manual-invite .manual-add-example {
-    --device-scale: 0.3;
-    width: calc(1706px * var(--device-scale));
-    height: calc(966px * var(--device-scale));
-}
-
-.automate-invites .suggest-integration textarea {
-    width: 90%;
-}
-
-.automate-invites .language-preference .language-boxes {
-    display: flex;
-    flex-wrap: wrap;
-}
-.automate-invites .language-preference .language-box {
-    width: 120px;
-    height: 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border: 1px solid white;
-    border-radius: 4px;
-    font-size: 14px;
-    position: relative;
-    cursor: pointer;
-    margin: 10px;
-}
-.automate-invites .language-preference .language-box.selected {
-    border: 2px solid var(--primary-cyan);
-    background-color: var(--primary-black-light);
-}
-
-.automate-invites .language-preference .language-box input {
-    border-radius: 4px;
-    border: 1px solid white;
-    padding: 3px 5px;
-    text-align: center;
-    background-color: #222222;
-    color: white;
-    width: 90%;
-    font-size: 12px;
-    margin: 0 auto;
-}
-
 .tab-position-circle {
     width: 10px;
     height: 10px;
@@ -618,6 +526,8 @@ form > h1 {
 .root-cyan-label.input-label.focused-input-label.error-input-label {
     color: var(--secondary-red);
 }
+
+/* CAROUSEL */
 
 .carousel .frame-position-circle {
     width: 8px;
@@ -680,6 +590,8 @@ form > h1 {
     transform: translate(50%, -50%) rotate(-90deg);
 }
 
+/* ---------------------------->> END CAROUSEL <<---------------------------- */
+
 .flex {
     display: flex;
 }
@@ -687,17 +599,7 @@ form > h1 {
     font-style: italic;
 }
 
-.menuButtonArea {
-    display: flex;
-    margin: 5px 0;
-}
-
-.menuButtonArea .blackInput {
-    line-height: 22px;
-}
-.menuButtonArea .menuButton {
-    line-height: 22px;
-}
+/* ----------->> STANDARD ROUNDED BLACK INPUT WITH WHITE OUTLINE <<---------- */
 
 .blackInput {
     border-radius: 8px;
@@ -712,6 +614,9 @@ form > h1 {
 .blackInput:focus {
     outline-width: 0;
 }
+
+/* -------------------------->> END BLACK INPUT  <<-------------------------- */
+/* -------------------------->> STANDARD BUTTONS <<-------------------------- */
 
 .button {
     cursor: pointer;
@@ -881,47 +786,7 @@ form > h1 {
     --gradient-color-2: var(--secondary-red);
 }
 
-.import-candidates {
-    height: 100%;
-    position: relative;
-    padding: 10px;
-}
-
-.import-candidates > div:last-child {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 100%;
-}
-
-/* "'Upload CSV' or 'Manually Invite'" area */
-.import-candidates .invite-options {
-    display: flex;
-    /* equal space between buttons and "or" */
-    justify-content: space-between;
-    /* center the options */
-    margin: 0 auto;
-    max-width: 400px;
-    width: 100%;
-}
-
-.import-candidates .file-name {
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.shadowBox {
-    -webkit-box-shadow: 0 0 80px 20px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0 0 80px 20px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 80px 20px rgba(0, 0, 0, 0.5);
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+/* ------------------------>> END STANDARD BUTTON <<------------------------- */
 
 .influencerSelection {
     -webkit-box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.5);
@@ -4006,10 +3871,6 @@ textarea.multipleChoiceCustomAnswer {
         transition: visibility 0s 0.5s, opacity 0.5s linear;
     }
 
-    .automate-invites .manual-invite .manual-add-example {
-        --device-scale: 0.2;
-    }
-
     .candidateResults .interestArea {
         left: 4%;
     }
@@ -4491,10 +4352,6 @@ textarea.multipleChoiceCustomAnswer {
         height: 0px;
     }
 
-    .automate-invites .manual-invite .manual-add-example {
-        --device-scale: 0.15;
-    }
-
     .myEvalsBox .position-key {
         position: relative;
         float: right;
@@ -4736,9 +4593,6 @@ textarea.multipleChoiceCustomAnswer {
     }
     form > h1 {
         font-size: 25px;
-    }
-    .formSubmitButton {
-        padding: 0px 25px 1px;
     }
     .onboardingIconLi {
         margin: 0px 30px;
