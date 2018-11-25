@@ -773,9 +773,6 @@ form > h1 {
 .blackInput:focus {
     outline-width: 0;
 }
-.blackInput.googleJobs {
-    width: 330px;
-}
 
 .button {
     cursor: pointer;
@@ -4549,10 +4546,6 @@ textarea.multipleChoiceCustomAnswer {
         margin-left: -1em;
     }
 
-    .blackInput.googleJobs {
-        width: 250px;
-    }
-
     .font40pxUnder800 {
         font-size: 40px;
     }
@@ -4776,12 +4769,6 @@ textarea.multipleChoiceCustomAnswer {
         border: 0px !important;
     }
 
-    .blackInput.googleJobs {
-        width: 200px;
-    }
-
-    /* END WHERE LOGO CONTAINER USED TO BE */
-
     .marginSides40pxUnder700 {
         margin-right: 40px;
         margin-left: 40px;
@@ -4931,9 +4918,6 @@ textarea.multipleChoiceCustomAnswer {
         margin-top: 2px;
     }
 
-    .blackInput.googleJobs {
-        width: auto;
-    }
     .font40pxUnder600 {
         font-size: 40px;
     }
