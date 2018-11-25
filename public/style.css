@@ -287,19 +287,11 @@ section {
     border: 1px solid white;
 }
 
-.extraHeaderSpace {
-    height: 200px;
-}
-
 footer {
     position: relative;
     bottom: 0;
     width: 100%;
     padding: 10px;
-}
-
-.noDisplay {
-    display: none;
 }
 
 .underline {
@@ -688,59 +680,6 @@ form > h1 {
     transform: translate(50%, -50%) rotate(-90deg);
 }
 
-#employerOnboarding {
-    position: relative;
-    display: flex;
-    max-width: 1300px;
-    min-height: 70vh;
-    width: 90%;
-    margin: 30px auto;
-    min-width: var(--min-screen-width);
-    -webkit-box-shadow: 0 0 30px -3px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0 0 30px -3px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 30px -3px rgba(0, 0, 0, 0.5);
-}
-
-@media screen and (min-height: 800px) {
-    #employerOnboarding {
-        min-height: 600px;
-    }
-}
-
-#employerOnboarding > .onboardingLeft {
-    background: #2a2a2a;
-    width: 255px;
-    display: flex;
-    flex: 0 0 auto;
-}
-
-/* .onboardingLeft:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -20;
-    -webkit-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
-    -moz-box-shadow:    0 0 30px -3px rgba(0,0,0,.5);
-    box-shadow:         0 0 30px -3px rgba(0,0,0,.5);
-} */
-
-#employerOnboarding .onboardingRight {
-    text-align: center;
-    vertical-align: top;
-    display: flex;
-    width: 100%;
-    -webkit-box-shadow: 0 0 30px -3px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0 0 30px -3px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 30px -3px rgba(0, 0, 0, 0.5);
-}
-
-.opacity30Percent {
-    opacity: 0.3;
-}
-
 .flex {
     display: flex;
 }
@@ -971,106 +910,6 @@ form > h1 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-#employerOnboarding .onboardingRight > div > .content > div > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 100%;
-}
-#employerOnboarding .onboardingRight > div > .content > div {
-    height: 100%;
-    position: relative;
-    padding: 10px 5%;
-}
-
-/* make so that the Previous and Next buttons aren't right next to each other */
-.previous-next-area > div:first-child {
-    margin-right: 80px;
-}
-
-/* first and only button is Next on this page so shouldn't have space to the right */
-.previous-next-area.create-evaluation > div:first-child {
-    margin-right: 0px;
-}
-
-/* so that Next button is v wide */
-.previous-next-area > .button {
-    padding: 3px 30px;
-}
-
-.invite-admins,
-.invite-employees,
-.congratulations,
-.google-jobs .calandar-calendly {
-    padding: 10px 5%;
-}
-
-.calendly > iframe {
-    max-width: 500px;
-}
-
-.invite-admins > div,
-.invite-employees > div,
-.congratulations > div,
-.google-jobs > div,
-.calandar-calendly > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 100%;
-}
-
-.invite-admins .position-titles {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 auto;
-    max-width: 400px;
-    width: 100%;
-}
-
-.invite-admins .position-titles > div {
-    display: inline-block;
-}
-
-/* dialog for the drag and drop container */
-.upload-candidate-csv-dialog-paper {
-    margin: auto;
-    background-color: var(--primary-black-dark) !important;
-    min-width: 225px;
-}
-
-.upload-candidate-csv-dialog {
-    background-color: var(--primary-black-dark);
-    min-width: 200px;
-    padding: 20px;
-    overflow: hidden;
-}
-
-.upload-candidate-csv-dialog .drop-zone {
-    border-style: dashed;
-    border-width: 2px;
-    border-color: #444444;
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-.upload-candidate-csv-dialog .drop-zone.dragging {
-    background-color: var(--primary-black-light);
-}
-
-.upload-candidate-csv-dialog .upload-icon {
-    width: 40%;
-    min-width: 100px;
-    max-width: 500px;
-    margin-bottom: 50px;
-    margin-top: 20px;
-}
-
-.upload-candidate-csv-dialog .drag-here-text {
-    margin: 20px 10px 40px;
 }
 
 .shadowBox {
@@ -5112,9 +4951,6 @@ textarea.multipleChoiceCustomAnswer {
     .halfWidthStepLeft {
         width: 100%;
         padding: 20px 3% 10px;
-    }
-    .stepSeparatorNoDisplay {
-        display: none;
     }
     .onboardingIcons {
         height: 40px;
