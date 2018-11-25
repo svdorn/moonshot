@@ -795,18 +795,6 @@ form > h1 {
     padding: 3px;
 }
 
-#pricingSection {
-    position: relative;
-}
-#pricingSection > div:nth-child(2) {
-    position: relative;
-}
-#pricingSection div {
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-
 .skillMultipleChoiceAnswer {
     cursor: pointer;
     width: 60%;
@@ -843,25 +831,6 @@ form > h1 {
 .skillMultipleChoiceOptionText {
     display: inline-block;
     margin-left: 30px;
-}
-
-.smallLogoPLP {
-    height: 80px;
-}
-.smallLogoPLPSponsor {
-    height: 90px !important;
-}
-
-.width400px {
-    width: 400px;
-}
-
-.stepNumber {
-    background: -webkit-linear-gradient(right, #da5f7b, #b130d3);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    float: left;
-    margin: 0 20px 0 40px;
 }
 
 .predictiveGraphTitle {
@@ -1122,12 +1091,6 @@ form > h1 {
     margin: 40px 10px 10px 10px;
 }
 
-.menuItem2 {
-    color: var(--primary-purple-dark);
-    font-size: 20px;
-    margin: 30px 10px 10px 10px;
-}
-
 .verticalDivider {
     background-color: #d2d2d2;
     height: calc(100% - 40px);
@@ -1162,30 +1125,6 @@ form > h1 {
     margin-right: 18px;
 }
 
-.noOverflowX {
-    overflow-x: hidden;
-}
-
-.myEvalsSkillChip {
-    border: 1px solid #72d6f5;
-    border-radius: 10px;
-    background-color: var(--primary-black-dark);
-    color: #72d6f5;
-    padding: 0px 10px 1px;
-}
-.skillChip {
-    border-radius: 30px;
-    background-color: white;
-    font-size: 20px;
-    padding: 0px 10px 3px;
-}
-.center.skillChips {
-    margin: 0px 15px;
-}
-.skillChips > div {
-    margin: 0px 10px 10px;
-}
-
 /* So that the menu text color is the same as the rest of the header */
 .headerDropdownWhite > div:first-child > div:nth-child(2) {
     color: white !important;
@@ -1204,7 +1143,6 @@ form > h1 {
     border-bottom: 2px solid white;
 }
 .currentRoute {
-    /* text-decoration: underline;  */
     border-bottom: 2px solid white;
 }
 
@@ -1233,16 +1171,13 @@ form > h1 {
     pointer-events: none;
 }
 
+/* -------------------------->> STANDARD HEIGHTS <<-------------------------- */
+
 .fillScreen,
-.fillScreenWithHeader,
 .landingPage {
     width: 100%;
     min-height: 100vh;
     position: relative;
-}
-.fillScreenWithHeader {
-    margin-top: -100px;
-    padding-top: 100px;
 }
 
 .fullHeight {
@@ -1263,56 +1198,13 @@ form > h1 {
     height: 0;
 }
 
+/* ------------------------>> END STANDARD HEIGHTS <<------------------------ */
+
 .blackBackground {
     background: var(--primary-black-dark);
 }
 .lightBlackBackground {
     background-color: var(--primary-black-light);
-}
-
-@keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-/* Firefox < 16 */
-@-moz-keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-/* Safari, Chrome and Opera > 12.1 */
-@-webkit-keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-/* Internet Explorer */
-@-ms-keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-/* Opera < 12.1 */
-@-o-keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
 }
 
 .hover-move-arrow {
@@ -1334,23 +1226,6 @@ button.link {
     color: white;
 }
 
-.dividerSmall {
-    height: 50px;
-}
-
-.boxStyle {
-    position: absolute;
-    top: 0;
-    bottom: 0; /* Aligns Vertically - Remove for Horizontal Only */
-    margin: 200px auto 0 100px;
-    height: 200px;
-    padding: 0px 20px 0px 20px;
-}
-
-.appBar {
-    margin-top: 75px;
-}
-
 .dialog {
     display: flex;
     justify-content: center;
@@ -1362,29 +1237,9 @@ button.link {
 .center {
     text-align: center;
 }
-.text-left {
-    text-align: left;
-}
-.text-right {
-    text-align: right;
-}
-.centerOfPage {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
 
 .transparentBorder {
     padding: 1px;
-}
-.paperBorder {
-    padding: 1px;
-}
-.paperBorder > div {
-    background: white;
-    height: 100%;
-    width: 100%;
 }
 .gradientBorderBlue {
     background: linear-gradient(to right, #5deaff, #3dabff);
@@ -1416,13 +1271,6 @@ button.link {
     color: #b130de;
     margin-bottom: 20px;
     display: inline-block;
-}
-
-#pricingSection .button.large {
-    position: absolute;
-    bottom: 20px;
-    right: 50%;
-    transform: translateX(50%);
 }
 
 .paperBoxInviteCadence {
@@ -2311,13 +2159,6 @@ button.link {
 .home-pricing-select {
     margin: 0 -10px -4px 0;
 }
-#pricingSection div {
-    text-overflow: unset;
-}
-#pricingSection ul {
-    list-style: none;
-    padding: 0;
-}
 
 .my-employees .search-fields .add-employee {
     margin: -10px 0 5px;
@@ -2902,11 +2743,6 @@ button.link {
     float: left;
     margin-left: 10px;
     width: calc(100% - 130px);
-}
-.halfWidthStepNumber {
-    color: #da5f7b;
-    font-size: 18px;
-    margin-bottom: 3px;
 }
 .halfWidthStepDesc {
     height: 50px;
@@ -3771,11 +3607,6 @@ textarea.multipleChoiceCustomAnswer {
         left: 27px;
     }
 }
-@media only screen and (max-width: 1175px) {
-    .boxStyle {
-        margin: 200px auto 0 50px;
-    }
-}
 
 @media only screen and (max-width: 1100px) {
     .results > .statsAndDescription > div {
@@ -3842,18 +3673,6 @@ textarea.multipleChoiceCustomAnswer {
     }
 }
 
-@media only screen and (max-width: 1095px) {
-    .boxStyle {
-        margin: 200px auto 0 25px;
-    }
-}
-
-@media only screen and (max-width: 1050px) {
-    .boxStyle {
-        margin: 200px auto 0 10px;
-    }
-}
-
 @media only screen and (min-width: 1001px) {
     .under1000only {
         display: none;
@@ -3883,12 +3702,6 @@ textarea.multipleChoiceCustomAnswer {
     .myCandidates .resultsOpenNoCandidates {
         left: 46px;
         width: 150px;
-    }
-
-    .boxStyle {
-        display: inline-block;
-        position: relative;
-        margin: -80px 0 50px;
     }
 
     .font40pxUnder1000 {
@@ -4233,17 +4046,6 @@ textarea.multipleChoiceCustomAnswer {
     }
     #discoverSearchBarMedScreen > div:nth-child(4) {
         display: none;
-    }
-
-    #pricingSection > div > div > div > ul {
-        list-style: none;
-    }
-    #pricingSection > div > div > div > ul > li::before {
-        content: "•";
-        color: #7dfed2;
-        display: inline-block;
-        width: 1em;
-        margin-left: -1em;
     }
 
     .font40pxUnder800 {
@@ -4753,9 +4555,6 @@ textarea.multipleChoiceCustomAnswer {
         height: 17px;
     }
 
-    .boxStyle {
-        margin: 0px 0 50px;
-    }
     .settingsTabs {
         width: 95%;
     }
@@ -4775,9 +4574,6 @@ textarea.multipleChoiceCustomAnswer {
     .lightBlueChip > div {
         font-size: 15px;
         padding-top: 2px;
-    }
-    .skillChip {
-        font-size: 15px;
     }
 
     #exampleSkillsContainer {
@@ -5250,6 +5046,55 @@ textarea.multipleChoiceCustomAnswer {
         font-size: 6px;
     }
 }
+
+/* ----------------------------->> KEYFRAMES <<------------------------------ */
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* --------------------------->> END KEYFRAMES <<---------------------------- */
 
 .noStyle {
 }
