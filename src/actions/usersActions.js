@@ -873,14 +873,6 @@ export function changePasswordForgot(user) {
     };
 }
 
-// get rid of any old incomplete steps that would prevent the user from
-// completing a pathway
-export function resetIncompleteSteps() {
-    return function(dispatch) {
-        dispatch({ type: "RESET_INCOMPLETE_STEPS" });
-    };
-}
-
 // Send an email when form filled out on unsubscribe page
 export function unsubscribe(user, showNotification) {
     return function(dispatch) {

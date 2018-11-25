@@ -141,12 +141,8 @@ class Login extends Component {
     render() {
         // the query that will be passed to "sign up" if that is clicked
         let location = this.props.location;
-        const pathway = location.query.pathway;
         const redirect = location.query.redirect;
         let signUpQuery = {};
-        if (pathway) {
-            signUpQuery.pathway = pathway;
-        }
         if (redirect) {
             signUpQuery.redirect = redirect;
         }
@@ -157,7 +153,7 @@ class Login extends Component {
                     <title>Log In | Moonshot</title>
                     <meta
                         name="description"
-                        content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion."
+                        content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
                 {/*<HomepageTriangles className="slightly-blurred" style={{pointerEvents:"none"}} variation="1" />*/}

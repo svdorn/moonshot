@@ -493,50 +493,12 @@ export function usersReducers(state = initialState, action) {
                 notificationDate: new Date()
             };
             break;
-        // case "START_ONBOARDING":
-        //     return {
-        //         ...state, isOnboarding: true
-        //     }
-        //     break;
-        // case "END_ONBOARDING":
-        //     // update the user if an update was sent
-        //     if (action.user) {
-        //         return {
-        //             ...state,
-        //             isOnboarding: false,
-        //             currentUser: action.user
-        //         }
-        //     } else {
-        //         return {
-        //             ...state,
-        //             isOnboarding: false
-        //         }
-        //     }
-        //     break;
-        // case "UPDATE_USER_ONBOARDING":
-        //     return {
-        //         ...state, currentUser: action.user
-        //     };
-        //     break;
         case "START_PSYCH_EVAL":
         case "USER_UPDATE":
             return {
                 ...state,
                 currentUser: action.currentUser,
                 loadingSomething: false
-            };
-            break;
-        case "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS":
-            return {
-                ...state,
-                incompleteSteps: action.incompleteSteps,
-                loadingSomething: false
-            };
-            break;
-        case "RESET_INCOMPLETE_STEPS":
-            return {
-                ...state,
-                incompleteSteps: undefined
             };
             break;
         case "SET_WEBP_SUPPORT":

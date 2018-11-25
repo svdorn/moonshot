@@ -1599,9 +1599,6 @@ form > h1 {
 #menuDropdown + div {
     display: none;
 }
-/* #menuDropdown.currentRoute + div {
-    display: inline-block;
-} */
 #menuDropdown.currentRoute {
     border-bottom: none;
 }
@@ -1650,10 +1647,6 @@ form > h1 {
 .lightBlackBackground {
     background-color: var(--primary-black-light);
 }
-.blackBackgroundOpacity {
-    background: var(--primary-black-dark);
-    opacity: 0.85;
-}
 
 @keyframes fadein {
     from {
@@ -1698,60 +1691,6 @@ form > h1 {
     to {
         opacity: 1;
     }
-}
-
-#pathwayDescriptionAndSalary {
-    position: relative;
-    height: 150px;
-    margin-top: 15px;
-    margin-bottom: 40px;
-}
-.pathwayDescriptionAndSalaryIcon {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 80%;
-    margin: auto;
-}
-#pathwayHatIcon {
-    height: 50px;
-}
-#pathwayMoneyIcon {
-    height: 62px;
-}
-.pathwayDescriptionAndSalaryText {
-    width: 50%;
-    font-size: 20px;
-    right: 0;
-    left: 0;
-    margin: auto;
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.pathwayDescriptionAndSalaryHalf {
-    width: 50%;
-    float: left;
-    position: relative;
-    height: 150px;
-}
-.pathwayDescriptionAndSalaryFull {
-    width: 100%;
-    position: relative;
-    height: 150px;
-}
-.pathwayDescriptionAndSalarySpacer {
-    width: 80%;
-    height: 100%;
-    position: relative;
-}
-#pathwaySalaryInfo {
-    margin-left: 9%;
-    margin-right: 20%;
-}
-#pathwayShortDescription {
-    margin-left: 20%;
 }
 
 .hover-move-arrow {

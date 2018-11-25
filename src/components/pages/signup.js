@@ -300,7 +300,7 @@ class Signup extends Component {
                     <title>Sign Up | Moonshot</title>
                     <meta
                         name="description"
-                        content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion."
+                        content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
                 <div className={blurredClass}>
