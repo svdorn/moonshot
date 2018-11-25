@@ -137,7 +137,7 @@ class AddPositionDialog extends Component {
             this.props.startLoading();
 
             axios
-                .post("api/business/addEvaluation", {
+                .post("/api/business/addEvaluation", {
                     userId,
                     verificationToken,
                     businessId,
