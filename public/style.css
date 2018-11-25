@@ -1088,69 +1088,6 @@ form > h1 {
     margin: 20px 10px 40px;
 }
 
-.processButtonsContainer {
-    position: relative;
-    display: inline-block;
-    left: 50%;
-    transform: translateX(-50%);
-}
-.processButtonsContainer > div {
-    margin: 0 12px 7px;
-    display: inline-block;
-    position: relative;
-}
-.processHeaderContainer {
-    height: 60px;
-    position: relative;
-    width: 170px;
-
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.processHeaderContainer > div {
-    position: absolute;
-}
-/* selects the top and bottom divs within the container - the skewed ones without text */
-.processHeaderContainer > div:nth-child(-n + 2) {
-    height: 50%;
-    width: 100%;
-}
-.processButtonsContainer > div:nth-child(1) > div > div:nth-child(-n + 2) {
-    --borderColor: #a88cfe;
-}
-.processButtonsContainer > div:nth-child(2) > div > div:nth-child(-n + 2) {
-    --borderColor: #a591fe;
-}
-.processButtonsContainer > div:nth-child(4) > div > div:nth-child(-n + 2) {
-    --borderColor: #8cb8fe;
-}
-.processButtonsContainer > div:nth-child(5) > div > div:nth-child(-n + 2) {
-    --borderColor: #7ed2fe;
-}
-.processHeaderContainer > div:first-child {
-    top: 0;
-    border-top: 3px solid var(--borderColor);
-    border-left: 6px solid var(--borderColor);
-    border-right: 6px solid var(--borderColor);
-    transform: skewX(55deg);
-}
-.processHeaderContainer > div:nth-child(2) {
-    bottom: 0;
-    border-bottom: 3px solid var(--borderColor);
-    border-left: 6px solid var(--borderColor);
-    border-right: 6px solid var(--borderColor);
-    transform: skewX(-55deg);
-}
-/* the part of the process header that has text */
-.processHeaderContainer > div:nth-child(3) {
-    color: white;
-    text-align: center;
-    transform: translateY(-50%);
-    width: 100%;
-    top: 50%;
-}
-
 .shadowBox {
     -webkit-box-shadow: 0 0 80px 20px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0 0 80px 20px rgba(0, 0, 0, 0.5);
@@ -1224,10 +1161,6 @@ form > h1 {
 }
 .smallLogoPLPSponsor {
     height: 90px !important;
-}
-
-.dropDownSettings {
-    display: none !important;
 }
 
 .width400px {
@@ -3063,12 +2996,6 @@ button.link {
     vertical-align: top;
     margin: auto;
 }
-.horizListMargin1 {
-    margin-left: 80px;
-}
-.horizListMargin2 {
-    margin-left: 80px;
-}
 
 .skillEditor .correctIndicator,
 .skillEditor .question-part-type {
@@ -3350,17 +3277,6 @@ button.link {
     max-height: 461px;
     overflow-y: hidden;
     padding-right: 20px;
-}
-
-.profileSchoolName {
-    float: left;
-}
-.profileSchoolDate {
-    float: right;
-}
-.profileSchoolMajorsAndMinors {
-    clear: both;
-    margin-left: 60px;
 }
 
 .bigCreateYourFreeAccount {
@@ -3940,10 +3856,6 @@ textarea.multipleChoiceCustomAnswer {
     display: inline;
 }
 
-.marginTopOnDesktop {
-    margin-top: 60px;
-}
-
 .fixed-onboarding-progress {
     cursor: pointer;
     position: fixed;
@@ -4162,17 +4074,6 @@ textarea.multipleChoiceCustomAnswer {
     padding: 0 0 0 0;
 }
 
-@media only screen and (max-width: 1643px) {
-    .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(6) {
-        display: none;
-    }
-}
-
-@media only screen and (max-width: 1369px) {
-    .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(5) {
-        display: none;
-    }
-}
 @media only screen and (max-width: 1200px) {
     .above1200only {
         display: none;
@@ -4188,12 +4089,6 @@ textarea.multipleChoiceCustomAnswer {
 @media only screen and (max-width: 1175px) {
     .boxStyle {
         margin: 200px auto 0 50px;
-    }
-    .horizListMargin1 {
-        margin-left: 40px;
-    }
-    .horizListMargin2 {
-        margin-left: 40px;
     }
 }
 
@@ -4263,9 +4158,6 @@ textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 1095px) {
-    .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(4) {
-        display: none;
-    }
     .boxStyle {
         margin: 200px auto 0 25px;
     }
@@ -4316,26 +4208,6 @@ textarea.multipleChoiceCustomAnswer {
         display: inline-block;
         position: relative;
         margin: -80px 0 50px;
-    }
-    .dropDownSettings {
-        display: block !important;
-        margin: 5px 0px 10px 0px;
-    }
-
-    #picturesToPathwaysHomepageSpacer {
-        margin-top: 40px;
-    }
-    .pathwayContent {
-        display: block;
-        margin: auto;
-        width: 95%;
-    }
-    .pathwayContentContainer {
-        width: 100%;
-    }
-
-    .noPadding {
-        padding: 0 0 0 0;
     }
 
     .font40pxUnder1000 {
@@ -4541,12 +4413,6 @@ textarea.multipleChoiceCustomAnswer {
     }
 }
 
-@media only screen and (max-width: 929px) {
-    .horizListMargin2 {
-        margin-top: 40px;
-    }
-}
-
 @media only screen and (min-width: 880px) {
     #intro {
         height: 760px;
@@ -4633,12 +4499,6 @@ textarea.multipleChoiceCustomAnswer {
     }
 }
 
-@media only screen and (max-width: 821px) {
-    .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(3) {
-        display: none;
-    }
-}
-
 @media only screen and (min-width: 801px) {
     .under800only {
         display: none;
@@ -4656,10 +4516,6 @@ textarea.multipleChoiceCustomAnswer {
         display: none;
     }
 
-    .myPathwaysTabs > div:nth-of-type(2) {
-        margin-left: 20%;
-    }
-
     .my-employees .search-fields .add-employee {
         margin: 0 0 5px;
     }
@@ -4675,21 +4531,6 @@ textarea.multipleChoiceCustomAnswer {
     .myCandidates .left.arrowContainer.halfScreen,
     .myCandidates .left.arrowContainer.fullScreen {
         right: calc(100% - 16px);
-    }
-
-    #pathwaySalaryInfo {
-        margin-left: 16%;
-        margin-right: 10%;
-    }
-    #pathwayShortDescription {
-        margin-left: 25%;
-    }
-
-    .pathwayDescriptionAndSalaryText {
-        width: 70%;
-    }
-    .pathwayDescriptionAndSalaryIcon {
-        padding-right: 25px;
     }
 
     .above800fade {
@@ -4900,15 +4741,6 @@ textarea.multipleChoiceCustomAnswer {
         width: 450px;
     }
 
-    .processHeaderContainer {
-        height: 50px;
-        width: 144px;
-    }
-
-    .homePathwaysDesc {
-        padding: 0;
-    }
-
     .aboutMeLi {
         width: calc(100% - 100px);
     }
@@ -4932,19 +4764,6 @@ textarea.multipleChoiceCustomAnswer {
     }
     .aboutMeLi > div:nth-child(2) {
         display: none;
-    }
-    .profileSchoolName {
-        float: inherit;
-    }
-    .profileSchoolDate {
-        float: right;
-    }
-    .profileSchoolMajorsAndMinors {
-        float: inherit;
-        margin-left: 50px;
-    }
-    .myPathwaysTabs > div > button {
-        font-size: 12px !important;
     }
     .aboutMeLi > div:nth-child(3) {
         width: 100%;
@@ -4971,10 +4790,6 @@ textarea.multipleChoiceCustomAnswer {
     .settingsTabs > div > button {
         font-size: 12px !important;
         border: 0px !important;
-    }
-
-    .pathwayContentTimeText {
-        margin-top: 5px;
     }
 
     .blackInput.googleJobs {
@@ -5075,12 +4890,6 @@ textarea.multipleChoiceCustomAnswer {
     }
 }
 
-@media only screen and (max-width: 619px) {
-    .horizListMargin1 {
-        margin-top: 40px;
-    }
-}
-
 @media only screen and (min-width: 601px) {
     .under600only {
         display: none;
@@ -5124,15 +4933,6 @@ textarea.multipleChoiceCustomAnswer {
     }
     .formSubmitButton {
         padding: 0px 25px 1px;
-    }
-    .pathwayDescriptionAndSalaryText {
-        font-size: 15px;
-    }
-    #pathwayMoneyIcon {
-        height: 48px;
-    }
-    #pathwayHatIcon {
-        height: 38px;
     }
     .onboardingIconLi {
         margin: 0px 30px;
@@ -5222,15 +5022,6 @@ textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 547px) {
-    .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(2) {
-        display: none;
-    }
-    .horizListMargin1 {
-        margin-left: 0;
-    }
-    .horizListMargin2 {
-        margin-left: 0;
-    }
     .pricingInput .blackInput {
         min-width: 0;
     }
@@ -5239,9 +5030,6 @@ textarea.multipleChoiceCustomAnswer {
 @media only screen and (min-width: 501px) {
     .under500only {
         display: none;
-    }
-    .homePathwaysDesc {
-        max-width: 700px;
     }
 }
 
@@ -5254,13 +5042,6 @@ textarea.multipleChoiceCustomAnswer {
     }
     .above500only {
         display: none;
-    }
-    .marginTopOnDesktop {
-        margin-top: 0px;
-    }
-    .pathwayPrevMobileThird {
-        display: block;
-        margin-top: 20px;
     }
     .myCandidatesInfoBox {
         width: 280px;
@@ -5338,10 +5119,6 @@ textarea.multipleChoiceCustomAnswer {
 
     .selectIconMargin {
         margin-top: -2px;
-    }
-
-    #picturesToPathwaysHomepageSpacer {
-        margin-top: 80px;
     }
 
     .fullHeight,
@@ -5535,19 +5312,6 @@ textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 450px) {
-    .pathwayDescriptionAndSalaryText {
-        font-size: 12px;
-    }
-    #pathwayMoneyIcon {
-        height: 40px;
-    }
-    #pathwayHatIcon {
-        height: 32px;
-    }
-    .pathwayDescriptionAndSalaryIcon {
-        padding-right: 10px;
-    }
-
     .sliderOnSelect {
         width: 60%;
         display: inline-block;
@@ -5666,9 +5430,6 @@ textarea.multipleChoiceCustomAnswer {
     .pointBox {
         width: 27px;
     }
-    .myPathwaysTabs > div > button {
-        font-size: 12px !important;
-    }
     .onboardingIconLi {
         margin: 0px 10px;
     }
@@ -5694,10 +5455,6 @@ textarea.multipleChoiceCustomAnswer {
         margin-right: 30px;
     }
 
-    .pathwayContentTimeText {
-        margin-top: 4px;
-    }
-
     .marginSides40pxUnder700 {
         margin-right: 20px;
         margin-left: 20px;
@@ -5705,10 +5462,6 @@ textarea.multipleChoiceCustomAnswer {
 
     .marginTop20pxUnder400 {
         margin-top: 20px;
-    }
-
-    .processHeaderContainer {
-        width: 108px;
     }
 
     .pricingButton {
