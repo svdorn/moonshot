@@ -759,18 +759,6 @@ form > h1 {
 .menuButtonArea .menuButton {
     line-height: 22px;
 }
-.pricingInput .blackInput {
-    min-width: var(--min-screen-width);
-    left: 50%;
-    position: relative;
-    transform: translateX(-50%);
-}
-.pricingInput .enterPosition {
-    display: inline-block;
-}
-.pricingInput .button {
-    margin-left: 140px;
-}
 
 .blackInput {
     border-radius: 8px;
@@ -3498,10 +3486,6 @@ textarea.multipleChoiceCustomAnswer {
     text-align: center;
 }
 
-.crystalBall {
-    height: 400px;
-}
-
 .pricingButton {
     position: absolute;
     bottom: 40px;
@@ -4803,10 +4787,6 @@ textarea.multipleChoiceCustomAnswer {
         margin-left: 40px;
     }
 
-    .pricingInput .button {
-        margin-left: 110px;
-    }
-
     .font48pxUnder700 {
         font-size: 48px;
     }
@@ -4954,11 +4934,6 @@ textarea.multipleChoiceCustomAnswer {
     .blackInput.googleJobs {
         width: auto;
     }
-
-    .crystalBall {
-        height: 300px;
-    }
-
     .font40pxUnder600 {
         font-size: 40px;
     }
@@ -5018,12 +4993,6 @@ textarea.multipleChoiceCustomAnswer {
 @media only screen and (min-width: 551px) {
     .under550only {
         display: none;
-    }
-}
-
-@media only screen and (max-width: 547px) {
-    .pricingInput .blackInput {
-        min-width: 0;
     }
 }
 
@@ -5395,18 +5364,6 @@ textarea.multipleChoiceCustomAnswer {
     .form {
         max-width: 300px;
     }
-    .pricingInput .blackInput {
-        left: 0;
-        position: relative;
-        transform: none;
-    }
-    .pricingInput .enterPosition {
-        display: block;
-    }
-    .pricingInput .button {
-        margin-left: 1px;
-        margin-top: 10px;
-    }
 
     .myCandidates.mobile .candidateTable {
         margin: 0 5px 15px 5px;
@@ -5466,10 +5423,6 @@ textarea.multipleChoiceCustomAnswer {
 
     .pricingButton {
         bottom: 32px;
-    }
-
-    #crystalBall {
-        margin-top: 110px;
     }
 
     .legend .middle80indicator {
