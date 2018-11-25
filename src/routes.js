@@ -1,7 +1,6 @@
 "use strict";
 import React from "react";
 import { render } from "react-dom";
-//import credentials from '../credentials.js';
 
 //REACT_ROUTER
 import { Router, Route, IndexRoute, browserHistory, Redirect } from "react-router";

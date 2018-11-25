@@ -1238,20 +1238,7 @@ button.link {
     text-align: center;
 }
 
-.transparentBorder {
-    padding: 1px;
-}
-.gradientBorderBlue {
-    background: linear-gradient(to right, #5deaff, #3dabff);
-    padding: 1px;
-}
-.gradientBorderBlue > div {
-    background: white;
-    height: 100%;
-    width: 100%;
-}
 .lightBlueChip {
-    /* height: 36px; */
     background: var(--primary-cyan);
     padding: 1px;
     border-radius: 25px;
@@ -1265,12 +1252,6 @@ button.link {
     font-size: 20px;
     padding: 2px 10px;
     border-radius: 25px;
-}
-
-.removeSchool {
-    color: #b130de;
-    margin-bottom: 20px;
-    display: inline-block;
 }
 
 .paperBoxInviteCadence {
@@ -1292,18 +1273,6 @@ button.link {
     background: var(--primary-black-dark);
     height: 100%;
     width: 100%;
-}
-
-.gradientBorderPurple {
-    background: linear-gradient(to right, #be6aff, #7f0eff);
-    padding: 2px;
-    display: inline-block;
-}
-.gradientBorderPurple > div {
-    background: white;
-    height: 100%;
-    width: 100%;
-    padding: 2px 13px;
 }
 
 .home-blue {
@@ -2211,121 +2180,6 @@ button.link {
     text-align: center;
 }
 
-#onboardingBioTextarea {
-    width: 100%;
-    height: initial;
-    text-align: initial;
-    padding: 5px 10px;
-}
-#onboardingBio {
-    width: calc(700px + 8%);
-}
-.onboardingDots {
-    margin-bottom: 10px;
-}
-.onboardingDots > div {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-    border-radius: 10px;
-    cursor: pointer;
-}
-.onboardingDots > div {
-    margin-right: 60px;
-}
-.onboardingDots > div:last-child {
-    margin-right: 0px;
-}
-.onboardingDotsinterests > div {
-    background: linear-gradient(to right, #5deaff, #3dabff);
-    opacity: 0.3;
-}
-.onboardingDotsgoals > div {
-    background: linear-gradient(to right, var(--primary-purple-light), var(--primary-purple-dark));
-    opacity: 0.3;
-}
-.onboardingDotsinfo > div {
-    background: linear-gradient(to right, #b130d3, #e35d67);
-    opacity: 0.3;
-}
-.onboardingDotsinterests > div:first-child,
-.onboardingDotsgoals > div:nth-child(2),
-.onboardingDotsinfo > div:nth-child(3) {
-    opacity: 1;
-}
-.onboardingTabs {
-    margin-top: -50px;
-}
-.onboardingTabs > div:first-child > button > div > div {
-    color: white;
-}
-.onboardingDividerLeft {
-    background-image: linear-gradient(to right, #5deaff, #3dabff);
-    border-right: 200px solid #00c3ff;
-    right: 50%;
-}
-.onboardingDividerRight {
-    background-image: linear-gradient(to right, #5deaff, #3dabff);
-    border-left: 200px solid #00c3ff;
-    left: 50%;
-}
-.onboardingDividerRight,
-.onboardingDividerLeft,
-.onboarding2DividerRight,
-.onboarding2DividerLeft,
-.onboarding3DividerRight,
-.onboarding3DividerLeft {
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    height: 0px;
-    width: 0px;
-    position: absolute;
-    bottom: 0;
-}
-.onboarding2DividerLeft {
-    background: linear-gradient(to right, #be6aff, #7f0eff);
-    border-right: 200px solid #9727ff;
-    right: 50%;
-}
-.onboarding2DividerRight {
-    background: linear-gradient(to right, #be6aff, #7f0eff);
-    border-left: 200px solid #9727ff;
-    left: 50%;
-}
-.onboarding3DividerLeft {
-    background: linear-gradient(to right, #b130d3, #e35d67);
-    border-right: 200px solid #b130d3;
-    right: 50%;
-}
-.onboarding3DividerRight {
-    background: linear-gradient(to right, #e35d67, #b130d3);
-    border-left: 200px solid #b130d3;
-    left: 50%;
-}
-
-.onboardingIcons {
-    height: 60px;
-    vertical-align: top;
-    margin-bottom: 7px;
-}
-.onboardingListContainer {
-    margin-top: 30px;
-}
-.onboardingIconLi {
-    margin: 0px 45px;
-    vertical-align: top;
-}
-.onboardingInterestsListContainer {
-    margin: 30px auto 0;
-    width: 50%;
-}
-.onboardingGoalsListContainer {
-    margin: auto;
-    padding: 0;
-    list-style: none;
-    text-align: center;
-}
-
 .characteristicsList > div > div {
     margin: 10px 20px;
 }
@@ -2344,88 +2198,6 @@ button.link {
 
 .grayTextOnHover:hover {
     color: var(--secondary-gray);
-}
-
-.onboardingPage1Text {
-    background: linear-gradient(to right, #5deaff, #3dabff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.onboardingPage1Text2 {
-    color: white;
-    padding: 1px 14px;
-}
-.onboardingPage2Text2 {
-    color: white;
-    padding: 2px 14px;
-}
-.onboardingPage1Text3 {
-    color: #00c3ff;
-    padding: 2px 15px;
-}
-.onboardingPage1Text2Background {
-    background: linear-gradient(to bottom right, #5deaff, #3dabff);
-    padding: 2px;
-    margin: 20px 10px 0;
-}
-.onboardingPage1Margin {
-    margin: 20px 10px 0;
-}
-.onboardingPage1Button {
-    background: linear-gradient(to right, #5deaff, #3dabff);
-    border: #3dabff;
-    padding: 3px 7px;
-    margin-top: 15px;
-    cursor: pointer;
-}
-.onboardingPage2Text {
-    background: linear-gradient(to right, #be6aff, #7f0eff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.onboardingPage2Button {
-    background: linear-gradient(to right, #be6aff, #7f0eff);
-    border: #9727ff;
-    padding: 3px 7px;
-    margin: 20px 10px 0;
-    cursor: pointer;
-}
-.onboardingPage2Button:first-child {
-    padding: 3px 5px;
-}
-.onboardingPage2Text3 {
-    color: #9727ff;
-}
-.onboardingPage2Margin {
-    margin-top: 20px;
-}
-.onboardingPage2Text2Background {
-    background: linear-gradient(to bottom right, #be6aff, #7f0eff);
-    padding: 2px;
-    margin-top: 20px;
-    display: inline-block;
-}
-.onboardingPage3TextTitle {
-    background: linear-gradient(to right, #b130d3, #e35d67);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.onboardingPage3Text {
-    color: #b130d3;
-}
-.onboardingPage3Button {
-    background: linear-gradient(to right, #b130d3, #e35d67);
-    border: #01f3c8;
-    padding: 3px 7px;
-    margin: 20px 10px 0;
-    cursor: pointer;
-}
-.onboardingPage3 {
-    color: #b130d3;
-}
-.onboardingPage3Link {
-    color: var(--primary-cyan);
-    text-decoration: underline;
 }
 
 .checkbox {
@@ -2474,42 +2246,12 @@ button.link {
     margin: 0 5px 5px;
 }
 
-.onboardingLeftInput,
-.onboardingRightInput,
-#onboardingBioTextareaSpan {
-    vertical-align: top;
-    color: #b130d3;
-}
-.onboardingLeftInput > span,
-.onboardingRightInput > span {
-    display: inline-block;
-    margin-bottom: 8px;
-}
-.inputSeparator {
-    width: 7%;
-    min-width: 20px;
-}
-
 .incompleteStepsWarning {
     padding-left: 0;
 }
 .incompleteStepsWarning > li {
     color: red;
     list-style-type: none;
-}
-
-.onboardingInputWithGradientBorder {
-    border: none;
-    font-size: 20px;
-    text-align: center;
-    height: 40px;
-    width: 350px;
-    color: black;
-    background-color: white;
-}
-.onboardingGradientBorder {
-    padding: 2px 3px;
-    background: linear-gradient(to bottom right, #b130d3, #e35d67);
 }
 
 .horizListSpacer {
@@ -2587,32 +2329,6 @@ button.link {
 
 .raisedButtonBusinessHome > button {
     background-color: white !important;
-}
-.dp > div > div > input {
-    text-align: center;
-    height: 90% !important;
-}
-.dp > div {
-    height: inherit;
-    width: inherit !important;
-}
-.dp > div > div {
-    width: inherit !important;
-    line-height: inherit !important;
-    height: inherit !important;
-    display: inherit !important;
-}
-.dp > div > div > div {
-    top: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-.dp > div > div > div > hr {
-    border-bottom: 0px !important;
-}
-
-.clickableGrandChildrenInputImportant > div > input {
-    cursor: pointer !important;
 }
 
 #aboutMeAreas {
@@ -3377,90 +3093,6 @@ textarea.multipleChoiceCustomAnswer {
     display: inline;
 }
 
-.fixed-onboarding-progress {
-    cursor: pointer;
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    height: 70px;
-    width: 200px;
-    z-index: 1100;
-    background-color: var(--primary-black-dark);
-    -webkit-box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.5);
-    transition: box-shadow 0.2s ease;
-}
-
-.fixed-onboarding-progress:hover {
-    -webkit-box-shadow: 0 0 15px 6px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0 0 15px 6px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 15px 6px rgba(0, 0, 0, 0.5);
-    transition: box-shadow 0.2s ease;
-}
-
-.fixed-onboarding-progress > div {
-    position: relative;
-    width: 100%;
-    height: calc(100% - 7px);
-}
-
-.fixed-onboarding-progress > div:first-child {
-    margin-top: 7px;
-}
-
-.fixed-onboarding-progress .fixed-progress-bar {
-    position: absolute;
-    bottom: 18px;
-    left: 50%;
-    width: 80%;
-    height: 7px;
-    transform: translateX(-50%);
-}
-
-.onboarding-progress-container {
-    border-radius: 1000px;
-    overflow: hidden;
-    background-color: var(--secondary-gray);
-}
-
-.onboarding-progress-container.default {
-    width: 100px;
-    height: 10px;
-}
-
-.onboarding-progress-container.creatingEval {
-    width: 85%;
-    max-width: 800px;
-    height: 15px;
-}
-
-.onboarding-progress-container > div {
-    height: 100%;
-}
-
-.onboardingRight .onboarding-progress-container {
-    width: 70%;
-    height: 6px;
-    margin-top: 25px;
-    margin-bottom: 10px;
-}
-
-.onboardingRight > .top-progress-bar {
-    flex: 0 1 auto;
-    height: 115px;
-}
-
-.onboardingRight > div > .content {
-    position: relative;
-    height: calc(100% - 115px);
-}
-
-.onboardingRight > div > .content > div {
-    width: 100%;
-    height: 100%;
-}
-
 .sliderOnSelect {
     width: 200px;
     display: inline-block;
@@ -4104,35 +3736,6 @@ textarea.multipleChoiceCustomAnswer {
     }
 }
 
-@media only screen and (min-width: 751px) {
-    .dp > div > div {
-        font-size: 20px !important;
-    }
-}
-@media only screen and (max-width: 750px) {
-    .onboardingGradientBorder {
-        padding: 0px 2px 1px;
-    }
-    .onboardingGradientBorder#onboardingBirthDate,
-    .onboardingGradientBorder#onboardingBio,
-    .onboardingGradientBorder.onboardingGradDate {
-        padding-top: 1px;
-    }
-    .onboardingInputWithGradientBorder {
-        font-size: 12px;
-        text-align: center;
-        height: 25px;
-        width: 218.75px;
-        color: black;
-    }
-    .dp > div > div {
-        font-size: 12px !important;
-    }
-    #onboardingBio {
-        width: calc(400px + 8%);
-    }
-}
-
 @media only screen and (min-width: 701px) {
     .smallScreenMenu {
         display: none !important;
@@ -4258,9 +3861,6 @@ textarea.multipleChoiceCustomAnswer {
     .halfWidthStepRight > img,
     .halfWidthStepLeft > img {
         height: 65px;
-    }
-    .onboardingIconLi {
-        margin: 0px 40px;
     }
     .settingsTabs > div > button {
         font-size: 12px !important;
@@ -4395,9 +3995,6 @@ textarea.multipleChoiceCustomAnswer {
     }
     form > h1 {
         font-size: 25px;
-    }
-    .onboardingIconLi {
-        margin: 0px 30px;
     }
     .flex-center p {
         padding: 10px;
@@ -4602,64 +4199,6 @@ textarea.multipleChoiceCustomAnswer {
         width: 100%;
         padding: 20px 3% 10px;
     }
-    .onboardingIcons {
-        height: 40px;
-    }
-    .onboardingPage1Text2 {
-        padding: 1px 5px;
-    }
-    .onboardingPage2Text2 {
-        padding: 2px 13px;
-    }
-    .onboardingPage1Text3 {
-        padding: 1px 5px;
-    }
-    .onboardingPage1Text2Background {
-        padding: 1px;
-        margin-right: 14px;
-        margin-top: 14px;
-    }
-    .onboardingPage1Margin {
-        margin-top: 14px;
-        margin-right: 14px;
-    }
-    .onboardingInterestsListContainer {
-        width: 85%;
-    }
-    .onboardingPage2Margin {
-        margin-top: 15px;
-    }
-    .onboardingPage2Text2Background {
-        margin-top: 15px;
-    }
-    #onboardingBio {
-        width: calc(275px + 8%);
-    }
-    .onboarding3DividerLeft {
-        border-right: 120px solid #b130d3;
-    }
-    .onboarding3DividerRight {
-        border-left: 120px solid #b130d3;
-    }
-    .onboarding2DividerLeft {
-        border-right: 120px solid #9727ff;
-    }
-    .onboarding2DividerRight {
-        border-left: 120px solid #9727ff;
-    }
-    .onboardingDividerLeft {
-        border-right: 120px solid #00c3ff;
-    }
-    .onboardingDividerRight {
-        border-left: 120px solid #00c3ff;
-    }
-    .onboardingDots > div {
-        width: 15px;
-        height: 15px;
-    }
-    .onboardingIconLi {
-        margin: 0px 25px;
-    }
     .drawerWidth {
         width: 250px !important;
     }
@@ -4740,13 +4279,6 @@ textarea.multipleChoiceCustomAnswer {
 
     .font12pxUnder500Important {
         font-size: 12px !important;
-    }
-}
-
-@media only screen and (max-width: 480px) {
-    .inputSeparator {
-        width: 0;
-        min-width: 0;
     }
 }
 
@@ -4857,10 +4389,6 @@ textarea.multipleChoiceCustomAnswer {
     .pointBox {
         width: 27px;
     }
-    .onboardingIconLi {
-        margin: 0px 10px;
-    }
-
     .twoOptionsOr {
         margin: 40px 8px 0;
     }

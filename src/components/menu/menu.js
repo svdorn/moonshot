@@ -16,7 +16,6 @@ import { bindActionCreators } from "redux";
 import {
     signout,
     closeNotification,
-    endOnboarding,
     openAddUserModal,
     openIntroductionModal
 } from "../../actions/usersActions";
@@ -757,7 +756,6 @@ function mapDispatchToProps(dispatch) {
         {
             signout,
             closeNotification,
-            endOnboarding,
             openAddUserModal,
             openIntroductionModal
         },
