@@ -902,28 +902,6 @@ export function unsubscribe(user, showNotification) {
     };
 }
 
-// Send an email when form filled out on comingSoon page
-export function comingSoon(user, signedIn) {
-    return function(dispatch) {
-        dispatch({ type: "FOR_BUSINESS_REQUESTED" });
-
-        axios
-            .post("api/candidate/comingSoonEmail", user)
-            .then(function(response) {
-                if (!signedIn) {
-                    dispatch({ type: "FOR_BUSINESS", ...notification(response) });
-                    goTo("/login");
-                    dispatch({ type: "CHANGE_CURRENT_ROUTE", payload: "/login" });
-                } else {
-                    dispatch({ type: "FOR_BUSINESS", notification: undefined });
-                }
-            })
-            .catch(function(err) {
-                dispatch({ type: "FOR_BUSINESS", ...notification("Error sending email", "error") });
-            });
-    };
-}
-
 // DELETE A USER
 export function deleteUser(id) {
     return function(dispatch) {

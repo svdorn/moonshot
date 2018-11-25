@@ -1655,52 +1655,6 @@ form > h1 {
     opacity: 0.85;
 }
 
-.comingSoonBanner {
-    position: absolute;
-    pointer-events: none;
-    z-index: 10;
-    overflow: hidden;
-    width: 150px;
-    height: 150px;
-}
-.comingSoonBanner > div {
-    position: relative;
-}
-.comingSoonBanner > div > div {
-    background: linear-gradient(to right, #5de2ff, #3dabff);
-    width: 222px;
-    height: 40px;
-    position: absolute;
-    transform: rotate(-45deg) translate(-63px, -10px);
-    color: white;
-    padding-top: 3px;
-    font-size: 22px;
-}
-.comingSoonPathwayPreview {
-    position: absolute;
-}
-.reserveYourSpotOnHover {
-    display: none;
-    z-index: 20;
-    background-color: rgba(0, 0, 0, 0.55);
-    width: 248px;
-    height: 352px;
-    position: absolute;
-    pointer-events: none;
-}
-.reserveYourSpotOnHover > div {
-    margin-top: 70px;
-}
-/* show "Reserve your spot now" on hover on coming soon pathway preview */
-.pathwayPreview:hover > div:first-child.comingSoonPathwayPreview > div:nth-child(2) {
-    display: initial;
-    -webkit-animation: fadein 0.2s; /* Safari, Chrome and Opera > 12.1 */
-    -moz-animation: fadein 0.2s; /* Firefox < 16 */
-    -ms-animation: fadein 0.2s; /* Internet Explorer */
-    -o-animation: fadein 0.2s; /* Opera < 12.1 */
-    animation: fadein 0.2s;
-}
-
 @keyframes fadein {
     from {
         opacity: 0;
