@@ -8,12 +8,10 @@ import {
     addNotification,
     generalAction,
     updateUser,
-    openAddPositionModal,
     intercomEvent
 } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists, updateStore } from "../../../../../miscFunctions";
-import AddPosition from "./childComponents/addPosition";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
     TextField,
@@ -226,7 +224,6 @@ function mapDispatchToProps(dispatch) {
             addNotification,
             generalAction,
             updateUser,
-            openAddPositionModal,
             intercomEvent,
             updateStore
         },

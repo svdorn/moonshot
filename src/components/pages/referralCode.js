@@ -107,7 +107,7 @@ class ReferralCode extends Component {
         // make the loading bar show up
         self.setState({ ...this.state, loading: true });
         axios
-            .post("api/misc/createReferralCode", { name, email })
+            .post("/api/misc/createReferralCode", { name, email })
             .then(function(response) {
                 // stop the loading bar, show the referral code
                 const referralCode = response.data;
