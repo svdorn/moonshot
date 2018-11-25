@@ -1734,39 +1734,6 @@ button.link {
     justify-content: center;
 }
 
-.youtubeDialog > div > div {
-    max-width: none !important;
-    width: 100% !important;
-}
-
-.infoBox {
-    margin: auto;
-    width: 100%;
-    max-width: 650px;
-    text-align: center;
-    padding-top: 230px;
-}
-
-.infoBoxImage {
-    height: 70px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin: auto -220px auto;
-}
-.infoBoxPortfolioImage {
-    height: 70px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin: auto -180px auto;
-}
-
-.pathwayHeaderText {
-    margin-left: 50px;
-    padding-top: 100px;
-}
-
 .noWrap {
     white-space: nowrap;
 }
@@ -2743,13 +2710,6 @@ button.link {
     filter: alpha(opacity=100); /* For IE8 and earlier */
 }
 
-.pathwayImgContainer {
-    display: inline-block;
-    height: 168px;
-    width: 224px;
-    margin-top: 8px;
-}
-
 .horizCenteredList {
     text-align: center;
     padding-left: 0px;
@@ -2757,53 +2717,6 @@ button.link {
 .horizCenteredList li {
     display: inline-block;
     vertical-align: top;
-}
-
-.pathwayPrevList {
-    max-width: 1500px;
-    margin: auto;
-}
-.pathwayPrevList li {
-    margin: 0px 13px 10px;
-    vertical-align: top;
-}
-.pathwayPrevIconList li {
-    margin: 0px 3.2px;
-}
-
-/* so that the pathway icons are all equally spaced out */
-.pathwayPrevIconList > li > div {
-    width: 72.8px;
-    font-size: 11.2px;
-}
-.pathwayPrevListContainer {
-    height: 360px;
-    /* overflow-y: hidden; */
-}
-.pathwayPrevMobileThird {
-    display: none;
-}
-
-.homepageBenefitsList {
-    margin-top: 100px;
-    padding-left: 40px;
-}
-.homepageBenefitsList li {
-    vertical-align: top;
-}
-
-.homepageSeparatorContainer {
-    position: relative;
-}
-
-.homepageSeparator {
-    width: 160px;
-    height: 160px;
-    position: absolute;
-    top: -80px;
-    left: -180px;
-    clip: rect(auto, 180px, auto, 100px);
-    transform: scale(5, 0.03);
 }
 
 .stepSeparatorLeft {
@@ -3211,63 +3124,6 @@ button.link {
     padding-left: 5px;
 }
 
-.videoContainer {
-    position: relative;
-    display: block;
-    width: 100%;
-    margin: auto;
-    padding-top: 56.25%;
-}
-.videoContainer > span {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-}
-.questionsContactUs {
-    width: 320px;
-    height: 100px;
-    padding: 25px;
-    margin-top: 20px;
-}
-.scrollBarAndContactUs {
-    width: 320px;
-    display: inline-block;
-    float: left;
-    margin: 10px 30px 20px 10px;
-}
-.stepScrollerContainer {
-    height: 500px;
-    width: 400px;
-    margin-bottom: 20px;
-}
-.stepScrollerContainerInDrawer {
-    height: 100%;
-    width: 400px;
-}
-.drawerOpener {
-    left: -300px;
-    visibility: hidden;
-    position: absolute;
-}
-.pathwayContentContainer {
-    display: inline-block;
-    width: calc(100% - 390px);
-    text-align: center;
-}
-.pathwayContent {
-    min-height: 450px;
-    /* height: 50vw;
-    max-height: 450px;
-    min-height: 300px; */
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-.pathwayContentTimeText {
-    margin-top: 7px;
-}
-
 .opacity-hidden {
     opacity: 0;
 }
@@ -3386,20 +3242,6 @@ button.link {
     border: 0px !important;
 }
 
-.myPathwaysTabs > div:first-of-type {
-    background-color: transparent !important;
-    display: inline-block !important;
-}
-.myPathwaysTabs > div:nth-of-type(2) {
-    margin-left: 30%;
-}
-.myPathwaysTabs > div > button {
-    font-size: 14px !important;
-}
-.addToProfile {
-    float: right;
-    margin-right: 60px;
-}
 .aboutMeSection {
     min-height: 100%;
 }
@@ -3480,22 +3322,6 @@ button.link {
     margin: 70px auto;
     background: linear-gradient(to right, var(--primary-pink), var(--primary-orange));
 }
-.pinkToOrangeSpacer {
-    width: 60%;
-    height: 2px;
-    margin: 70px 20%;
-    background: linear-gradient(to right, #fd0d8b, #ff5d27);
-}
-.orangeToPinkSpacer {
-    width: 60%;
-    height: 2px;
-    margin: 70px 20%;
-    background: linear-gradient(to right, #ff5d27, #fd0d8b);
-}
-#picturesToPathwaysHomepageSpacer {
-    margin-top: 60px;
-    margin-bottom: 40px;
-}
 
 .homepage-pricing-dropdown-icon {
     margin-left: -10px;
@@ -3508,11 +3334,6 @@ button.link {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-.homePathwaysDesc {
-    margin: auto;
-    margin-bottom: 40px;
 }
 
 /* make Category and Company more to the right */
@@ -3598,32 +3419,8 @@ button.link {
     transform: translateX(-50%);
 }
 
-.pathwayPreviewLi {
-    vertical-align: top;
-}
-li.pathwayPreviewLi.explorePathwayPreview {
-    margin-bottom: 40px;
-}
-li.pathwayPreviewLi.featuredPathwayPreview {
-    margin-bottom: 60px;
-}
-
-.horizListQuotes {
-    position: relative;
-    margin-top: 40px;
-    margin-bottom: 25px;
-    list-style-type: none;
-}
-
 .above600only {
     display: initial;
-}
-.semiOpaquePaper {
-    background-color: rgba(255, 255, 255, 0.6) !important;
-}
-.form.bigForm {
-    width: 80%;
-    max-width: 800px;
 }
 #image404 {
     width: 80%;
@@ -4528,15 +4325,6 @@ textarea.multipleChoiceCustomAnswer {
     #picturesToPathwaysHomepageSpacer {
         margin-top: 40px;
     }
-
-    .drawerOpener {
-        visibility: visible;
-        position: relative;
-        width: 150px;
-        display: block !important;
-        margin: 20px auto 20px auto;
-        left: 0;
-    }
     .pathwayContent {
         display: block;
         margin: auto;
@@ -4544,12 +4332,6 @@ textarea.multipleChoiceCustomAnswer {
     }
     .pathwayContentContainer {
         width: 100%;
-    }
-    .videoContainer {
-        display: block;
-        width: 100%;
-        margin: auto;
-        padding-top: 56.25%;
     }
 
     .noPadding {
@@ -4916,10 +4698,6 @@ textarea.multipleChoiceCustomAnswer {
         transition: visibility 0s 0.5s, opacity 0.5s linear;
     }
 
-    .homepageSeparator {
-        transform: scale(4, 0.025);
-    }
-
     #exampleSkillsContainer {
         width: 85%;
     }
@@ -5182,14 +4960,6 @@ textarea.multipleChoiceCustomAnswer {
     }
     .wideScreenMenuItem {
         display: none !important;
-    }
-    .infoBoxImage {
-        height: 50px;
-        margin: auto -170px auto;
-    }
-    .infoBoxPortfolioImage {
-        height: 50px;
-        margin: auto -140px auto;
     }
     .halfWidthStepRight > img,
     .halfWidthStepLeft > img {
@@ -5485,9 +5255,6 @@ textarea.multipleChoiceCustomAnswer {
     .above500only {
         display: none;
     }
-    .homepageSeparator {
-        transform: scale(3, 0.02);
-    }
     .marginTopOnDesktop {
         margin-top: 0px;
     }
@@ -5582,10 +5349,6 @@ textarea.multipleChoiceCustomAnswer {
         height: 550px;
         min-height: 550px;
     }
-    .infoBox {
-        padding-top: 190px;
-    }
-
     .lightBlueChip > div {
         font-size: 15px;
         padding-top: 2px;
@@ -5903,17 +5666,8 @@ textarea.multipleChoiceCustomAnswer {
     .pointBox {
         width: 27px;
     }
-
-    .infoBoxImage {
-        height: 38px;
-        margin: auto -140px auto;
-    }
     .myPathwaysTabs > div > button {
         font-size: 12px !important;
-    }
-    .infoBoxPortfolioImage {
-        height: 38px;
-        margin: auto -140px auto;
     }
     .onboardingIconLi {
         margin: 0px 10px;
@@ -6114,12 +5868,6 @@ textarea.multipleChoiceCustomAnswer {
     }
     .font6pxUnder350 {
         font-size: 6px;
-    }
-}
-
-@media only screen and (max-width: 325px) {
-    .homepageSeparator {
-        transform: scale(2.5, 0.02);
     }
 }
 
