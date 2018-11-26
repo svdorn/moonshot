@@ -4,12 +4,20 @@ const PsychUsers = require("../../models/psychUsers");
 const { getAndVerifyUser, sanitize } = require("../helperFunctions");
 const errors = require("../errors");
 
-// functions/constants that clean up queries
+// FUNCTIONS/CONSTANTS THAT CLEAN UP QUERIES
 unwind = str => ({ $unwind: str });
 project = obj => ({ $project: obj });
 match = obj => ({ $match: obj });
 group = obj => ({ $group: obj });
 const psychExists = match({ "psychometricTest.endDate": { $exists: true } });
+
+// RANDOM HELPFUL FUNCTIONS
+// adds two numbers
+add = (a, b) => a + b;
+// gets the sum of a list
+sum = values => values.reduce(add, 0);
+// gets the average value of a list
+mean = values => sum(values) / values.length;
 
 const outputDescriptions = {
     Sincerity: {
@@ -218,7 +226,11 @@ async function GET_factors(req, res, next) {
     });
 
     // sort the factors by name
-    newFactorObjs = newFactorObjs.sort((f1, f2) => f1.name - f2.name);
+    newFactorObjs = newFactorObjs.sort((f1, f2) => {
+        if (f1.name > f2.name) return 1;
+        else if (f1.name < f2.name) return -1;
+        else return 0;
+    });
 
     return res.status(200).send({ factors: newFactorObjs });
 }
@@ -283,6 +295,74 @@ async function GET_facets(req, res, next) {
     });
 
     return res.status(200).send({ factors: newFacetObjs });
+}
+
+// TODO
+// get stats for the questions pertaining to each facet
+async function GET_questions(req, res, next) {
+    const { site, userId, verificationToken } = sanitize(req.query);
+
+    // get the user requesting the info
+    try {
+        var user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+    if (!user.admin) {
+        return res.status(403).send({ message: errors.PERMISSIONS_ERROR });
+    }
+
+    // gets a list of facets that each have a list of instances of that facet's responses
+    const facetsAggregation = [
+        // only want the users who have completed the psych test
+        psychExists,
+        // make every user object into { factors: [factor] }
+        project({ _id: 0, factors: "$psychometricTest.factors" }),
+        // make every factor its own object with its name and score
+        unwind("$factors"),
+        // only need the facets of each factor
+        project({ facet: "$factors.facets" }),
+        // make every facet its own object
+        unwind("$facet"),
+        // group these facets by name and make an array of { score, describesMe } objects
+        group({
+            _id: { name: "$facet.name" },
+            instances: { $push: { score: "$facet.score", responses: "$facet.responses" } }
+        })
+    ];
+
+    // gets all the questions that could be answered and all the facets
+    try {
+        var questions = await Psychquestions.find({});
+
+        let insightsFacets = ["All", "Insights"].includes(site)
+            ? await Users.aggregate(facetsAggregation)
+            : [];
+
+        let learningFacets = ["All", "Learning"].includes(site)
+            ? await PsychUsers.aggregate(facetsAggregation)
+            : [];
+
+        var facets = insightsFacets.concat(learningFacets);
+    } catch (e) {
+        console.log("Error getting question data: ", e);
+        return res.status(500).send({ message: "Error getting data :(" });
+    }
+
+    // make an object out of the questions for easy access
+    let questionsObj = {};
+    questions.forEach(q => (questionsObj[q._id.toString()] = q));
+
+    // // go through each facet so we can measure its question's stats and chronbach's alpha
+    // facets.forEach(facet => {
+    //     // measure chronbach's alpha (inter reliability)
+    //     const questionsVarianceSum = questionsVariances.reduce(, 0);
+    //     const varianceFraction = questionsVarianceSum / scoresVariance;
+    //     const kScalar = k / (k + 1);
+    //     let alpha = kScalar * (1 - varianceFraction);
+    // });
+
+    return res.status(200).send({});
 }
 
 // get stats for each output (Learning only)
@@ -454,11 +534,6 @@ function rangeGroupFunction(value, low, high, step) {
     }
 
     return groupValue;
-}
-
-// return the average of a list of numbers
-function mean(values) {
-    return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
 // return the standard distribution from the average and a list of numbers
