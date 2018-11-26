@@ -99,7 +99,10 @@
 
 .custom-plan {
     color: var(--primary-white);
-    margin-top: 40px;
+    margin-top: 40px;.pricing > div:nth-child(4) {
+    font-size: 16px;
+    margin-top: 15px;
+}
     font-size: 16px;
     text-align: center;
 }
