@@ -355,12 +355,14 @@ async function GET_questions(req, res, next) {
 
     // go through each facet so we can measure its question's stats and chronbach's alpha
     facets.forEach(facet => {
+        // remove users who don't have scores for this factor
+        const users = facet.users.filter(user => typeof user.score === "number");
         // a list of all users' scores on this facet
-        const facetScores = facet.users.map(user => user.score);
+        const facetScores = users.map(user => user.score);
         // so we can make a list of lists of question scores
         let qScoresObj = {};
         // go through each user that had a score in this facet
-        facet.users.forEach(user => {
+        users.forEach(user => {
             // go through the user's responses to each question from the facet
             user.responses.forEach(response => {
                 if (qScoresObj[response.answeredId] === undefined) {
@@ -384,7 +386,7 @@ async function GET_questions(req, res, next) {
         // TODO
 
         // go through each user who had a score for this facet
-        facet.users.forEach(user => {
+        users.forEach(user => {
             // measure standard deviation of responses to questions
             // TODO
         });
