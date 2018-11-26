@@ -18,6 +18,17 @@ add = (a, b) => a + b;
 sum = values => values.reduce(add, 0);
 // gets the average value of a list
 mean = values => sum(values) / values.length;
+// calculate the variance of a list of values
+variance = values => {
+    // get the average value of the list
+    const average = mean(values);
+    // number of values
+    const n = values.length;
+    // return the sum of the squared deviations from the average
+    return values.reduce((sum, value) => sum + Math.pow(value - average, 2), 0) / (n - 1);
+};
+// return the standard distribution from a list of numbers
+standardDeviation = values => Math.sqrt(variance(values));
 
 const outputDescriptions = {
     Sincerity: {
@@ -216,7 +227,7 @@ async function GET_factors(req, res, next) {
         // calculate the average score for the factor
         const average = mean(factorArraysObj[factorName]);
         // calculate the standard deviation for the factor
-        const stdDev = standardDeviation(factorArraysObj[factorName], average);
+        const stdDev = standardDeviation(factorArraysObj[factorName]);
 
         // make the data points of the ranges - [ { name: "-4.75", quantity: 80 }, ... ]
         const dataPoints = makeRanges(factorArraysObj[factorName], -5, 5, 0.5);
@@ -285,7 +296,7 @@ async function GET_facets(req, res, next) {
         // calculate the average score for the factor
         const average = mean(facetArraysObj[facetName]);
         // calculate the standard deviation for the factor
-        const stdDev = standardDeviation(facetArraysObj[facetName], average);
+        const stdDev = standardDeviation(facetArraysObj[facetName]);
 
         // make the data points of the ranges - [ { name: "-4.75", quantity: 80 }, ... ]
         const dataPoints = makeRanges(facetArraysObj[facetName], -5, 5, 0.5);
@@ -582,14 +593,56 @@ async function GET_outputs(req, res, next) {
     return res.status(200).send({ outputs });
 }
 
-// calculate chronbach's alpha (inter reliability)
-// scores = [ totalScore ]
-// items = [ [ itemScore ] ]
+// const theScores = [15, 13, 19, 16, 13, 11];
+// const theItems = [
+//     [4.0, 4.0, 5.0, 3.0, 3.0, 3.0],
+//     [3.0, 3.0, 5.0, 4.0, 4.0, 3.0],
+//     [4.0, 3.0, 5.0, 4.0, 3.0, 2.0],
+//     [4.0, 3.0, 4.0, 5.0, 3.0, 3.0]
+// ];
+// console.log("alpha should be .81, is: ", chronbachsAlpha(theScores, theItems));
+
+// function chronbachsAlpha(users) {
+//     // number of items
+//     const n = items.length;
+//     questionMeans
+//     // TODO
+//     users.forEach(user => {
+//         user.responses.forEach(response)
+//         covariances =
+//     })
+//
+//     const averageInterItemCovariance = mean(covariances);
+//     // average variance within user's
+//     // TODO
+//     // const averageVariance =
+//     const numerator = n * averageInterItemCovariance;
+//     const denominator = averageVariance + (n - 1) * averageInterItemCovariance;
+//     return numerator / denominator;
+// }
+//
+// function chronbachsAlpha(scores, itemsScores) {
+//     // number of items
+//     const n = items.length;
+//     // TODO
+//     // const averageInterItemCovariance = ;
+//     // average variance of answers to each item (question)
+//     const averageVariance = mean(itemsScores.map(itemScores => variance(itemScores)));
+//     const numerator = n * averageInterItemCovariance;
+//     const denominator = averageVariance + (n - 1) * averageInterItemCovariance;
+//     return numerator / denominator;
+// }
+
+// // calculate chronbach's alpha (inter reliability)
+// // scores = [ totalScore ] (array of scores received for this facet)
+// // items = [ [ itemScore ] ] (array of scores for each question)
 function chronbachsAlpha(scores, items) {
-    // the variances of each item's answers
-    let itemsVariances = items.map(item => variance(item));
-    // sum of variances within each question
+    // get a list of the variances between users on each question
+    // (variance within the question across the sample)
+    let itemsVariances = items.map(itemAnswers => variance(itemAnswers));
+    // sum of those variances
     const itemsVarianceSum = sum(itemsVariances);
+
     // variance between scores different test takers got for the facet
     let scoresVariance = variance(scores);
     // sum of variances within questions / variances in facet scores
@@ -598,8 +651,9 @@ function chronbachsAlpha(scores, items) {
     // number of items
     const k = items.length;
     // number of items / (number of items - 1)
-    const kScalar = k / (k + 1);
+    const kScalar = k / (k - 1);
 
+    // final chronbach's alpha
     return kScalar * (1 - varianceFraction);
 }
 
@@ -633,24 +687,6 @@ function rangeGroupFunction(value, low, high, step) {
     }
 
     return groupValue;
-}
-
-// return the standard distribution from the average and a list of numbers
-function standardDeviation(values, average) {
-    // add up all the squared deviations from the average
-    const total = variance(values, average);
-    // return the square root of (that sum divided by the number of values)
-    return Math.sqrt(total / values.length);
-}
-
-// calculate the variance of a list of values
-function variance(values, average) {
-    // if average not given, calculate it
-    if (typeof average !== "number") {
-        average = mean(values);
-    }
-    // return the sum of the squared deviations from the average
-    return values.reduce((sum, value) => sum + Math.pow(value - average, 2), 0);
 }
 
 // returns an object like this:
