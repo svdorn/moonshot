@@ -125,12 +125,8 @@ class Psych extends Component {
             .get("/api/admin/dataDisplay/factors", {
                 params: { ...this.state.GETparams, site: this.state.site }
             })
-            .then(result => {
-                self.setState({ factors: result.data.factors });
-            })
-            .catch(error => {
-                console.log("error getting factor data: ", error);
-            });
+            .then(result => self.setState({ factors: result.data.factors }))
+            .catch(error => console.log("error getting factor data: ", error));
     };
 
     // get data about every facet
@@ -158,31 +154,14 @@ class Psych extends Component {
 
     // get data about the questions that are asked in the test
     getQuestionData = () => {
-        const questions = [
-            {
-                question: "What's yo poison?",
-                rightOption: "moydah",
-                leftOption: "luv",
-                interRel: 0.3,
-                average: 1.3,
-                stdDev: 2,
-                factor: "Honesty-Humility",
-                facet: "Shamefulness"
-            },
-            {
-                question:
-                    "aa pa paweiflnj asdp asfkajsdlfj anjwodfipa 8sijahowpf9 adisfjlahsof awefpi auhwef lasjdf a?",
-                rightOption: "auhsd98fpuia nawf awef pawe",
-                leftOption: "aweoifhuawe falsdawef awefasdw awef wef wef",
-                interRel: 0.5,
-                average: -0.8,
-                stdDev: 1.69,
-                factor: "Emotionality",
-                facet: "Crybabiness"
-            }
-        ];
+        const self = this;
 
-        this.setState({ questions });
+        axios
+            .get("/api/admin/dataDisplay/questions", {
+                params: { ...this.state.GETparams, site: this.state.site }
+            })
+            .then(response => self.setState({ questions: response.data.questions }))
+            .catch(error => console.log("Error getting data: ", error));
     };
 
     // get data about the outputs that are given to people who take the test for fun
@@ -192,12 +171,8 @@ class Psych extends Component {
             .get("/api/admin/dataDisplay/outputs", {
                 params: { ...this.state.GETparams, site: this.state.site }
             })
-            .then(result => {
-                self.setState({ outputs: result.data.outputs });
-            })
-            .catch(error => {
-                console.log("error getting factor data: ", error);
-            });
+            .then(result => self.setState({ outputs: result.data.outputs }))
+            .catch(error => console.log("error getting factor data: ", error));
     };
 
     // change the site we're getting data from (All, Insights, Learning)

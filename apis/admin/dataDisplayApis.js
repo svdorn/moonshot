@@ -1,6 +1,6 @@
-const app = require("../../apiServer");
 const Users = require("../../models/users");
 const PsychUsers = require("../../models/psychUsers");
+const PsychQuestions = require("../../models/psychquestions");
 const { getAndVerifyUser, sanitize } = require("../helperFunctions");
 const errors = require("../errors");
 
@@ -324,16 +324,16 @@ async function GET_questions(req, res, next) {
         project({ facet: "$factors.facets" }),
         // make every facet its own object
         unwind("$facet"),
-        // group these facets by name and make an array of { score, describesMe } objects
+        // group these facets by name and make an array of { score, responses } objects
         group({
             _id: { name: "$facet.name" },
-            instances: { $push: { score: "$facet.score", responses: "$facet.responses" } }
+            users: { $push: { score: "$facet.score", responses: "$facet.responses" } }
         })
     ];
 
     // gets all the questions that could be answered and all the facets
     try {
-        var questions = await Psychquestions.find({});
+        var questions = await PsychQuestions.find({});
 
         let insightsFacets = ["All", "Insights"].includes(site)
             ? await Users.aggregate(facetsAggregation)
@@ -353,16 +353,68 @@ async function GET_questions(req, res, next) {
     let questionsObj = {};
     questions.forEach(q => (questionsObj[q._id.toString()] = q));
 
-    // // go through each facet so we can measure its question's stats and chronbach's alpha
-    // facets.forEach(facet => {
-    //     // measure chronbach's alpha (inter reliability)
-    //     const questionsVarianceSum = questionsVariances.reduce(, 0);
-    //     const varianceFraction = questionsVarianceSum / scoresVariance;
-    //     const kScalar = k / (k + 1);
-    //     let alpha = kScalar * (1 - varianceFraction);
-    // });
+    // go through each facet so we can measure its question's stats and chronbach's alpha
+    facets.forEach(facet => {
+        // a list of all users' scores on this facet
+        const facetScores = facet.users.map(user => user.score);
+        // so we can make a list of lists of question scores
+        let qScoresObj = {};
+        // go through each user that had a score in this facet
+        facet.users.forEach(user => {
+            // go through the user's responses to each question from the facet
+            user.responses.forEach(response => {
+                if (qScoresObj[response.answeredId] === undefined) {
+                    qScoresObj[response.answeredId] = [];
+                }
+                // add the user's response divided by the number of questions -
+                // this is done because chronbach tests involve adding all
+                // answers together to get the final score of the test
+                qScoresObj[response.answeredId].push(response.answer / user.responses.length);
+            });
+        });
+        // convert the questions scores object into an array
+        const qScores = Object.keys(qScoresObj).map(qId => qScoresObj[qId]);
 
-    return res.status(200).send({});
+        // measure chronbach's alpha (inter reliability) of the facet
+        const cAlpha = chronbachsAlpha(facetScores, qScores);
+
+        console.log("cAlpha of ", facet._id.name, ": ", cAlpha);
+
+        // measure the chronbach's alpha of the facet without each question
+        // TODO
+
+        // go through each user who had a score for this facet
+        facet.users.forEach(user => {
+            // measure standard deviation of responses to questions
+            // TODO
+        });
+    });
+
+    const fakeData = [
+        {
+            question: "What's yo poison?",
+            rightOption: "moydah",
+            leftOption: "luv",
+            interRel: 0.3,
+            average: 1.3,
+            stdDev: 2,
+            factor: "Honesty-Humility",
+            facet: "Shamefulness"
+        },
+        {
+            question:
+                "aa pa paweiflnj asdp asfkajsdlfj anjwodfipa 8sijahowpf9 adisfjlahsof awefpi auhwef lasjdf a?",
+            rightOption: "auhsd98fpuia nawf awef pawe",
+            leftOption: "aweoifhuawe falsdawef awefasdw awef wef wef",
+            interRel: 0.5,
+            average: -0.8,
+            stdDev: 1.69,
+            factor: "Emotionality",
+            facet: "Crybabiness"
+        }
+    ];
+
+    return res.status(200).send({ questions: fakeData });
 }
 
 // get stats for each output (Learning only)
@@ -504,6 +556,27 @@ async function GET_outputs(req, res, next) {
     return res.status(200).send({ outputs });
 }
 
+// calculate chronbach's alpha (inter reliability)
+// scores = [ totalScore ]
+// items = [ [ itemScore ] ]
+function chronbachsAlpha(scores, items) {
+    // the variances of each item's answers
+    let itemsVariances = items.map(item => variance(item));
+    // sum of variances within each question
+    const itemsVarianceSum = sum(itemsVariances);
+    // variance between scores different test takers got for the facet
+    let scoresVariance = variance(scores);
+    // sum of variances within questions / variances in facet scores
+    const varianceFraction = itemsVarianceSum / scoresVariance;
+
+    // number of items
+    const k = items.length;
+    // number of items / (number of items - 1)
+    const kScalar = k / (k + 1);
+
+    return kScalar * (1 - varianceFraction);
+}
+
 // make the data points of the ranges - [ { name: "-4.75", quantity: 80 }, ... ]
 function makeRanges(values, low, high, step) {
     // create the groups - { name: "-3", quantity: 20 }
@@ -538,14 +611,20 @@ function rangeGroupFunction(value, low, high, step) {
 
 // return the standard distribution from the average and a list of numbers
 function standardDeviation(values, average) {
-    // if the average was not given, calculate it
+    // add up all the squared deviations from the average
+    const total = variance(values, average);
+    // return the square root of (that sum divided by the number of values)
+    return Math.sqrt(total / values.length);
+}
+
+// calculate the variance of a list of values
+function variance(values, average) {
+    // if average not given, calculate it
     if (typeof average !== "number") {
         average = mean(values);
     }
-    // add up all the squared deviations from the average
-    const total = values.reduce((sum, value) => sum + Math.pow(value - average, 2), 0);
-    // return the square root of (that sum divided by the number of values)
-    return Math.sqrt(total / values.length);
+    // return the sum of the squared deviations from the average
+    return values.reduce((sum, value) => sum + Math.pow(value - average, 2), 0);
 }
 
 // returns an object like this:
@@ -609,12 +688,16 @@ function groupCountsBy(arr, groupFunc, ...groupFuncArgs) {
     }));
 }
 
+const app = require("../../apiServer");
+
 app.get("/admin/dataDisplay/factors", GET_factors);
 app.get("/admin/dataDisplay/facets", GET_facets);
+app.get("/admin/dataDisplay/questions", GET_questions);
 app.get("/admin/dataDisplay/outputs", GET_outputs);
 
 module.exports = {
     GET_factors,
     GET_facets,
+    GET_questions,
     GET_outputs
 };
