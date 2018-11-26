@@ -2199,50 +2199,6 @@ button.link {
     min-height: 100%;
 }
 
-.halfWidthStepRight,
-.halfWidthStepLeft {
-    text-align: left;
-    width: 50%;
-    float: left;
-    position: relative;
-    padding: 20px 3% 10px;
-}
-.halfWidthStepRight {
-    padding: 20px 3% 10px 1%;
-}
-.halfWidthStepLeft {
-    padding: 20px 1% 10px 3%;
-}
-.halfWidthStepRight > img,
-.halfWidthStepLeft > img {
-    height: 80px;
-    float: left;
-    margin: 10px 20px 10px 20px;
-}
-.halfWidthStepText {
-    display: inline-block;
-    float: left;
-    margin-left: 10px;
-    width: calc(100% - 130px);
-}
-.halfWidthStepDesc {
-    height: 50px;
-    overflow-y: hidden;
-}
-.halfWidthStepTitle {
-    color: #da5f7b;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 30px;
-}
-
-.headerDiv {
-    position: relative;
-    height: 100px;
-    width: 100%;
-}
-
 .resultsPageSpacer {
     width: 40%;
     height: 2px;
@@ -2254,10 +2210,6 @@ button.link {
     height: 2px;
     margin: 70px auto;
     background: linear-gradient(to right, var(--primary-pink), var(--primary-orange));
-}
-
-.homepage-pricing-dropdown-icon {
-    margin-left: -10px;
 }
 
 .noselect {
@@ -2285,28 +2237,12 @@ button.link {
     padding-right: 20px;
 }
 
-.bigCreateYourFreeAccount {
-    margin-top: 30px;
-    padding: 1px 25px 4px;
-    font-size: 25px;
-}
-
 .dialogForBiz {
     max-width: 450px;
     margin: auto;
     background-color: #323232 !important;
 }
 .dialogForBiz > div:first-child {
-    min-height: 300px;
-    border-top: none !important;
-    border-bottom: none !important;
-}
-.dialogForVideo {
-    max-width: 700px;
-    margin: auto;
-    background-color: #323232 !important;
-}
-.dialogForVideo > div:first-child {
     min-height: 300px;
     border-top: none !important;
     border-bottom: none !important;
@@ -2328,10 +2264,6 @@ button.link {
     min-height: 300px;
 }
 
-.blurOnHover:hover {
-    filter: blur(5px);
-}
-
 .addEval {
     position: relative;
     z-index: 100;
@@ -2348,16 +2280,6 @@ button.link {
     width: 80%;
     max-width: 500px;
     margin: 15px 0 15px -2%;
-}
-
-.termsPage {
-    text-align: left;
-    color: white;
-    padding: 100px 40px 40px;
-}
-
-.blackTextImportant {
-    color: black !important;
 }
 
 .blurred {
@@ -2381,14 +2303,6 @@ button.link {
 .sliderContainer {
     margin: 0 20%;
     position: relative;
-}
-
-.sliderNoLeftColor > div:first-child > div:first-child > div:first-child {
-    background-color: rgb(189, 189, 189) !important;
-}
-.sliderNoLeftColor > div:first-child > div:first-child > div:nth-child(3) {
-    background-color: rgb(0, 195, 255) !important;
-    border: 2px solid rgb(0, 195, 255) !important;
 }
 
 .grabbing {
@@ -2415,11 +2329,6 @@ button.link {
     cursor: default;
 }
 
-.twoOptionsOr {
-    display: inline-block;
-    margin: 55px 20px 0;
-}
-
 .fully-center {
     position: absolute;
     left: 50%;
@@ -2428,33 +2337,14 @@ button.link {
     text-align: center;
 }
 
+/* doubled up so that it works for material-ui altering */
 .overflow-visible-1.overflow-visible-2 {
     overflow-y: visible;
 }
 
-.flex-center {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.multipleChoiceOption,
-.multiSelectOption {
-    position: relative;
-    margin-bottom: 10px;
-
-    text-align: left;
-    margin-left: 80px;
-    margin-right: 80px;
-}
 .multipleChoiceAnswer {
     overflow-x: hidden;
     display: inline-block;
-}
-textarea.multiSelectCustomAnswer,
-textarea.multipleChoiceCustomAnswer {
-    width: calc(100% - 70px);
 }
 .multipleChoiceCircle {
     width: 20px;
@@ -2472,32 +2362,6 @@ textarea.multipleChoiceCustomAnswer {
 }
 .multipleChoiceCircle.selected {
     background-color: var(--primary-cyan);
-}
-.multipleChoiceCircle.medium {
-    /* left: calc(35% - 110px); */
-}
-
-.multiSelectOption {
-    display: inline-block;
-    margin: 0 20px 10px;
-    vertical-align: top;
-    min-height: 50px;
-}
-.multiSelectAnswer {
-    max-width: 160px;
-    display: inline-block;
-}
-
-.centeredElement {
-    width: 100%;
-    text-align: center;
-}
-
-.pricingButton {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 .candidateResults .interestArea {
@@ -2536,6 +2400,9 @@ textarea.multipleChoiceCustomAnswer {
 .relative {
     position: relative;
 }
+
+/* --------------------------->> MARGINS/PADDING <<-------------------------- */
+
 .marginSides80px {
     margin-right: 80px;
     margin-left: 80px;
@@ -2638,7 +2505,8 @@ textarea.multipleChoiceCustomAnswer {
     width: 260px;
 }
 
-/* decorative triangles */
+/* ------------------------->> END MARGINS/PADDING <<------------------------ */
+/* ------------------------>> DECORATIVE TRIANGLES <<------------------------ */
 
 .triangle {
     width: 160px;
@@ -2780,59 +2648,9 @@ textarea.multipleChoiceCustomAnswer {
     --triangle-delay: 9.8s;
 }
 
-@-webkit-keyframes triangle-animation {
-    0% {
-        top: var(--triangle-top-start);
-        right: var(--triangle-right-start);
-        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
-    }
-    100% {
-        top: var(--triangle-top-end);
-        right: var(--triangle-right-end);
-        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
-    }
-}
-@-moz-keyframes triangle-animation {
-    0% {
-        top: var(--triangle-top-start);
-        right: var(--triangle-right-start);
-        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
-    }
-    100% {
-        top: var(--triangle-top-end);
-        right: var(--triangle-right-end);
-        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
-    }
-}
-@-o-keyframes triangle-animation {
-    0% {
-        top: var(--triangle-top-start);
-        right: var(--triangle-right-start);
-        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
-    }
-    100% {
-        top: var(--triangle-top-end);
-        right: var(--triangle-right-end);
-        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
-    }
-}
-@keyframes triangle-animation {
-    0% {
-        top: var(--triangle-top-start);
-        right: var(--triangle-right-start);
-        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
-    }
-    100% {
-        top: var(--triangle-top-end);
-        right: var(--triangle-right-end);
-        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
-    }
-}
+/* ---------------------->> END DECORATIVE TRIANGLES <<---------------------- */
 
-/* end decorative triangles */
-
-.above800fade,
-.above1000fade {
+.above800fade {
     visibility: visible;
     opacity: 1;
     transition: opacity 0.5s linear;
@@ -2845,17 +2663,6 @@ textarea.multipleChoiceCustomAnswer {
 
 .br {
     display: inline;
-}
-
-.sliderOnSelect {
-    width: 200px;
-    display: inline-block;
-    float: right;
-    margin: -30px 8% 0px 0px;
-}
-.textAreaOnSelect {
-    width: 90%;
-    margin: 0px 5%;
 }
 
 .code {
@@ -2874,13 +2681,6 @@ textarea.multipleChoiceCustomAnswer {
     word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
-.width90Percent {
-    width: 90%;
-}
-.maxWidth350px {
-    max-width: 350px;
-}
-
 .width40px {
     width: 40px;
 }
@@ -2897,6 +2697,8 @@ textarea.multipleChoiceCustomAnswer {
 .right-align {
     text-align: right;
 }
+
+/* ----------------------------->> FONT SIZES <<----------------------------- */
 
 .font60px {
     font-size: 60px;
@@ -3068,12 +2870,6 @@ textarea.multipleChoiceCustomAnswer {
 @media only screen and (max-width: 1000px) {
     .above1000only {
         display: none;
-    }
-
-    .above1000fade {
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0s 0.5s, opacity 0.5s linear;
     }
 
     .candidateResults .interestArea {
@@ -3293,12 +3089,6 @@ textarea.multipleChoiceCustomAnswer {
     }
 }
 
-@media only screen and (min-width: 880px) {
-    #intro {
-        height: 760px;
-    }
-}
-
 @media only screen and (min-width: 851px) {
     .under850only {
         display: none;
@@ -3382,12 +3172,6 @@ textarea.multipleChoiceCustomAnswer {
 @media only screen and (min-width: 801px) {
     .under800only {
         display: none;
-    }
-    .pushDownAbove800 {
-        margin-top: 50px;
-    }
-    .pushDownSlightlyAbove800 {
-        margin-top: 40px;
     }
 }
 
@@ -3609,10 +3393,6 @@ textarea.multipleChoiceCustomAnswer {
     .wideScreenMenuItem {
         display: none !important;
     }
-    .halfWidthStepRight > img,
-    .halfWidthStepLeft > img {
-        height: 65px;
-    }
     .settingsTabs > div > button {
         font-size: 12px !important;
         border: 0px !important;
@@ -3686,46 +3466,14 @@ textarea.multipleChoiceCustomAnswer {
     }
 }
 
-@media only screen and (min-width: 660px) {
-    #intro {
-        display: flex;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-        height: 600px;
-    }
-    .leftFloatingCard {
-        --device-scale: 0.23;
-        left: 46%;
-        top: 50%;
-    }
-    .rightFloatingCard {
-        --device-scale: 0.21;
-        left: 119%;
-        top: 80%;
-    }
-}
-
 @media only screen and (min-width: 601px) {
     .under600only {
         display: none;
-    }
-    .from500to600only {
-        display: none;
-    }
-    .outside500to600only {
-        display: initial;
     }
 }
 
 @media only screen and (max-width: 600px) {
     .above600only {
-        display: none;
-    }
-    .from500to600only {
-        display: initial;
-    }
-    .outside500to600only {
         display: none;
     }
     .text-field {
@@ -3735,26 +3483,12 @@ textarea.multipleChoiceCustomAnswer {
         display: inherit;
         margin-top: -30px;
     }
-    .bigCreateYourFreeAccount {
-        font-size: 20px;
-        padding: 2px 20px 0px;
-    }
     .form {
         max-width: 450px;
-        /* margin-top: 110px; */
         overflow: hidden;
     }
     form > h1 {
         font-size: 25px;
-    }
-    .flex-center p {
-        padding: 10px;
-    }
-
-    .multipleChoiceOption,
-    .multiSelectOption {
-        margin-left: 50px;
-        margin-right: 50px;
     }
 
     .multipleChoiceCircle {
@@ -3830,12 +3564,6 @@ textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 500px) {
-    .outside500to600only {
-        display: initial;
-    }
-    .from500to600only {
-        display: none;
-    }
     .above500only {
         display: none;
     }
@@ -3930,32 +3658,7 @@ textarea.multipleChoiceCustomAnswer {
     }
     .form {
         max-width: 350px;
-        /* margin-top: 95px; */
         margin-bottom: 0px;
-    }
-
-    .list500pxStack li {
-        display: block !important;
-        margin-top: 40px;
-    }
-    .listBottom500pxStack {
-        margin-top: 40px;
-    }
-    .halfWidthStepRight > img,
-    .halfWidthStepLeft > img {
-        height: 50px;
-    }
-    .halfWidthStepRight,
-    .halfWidthStepLeft {
-        width: 100%;
-        padding: 20px 3% 10px;
-    }
-    .drawerWidth {
-        width: 250px !important;
-    }
-    .drawerContent {
-        max-width: 240px;
-        word-wrap: break-word;
     }
 
     .resultsHiringStage {
@@ -3967,10 +3670,6 @@ textarea.multipleChoiceCustomAnswer {
     }
     .page-line-header > div:last-child {
         padding: 0px 20px;
-    }
-
-    .twoOptionsOr {
-        margin: 55px 10px 0;
     }
 
     .font40pxUnder500 {
@@ -4034,13 +3733,6 @@ textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 450px) {
-    .sliderOnSelect {
-        width: 60%;
-        display: inline-block;
-        float: right;
-        margin: -30px 20% 0px;
-    }
-
     .evalPortionIntro > div:not(:first-child) {
         width: 250px;
     }
@@ -4140,38 +3832,16 @@ textarea.multipleChoiceCustomAnswer {
     .pointBox {
         width: 27px;
     }
-    .twoOptionsOr {
-        margin: 40px 8px 0;
-    }
 
-    .multiSelectOption {
-        min-height: 30px;
-    }
     .multipleChoiceCircle {
         margin-top: 0px;
         width: 15px;
         height: 15px;
     }
-    .multiSelectAnswer {
-        margin-top: 2px;
-    }
-    .multipleChoiceOption,
-    .multiSelectOption {
-        margin-left: 30px;
-        margin-right: 30px;
-    }
 
     .marginSides40pxUnder700 {
         margin-right: 20px;
         margin-left: 20px;
-    }
-
-    .marginTop20pxUnder400 {
-        margin-top: 20px;
-    }
-
-    .pricingButton {
-        bottom: 32px;
     }
 
     .legend .middle80indicator {
@@ -4236,10 +3906,6 @@ textarea.multipleChoiceCustomAnswer {
     .font10pxUnder400Important {
         font-size: 10px !important;
     }
-
-    .width250pxUnder400 {
-        width: 250px;
-    }
 }
 
 @media only screen and (max-width: 375px) {
@@ -4265,9 +3931,6 @@ textarea.multipleChoiceCustomAnswer {
 @media only screen and (max-width: 350px) {
     .above350only {
         display: none;
-    }
-    textarea.multipleChoiceCustomAnswer {
-        width: 180px;
     }
 
     .font40pxUnder350 {
@@ -4370,6 +4033,55 @@ textarea.multipleChoiceCustomAnswer {
     }
     to {
         opacity: 1;
+    }
+}
+
+@-webkit-keyframes triangle-animation {
+    0% {
+        top: var(--triangle-top-start);
+        right: var(--triangle-right-start);
+        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
+    }
+    100% {
+        top: var(--triangle-top-end);
+        right: var(--triangle-right-end);
+        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
+    }
+}
+@-moz-keyframes triangle-animation {
+    0% {
+        top: var(--triangle-top-start);
+        right: var(--triangle-right-start);
+        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
+    }
+    100% {
+        top: var(--triangle-top-end);
+        right: var(--triangle-right-end);
+        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
+    }
+}
+@-o-keyframes triangle-animation {
+    0% {
+        top: var(--triangle-top-start);
+        right: var(--triangle-right-start);
+        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
+    }
+    100% {
+        top: var(--triangle-top-end);
+        right: var(--triangle-right-end);
+        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
+    }
+}
+@keyframes triangle-animation {
+    0% {
+        top: var(--triangle-top-start);
+        right: var(--triangle-right-start);
+        transform: rotate(0deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
+    }
+    100% {
+        top: var(--triangle-top-end);
+        right: var(--triangle-right-end);
+        transform: rotate(180deg) scale(var(--triangle-scale), calc(var(--triangle-scale) * 0.6));
     }
 }
 
