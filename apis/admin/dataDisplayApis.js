@@ -201,7 +201,7 @@ async function GET_factors(req, res, next) {
     // an array that will contain the factors that will be returned to the front end
     let newFactorObjs = [];
 
-    // go through each factor
+    // go through each factor to make the returnable factor array
     Object.keys(factorArraysObj).forEach(factorName => {
         // get the number of candidates who have this factor
         const n = factorArraysObj[factorName].length;
@@ -216,6 +216,9 @@ async function GET_factors(req, res, next) {
         // add the new info to the list of objects to return
         newFactorObjs.push({ name: factorName, n, average, stdDev, dataPoints });
     });
+
+    // sort the factors by name
+    newFactorObjs = newFactorObjs.sort((f1, f2) => f1.name - f2.name);
 
     return res.status(200).send({ factors: newFactorObjs });
 }
