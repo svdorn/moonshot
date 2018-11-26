@@ -189,13 +189,6 @@ class AddPositionDialog extends Component {
                 fontSize: "23px",
                 color: "white"
             },
-            separatorLine: {
-                width: "100%",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
-            },
             anchorOrigin: {
                 vertical: "top",
                 horizontal: "left"

@@ -659,10 +659,6 @@ const style = {
     characteristicsTitle: {
         color: "#96ADFC"
     },
-    characteristicsListRow: {
-        display: "flex",
-        justifyContent: "center"
-    },
     descriptionBox: {
         paddingTop: "40px"
     }
