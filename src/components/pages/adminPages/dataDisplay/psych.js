@@ -131,25 +131,13 @@ class Psych extends Component {
 
     // get data about every facet
     getFacetData = () => {
-        const facets = [
-            {
-                name: "Ambiguity",
-                dataPoints: randomData[3],
-                average: 2.3,
-                interRel: 0.87,
-                stdDev: 0.41
-            },
-            {
-                name: "Your Mom",
-                dataPoints: randomData[4],
-                average: 2.3,
-                interRel: 0.87,
-                stdDev: 0.41
-            },
-            { name: "Hope", dataPoints: randomData[5], average: -1.6, interRel: 0.82, stdDev: 0.53 }
-        ];
-
-        this.setState({ facets });
+        const self = this;
+        axios
+            .get("/api/admin/dataDisplay/facets", {
+                params: { ...this.state.GETparams, site: this.state.site }
+            })
+            .then(result => self.setState({ facets: result.data.facets }))
+            .catch(error => console.log("error getting facet data: ", error));
     };
 
     // get data about the questions that are asked in the test
