@@ -602,37 +602,6 @@ async function GET_outputs(req, res, next) {
 // ];
 // console.log("alpha should be .81, is: ", chronbachsAlpha(theScores, theItems));
 
-// function chronbachsAlpha(users) {
-//     // number of items
-//     const n = items.length;
-//     questionMeans
-//     // TODO
-//     users.forEach(user => {
-//         user.responses.forEach(response)
-//         covariances =
-//     })
-//
-//     const averageInterItemCovariance = mean(covariances);
-//     // average variance within user's
-//     // TODO
-//     // const averageVariance =
-//     const numerator = n * averageInterItemCovariance;
-//     const denominator = averageVariance + (n - 1) * averageInterItemCovariance;
-//     return numerator / denominator;
-// }
-//
-// function chronbachsAlpha(scores, itemsScores) {
-//     // number of items
-//     const n = items.length;
-//     // TODO
-//     // const averageInterItemCovariance = ;
-//     // average variance of answers to each item (question)
-//     const averageVariance = mean(itemsScores.map(itemScores => variance(itemScores)));
-//     const numerator = n * averageInterItemCovariance;
-//     const denominator = averageVariance + (n - 1) * averageInterItemCovariance;
-//     return numerator / denominator;
-// }
-
 // // calculate chronbach's alpha (inter reliability)
 // // scores = [ totalScore ] (array of scores received for this facet)
 // // items = [ [ itemScore ] ] (array of scores for each question)
