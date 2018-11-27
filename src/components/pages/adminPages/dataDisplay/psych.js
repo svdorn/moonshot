@@ -4,7 +4,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification } from "../../../../actions/usersActions";
-import { randomInt } from "../../../../miscFunctions";
+import { round } from "../../../../miscFunctions";
 import { Tabs, Tab, Dialog } from "@material-ui/core";
 import {
     BarChart,
@@ -28,32 +28,6 @@ import "./dataDisplay.css";
 const sites = ["All", "Insights", "Learning"];
 const categories = ["Factors", "Facets", "Questions", "Outputs"];
 
-const nums = [
-    "-4.75",
-    "-4.25",
-    "-3.75",
-    "-3.25",
-    "-2.75",
-    "-2.25",
-    "-1.75",
-    "-1.25",
-    "-0.75",
-    "-0.25",
-    "0.25",
-    "0.75",
-    "1.25",
-    "1.75",
-    "2.25",
-    "2.75",
-    "3.25",
-    "3.75",
-    "4.25",
-    "4.75"
-];
-
-const randomData = [0, 1, 2, 3, 4, 5, 6].map(n =>
-    nums.map(num => ({ name: num, quantity: randomInt(0, 400) }))
-);
 const makePercent = num => {
     if (typeof num !== "number") {
         return "";
@@ -298,8 +272,8 @@ class Psych extends Component {
                         {chart}
                     </div>
                     <div>
-                        <div>Average: {factor.average}</div>
-                        <div>Std. dev.: {factor.stdDev}</div>
+                        <div>Average: {round(factor.average, 2)}</div>
+                        <div>Std. dev.: {round(factor.stdDev, 2)}</div>
                     </div>
                     <div
                         className="checkbox smallCheckbox whiteCheckbox"
@@ -389,9 +363,9 @@ class Psych extends Component {
                         {chart}
                     </div>
                     <div>
-                        <div>Average: {facet.average}</div>
-                        <div>Interreliability: {facet.interRel}</div>
-                        <div>Std. dev.: {facet.stdDev}</div>
+                        <div>Average: {round(facet.average, 2)}</div>
+                        <div>Chronbach's Alpha: {round(facet.interRel, 2)}</div>
+                        <div>Std. dev.: {round(facet.stdDev, 2)}</div>
                     </div>
                     <div
                         className="checkbox smallCheckbox whiteCheckbox"
@@ -464,9 +438,10 @@ class Psych extends Component {
                         </div>
                     </div>
                     <div>
-                        <div>Average: {q.average}</div>
-                        <div>Interreliability: {q.interRel}</div>
-                        <div>Std. dev.: {q.stdDev}</div>
+                        <div>Average: {round(q.average, 2)}</div>
+                        <div>Facet Alpha: {round(q.facetAlpha, 2)}</div>
+                        <div>Alpha Without This: {round(q.cAlphaWithoutQuestion, 2)}</div>
+                        <div>Std. dev.: {round(q.stdDev, 2)}</div>
                     </div>
                 </div>,
                 <br key={`facet ${qIdx} br`} />

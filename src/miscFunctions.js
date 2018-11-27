@@ -416,6 +416,27 @@ function randomInt(lowBound, highBound) {
 
 function noop() {}
 
+// round a number to the given number of decimal points
+function round(number, places) {
+    if (typeof number !== "number") {
+        return number;
+    }
+
+    // make sure places is valid and an integer
+    if (typeof places !== "number" || places < 0) {
+        places = 0;
+    }
+    places = Math.round(places);
+
+    // multiply by 10^(places), round, divide by 10^(places)
+    const multiplier = Math.pow(10, places);
+    let rounded = number * multiplier;
+    rounded = Math.round(rounded);
+    rounded /= multiplier;
+
+    return rounded;
+}
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -440,6 +461,7 @@ const miscFunctions = {
     getFormattedDate,
     noop,
     randomInt,
+    round,
 
     Queue,
     Stack
