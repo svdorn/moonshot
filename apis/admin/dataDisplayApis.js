@@ -297,20 +297,20 @@ async function GET_facets(req, res, next) {
         // if getting data from both sites, have to combine the facets
         if (site === "All") {
             // make an object that will store "facetName": usersArray
-            let facetsObj = {};
+            let facetsTable = {};
             // add the usersArrays for insights facets and learning facets
             insightsFacets.forEach(iFacet => {
-                facetsObj[iFacet._id.name] = iFacet.users;
+                facetsTable[iFacet._id.name] = iFacet.users;
             });
             learningFacets.forEach(lFacet => {
-                if (!facetsObj[lFacet._id.name]) {
-                    facetsObj[lFacet._id.name] = [];
+                if (!facetsTable[lFacet._id.name]) {
+                    facetsTable[lFacet._id.name] = [];
                 }
-                facetsObj[lFacet._id.name].push(lFacet.users);
+                facetsTable[lFacet._id.name] = facetsTable[lFacet._id.name].concat(lFacet.users);
             });
             // make the object an array with same format as initial return values from Promises
-            Object.keys(facetsObj).forEach(facetName => {
-                facets.push({ _id: { name: facetName }, users: facetsObj[facetName] });
+            Object.keys(facetsTable).forEach(facetName => {
+                facets.push({ _id: { name: facetName }, users: facetsTable[facetName] });
             });
         }
         // otherwise just return whichever array has values
