@@ -344,19 +344,15 @@ async function GET_facets(req, res, next) {
                 if (qScoresObj[response.answeredId] === undefined) {
                     qScoresObj[response.answeredId] = [];
                 }
-                // add the user's response divided by the number of questions -
-                // this is done because chronbach tests involve adding all
-                // answers together to get the final score of the test
-                qScoresObj[response.answeredId].push(response.answer / user.responses.length);
+                // add the user's responses
+                qScoresObj[response.answeredId].push(response.answer);
             });
         });
         // convert the questions scores object into an array
         const qScores = Object.keys(qScoresObj).map(qId => qScoresObj[qId]);
 
         // measure chronbach's alpha (inter reliability) of the facet
-        const cAlpha = chronbachsAlpha(facetScores, qScores);
-
-        console.log("cAlpha of ", facet._id.name, ": ", cAlpha);
+        const cAlpha = chronbachsAlpha(facetScores, qScores, true);
 
         // get the number of candidates who have this facet
         const n = facetScores.length;
