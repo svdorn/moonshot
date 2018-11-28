@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification } from "../../../../actions/usersActions";
 import { round } from "../../../../miscFunctions";
-import { Tabs, Tab, Dialog } from "@material-ui/core";
+import { Tabs, Tab, Dialog, CircularProgress } from "@material-ui/core";
 import {
     BarChart,
     Bar,
@@ -51,6 +51,7 @@ class Psych extends Component {
         }
 
         this.state = {
+            loading: false,
             site: sites[0],
             factors: [],
             facets: [],
@@ -77,6 +78,7 @@ class Psych extends Component {
             prevState.site !== this.state.site
         ) {
             this.updateData();
+            this.setState({ loading: true });
         }
     }
 
@@ -99,7 +101,7 @@ class Psych extends Component {
             .get("/api/admin/dataDisplay/factors", {
                 params: { ...this.state.GETparams, site: this.state.site }
             })
-            .then(result => self.setState({ factors: result.data.factors }))
+            .then(result => self.setState({ factors: result.data.factors, loading: false }))
             .catch(error => console.log("error getting factor data: ", error));
     };
 
@@ -110,7 +112,7 @@ class Psych extends Component {
             .get("/api/admin/dataDisplay/facets", {
                 params: { ...this.state.GETparams, site: this.state.site }
             })
-            .then(result => self.setState({ facets: result.data.facets }))
+            .then(result => self.setState({ facets: result.data.facets, loading: false }))
             .catch(error => console.log("error getting facet data: ", error));
     };
 
@@ -122,7 +124,7 @@ class Psych extends Component {
             .get("/api/admin/dataDisplay/questions", {
                 params: { ...this.state.GETparams, site: this.state.site }
             })
-            .then(response => self.setState({ questions: response.data.questions }))
+            .then(response => self.setState({ questions: response.data.questions, loading: false }))
             .catch(error => console.log("Error getting data: ", error));
     };
 
@@ -133,7 +135,7 @@ class Psych extends Component {
             .get("/api/admin/dataDisplay/outputs", {
                 params: { ...this.state.GETparams, site: this.state.site }
             })
-            .then(result => self.setState({ outputs: result.data.outputs }))
+            .then(result => self.setState({ outputs: result.data.outputs, loading: false }))
             .catch(error => console.log("error getting factor data: ", error));
     };
 
@@ -504,6 +506,7 @@ class Psych extends Component {
             <div style={{ textAlign: "center" }}>
                 {this.siteSelector()}
                 {this.categorySelector()}
+                {this.state.loading ? <CircularProgress /> : null}
                 {categoryDisplays[categoryIdx]()}
                 <Dialog open={compareOpen} onClose={this.closeCompare}>
                     <CompareFactors

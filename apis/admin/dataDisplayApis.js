@@ -436,7 +436,9 @@ async function GET_questions(req, res, next) {
                 if (!facetsObj[lFacet._id.name]) {
                     facetsObj[lFacet._id.name] = { _id: lFacet._id, users: [] };
                 }
-                facetsObj[lFacet._id.name].users.push(lFacet.users);
+                facetsObj[lFacet._id.name].users = facetsObj[lFacet._id.name].users.concat(
+                    lFacet.users
+                );
             });
             // make the object an array with same format as initial return values from Promises
             Object.keys(facetsObj).forEach(facetName => {
@@ -463,7 +465,7 @@ async function GET_questions(req, res, next) {
     facets.forEach(facet => {
         // remove users who don't have scores for this factor
         const users = facet.users.filter(user => typeof user.score === "number");
-        // a list of all users' scores on this facet
+        // a list of all users' scores on this facet multiplied by k (for chronbach's alpha)
         const facetScores = users.map(user => user.score);
         // so we can make a list of lists of question scores
         let qScoresObj = {};
@@ -473,30 +475,39 @@ async function GET_questions(req, res, next) {
             user.responses.forEach(response => {
                 if (qScoresObj[response.answeredId] === undefined) {
                     qScoresObj[response.answeredId] = {
-                        divided: [],
-                        unmodified: [],
+                        questionAnswers: [],
                         facetScoresWithoutQuestion: []
                     };
                 }
                 const numQuestions = user.responses.length;
-                // add the user's response divided by the number of questions -
-                // this is done because chronbach tests involve adding all
-                // answers together to get the final score of the test
-                qScoresObj[response.answeredId].divided.push(response.answer / numQuestions);
-                qScoresObj[response.answeredId].unmodified.push(response.answer);
+                // add the user's response
+                qScoresObj[response.answeredId].questionAnswers.push(response.answer);
                 // figure out what the facet score would be without this question
                 qScoresObj[response.answeredId].facetScoresWithoutQuestion.push(
-                    user.score * numQuestions - response.answer
+                    (user.score * numQuestions - response.answer) / (numQuestions - 1)
                 );
             });
         });
-        // convert the divided questions scores object into an array
-        const qScores = Object.keys(qScoresObj).map(qId => qScoresObj[qId].divided);
+        // convert the questions scores object into a 2d array
+        const qScores = Object.keys(qScoresObj).map(qId => qScoresObj[qId].questionAnswers);
 
         // measure chronbach's alpha (inter reliability) of the facet
-        const cAlpha = chronbachsAlpha(facetScores, qScores);
+        const cAlpha = chronbachsAlpha(facetScores, qScores, true);
 
-        console.log("cAlpha of ", facet._id.name, ": ", cAlpha);
+        if (facet._id.name === "Wholesomeness") {
+            console.log("FACET SCORES");
+            facetScores.forEach(score => {
+                console.log(score);
+            });
+            console.log("QUESTION SCORES");
+            qScores.forEach((scores, index) => {
+                console.log("QUESTION ", index + 1, ": ");
+                scores.forEach(score => {
+                    console.log(score);
+                });
+            });
+            console.log("cAlpha of ", facet._id.name, ": ", cAlpha);
+        }
 
         Object.keys(qScoresObj).forEach(qId => {
             // measure the chronbach's alpha of the facet without the question
@@ -505,55 +516,31 @@ async function GET_questions(req, res, next) {
                 // filter out this question
                 .filter(otherQId => otherQId !== qId)
                 // just get the value of the answer to the question
-                .map(otherQId => qScoresObj[otherQId].unmodified);
+                .map(otherQId => qScoresObj[otherQId].questionAnswers);
             // calculate the modified facet's chronbach's alpha
             const cAlphaWithoutQuestion = chronbachsAlpha(
                 qScoresObj[qId].facetScoresWithoutQuestion,
-                questionScoresWithoutQuestion
+                questionScoresWithoutQuestion,
+                true
             );
 
             // info about the question (body of the question, right option, left option)
             const questionInfo = questionsObj[qId];
 
             // this is what will be received by the front end
-            console.log("facet._id: ", facet._id);
             questionsToReturn.push({
                 question: questionInfo.body,
                 rightOption: questionInfo.rightOption,
                 leftOption: questionInfo.leftOption,
                 facetAlpha: cAlpha,
                 cAlphaWithoutQuestion,
-                average: mean(qScoresObj[qId].unmodified),
-                stdDev: standardDeviation(qScoresObj[qId].unmodified),
+                average: mean(qScoresObj[qId].questionAnswers),
+                stdDev: standardDeviation(qScoresObj[qId].questionAnswers),
                 factor: facet._id.factorName,
                 facet: facet._id.name
             });
         });
     });
-
-    // const fakeData = [
-    //     {
-    //         question: "What's yo poison?",
-    //         rightOption: "moydah",
-    //         leftOption: "luv",
-    //         interRel: 0.3,
-    //         average: 1.3,
-    //         stdDev: 2,
-    //         factor: "Honesty-Humility",
-    //         facet: "Shamefulness"
-    //     },
-    //     {
-    //         question:
-    //             "aa pa paweiflnj asdp asfkajsdlfj anjwodfipa 8sijahowpf9 adisfjlahsof awefpi auhwef lasjdf a?",
-    //         rightOption: "auhsd98fpuia nawf awef pawe",
-    //         leftOption: "aweoifhuawe falsdawef awefasdw awef wef wef",
-    //         interRel: 0.5,
-    //         average: -0.8,
-    //         stdDev: 1.69,
-    //         factor: "Emotionality",
-    //         facet: "Crybabiness"
-    //     }
-    // ];
 
     return res.status(200).send({ questions: questionsToReturn });
 }
@@ -709,22 +696,27 @@ async function GET_outputs(req, res, next) {
 // // calculate chronbach's alpha (inter reliability)
 // // scores = [ totalScore ] (array of scores received for this facet)
 // // items = [ [ itemScore ] ] (array of scores for each question)
-function chronbachsAlpha(scores, items) {
+function chronbachsAlpha(scores, items, multiplyScoresByK) {
+    // number of items
+    const k = items.length;
+    // number of items / (number of items - 1)
+    const kScalar = k / (k - 1);
+
     // get a list of the variances between users on each question
     // (variance within the question across the sample)
     let itemsVariances = items.map(itemAnswers => variance(itemAnswers));
     // sum of those variances
     const itemsVarianceSum = sum(itemsVariances);
 
+    // do this if your score is currently the average of the item responses
+    if (multiplyScoresByK) {
+        scores = scores.map(score => score * k);
+    }
+
     // variance between scores different test takers got for the facet
     let scoresVariance = variance(scores);
     // sum of variances within questions / variances in facet scores
     const varianceFraction = itemsVarianceSum / scoresVariance;
-
-    // number of items
-    const k = items.length;
-    // number of items / (number of items - 1)
-    const kScalar = k / (k - 1);
 
     // final chronbach's alpha
     return kScalar * (1 - varianceFraction);

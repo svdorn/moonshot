@@ -34,21 +34,21 @@ app.use(prerender);
 app.set("trust proxy", 1);
 
 // this is the testing database
+// let dbConnectLink =
+//     "mongodb://" +
+//     credentials.dbDevUsername +
+//     ":" +
+//     credentials.dbDevPassword +
+//     "@ds125146.mlab.com:25146/testmoonshot";
+// this is the real database
+// if (process.env.NODE_ENV === "production") {
 let dbConnectLink =
     "mongodb://" +
-    credentials.dbDevUsername +
+    credentials.dbUsername +
     ":" +
-    credentials.dbDevPassword +
-    "@ds125146.mlab.com:25146/testmoonshot";
-// this is the real database
-if (process.env.NODE_ENV === "production") {
-    dbConnectLink =
-        "mongodb://" +
-        credentials.dbUsername +
-        ":" +
-        credentials.dbPassword +
-        "@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159";
-}
+    credentials.dbPassword +
+    "@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159";
+// }
 // options for db connection
 const dbOptions = { useNewUrlParser: true };
 // connect to mLab
