@@ -202,7 +202,11 @@ class CompareFactors extends Component {
     // return a scatter plot comparison between two factors (if there are exactly 2)
     scatterPlot = () => {
         if (this.props.factors.length !== 2) {
-            return null;
+            return (
+                <div style={{ textAlign: "center", margin: "200px auto" }}>
+                    Need two factors/facets for a scatter plot.
+                </div>
+            );
         }
 
         const { scatter } = this.state;
@@ -334,8 +338,8 @@ class CompareFactors extends Component {
                     <Tab label="Line" value="line" style={{ color: "white" }} />
                     <Tab label="GCA" value="gca" style={{ color: "white" }} />
                 </Tabs>
-                {chartType === "line" ? this.lineChart() : null}
                 {chartType === "scatter" ? this.scatterPlot() : null}
+                {chartType === "line" ? this.lineChart() : null}
                 {chartType === "gca" ? this.compareToGCA() : null}
             </div>
         );
