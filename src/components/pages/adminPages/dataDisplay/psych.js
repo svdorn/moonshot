@@ -219,17 +219,11 @@ class Psych extends Component {
     getComparableFacs = () => {
         let { categoryIdx, compareOpen } = this.state;
 
-        // if (!compareOpen) {
-        //     return [];
-        // }
-
         // find out if we're using factors or facets
         const facName = categoryIdx === 0 ? "factors" : "facets";
         const comparableType = categoryIdx === 0 ? "comparableFactors" : "comparableFacets";
         let facArray = this.state[facName];
         let compareArray = this.state[comparableType];
-
-        console.log("compareArray: ", compareArray);
 
         return compareArray.map(idx => facArray[idx]);
     };
@@ -418,10 +412,7 @@ class Psych extends Component {
                     >
                         <img
                             alt=""
-                            className={
-                                "checkMark" +
-                                self.state.comparableFacets.some(cf => cf.name === facet.name)
-                            }
+                            className={"checkMark" + self.state.comparableFacets.includes(fIdx)}
                             src={"/icons/CheckMarkRoundedWhite" + self.props.png}
                         />
                     </div>
