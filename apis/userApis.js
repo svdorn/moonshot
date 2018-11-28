@@ -670,11 +670,10 @@ async function POST_updateOnboardingStep(req, res) {
 // signs the user out by destroying the user session
 function POST_signOut(req, res) {
     // remove the user id and verification token from the session
-    req.session.userId = "DIGGLEDY DANGLE";
+    req.session.userId = null;
     req.session.verificationToken = null;
     // save the updated session
     req.session.save(function(err) {
-        console.log("HERE. req.session: ", req.session);
         if (err) {
             console.log("error removing user session: ", err);
             return res.status(500).send("Error logging out.");
