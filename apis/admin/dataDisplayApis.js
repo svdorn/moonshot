@@ -490,20 +490,20 @@ async function GET_questions(req, res, next) {
         // measure chronbach's alpha (inter reliability) of the facet
         const cAlpha = chronbachsAlpha(facetScores, qScores, true);
 
-        if (facet._id.name === "Wholesomeness") {
-            console.log("FACET SCORES");
-            facetScores.forEach(score => {
-                console.log(score);
-            });
-            console.log("QUESTION SCORES");
-            qScores.forEach((scores, index) => {
-                console.log("QUESTION ", index + 1, ": ");
-                scores.forEach(score => {
-                    console.log(score);
-                });
-            });
-            console.log("cAlpha of ", facet._id.name, ": ", cAlpha);
-        }
+        // if (facet._id.name === "Wholesomeness") {
+        //     console.log("FACET SCORES");
+        //     facetScores.forEach(score => {
+        //         console.log(score);
+        //     });
+        //     console.log("QUESTION SCORES");
+        //     qScores.forEach((scores, index) => {
+        //         console.log("QUESTION ", index + 1, ": ");
+        //         scores.forEach(score => {
+        //             console.log(score);
+        //         });
+        //     });
+        //     console.log("cAlpha of ", facet._id.name, ": ", cAlpha);
+        // }
 
         Object.keys(qScoresObj).forEach(qId => {
             // measure the chronbach's alpha of the facet without the question
