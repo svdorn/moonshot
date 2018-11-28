@@ -292,7 +292,7 @@ class ClaimPageModal extends Component {
                     </a>
                     {" and "}
                     <a
-                        href="https://www.docdroid.net/pGBcFSh/moonshot-insights-agreement.pdf"
+                        href="https://docdro.id/1iTCvMj"
                         target="_blank"
                         className="primary-cyan hover-primary-cyan"
                     >
