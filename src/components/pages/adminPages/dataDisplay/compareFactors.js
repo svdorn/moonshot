@@ -41,7 +41,7 @@ class CompareFactors extends Component {
 
         this.state = {
             dot: false,
-            chartType: "line",
+            chartType: "scatter",
             scatter: {
                 points: [],
                 bflPoints: [],
@@ -330,8 +330,8 @@ class CompareFactors extends Component {
         return (
             <div className="background-primary-black-dark primary-white">
                 <Tabs value={chartType} onChange={this.handleChartChange} centered>
-                    <Tab label="Line" value="line" style={{ color: "white" }} />
                     <Tab label="Scatter" value="scatter" style={{ color: "white" }} />
+                    <Tab label="Line" value="line" style={{ color: "white" }} />
                     <Tab label="GCA" value="gca" style={{ color: "white" }} />
                 </Tabs>
                 {chartType === "line" ? this.lineChart() : null}
