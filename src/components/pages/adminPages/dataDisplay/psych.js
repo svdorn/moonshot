@@ -77,8 +77,10 @@ class Psych extends Component {
             prevState.categoryIdx !== this.state.categoryIdx ||
             prevState.site !== this.state.site
         ) {
-            this.updateData();
+            // show the loading circle
             this.setState({ loading: true });
+            // retrieve new data
+            this.updateData();
         }
     }
 
@@ -153,21 +155,25 @@ class Psych extends Component {
     handleCheckMarkClick = fac => {
         let { categoryIdx } = this.state;
         // find out if we're using factors or facets
-        const facType = categoryIdx === 0 ? "comparableFactors" : "comparableFacets";
-        let facArray = this.state[facType];
-        console.log("facArray: ", facArray);
-        // go through each factor/facet that's already clicked
-        for (let cfIdx = 0; cfIdx < facArray.length; cfIdx++) {
-            // if it's the same as the one that was clicked ...
-            if (facArray[cfIdx].name === fac.name) {
-                // ... remove it, then set the state to reflect the change
-                facArray = facArray.slice(0, cfIdx).concat(facArray.slice(cfIdx + 1));
-                return this.setState({ [facType]: facArray });
-            }
+        const facName = categoryIdx === 0 ? "factors" : "facets";
+        const comparableType = categoryIdx === 0 ? "comparableFactors" : "comparableFacets";
+        let compareArray = this.state[comparableType];
+        let facArray = this.state[facName];
+
+        // get the index of this fac in its array
+        const facIndex = facArray.findIndex(f => f.name === fac.name);
+
+        // if the "facs to compare" array has that index ...
+        const idx = compareArray.indexOf(facIndex);
+        if (idx > -1) {
+            // ... remove the index
+            compareArray = compareArray.slice(0, idx).concat(compareArray.slice(idx + 1));
+        } else {
+            // ... otherwise add the index
+            compareArray.push(facIndex);
         }
-        // if the factor didn't exists within the array, add it, then set state
-        facArray.push(fac);
-        this.setState({ [facType]: facArray });
+
+        this.setState({ [comparableType]: compareArray });
     };
 
     // pop up a modal comparing two factors/facets
@@ -186,6 +192,19 @@ class Psych extends Component {
     // close the comparison dialog
     closeCompare = () => {
         this.setState({ compareOpen: false });
+    };
+
+    // get a list of factors/facets for the CompareFactors component
+    getComparableFacs = () => {
+        let { categoryIdx, compareOpen } = this.state;
+
+        // find out if we're using factors or facets
+        const facName = categoryIdx === 0 ? "factors" : "facets";
+        const comparableType = categoryIdx === 0 ? "comparableFactors" : "comparableFacets";
+        let facArray = this.state[facName];
+        let compareArray = this.state[comparableType];
+
+        return compareArray.map(idx => facArray[idx]);
     };
 
     // change whether we see a line chart or a bar chart
@@ -233,7 +252,7 @@ class Psych extends Component {
     factors = () => {
         const self = this;
 
-        const factorGraphs = this.state.factors.map(factor => {
+        const factorGraphs = this.state.factors.map((factor, idx) => {
             // the parts of the chart that are common to Bar and Line Charts
             const chartParts = [
                 <CartesianGrid strokeDasharray="3 3" />,
@@ -283,10 +302,7 @@ class Psych extends Component {
                     >
                         <img
                             alt=""
-                            className={
-                                "checkMark" +
-                                self.state.comparableFactors.some(cf => cf.name === factor.name)
-                            }
+                            className={"checkMark" + self.state.comparableFactors.includes(idx)}
                             src={"/icons/CheckMarkRoundedWhite" + self.props.png}
                         />
                     </div>
@@ -375,10 +391,7 @@ class Psych extends Component {
                     >
                         <img
                             alt=""
-                            className={
-                                "checkMark" +
-                                self.state.comparableFacets.some(cf => cf.name === facet.name)
-                            }
+                            className={"checkMark" + self.state.comparableFacets.includes(fIdx)}
                             src={"/icons/CheckMarkRoundedWhite" + self.props.png}
                         />
                     </div>
@@ -510,11 +523,9 @@ class Psych extends Component {
                 {categoryDisplays[categoryIdx]()}
                 <Dialog open={compareOpen} onClose={this.closeCompare}>
                     <CompareFactors
-                        factors={
-                            categoryIdx === 0
-                                ? this.state.comparableFactors
-                                : this.state.comparableFacets
-                        }
+                        facs={this.getComparableFacs()}
+                        facType={categoryIdx === 0 ? "factors" : "facets"}
+                        site={this.state.site}
                     />
                 </Dialog>
             </div>
