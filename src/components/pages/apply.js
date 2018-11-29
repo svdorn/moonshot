@@ -134,7 +134,7 @@ class Apply extends Component {
             <Select
                 disableUnderline={true}
                 classes={{
-                    root: "selectRootWhite font20px font16pxUnder500",
+                    root: "select-no-focus-color selectRootWhite font20px font16pxUnder500",
                     icon: "selectIconWhiteImportant selectIconMargin"
                 }}
                 value={position}
