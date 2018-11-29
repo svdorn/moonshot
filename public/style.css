@@ -3797,6 +3797,12 @@ button.link {
     }
 }
 
+@media only screen and (min-width: 451px) {
+    .under450only {
+        display: none;
+    }
+}
+
 @media only screen and (min-width: 401px) {
     .under400only {
         display: none;

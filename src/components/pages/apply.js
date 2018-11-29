@@ -242,52 +242,6 @@ class Apply extends Component {
         );
     }
 
-    // // info for an admin coming to preview this page
-    // adminInformation() {
-    //     if (!this.props.currentUser.confirmEmbedLink) {
-    //         var buttonText = "Continue To Invite Candidates ";
-    //         var onClick = () => this.dashboardAndModal();
-    //     } else {
-    //         var buttonText = "Invite Candidates ";
-    //         var onClick = () => this.openInviteCandidatesModal();
-    //     }
-    //     return (
-    //         <div>
-    //             <div>
-    //                 <button
-    //                     className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
-    //                     styleName="next-button"
-    //                     style={{ padding: "6px 20px" }}
-    //                 >
-    //                     <span>Next &#8594;</span>
-    //                 </button>
-    //                 <HoverTip
-    //                     className="font14px secondary-gray"
-    //                     style={{ marginTop: "40px", marginLeft: "-6px" }}
-    //                     text="After candidates press next, they sign up to complete your evaluation."
-    //                 />
-    //             </div>
-    //             <div styleName="employer-box">
-    //                 <div>
-    //                     This is {makePossessive(this.state.company)} candidate invite page. When
-    //                     candidates click on your link, they will be taken here. New evaluations will
-    //                     automatically be added to your dropdown list above.{" "}
-    //                     <span
-    //                         className="primary-cyan clickable"
-    //                         onClick={this.openAddPositionModal}
-    //                     >
-    //                         Add evaluations
-    //                     </span>{" "}
-    //                     for other open positions.
-    //                 </div>
-    //                 <div onClick={onClick}>
-    //                     {buttonText} <img src={`/icons/ArrowBlue${this.props.png}`} />
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     );
-    // }
-
     // info for somebody about to create an account
     claimPage() {
         return (

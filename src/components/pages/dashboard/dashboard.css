@@ -680,6 +680,17 @@
     min-height: 300px;
 }
 
+.modal-position-info {
+    padding: 40px 50px;
+    background-color: var(--primary-black-dark);
+    color: var(--secondary-gray);
+    min-width: 500px;
+    min-height: 408px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .modal-verification {
     padding: 20px;
     background-color: var(--primary-black-dark);
@@ -821,6 +832,12 @@
 
     .add-position-header {
         margin-bottom: 20px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .modal-position-info {
+        min-width: 400px;
     }
 }
 
@@ -983,5 +1000,13 @@
 
     .gca-image {
         left: 50%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    @media screen and (max-width: 600px) {
+        .modal-position-info {
+            min-width: 0;
+        }
     }
 }

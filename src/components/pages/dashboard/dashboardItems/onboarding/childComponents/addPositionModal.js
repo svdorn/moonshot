@@ -196,7 +196,10 @@ class AddPositionModal extends Component {
                             </div>
                         </div>
                     ) : null}
-                    <div style={{ margin: "24px auto 14px" }} className="primary-white">
+                    <div
+                        style={{ margin: "24px -30px 14px" }}
+                        className="primary-white font14pxUnder400 font12pxUnder350"
+                    >
                         <div
                             className="checkbox smallCheckbox whiteCheckbox"
                             onClick={this.handleClickIsManager.bind(this)}
@@ -207,7 +210,7 @@ class AddPositionModal extends Component {
                                 src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             />
                         </div>
-                        <span style={{ paddingLeft: "5px" }}>{"Position is a manager role"}</span>
+                        <span style={{ paddingLeft: "5px" }}>Position is a manager role</span>
                         <div className="info-hoverable">i</div>
                         <HoverTip
                             className="font10px secondary-gray"

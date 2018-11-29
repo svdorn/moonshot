@@ -168,10 +168,6 @@ class AddPositionDialog extends Component {
         }
     }
 
-    // inviteCandidates() {
-    //     this.props.closeAddPositionModal();
-    // }
-
     render() {
         const style = {
             separator: {
@@ -267,7 +263,7 @@ class AddPositionDialog extends Component {
                                 src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             />
                         </div>
-                        {"Position is a manager role"}
+                        Position is a manager role
                     </div>
                     <RaisedButton
                         label="Continue"

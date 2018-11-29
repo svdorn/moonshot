@@ -73,19 +73,21 @@ class IntroductionModal extends Component {
         let frame = null;
         if (this.state.frame === "addPosition") {
             frame = (
-                <AddPositionModal
-                    close={this.close}
-                    title={this.state.title}
-                    role={this.state.role}
-                />
+                <div styleName="modal-position-info">
+                    <AddPositionModal
+                        close={this.close}
+                        title={this.state.title}
+                        role={this.state.role}
+                    />
+                </div>
             );
         } else {
-            frame = this.makeWelcomeFrame();
+            frame = <div styleName="modal-signup">{this.makeWelcomeFrame()}</div>;
         }
 
         return (
             <Dialog open={!!this.props.open} maxWidth={false} onClose={this.close}>
-                <div styleName="modal-signup">{frame}</div>
+                {frame}
             </Dialog>
         );
     }
