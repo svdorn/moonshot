@@ -89,11 +89,11 @@ const sevenDaysInSeconds = 7 * 24 * 60 * 60;
 app.use(
     session({
         secret: credentials.secretString,
-        unset: "destroy", // delete the session when set to null or req.session.destroy() used
+        resave: true, // saves session even if un-modified
         saveUninitialized: false, // doesn't save a session if it is new but not modified
+        unset: "destroy", // delete the session when set to null or req.session.destroy() used
         rolling: true, // resets maxAge on session when user uses site again
         proxy: true, // must be true since we are using a reverse proxy
-        resave: true, // saves session even if un-modified
         cookie: {
             maxAge: 1000 * sevenDaysInSeconds, // 7 days in milliseconds
             secure: !helperFunctions.devMode, // only make the cookie if accessing via https

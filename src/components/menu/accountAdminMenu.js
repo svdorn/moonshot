@@ -209,7 +209,7 @@ class AccountAdminMenu extends Component {
         }
 
         // moonshot logo
-        const home = user ? "/dashboard" : "/";
+        const home = user ? "/dashboard" : "/explore";
         let logo = (
             <img
                 alt="Moonshot Logo"
