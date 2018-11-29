@@ -142,25 +142,25 @@ class CompareFactors extends Component {
         this.setState({ gcaScatterFacs });
     }
 
-    // return a line chart comparison between the factors
+    // return a line chart comparison between the factors/facets
     lineChart = () => {
-        const { factors } = this.props;
+        const { facs } = this.props;
 
         // create a list of the combined data points
-        const data = factors[0].dataPoints.map((point, pointIdx) => {
+        const data = facs[0].dataPoints.map((point, pointIdx) => {
             let combinedPoint = {
                 // "3.75" or "-2.25" etc
                 name: point.name
             };
-            // add the quantity for each factor
-            factors.forEach(factor => {
-                combinedPoint[factor.name] = factor.dataPoints[pointIdx].quantity;
+            // add the quantity for each factor/facet
+            facs.forEach(fac => {
+                combinedPoint[fac.name] = fac.dataPoints[pointIdx].quantity;
             });
             return combinedPoint;
         });
 
         // create the Lines for the chart
-        const lines = factors.map((f, idx) => (
+        const lines = facs.map((f, idx) => (
             <Line
                 key={`${f.name} Line`}
                 type="monotone"
@@ -203,7 +203,7 @@ class CompareFactors extends Component {
         ];
     };
 
-    // return a scatter plot comparison between two factors (if there are exactly 2)
+    // return a scatter plot comparison between two factors/facets (if there are exactly 2)
     scatterPlot = () => {
         if (this.props.facs.length !== 2) {
             return (
@@ -271,7 +271,7 @@ class CompareFactors extends Component {
         ];
     };
 
-    // compare the 1+ factors to GCA
+    // compare the 1+ factors/facets to GCA
     compareToGCA = () => {
         let stats = [];
         const scatters = this.state.gcaScatterFacs.map((fac, idx) => {
