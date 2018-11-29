@@ -54,7 +54,7 @@ const boxTexts = [
     {
         title: "Scale Your Culture",
         body:
-            "Hire candidates that not only fit your company culture, but also offer new and diverse perspectives."
+            "Hire candidates who not only fit your company culture, but also offer new and diverse perspectives."
     },
     {
         title: "Keep Turnover Low",
