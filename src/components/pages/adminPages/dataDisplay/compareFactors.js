@@ -7,6 +7,7 @@ import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
 import { button } from "../../../../classes";
 import { Tabs, Tab } from "@material-ui/core";
+import { round } from "../../../../miscFunctions";
 
 import "./dataDisplay.css";
 
@@ -214,6 +215,14 @@ class CompareFactors extends Component {
 
         const { scatter } = this.state;
 
+        let intercept = round(scatter.intercept, 2);
+        let absIntercept = intercept;
+        let plusMinus = "+";
+        if (intercept < 0) {
+            absIntercept = intercept * -1;
+            plusMinus = "-";
+        }
+
         return [
             <ScatterChart
                 width={600}
@@ -245,18 +254,18 @@ class CompareFactors extends Component {
                 <div>
                     Best Fit Line:
                     <span style={{ marginLeft: "10px" }}>
-                        {scatter.y} = {scatter.slope}
-                        {scatter.x} + {scatter.intercept}
+                        {scatter.y} = {round(scatter.slope, 2)}
+                        {scatter.x} {plusMinus} {absIntercept}
                     </span>
                 </div>
                 <div>
-                    Slope: <span>{scatter.slope}</span>
+                    Slope: <span>{round(scatter.slope, 2)}</span>
                 </div>
                 <div>
-                    Intercept: <span>{scatter.intercept}</span>
+                    Intercept: <span>{intercept}</span>
                 </div>
                 <div>
-                    Correlation: <span>{scatter.correlation}</span>
+                    Correlation: <span>{round(scatter.correlation, 2)}</span>
                 </div>
             </div>
         ];
