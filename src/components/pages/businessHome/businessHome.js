@@ -400,7 +400,7 @@ class BusinessHome extends Component {
                 title: "How We Do It",
                 position: "right",
                 body:
-                    "Candidates take a ~20-minute assessment comprised of a revolutionary personality test and an abstract problem-solving quiz."
+                    "Candidates take a 22-minute evaluation comprised of our personality test and abstract-problem solving quiz."
             }
         ];
 
