@@ -273,6 +273,8 @@ class CompareFactors extends Component {
 
     // compare the 1+ factors/facets to GCA
     compareToGCA = () => {
+        return <div style={{ margin: "200px auto", textAlign: "center" }}>Not yet implemented</div>;
+
         let stats = [];
         const scatters = this.state.gcaScatterFacs.map((fac, idx) => {
             stats.push(
