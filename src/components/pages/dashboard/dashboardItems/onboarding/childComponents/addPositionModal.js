@@ -192,7 +192,7 @@ class AddPositionModal extends Component {
                         <div>
                             <div styleName="add-position-select-type-in-modal">
                                 <div className="primary-cyan">Select a position type:</div>
-                                <div>{this.makeDropdown(this.state.positionType)}</div>
+                                {this.makeDropdown(this.state.positionType)}
                             </div>
                         </div>
                     ) : null}

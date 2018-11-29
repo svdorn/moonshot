@@ -192,7 +192,12 @@
     font-size: 16px;
 }
 .add-position-select-type-in-modal {
-    margin-top: 10px;
+    margin: 10px -25px 0;
+}
+.add-position-select-type-in-modal > div:first-child {
+    margin-right: 10px;
+    margin-left: 20px;
+    display: inline-block;
 }
 .add-position-select-type > div {
     display: inline-block;
@@ -1004,9 +1009,15 @@
 }
 
 @media screen and (max-width: 500px) {
-    @media screen and (max-width: 600px) {
-        .modal-position-info {
-            min-width: 0;
-        }
+    .modal-position-info {
+        min-width: 0;
+    }
+
+    .add-position-select-type-in-modal > div:first-child {
+        margin: 0;
+        display: block;
+    }
+    .add-position-select-type-in-modal > div:nth-child(2) {
+        margin-left: 15px;
     }
 }
