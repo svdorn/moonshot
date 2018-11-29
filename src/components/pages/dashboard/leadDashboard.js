@@ -139,9 +139,6 @@ class GuestDashboard extends Component {
             </Dialog>
         );
 
-        // hide the dashboard items until onboarding is complete
-        const hideItems = true;
-
         return (
             <div
                 className={
@@ -166,10 +163,11 @@ class GuestDashboard extends Component {
                 </div>
                 <div styleName="dashboard">
                     {activity}
-                    <DashboardItem type="Candidates" width={1} blurred={hideItems} />
-                    <DashboardItem type="Evaluations" width={1} blurred={hideItems} />
-                    <DashboardItem type="Employees" width={1} blurred={hideItems} />
-                    {/*<DashboardItem type="Billing" width={1} />*/}
+                    <DashboardItem type="Candidates" width={1} blurred={true} />
+                    <DashboardItem type="Evaluations" width={1} blurred={true} />
+                    <DashboardItem type="Employees" width={1} blurred={true} />
+                    <DashboardItem type="Account" width={1} blurred={true} />
+                    <DashboardItem type="Billing" width={1} blurred={true} demo={true} />
                 </div>
             </div>
         );
