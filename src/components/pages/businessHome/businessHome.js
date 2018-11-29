@@ -319,7 +319,7 @@ class BusinessHome extends Component {
                                 <textarea
                                     id="get-started-input"
                                     styleName="get-started-input"
-                                    className="font26px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
+                                    className="font24px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
                                     type="text"
                                     name="position"
                                     placeholder="Who do you need to hire?"

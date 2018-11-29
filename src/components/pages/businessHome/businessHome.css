@@ -86,7 +86,7 @@
     margin: var(--get-started-border-width);
     border-radius: 8px;
     border: none;
-    padding: 5px 10px 0;
+    padding: 7px 10px 0;
     background-color: var(--primary-black-dark);
     color: white;
     position: relative;
@@ -96,7 +96,7 @@
     overflow-y: hidden;
 }
 .get-started-input::placeholder {
-    color: var(--secondary-gray);
+    color: rgb(195, 195, 195);
     font-style: italic;
 }
 .get-started-input:focus::placeholder {
