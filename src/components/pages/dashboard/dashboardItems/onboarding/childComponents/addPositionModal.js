@@ -197,7 +197,7 @@ class AddPositionModal extends Component {
                         </div>
                     ) : null}
                     <div
-                        style={{ margin: "24px -30px 14px" }}
+                        style={{ margin: "12px -30px 14px" }}
                         className="primary-white font14pxUnder400 font12pxUnder350"
                     >
                         <div

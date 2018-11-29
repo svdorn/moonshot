@@ -192,7 +192,7 @@
     font-size: 16px;
 }
 .add-position-select-type-in-modal {
-    margin: 10px -25px 0;
+    margin: 20px -25px 0;
 }
 .add-position-select-type-in-modal > div:first-child {
     margin-right: 10px;
@@ -686,11 +686,11 @@
 }
 
 .modal-position-info {
-    padding: 40px 50px;
+    padding: 30px 50px;
     background-color: var(--primary-black-dark);
     color: var(--secondary-gray);
     min-width: 500px;
-    min-height: 408px;
+    min-height: 361px;
     display: flex;
     align-items: center;
     justify-content: center;
