@@ -183,7 +183,6 @@ class AddPositionModal extends Component {
                                 name="position"
                                 label="Position Name"
                                 validate={[required]}
-                                required={true}
                                 placeholder="iOS Developer"
                             />
                         </div>
