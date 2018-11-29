@@ -379,7 +379,7 @@ class BusinessHome extends Component {
                         styleName="no-credit-card"
                         className="font16px font14pxUnder900 font12pxUnder400"
                     >
-                        See everything immediately. <br className="under550only" />
+                        It's free until you make your first hire. <br className="under550only" />
                         No credit card required.
                     </div>
                 </div>
