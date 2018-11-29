@@ -690,32 +690,35 @@ async function GET_scatter(req, res, next) {
     // get all the users
     try {
         var users = await Users.find({ "psychometricTest.endDate": { $exists: true } }).select(
-            "psychometricTest.factors"
+            "psychometricTest.factors.score psychometricTest.factors.name psychometricTest.factors.facets.name psychometricTest.factors.facets.score"
         );
     } catch (e) {
         console.log("Error getting scatter data: ", e);
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
-    console.log("facNames[0]: ", facNames[0]);
-    console.log("facNames[1]: ", facNames[1], "\n\n");
-
     // get a data point from each user
     let points = users.map(user => {
-        const userFactors = user.psychometricTest.factors;
+        // if using factors, make the facs array be all the factors
+        if (facType === "factors") {
+            var userFacs = user.psychometricTest.factors;
+        }
+        // if using facets, make it all be facets
+        else {
+            var userFacs = [];
+            user.psychometricTest.factors.forEach(factor => {
+                factor.facets.forEach(facet => userFacs.push(facet));
+            });
+        }
 
-        const fac1 = userFactors.find(f => f.name === facNames[0]);
-        const fac2 = userFactors.find(f => f.name === facNames[1]);
-        console.log("fac1: ", fac1);
-        console.log("fac2: ", fac2);
+        const fac1 = userFacs.find(f => f.name === facNames[0]);
+        const fac2 = userFacs.find(f => f.name === facNames[1]);
 
         return {
             x: fac1 ? fac1.score : null,
             y: fac2 ? fac2.score : null
         };
     });
-
-    console.log("points before filter: ", points);
 
     // filter out any null data points
     points = points.filter(p => typeof p.x === "number" && typeof p.y === "number");
