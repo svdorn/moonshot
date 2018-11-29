@@ -543,7 +543,11 @@ class Psych extends Component {
                 {this.state.loading ? <CircularProgress /> : null}
                 {categoryDisplays[categoryIdx]()}
                 <Dialog open={compareOpen} onClose={this.closeCompare}>
-                    <CompareFactors factors={this.getComparableFacs()} />
+                    <CompareFactors
+                        facs={this.getComparableFacs()}
+                        facType={categoryIdx === 0 ? "factors" : "facets"}
+                        site={this.state.site}
+                    />
                 </Dialog>
             </div>
         );

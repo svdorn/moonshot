@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import axios from "axios";
 import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
 import { button } from "../../../../classes";
@@ -39,6 +40,14 @@ class CompareFactors extends Component {
     constructor(props) {
         super(props);
 
+        const { currentUser } = props;
+        if (currentUser) {
+            var { _id: userId, verificationToken } = currentUser;
+        } else {
+            var userId = undefined;
+            var verificationToken = undefined;
+        }
+
         this.state = {
             dot: false,
             chartType: "scatter",
@@ -60,7 +69,8 @@ class CompareFactors extends Component {
                     intercept: 0,
                     correlation: 0
                 }
-            ]
+            ],
+            GETparams: { userId, verificationToken }
         };
     }
 
@@ -78,26 +88,19 @@ class CompareFactors extends Component {
     getScatterData() {
         console.log("getting scatter data");
 
-        const points = [
-            { x: 1, y: 3 },
-            { x: 4, y: -2 },
-            { x: -3, y: 1 },
-            { x: 1, y: 5 },
-            { x: 2.4, y: -3 },
-            { x: -4.6, y: 5 }
-        ];
-        const bflPoints = [{ x: -6, y: -4 }, { x: 6, y: 4 }];
+        const self = this;
 
-        const x = "Agreeableness";
-        const y = "Honesty-Humility";
-
-        const slope = 2.3;
-        const intercept = 1.9;
-        const correlation = 0.55;
-
-        const scatter = { points, bflPoints, x, y, slope, intercept, correlation };
-
-        this.setState({ scatter });
+        axios
+            .get("/api/admin/dataDisplay/scatter", {
+                params: {
+                    ...this.state.GETparams,
+                    facType: this.props.facType,
+                    facNames: this.props.facs.map(fac => fac.name),
+                    site: this.props.site
+                }
+            })
+            .then(response => self.setState({ scatter: response.data.scatter }))
+            .catch(error => console.log("error getting scatter data: ", error));
     }
 
     // get data for the GCA scatter plot
@@ -201,7 +204,7 @@ class CompareFactors extends Component {
 
     // return a scatter plot comparison between two factors (if there are exactly 2)
     scatterPlot = () => {
-        if (this.props.factors.length !== 2) {
+        if (this.props.facs.length !== 2) {
             return (
                 <div style={{ textAlign: "center", margin: "200px auto" }}>
                     Need two factors/facets for a scatter plot.
@@ -325,7 +328,7 @@ class CompareFactors extends Component {
     };
 
     render() {
-        if (this.props.factors.length < 1) {
+        if (this.props.facs.length < 1) {
             return "Need at least one factor/facet to show.";
         }
 

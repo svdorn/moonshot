@@ -370,7 +370,6 @@ async function GET_facets(req, res, next) {
     return res.status(200).send({ facets: facetObjs });
 }
 
-// TODO
 // get stats for the questions pertaining to each facet
 async function GET_questions(req, res, next) {
     const { site, userId, verificationToken } = sanitize(req.query);
@@ -669,6 +668,97 @@ async function GET_outputs(req, res, next) {
     return res.status(200).send({ outputs });
 }
 
+// get data on individual users for a scatter plot comparing to factors/facets
+async function GET_scatter(req, res, next) {
+    const { site, facNames, facType, userId, verificationToken } = sanitize(req.query);
+
+    // get the user requesting the info
+    try {
+        var user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+    if (!user.admin) {
+        return res.status(403).send({ message: errors.PERMISSIONS_ERROR });
+    }
+
+    // check for invalid arguments
+    if (facNames.length !== 2) {
+        return res.status(400).send({ message: "Can only compare 2 factors/facets." });
+    }
+
+    // get all the users
+    try {
+        var users = await Users.find({ "psychometricTest.endDate": { $exists: true } }).select(
+            "psychometricTest.factors"
+        );
+    } catch (e) {
+        console.log("Error getting scatter data: ", e);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    console.log("facNames[0]: ", facNames[0]);
+    console.log("facNames[1]: ", facNames[1], "\n\n");
+
+    // get a data point from each user
+    let points = users.map(user => {
+        const userFactors = user.psychometricTest.factors;
+
+        const fac1 = userFactors.find(f => f.name === facNames[0]);
+        const fac2 = userFactors.find(f => f.name === facNames[1]);
+        console.log("fac1: ", fac1);
+        console.log("fac2: ", fac2);
+
+        return {
+            x: fac1 ? fac1.score : null,
+            y: fac2 ? fac2.score : null
+        };
+    });
+
+    console.log("points before filter: ", points);
+
+    // filter out any null data points
+    points = points.filter(p => typeof p.x === "number" && typeof p.y === "number");
+
+    // find the correlation coefficient
+    const correlation = correlationCoefficient(points);
+
+    // find the best fit line
+    // const { slope, intercept } = bestFitLine(points);
+
+    // const points = [{ x: 1, y: 5 }, { x: 2.4, y: -3 }, { x: -4.6, y: 5 }];
+    const bflPoints = [{ x: -6, y: -4 }, { x: 6, y: 4 }];
+
+    const slope = 2.3;
+    const intercept = 1.9;
+
+    // make sure the x and y names are correct
+    const x = facNames[0];
+    const y = facNames[1];
+
+    const scatter = { points, bflPoints, x, y, slope, intercept, correlation };
+
+    return res.status(200).send({ scatter });
+}
+
+// find the correlation between two variables
+// points = [ {x: NUMBER, y: NUMBER}, ... ]
+function correlationCoefficient(points) {
+    const n = points.length;
+    const sumX = sum(points.map(p => p.x));
+    const sumY = sum(points.map(p => p.y));
+    const sumXY = sum(points.map(p => p.x * p.y));
+    const sumXSquared = sum(points.map(p => p.x * p.x));
+    const sumYSquared = sum(points.map(p => p.y * p.y));
+
+    const numerator = n * sumXY - sumX * sumY;
+    const denominator = Math.sqrt(
+        (n * sumXSquared - sumX * sumX) * (n * sumYSquared - sumY * sumY)
+    );
+
+    return numerator / denominator;
+}
+
 // calculate chronbach's alpha (inter reliability)
 // scores = [ totalScore ] (array of scores received for this facet)
 // items = [ [ itemScore ] ] (array of scores for each question)
@@ -798,10 +888,12 @@ app.get("/admin/dataDisplay/factors", GET_factors);
 app.get("/admin/dataDisplay/facets", GET_facets);
 app.get("/admin/dataDisplay/questions", GET_questions);
 app.get("/admin/dataDisplay/outputs", GET_outputs);
+app.get("/admin/dataDisplay/scatter", GET_scatter);
 
 module.exports = {
     GET_factors,
     GET_facets,
     GET_questions,
-    GET_outputs
+    GET_outputs,
+    GET_scatter
 };
