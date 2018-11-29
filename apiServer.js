@@ -61,10 +61,8 @@ mongoose.connect(
 );
 
 var db = mongoose.connection;
-db.on("connected", function() {
-    console.log(success("Connected to MongoDB."));
-});
-db.on("error", console.error.bind(console, "# MongoDB - connection error: "));
+db.on("connected", () => console.log(success("Connected to MongoDB.")));
+db.on("error", e => console.log(error("MongoDB connection error: "), e));
 
 // import all the api functions
 const userApis = require("./apis/userApis");
