@@ -176,27 +176,6 @@ class Psych extends Component {
         this.setState({ [comparableType]: compareArray });
     };
 
-    // // mark a factor/facet to compare
-    // handleCheckMarkClick = fac => {
-    //     let { categoryIdx } = this.state;
-    //     // find out if we're using factors or facets
-    //     const facType = categoryIdx === 0 ? "comparableFactors" : "comparableFacets";
-    //     let facArray = this.state[facType];
-    //
-    //     // go through each factor/facet that's already clicked
-    //     for (let cfIdx = 0; cfIdx < facArray.length; cfIdx++) {
-    //         // if it's the same as the one that was clicked ...
-    //         if (facArray[cfIdx].name === fac.name) {
-    //             // ... remove it, then set the state to reflect the change
-    //             facArray = facArray.slice(0, cfIdx).concat(facArray.slice(cfIdx + 1));
-    //             return this.setState({ [facType]: facArray });
-    //         }
-    //     }
-    //     // if the factor didn't exists within the array, add it, then set state
-    //     facArray.push(fac);
-    //     this.setState({ [facType]: facArray });
-    // };
-
     // pop up a modal comparing two factors/facets
     compare = () => {
         // find out whether we're getting facets or factors

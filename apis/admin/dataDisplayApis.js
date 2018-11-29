@@ -674,11 +674,11 @@ async function GET_scatter(req, res, next) {
 
     // get the user requesting the info
     try {
-        var user = await getAndVerifyUser(userId, verificationToken);
+        var currentUser = await getAndVerifyUser(userId, verificationToken);
     } catch (getUserError) {
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
-    if (!user.admin) {
+    if (!currentUser.admin) {
         return res.status(403).send({ message: errors.PERMISSIONS_ERROR });
     }
 
@@ -689,9 +689,20 @@ async function GET_scatter(req, res, next) {
 
     // get all the users
     try {
-        var users = await Users.find({ "psychometricTest.endDate": { $exists: true } }).select(
-            "psychometricTest.factors.score psychometricTest.factors.name psychometricTest.factors.facets.name psychometricTest.factors.facets.score"
-        );
+        const query = { "psychometricTest.endDate": { $exists: true } };
+        const select =
+            "psychometricTest.factors.score psychometricTest.factors.name \
+            psychometricTest.factors.facets.name psychometricTest.factors.facets.score";
+
+        let insightsUsers = ["All", "Insights"].includes(site)
+            ? await Users.find(query).select(select)
+            : [];
+
+        let learningUsers = ["All", "Learning"].includes(site)
+            ? await PsychUsers.find(query).select(select)
+            : [];
+
+        var users = insightsUsers.concat(learningUsers);
     } catch (e) {
         console.log("Error getting scatter data: ", e);
         return res.status(500).send({ message: errors.SERVER_ERROR });
