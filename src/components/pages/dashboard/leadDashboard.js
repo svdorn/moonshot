@@ -166,7 +166,7 @@ class GuestDashboard extends Component {
                     <DashboardItem type="Candidates" width={1} blurred={true} />
                     <DashboardItem type="Evaluations" width={1} blurred={true} />
                     <DashboardItem type="Employees" width={1} blurred={true} />
-                    <DashboardItem type="Account" width={1} blurred={true} />
+                    <DashboardItem type="Account" width={1} blurred={true} demo={true} />
                     <DashboardItem type="Billing" width={1} blurred={true} demo={true} />
                 </div>
             </div>
