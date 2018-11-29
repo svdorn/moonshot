@@ -59,8 +59,8 @@ class IntroductionModal extends Component {
                 <div className="font16px font14pxUnder700 font12pxUnder500 marginTop10px">
                     We created a 22-minute evaluation that you can share with your candidates to
                     understand their personality, ability to learn, adapt and problem solve. This
-                    data enables us to predict each candidate{"'"}s job performance, growth
-                    potential, longevity or tenure, and culture fit at your company.
+                    data enables us to predict each candidate’s job performance, growth potential,
+                    culture fit, and longevity at your company.
                 </div>
                 <div styleName="blue-arrow" onClick={this.welcomeFrameClick}>
                     Continue <img src={`/icons/ArrowBlue${this.props.png}`} />
