@@ -724,13 +724,10 @@ async function GET_scatter(req, res, next) {
     const correlation = correlationCoefficient(points);
 
     // find the best fit line
-    // const { slope, intercept } = bestFitLine(points);
+    const { slope, intercept } = bestFitLine(points);
 
     // const points = [{ x: 1, y: 5 }, { x: 2.4, y: -3 }, { x: -4.6, y: 5 }];
-    const bflPoints = [{ x: -6, y: -4 }, { x: 6, y: 4 }];
-
-    const slope = 2.3;
-    const intercept = 1.9;
+    const bflPoints = lineBoundaryPoints(slope, intercept, -6, 6, -6, 6);
 
     // make sure the x and y names are correct
     const x = facNames[0];
@@ -757,6 +754,56 @@ function correlationCoefficient(points) {
     );
 
     return numerator / denominator;
+}
+
+// find the slope and intercept of the best fit line of two variables
+// points = [ {x: NUMBER, y: NUMBER}, ... ]
+function bestFitLine(points) {
+    const meanX = mean(points.map(p => p.x));
+    const meanY = mean(points.map(p => p.y));
+
+    const rise = sum(points.map(p => (p.x - meanX) * (p.y - meanY)));
+    const run = sum(points.map(p => Math.pow(p.x - meanX, 2)));
+    const slope = rise / run;
+    const intercept = meanY - slope * meanX;
+
+    return { slope, intercept };
+}
+
+// get bounding points within an x and y range for any y-intercept form function
+function lineBoundaryPoints(slope, intercept, xLeft, xRight, yBottom, yTop) {
+    // the function using the given slope and intercept
+    f = x => slope * x + intercept;
+    fInv = y => (y - intercept) / slope;
+
+    const fxLeft = f(xLeft);
+    const fxRight = f(xRight);
+    const fInvyBottom = fInv(yBottom);
+    const fInvyTop = fInv(yTop);
+
+    // if f(minimum x wanted) is within y range
+    if (fxLeft >= yBottom && fxLeft <= yTop) {
+        var xMin = xLeft;
+        var yMin = fxLeft;
+    }
+    // if f(minimum x wanted) is outside of the y range, base x on y instead
+    else {
+        var xMin = fInv(yBottom);
+        var yMin = yBottom;
+    }
+
+    // if f(maximum x wanted) is within y range
+    if (fxRight >= yBottom && fxRight <= yTop) {
+        var xMax = xRight;
+        var yMax = fxRight;
+    }
+    // if f(minimum x wanted) is outside of the y range, base x on y instead
+    else {
+        var xMax = fInv(yTop);
+        var yMax = yTop;
+    }
+
+    return [{ x: xMin, y: yMin }, { x: xMax, y: yMax }];
 }
 
 // calculate chronbach's alpha (inter reliability)
