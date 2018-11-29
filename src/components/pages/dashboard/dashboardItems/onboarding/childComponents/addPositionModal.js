@@ -59,7 +59,7 @@ class AddPositionModal extends Component {
             <Select
                 disableUnderline={true}
                 classes={{
-                    root: "selectRootWhite font16px font14pxUnder500",
+                    root: "select-no-focus-color selectRootWhite font16px font14pxUnder500",
                     icon: "selectIconWhiteImportant selectIconMarginSmallText"
                 }}
                 value={position}

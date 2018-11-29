@@ -982,7 +982,11 @@ form > h1 {
     display: inline-block;
 }
 
+/* SO THAT THE SELECT DOES NOT HAVE A DIFFERENT COLOR WHEN FOCUSED */
 .myCandidates [class^="MuiSelect-select"]:focus {
+    background: none;
+}
+.select-no-focus-color [class^="MuiSelect-select"]:focus {
     background: none;
 }
 
