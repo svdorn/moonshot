@@ -7,6 +7,7 @@ import { updateStore } from "../../../../../../actions/usersActions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import HoverTip from "../../../../../miscComponents/hoverTip";
 
 import TextInput from "../../../../../userInput/textInput";
 
@@ -195,7 +196,7 @@ class AddPositionModal extends Component {
                             </div>
                         </div>
                     ) : null}
-                    <div style={{ margin: "5px auto 7px" }} className="primary-white">
+                    <div style={{ margin: "24px auto 14px" }} className="primary-white">
                         <div
                             className="checkbox smallCheckbox whiteCheckbox"
                             onClick={this.handleClickIsManager.bind(this)}
@@ -206,15 +207,21 @@ class AddPositionModal extends Component {
                                 src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             />
                         </div>
-                        {"Position is a manager role"}
+                        <span style={{ paddingLeft: "5px" }}>{"Position is a manager role"}</span>
+                        <div className="info-hoverable">i</div>
+                        <HoverTip
+                            className="font10px secondary-gray"
+                            sourceTriangle={false}
+                            style={{ margin: "25px 10px 0 -48px" }}
+                            text="Three or more people will report to this person."
+                        />
                     </div>
                     {this.state.addPositionError ? (
                         <div className="secondary-red font10px">{this.state.addPositionError}</div>
                     ) : null}
                     <button
                         onClick={this.handleSubmit}
-                        className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop10px"
-                        styleName="onboarding-button"
+                        className="button noselect round-6px background-primary-cyan primary-white font18px font16pxUnder700 font14pxUnder500 marginTop10px"
                         style={{ padding: "6px 20px" }}
                     >
                         <span>Continue</span>
