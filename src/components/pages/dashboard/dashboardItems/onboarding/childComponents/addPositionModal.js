@@ -176,7 +176,7 @@ class AddPositionModal extends Component {
                         Complete the details for this position.
                     </div>
                     {this.state.mustSelectTypeError ? (
-                        <div className="secondary-red font10px">Must select a position type.</div>
+                        <div className="secondary-red font10px">Please select a position type</div>
                     ) : null}
                     {!title || update ? (
                         <div>
@@ -191,7 +191,7 @@ class AddPositionModal extends Component {
                     {!role || update ? (
                         <div>
                             <div styleName="add-position-select-type-in-modal">
-                                <div>Select a position type:</div>
+                                <div className="primary-cyan">Select a position type:</div>
                                 <div>{this.makeDropdown(this.state.positionType)}</div>
                             </div>
                         </div>
