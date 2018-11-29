@@ -87,6 +87,7 @@ const helperFunctions = require("./apis/helperFunctions");
 require("./apis/selfActivatingFunctions");
 
 // set up the session
+const sevenDaysInSeconds = 7 * 24 * 60 * 60;
 app.use(
     session({
         secret: credentials.secretString,
@@ -96,15 +97,13 @@ app.use(
         proxy: true, // must be true since we are using a reverse proxy
         resave: true, // saves session even if un-modified
         cookie: {
-            maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
-            // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
-            secure: process.env.NODE_ENV !== "development", // only make the cookie if accessing via https
+            maxAge: 1000 * sevenDaysInSeconds, // 7 days in milliseconds
+            secure: !helperFunctions.devMode, // only make the cookie if accessing via https
             httpOnly: true, // cookie can only be sent over http(s), not client js
             domain: process.env.SITE_NAME, // moonshotinsights.io or frizzkitten.com or localhost:8081
             path: "/" // only allow access to cookie if it's on the right domain and path
         },
-        store: new MongoStore({ mongooseConnection: db, ttl: 7 * 24 * 60 * 60 })
-        // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
+        store: new MongoStore({ mongooseConnection: db, ttl: sevenDaysInSeconds })
     })
 );
 

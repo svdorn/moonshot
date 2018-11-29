@@ -35,6 +35,14 @@ class AccountAdminMenu extends Component {
         this.bound_handleAnyClick = this.handleAnyClick.bind(this);
     }
 
+    // open sign up modal if coming here with /explore?signup=true
+    componentDidMount() {
+        const { location } = this.props;
+        if (location.pathname.toLowerCase() === "/explore" && location.query.signup) {
+            this.openSignUpModal("Button");
+        }
+    }
+
     // sign out of user's account
     signOut = () => {
         this.removePopup();

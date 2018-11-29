@@ -189,7 +189,7 @@ class Login extends Component {
                         <br />
                         <div
                             className="clickable underline"
-                            onClick={() => goTo({ pathname: "/signup", query: signUpQuery })}
+                            onClick={() => goTo({ pathname: "/explore", query: { signup: true } })}
                             style={{ display: "inline-block" }}
                         >
                             Create Account

@@ -123,8 +123,6 @@ class AddPosition extends Component {
 
                 this.props.startLoading();
 
-                console.log("HERE");
-
                 axios
                     .post("/api/business/addEvaluation", {
                         userId,

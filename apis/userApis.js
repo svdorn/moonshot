@@ -674,7 +674,6 @@ function POST_signOut(req, res) {
     req.session.verificationToken = null;
     // save the updated session
     req.session.save(function(err) {
-        console.log("HERE. req.session: ", req.session);
         if (err) {
             console.log("error removing user session: ", err);
             return res.status(500).send("Error logging out.");

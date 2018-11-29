@@ -647,6 +647,7 @@ export function createBusinessAndUser(userInfo, customErrorAction) {
                 });
                 dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
                 dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
+                dispatch({ type: "CLOSE_SIGNUP_MODAL" });
                 dispatch({ type: "CLOSE_CLAIM_PAGE_MODAL" });
                 goTo("/dashboard");
                 if (userInfo.verificationModal) {
