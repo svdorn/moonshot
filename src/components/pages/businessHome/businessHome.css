@@ -1141,10 +1141,14 @@
         display: none;
     }
 
+    .what-how-part {
+        padding: 0 20px;
+    }
     .what-how-background {
         --box-width: 300px;
         --box-height: 280px;
     }
+    .stacked-buttons.show,
     .stacked-buttons {
         margin-top: 20px;
     }
@@ -1231,6 +1235,11 @@
     .paperBoxBusinessHome {
         height: 395px;
         width: 280px;
+    }
+
+    .stacked-buttons.show,
+    .stacked-buttons {
+        margin-top: 15px;
     }
 }
 
