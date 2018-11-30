@@ -63,24 +63,11 @@
     text-align: left;
     max-width: 500px;
 }
-.blue-arrow {
+.welcome-text {
     font-size: 20px;
     margin-top: 15px;
     cursor: pointer;
     color: var(--primary-cyan);
-}
-.blue-arrow > img {
-    width: 15px;
-    margin: 0 5px 2px 2px;
-    margin-bottom: 4px;
-    transform: translateX(0%);
-
-    -webkit-transition: transform 0.5s ease;
-    -ms-transition: transform 0.5s ease;
-    transition: transform 0.5s ease;
-}
-.blue-arrow:hover > img {
-    transform: translateX(50%);
 }
 
 .title-margin {
@@ -828,7 +815,7 @@
         height: 188px;
     }
 
-    .blue-arrow {
+    .welcome-text {
         font-size: 18px;
     }
 
@@ -871,7 +858,7 @@
         max-width: 260px;
     }
 
-    .blue-arrow {
+    .welcome-text {
         font-size: 14px;
     }
 

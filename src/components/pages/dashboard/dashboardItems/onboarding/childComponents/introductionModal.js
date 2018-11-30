@@ -15,6 +15,7 @@ import { goTo } from "../../../../../../miscFunctions";
 import { button } from "../../../../../../classes.js";
 import axios from "axios";
 import AddPositionModal from "./addPositionModal";
+import ShiftArrow from "../../../../../miscComponents/shiftArrow";
 
 import "../../../dashboard.css";
 
@@ -62,8 +63,9 @@ class IntroductionModal extends Component {
                     data enables us to predict each candidate’s job performance, growth potential,
                     culture fit, and longevity at your company.
                 </div>
-                <div styleName="blue-arrow" onClick={this.welcomeFrameClick}>
-                    Continue <img src={`/icons/ArrowBlue${this.props.png}`} />
+                <div styleName="welcome-text" onClick={this.welcomeFrameClick}>
+                    Continue{" "}
+                    <ShiftArrow width="17px" color="cyan" style={{ marginBottom: "4px" }} />
                 </div>
             </div>
         );
