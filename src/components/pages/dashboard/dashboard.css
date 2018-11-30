@@ -318,16 +318,15 @@
     margin-top: 8px;
 }
 
-.got-it-button {
+.got-it-area {
     color: white;
     position: absolute;
     bottom: calc(var(--item-margin));
-    left: 50%;
-    transform: translate(-50%);
+    text-align: center;
+    width: calc(100% - 2 * var(--item-margin));
 }
 .emoji-buttons-full {
     position: absolute;
-    /* bottom: -50px; */
     left: 50%;
     transform: translate(-50%);
     width: 100%;

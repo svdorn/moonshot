@@ -121,19 +121,15 @@ class BuildTeam extends Component {
                     <div className="build-team">
                         <div>{this.makeChoices()}</div>
                     </div>
-                    {this.props.loading ? (
-                        <div className="center">
+                    <div styleName="got-it-area">
+                        {this.props.loading ? (
                             <CircularProgress color="#76defe" />
-                        </div>
-                    ) : (
-                        <div
-                            className={button.cyan}
-                            styleName="got-it-button"
-                            onClick={this.handleClick}
-                        >
-                            See What{"'"}s Next <ShiftArrow />
-                        </div>
-                    )}
+                        ) : (
+                            <div className={button.cyan} onClick={this.handleClick}>
+                                See What{"'"}s Next <ShiftArrow />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         );
