@@ -15,6 +15,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TextInput from "../../../../../userInput/textInput";
 import NavCircles from "../../../../../miscComponents/navCircles";
 import ShiftArrow from "../../../../../miscComponents/shiftArrow";
+import HoverTip from "../../../../../miscComponents/hoverTip";
 import axios from "axios";
 
 import "../../../dashboard.css";
@@ -187,6 +188,13 @@ class AddPosition extends Component {
                         />
                     </div>
                     {"Position is a manager role"}
+                    <div className="info-hoverable">i</div>
+                    <HoverTip
+                        className="font10px secondary-gray"
+                        sourceTriangle={false}
+                        style={{ margin: "25px 10px 0 -48px" }}
+                        text="Three or more people will report to this person."
+                    />
                 </div>
             </div>
         );
