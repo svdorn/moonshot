@@ -9,6 +9,7 @@ import {
 } from "../../../../../actions/usersActions";
 import { CircularProgress } from "material-ui";
 import { button } from "../../../../../classes";
+import ShiftArrow from "../../../../miscComponents/shiftArrow";
 
 import "../../dashboard.css";
 
@@ -110,9 +111,11 @@ class BuildTeam extends Component {
             <div styleName="item-padding">
                 <div styleName="build-team-container">
                     <div className="center">
-                        Which of these is most interesting to you?
                         <div className="primary-cyan">
-                            Your choice(s) help us know where to focus
+                            Which of these is most interesting to you?
+                        </div>
+                        <div className="primary-white">
+                            Your choice(s) help us know where to focus.
                         </div>
                     </div>
                     <div className="build-team">
@@ -128,7 +131,7 @@ class BuildTeam extends Component {
                             styleName="got-it-button"
                             onClick={this.handleClick}
                         >
-                            See What{"'"}s Next &#8594;
+                            See What{"'"}s Next <ShiftArrow />
                         </div>
                     )}
                 </div>

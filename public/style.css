@@ -465,7 +465,7 @@ form > h1 {
 
 .build-team {
     position: relative;
-    padding: 5px 20px;
+    padding: 5px 10px;
 }
 
 .build-team > div {
@@ -483,9 +483,9 @@ form > h1 {
 
 .build-team .method-box {
     display: flex;
-    width: 210px;
-    height: 50px;
-    padding: 1px;
+    width: 230px;
+    height: 52px;
+    padding: 10px;
     margin: 10px 5px;
     border: 2px solid white;
     border-radius: 4px;
@@ -3552,6 +3552,12 @@ button.link {
     }
     .font6pxUnder600 {
         font-size: 6px;
+    }
+}
+
+@media only screen and (max-width: 570) {
+    .build-team .method-box {
+        margin: 10px 2px;
     }
 }
 

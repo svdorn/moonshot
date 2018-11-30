@@ -1,0 +1,14 @@
+.shift-arrow {
+    --arrow-width: 10px;
+    width: var(--arrow-width);
+    height: calc(var(--arrow-width) * 0.7);
+    margin: 0 5px 2px 2px;
+    transform: translateX(0%);
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+div:hover > .shift-arrow {
+    transform: translateX(50%);
+}

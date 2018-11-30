@@ -109,7 +109,7 @@
 .build-team-container > div:first-child {
     font-size: 16px;
 }
-.build-team-container > div:first-child > div:first-child {
+.build-team-container > div:first-child > div:nth-child(2) {
     font-size: 14px;
 }
 
