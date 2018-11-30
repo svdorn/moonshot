@@ -15,17 +15,14 @@ class NavCircles extends Component {
     }
 
     handleCircleClick = event => {
-        const { onNavigate } = this.props;
-        if (typeof onNavigate !== "function") return;
+        const { onNavigate, disabled } = this.props;
+        if (disabled || typeof onNavigate !== "function") return;
 
-        const value = event.currentTarget.dataset.value;
-        console.log("value is: ", value);
-
-        onNavigate(event, value);
+        onNavigate(event, event.currentTarget.dataset.value);
     };
 
     render() {
-        const { value, values, onNavigate } = this.props;
+        const { value, values, onNavigate, disabled } = this.props;
 
         // need at least one navigation circle to show anything
         if (!Array.isArray(values) || values.length < 1) return null;
@@ -33,7 +30,9 @@ class NavCircles extends Component {
         let navCircles = values.map((v, valueIdx) => {
             return (
                 <div
-                    styleName={`nav-circle ${v === value ? "selected" : ""}`}
+                    styleName={`nav-circle ${v === value ? "selected" : ""} ${
+                        disabled ? "disabled" : ""
+                    }`}
                     data-value={v}
                     onClick={this.handleCircleClick}
                     key={"nav-circle" + v}

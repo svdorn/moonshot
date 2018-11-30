@@ -193,9 +193,15 @@ class AddPosition extends Component {
     };
 
     // navigate to a new frame using the nav circles
-    handleNav = (event, frame) => this.setState({ frame });
+    handleNav = (event, frame) => {
+        this.setState({ frame });
+    };
 
     render() {
+        const formValues = this.props.formData.addPos
+            ? this.props.formData.addPos.values
+            : undefined;
+
         return (
             <div>
                 <form className="center" style={{ marginTop: "-10px" }}>
@@ -220,6 +226,7 @@ class AddPosition extends Component {
                     value={this.state.frame}
                     values={["name", "type"]}
                     onNavigate={this.handleNav}
+                    disabled={!formValues || !formValues.position}
                 />
             </div>
         );

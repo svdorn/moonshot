@@ -14,3 +14,7 @@
     --color-1: var(--primary-white);
     --color-2: var(--primary-cyan);
 }
+
+.nav-circle.disabled {
+    cursor: not-allowed;
+}
