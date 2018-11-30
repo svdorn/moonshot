@@ -18,11 +18,11 @@ class NavCircles extends Component {
         const { onNavigate, disabled } = this.props;
         if (disabled || typeof onNavigate !== "function") return;
 
-        onNavigate(event, event.currentTarget.dataset.value);
+        onNavigate(event.currentTarget.dataset.value, event);
     };
 
     render() {
-        const { value, values, onNavigate, disabled } = this.props;
+        const { value, values, onNavigate, disabled, className } = this.props;
 
         // need at least one navigation circle to show anything
         if (!Array.isArray(values) || values.length < 1) return null;
@@ -40,7 +40,7 @@ class NavCircles extends Component {
             );
         });
 
-        return <div>{navCircles}</div>;
+        return <div className={typeof className === "string" ? className : ""}>{navCircles}</div>;
     }
 }
 

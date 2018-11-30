@@ -416,12 +416,14 @@ function fieldsAreEmpty(vals, requiredFields, touch) {
     // start with assumption that all fields are filled out
     let fieldIsEmpty = false;
 
+    const touchIsFunction = typeof touch === "function";
+
     // go through each required field
     requiredFields.forEach(field => {
         // if the field is empty ...
         if (!vals || !vals[field]) {
             // ... touch it to bring up the error message
-            touch(field);
+            if (touchIsFunction) touch(field);
             // ... and mark that some field is not filled out
             fieldIsEmpty = true;
         }

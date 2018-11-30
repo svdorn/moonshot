@@ -14,6 +14,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextInput from "../../../../../userInput/textInput";
 import NavCircles from "../../../../../miscComponents/navCircles";
+import ShiftArrow from "../../../../../miscComponents/shiftArrow";
 import axios from "axios";
 
 import "../../../dashboard.css";
@@ -193,7 +194,7 @@ class AddPosition extends Component {
     };
 
     // navigate to a new frame using the nav circles
-    handleNav = (event, frame) => {
+    handleNav = (frame, event) => {
         this.setState({ frame });
     };
 
@@ -202,27 +203,29 @@ class AddPosition extends Component {
             ? this.props.formData.addPos.values
             : undefined;
 
+        const { frame, addPositionError, mustSelectTypeError } = this.state;
+
         return (
             <div>
                 <form className="center" style={{ marginTop: "-10px" }}>
-                    {this.state.mustSelectTypeError ? (
+                    {mustSelectTypeError ? (
                         <div className="secondary-red font10px">Must select a position type.</div>
                     ) : null}
-                    {this.state.frame === "name" ? this.getNameInfo() : this.getTypeInfo()}
+                    {frame === "name" ? this.getNameInfo() : this.getTypeInfo()}
                     <br />
-                    {this.state.addPositionError ? (
+                    {addPositionError ? (
                         <div className="secondary-red font10px">{this.state.addPositionError}</div>
                     ) : null}
                     <button
                         onClick={this.handleSubmit}
-                        className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700"
-                        styleName="onboarding-button"
+                        className="button noselect round-6px background-primary-cyan primary-white font18px font16pxUnder700"
                         style={{ padding: "5px 17px" }}
                     >
-                        <span>Enter &#8594;</span>
+                        {frame === "type" ? "Enter" : "Next"} <ShiftArrow />
                     </button>
                 </form>
                 <NavCircles
+                    className="add-position-nav"
                     value={this.state.frame}
                     values={["name", "type"]}
                     onNavigate={this.handleNav}
