@@ -13,6 +13,7 @@ import { fieldsAreEmpty } from "../../../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextInput from "../../../../../userInput/textInput";
+import NavCircles from "../../../../../miscComponents/navCircles";
 import axios from "axios";
 
 import "../../../dashboard.css";
@@ -191,6 +192,9 @@ class AddPosition extends Component {
         );
     };
 
+    // navigate to a new frame using the nav circles
+    handleNav = (event, frame) => this.setState({ frame });
+
     render() {
         return (
             <div>
@@ -212,6 +216,11 @@ class AddPosition extends Component {
                         <span>Enter &#8594;</span>
                     </button>
                 </form>
+                <NavCircles
+                    value={this.state.frame}
+                    values={["name", "type"]}
+                    onNavigate={this.handleNav}
+                />
             </div>
         );
     }
