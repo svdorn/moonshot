@@ -409,6 +409,27 @@ function getFormattedDate(date) {
     return month + " " + day + ", " + year;
 }
 
+// brings up message telling user to fill out empty fields if they're empty
+// returns true if a field was blank
+// you have to include the values, an array of the fields, and this.props.touch from redux-form
+function fieldsAreEmpty(vals, requiredFields, touch) {
+    // start with assumption that all fields are filled out
+    let fieldIsEmpty = false;
+
+    // go through each required field
+    requiredFields.forEach(field => {
+        // if the field is empty ...
+        if (!vals || !vals[field]) {
+            // ... touch it to bring up the error message
+            touch(field);
+            // ... and mark that some field is not filled out
+            fieldIsEmpty = true;
+        }
+    });
+
+    return fieldIsEmpty;
+}
+
 function randomInt(lowBound, highBound) {
     const range = highBound - lowBound;
     return Math.floor(Math.random() * (range + 1)) + lowBound;
@@ -438,6 +459,7 @@ const miscFunctions = {
     copyCustomLink,
     copyFromPage,
     getFormattedDate,
+    fieldsAreEmpty,
     noop,
     randomInt,
 

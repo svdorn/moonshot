@@ -9,15 +9,13 @@ import {
     updateStore,
     updatePositionCount
 } from "../../../../../../actions/usersActions";
-import { renderTextField } from "../../../../../../miscFunctions";
+import { fieldsAreEmpty } from "../../../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextInput from "../../../../../userInput/textInput";
 import axios from "axios";
 
 import "../../../dashboard.css";
-
-const required = value => (value ? undefined : "This field is required.");
 
 class AddPosition extends Component {
     constructor(props) {
@@ -40,7 +38,9 @@ class AddPosition extends Component {
             // if user didn't select a position type when making a new position
             mustSelectTypeError: false,
             // error adding a position
-            addPositionError: undefined
+            addPositionError: undefined,
+            // which frame you're on ("name" or "type")
+            frame: "name"
         };
     }
 
@@ -90,18 +90,16 @@ class AddPosition extends Component {
             // TODO: need to be able to add multiple positions
             let self = this;
             e.preventDefault();
+
             const vals = this.props.formData.addPos.values;
 
-            // Form validation before submit
-            let notValid = false;
-            const requiredFields = ["position"];
-            requiredFields.forEach(field => {
-                if (!vals || !vals[field]) {
-                    this.props.touch(field);
-                    notValid = true;
-                }
-            });
-            if (notValid) return;
+            // validate that fields are all filled out
+            if (fieldsAreEmpty(vals, ["position"], this.props.touch)) return;
+
+            // if on the name frame, go to the type frame
+            if (this.state.frame !== "type") {
+                return this.setState({ frame: "type" });
+            }
 
             // if the user didn't select a position type, don't let them move on
             if (this.state.positionType === "Position Type") {
@@ -158,6 +156,41 @@ class AddPosition extends Component {
         }
     };
 
+    // get the name of the position
+    getNameInfo = () => {
+        return (
+            <div>
+                <TextInput name="position" label="Position Name" placeholder="iOS Developer" />
+            </div>
+        );
+    };
+
+    // get the type of the position
+    getTypeInfo = () => {
+        return (
+            <div>
+                <div styleName="add-position-select-type">
+                    <div>Select a position type:</div>
+                    <div>{this.makeDropdown(this.state.positionType)}</div>
+                </div>
+                <br />
+                <div styleName="add-position-ismgr">
+                    <div
+                        className="checkbox smallCheckbox whiteCheckbox"
+                        onClick={this.handleClickIsManager.bind(this)}
+                    >
+                        <img
+                            alt=""
+                            className={"checkMark" + this.state.newPosIsManager}
+                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                        />
+                    </div>
+                    {"Position is a manager role"}
+                </div>
+            </div>
+        );
+    };
+
     render() {
         return (
             <div>
@@ -165,32 +198,8 @@ class AddPosition extends Component {
                     {this.state.mustSelectTypeError ? (
                         <div className="secondary-red font10px">Must select a position type.</div>
                     ) : null}
-                    <TextInput
-                        name="position"
-                        label="Position Name"
-                        validate={[required]}
-                        required={true}
-                        placeholder="iOS Developer"
-                    />
+                    {this.state.frame === "name" ? this.getNameInfo() : this.getTypeInfo()}
                     <br />
-                    <div styleName="add-position-select-type">
-                        <div>Select a position type:</div>
-                        <div>{this.makeDropdown(this.state.positionType)}</div>
-                    </div>
-                    <br />
-                    <div styleName="add-position-ismgr">
-                        <div
-                            className="checkbox smallCheckbox whiteCheckbox"
-                            onClick={this.handleClickIsManager.bind(this)}
-                        >
-                            <img
-                                alt=""
-                                className={"checkMark" + this.state.newPosIsManager}
-                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            />
-                        </div>
-                        {"Position is a manager role"}
-                    </div>
                     {this.state.addPositionError ? (
                         <div className="secondary-red font10px">{this.state.addPositionError}</div>
                     ) : null}

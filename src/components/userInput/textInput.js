@@ -17,6 +17,9 @@ const theme = createMuiTheme({
     typography: { fontFamily: "Muli,sans-serif" }
 });
 
+// default validation function - just makes the fields say This Field is Required
+const defaultValidate = value => (value ? undefined : "This field is required.");
+
 const renderField = ({
     input,
     label,
@@ -72,7 +75,7 @@ class TextInput extends Component {
                         component={renderField}
                         label={label}
                         required={required}
-                        validate={validate}
+                        validate={Array.isArray(validate) ? validate : [defaultValidate]}
                         placeholder={placeholder}
                         type={type}
                         style={style}

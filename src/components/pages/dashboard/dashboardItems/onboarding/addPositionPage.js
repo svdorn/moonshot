@@ -21,9 +21,7 @@ class AddPositionPage extends Component {
                     <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
                         Who do you need to hire?
                     </div>
-                    <div className="font14px">
-                        <i>Enter one of your open positions.</i>
-                    </div>
+                    <div className="font14px">Enter one of your open positions.</div>
                 </div>
                 <AddPosition />
             </div>
