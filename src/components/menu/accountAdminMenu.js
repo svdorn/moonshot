@@ -16,6 +16,7 @@ import { goTo, getFirstName, withinElement } from "../../miscFunctions";
 import { axios } from "axios";
 import { button } from "../../classes.js";
 import { animateScroll } from "react-scroll";
+import CornersButton from "../miscComponents/cornersButton";
 
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 
@@ -200,9 +201,13 @@ class AccountAdminMenu extends Component {
                 <div>
                     <img src={`/icons/User${png}`} styleName="user-icon" />
                     <div styleName="menu-option" onClick={() => this.openSignUpModal("Button")}>
-                        <div className={button.cyan} style={{ color: "white" }}>
-                            Create Account
-                        </div>
+                        <CornersButton
+                            content="Create Account"
+                            className="font14px font12pxUnder400"
+                            arrow={false}
+                            paddingSides="12px"
+                            paddingTop="6px"
+                        />
                     </div>
                 </div>
             );
@@ -220,7 +225,7 @@ class AccountAdminMenu extends Component {
         );
 
         const menuContent = (
-            <div className={this.props.blurMenu ? "blur" : ""}>
+            <div style={{ height: "100%" }} className={this.props.blurMenu ? "blur" : ""}>
                 {logo}
                 <div styleName="main-menu-items">{topItems}</div>
                 <div styleName="menu-bottom">{bottomItem}</div>

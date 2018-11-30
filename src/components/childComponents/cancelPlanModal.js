@@ -133,7 +133,8 @@ class CancelPlanModal extends Component {
                 <CornersButton
                     onClick={this.pausePlan}
                     content="Request a Pause"
-                    size="small-padding"
+                    paddingSides="30px"
+                    paddingTop="8px"
                     color1={colors.primaryCyan}
                     color2={colors.primaryWhite}
                     className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
@@ -158,7 +159,8 @@ class CancelPlanModal extends Component {
                 <CornersButton
                     onClick={this.cancelPlan}
                     content="Finalize Cancellation"
-                    size="small-padding"
+                    paddingSides="30px"
+                    paddingTop="8px"
                     color1={colors.primaryCyan}
                     color2={colors.primaryWhite}
                     className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"

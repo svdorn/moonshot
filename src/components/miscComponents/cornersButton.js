@@ -13,7 +13,20 @@ class CornersButton extends Component {
     }
 
     render() {
-        let { className, onClick, color1, color2, style, content, png, size, active } = this.props;
+        let {
+            className,
+            onClick,
+            color1,
+            color2,
+            style,
+            content,
+            png,
+            size,
+            active,
+            arrow,
+            paddingSides,
+            paddingTop
+        } = this.props;
         if (typeof className !== "string") {
             className = "";
         }
@@ -35,9 +48,22 @@ class CornersButton extends Component {
         if (typeof active !== "string") {
             active = "";
         }
+        if (typeof paddingSides !== "string") {
+            paddingSides = "50px";
+        }
+        if (typeof paddingTop !== "string") {
+            paddingTop = "16px";
+        }
+        paddingSides = "side-padding-" + paddingSides;
+        paddingTop = "top-padding-" + paddingTop;
 
         return (
-            <div styleName={"button " + size + " " + active} className={className} onClick={onClick} style={style}>
+            <div
+                styleName={`button ${size} ${active} ${paddingSides} ${paddingTop}`}
+                className={className}
+                onClick={onClick}
+                style={style}
+            >
                 <div styleName="content" style={{ color: color1 }}>
                     {content}
                 </div>
@@ -49,7 +75,7 @@ class CornersButton extends Component {
                 <div styleName="hover-content" style={{ color: color2 }}>
                     {content}
                 </div>
-                <img styleName="arrow" src={`/icons/LineArrow${png}`} />
+                {arrow === false ? null : <img styleName="arrow" src={`/icons/LineArrow${png}`} />}
                 <div styleName="above-hover-content" style={{ backgroundColor: color1 }} />
             </div>
         );

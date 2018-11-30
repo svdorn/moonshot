@@ -216,7 +216,8 @@ class Billing extends Component {
                             onClick={active ? null : () => this.selectPlan(box.period)}
                             content={buttonText}
                             active={active}
-                            size="small-padding"
+                            paddingSides="30px"
+                            paddingTop="8px"
                             color1={colors.primaryCyan}
                             color2={colors.primaryWhite}
                             className="font16px font14pxUnder900 font12pxUnder400 marginTop20px"
@@ -325,7 +326,8 @@ class Billing extends Component {
                 <CornersButton
                     onClick={() => this.updatePlan(plan)}
                     content="Update Plan"
-                    size="small-padding"
+                    paddingSides="30px"
+                    paddingTop="8px"
                     color1={colors.primaryCyan}
                     color2={colors.primaryWhite}
                     className="font18px font16pxUnder900 font12pxUnder400 marginTop20px"
@@ -402,7 +404,8 @@ class Billing extends Component {
                         <CornersButton
                             onClick={() => this.confirmPlan(plan)}
                             content="Confirm"
-                            size="small-padding"
+                            paddingSides="30px"
+                            paddingTop="8px"
                             color1={colors.primaryCyan}
                             color2={colors.primaryWhite}
                             className="font18px font16pxUnder900 font12pxUnder400 marginTop20px"
@@ -420,12 +423,11 @@ class Billing extends Component {
     customPlanSection() {
         return (
             <div styleName="custom-plan">
-                <div>
-                    Custom Plan
-                </div>
+                <div>Custom Plan</div>
                 <div styleName="header-seperator" />
                 <div>
-                    You have a custom plan with Moonshot Insights. For more information or to change your plan, please message us and we will be happy to help.
+                    You have a custom plan with Moonshot Insights. For more information or to change
+                    your plan, please message us and we will be happy to help.
                 </div>
                 <div styleName="message-us" onClick={this.intercomMsg}>
                     <img src={`/icons/billing/SpeechBubble${this.props.png}`} />
@@ -453,11 +455,9 @@ class Billing extends Component {
                 </MetaTags>
                 {billing ? (
                     <div styleName="billing">
-                        {billing.customPlan ?
-                            <div>
-                                { this.customPlanSection() }
-                            </div>
-                            :
+                        {billing.customPlan ? (
+                            <div>{this.customPlanSection()}</div>
+                        ) : (
                             <div>
                                 {this.pricingSection()}
                                 {this.updatePlanSection()}
@@ -465,7 +465,7 @@ class Billing extends Component {
                                 {this.creditCardSection()}
                                 {this.confirmNewSubscriptionSection()}
                             </div>
-                        }
+                        )}
                     </div>
                 ) : (
                     <div styleName="circular-progress">
