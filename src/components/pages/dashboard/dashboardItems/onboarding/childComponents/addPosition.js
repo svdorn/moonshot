@@ -65,7 +65,7 @@ class AddPosition extends Component {
             <Select
                 disableUnderline={true}
                 classes={{
-                    root: "selectRootWhite font16px font14pxUnder500",
+                    root: "select-no-focus-color selectRootWhite font16px font14pxUnder500",
                     icon: "selectIconWhiteImportant selectIconMarginSmallText"
                 }}
                 value={position}
@@ -170,12 +170,11 @@ class AddPosition extends Component {
     // get the type of the position
     getTypeInfo = () => {
         return (
-            <div>
+            <div style={{ paddingTop: "10px" }}>
                 <div styleName="add-position-select-type">
                     <div>Select a position type:</div>
                     <div>{this.makeDropdown(this.state.positionType)}</div>
                 </div>
-                <br />
                 <div styleName="add-position-ismgr">
                     <div
                         className="checkbox smallCheckbox whiteCheckbox"
@@ -199,17 +198,38 @@ class AddPosition extends Component {
     };
 
     render() {
+        const { frame, addPositionError, mustSelectTypeError, positionType } = this.state;
+
+        // the values that have been entered into the form
         const formValues = this.props.formData.addPos
             ? this.props.formData.addPos.values
             : undefined;
+        // if the position name has been entered
+        const hasPositionName = !!formValues && !!formValues.position;
 
-        const { frame, addPositionError, mustSelectTypeError } = this.state;
+        // if the current step is complete
+        console.log("here");
+        const canAdvance =
+            (frame === "name" && hasPositionName) || positionType !== "Position Type";
+        // button should be disabled if current step is not complete
+        const buttonClass = canAdvance
+            ? "background-primary-cyan"
+            : "disabled background-secondary-gray";
 
         return (
             <div>
-                <form className="center" style={{ marginTop: "-10px" }}>
+                <form className="center">
                     {mustSelectTypeError ? (
-                        <div className="secondary-red font10px">Must select a position type.</div>
+                        <div
+                            style={{
+                                position: "absolute",
+                                left: "50%",
+                                transform: "translate(-50%, -10px)"
+                            }}
+                            className="secondary-red font14px"
+                        >
+                            Please select a position type.
+                        </div>
                     ) : null}
                     {frame === "name" ? this.getNameInfo() : this.getTypeInfo()}
                     <br />
@@ -218,10 +238,13 @@ class AddPosition extends Component {
                     ) : null}
                     <button
                         onClick={this.handleSubmit}
-                        className="button noselect round-6px background-primary-cyan primary-white font18px font16pxUnder700"
+                        className={
+                            "button noselect round-6px primary-white font18px font16pxUnder700 " +
+                            buttonClass
+                        }
                         style={{ padding: "5px 17px" }}
                     >
-                        {frame === "type" ? "Enter" : "Next"} <ShiftArrow />
+                        {frame === "type" ? "Enter" : "Next"} <ShiftArrow disabled={!canAdvance} />
                     </button>
                 </form>
                 <NavCircles
@@ -229,7 +252,7 @@ class AddPosition extends Component {
                     value={this.state.frame}
                     values={["name", "type"]}
                     onNavigate={this.handleNav}
-                    disabled={!formValues || !formValues.position}
+                    disabled={!hasPositionName}
                 />
             </div>
         );

@@ -9,7 +9,8 @@
     -ms-transition: transform 0.5s ease;
     transition: transform 0.5s ease;
 }
-div:hover > .shift-arrow,
-button:hover > .shift-arrow {
+
+div:hover > .shift-arrow:not(.disabled),
+button:hover > .shift-arrow:not(.disabled) {
     transform: translateX(50%);
 }
