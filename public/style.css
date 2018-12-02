@@ -2309,13 +2309,6 @@ button.link {
     position: relative;
 }
 
-.add-position-nav {
-    position: absolute;
-    text-align: center;
-    width: calc(100% - 2 * var(--item-margin));
-    bottom: var(--item-margin);
-}
-
 /* ------------------------------->> CURSORS <<------------------------------ */
 
 .grabbing {

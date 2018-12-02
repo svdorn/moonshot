@@ -216,7 +216,6 @@ class AddPosition extends Component {
         const hasPositionName = !!formValues && !!formValues.position;
 
         // if the current step is complete
-        console.log("here");
         const canAdvance =
             (frame === "name" && hasPositionName) || positionType !== "Position Type";
         // button should be disabled if current step is not complete
@@ -244,24 +243,27 @@ class AddPosition extends Component {
                     {addPositionError ? (
                         <div className="secondary-red font10px">{this.state.addPositionError}</div>
                     ) : null}
-                    <button
-                        onClick={this.handleSubmit}
-                        className={
-                            "button noselect round-6px primary-white font18px font16pxUnder700 " +
-                            buttonClass
-                        }
-                        style={{ padding: "5px 17px" }}
-                    >
-                        {frame === "type" ? "Enter" : "Next"} <ShiftArrow disabled={!canAdvance} />
-                    </button>
+                    <div styleName="add-position-button-container">
+                        <button
+                            onClick={this.handleSubmit}
+                            className={
+                                "button noselect round-6px primary-white font16px " + buttonClass
+                            }
+                            styleName="add-position-button"
+                        >
+                            {frame === "type" ? "Enter" : "Next"}{" "}
+                            <ShiftArrow disabled={!canAdvance} />
+                        </button>
+                    </div>
                 </form>
-                <NavCircles
-                    className="add-position-nav"
-                    value={this.state.frame}
-                    values={["name", "type"]}
-                    onNavigate={this.handleNav}
-                    disabled={!hasPositionName}
-                />
+                <div styleName="add-position-nav">
+                    <NavCircles
+                        value={this.state.frame}
+                        values={["name", "type"]}
+                        onNavigate={this.handleNav}
+                        disabled={!hasPositionName}
+                    />
+                </div>
             </div>
         );
     }

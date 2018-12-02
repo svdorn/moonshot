@@ -171,6 +171,7 @@
 
 .add-position-header {
     margin-bottom: 12px;
+    font-size: 22px;
 }
 .add-position-select-type {
     color: var(--primary-cyan);
@@ -737,6 +738,25 @@
     margin-bottom: -6px;
 }
 
+.add-position-button-container,
+.add-position-nav {
+    position: absolute;
+    width: calc(100% - 2 * var(--item-margin));
+    margin: 0 auto;
+}
+
+.add-position-button-container {
+    bottom: calc(var(--item-margin) + 35px);
+}
+
+.add-position-button {
+    padding: 5px 17px;
+}
+
+.add-position-nav {
+    bottom: var(--item-margin);
+}
+
 @media screen and (min-width: 851px) {
     .mobile-only {
         display: none;
@@ -763,6 +783,14 @@
 
     .full-step-container {
         padding: calc(var(--item-margin) / 1.5);
+    }
+
+    .add-position-ismgr {
+        margin-top: 10px;
+    }
+
+    .add-position {
+        padding-top: 30px;
     }
 
     .checklist {
@@ -846,12 +874,10 @@
         padding: 10px;
     }
 
-    .add-position-ismgr {
-        margin: -15px auto 10px;
-    }
     .add-position-header {
         margin-top: 10px;
         margin-bottom: 15px;
+        font-size: 16px;
     }
 
     .welcome-frame-modal {

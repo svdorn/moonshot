@@ -18,12 +18,12 @@ class AddPositionPage extends Component {
         return (
             <div>
                 <div styleName="add-position-header">
-                    <div className="font22px font20pxUnder700 font16pxUnder500 primary-cyan">
-                        Who do you need to hire?
-                    </div>
+                    <div className="primary-cyan">Who do you need to hire?</div>
                     <div className="font14px">Enter one of your open positions.</div>
                 </div>
-                <AddPosition />
+                <div styleName="add-position">
+                    <AddPosition />
+                </div>
             </div>
         );
     }
