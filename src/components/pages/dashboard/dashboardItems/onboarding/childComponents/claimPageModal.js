@@ -223,7 +223,7 @@ class ClaimPageModal extends Component {
 
     makeFrame0() {
         return (
-            <div className="center">
+            <div className="center" style={{ marginTop: "15px" }}>
                 <TextInput name="name" label="Full Name" />
             </div>
         );
@@ -231,8 +231,8 @@ class ClaimPageModal extends Component {
 
     makeFrame1() {
         return (
-            <div className="center">
-                <TextInput name="email" label="Email" />
+            <div className="center" style={{ marginTop: "15px" }}>
+                <TextInput name="email" label="Work Email" />
             </div>
         );
     }
@@ -244,7 +244,7 @@ class ClaimPageModal extends Component {
         }
 
         return (
-            <div className="center">
+            <div className="center" style={{ marginTop: "5px" }}>
                 <TextInput
                     viewablePassword={true}
                     name="password"
