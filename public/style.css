@@ -531,6 +531,14 @@ form > h1 {
     height: 10px;
 }
 
+.modal-signup {
+    padding: 40px 50px;
+    background-color: var(--primary-black-dark);
+    color: var(--secondary-gray);
+    min-width: 200px;
+    min-height: 300px;
+}
+
 /* CAROUSEL */
 
 .carousel .frame-position-circle {
@@ -3670,6 +3678,10 @@ button.link {
         padding-top: 2px;
     }
 
+    .modal-signup {
+        padding: 20px;
+    }
+
     #exampleSkillsContainer {
         width: 95%;
         max-height: 320px;
@@ -3832,6 +3844,10 @@ button.link {
     }
     .form {
         max-width: 300px;
+    }
+
+    .modal-signup {
+        padding: 20px 10px;
     }
 
     .myCandidates.mobile .candidateTable {

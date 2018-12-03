@@ -84,7 +84,7 @@ class IntroductionModal extends Component {
                 </div>
             );
         } else {
-            frame = <div styleName="modal-signup">{this.makeWelcomeFrame()}</div>;
+            frame = <div className="modal-signup">{this.makeWelcomeFrame()}</div>;
         }
 
         return (

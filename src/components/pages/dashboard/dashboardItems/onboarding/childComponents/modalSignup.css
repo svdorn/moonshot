@@ -1,0 +1,22 @@
+.button-and-nav {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 20px;
+}
+
+.agree-to-terms {
+    margin: 20px 0px 0px;
+}
+
+@media screen and (max-width: 500px) {
+    .agree-to-terms {
+        margin: 20px 20px 0px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .agree-to-terms {
+        margin: 20px 0px 0px;
+    }
+}

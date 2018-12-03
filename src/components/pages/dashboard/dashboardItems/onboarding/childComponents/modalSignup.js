@@ -419,7 +419,7 @@ class ModalSignup extends Component {
         return (
             <Dialog open={!!this.props.open} maxWidth={false} onClose={this.closeSignupModal}>
                 {frame === 1 && info.header1 ? (
-                    <div styleName="modal-signup">
+                    <div className="modal-signup">
                         <div className="primary-cyan font22px font20pxUnder500">{info.header1}</div>
                         <div
                             className="font16px"
@@ -443,7 +443,7 @@ class ModalSignup extends Component {
                         </div>
                     </div>
                 ) : (
-                    <form styleName="modal-signup">
+                    <form className="modal-signup">
                         {frame === 2 ? (
                             <div>{this.makeFrame2()}</div>
                         ) : (

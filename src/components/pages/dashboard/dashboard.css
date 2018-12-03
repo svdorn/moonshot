@@ -951,9 +951,6 @@
     .onboarding-content > div.full-step-container > div:first-child {
         border-bottom: none;
     }
-    .modal-signup {
-        padding: 20px;
-    }
 
     .admin-image {
         height: 75%;

@@ -7,16 +7,16 @@
 }
 
 .outside {
-    left: calc(100% - 20px);
+    left: calc(100% + 2px);
 }
 .inside {
-    right: 36px;
+    right: 0;
 }
 
 @media screen and (max-width: 600px) {
     .inside,
     .outside {
-        left: calc(100% - 56px);
+        left: calc(100% + 2px);
         right: auto;
     }
 }

@@ -91,35 +91,37 @@ class TextInput extends Component {
             if (!label) label = "Password";
             var place = typeof value === "string" && value.length > 12 ? "outside" : "inside";
             var hideShowStyle = this.props.buttonColor ? { color: this.props.buttonColor } : {};
-            className = className ? `${className} relative` : "relative";
+            className = className ? `${className} relative inline-block` : "relative inline-block";
             var { showPassword } = this.state;
             type = showPassword ? "text" : "password";
         }
 
         return (
-            <div className={className ? className : ""}>
-                <MuiThemeProvider theme={theme}>
-                    <Field
-                        name={name}
-                        component={renderField}
-                        label={label}
-                        required={required}
-                        validate={Array.isArray(validate) ? validate : [defaultValidate]}
-                        placeholder={placeholder}
-                        type={type}
-                        style={style}
-                        autoFocus={autoFocus}
-                    />
-                    {viewablePassword ? (
-                        <div
-                            styleName={"password-toggle-visibility " + place}
-                            style={hideShowStyle}
-                            onClick={this.toggleShowPassword}
-                        >
-                            {this.state.showPassword ? "hide" : "show"}
-                        </div>
-                    ) : null}
-                </MuiThemeProvider>
+            <div>
+                <div className={className ? className : ""}>
+                    <MuiThemeProvider theme={theme}>
+                        <Field
+                            name={name}
+                            component={renderField}
+                            label={label}
+                            required={required}
+                            validate={Array.isArray(validate) ? validate : [defaultValidate]}
+                            placeholder={placeholder}
+                            type={type}
+                            style={style}
+                            autoFocus={autoFocus}
+                        />
+                        {viewablePassword ? (
+                            <div
+                                styleName={"password-toggle-visibility " + place}
+                                style={hideShowStyle}
+                                onClick={this.toggleShowPassword}
+                            >
+                                {this.state.showPassword ? "hide" : "show"}
+                            </div>
+                        ) : null}
+                    </MuiThemeProvider>
+                </div>
             </div>
         );
     }

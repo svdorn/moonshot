@@ -26,7 +26,7 @@ import {
 import TextInput from "../../../../../userInput/textInput";
 import NavCircles from "../../../../../miscComponents/navCircles";
 
-import "../../../dashboard.css";
+import "./modalSignup.css";
 
 const validate = values => {
     const errors = {};
@@ -259,7 +259,7 @@ class ClaimPageModal extends Component {
                     value={value}
                     buttonColor="#b5b5b5"
                 />
-                <div style={{ margin: "20px 20px 0px" }} className="font12px">
+                <div styleName="agree-to-terms" className="font12px">
                     <div
                         className="checkbox smallCheckbox whiteCheckbox"
                         onClick={this.handleCheckMarkClick.bind(this)}
@@ -270,7 +270,7 @@ class ClaimPageModal extends Component {
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                         />
                     </div>
-                    I have read and agree to the Moonshot Insights<br />
+                    I have read and agree to the Moonshot Insights <br className="above500only" />
                     <a
                         href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                         target="_blank"
@@ -331,7 +331,7 @@ class ClaimPageModal extends Component {
 
         return (
             <Dialog open={!!open} maxWidth={false} onClose={this.close}>
-                <form styleName="modal-signup" className="inline-block center">
+                <form className="modal-signup inline-block center">
                     <div>
                         <div className="primary-cyan font22px font20pxUnder500">
                             Claim Your Page
@@ -348,30 +348,30 @@ class ClaimPageModal extends Component {
                             {frame === 2 ? this.makeFrame2() : null}
                         </div>
 
-                        {this.props.loadingCreateBusiness ? (
-                            <CircularProgress color="#72d6f5" />
-                        ) : (
-                            <div
-                                className={
-                                    "primary-white font18px font16pxUnder700 marginTop10px " +
-                                    button.cyan
-                                }
-                                onClick={
-                                    frame === 2
-                                        ? this.handleSubmit
-                                        : this.navFrames.bind(this, "next")
-                                }
-                            >
-                                {frame === 0 || frame === 1 ? "Next" : "Start"}
-                            </div>
-                        )}
+                        <div styleName="button-and-nav">
+                            {this.props.loadingCreateBusiness ? (
+                                <CircularProgress color="#72d6f5" />
+                            ) : (
+                                <div
+                                    className={"primary-white font16px " + button.cyan}
+                                    style={{ marginBottom: "5px" }}
+                                    onClick={
+                                        frame === 2
+                                            ? this.handleSubmit
+                                            : this.navFrames.bind(this, "next")
+                                    }
+                                >
+                                    {frame === 0 || frame === 1 ? "Next" : "Start"}
+                                </div>
+                            )}
 
-                        <NavCircles
-                            value={this.state.frame}
-                            values={[0, 1, 2]}
-                            onNavigate={this.circleNav}
-                            inactive={this.inactiveFrames()}
-                        />
+                            <NavCircles
+                                value={this.state.frame}
+                                values={[0, 1, 2]}
+                                onNavigate={this.circleNav}
+                                inactive={this.inactiveFrames()}
+                            />
+                        </div>
                     </div>
                 </form>
             </Dialog>
