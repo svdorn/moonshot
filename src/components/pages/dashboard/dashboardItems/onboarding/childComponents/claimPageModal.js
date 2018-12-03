@@ -366,6 +366,7 @@ class ClaimPageModal extends Component {
                                 values={[0, 1, 2]}
                                 onNavigate={this.circleNav}
                                 inactive={this.inactiveFrames()}
+                                dotStyle={{ width: "10px", height: "10px" }}
                             />
                         </div>
                     </div>

@@ -22,7 +22,7 @@ class NavCircles extends Component {
     };
 
     render() {
-        const { value, values, onNavigate, disabled, className, inactive } = this.props;
+        const { value, values, onNavigate, disabled, className, inactive, dotStyle } = this.props;
 
         // need at least one navigation circle to show anything
         if (!Array.isArray(values) || values.length < 1) return null;
@@ -36,6 +36,7 @@ class NavCircles extends Component {
                     styleName={`nav-circle ${v === value ? "selected" : ""} ${
                         disabled || (inactiveExist && inactive.includes(v)) ? "disabled" : ""
                     }`}
+                    style={typeof dotStyle === "object" ? dotStyle : {}}
                     data-value={v}
                     onClick={this.handleCircleClick}
                     key={"nav-circle" + v}
