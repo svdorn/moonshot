@@ -25,6 +25,7 @@ import {
     fieldsAreEmpty
 } from "../../../../../../miscFunctions";
 import ViewablePassword from "../../../../../miscComponents/viewablePassword";
+import TextInput from "../../../../../userInput/textInput";
 import NavCircles from "../../../../../miscComponents/navCircles";
 
 import "../../../dashboard.css";
@@ -197,9 +198,8 @@ class ClaimPageModal extends Component {
                     notValid = true;
                 }
             });
-            if (notValid) {
-                return;
-            }
+            if (notValid) return;
+
             if (checkEmail && !isValidEmail(vals.email)) {
                 return this.setState({ error: "Invalid email." });
             }
@@ -254,11 +254,11 @@ class ClaimPageModal extends Component {
 
         return (
             <div className="center">
-                <ViewablePassword
+                <TextInput
+                    viewablePassword={true}
                     name="password"
                     label="Password"
                     value={value}
-                    className="signup-fields"
                     buttonColor="#b5b5b5"
                 />
                 <div style={{ margin: "20px 20px 0px" }} className="font12px">

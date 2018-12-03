@@ -88,9 +88,27 @@ const renderPasswordField = ({ input, label, meta: { touched, error }, ...custom
     />
 );
 
+// const viewablePasswordField = ({ input, label, meta: { touched, error }, type, ...custom }) => (
+//     <TextField
+//         hintText={label}
+//         floatingLabelText={label}
+//         errorText={touched && error}
+//         inputStyle={style.searchInputStyle}
+//         hintStyle={style.searchHintStyle}
+//         floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+//         floatingLabelStyle={style.searchFloatingLabelStyle}
+//         underlineFocusStyle={style.searchUnderlineFocusStyle}
+//         {...input}
+//         {...custom}
+//         autofill="new-password"
+//         className="text-field"
+//         type={type}
+//     />
+// );
+
 const viewablePasswordField = ({ input, label, meta: { touched, error }, type, ...custom }) => (
     <TextField
-        hintText={label}
+        label={label}
         floatingLabelText={label}
         errorText={touched && error}
         inputStyle={style.searchInputStyle}
