@@ -340,7 +340,7 @@ class ModalSignup extends Component {
                 {error ? <div className="font14px marginTop10px secondary-red">{error}</div> : null}
 
                 <div className="input-separator" />
-                <TextInput name="email" label="Email" />
+                <TextInput name="email" label="Work Email" />
                 <div className="input-separator" />
                 <TextInput name="password" label="Password" value={value} viewablePassword={true} />
                 <div className="input-separator" />
