@@ -21,7 +21,7 @@ class AddPositionPage extends Component {
                     <div className="primary-cyan">Who do you need to hire?</div>
                     <div className="font14px">Enter one of your open positions.</div>
                 </div>
-                <div styleName="add-position">
+                <div styleName="non-desktop-activation-space">
                     <AddPosition />
                 </div>
             </div>

@@ -53,6 +53,10 @@ class InvitePage extends Component {
         const vals = this.props.formData.businessSignup.values;
         const canAdvance = !!vals && !!vals.company;
 
+        const buttonClass = canAdvance
+            ? "background-primary-cyan"
+            : "disabled background-secondary-gray";
+
         return (
             <div styleName="item-padding">
                 <div styleName="build-team-container">
@@ -61,11 +65,15 @@ class InvitePage extends Component {
                         onSubmit={this.handleSubmit}
                         style={{ height: "100%" }}
                     >
-                        <div className="primary-cyan font24px font20pxUnder700 font18pxUnder600 marginTop20px">
-                            <div styleName="not-small-mobile">See Your Candidate Invite Page</div>
-                            <div styleName="small-mobile-only">Your Candidate Invite Page</div>
+                        <div className="primary-cyan font24px font20pxUnder700 font18pxUnder600">
+                            <div styleName="not-small-mobile add-position-header">
+                                See Your Candidate Invite Page
+                            </div>
+                            <div styleName="small-mobile-only add-position-header">
+                                Your Candidate Invite Page
+                            </div>
                         </div>
-                        <div className="marginTop10px">
+                        <div styleName="non-desktop-activation-space" className="marginTop20px">
                             One page that all of your candidates can visit to complete their
                             evaluation.
                         </div>
@@ -80,11 +88,14 @@ class InvitePage extends Component {
 
                         <div styleName="add-position-button-container">
                             <button
-                                className="button noselect round-6px background-primary-cyan primary-white font18px font16pxUnder700 font14pxUnder500 marginTop20px"
+                                className={
+                                    "button noselect round-6px primary-white font16px " +
+                                    buttonClass
+                                }
                                 style={{ padding: "5px 17px" }}
                                 onClick={this.handleSubmit}
                             >
-                                See Your Page <ShiftArrow disabled={false} />
+                                See Your Page <ShiftArrow disabled={!canAdvance} />
                             </button>
                         </div>
                     </form>
