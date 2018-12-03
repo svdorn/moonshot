@@ -205,7 +205,7 @@ class CandidateView extends Component {
                     </div>
                     <div styleName="text-padding">
                         {
-                            "Candidates complete a series of questions so we can form archetypes and predict how they'll behave and fit in your work environment."
+                            "Candidates complete a series of situational questions so we can better understand their personality and predict how they'll behave and fit in your work environment."
                         }
                     </div>
                     {this.emojiButtons("a")}
