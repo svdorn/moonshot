@@ -88,42 +88,6 @@ const renderPasswordField = ({ input, label, meta: { touched, error }, ...custom
     />
 );
 
-// const viewablePasswordField = ({ input, label, meta: { touched, error }, type, ...custom }) => (
-//     <TextField
-//         hintText={label}
-//         floatingLabelText={label}
-//         errorText={touched && error}
-//         inputStyle={style.searchInputStyle}
-//         hintStyle={style.searchHintStyle}
-//         floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
-//         floatingLabelStyle={style.searchFloatingLabelStyle}
-//         underlineFocusStyle={style.searchUnderlineFocusStyle}
-//         {...input}
-//         {...custom}
-//         autofill="new-password"
-//         className="text-field"
-//         type={type}
-//     />
-// );
-
-const viewablePasswordField = ({ input, label, meta: { touched, error }, type, ...custom }) => (
-    <TextField
-        label={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        inputStyle={style.searchInputStyle}
-        hintStyle={style.searchHintStyle}
-        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
-        floatingLabelStyle={style.searchFloatingLabelStyle}
-        underlineFocusStyle={style.searchUnderlineFocusStyle}
-        {...input}
-        {...custom}
-        autofill="new-password"
-        className="text-field"
-        type={type}
-    />
-);
-
 // get the qualifier (e.g. "above average", "expert", etc) based on a score
 function qualifierFromScore(score) {
     // make sure the score is a number we can use
@@ -461,7 +425,6 @@ const miscFunctions = {
     qualifierFromScore,
     renderTextField,
     renderPasswordField,
-    viewablePasswordField,
     getFirstName,
     isValidEmail,
     htmlDecode,
