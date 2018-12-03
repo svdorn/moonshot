@@ -417,7 +417,12 @@ class ModalSignup extends Component {
         }
 
         return (
-            <Dialog open={!!this.props.open} maxWidth={false} onClose={this.closeSignupModal}>
+            <Dialog
+                open={!!this.props.open}
+                maxWidth={false}
+                onClose={this.closeSignupModal}
+                classes={{ paper: "background-primary-black-dark-important" }}
+            >
                 {frame === 1 && info.header1 ? (
                     <div className="modal-signup">
                         <div className="primary-cyan font22px font20pxUnder500">{info.header1}</div>
