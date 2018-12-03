@@ -28,6 +28,7 @@ const renderField = ({
     placeholder,
     autoComplete,
     autoFocus,
+    textFieldClassName,
     type,
     style,
     className,
@@ -42,7 +43,7 @@ const renderField = ({
         error={touched && error ? true : false}
         type={typeof type === "string" ? type : "text"}
         variant="standard"
-        className={typeof className === "string" ? className : "text-field"}
+        className={typeof textFieldClassName === "string" ? textFieldClassName : "text-field"}
         style={typeof style === "object" ? style : {}}
         autoComplete={typeof autoComplete === "string" ? autoComplete : "on"}
         autoFocus={typeof autoFocus === "boolean" ? autoFocus : false}
@@ -82,7 +83,8 @@ class TextInput extends Component {
             autoFocus,
             viewablePassword,
             value,
-            className
+            className,
+            textFieldClassName
         } = this.props;
 
         // if there should be a hide/show button to show/hide password
@@ -110,6 +112,7 @@ class TextInput extends Component {
                             type={type}
                             style={style}
                             autoFocus={autoFocus}
+                            textFieldClassName={textFieldClassName}
                         />
                         {viewablePassword ? (
                             <div

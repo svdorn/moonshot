@@ -2524,6 +2524,9 @@ button.link {
 .text-field {
     width: 260px;
 }
+.text-field.width280 {
+    width: 280px;
+}
 
 /* ------------------------->> END MARGINS/PADDING <<------------------------ */
 /* ------------------------>> DECORATIVE TRIANGLES <<------------------------ */

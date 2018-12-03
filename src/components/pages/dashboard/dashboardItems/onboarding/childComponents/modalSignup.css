@@ -9,9 +9,32 @@
     margin: 15px -5px 0px;
 }
 
+.password-agree-area {
+    margin: 5px 10px;
+    position: absolute;
+    width: calc(100% - 20px);
+    left: 0;
+    text-align: center;
+}
+
+.error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
 @media screen and (max-width: 500px) {
     .agree-to-terms {
         margin: 20px 20px 0px;
+    }
+
+    .error {
+        font-size: 12px;
+        margin-top: 5px;
     }
 }
 
@@ -22,5 +45,15 @@
 
     .claim-page-modal {
         min-height: 325px;
+    }
+
+    .error {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .error {
+        font-size: 9px;
     }
 }

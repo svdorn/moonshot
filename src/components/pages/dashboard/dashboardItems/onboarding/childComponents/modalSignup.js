@@ -182,7 +182,7 @@ class ModalSignup extends Component {
         if (e) e.preventDefault();
         if (!this.state.agreeingToTerms) {
             return this.setState({
-                error: "Must agree to Terms and Conditions and Privacy Policy."
+                error: "Must agree to Terms of Service and Privacy Policy."
             });
         }
 

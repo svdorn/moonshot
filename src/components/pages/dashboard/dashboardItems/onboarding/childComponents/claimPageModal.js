@@ -94,7 +94,7 @@ class ClaimPageModal extends Component {
     handleSubmit(e) {
         if (!this.state.agreeingToTerms) {
             return this.setState({
-                error: "Must agree to Terms and Conditions and Privacy Policy."
+                error: "Must agree to Terms of Service and Privacy Policy."
             });
         }
 
@@ -244,13 +244,14 @@ class ClaimPageModal extends Component {
         }
 
         return (
-            <div className="center" style={{ marginTop: "5px" }}>
+            <div className="center" styleName="password-agree-area">
                 <TextInput
                     viewablePassword={true}
                     name="password"
                     label="Password"
                     value={value}
                     buttonColor="#b5b5b5"
+                    textFieldClassName="text-field width280"
                 />
                 <div styleName="agree-to-terms" className="font12px">
                     <div
@@ -339,7 +340,9 @@ class ClaimPageModal extends Component {
                         </div>
                         <div className="font14px">Fill this out so you can manage your page.</div>
                         {this.state.error ? (
-                            <div className="font14px marginTop10px secondary-red">{error}</div>
+                            <div styleName="error" className="secondary-red">
+                                {error}
+                            </div>
                         ) : null}
                     </div>
                     <div>
