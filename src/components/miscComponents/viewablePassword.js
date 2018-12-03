@@ -24,6 +24,7 @@ class ViewablePassword extends Component {
         const label = this.props.label ? this.props.label : "Password";
         const value = this.props.value ? this.props.value : undefined;
         const { showPassword } = this.state;
+        const style = this.props.buttonColor ? { color: this.props.buttonColor } : {};
 
         const place = typeof value === "string" && value.length > 12 ? "outside" : "inside";
 
@@ -38,6 +39,7 @@ class ViewablePassword extends Component {
                 />
                 <div
                     styleName={"password-toggle-visibility " + place}
+                    style={style}
                     onClick={this.toggleShowPassword}
                 >
                     {showPassword ? "hide" : "show"}

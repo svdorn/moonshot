@@ -259,6 +259,7 @@ class ClaimPageModal extends Component {
                     label="Password"
                     value={value}
                     className="signup-fields"
+                    buttonColor="#b5b5b5"
                 />
                 <div style={{ margin: "20px 20px 0px" }} className="font12px">
                     <div
