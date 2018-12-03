@@ -643,7 +643,11 @@ export function createBusinessAndUser(userInfo, customErrorAction) {
                     type: "LOGIN",
                     user: response.data.user,
                     fullAccess: response.data.fullAccess,
-                    ...notification("Your account has been activated! Thanks for signing up!")
+                    ...notification(
+                        `Your account has been activated! Continue to set things up for ${
+                            userInfo.company
+                        }.`
+                    )
                 });
                 dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
                 dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
