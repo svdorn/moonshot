@@ -231,14 +231,6 @@ class ClaimPageModal extends Component {
                     <Field name="name" component={renderTextField} label="Full Name" />
                     <br />
                 </div>
-                <div
-                    className={
-                        "primary-white font18px font16pxUnder700 marginTop10px " + button.cyan
-                    }
-                    onClick={this.navFrames.bind(this, "next")}
-                >
-                    Next
-                </div>
             </div>
         );
     }
@@ -249,14 +241,6 @@ class ClaimPageModal extends Component {
                 <div className="inputContainer">
                     <Field name="email" component={renderTextField} label="Email" />
                     <br />
-                </div>
-                <div
-                    className={
-                        "primary-white font18px font16pxUnder700 marginTop10px " + button.cyan
-                    }
-                    onClick={this.navFrames.bind(this, "next")}
-                >
-                    Next
                 </div>
             </div>
         );
@@ -304,18 +288,6 @@ class ClaimPageModal extends Component {
                         terms of service
                     </a>.
                 </div>
-                {this.props.loadingCreateBusiness ? (
-                    <CircularProgress color="#72d6f5" />
-                ) : (
-                    <div
-                        className={
-                            "primary-white font18px font16pxUnder700 marginTop10px " + button.cyan
-                        }
-                        onClick={this.handleSubmit}
-                    >
-                        Start
-                    </div>
-                )}
             </div>
         );
     }
@@ -355,10 +327,11 @@ class ClaimPageModal extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
-        const { frame } = this.state;
+        const { frame, error } = this.state;
+        const { loadingCreateBusiness, open } = this.props;
 
         return (
-            <Dialog open={!!this.props.open} maxWidth={false} onClose={this.close}>
+            <Dialog open={!!open} maxWidth={false} onClose={this.close}>
                 <form styleName="modal-signup" className="inline-block center">
                     <div>
                         <div className="primary-cyan font22px font20pxUnder500">
@@ -366,9 +339,7 @@ class ClaimPageModal extends Component {
                         </div>
                         <div className="font14px">Fill this out so you can manage your page.</div>
                         {this.state.error ? (
-                            <div className="font14px marginTop10px secondary-red">
-                                {this.state.error}
-                            </div>
+                            <div className="font14px marginTop10px secondary-red">{error}</div>
                         ) : null}
                     </div>
                     <div>
@@ -377,6 +348,25 @@ class ClaimPageModal extends Component {
                             {frame === 1 ? this.makeFrame1() : null}
                             {frame === 2 ? this.makeFrame2() : null}
                         </div>
+
+                        {this.props.loadingCreateBusiness ? (
+                            <CircularProgress color="#72d6f5" />
+                        ) : (
+                            <div
+                                className={
+                                    "primary-white font18px font16pxUnder700 marginTop10px " +
+                                    button.cyan
+                                }
+                                onClick={
+                                    frame === 2
+                                        ? this.handleSubmit
+                                        : this.navFrames.bind(this, "next")
+                                }
+                            >
+                                {frame === 0 || frame === 1 ? "Next" : "Start"}
+                            </div>
+                        )}
+
                         <NavCircles
                             value={this.state.frame}
                             values={[0, 1, 2]}
