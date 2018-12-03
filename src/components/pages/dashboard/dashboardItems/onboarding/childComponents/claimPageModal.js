@@ -323,7 +323,12 @@ class ClaimPageModal extends Component {
         const { loadingCreateBusiness, open } = this.props;
 
         return (
-            <Dialog open={!!open} maxWidth={false} onClose={this.close}>
+            <Dialog
+                open={!!open}
+                maxWidth={false}
+                onClose={this.close}
+                classes={{ paper: "background-primary-black-dark-important" }}
+            >
                 <form className="modal-signup inline-block center" styleName="claim-page-modal">
                     <div>
                         <div
