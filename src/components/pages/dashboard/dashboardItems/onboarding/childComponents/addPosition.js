@@ -201,9 +201,7 @@ class AddPosition extends Component {
     };
 
     // navigate to a new frame using the nav circles
-    handleNav = (frame, event) => {
-        this.setState({ frame });
-    };
+    handleNav = (frame, event) => this.setState({ frame });
 
     render() {
         const { frame, addPositionError, mustSelectTypeError, positionType } = this.state;

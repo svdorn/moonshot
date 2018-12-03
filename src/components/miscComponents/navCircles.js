@@ -22,16 +22,19 @@ class NavCircles extends Component {
     };
 
     render() {
-        const { value, values, onNavigate, disabled, className } = this.props;
+        const { value, values, onNavigate, disabled, className, inactive } = this.props;
 
         // need at least one navigation circle to show anything
         if (!Array.isArray(values) || values.length < 1) return null;
+
+        // whether there are inactive circles to check for
+        const inactiveExist = Array.isArray(inactive);
 
         let navCircles = values.map((v, valueIdx) => {
             return (
                 <div
                     styleName={`nav-circle ${v === value ? "selected" : ""} ${
-                        disabled ? "disabled" : ""
+                        disabled || (inactiveExist && inactive.includes(v)) ? "disabled" : ""
                     }`}
                     data-value={v}
                     onClick={this.handleCircleClick}
