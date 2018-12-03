@@ -305,6 +305,15 @@ class ClaimPageModal extends Component {
         return !!vals.email && !!isValidEmail(vals.email);
     };
 
+    frame2finished = () => {
+        // values of input fields
+        const vals = this.props.formData.businessSignup
+            ? this.props.formData.businessSignup.values
+            : undefined;
+
+        return !!vals.password && isValidPassword(vals.password) && this.state.agreeingToTerms;
+    };
+
     // returns a list of which circles can be clicked
     inactiveFrames = () => {
         if (!this.frame0finished()) {
@@ -322,6 +331,15 @@ class ClaimPageModal extends Component {
     render() {
         const { frame, error } = this.state;
         const { loadingCreateBusiness, open } = this.props;
+
+        const canAdvance =
+            (frame === 0 && this.frame0finished()) ||
+            (frame === 1 && this.frame1finished()) ||
+            (frame === 2 && this.frame2finished());
+
+        const buttonClass = canAdvance
+            ? "background-primary-cyan"
+            : "background-secondary-gray not-allowed";
 
         return (
             <Dialog
@@ -357,7 +375,10 @@ class ClaimPageModal extends Component {
                                 <CircularProgress color="#72d6f5" />
                             ) : (
                                 <div
-                                    className={"primary-white font16px " + button.cyan}
+                                    className={
+                                        "button medium round-4px primary-white font16px " +
+                                        buttonClass
+                                    }
                                     style={{ marginBottom: "5px" }}
                                     onClick={
                                         frame === 2
