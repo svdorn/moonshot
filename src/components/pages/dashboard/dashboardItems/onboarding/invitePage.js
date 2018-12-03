@@ -8,8 +8,10 @@ import {
     postBusinessInterests,
     updateStore
 } from "../../../../../actions/usersActions";
-import { renderTextField, goTo } from "../../../../../miscFunctions";
+import { renderTextField, goTo, fieldsAreEmpty } from "../../../../../miscFunctions";
 import { button } from "../../../../../classes";
+import TextInput from "../../../../userInput/textInput";
+import ShiftArrow from "../../../../miscComponents/shiftArrow";
 
 import "../../dashboard.css";
 
@@ -20,7 +22,7 @@ const validate = values => {
     for (let fieldIdx = 0; fieldIdx < requiredFields.length; fieldIdx++) {
         const field = requiredFields[fieldIdx];
         if (!values[field]) {
-            errors[field] = "Must enter company name to continue.";
+            errors[field] = "Enter your company's name to continue.";
             return errors;
         }
     }
@@ -40,25 +42,17 @@ class InvitePage extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
+        // form validation before submit
         const vals = this.props.formData.businessSignup.values;
-
-        // Form validation before submit
-        let notValid = false;
-        const requiredFields = ["company"];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) {
-            return;
-        }
+        if (fieldsAreEmpty(vals, ["company"], this.props.touch)) return;
 
         goTo("/apply/" + vals.company + "?onboarding=true");
     }
 
     render() {
+        const vals = this.props.formData.businessSignup.values;
+        const canAdvance = !!vals && !!vals.company;
+
         return (
             <div styleName="item-padding">
                 <div styleName="build-team-container">
@@ -75,30 +69,24 @@ class InvitePage extends Component {
                             One page that all of your candidates can visit to complete their
                             evaluation.
                         </div>
-                        <div className="inputContainer signup-fields" styleName="not-small-mobile">
+                        <div className="inputContainer signup-fields">
                             <Field
                                 name="company"
                                 component={renderTextField}
-                                label="Enter your company name"
+                                label="Enter company name"
                             />
                             <br />
                         </div>
-                        <div className="inputContainer signup-fields" styleName="small-mobile-only">
-                            <Field
-                                name="company"
-                                component={renderTextField}
-                                label="Company name"
-                            />
-                            <br />
+
+                        <div styleName="add-position-button-container">
+                            <button
+                                className="button noselect round-6px background-primary-cyan primary-white font18px font16pxUnder700 font14pxUnder500 marginTop20px"
+                                style={{ padding: "5px 17px" }}
+                                onClick={this.handleSubmit}
+                            >
+                                See Your Page <ShiftArrow disabled={false} />
+                            </button>
                         </div>
-                        <button
-                            className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500 marginTop20px"
-                            styleName="onboarding-button"
-                            style={{ padding: "5px 17px" }}
-                            onClick={this.handleSubmit}
-                        >
-                            <span>See Your Page &#8594;</span>
-                        </button>
                     </form>
                 </div>
             </div>
