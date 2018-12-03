@@ -237,7 +237,7 @@ export function intercomEvent(eventName, userId, verificationToken, metadata) {
                 if (response.data.temp) {
                     dispatch({ type: "INTERCOM_EVENT_TEMP", user: response.data.user });
                 } else {
-                    dispatch({ type: "INTERCOM_EVENT" });
+                    dispatch({ type: "INTERCOM_EVENT", user: response.data.user });
                 }
             })
             .catch(function(err) {

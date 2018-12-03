@@ -529,10 +529,12 @@ async function POST_confirmEmbedLink(req, res) {
 }
 
 module.exports.POST_intercomEvent = async function(req, res) {
-    const event_name = sanitize(req.body.eventName);
-    const metadata = sanitize(req.body.metadata);
+    const { userId, verificationToken, metadata, eventName: event_name } = sanitize(req.body);
 
-    if (!req.body.userId || !req.body.verificationToken) {
+    // whether the person who triggered the event has an account
+    const userHasAccount = !!userId && !!verificationToken;
+
+    if (!userHasAccount) {
         var email = await generateNewUniqueEmail();
         var intercom = await client.users.create({
             email,
@@ -584,7 +586,24 @@ module.exports.POST_intercomEvent = async function(req, res) {
             email: user.intercom.email,
             metadata
         },
-        function(d) {
+        async function(d) {
+            // if user is real
+            if (userHasAccount) {
+                // if the triggered intercom events array does not exist, make it
+                if (!Array.isArray(user.triggeredIntercomEvents)) {
+                    user.triggeredIntercomEvents = [];
+                }
+                // if the user hasn't triggered this event in the past ...
+                if (!user.triggeredIntercomEvents.includes(event_name)) {
+                    // ... add it to the user's list of triggered events
+                    user.triggeredIntercomEvents.push(event_name);
+                    // then save the user
+                    await user.save();
+                    // make it safe for the front end
+                    user = frontEndUser(user);
+                }
+            }
+
             return res.status(200).send({ user, temp });
         }
     );

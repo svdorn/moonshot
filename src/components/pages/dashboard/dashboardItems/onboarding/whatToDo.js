@@ -126,6 +126,11 @@ class WhatToDo extends Component {
             }
         }
 
+        const showMoreInfoButton =
+            !currentUser ||
+            !currentUser.triggeredIntercomEvents ||
+            !currentUser.triggeredIntercomEvents.includes("onboarding-step-4");
+
         return (
             <div styleName="full-step-container">
                 <div styleName="copy-link-view">
@@ -188,10 +193,12 @@ class WhatToDo extends Component {
                                 <img src={`/icons/emojis/PartyPopper${this.props.png}`} />
                                 <div style={{ paddingTop: "5px" }}>All set!</div>
                             </div>
-                            <div onClick={this.intercomMsg}>
-                                <img src={`/icons/emojis/Face${this.props.png}`} />
-                                <div style={{ paddingTop: "5px" }}>More info</div>
-                            </div>
+                            {showMoreInfoButton ? (
+                                <div onClick={this.intercomMsg}>
+                                    <img src={`/icons/emojis/Face${this.props.png}`} />
+                                    <div style={{ paddingTop: "5px" }}>More info</div>
+                                </div>
+                            ) : null}
                         </div>
                     ) : (
                         <div styleName="circular-progress">

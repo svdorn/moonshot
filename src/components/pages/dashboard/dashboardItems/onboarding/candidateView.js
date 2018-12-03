@@ -105,16 +105,24 @@ class CandidateView extends Component {
     };
 
     emojiButtons(instance) {
+        const user = this.props.currentUser;
+        const showMoreInfoButton =
+            !user ||
+            !user.triggeredIntercomEvents ||
+            !user.triggeredIntercomEvents.includes(`onboarding-step-1${instance}`);
+
         return (
             <div styleName="emoji-buttons">
                 <div onClick={this.next}>
                     <img src={`/icons/emojis/ThumbsUp${this.props.png}`} />
-                    <div>Got it</div>
+                    <div>Got it!</div>
                 </div>
-                <div onClick={() => this.intercomMsg(instance)}>
-                    <img src={`/icons/emojis/Face${this.props.png}`} />
-                    <div>More info</div>
-                </div>
+                {showMoreInfoButton ? (
+                    <div onClick={() => this.intercomMsg(instance)}>
+                        <img src={`/icons/emojis/Face${this.props.png}`} />
+                        <div>More info</div>
+                    </div>
+                ) : null}
             </div>
         );
     }

@@ -270,7 +270,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "INTERCOM_EVENT":
             Intercom("update");
-            return { ...state, loadingSomething: false };
+            return { ...state, loadingSomething: false, currentUser: action.user };
             break;
         case "INTERCOM_EVENT_TEMP":
             if (action.user && action.user.intercom) {
