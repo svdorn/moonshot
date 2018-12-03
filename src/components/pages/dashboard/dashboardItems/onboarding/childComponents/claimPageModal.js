@@ -17,14 +17,12 @@ import colors from "../../../../../../colors";
 import { button } from "../../../../../../classes.js";
 import {
     renderTextField,
-    viewablePasswordField,
     isValidEmail,
     goTo,
     isValidPassword,
     propertyExists,
     fieldsAreEmpty
 } from "../../../../../../miscFunctions";
-import ViewablePassword from "../../../../../miscComponents/viewablePassword";
 import TextInput from "../../../../../userInput/textInput";
 import NavCircles from "../../../../../miscComponents/navCircles";
 

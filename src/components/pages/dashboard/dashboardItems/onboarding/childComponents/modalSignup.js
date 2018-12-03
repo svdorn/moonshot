@@ -16,13 +16,12 @@ import ReactGA from "react-ga";
 import colors from "../../../../../../colors";
 import {
     renderTextField,
-    viewablePasswordField,
     isValidEmail,
     goTo,
     isValidPassword,
     propertyExists
 } from "../../../../../../miscFunctions";
-import ViewablePassword from "../../../../../miscComponents/viewablePassword";
+import TextInput from "../../../../../userInput/textInput";
 
 import "../../../dashboard.css";
 
@@ -339,17 +338,12 @@ class ModalSignup extends Component {
                     {info.body3}
                 </div>
                 {error ? <div className="font14px marginTop10px secondary-red">{error}</div> : null}
-                <div className="inputContainer signup-fields">
-                    <Field name="email" component={renderTextField} label="Email" />
-                    <br />
-                </div>
 
-                <ViewablePassword
-                    name="password"
-                    label="Password"
-                    value={value}
-                    className="signup-fields"
-                />
+                <div className="input-separator" />
+                <TextInput name="email" label="Email" />
+                <div className="input-separator" />
+                <TextInput name="password" label="Password" value={value} viewablePassword={true} />
+                <div className="input-separator" />
 
                 <div style={{ margin: "20px 20px 0px" }} className="font12px">
                     <div

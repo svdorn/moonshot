@@ -527,6 +527,10 @@ form > h1 {
     color: var(--secondary-red);
 }
 
+.input-separator {
+    height: 10px;
+}
+
 /* CAROUSEL */
 
 .carousel .frame-position-circle {
