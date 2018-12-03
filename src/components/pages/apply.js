@@ -207,7 +207,7 @@ class Apply extends Component {
             var onClick = this.openClaimPageModal;
             var description = (
                 <div>
-                    Candidates will see the above when they click{" "}
+                    Candidates will see what's above when they click{" "}
                     {makePossessive(this.state.company)} invite link.
                 </div>
             );
