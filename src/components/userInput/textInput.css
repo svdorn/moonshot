@@ -1,9 +1,10 @@
 .password-toggle-visibility {
     display: inline-block;
     position: absolute;
-    top: 19px;
+    top: 22px;
     cursor: pointer;
     color: var(--primary-cyan);
+    font-size: 14px;
 }
 
 .outside {

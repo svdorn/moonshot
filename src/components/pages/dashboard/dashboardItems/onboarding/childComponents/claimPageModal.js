@@ -10,13 +10,12 @@ import {
 import { TextField } from "material-ui";
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { Field, reduxForm } from "redux-form";
+import { reduxForm } from "redux-form";
 import MetaTags from "react-meta-tags";
 import ReactGA from "react-ga";
 import colors from "../../../../../../colors";
 import { button } from "../../../../../../classes.js";
 import {
-    renderTextField,
     isValidEmail,
     goTo,
     isValidPassword,
@@ -225,10 +224,7 @@ class ClaimPageModal extends Component {
     makeFrame0() {
         return (
             <div className="center">
-                <div className="inputContainer">
-                    <Field name="name" component={renderTextField} label="Full Name" />
-                    <br />
-                </div>
+                <TextInput name="name" label="Full Name" />
             </div>
         );
     }
@@ -236,10 +232,7 @@ class ClaimPageModal extends Component {
     makeFrame1() {
         return (
             <div className="center">
-                <div className="inputContainer">
-                    <Field name="email" component={renderTextField} label="Email" />
-                    <br />
-                </div>
+                <TextInput name="email" label="Email" />
             </div>
         );
     }
@@ -331,9 +324,12 @@ class ClaimPageModal extends Component {
 
         return (
             <Dialog open={!!open} maxWidth={false} onClose={this.close}>
-                <form className="modal-signup inline-block center">
+                <form className="modal-signup inline-block center" styleName="claim-page-modal">
                     <div>
-                        <div className="primary-cyan font22px font20pxUnder500">
+                        <div
+                            className="primary-cyan font22px font20pxUnder500"
+                            style={{ marginBottom: "5px" }}
+                        >
                             Claim Your Page
                         </div>
                         <div className="font14px">Fill this out so you can manage your page.</div>

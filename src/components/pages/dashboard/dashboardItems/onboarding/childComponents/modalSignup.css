@@ -6,7 +6,7 @@
 }
 
 .agree-to-terms {
-    margin: 20px 0px 0px;
+    margin: 15px -5px 0px;
 }
 
 @media screen and (max-width: 500px) {
@@ -18,5 +18,9 @@
 @media screen and (max-width: 400px) {
     .agree-to-terms {
         margin: 20px 0px 0px;
+    }
+
+    .claim-page-modal {
+        min-height: 320px;
     }
 }

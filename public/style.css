@@ -536,7 +536,7 @@ form > h1 {
     background-color: var(--primary-black-dark);
     color: var(--secondary-gray);
     min-width: 200px;
-    min-height: 300px;
+    min-height: 310px;
 }
 
 /* CAROUSEL */
