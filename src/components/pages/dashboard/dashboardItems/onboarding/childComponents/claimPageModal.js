@@ -372,7 +372,7 @@ class ClaimPageModal extends Component {
 
                         <div styleName="button-and-nav">
                             {this.props.loadingCreateBusiness ? (
-                                <CircularProgress color="#72d6f5" />
+                                <CircularProgress color="secondary" />
                             ) : (
                                 <div
                                     className={

@@ -211,7 +211,7 @@
 .full-step-container {
     position: relative;
     flex: 1;
-    padding: calc(var(--item-margin) / 2) var(--item-margin);
+    padding: calc(var(--item-margin) / 2) var(--item-margin) 0;
     height: 100%;
 }
 .candidate-view > div:first-child {
@@ -268,7 +268,7 @@
     text-align: center;
 }
 .copy-link-view > div:nth-child(4) {
-    margin: 10px auto;
+    margin: 10px auto 0;
 }
 .add-positions-view > div:first-child {
     color: var(--primary-cyan);
@@ -402,7 +402,7 @@
 }
 .link-area {
     display: flex;
-    margin: 3px 0 12px;
+    margin-top: 10px;
     justify-content: center;
 }
 .link-area > input {
@@ -516,7 +516,7 @@
 
 .onboarding-title {
     color: var(--primary-cyan);
-    font-size: 20px;
+    font-size: 18px;
 }
 .custom-page-title {
     color: var(--primary-cyan);
@@ -720,6 +720,10 @@
 .link-to-custom-page {
     margin: 4px 10px 0;
     display: inline-block;
+    color: white;
+}
+.link-to-custom-page:hover {
+    color: var(--primary-cyan);
 }
 
 .why-it-works-desc {

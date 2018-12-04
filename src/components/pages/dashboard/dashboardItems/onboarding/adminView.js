@@ -83,7 +83,7 @@ class AdminView extends Component {
                     </div>
                     <div styleName="desktop-only">
                         {
-                            "Job Performance and Growth Potential predictions for each candidate along with a Candidate Score and results from their evaluation. We generate Longevity/tenure and Culture Fit predictions after at least 16 of your employees have been evaluated."
+                            "We predict the job performance, growth potential, longevity, and culture fit of each candidate. You can also see an overall Candidate Score and a breakdown of each candidate’s results."
                         }
                     </div>
                     <div styleName="mobile-only">
