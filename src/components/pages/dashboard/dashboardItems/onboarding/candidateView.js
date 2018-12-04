@@ -228,11 +228,11 @@ class CandidateView extends Component {
                         className="primary-cyan font18px"
                         styleName="mobile-center title-margin text-padding"
                     >
-                        Evaluate Intellect
+                        Candidate Experience
                     </div>
-                    <div styleName="text-padding">
+                    <div style={{ paddingLeft: "5px" }}>
                         Candidates then complete a short quiz highly predictive of job performance
-                        and growth potential that demonstates their ability to
+                        and growth potential that demonstrates their ability to
                         <span styleName="desktop-only">:</span>
                         <span styleName="mobile-only">
                             {
@@ -241,7 +241,7 @@ class CandidateView extends Component {
                             }
                         </span>
                     </div>
-                    <ul styleName="desktop-only">
+                    <ul styleName="desktop-only" style={{ lineHeight: "1.45" }}>
                         <li>Solve Problems</li>
                         <li>Learn Quickly</li>
                         <li>Adapt to Complex Situations</li>
