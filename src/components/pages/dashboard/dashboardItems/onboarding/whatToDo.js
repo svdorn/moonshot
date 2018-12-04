@@ -173,14 +173,14 @@ class WhatToDo extends Component {
                             onClick={this.highlight}
                             value={`https://moonshotinsights.io/apply/${uniqueName}`}
                         />
-
-                        <button
-                            className="button noselect round-6px background-primary-cyan primary-white learn-more-texts"
+                        <Button
+                            variant="contained"
+                            color="primary"
                             onClick={this.copyLink}
-                            style={{ padding: "3px 10px" }}
+                            classes={{ root: "no-text-transform no-focus-outline" }}
                         >
-                            <span>Copy Link</span>
-                        </button>
+                            Copy Link
+                        </Button>
                         <br styleName="small-mobile-only" />
                         <div
                             className="pointer transition-all"

@@ -294,6 +294,13 @@ footer {
     padding: 10px;
 }
 
+.no-text-transform {
+    text-transform: none !important;
+}
+.no-focus-outline:focus {
+    outline: none !important;
+}
+
 .underline {
     text-decoration: underline;
 }
