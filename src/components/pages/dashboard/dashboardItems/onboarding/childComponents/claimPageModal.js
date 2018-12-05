@@ -24,6 +24,7 @@ import {
 } from "../../../../../../miscFunctions";
 import TextInput from "../../../../../userInput/textInput";
 import NavCircles from "../../../../../miscComponents/navCircles";
+import Button from "../../../../../miscComponents/Button";
 
 import "./modalSignup.css";
 
@@ -370,20 +371,17 @@ class ClaimPageModal extends Component {
                             {this.props.loadingCreateBusiness ? (
                                 <CircularProgress color="secondary" />
                             ) : (
-                                <div
-                                    className={
-                                        "button medium round-4px primary-white font16px " +
-                                        buttonClass
-                                    }
+                                <Button
                                     style={{ marginBottom: "5px" }}
                                     onClick={
                                         frame === 2
                                             ? this.handleSubmit
                                             : this.navFrames.bind(this, "next")
                                     }
+                                    disabled={!canAdvance}
                                 >
                                     {frame === 0 || frame === 1 ? "Next" : "Start"}
-                                </div>
+                                </Button>
                             )}
 
                             <NavCircles
