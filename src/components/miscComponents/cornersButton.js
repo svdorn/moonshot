@@ -45,9 +45,6 @@ class CornersButton extends Component {
         if (typeof size !== "string") {
             size = "";
         }
-        if (typeof active !== "string") {
-            active = "";
-        }
         if (typeof paddingSides !== "string") {
             paddingSides = "50px";
         }
@@ -59,7 +56,7 @@ class CornersButton extends Component {
 
         return (
             <div
-                styleName={`button ${size} ${active} ${paddingSides} ${paddingTop}`}
+                styleName={`button ${size} ${active ? "active" : ""} ${paddingSides} ${paddingTop}`}
                 className={className}
                 onClick={onClick}
                 style={style}

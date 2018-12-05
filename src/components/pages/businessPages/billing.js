@@ -195,12 +195,12 @@ class Billing extends Component {
             let buttonText = baseButtonText;
             let shadowActive = "";
             if (plan === box.period && !allNotActive) {
-                var active = "active";
+                var active = true;
                 shadowActive = "active";
                 buttonText = "Selected";
             }
             if (currentPlan === box.period && !allNotActive) {
-                var active = "active";
+                var active = true;
                 buttonText = "Current Plan";
             }
             return (

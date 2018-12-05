@@ -3,9 +3,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { generalAction, addNotification } from "../../../actions/usersActions";
-import { getFirstName, copyFromPage } from "../../../miscFunctions";
+import { getFirstName, copyFromPage, copyCustomLink, makePossessive } from "../../../miscFunctions";
 import { Dialog } from "@material-ui/core";
-import { Button } from "../../miscComponents";
+import { Button, CornersButton } from "../../miscComponents";
 import axios from "axios";
 
 import "./inviteCandidatesModal.css";
@@ -29,6 +29,12 @@ class InviteCandidatesModal extends Component {
         this.props.addNotification("Template copied to clipboard", "info");
     };
 
+    // copy the business' custom link
+    copyLink = e => {
+        if (e) e.preventDefault();
+        copyCustomLink(this.props.currentUser, this.props.addNotification);
+    };
+
     makeDialogBody() {
         const { currentUser } = this.props;
         let businessName = undefined;
@@ -46,12 +52,25 @@ class InviteCandidatesModal extends Component {
                 <div className="primary-cyan font22px font18pxUnder700">
                     Candidate Invite Template
                 </div>
-                <div className="font14px font12pxUnder700">
+                <div className="font14px font12pxUnder700" style={{ margin: "10px auto 17px" }}>
                     Copy, paste, and tweak this message for your automated emails or other
                     communications with candidates. It's best to send this message to all (or the
                     majority) of your applicants 24-48 hours after they apply.
                 </div>
-                <div className="font14px font12pxUnder700" style={{ marginBottom: "10px" }}>
+                <div className="font14px font12pxUnder700">
+                    <i>
+                        {businessName ? makePossessive(businessName) : "Your"} candidate invite page
+                    </i>
+                    <CornersButton
+                        content="Get Link"
+                        onClick={this.copyLink}
+                        arrow={false}
+                        paddingSides="24px"
+                        paddingTop="6px"
+                        style={{ marginLeft: "15px" }}
+                    />
+                </div>
+                <div styleName="email" className="font14px font12pxUnder700">
                     <div>Subject: {subject}</div>
                     <div id="invite-template">
                         <div>Hi,</div>
