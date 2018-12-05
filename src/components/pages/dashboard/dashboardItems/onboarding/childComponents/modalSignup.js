@@ -283,13 +283,10 @@ class ModalSignup extends Component {
 
         return (
             <div className="center">
-                <div
-                    className="primary-cyan font22px font20pxUnder500"
-                    style={{ marginBottom: "10px" }}
-                >
+                <div className="primary-cyan font22px font20pxUnder500" styleName="header">
                     {info.header2}
                 </div>
-                <div className="font14px font12pxUnder400">{info.body2}</div>
+                <div className="font14px font12pxUnder600">{info.body2}</div>
                 {error ? <div styleName="error">{error}</div> : null}
 
                 <div style={{ height: "20px" }} />
@@ -312,13 +309,10 @@ class ModalSignup extends Component {
 
         return (
             <div className="center">
-                <div
-                    className="primary-cyan font22px font20pxUnder500"
-                    style={{ marginBottom: "10px" }}
-                >
+                <div className="primary-cyan font22px font20pxUnder500" styleName="header">
                     {info.header3}
                 </div>
-                <div className="font14px font12pxUnder400">{info.body3}</div>
+                <div className="font14px font12pxUnder600">{info.body3}</div>
                 {error ? <div styleName="error">{error}</div> : null}
 
                 <div className="input-separator" />
