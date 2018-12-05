@@ -377,7 +377,7 @@ class Menu extends Component {
         // show only the Moonshot logo if currently loading
         if (this.props.isFetching) {
             return (
-                <header style={{ zIndex: "100" }}>
+                <header style={{ zIndex: "100", backgroundColor: this.props.backgroundColor }}>
                     <Toolbar id="menu" style={{ marginTop: "10px" }}>
                         <ToolbarGroup>
                             <img
@@ -707,7 +707,7 @@ class Menu extends Component {
         let menu = (
             <header
                 className={this.state.headerClass + additionalHeaderClass}
-                style={{ zIndex: "100" }}
+                style={{ zIndex: "100", backgroundColor: this.props.backgroundColor }}
             >
                 <div>
                     <Toolbar id="menu" style={{ height: "35px" }}>
@@ -766,6 +766,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        backgroundColor: state.users.backgroundColor,
         isFetching: state.users.isFetching,
         png: state.users.png
     };
