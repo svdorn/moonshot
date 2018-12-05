@@ -76,7 +76,7 @@ class AdminView extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info admin-view">
                 <div>
-                    <div>
+                    <div styleName="predictive-view-info">
                         <div
                             className="primary-cyan"
                             styleName="small-title mobile-center title-margin"
@@ -85,8 +85,8 @@ class AdminView extends Component {
                         </div>
                         <div>
                             <div style={{ marginBottom: "10px" }}>
-                                We predict the job performance, growth potential, culture fit, and
-                                longevity of each candidate.
+                                We predict the job performance, growth potential,{" "}
+                                <span>culture fit, and longevity</span> of each candidate.
                             </div>
                             <div>
                                 You can also see an overall Candidate Score and a breakdown of each

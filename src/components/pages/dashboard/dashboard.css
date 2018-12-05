@@ -709,6 +709,10 @@
     right: 6px;
 }
 
+.predictive-view-info:hover > div > div > span {
+    text-decoration: underline;
+}
+
 .link-to-custom-page {
     margin: 8px 10px 0;
     display: inline-block;
