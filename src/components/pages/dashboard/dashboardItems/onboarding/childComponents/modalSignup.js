@@ -8,8 +8,7 @@ import {
     closeSignupModal
 } from "../../../../../../actions/usersActions";
 import { TextField } from "material-ui";
-import Dialog from "@material-ui/core/Dialog";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress, Dialog } from "@material-ui/core";
 import { Field, reduxForm } from "redux-form";
 import MetaTags from "react-meta-tags";
 import ReactGA from "react-ga";
@@ -19,14 +18,15 @@ import {
     isValidEmail,
     goTo,
     isValidPassword,
-    propertyExists
+    propertyExists,
+    fieldsAreEmpty
 } from "../../../../../../miscFunctions";
 import TextInput from "../../../../../userInput/textInput";
 import ShiftArrow from "../../../../../miscComponents/shiftArrow";
 import Button from "../../../../../miscComponents/Button";
 import NavCircles from "../../../../../miscComponents/navCircles";
 
-import "../../../dashboard.css";
+import "./modalSignup.css";
 
 const validate = values => {
     const errors = {};
@@ -190,15 +190,9 @@ class ModalSignup extends Component {
         const vals = this.props.formData.businessSignup.values;
 
         // Form validation before submit
-        let notValid = false;
-        const requiredFields = ["email", "password", "name", "company"];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return this.setState({ error: "Must fill out all fields." });
+        if (fieldsAreEmpty(vals, ["email", "password", "name", "company"], this.props.touch)) {
+            return this.setState({ error: "Must fill out all fields." });
+        }
 
         // grab values we need from the form
         const { name, company, password, email } = vals;
@@ -256,7 +250,6 @@ class ModalSignup extends Component {
 
     onSignupError = errorObject => {
         let errorMessage = "Error signing up, try refreshing.";
-        console.log("errorObject: ", errorObject);
         if (propertyExists(errorObject, ["response", "data"])) {
             const errData = errorObject.response.data;
             if (typeof errData === "object" && errData.message === "string") {
@@ -282,17 +275,9 @@ class ModalSignup extends Component {
             return;
         }
         const vals = this.props.formData.businessSignup.values;
-        let notValid = false;
-        const requiredFields = ["name", "company"];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) {
-            this.setState({ error: "Must fill out all fields to continue." });
-            return;
+
+        if (fieldsAreEmpty(vals, ["name", "company"], this.props.touch)) {
+            return this.setState({ error: "Please fill out all the fields." });
         } else this.setState({ frame: 3, error: undefined });
     }
 
@@ -304,14 +289,13 @@ class ModalSignup extends Component {
                 <div className="primary-cyan font22px font20pxUnder500">{info.header2}</div>
                 <div className="font14px">{info.body2}</div>
                 {error ? <div className="secondary-red font16px">{error}</div> : null}
-                <div className="inputContainer signup-fields">
-                    <Field name="name" component={renderTextField} label="Full Name" />
-                    <br />
-                </div>
-                <div className="inputContainer signup-fields">
-                    <Field name="company" component={renderTextField} label="Company" />
-                    <br />
-                </div>
+
+                <div className="input-separator" />
+                <TextInput name="name" label="Full Name" />
+                <div className="input-separator" />
+                <TextInput name="company" label="Company" />
+                <div className="input-separator" />
+
                 <Button onClick={this.handleFrameChange}>Next</Button>
             </div>
         );
@@ -369,7 +353,7 @@ class ModalSignup extends Component {
                     </a>.
                 </div>
                 {this.props.loadingCreateBusiness ? (
-                    <CircularProgress color="#72d6f5" />
+                    <CircularProgress color="secondary" />
                 ) : (
                     <button
                         className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white"
