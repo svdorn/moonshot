@@ -53,7 +53,7 @@ const defaultInfo = {
     header2: "Add Your Info",
     body2: "We need this to set up your account.",
     header3: "Set Up Your Login",
-    body3: "Fill this out so you can log back in."
+    body3: "Fill this out so you can log back in and freely access your page."
 };
 
 class ModalSignup extends Component {

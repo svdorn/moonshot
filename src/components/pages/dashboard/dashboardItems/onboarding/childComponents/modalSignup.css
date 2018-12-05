@@ -2,7 +2,7 @@
     padding: 30px 50px;
     background-color: var(--primary-black-dark);
     color: var(--secondary-gray);
-    min-width: 200px;
+    min-width: 505px;
     min-height: 410px;
 }
 
@@ -43,6 +43,7 @@
 @media screen and (max-width: 600px) {
     .modal-signup {
         padding: 30px 25px;
+        min-width: calc(100vw - 96px);
     }
 }
 
