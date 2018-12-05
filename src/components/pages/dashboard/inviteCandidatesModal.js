@@ -57,16 +57,18 @@ class InviteCandidatesModal extends Component {
                     majority) of your applicants 24-48 hours after they apply.
                 </div>
                 <div className="font14px font12pxUnder700">
-                    <i>
+                    <i style={{ marginRight: "7px" }}>
                         {businessName ? makePossessive(businessName) : "Your"} candidate invite page
                     </i>
+                    <br className="under400only" />
                     <CornersButton
                         content="Get Link"
                         onClick={this.copyLink}
                         arrow={false}
                         paddingSides="24px"
                         paddingTop="6px"
-                        style={{ marginLeft: "15px" }}
+                        style={{ marginLeft: "7px" }}
+                        className="marginRight"
                     />
                 </div>
                 <div styleName="email" className="font14px font12pxUnder700">
