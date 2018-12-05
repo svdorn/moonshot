@@ -23,7 +23,7 @@ import {
     fieldsAreEmpty
 } from "../../../../../../miscFunctions";
 import TextInput from "../../../../../userInput/textInput";
-import NavCircles from "../../../../../miscComponents/navCircles";
+import NavCircles from "../../../../../miscComponents/NavCircles";
 import Button from "../../../../../miscComponents/Button";
 
 import "./modalSignup.css";

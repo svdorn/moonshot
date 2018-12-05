@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { addNotification, updateStore, hidePopups } from "../../../../../actions/usersActions";
 import { goTo } from "../../../../../miscFunctions";
 import { button } from "../../../../../classes";
-import ShiftArrow from "../../../../miscComponents/shiftArrow";
+import ShiftArrow from "../../../../miscComponents/ShiftArrow";
 
 import "../../dashboard.css";
 

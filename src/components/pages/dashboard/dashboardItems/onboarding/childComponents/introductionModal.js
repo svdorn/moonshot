@@ -15,7 +15,7 @@ import { goTo } from "../../../../../../miscFunctions";
 import { button } from "../../../../../../classes.js";
 import axios from "axios";
 import AddPositionModal from "./addPositionModal";
-import ShiftArrow from "../../../../../miscComponents/shiftArrow";
+import ShiftArrow from "../../../../../miscComponents/ShiftArrow";
 
 import "../../../dashboard.css";
 

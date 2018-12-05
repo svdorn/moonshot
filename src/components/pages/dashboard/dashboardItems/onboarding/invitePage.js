@@ -11,7 +11,7 @@ import {
 import { renderTextField, goTo, fieldsAreEmpty } from "../../../../../miscFunctions";
 import { button } from "../../../../../classes";
 import TextInput from "../../../../userInput/textInput";
-import ShiftArrow from "../../../../miscComponents/shiftArrow";
+import ShiftArrow from "../../../../miscComponents/ShiftArrow";
 
 import "../../dashboard.css";
 

@@ -25,7 +25,7 @@ import {
 } from "material-ui";
 import { primaryCyan } from "../../../../../colors";
 import axios from "axios";
-import ShiftArrow from "../../../../miscComponents/shiftArrow";
+import ShiftArrow from "../../../../miscComponents/ShiftArrow";
 
 import "../../dashboard.css";
 

@@ -9,7 +9,7 @@ import {
 } from "../../../../../actions/usersActions";
 import { CircularProgress } from "material-ui";
 import { button } from "../../../../../classes";
-import ShiftArrow from "../../../../miscComponents/shiftArrow";
+import ShiftArrow from "../../../../miscComponents/ShiftArrow";
 
 import "../../dashboard.css";
 

@@ -13,8 +13,8 @@ import { fieldsAreEmpty } from "../../../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextInput from "../../../../../userInput/textInput";
-import NavCircles from "../../../../../miscComponents/navCircles";
-import ShiftArrow from "../../../../../miscComponents/shiftArrow";
+import NavCircles from "../../../../../miscComponents/NavCircles";
+import ShiftArrow from "../../../../../miscComponents/ShiftArrow";
 import HoverTip from "../../../../../miscComponents/hoverTip";
 import axios from "axios";
 

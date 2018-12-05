@@ -2,10 +2,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {} from "../../actions/usersActions";
-import { noop } from "../../miscFunctions";
-
-import "./navCircles.css";
 
 class CheckBox extends Component {
     handleClick = event => {

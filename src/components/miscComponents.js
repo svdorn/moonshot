@@ -9,10 +9,10 @@ import HoverTip from "./miscComponents/hoverTip";
 import InfluencerPredictiveGraph from "./miscComponents/influencerPredictiveGraph";
 import InfoBubble from "./miscComponents/infoBubble";
 import MiscError from "./miscComponents/miscError";
-import NavCircles from "./miscComponents/navCircles";
+import NavCircles from "./miscComponents/NavCircles";
 import PredictiveGraph from "./miscComponents/predictiveGraph";
 import PredictiveGraphDescriptors from "./miscComponents/predictiveGraphDescriptors";
-import ShiftArrow from "./miscComponents/shiftArrow";
+import ShiftArrow from "./miscComponents/ShiftArrow";
 
 module.exports = {
     Button,

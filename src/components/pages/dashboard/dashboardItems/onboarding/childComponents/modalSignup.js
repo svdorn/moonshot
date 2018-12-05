@@ -22,9 +22,9 @@ import {
     fieldsAreEmpty
 } from "../../../../../../miscFunctions";
 import TextInput from "../../../../../userInput/textInput";
-import ShiftArrow from "../../../../../miscComponents/shiftArrow";
+import ShiftArrow from "../../../../../miscComponents/ShiftArrow";
 import { Button, CheckBox } from "../../../../../miscComponents";
-import NavCircles from "../../../../../miscComponents/navCircles";
+import NavCircles from "../../../../../miscComponents/NavCircles";
 
 import "./modalSignup.css";
 
