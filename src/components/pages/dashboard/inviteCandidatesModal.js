@@ -24,8 +24,7 @@ class InviteCandidatesModal extends Component {
     };
 
     copyTemplate = () => {
-        copyFromPage("#invite-template");
-        this.handleClose();
+        copyFromPage("#invite-template-email");
         this.props.addNotification("Template copied to clipboard", "info");
     };
 
@@ -72,7 +71,7 @@ class InviteCandidatesModal extends Component {
                 </div>
                 <div styleName="email" className="font14px font12pxUnder700">
                     <div>Subject: {subject}</div>
-                    <div id="invite-template">
+                    <div id="invite-template-email">
                         <div>Hi,</div>
                         <div>
                             Congratulations, we would like to invite you to the next round of
