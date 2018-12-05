@@ -172,7 +172,10 @@ const usersSchema = mongoose.Schema({
     },
     // location to redirect to after signing up
     redirect: String,
-
+    // primary color (buttons and menu) shown in the eval
+    primaryColor: String,
+    // background color shown to candidates
+    backgroundColor: String,
     // skill tests the user has taken
     skillTests: [
         {
