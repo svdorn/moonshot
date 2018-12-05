@@ -369,7 +369,12 @@ class ModalSignup extends Component {
         const vals = this.props.formData.businessSignup
             ? this.props.formData.businessSignup.values
             : {};
-        return vals && isValidEmail(vals.email) && isValidPassword(vals.password);
+        return (
+            vals &&
+            this.state.agreeingToTerms &&
+            isValidEmail(vals.email) &&
+            isValidPassword(vals.password)
+        );
     };
 
     //name, email, password, confirm password, signup button
@@ -381,8 +386,18 @@ class ModalSignup extends Component {
         if (frame == 3) {
             if (this.props.loadingCreateBusiness)
                 buttonArea = <CircularProgress color="secondary" />;
-            else buttonArea = <Button onClick={this.handleSubmit}>Enter</Button>;
-        } else buttonArea = <Button onClick={this.handleFrameChange}>Next</Button>;
+            else
+                buttonArea = (
+                    <Button onClick={this.handleSubmit} disabled={!this.frame3finished()}>
+                        Enter
+                    </Button>
+                );
+        } else
+            buttonArea = (
+                <Button onClick={this.handleFrameChange} disabled={!this.frame2finished()}>
+                    Next
+                </Button>
+            );
 
         return (
             <Dialog
