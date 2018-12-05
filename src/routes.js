@@ -19,6 +19,7 @@ import Main from "./main";
 import AuthenticatedComponent from "./components/authenticatedComponent/authenticatedComponent";
 import Settings from "./components/pages/settings/settings";
 import Ease from "./components/pages/ease";
+import Pricing from "./components/pages/pricing";
 import ApplyContainer from "./components/pages/applyContainer";
 import GeneralApply from "./components/pages/generalApply";
 import Apply from "./components/pages/apply";
@@ -123,6 +124,7 @@ const routes = (
                     page={<Billing />}
                     userType={accountAdmin}
                 />
+                <Route path="pricing" component={Pricing} />
                 <Route path="ease" component={Ease} />
                 <Route path="settings" component={AuthenticatedComponent} page={<Settings />} />
                 <Route path="listing" component={Listing} />

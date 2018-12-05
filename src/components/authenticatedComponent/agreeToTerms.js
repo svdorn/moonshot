@@ -20,7 +20,7 @@ class AgreeToTerms extends Component {
         else {
             agreements.push({
                 name: "Terms of Service",
-                link: "https://www.docdroid.net/pGBcFSh/moonshot-insights-agreement.pdf",
+                link: "https://docdro.id/1iTCvMj",
                 type: "foreign"
             });
         }
