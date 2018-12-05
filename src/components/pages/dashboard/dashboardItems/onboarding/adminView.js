@@ -132,13 +132,10 @@ class AdminView extends Component {
                         {"We Are Your Data Scientists"}
                     </div>
                     <div styleName="why-it-works-desc">
-                        Education and experience provide 1% and 1.1% predictive ability compared to
-                        your evaluations with us, which provide more than 50%. We then layer on
-                        machine learning to<span styleName="desktop-only">
-                            {" "}
-                            improve your predictive model and
-                        </span>{" "}
-                        identify insights on your company to drive hyperintelligent hiring.
+                        Education and experience are 1% and 1.1% predictive of job performance,
+                        whereas your evaluations with us are more than 50% predictive. We layer on
+                        machine learning to identify insights on your company to drive
+                        hyperintelligent hiring.
                     </div>
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>
