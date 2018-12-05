@@ -22,6 +22,9 @@ import {
     propertyExists
 } from "../../../../../../miscFunctions";
 import TextInput from "../../../../../userInput/textInput";
+import ShiftArrow from "../../../../../miscComponents/shiftArrow";
+import Button from "../../../../../miscComponents/Button";
+import NavCircles from "../../../../../miscComponents/navCircles";
 
 import "../../../dashboard.css";
 
@@ -86,9 +89,7 @@ class ModalSignup extends Component {
             }
             const info = this.props.info;
 
-            if (!info) {
-                return;
-            }
+            if (!info) return;
 
             if (info.type === "menu") {
                 switch (info.name) {
@@ -311,13 +312,7 @@ class ModalSignup extends Component {
                     <Field name="company" component={renderTextField} label="Company" />
                     <br />
                 </div>
-                <button
-                    className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white marginTop20px"
-                    onClick={this.handleFrameChange}
-                    style={{ padding: "2px 4px" }}
-                >
-                    Onward &#8594;
-                </button>
+                <Button onClick={this.handleFrameChange}>Next</Button>
             </div>
         );
     }
@@ -389,32 +384,47 @@ class ModalSignup extends Component {
     }
 
     // navigate around by using the bottom nav circles
-    circleNav = wantedFrame => () => {
-        if (wantedFrame < this.state.frame) {
-            this.setState({ frame: wantedFrame });
-        }
+    circleNav = frame => {
+        if (frame == 2) this.setState({ frame: parseInt(frame, 10) });
+        else this.handleFrameChange();
+    };
+
+    // whether frame 2 (the first frame) has been filled out
+    frame2finished = () => {
+        const vals = this.props.formData.businessSignup
+            ? this.props.formData.businessSignup.values
+            : undefined;
+        return vals && vals.name && vals.company;
+    };
+
+    // whether frame 3 (the second frame) has been filled out
+    frame3finished = () => {
+        const vals = this.props.formData.businessSignup
+            ? this.props.formData.businessSignup.values
+            : {};
+        return vals && isValidEmail(vals.email) && isValidPassword(vals.password);
     };
 
     //name, email, password, confirm password, signup button
     render() {
         const { frame, info } = this.state;
 
-        let navArea = [];
-        const selectedStyle = {
-            background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
-        };
-        // add the circles you can navigate with
-        for (let navCircleIdx = 0; navCircleIdx < 2; navCircleIdx++) {
-            navArea.push(
-                <div
-                    styleName="signup-circle"
-                    style={frame - 2 === navCircleIdx ? selectedStyle : {}}
-                    className={frame - 2 >= navCircleIdx ? "pointer" : ""}
-                    key={`signup modal ${navCircleIdx}`}
-                    onClick={this.circleNav(navCircleIdx + 2)}
-                />
-            );
-        }
+        // let navArea = [];
+        // const selectedStyle = {
+        //     background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
+        // };
+        // // add the circles you can navigate with
+        // for (let navCircleIdx = 0; navCircleIdx < 2; navCircleIdx++) {
+        //     navArea.push(
+        //         <div
+        //             styleName="signup-circle"
+        //             style={frame - 2 === navCircleIdx ? selectedStyle : {}}
+        //             className={frame - 2 >= navCircleIdx ? "pointer" : ""}
+        //             key={`signup modal ${navCircleIdx}`}
+        //             onClick={this.circleNav(navCircleIdx + 2)}
+        //         />
+        //     );
+        // }
 
         return (
             <Dialog
@@ -434,17 +444,13 @@ class ModalSignup extends Component {
                         </div>
                         <div
                             key={"continue signup modal"}
-                            className="menuItem pointer font16px noWrap primary-cyan wideScreenMenuItem"
+                            className="pointer font20px noWrap primary-cyan wideScreenMenuItem"
                             onClick={this.handleFrameChange}
                         >
                             <span className="primary-cyan" style={{ marginRight: "7px" }}>
                                 Continue
                             </span>{" "}
-                            <img
-                                className="hover-move-arrow"
-                                style={{ height: "8px" }}
-                                src={`/icons/ArrowBlue${this.props.png}`}
-                            />
+                            <ShiftArrow color="cyan" width="14px" />
                         </div>
                     </div>
                 ) : (
@@ -454,7 +460,14 @@ class ModalSignup extends Component {
                         ) : (
                             <div>{this.makeFrame3()}</div>
                         )}
-                        <div className="center">{navArea}</div>
+                        <div className="center">
+                            <NavCircles
+                                values={[2, 3]}
+                                value={frame}
+                                onNavigate={this.circleNav}
+                                inactive={this.frame2finished() ? [] : [3]}
+                            />
+                        </div>
                     </form>
                 )}
             </Dialog>

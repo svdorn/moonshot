@@ -708,14 +708,6 @@
 .psych-nav.right {
     right: 6px;
 }
-.signup-circle {
-    width: 10px;
-    height: 10px;
-    border-radius: 8px;
-    background: linear-gradient(to bottom right, var(--secondary-gray), var(--primary-black-light));
-    display: inline-block;
-    margin: 10px 7px auto;
-}
 
 .link-to-custom-page {
     margin: 8px 10px 0;
