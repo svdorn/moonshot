@@ -11,7 +11,8 @@ import {
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import PsychSlider from "./psychSlider";
-import { CircularProgress } from "material-ui";
+import { CircularProgress } from "@material-ui/core";
+import { Button } from "../../miscComponents";
 
 class PsychAnalysis extends Component {
     constructor(props) {
@@ -39,14 +40,14 @@ class PsychAnalysis extends Component {
     }
 
     // move on to the next psych question
-    nextQuestion() {
+    nextQuestion = () => {
         if (!this.props.loading) {
             this.props.answerEvaluationQuestion("Psych", {
                 ...this.props.credentials,
                 answer: this.state.answer
             });
         }
-    }
+    };
 
     // start the eval for the first time
     startTest() {
@@ -191,16 +192,19 @@ class PsychAnalysis extends Component {
                         style={sliderStyle}
                         updateAnswer={this.updateAnswer.bind(this)}
                         questionId={questionId}
+                        backgroundColor={this.props.backgroundColor}
+                        color1={this.props.primaryColor}
+                        color2={this.props.primaryColor}
                     />
                 </div>
                 <br />
-                <div
-                    className={"psychAnalysisButton marginBottom50px" + nextButtonClass}
-                    onClick={this.nextQuestion.bind(this)}
-                    style={{ marginTop: "20px" }}
+                <Button
+                    onClick={this.nextQuestion}
+                    disabled={this.props.loading}
+                    style={{ margin: "50px auto 20px" }}
                 >
                     Next
-                </div>
+                </Button>
             </div>
         );
     }
@@ -221,7 +225,7 @@ class PsychAnalysis extends Component {
 
         // if the question has not been loaded yet
         else if (!questionInfo) {
-            return <CircularProgress color="#76defe" />;
+            return <CircularProgress color="primary" />;
         }
 
         // the typical interface with the slider
@@ -250,6 +254,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        backgroundColor: state.users.backgroundColor,
+        primaryColor: state.users.primaryColor,
         questionInfo: state.users.evaluationState.componentInfo,
         showIntro: state.users.evaluationState.showIntro,
         loading: state.users.loadingSomething

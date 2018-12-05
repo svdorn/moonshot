@@ -16,15 +16,19 @@ import PsychTest from "./psychTest";
 import CognitiveTest from "./cognitiveTest";
 import SkillTest from "./skillTest";
 
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+
 class Evaluation extends Component {
     constructor(props) {
         super(props);
 
+        const { currentUser } = props;
+
         // get position and business ids from url
         const { businessId, positionId } = props.params;
         // get user credentials
-        if (props.currentUser) {
-            var { _id, verificationToken } = props.currentUser;
+        if (currentUser) {
+            var { _id, verificationToken } = currentUser;
         } else {
             var _id = undefined;
             var verificationToken = undefined;
@@ -39,7 +43,15 @@ class Evaluation extends Component {
         // general arguments for get api call
         const generalApiGetArgs = { params: generalApiPostArgs };
 
+        const theme = createMuiTheme({
+            palette: {
+                primary: { main: this.props.primaryColor ? this.props.primaryColor : "#76defe" }
+            }
+        });
+
         this.state = {
+            // the theme of the evaluation (everything for candidates)
+            theme,
             // waiting for confirmation that user can be here
             initialLoad: true,
             // loading anything else
@@ -384,7 +396,9 @@ class Evaluation extends Component {
                         content="Take a position evaluation to see if you and the position make a good match."
                     />
                 </MetaTags>
-                {content}
+                {this.state.theme ? (
+                    <MuiThemeProvider theme={this.state.theme}>{content}</MuiThemeProvider>
+                ) : null}
             </div>
         );
     }
