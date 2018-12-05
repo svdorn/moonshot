@@ -24,6 +24,7 @@ import {
 import TextInput from "../../../../../userInput/textInput";
 import ShiftArrow from "../../../../../miscComponents/shiftArrow";
 import Button from "../../../../../miscComponents/Button";
+import CheckBox from "../../../../../miscComponents/CheckBox";
 import NavCircles from "../../../../../miscComponents/navCircles";
 
 import "./modalSignup.css";
@@ -261,12 +262,8 @@ class ModalSignup extends Component {
         this.setState({ error: errorMessage });
     };
 
-    handleCheckMarkClick() {
-        this.setState({
-            ...this.state,
-            agreeingToTerms: !this.state.agreeingToTerms
-        });
-    }
+    // when a user clicks the checkbox
+    handleCheckMarkClick = agreeingToTerms => this.setState({ agreeingToTerms });
 
     handleFrameChange(e) {
         if (e) e.preventDefault();
@@ -286,17 +283,20 @@ class ModalSignup extends Component {
 
         return (
             <div className="center">
-                <div className="primary-cyan font22px font20pxUnder500">{info.header2}</div>
-                <div className="font14px">{info.body2}</div>
-                {error ? <div className="secondary-red font16px">{error}</div> : null}
+                <div
+                    className="primary-cyan font22px font20pxUnder500"
+                    style={{ marginBottom: "10px" }}
+                >
+                    {info.header2}
+                </div>
+                <div className="font14px font12pxUnder400">{info.body2}</div>
+                {error ? <div styleName="error">{error}</div> : null}
 
-                <div className="input-separator" />
+                <div style={{ height: "20px" }} />
                 <TextInput name="name" label="Full Name" />
                 <div className="input-separator" />
                 <TextInput name="company" label="Company" />
                 <div className="input-separator" />
-
-                <Button onClick={this.handleFrameChange}>Next</Button>
             </div>
         );
     }
@@ -312,30 +312,30 @@ class ModalSignup extends Component {
 
         return (
             <div className="center">
-                <div className="primary-cyan font22px font20pxUnder500">{info.header3}</div>
-                <div className="font14px" style={{ marginTop: "-7px" }}>
-                    {info.body3}
+                <div
+                    className="primary-cyan font22px font20pxUnder500"
+                    style={{ marginBottom: "10px" }}
+                >
+                    {info.header3}
                 </div>
-                {error ? <div className="font14px marginTop10px secondary-red">{error}</div> : null}
+                <div className="font14px font12pxUnder400">{info.body3}</div>
+                {error ? <div styleName="error">{error}</div> : null}
 
                 <div className="input-separator" />
                 <TextInput name="email" label="Work Email" />
                 <div className="input-separator" />
-                <TextInput name="password" label="Password" value={value} viewablePassword={true} />
+                <TextInput
+                    name="password"
+                    label="Password"
+                    value={value}
+                    viewablePassword={true}
+                    buttonColor="#b5b5b5"
+                />
                 <div className="input-separator" />
 
-                <div style={{ margin: "20px 20px 0px" }} className="font12px">
-                    <div
-                        className="checkbox smallCheckbox whiteCheckbox"
-                        onClick={this.handleCheckMarkClick.bind(this)}
-                    >
-                        <img
-                            alt=""
-                            className={"checkMark" + agreeingToTerms}
-                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                        />
-                    </div>
-                    I have read and agree to the Moonshot Insights<br />
+                <div styleName="agree-to-terms" className="font12px">
+                    <CheckBox checked={agreeingToTerms} onClick={this.handleCheckMarkClick} />
+                    I have read and agree to the Moonshot Insights <br className="above500only" />
                     <a
                         href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                         target="_blank"
@@ -352,17 +352,6 @@ class ModalSignup extends Component {
                         terms of service
                     </a>.
                 </div>
-                {this.props.loadingCreateBusiness ? (
-                    <CircularProgress color="secondary" />
-                ) : (
-                    <button
-                        className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white"
-                        onClick={this.handleSubmit}
-                        style={{ padding: "2px 4px" }}
-                    >
-                        Enter &#8594;
-                    </button>
-                )}
             </div>
         );
     }
@@ -393,22 +382,13 @@ class ModalSignup extends Component {
     render() {
         const { frame, info } = this.state;
 
-        // let navArea = [];
-        // const selectedStyle = {
-        //     background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
-        // };
-        // // add the circles you can navigate with
-        // for (let navCircleIdx = 0; navCircleIdx < 2; navCircleIdx++) {
-        //     navArea.push(
-        //         <div
-        //             styleName="signup-circle"
-        //             style={frame - 2 === navCircleIdx ? selectedStyle : {}}
-        //             className={frame - 2 >= navCircleIdx ? "pointer" : ""}
-        //             key={`signup modal ${navCircleIdx}`}
-        //             onClick={this.circleNav(navCircleIdx + 2)}
-        //         />
-        //     );
-        // }
+        // make the button (or loading circle)
+        let buttonArea = undefined;
+        if (frame == 3) {
+            if (this.props.loadingCreateBusiness)
+                buttonArea = <CircularProgress color="secondary" />;
+            else buttonArea = <Button onClick={this.handleSubmit}>Enter</Button>;
+        } else buttonArea = <Button onClick={this.handleFrameChange}>Next</Button>;
 
         return (
             <Dialog
@@ -428,7 +408,7 @@ class ModalSignup extends Component {
                         </div>
                         <div
                             key={"continue signup modal"}
-                            className="pointer font20px noWrap primary-cyan wideScreenMenuItem"
+                            className="pointer font20px primary-cyan"
                             onClick={this.handleFrameChange}
                         >
                             <span className="primary-cyan" style={{ marginRight: "7px" }}>
@@ -438,13 +418,15 @@ class ModalSignup extends Component {
                         </div>
                     </div>
                 ) : (
-                    <form className="modal-signup">
+                    <form styleName="modal-signup">
                         {frame === 2 ? (
                             <div>{this.makeFrame2()}</div>
                         ) : (
                             <div>{this.makeFrame3()}</div>
                         )}
-                        <div className="center">
+                        <div className="center" styleName="button-and-nav">
+                            {buttonArea}
+                            <div style={{ height: "5px" }} />
                             <NavCircles
                                 values={[2, 3]}
                                 value={frame}

@@ -357,11 +357,7 @@ class ClaimPageModal extends Component {
                             Claim Your Page
                         </div>
                         <div className="font14px">Fill this out so you can manage your page.</div>
-                        {this.state.error ? (
-                            <div styleName="error" className="secondary-red">
-                                {error}
-                            </div>
-                        ) : null}
+                        {this.state.error ? <div styleName="error">{error}</div> : null}
                     </div>
                     <div>
                         <div>

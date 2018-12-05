@@ -8,12 +8,6 @@ import { noop } from "../../miscFunctions";
 import "./navCircles.css";
 
 class NavCircles extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {};
-    }
-
     handleCircleClick = event => {
         const { onNavigate, disabled } = this.props;
         if (disabled || typeof onNavigate !== "function") return;
@@ -48,17 +42,4 @@ class NavCircles extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        currentUser: state.users.currentUser
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
-}
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(NavCircles);
+export default NavCircles;

@@ -2057,6 +2057,9 @@ button.link {
 .whiteCheckbox {
     border: 2px solid white;
 }
+.whiteCheckbox.error {
+    border-color: var(--secondary-red);
+}
 .mediumCheckbox > img {
     height: 15px;
     width: 15px;

@@ -1,3 +1,11 @@
+.modal-signup {
+    padding: 30px 50px;
+    background-color: var(--primary-black-dark);
+    color: var(--secondary-gray);
+    min-width: 200px;
+    min-height: 410px;
+}
+
 .button-and-nav {
     position: absolute;
     left: 0;
@@ -25,6 +33,7 @@
     width: 100%;
     font-size: 14px;
     margin-top: 10px;
+    color: var(--secondary-red);
 }
 
 @media screen and (max-width: 500px) {
@@ -36,11 +45,19 @@
         font-size: 12px;
         margin-top: 5px;
     }
+
+    .modal-signup {
+        padding: 20px;
+    }
 }
 
 @media screen and (max-width: 400px) {
     .agree-to-terms {
         margin: 20px 0px 0px;
+    }
+
+    .modal-signup {
+        padding: 20px 10px;
     }
 
     .claim-page-modal {
