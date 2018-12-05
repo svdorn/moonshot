@@ -10,6 +10,7 @@ import {
 import {} from "../../../../../miscFunctions";
 
 import PsychSlider from "../../../evaluation/psychSlider";
+import HoverTip from "../../../../miscComponents/hoverTip";
 
 import "../../dashboard.css";
 import { button } from "../../../../../classes";
@@ -75,22 +76,28 @@ class AdminView extends Component {
         return (
             <div className="inline-block" styleName="onboarding-info admin-view">
                 <div>
-                    <div
-                        className="primary-cyan"
-                        styleName="small-title mobile-center title-margin"
-                    >
-                        A Predictive View of Candidates
+                    <div>
+                        <div
+                            className="primary-cyan"
+                            styleName="small-title mobile-center title-margin"
+                        >
+                            A Predictive View of Candidates
+                        </div>
+                        <div>
+                            <div style={{ marginBottom: "10px" }}>
+                                We predict the job performance, growth potential, culture fit, and
+                                longevity of each candidate.
+                            </div>
+                            <div>
+                                You can also see an overall Candidate Score and a breakdown of each
+                                candidate’s results.
+                            </div>
+                        </div>
                     </div>
-                    <div styleName="desktop-only">
-                        {
-                            "We predict the job performance, growth potential, longevity, and culture fit of each candidate. You can also see an overall Candidate Score and a breakdown of each candidate’s results."
-                        }
-                    </div>
-                    <div styleName="mobile-only">
-                        {
-                            "Job Performance and Growth Potential predictions for each candidate along with a Candidate Score and evaluation results. We generate Longevity and Culture Fit predictions after 16+ employees have been evaluated."
-                        }
-                    </div>
+                    <HoverTip
+                        style={{ width: "216px", marginLeft: "12px" }}
+                        text="Culture fit and longevity predictions are enabled after at least 16 of your employees have been evaluated because these predictions are company-specific."
+                    />
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>
                             <img src={`/icons/emojis/ThumbsUp${this.props.png}`} />

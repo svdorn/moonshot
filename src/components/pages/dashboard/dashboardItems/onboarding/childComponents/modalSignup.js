@@ -23,8 +23,7 @@ import {
 } from "../../../../../../miscFunctions";
 import TextInput from "../../../../../userInput/textInput";
 import ShiftArrow from "../../../../../miscComponents/shiftArrow";
-import Button from "../../../../../miscComponents/Button";
-import CheckBox from "../../../../../miscComponents/CheckBox";
+import { Button, CheckBox } from "../../../../../miscComponents";
 import NavCircles from "../../../../../miscComponents/navCircles";
 
 import "./modalSignup.css";
