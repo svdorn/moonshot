@@ -4,12 +4,11 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { generalAction, addNotification } from "../../../actions/usersActions";
 import { getFirstName, copyFromPage } from "../../../miscFunctions";
-import { Dialog, FlatButton, CircularProgress } from "material-ui";
-import { primaryCyan } from "../../../colors";
-import { button } from "../../../classes.js";
+import { Dialog } from "@material-ui/core";
+import { Button } from "../../miscComponents";
 import axios from "axios";
 
-import "./dashboard.css";
+import "./inviteCandidatesModal.css";
 
 class InviteCandidatesModal extends Component {
     constructor(props) {
@@ -43,15 +42,16 @@ class InviteCandidatesModal extends Component {
         const subject = businessName ? `Invitation from ${businessName}` : "Evaluation Invitation";
 
         return (
-            <div styleName="invite-candidates-modal">
+            <div styleName="invite-candidates-modal" className="center">
                 <div className="primary-cyan font22px font18pxUnder700">
                     Candidate Invite Template
                 </div>
                 <div className="font14px font12pxUnder700">
-                    Copy, paste and tweak this message for your automated emails or other
-                    communications with candidates.
+                    Copy, paste, and tweak this message for your automated emails or other
+                    communications with candidates. It's best to send this message to all (or the
+                    majority) of your applicants 24-48 hours after they apply.
                 </div>
-                <div className="font14px font12pxUnder700">
+                <div className="font14px font12pxUnder700" style={{ marginBottom: "10px" }}>
                     <div>Subject: {subject}</div>
                     <div id="invite-template">
                         <div>Hi,</div>
@@ -59,7 +59,7 @@ class InviteCandidatesModal extends Component {
                             Congratulations, we would like to invite you to the next round of
                             evaluations! We are excited to learn more about you and see how well you
                             could fit with our team. The next step is completing a 22-minute
-                            evaluation, which you can sign up and take{" "}
+                            evaluation, which you can take{" "}
                             <a
                                 style={{ color: "#76defe", textDecoration: "underline" }}
                                 href={`https://moonshotinsights.io/apply/${uniqueName}`}
@@ -77,43 +77,36 @@ class InviteCandidatesModal extends Component {
                         </div>
                     </div>
                 </div>
-                <div
-                    className={
-                        "primary-white font18px font16pxUnder700 font14pxUnder500 " + button.cyan
-                    }
-                    onClick={this.copyTemplate}
-                >
-                    Copy Message
-                </div>
+                <Button onClick={this.copyTemplate}>Copy Message</Button>
             </div>
         );
     }
 
     render() {
-        const actions = [
-            <FlatButton
-                label="Close"
-                onClick={this.handleClose}
-                className="primary-white-important"
-            />
-        ];
-
-        return (
-            <div>
-                {this.props.currentUser ? (
-                    <Dialog
-                        actions={actions}
-                        open={!!this.props.open}
-                        onClose={this.handleClose}
-                        autoScrollBodyContent={true}
-                        paperClassName="dialogForBiz"
-                        contentClassName="center"
+        return this.props.currentUser ? (
+            <Dialog
+                open={!!this.props.open}
+                onClose={this.handleClose}
+                classes={{ paper: "background-primary-black-dark-important" }}
+                maxWidth={false}
+            >
+                <div styleName="container">
+                    {this.makeDialogBody()}
+                    <Button
+                        variant="text"
+                        label="Close"
+                        onClick={this.handleClose}
+                        style={{
+                            float: "right",
+                            marginBottom: "5px",
+                            marginRight: "-22px"
+                        }}
                     >
-                        <div>{this.makeDialogBody()}</div>
-                    </Dialog>
-                ) : null}
-            </div>
-        );
+                        CLOSE
+                    </Button>
+                </div>
+            </Dialog>
+        ) : null;
     }
 }
 

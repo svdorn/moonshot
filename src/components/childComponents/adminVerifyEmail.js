@@ -109,10 +109,10 @@ class AdminVerifyEmail extends Component {
                 <div>
                     <div styleName="banner">
                         <div className="inline-block">
-                            {"Verify your email to activate your evaluations!"}
+                            Verify your email to activate your Candidate Invite Page!
                             <div styleName="extra-space" />
                             <br styleName="first-break" />
-                            {"Didn't get a verification email?"}
+                            Didn't get a verification email?
                         </div>
                         <br styleName="second-break" />
                         <div className={button.cyan} onClick={this.reSend.bind(this)}>
