@@ -317,12 +317,13 @@ export function addEmailToUser(userId, verificationToken, email) {
         axios
             .post("/api/user/addEmailToUser", { userId, verificationToken, email })
             .then(function(response) {
-                dispatch({ type: "SIGNOUT" });
-                goTo("/finished");
+                dispatch(signout(() => {
+                    goTo("/finished");
+                }))
             })
             .catch(function(err) {
                 dispatch({
-                    type: "POST_BUSINESS_INTERESTS_REJECTED",
+                    type: "ADD_EMAIL_TO_USER_REJECTED",
                     ...notification(err, "error")
                 });
             });

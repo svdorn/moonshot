@@ -329,6 +329,7 @@ export function usersReducers(state = initialState, action) {
         case "NOTIFICATION_AND_STOP_LOADING":
         case "CHANGE_PASSWORD_REJECTED":
         case "LOGIN_REJECTED":
+        case "ADD_EMAIL_TO_USER_REJECTED":
             return {
                 ...state,
                 notification: action.notification,

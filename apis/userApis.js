@@ -505,6 +505,17 @@ async function POST_addEmailToUser(req, res) {
         return res.status(500).send("Must provide email to continue.");
     }
 
+    Users.find({ email })
+    .then(foundUsers => {
+        if (foundUsers.length > 0) {
+            return res.status(400).send({message: "An account with that email address already exists. Enter a different email."});
+        }
+    })
+    .catch(findUserError => {
+        console.log("error finding user by email: ", findUserError);
+        return res.status(500).send({message: errors.SERVER_ERROR});
+    });
+
     // get the user who is asking for their evaluations page
     try {
         var user = await getAndVerifyUser(userId, verificationToken);
