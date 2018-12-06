@@ -113,27 +113,6 @@ class Main extends Component {
                     let userType = "lead";
                     if (currentUser) {
                         userType = currentUser.userType;
-
-                        const { primaryColor, secondaryColor } = currentUser;
-
-                        console.log("primaryColor: ", primaryColor);
-
-                        self.setState({
-                            theme: createMuiTheme({
-                                palette: {
-                                    primary: {
-                                        main: primaryColor ? primaryColor : "#ffffff"
-                                    },
-                                    secondary: {
-                                        main: secondaryColor
-                                            ? secondaryColor
-                                            : primaryColor
-                                                ? primaryColor
-                                                : "#76defe"
-                                    }
-                                }
-                            })
-                        });
                     }
                     // pass the user type to google analytics
                     ReactGA.set({ dimension1: userType });
@@ -157,6 +136,32 @@ class Main extends Component {
         this.checkWebpFeature("lossy", (feature, result) => {
             this.props.setWebpSupport(result);
         });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (
+            prevProps.primaryColor !== this.props.primaryColor ||
+            prevProps.secondaryColor !== this.props.secondaryColor
+        ) {
+            const { primaryColor, secondaryColor } = this.props;
+
+            this.setState({
+                theme: createMuiTheme({
+                    palette: {
+                        primary: {
+                            main: primaryColor ? primaryColor : "#ffffff"
+                        },
+                        secondary: {
+                            main: secondaryColor
+                                ? secondaryColor
+                                : primaryColor
+                                    ? primaryColor
+                                    : "#76defe"
+                        }
+                    }
+                })
+            });
+        }
     }
 
     // check_webp_feature:
