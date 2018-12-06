@@ -129,12 +129,19 @@ class Apply extends Component {
             );
         });
 
+        const { textColor } = this.props;
+        const iconClass =
+            !textColor || textColor.toLowerCase() == "white" || textColor.toLowerCase() == "#ffffff"
+                ? "selectIconWhiteImportant"
+                : "";
+
         return (
             <Select
                 disableUnderline={true}
+                style={{ color: this.props.textColor }}
                 classes={{
-                    root: "select-no-focus-color selectRootWhite font20px font16pxUnder500",
-                    icon: "selectIconWhiteImportant selectIconMargin"
+                    root: "select-no-focus-color font20px font16pxUnder500",
+                    icon: "selectIconMargin " + iconClass
                 }}
                 value={position}
                 onChange={this.handleChangePosition(position)}
@@ -329,8 +336,8 @@ class Apply extends Component {
                         </div>
                     </div>
                     <div
-                        className="font16px font14pxUnder500 primary-cyan"
-                        style={{ width: "88%", margin: "auto" }}
+                        className="font16px font14pxUnder500"
+                        style={{ width: "88%", margin: "auto", color: this.props.primaryColor }}
                     >
                         Select the position you would like to apply for.
                     </div>
@@ -398,7 +405,9 @@ function mapStateToProps(state) {
         claimPageModal: state.users.claimPageModal,
         inviteCandidatesModal: state.users.inviteCandidatesModalOpen,
         positionModal: state.users.positionModalOpen,
-        onboardingPositions: state.users.onboardingPositions
+        onboardingPositions: state.users.onboardingPositions,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 

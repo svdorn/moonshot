@@ -13,13 +13,15 @@ export function getUserFromSession(callback) {
         });
 
         // TODO: DELETE THE dispatches AND MAKE NEW ONES PROBABLY
-        const backgroundColor = "#ffffff";
+        const backgroundColor = "#2e2e2e";
+        const textColor = "#ffffff";
 
         dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
-        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: "#0000ff" });
-        dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: "#000000" });
+        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: "#76defe" });
+        dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
 
         document.body.style.backgroundColor = backgroundColor;
+        document.body.style.color = textColor;
 
         axios
             .get("/api/user/session")
