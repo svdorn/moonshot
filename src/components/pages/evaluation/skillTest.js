@@ -9,9 +9,10 @@ import {
     addNotification
 } from "../../../actions/usersActions";
 import axios from "axios";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress } from "@material-ui/core";
 import StyledContent from "../../childComponents/styledContent";
 import { htmlDecode } from "../../../miscFunctions";
+import { Button } from "../../miscComponents";
 
 import "./evaluation.css";
 
@@ -53,14 +54,14 @@ class SkillTest extends Component {
     }
 
     // move on to the next question (or start/finish the test)
-    nextQuestion() {
+    nextQuestion = () => {
         if (typeof this.state.selectedId !== "undefined" && !this.props.loading) {
             this.props.answerEvaluationQuestion("Skill", {
                 ...this.props.credentials,
                 selectedId: this.state.selectedId
             });
         }
-    }
+    };
 
     // when new question is here, set the current answer as nonexistent
     componentDidUpdate(prevProps, prevState) {
@@ -73,13 +74,13 @@ class SkillTest extends Component {
         }
     }
 
-    startTest() {
+    startTest = () => {
         // can only start test if have agreed to skill terms now or in past
         const { currentUser } = this.props;
         if ((currentUser && currentUser.agreedToSkillTerms) || this.state.agreedToTerms) {
             this.props.answerEvaluationQuestion("Skill", this.props.credentials);
         }
-    }
+    };
 
     handleCheckMarkClick() {
         this.setState({ agreedToTerms: !this.state.agreedToTerms });
@@ -99,15 +100,11 @@ class SkillTest extends Component {
                     Let{"'"}s see what you{"'"}ve got!
                 </p>
                 {this.props.loading ? (
-                    <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                    <CircularProgress color="primary" style={{ marginBottom: "40px" }} />
                 ) : (
-                    <div
-                        style={{ marginBottom: "40px", width: "initial" }}
-                        className="noselect skillContinueButton"
-                        onClick={this.startTest.bind(this)}
-                    >
+                    <Button style={{ marginBottom: "40px" }} onClick={this.startTest}>
                         Begin
-                    </div>
+                    </Button>
                 )}
             </div>
         );
@@ -115,9 +112,6 @@ class SkillTest extends Component {
 
     // rendered if the user is on the first skill test of an eval and hasn't agreed to the test terms
     userAgreementPage() {
-        const buttonClass =
-            "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
-
         return (
             <div
                 styleName="eval-portion-intro"
@@ -167,15 +161,15 @@ class SkillTest extends Component {
                 </div>
                 <br />
                 {this.props.loading ? (
-                    <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                    <CircularProgress color="primary" style={{ marginBottom: "40px" }} />
                 ) : (
-                    <div
-                        style={{ marginBottom: "40px", width: "initial" }}
-                        className={buttonClass}
-                        onClick={this.startTest.bind(this)}
+                    <Button
+                        style={{ marginBottom: "40px" }}
+                        onClick={this.startTest}
+                        disabled={this.state.agreedToTerms}
                     >
                         Begin
-                    </div>
+                    </Button>
                 )}
             </div>
         );
@@ -205,19 +199,19 @@ class SkillTest extends Component {
         });
 
         const canContinue = typeof this.state.selectedId !== "undefined" && !this.props.loading;
-        const buttonClass = "skillContinueButton" + (canContinue ? "" : " disabled");
 
         // otherwise, good to go - show them the question
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
                 <StyledContent contentArray={questionInfo.body} style={{ marginBottom: "40px" }} />
                 {answers}
-                <div
-                    className={"marginBottom50px " + buttonClass}
-                    onClick={this.nextQuestion.bind(this)}
+                <Button
+                    disabled={!canContinue}
+                    onClick={this.nextQuestion}
+                    style={{ marginBottom: "50px" }}
                 >
                     Next
-                </div>
+                </Button>
             </div>
         );
     }
