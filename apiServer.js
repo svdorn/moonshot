@@ -191,6 +191,7 @@ app.post("/user/popups", userApis.POST_popups);
 app.post("/user/intercomEvent", userApis.POST_intercomEvent);
 app.post("/user/reSendVerificationEmail", userApis.POST_reSendVerificationEmail);
 app.post("/user/confirmEmbedLink", userApis.POST_confirmEmbedLink);
+app.post("/user/addEmailToUser", userApis.POST_addEmailToUser);
 
 app.post("/candidate/user", candidateApis.POST_user);
 app.post("/candidate/candidate", candidateApis.POST_candidate);

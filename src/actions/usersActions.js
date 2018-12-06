@@ -310,6 +310,25 @@ export function updateUser(user) {
     };
 }
 
+export function addEmailToUser(userId, verificationToken, email) {
+    return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
+        axios
+            .post("/api/user/addEmailToUser", { userId, verificationToken, email })
+            .then(function(response) {
+                dispatch({ type: "SIGNOUT" });
+                goTo("/finished");
+            })
+            .catch(function(err) {
+                dispatch({
+                    type: "POST_BUSINESS_INTERESTS_REJECTED",
+                    ...notification(err, "error")
+                });
+            });
+    }
+}
+
 // save an answer for ANY eval component (AdminQuestion, PsychQuestion, GCAQuestion, SkillQuestion)
 export function answerEvaluationQuestion(evalComponent, options) {
     return function(dispatch) {

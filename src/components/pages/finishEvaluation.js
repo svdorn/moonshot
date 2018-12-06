@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
     addNotification,
+    addEmailToUser
 } from "../../actions/usersActions";
 import { Field, reduxForm } from "redux-form";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -81,12 +82,11 @@ class FinishEvaluation extends Component {
         }
         if (notValid) return this.props.addNotification("Must enter your email to finish evaluation.", "error");
 
-        // get referral code from cookie, if it exists
-        const signUpReferralCode = this.getCode();
         const values = this.props.formData.finishEvaluation.values;
         const email = values.email;
-        // add email to user and stuff
-
+        const { _id, verificationToken } = this.props.currentUser;
+        // add email to user
+        this.props.addEmailToUser(_id, verificationToken, email);
     }
 
     // create the main content of the page
@@ -124,7 +124,7 @@ class FinishEvaluation extends Component {
                     </Button>
                 </div>
                 </div>
-                {this.props.loadingCreateUser ? (
+                {this.props.loading ? (
                     <CircularProgress style={{ marginTop: "8px" }} />
                 ) : (
                     ""
@@ -155,7 +155,8 @@ class FinishEvaluation extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            addNotification
+            addNotification,
+            addEmailToUser
         },
         dispatch
     );
@@ -164,8 +165,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         formData: state.form,
-        loadingCreateUser: state.users.loadingSomething,
-        userPosted: state.users.userPosted,
+        loading: state.users.loadingSomething,
         currentUser: state.users.currentUser,
         png: state.users.png
     };
