@@ -444,7 +444,6 @@ function round(number, places) {
 
 // decrease the shade of a color by a certain amount (default 20)
 function darken(color, difference) {
-    console.log("darkening");
     if (typeof color !== "string") return color;
     if (color.length === 7) color = color.substring(1);
     if (color.length !== 6) return color;

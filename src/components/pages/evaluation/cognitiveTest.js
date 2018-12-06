@@ -13,7 +13,8 @@ import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { htmlDecode } from "../../../miscFunctions";
 
-import "./cognitiveTest.css";
+import test from "./cognitiveTest.css";
+import evalCSS from "./evaluation.css";
 
 class CognitiveTest extends Component {
     constructor(props) {
@@ -106,7 +107,10 @@ class CognitiveTest extends Component {
         // if the user agreed to the terms and is seeing an example now
         if (this.state.showExample) {
             return (
-                <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
+                <div
+                    styleName={"evalCSS.eval-portion-intro"}
+                    className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
+                >
                     <div className="font24px">
                         <span style={{ color: this.props.primaryColor }}>Pattern Recognition</span>
                     </div>
@@ -142,7 +146,7 @@ class CognitiveTest extends Component {
                     </div>
                     <img
                         src={"/images/cognitiveTest/RPM-Example" + this.props.png}
-                        styleName="example-rpm"
+                        styleName="test.example-rpm"
                     />
                     <br />
                     {this.props.loading ? (
@@ -165,7 +169,10 @@ class CognitiveTest extends Component {
                 "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
 
             return (
-                <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
+                <div
+                    styleName="evalCSS.eval-portion-intro"
+                    className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
+                >
                     <div className="font24px">
                         <span style={{ color: this.props.primaryColor }}>Pattern Recognition</span>
                     </div>
@@ -295,12 +302,12 @@ class CognitiveTest extends Component {
                 <div
                     key={option.src}
                     onClick={this.state.outOfTime ? null : () => self.selectAnswer(option._id)}
-                    styleName={"multipleChoiceAnswer" + selectedClass + outOfTimeClass}
+                    styleName={"test.multipleChoiceAnswer" + selectedClass + outOfTimeClass}
                 >
-                    <div styleName={"multipleChoiceCircle" + selectedClass + outOfTimeClass}>
+                    <div styleName={"test.multipleChoiceCircle" + selectedClass + outOfTimeClass}>
                         <div />
                     </div>
-                    <div styleName="answersImg">
+                    <div styleName="test.answersImg">
                         <img src={imgSrc} />
                     </div>
                 </div>
@@ -330,14 +337,14 @@ class CognitiveTest extends Component {
                 ) : (
                     <div>
                         {this.state.outOfTime ? (
-                            <div styleName="error-red">
+                            <div styleName="test.error-red">
                                 Out of time - please advance to the next question.
                             </div>
                         ) : (
                             <div className="secondary-gray">0:{timer}</div>
                         )}
                         <div className="marginBottom40px">
-                            <img styleName="rpmImg" src={rpmSrc} />
+                            <img styleName="test.rpmImg" src={rpmSrc} />
                         </div>
                         <div className="center" style={{ maxWidth: "1000px", margin: "auto" }}>
                             {answers}

@@ -133,10 +133,10 @@ class AdminQuestions extends Component {
             );
         }
         return (
-            <div className="adminQuestionsContainer">
-                <div className="adminQuestions question">{question.text}</div>
+            <div styleName="adminQuestionsContainer">
+                <div styleName="admin-question">{question.text}</div>
                 <div className="center">
-                    <div className="center adminQuestions gradingSliderContainer">
+                    <div className="center" styleName="grading-slider-container">
                         <Slider
                             min={question.sliderMin}
                             max={question.sliderMax}
@@ -144,7 +144,9 @@ class AdminQuestions extends Component {
                             value={this.state.sliderValue}
                             onChange={this.handleSlider}
                         />
-                        <div className="adminQuestions sliderNumbers noselect">{sliderNumbers}</div>
+                        <div className="admin-questions slider-numbers noselect">
+                            {sliderNumbers}
+                        </div>
                     </div>
                 </div>
                 {this.props.loading ? (
@@ -191,15 +193,15 @@ class AdminQuestions extends Component {
                     onClick={() =>
                         self.selectAnswer(option._id, option.body, option.includeInputArea)
                     }
-                    className={"skillMultipleChoiceAnswer" + selectedClass}
+                    styleName="multiple-choice-answer"
                 >
                     <div
-                        className={"skillMultipleChoiceCircle" + selectedClass}
+                        styleName={"multiple-choice-circle" + selectedClass}
                         style={{ backgroundColor: this.props.primaryColor }}
                     >
                         <div style={{ backgroundColor: this.props.backgroundColor }} />
                     </div>
-                    <div className="skillMultipleChoiceOptionText">{option.body}</div>
+                    <div styleName="multiple-choice-option-text">{option.body}</div>
                     {inputArea}
                 </div>
             );
@@ -207,7 +209,7 @@ class AdminQuestions extends Component {
 
         return (
             <div>
-                <div className="adminQuestions question">{question.text}</div>
+                <div styleName="admin-question">{question.text}</div>
                 {options}
                 {this.props.loading ? (
                     <CircularProgress color="primary" />
@@ -297,7 +299,7 @@ class AdminQuestions extends Component {
 
         return (
             <div>
-                <div className="adminQuestions question">{question.text}</div>
+                <div styleName="admin-question">{question.text}</div>
                 <div className="center" style={{ marginBottom: "40px" }}>
                     {dropDowns}
                 </div>
@@ -333,7 +335,7 @@ class AdminQuestions extends Component {
 
     makeIntroPage() {
         return (
-            <div className="evalPortionIntro center">
+            <div className="center" styleName="eval-portion-intro">
                 <div />
                 <div>
                     <p>

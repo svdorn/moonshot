@@ -14,6 +14,8 @@ import PsychSlider from "./psychSlider";
 import { CircularProgress } from "@material-ui/core";
 import { Button } from "../../miscComponents";
 
+import "./evaluation.css";
+
 class PsychAnalysis extends Component {
     constructor(props) {
         super(props);
@@ -68,7 +70,7 @@ class PsychAnalysis extends Component {
         const isAdmin = !!currentUser && currentUser.userType === "accountAdmin";
 
         return (
-            <div className="evalPortionIntro skillsUserAgreement center">
+            <div styleName="eval-portion-intro" className="skillsUserAgreement center">
                 <div>
                     <p>
                         This is the psychometrics portion of the evaluation. In essence, this is a

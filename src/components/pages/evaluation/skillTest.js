@@ -13,6 +13,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import StyledContent from "../../childComponents/styledContent";
 import { htmlDecode } from "../../../miscFunctions";
 
+import "./evaluation.css";
+
 class SkillTest extends Component {
     constructor(props) {
         super(props);
@@ -117,7 +119,10 @@ class SkillTest extends Component {
             "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
 
         return (
-            <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
+            <div
+                styleName="eval-portion-intro"
+                className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
+            >
                 <div className="font24px" style={{ marginBottom: "20px" }}>
                     <span style={{ color: this.props.primaryColor }}>Skills</span>
                 </div>
@@ -189,12 +194,12 @@ class SkillTest extends Component {
                 <div
                     key={option.body}
                     onClick={() => self.selectAnswer(option._id)}
-                    className={"skillMultipleChoiceAnswer" + selectedClass}
+                    styleName="multiple-choice-answer"
                 >
-                    <div className={"skillMultipleChoiceCircle" + selectedClass}>
+                    <div styleName={"multiple-choice-circle" + selectedClass}>
                         <div />
                     </div>
-                    <div className="skillMultipleChoiceOptionText">{htmlDecode(option.body)}</div>
+                    <div styleName="multiple-choice-option-text">{htmlDecode(option.body)}</div>
                 </div>
             );
         });

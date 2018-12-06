@@ -385,16 +385,6 @@ form > h1 {
     cursor: pointer;
 }
 
-.evalPortionIntro {
-    text-align: center;
-}
-.evalPortionIntro > div {
-    text-align: left;
-    margin: auto;
-    width: 80%;
-    max-width: 1200px;
-    display: inline-block;
-}
 .skillsUserAgreement .checkbox {
     position: absolute;
     margin-top: 2px;
@@ -806,42 +796,6 @@ form > h1 {
     -moz-box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.5);
     padding: 3px;
-}
-
-.skillMultipleChoiceAnswer {
-    cursor: pointer;
-    width: 60%;
-    margin-left: 20%;
-    margin-bottom: 20px;
-    position: relative;
-    text-align: left;
-}
-.skillMultipleChoiceCircle {
-    width: 14px;
-    height: 14px;
-    border-radius: 100%;
-    position: relative;
-    position: absolute;
-    left: 0px;
-    display: inline-block;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.skillMultipleChoiceCircle > div {
-    border-radius: 100%;
-    width: 10px;
-    height: 10px;
-    position: absolute;
-    left: 2px;
-    top: 2px;
-    display: inline-block;
-}
-.skillMultipleChoiceCircle.selected > div {
-    display: none;
-}
-.skillMultipleChoiceOptionText {
-    display: inline-block;
-    margin-left: 30px;
 }
 
 .predictiveGraphTitle {
@@ -1334,24 +1288,18 @@ button.link {
     background: linear-gradient(to right, var(--primary-cyan), var(--primary-white));
     border: none !important;
 }
-.adminQuestionsContainer > div:nth-child(2) > div > div:first-child > div > div > div:first-child {
-    background: linear-gradient(to right, #fd0d8b, #ff5d27);
-}
-.adminQuestionsContainer > div:nth-child(2) > div > div:first-child > div > div > div:nth-child(3) {
-    background: linear-gradient(to right, #fd0d8b, #ff5d27);
-}
 
-.sliderNumbers {
+.slider-numbers {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-.myEmployees.sliderNumbers {
+.myEmployees.slider-numbers {
     width: 82%;
     margin-left: 9%;
     margin-top: -20px;
 }
-.adminQuestions.sliderNumbers {
+.admin-questions.slider-numbers {
     width: 104%;
     margin-left: -2%;
     margin-top: -30px;
@@ -1367,12 +1315,6 @@ button.link {
     position: absolute;
     width: 100%;
     bottom: 50px;
-}
-.adminQuestions.gradingSliderContainer {
-    position: relative;
-    width: 400px;
-    bottom: inherit;
-    display: inline-block;
 }
 .gradingMovementButtons {
     position: absolute;
@@ -2142,9 +2084,6 @@ button.link {
     background-color: white !important;
 }
 
-.adminQuestions.question {
-    margin: 0 20% 20px;
-}
 .aboutMeLiIconContainer {
     height: calc(100% - 40px);
     width: 70px;
@@ -3209,10 +3148,6 @@ button.link {
         margin: 0 0 5px;
     }
 
-    .evalPortionIntro > div:not(:first-child) {
-        width: 400px;
-    }
-
     .myCandidates .candidateTable td {
         padding: 5px 0px;
     }
@@ -3644,13 +3579,6 @@ button.link {
         left: -35px;
     }
 
-    .adminQuestions.gradingSliderContainer {
-        position: relative;
-        width: 220px;
-        bottom: inherit;
-        display: inline-block;
-    }
-
     .results > .statsAndDescription > div {
         width: 90%;
     }
@@ -3768,10 +3696,6 @@ button.link {
 }
 
 @media only screen and (max-width: 450px) {
-    .evalPortionIntro > div:not(:first-child) {
-        width: 250px;
-    }
-
     .font40pxUnder450 {
         font-size: 40px;
     }
