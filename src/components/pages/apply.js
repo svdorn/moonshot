@@ -152,7 +152,7 @@ class Apply extends Component {
     };
 
     handleSignUp() {
-        let URL = "/signup?code=";
+        let URL = "/introduction?code=";
         const position = this.state.positions.findIndex(pos => {
             return pos.name.toString() === this.state.position.toString();
         });

@@ -7,6 +7,7 @@ import { Router, Route, IndexRoute, browserHistory, Redirect } from "react-route
 
 import Login from "./components/pages/login";
 import Signup from "./components/pages/signup";
+import Introduction from "./components/pages/introduction";
 import MyCandidates from "./components/pages/businessPages/myCandidates";
 import MyEmployees from "./components/pages/businessPages/myEmployees";
 import MyEvaluations from "./components/pages/myEvaluations/myEvaluations";
@@ -79,6 +80,7 @@ const routes = (
                 <Route path="login" component={Login} />
                 <Route path="employerLogin" component={Login} />
                 <Route path="signup" component={Signup} />
+                <Route path="introduction" component={Introduction} />
                 <Route
                     path="myCandidates"
                     component={AuthenticatedComponent}
