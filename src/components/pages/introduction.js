@@ -10,7 +10,7 @@ import {
     setUserPosted
 } from "../../actions/usersActions";
 import { Field, reduxForm } from "redux-form";
-import { Dialog, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
+import CircularProgress from "@material-ui/core/CircularProgress";
 import TextInput from "../userInput/textInput";
 import MetaTags from "react-meta-tags";
 import { renderTextField, renderPasswordField, isValidEmail, goTo } from "../../miscFunctions";
@@ -191,7 +191,7 @@ class Introduction extends Component {
                     </Button>
                 </div>
                 {this.props.loadingCreateUser ? (
-                    <CircularProgress color="#72d6f5" style={{ marginTop: "8px" }} />
+                    <CircularProgress style={{ marginTop: "8px" }} />
                 ) : (
                     ""
                 )}
