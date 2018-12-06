@@ -266,7 +266,11 @@ class Main extends Component {
 
         return (
             <OldThemeProvider muiTheme={muiTheme}>
-                <MuiThemeProvider theme={this.state.theme}>{content}</MuiThemeProvider>
+                <MuiThemeProvider theme={this.state.theme}>
+                    <div style={{ color: this.props.textColor ? this.props.textColor : "#ffffff" }}>
+                        {content}
+                    </div>
+                </MuiThemeProvider>
             </OldThemeProvider>
         );
     }
@@ -290,7 +294,8 @@ function mapStateToProps(state) {
         webpSupportChecked: state.users.webpSupportChecked,
         positionCount: state.users.positionCount,
         primaryColor: state.users.primaryColor,
-        secondaryColor: state.users.secondaryColor
+        secondaryColor: state.users.secondaryColor,
+        textColor: state.users.textColor
     };
 }
 
