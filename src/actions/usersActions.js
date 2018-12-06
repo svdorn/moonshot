@@ -700,20 +700,31 @@ export function setUserPosted() {
     };
 }
 
-// POST USER
-export function postUser(user) {
+// POST CANDIDATE
+export function postCandidate(user) {
     return function(dispatch) {
         dispatch({ type: "POST_USER_REQUESTED" });
 
         axios
-            .post("/api/candidate/user", user)
+            .post("/api/candidate/candidate", user)
             .then(response => {
+                const returnedUser = response.data.user;
                 dispatch({
                     type: "POST_USER",
-                    user: response.data.user,
+                    user: returnedUser,
                     fullAccess: response.data.fullAccess
                 });
-                goTo("/myEvaluations");
+
+                if (returnedUser && returnedUser.positions) {
+                    const position = returnedUser.positions[0];
+                    if (position && position.businessId && position.positionId) {
+                        goTo(`/evaluation/${position.businessId}/${position.positionId}`);
+                    } else {
+                        goTo("/myEvaluations");
+                    }
+                } else {
+                    goTo("/myEvaluations");
+                }
             })
             .catch(error => {
                 // standard error message
@@ -738,20 +749,19 @@ export function postUser(user) {
     };
 }
 
-// POST CANDIDATE
-export function postCandidate(user) {
+// POST USER
+export function postUser(user) {
     return function(dispatch) {
         dispatch({ type: "POST_USER_REQUESTED" });
 
         axios
-            .post("/api/candidate/candidate", user)
+            .post("/api/candidate/user", user)
             .then(response => {
                 dispatch({
                     type: "POST_USER",
                     user: response.data.user,
                     fullAccess: response.data.fullAccess
                 });
-                // TODO: change to go to right eval page
                 goTo("/myEvaluations");
             })
             .catch(error => {
