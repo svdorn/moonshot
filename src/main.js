@@ -24,7 +24,7 @@ import "./main.css";
 
 // OLD MUI THEME
 
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import OldThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import {
     lightBlue500,
@@ -38,7 +38,7 @@ import {
 import { fade } from "material-ui/utils/colorManipulator";
 import spacing from "material-ui/styles/spacing";
 
-let theme = {
+let oldTheme = {
     // this messes with the slider colors
     // userAgent: 'all',
     userAgent: false,
@@ -62,35 +62,35 @@ let theme = {
     }
 };
 
-let muiTheme = getMuiTheme(theme);
+let muiTheme = getMuiTheme(oldTheme);
 
 // END OLD MUI THEME
 
 // NEW MUI THEME
 
-// import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-// const theme = createMuiTheme({
-//     palette: {
-//         primary: {
-//             main: "#2e2e2e",
-//             light: "#393939",
-//             dark: "#2e2e2e"
-//         },
-//         secondary: {
-//             main: "#76defe"
-//         }
-//     }
-// });
-
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 // END NEW MUI THEME
 
 class Main extends Component {
     constructor(props) {
         super(props);
+
+        const theme = createMuiTheme({
+            palette: {
+                primary: {
+                    main: "#ffffff"
+                },
+                secondary: {
+                    main: "#76defe"
+                }
+            }
+        });
+
         this.state = {
             loadedUser: false,
             agreedToTerms: false,
-            agreeingToTerms: false
+            agreeingToTerms: false,
+            theme
         };
     }
 
@@ -230,7 +230,11 @@ class Main extends Component {
             );
         }
 
-        return <MuiThemeProvider muiTheme={muiTheme}>{content}</MuiThemeProvider>;
+        return (
+            <OldThemeProvider muiTheme={muiTheme}>
+                <MuiThemeProvider theme={this.state.theme}>{content}</MuiThemeProvider>
+            </OldThemeProvider>
+        );
     }
 }
 
