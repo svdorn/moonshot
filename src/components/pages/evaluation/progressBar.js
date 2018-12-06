@@ -99,7 +99,7 @@ class ProgressBar extends Component {
         );
 
         return (
-            <div className="progressContainer">
+            <div style={{ textAlign: "center", color: this.props.primaryColor }}>
                 <div className="progressBar font14px">
                     <div className="progressStepBars">{stepBars}</div>
                     <div className="progressStepCircles">{stepCircles}</div>

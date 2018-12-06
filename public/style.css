@@ -407,10 +407,6 @@ form > h1 {
     margin: 0 100px;
 }
 
-.progressContainer {
-    color: white;
-    text-align: center;
-}
 .progressBar {
     width: 60%;
     margin-left: 20%;
@@ -456,7 +452,7 @@ form > h1 {
     width: 80%;
     height: 80%;
     border-radius: 100%;
-    background-color: #333333;
+    /* background-color: #333333; */
     position: absolute;
     top: 10%;
     left: 10%;

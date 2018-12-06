@@ -388,7 +388,7 @@ class Evaluation extends Component {
         }
 
         return (
-            <div className="fillScreen primary-white center">
+            <div className="fillScreen center" style={{ color: this.props.textColor }}>
                 <MetaTags>
                     <title>Evaluation | Moonshot</title>
                     <meta
@@ -408,7 +408,9 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         evaluationState: state.users.evaluationState,
-        png: state.users.png
+        png: state.users.png,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 
