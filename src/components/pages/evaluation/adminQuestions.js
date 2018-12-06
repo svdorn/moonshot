@@ -173,9 +173,6 @@ class AdminQuestions extends Component {
         // add all the options to the question
         let options = question.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
-            const selectedClass = isSelected ? " selected" : "";
-
-            // console.log("darken");
 
             const inputArea = !option.includeInputArea ? null : (
                 <input
@@ -200,10 +197,17 @@ class AdminQuestions extends Component {
                     styleName="multiple-choice-answer"
                 >
                     <div
-                        styleName={"multiple-choice-circle" + selectedClass}
-                        style={{ backgroundColor: this.props.primaryColor }}
+                        styleName={"multiple-choice-circle"}
+                        style={{
+                            backgroundColor: this.props.primaryColor
+                        }}
                     >
-                        <div style={{ backgroundColor: this.props.backgroundColor }} />
+                        <div
+                            style={{
+                                backgroundColor: this.props.backgroundColor,
+                                display: isSelected ? "none" : "inline-block"
+                            }}
+                        />
                     </div>
                     <div styleName="multiple-choice-option-text">{option.body}</div>
                     {inputArea}

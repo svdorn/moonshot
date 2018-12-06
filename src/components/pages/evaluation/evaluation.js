@@ -16,7 +16,7 @@ import PsychTest from "./psychTest";
 import CognitiveTest from "./cognitiveTest";
 import SkillTest from "./skillTest";
 
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+// import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 
 class Evaluation extends Component {
     constructor(props) {
@@ -43,15 +43,15 @@ class Evaluation extends Component {
         // general arguments for get api call
         const generalApiGetArgs = { params: generalApiPostArgs };
 
-        const theme = createMuiTheme({
-            palette: {
-                primary: { main: this.props.primaryColor ? this.props.primaryColor : "#76defe" }
-            }
-        });
+        // const theme = createMuiTheme({
+        //     palette: {
+        //         primary: { main: this.props.primaryColor ? this.props.primaryColor : "#76defe" }
+        //     }
+        // });
 
         this.state = {
             // the theme of the evaluation (everything for candidates)
-            theme,
+            // theme,
             // waiting for confirmation that user can be here
             initialLoad: true,
             // loading anything else
@@ -387,9 +387,7 @@ class Evaluation extends Component {
                         content="Take a position evaluation to see if you and the position make a good match."
                     />
                 </MetaTags>
-                {this.state.theme ? (
-                    <MuiThemeProvider theme={this.state.theme}>{content}</MuiThemeProvider>
-                ) : null}
+                {content}
             </div>
         );
     }

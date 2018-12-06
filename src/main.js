@@ -71,20 +71,28 @@ let muiTheme = getMuiTheme(oldTheme);
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 // END NEW MUI THEME
 
+const makeTheme = props => {
+    return createMuiTheme({
+        palette: {
+            primary: {
+                main: props.primaryColor ? props.primaryColor : "#ffffff"
+            },
+            secondary: {
+                main: props.secondaryColor
+                    ? props.secondaryColor
+                    : props.primaryColor
+                        ? props.primaryColor
+                        : "#76defe"
+            }
+        }
+    });
+};
+
 class Main extends Component {
     constructor(props) {
         super(props);
 
-        const theme = createMuiTheme({
-            palette: {
-                primary: {
-                    main: "#ffffff"
-                },
-                secondary: {
-                    main: "#76defe"
-                }
-            }
-        });
+        const theme = makeTheme(props);
 
         this.state = {
             loadedUser: false,
@@ -105,6 +113,27 @@ class Main extends Component {
                     let userType = "lead";
                     if (currentUser) {
                         userType = currentUser.userType;
+
+                        const { primaryColor, secondaryColor } = currentUser;
+
+                        console.log("primaryColor: ", primaryColor);
+
+                        self.setState({
+                            theme: createMuiTheme({
+                                palette: {
+                                    primary: {
+                                        main: primaryColor ? primaryColor : "#ffffff"
+                                    },
+                                    secondary: {
+                                        main: secondaryColor
+                                            ? secondaryColor
+                                            : primaryColor
+                                                ? primaryColor
+                                                : "#76defe"
+                                    }
+                                }
+                            })
+                        });
                     }
                     // pass the user type to google analytics
                     ReactGA.set({ dimension1: userType });
@@ -254,7 +283,9 @@ function mapStateToProps(state) {
         isFetching: state.users.isFetching,
         notification: state.users.notification,
         webpSupportChecked: state.users.webpSupportChecked,
-        positionCount: state.users.positionCount
+        positionCount: state.users.positionCount,
+        primaryColor: state.users.primaryColor,
+        secondaryColor: state.users.secondaryColor
     };
 }
 
