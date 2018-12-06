@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
-    postUser,
+    postCandidate,
     onSignUpPage,
     closeNotification,
     addNotification,
@@ -87,39 +87,26 @@ class Introduction extends Component {
             return;
         }
 
-        const vals = this.props.formData.signup.values;
+        const vals = this.props.formData.introduction.values;
 
         // Form validation before submit
         let notValid = false;
-        const requiredFields = ["name", "email", "password", "password2"];
+        const requiredFields = ["name"];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
                 this.props.touch(field);
                 notValid = true;
             }
         });
-        if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
-
-        if (!isValidEmail(vals.email)) {
-            return this.props.addNotification("Invalid email.", "error");
-        }
-        if (vals.password != vals.password2) {
-            return this.props.addNotification("Passwords must match.", "error");
-        }
+        if (notValid) return this.props.addNotification("Must enter your name to continue.", "error");
 
         // get referral code from cookie, if it exists
         const signUpReferralCode = this.getCode();
-        const values = this.props.formData.signup.values;
+        const values = this.props.formData.introduction.values;
         const name = values.name;
-        const password = values.password;
-        const email = values.email;
-        const { keepMeLoggedIn } = this.state;
         let user = {
             name,
-            password,
-            email,
-            signUpReferralCode,
-            keepMeLoggedIn
+            signUpReferralCode
         };
 
         // if the user got here from a link, add those links
@@ -135,12 +122,7 @@ class Introduction extends Component {
             );
         }
 
-        this.props.postUser(user);
-
-        this.setState({
-            ...this.state,
-            email
-        });
+        this.props.postCandidate(user);
     }
 
     handleCheckMarkClick() {
@@ -211,7 +193,7 @@ class Introduction extends Component {
                             terms of use
                         </a>.
                     </div>
-                    <Button onClick={this.handleSubmit} color="secondary">
+                    <Button onClick={this.handleSubmit} color="primary">
                         Begin
                     </Button>
                 </div>
@@ -246,7 +228,7 @@ class Introduction extends Component {
                         content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
-                <div className="center secondary-gray">{content}</div>
+                <div className="center primary-white">{content}</div>
             </div>
         );
     }
@@ -283,7 +265,7 @@ class Introduction extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            postUser,
+            postCandidate,
             onSignUpPage,
             addNotification,
             closeNotification,

@@ -192,6 +192,7 @@ app.post("/user/intercomEvent", userApis.POST_intercomEvent);
 app.post("/user/reSendVerificationEmail", userApis.POST_reSendVerificationEmail);
 app.post("/user/confirmEmbedLink", userApis.POST_confirmEmbedLink);
 
+app.post("/candidate/user", candidateApis.POST_user);
 app.post("/candidate/candidate", candidateApis.POST_candidate);
 
 app.post("/accountAdmin/sendVerificationEmail", accountAdminApis.POST_sendVerificationEmail);

@@ -32,11 +32,12 @@ const { sendVerificationEmail } = require("./userApis");
 
 
 const candidateApis = {
+    POST_user,
     POST_candidate
 }
 
 
-function POST_candidate(req, res) {
+function POST_user(req, res) {
     const { code, name, email, password, keepMeLoggedIn } = sanitize(req.body);
 
     // if invalid password is given, don't let the user create an account
@@ -415,6 +416,226 @@ function POST_candidate(req, res) {
                     error: findVerifiedError
                 });
             }
+
+            // code is legit and all properties using it are set; resolve
+            resolve(true);
+        });
+    }
+}
+
+function POST_candidate(req, res) {
+    const { code, name } = sanitize(req.body);
+
+    console.log("name: ", name);
+
+    let user = { name };
+
+    // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
+    // the db business document for the business offering the position the user signed up for
+    //let business = undefined;
+    // id of the business offering the position
+    let businessId = undefined;
+    // id of the position within the business
+    let positionId = undefined;
+    // the index of the position and actual position within the business
+    //let positionIndex = undefined;
+    // if the position the user applying for was found in the business db
+    let positionFound = undefined;
+    // the id of the code the user used to sign up
+    let codeId = undefined;
+    // whether we counted the users and created a profile url
+    let madeProfileUrl = false;
+    // the date the position evaluation was assigned
+    let startDate = undefined;
+    // <<-------------------------------------------------------->> //
+
+    // --->>> THINGS WE CAN SET FOR USER WITHOUT ASYNC CALLS <<<--- //
+    const NOW = new Date();
+    // admin status must be changed in the db directly
+    user.admin = false;
+    // atomatically to set candidate verification to true
+    user.verified = true;
+    // had to select that they agreed to the terms to sign up so must be true
+    user.termsAndConditions = [
+        {
+            name: "Privacy Policy",
+            date: NOW,
+            agreed: true
+        },
+        {
+            name: "Terms of Use",
+            date: NOW,
+            agreed: true
+        }
+    ];
+    // user has just signed up
+    user.dateSignedUp = NOW;
+    // hasn't had opportunity to do onboarding yet, but we set it to true cuz people don't have to do onboarding yet
+    user.hasFinishedOnboarding = true;
+    // infinite use, used to verify identify when making calls to backend
+    user.verificationToken = crypto.randomBytes(64).toString('hex');
+    // <<-------------------------------------------------------->> //
+
+    // whether an error already happened so shouldn't return another
+    let errored = false;
+
+    // --->> VERIFY THAT THE CODE THE USER PROVIDED IS LEGIT  <<--- //
+    verifyPositionCode().then(codeVerified => {
+        positionFound = true;
+        makeUser();
+    }).catch(verifyCodeError => {
+        if (typeof verifyCodeError === "object" && verifyCodeError.status && verifyCodeError.message) {
+            console.log(verifyCodeError.error);
+            if (!errored) {
+                errored = true;
+                return res.status(verifyCodeError.status).send({message: verifyCodeError.message});
+            }
+        } else {
+            console.log("Error verifying position code: ", verifyCodeError);
+            if (!errored) {
+                errored = true;
+                return res.status(500).send({message: errors.SERVER_ERROR});
+            }
+        }
+    });
+    // <<-------------------------------------------------------->> //
+
+    // --->> COUNT THE USERS WITH THIS NAME TO ALLOW PROFILE URL CREATION <<--- //
+    Users.countDocuments({name: user.name})
+    .then(count => {
+        // create the user's profile url with the count after their name
+        const randomNumber = crypto.randomBytes(8).toString('hex');
+        user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+        madeProfileUrl = true;
+        makeUser();
+    }).catch (countError => {
+        console.log("Couldn't count the number of users: ", countError);
+        if (!errored) {
+            errored = true;
+            return res.status(500).send({message: errors.SERVER_ERROR});
+        }
+    })
+
+    // --->>           CREATE AND UPDATE THE USER             <<--- //
+    async function makeUser() {
+        // make sure all pre-reqs to creating user are met
+        if (!positionFound || !madeProfileUrl || errored) { return; }
+
+        // get the business that is offering the position
+        try { var business = await Businesses.findById(businessId).select("name uniqueName"); }
+        catch (findBusinessError) {
+            console.log(findBusinessError);
+            return res.status(500).send({ message: errors.SERVER_ERROR });
+        }
+        // make the user db object
+        try {
+            user = await Users.create(user);
+        } catch (createUserError) {
+            console.log("Error creating user: ", createUserError);
+            return res.status(500).send({message: errors.SERVER_ERROR});
+        }
+
+        // delete the used sign up code
+        try { await Signupcodes.deleteOne({ _id: codeId, open: false }); }
+        catch (deleteCodeError) {
+            console.log("error deleting sign up code: ", deleteCodeError);
+            // don't stop execution since the user has already been created
+        }
+
+        // keep the user saved in the session if they want to stay logged in
+        req.session.userId = user._id;
+        req.session.verificationToken = user.verificationToken;
+        req.session.save(function (err) {
+            if (err) { console.log("error saving new user to session: ", err );}
+        });
+
+        try {
+            // add the evaluation to the user
+            user = (await addEvaluation(user, businessId, positionId, startDate)).user;
+            // since the user is just signing up we know that the active
+            // position will be the only one available
+            user.positionInProgress = user.positions[0].positionId;
+
+            // save the user with the new evaluation information
+            await user.save();
+        }
+        catch (addEvalOrSaveError) {
+            console.log("Couldn't add evaluation to user: ", addEvalOrSaveError);
+            return res.status(500).send({ message: errors.SERVER_ERROR });
+        }
+
+        // user was successfully created
+        return res.status(200).send({ user: frontEndUser(user) });
+
+        // THESE TWO WILL NOT RUN - there are guaranteed return statements beforehand
+        // add the user to the referrer's list of referred users
+        //creditReferrer().catch(referralError => { console.log(referralError); });
+    }
+    // <<-------------------------------------------------------->> //
+
+    function verifyPositionCode() {
+        return new Promise(async function(resolve, reject) {
+            // message shown to users with bad employer code
+            const INVALID_CODE = "Invalid sign-up code."
+            // if the user did not provide a signup code, they can't sign up
+            if (!code) {
+                return reject({status: 403, message: "Need an employer referral.", error: "No employer referral."});
+            }
+            // see if the code is a valid length
+            if (code.length !== 10) {
+                return reject({status: 400, message: INVALID_CODE, error: `invalid code length, was ${code.length} characters`});
+            }
+
+            // find the code in the db
+            let dbCode;
+            try { dbCode = await Signupcodes.findOne({ code }); }
+            catch (findCodeError) {
+                return reject({status: 500, message: "Error signing up. Try again later or contact support.", error: findCodeError});
+            }
+
+            if (!dbCode) {
+                return reject({status: 400, message: INVALID_CODE, error: "Signup code not found in the database"});
+            }
+
+            // set the code's id so it can be deleted after user creation
+            codeId = dbCode._id;
+
+            // get the ids for business and position so the user can be immediately
+            // signed up for the position
+            businessId = dbCode.businessId;
+            positionId = dbCode.positionId;
+            // the user's type is the type of code they got
+            user.userType = dbCode.userType;
+            // start date for their position eval, same as when code was created
+            const NOW = new Date();
+            startDate = NOW;
+
+
+            // make sure the business can be signed up for - business has to
+            // have at least one admin who has verified their email
+            try {
+                const verifiedAdminsQuery = {
+                    "userType": "accountAdmin",
+                    "verified": true,
+                    "businessInfo.businessId": mongoose.Types.ObjectId(businessId)
+                }
+                const verifiedUser = await Users.findOne(verifiedAdminsQuery);
+                if (verifiedUser == null) {
+                    return reject({
+                        status: 401,
+                        message: "This company hasn't finished setting up their account yet",
+                        error: new Error(`No verified admin for business with id ${businessId}`)
+                    });
+                }
+            } catch (findVerifiedError) {
+                return reject({
+                    status: 500,
+                    message: "Error signing up. Try again later or contact support.",
+                    error: findVerifiedError
+                });
+            }
+
+            console.log("user: ", user)
 
             // code is legit and all properties using it are set; resolve
             resolve(true);

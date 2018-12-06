@@ -706,7 +706,7 @@ export function postUser(user) {
         dispatch({ type: "POST_USER_REQUESTED" });
 
         axios
-            .post("/api/candidate/candidate", user)
+            .post("/api/candidate/user", user)
             .then(response => {
                 dispatch({
                     type: "POST_USER",
@@ -730,6 +730,38 @@ export function postUser(user) {
                     }
                     // if no user created, see if there is an error message
                     else if (typeof data.message === "string") {
+                        message = data.message;
+                    }
+                }
+                dispatch({ type: "POST_USER_REJECTED", ...notification(message, "error") });
+            });
+    };
+}
+
+// POST CANDIDATE
+export function postCandidate(user) {
+    return function(dispatch) {
+        dispatch({ type: "POST_USER_REQUESTED" });
+
+        axios
+            .post("/api/candidate/candidate", user)
+            .then(response => {
+                dispatch({
+                    type: "POST_USER",
+                    user: response.data.user,
+                    fullAccess: response.data.fullAccess
+                });
+                // TODO: change to go to right eval page
+                goTo("/myEvaluations");
+            })
+            .catch(error => {
+                // standard error message
+                let message = "Could not create account. Refresh and try again.";
+                if (propertyExists(error, ["response", "data"], "object")) {
+                    const data = error.response.data;
+
+                    // if no user created, see if there is an error message
+                    if (typeof data.message === "string") {
                         message = data.message;
                     }
                 }

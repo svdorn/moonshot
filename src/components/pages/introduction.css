@@ -5,6 +5,9 @@
 
 .text {
     width: 95%;
-    max-width: 900px;
+    max-width: 650px;
     margin: auto;
+}
+.text > div:nth-child(2) {
+    margin-top: 15px;
 }

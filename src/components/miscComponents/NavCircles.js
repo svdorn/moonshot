@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import {} from "../../actions/usersActions";
 import { noop } from "../../miscFunctions";
 
-import "./navCircles.css";
+import "./NavCircles.css";
 
 class NavCircles extends Component {
     handleCircleClick = event => {
