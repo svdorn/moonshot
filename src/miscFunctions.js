@@ -442,6 +442,28 @@ function round(number, places) {
     return rounded;
 }
 
+// decrease the shade of a color by a certain amount (default 20)
+function darken(color, difference) {
+    console.log("darkening");
+    if (typeof color !== "string") return color;
+    if (color.length === 7) color = color.substring(1);
+    if (color.length !== 6) return color;
+    if (typeof difference !== "number") difference = 20;
+    let r = parseInt(color.substring(0, 2), 16) - difference;
+    let g = parseInt(color.substring(2, 4), 16) - difference;
+    let b = parseInt(color.substring(4, 6), 16) - difference;
+    if (r < 0) r = 0;
+    if (g < 0) g = 0;
+    if (b < 0) g = 0;
+    r = r.toString(16);
+    g = g.toString(16);
+    b = b.toString(16);
+    if (r.length === 1) r = "0" + r;
+    if (g.length === 1) g = "0" + g;
+    if (b.length === 1) b = "0" + b;
+    return "#" + r + g + b;
+}
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -467,6 +489,7 @@ const miscFunctions = {
     noop,
     randomInt,
     round,
+    darken,
 
     Queue,
     Stack

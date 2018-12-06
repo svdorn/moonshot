@@ -71,23 +71,21 @@ class PsychAnalysis extends Component {
             <div className="evalPortionIntro skillsUserAgreement center">
                 <div>
                     <p>
-                        {
-                            "This is the psychometrics portion of the evaluation. In essence, this is a personality test."
-                        }
+                        This is the psychometrics portion of the evaluation. In essence, this is a
+                        personality test.
                     </p>
                     <p>
-                        {
-                            "You'll be given two choices per question. Drag the slider according to the degree that you agree with a given choice."
-                        }
+                        You'll be given two choices per question. Drag the slider according to the
+                        degree that you agree with a given choice.
                     </p>
                     <p>
-                        <span>{"DON'T OVERTHINK."}</span>
+                        <span style={{ color: this.props.primaryColor }}>{"DON'T OVERTHINK."}</span>
                         {
                             " Each question is meant to be taken at a surface level. Don't overthink it! If you don't understand a question, take your best guess and move on."
                         }
                     </p>
                     <p>
-                        <span>{"YOU CAN"}</span>
+                        <span style={{ color: this.props.primaryColor }}>{"YOU CAN"}</span>
                         {
                             " go to other tabs and windows. So if you don't understand something, feel free to look it up. The test should take around ten minutes."
                         }
@@ -258,7 +256,8 @@ function mapStateToProps(state) {
         primaryColor: state.users.primaryColor,
         questionInfo: state.users.evaluationState.componentInfo,
         showIntro: state.users.evaluationState.showIntro,
-        loading: state.users.loadingSomething
+        loading: state.users.loadingSomething,
+        primaryColor: state.users.primaryColor
     };
 }
 

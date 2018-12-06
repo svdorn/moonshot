@@ -119,7 +119,7 @@ class SkillTest extends Component {
         return (
             <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
                 <div className="font24px" style={{ marginBottom: "20px" }}>
-                    <span>Skills</span>
+                    <span style={{ color: this.props.primaryColor }}>Skills</span>
                 </div>
                 <div>
                     <p>
@@ -127,12 +127,14 @@ class SkillTest extends Component {
                         your aptitude in one or more skills.
                     </p>
                     <p>
-                        <span>TIME IS A FACTOR.</span> After 60 seconds for each question, your
-                        score for that question will decrease as time goes on.
+                        <span style={{ color: this.props.primaryColor }}>TIME IS A FACTOR.</span>{" "}
+                        After 60 seconds for each question, your score for that question will
+                        decrease as time goes on.
                     </p>
                     <p>
-                        <span>DO NOT</span> exit this tab, go to another tab, or leave this window.
-                        Each time you do, your overall score will decrease.
+                        <span style={{ color: this.props.primaryColor }}>DO NOT</span> exit this
+                        tab, go to another tab, or leave this window. Each time you do, your overall
+                        score will decrease.
                     </p>
                     <p>
                         The number of questions in the skills test will change as you go depending
@@ -265,7 +267,8 @@ function mapStateToProps(state) {
         questionInfo: state.users.evaluationState.componentInfo,
         showIntro: state.users.evaluationState.showIntro,
         loading: state.users.loadingSomething,
-        png: state.users.png
+        png: state.users.png,
+        primaryColor: state.users.primaryColor
     };
 }
 

@@ -399,9 +399,6 @@ form > h1 {
     position: absolute;
     margin-top: 2px;
 }
-.evalPortionIntro span {
-    color: #e83c53;
-}
 
 .psychAnalysisQuestion {
     margin: 0 100px;
@@ -824,7 +821,6 @@ form > h1 {
     height: 14px;
     border-radius: 100%;
     position: relative;
-    background: linear-gradient(to right, #fe256e, #ff5438);
     position: absolute;
     left: 0px;
     display: inline-block;
@@ -832,7 +828,6 @@ form > h1 {
     transform: translateY(-50%);
 }
 .skillMultipleChoiceCircle > div {
-    background-color: var(--primary-black-dark);
     border-radius: 100%;
     width: 10px;
     height: 10px;
