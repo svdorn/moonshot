@@ -426,8 +426,6 @@ function POST_user(req, res) {
 function POST_candidate(req, res) {
     const { code, name } = sanitize(req.body);
 
-    console.log("name: ", name);
-
     let user = { name };
 
     // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
@@ -522,11 +520,23 @@ function POST_candidate(req, res) {
         if (!positionFound || !madeProfileUrl || errored) { return; }
 
         // get the business that is offering the position
-        try { var business = await Businesses.findById(businessId).select("name uniqueName"); }
+        try { var business = await Businesses.findById(businessId).select("name uniqueName primaryColor backgroundColor"); }
         catch (findBusinessError) {
             console.log(findBusinessError);
             return res.status(500).send({ message: errors.SERVER_ERROR });
         }
+        if (!business) {
+            console.log("Error finding business.");
+            return res.status(500).send({message: errors.SERVER_ERROR});
+        }
+        // add color styles to user
+        if (business.backgroundColor) {
+            user.backgroundColor = business.backgroundColor;
+        }
+        if (business.primaryColor) {
+            user.primaryColor = business.primaryColor;
+        }
+        
         // make the user db object
         try {
             user = await Users.create(user);
