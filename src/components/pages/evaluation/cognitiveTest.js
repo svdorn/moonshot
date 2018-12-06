@@ -10,8 +10,9 @@ import {
     addNotification
 } from "../../../actions/usersActions";
 import axios from "axios";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress } from "@material-ui/core";
 import { htmlDecode } from "../../../miscFunctions";
+import { Button, CheckBox } from "../../miscComponents";
 
 import test from "./cognitiveTest.css";
 import evalCSS from "./evaluation.css";
@@ -64,7 +65,7 @@ class CognitiveTest extends Component {
     }
 
     // move on to the next question (or start/finish the test)
-    nextQuestion() {
+    nextQuestion = () => {
         if (
             (typeof this.state.selectedId !== "undefined" || this.state.outOfTime) &&
             !this.props.loading
@@ -77,25 +78,25 @@ class CognitiveTest extends Component {
                 });
             });
         }
-    }
+    };
 
-    startTest() {
+    startTest = () => {
         // can only start test if have agreed to cognitive terms
         if (this.state.agreedToTerms) {
             this.props.answerEvaluationQuestion("Cognitive", this.props.credentials);
         }
-    }
+    };
 
     // agree to the terms to taking the test
-    agreeToTerms() {
+    agreeToTerms = () => {
         if (this.state.agreedToTerms) {
             this.setState({ showExample: true });
         }
-    }
+    };
 
-    handleCheckMarkClick() {
+    handleCheckMarkClick = () => {
         this.setState({ agreedToTerms: !this.state.agreedToTerms });
-    }
+    };
 
     // generic error
     errorPage() {
@@ -150,24 +151,17 @@ class CognitiveTest extends Component {
                     />
                     <br />
                     {this.props.loading ? (
-                        <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                        <CircularProgress color="primary" style={{ marginBottom: "40px" }} />
                     ) : (
-                        <div
-                            style={{ marginBottom: "40px", width: "initial" }}
-                            className="noselect skillContinueButton"
-                            onClick={this.startTest.bind(this)}
-                        >
+                        <Button onClick={this.startTest} style={{ marginBottom: "40px" }}>
                             Start
-                        </div>
+                        </Button>
                     )}
                 </div>
             );
         }
         // if the user needs to agree to the user agreement first
         else {
-            const buttonClass =
-                "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
-
             return (
                 <div
                     styleName="evalCSS.eval-portion-intro"
@@ -198,16 +192,12 @@ class CognitiveTest extends Component {
                     </div>
                     <br />
                     <div>
-                        <div
-                            className="checkbox mediumCheckbox whiteCheckbox"
-                            onClick={this.handleCheckMarkClick.bind(this)}
-                        >
-                            <img
-                                alt=""
-                                className={"checkMark" + this.state.agreedToTerms}
-                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            />
-                        </div>
+                        <CheckBox
+                            checked={this.state.agreedToTerms}
+                            onClick={this.handleCheckMarkClick}
+                            size="medium"
+                            style={{ position: "absolute", marginTop: "3px" }}
+                        />
                         <p style={{ padding: "0 40px" }}>
                             By checking this box, I agree that I will answer the questions without
                             help from anyone or any external resources and that if I were to be
@@ -216,15 +206,15 @@ class CognitiveTest extends Component {
                     </div>
                     <br />
                     {this.props.loading ? (
-                        <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                        <CircularProgress color="primary" style={{ marginBottom: "40px" }} />
                     ) : (
-                        <div
-                            style={{ marginBottom: "40px", width: "initial" }}
-                            className={buttonClass}
-                            onClick={this.agreeToTerms.bind(this)}
+                        <Button
+                            disabled={!this.state.agreedToTerms}
+                            style={{ marginBottom: "40px" }}
+                            onClick={this.agreeToTerms}
                         >
                             Continue
-                        </div>
+                        </Button>
                     )}
                 </div>
             );
@@ -316,7 +306,6 @@ class CognitiveTest extends Component {
 
         const canContinue =
             !this.props.loading && (!!this.state.selectedId || this.state.outOfTime);
-        const buttonClass = "skillContinueButton" + (!canContinue ? " disabled" : "");
 
         const rpmSrc = questionInfo.rpm + this.props.png;
 
@@ -349,12 +338,13 @@ class CognitiveTest extends Component {
                         <div className="center" style={{ maxWidth: "1000px", margin: "auto" }}>
                             {answers}
                         </div>
-                        <div
-                            className={"marginBottom50px marginTop30px " + buttonClass}
-                            onClick={this.nextQuestion.bind(this)}
+                        <Button
+                            disabled={!canContinue}
+                            onClick={this.nextQuestion}
+                            style={{ margin: "30px 0 50px" }}
                         >
                             Next
-                        </div>
+                        </Button>
                     </div>
                 )}
             </div>
@@ -382,7 +372,7 @@ class CognitiveTest extends Component {
 
         // if the question has not been loaded yet
         else if (!questionInfo) {
-            return <CircularProgress color="secondary" />;
+            return <CircularProgress color="primary" />;
         }
 
         // the typical interface with the slider
