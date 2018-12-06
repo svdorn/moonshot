@@ -3,17 +3,6 @@
     margin-top: -10px;
 }
 
-.next-button > span {
-    margin-right: 0;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition:    all 0.3s ease;
-    -ms-transition:     all 0.3s ease;
-    transition:         all 0.3s ease;
-}
-.next-button:hover > span {
-    margin:5px;
-}
-
 .employer-box {
     width: 540px;
     height: 100%;
@@ -25,13 +14,13 @@
     font-size: 16px;
     text-align: left;
     border: 2px solid var(--primary-white);
-    -moz-box-shadow:    0px 1px 2px 2px var(--black-deep-dark);
+    -moz-box-shadow: 0px 1px 2px 2px var(--black-deep-dark);
     -webkit-box-shadow: 0px 1px 2px 2px var(--black-deep-dark);
-    box-shadow:         0px 1px 2px 2px var(--black-deep-dark);
+    box-shadow: 0px 1px 2px 2px var(--black-deep-dark);
 
-    -webkit-transition: -webkit-transition .5s;
-    -moz-transition: -moz-box-shadow .5s;
-    transition: box-shadow .5s;
+    -webkit-transition: -webkit-transition 0.5s;
+    -moz-transition: -moz-box-shadow 0.5s;
+    transition: box-shadow 0.5s;
 }
 .employer-box > div:nth-child(2) {
     font-size: 18px;
@@ -39,22 +28,11 @@
     cursor: pointer;
     color: var(--primary-cyan);
 }
-.employer-box > div:nth-child(2) > img {
-    width: 10px;
-    margin: 0 5px 2px 2px;
-    margin-bottom: 4px;
-    transform: translateX(0%);
-
-    -webkit-transition: transform 0.5s ease;
-    -ms-transition: transform 0.5s ease;
-    transition: transform 0.5s ease;
-}
-.employer-box > div:nth-child(2):hover > img {
-    transform: translateX(50%);
-}
 
 @media only screen and (max-width: 800px) {
-    .powered-by { margin-top: -6px; }
+    .powered-by {
+        margin-top: -6px;
+    }
 }
 
 @media only screen and (max-width: 700px) {
