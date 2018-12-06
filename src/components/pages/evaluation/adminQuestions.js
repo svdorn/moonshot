@@ -127,7 +127,11 @@ class AdminQuestions extends Component {
         const highRange = question.sliderMax;
         for (let number = lowRange; number <= highRange; number++) {
             sliderNumbers.push(
-                <div key={`sliderNumber${number}`} className="adminQuestions sliderNumber">
+                <div
+                    key={`sliderNumber${number}`}
+                    style={{ width: "12px" }}
+                    className="adminQuestions sliderNumber"
+                >
                     {number}
                 </div>
             );

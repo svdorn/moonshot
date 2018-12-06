@@ -71,9 +71,19 @@
     display: inline-block;
 }
 
+.psych-question {
+    margin: 0 100px;
+}
+
 @media screen and (max-width: 800px) {
     .eval-portion-intro > div:not(:first-child) {
         width: 400px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .psych-question {
+        margin: 0 50px;
     }
 }
 

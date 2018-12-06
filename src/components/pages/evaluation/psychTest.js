@@ -52,9 +52,7 @@ class PsychAnalysis extends Component {
     };
 
     // start the eval for the first time
-    startTest() {
-        this.props.answerEvaluationQuestion("Psych", this.props.credentials);
-    }
+    startTest = () => this.props.answerEvaluationQuestion("Psych", this.props.credentials);
 
     // when slider is moved
     updateAnswer(newAnswer) {
@@ -70,7 +68,7 @@ class PsychAnalysis extends Component {
         const isAdmin = !!currentUser && currentUser.userType === "accountAdmin";
 
         return (
-            <div styleName="eval-portion-intro" className="skillsUserAgreement center">
+            <div styleName="eval-portion-intro" className="center">
                 <div>
                     <p>
                         This is the psychometrics portion of the evaluation. In essence, this is a
@@ -95,15 +93,11 @@ class PsychAnalysis extends Component {
                 </div>
                 <br />
                 {this.props.loading ? (
-                    <CircularProgress color="#ff582d" />
+                    <CircularProgress color="primary" />
                 ) : (
-                    <div
-                        style={{ marginBottom: "40px", width: "initial" }}
-                        className={"skillContinueButton"}
-                        onClick={this.startTest.bind(this)}
-                    >
+                    <Button style={{ marginBottom: "40px" }} onClick={this.startTest}>
                         Begin
-                    </div>
+                    </Button>
                 )}
             </div>
         );
@@ -171,11 +165,11 @@ class PsychAnalysis extends Component {
             marginTop: `${topMargin}px`
         };
 
-        const nextButtonClass = this.props.loading ? " disabled" : "";
-
         return (
             <div className="noselect font16px font14pxUnder600 font12pxUnder450">
-                <div className="center psychAnalysisQuestion">{question}</div>
+                <div styleName="psych-question" className="center">
+                    {question}
+                </div>
 
                 <div style={sliderAndAnswerContainerStyle}>
                     <div style={leftOptionStyle}>

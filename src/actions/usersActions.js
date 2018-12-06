@@ -16,8 +16,8 @@ export function getUserFromSession(callback) {
         const backgroundColor = "#ffffff";
 
         dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
-        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: "#00FF00" });
-        dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: "black" });
+        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: "#0000ff" });
+        dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: "#000000" });
 
         document.body.style.backgroundColor = backgroundColor;
 

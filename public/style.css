@@ -390,10 +390,6 @@ form > h1 {
     margin-top: 2px;
 }
 
-.psychAnalysisQuestion {
-    margin: 0 100px;
-}
-
 .progressBar {
     width: 60%;
     margin-left: 20%;
@@ -1304,9 +1300,7 @@ button.link {
     margin-left: -2%;
     margin-top: -30px;
 }
-.adminQuestions.sliderNumber {
-    width: 12px;
-}
+
 .myEmployeesWidth {
     max-width: 1200px;
     margin: auto;
@@ -3307,10 +3301,6 @@ button.link {
     }
     .candidateResults .resultsContent {
         height: calc(100vh - 314px);
-    }
-
-    .psychAnalysisQuestion {
-        margin: 0 50px;
     }
 
     .results > .statsAndDescription > div {
