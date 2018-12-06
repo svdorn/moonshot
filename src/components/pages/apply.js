@@ -326,7 +326,9 @@ class Apply extends Component {
             content = (
                 <div>
                     <div className="paddingTop50px marginBottom30px">
-                        <div className="font38px font30pxUnder700 font24pxUnder500">
+                        <div className="font38px font30pxUnder700 font24pxUnder500"
+                             style={{ color: this.props.primaryColor }}
+                            >
                             {this.state.company} Evaluation
                         </div>
                         <div
@@ -339,7 +341,7 @@ class Apply extends Component {
                     </div>
                     <div
                         className="font16px font14pxUnder500"
-                        style={{ width: "88%", margin: "auto", color: this.props.primaryColor }}
+                        style={{ width: "88%", margin: "auto" }}
                     >
                         Select the position you would like to apply for.
                     </div>

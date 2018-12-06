@@ -144,12 +144,13 @@ class Introduction extends Component {
         return (
             <div>
                 <div className="paddingTop50px marginBottom30px">
-                    <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">
+                    <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
                         {this.state.company} Evaluation
                     </div>
                     <div
-                        className="font16px font14pxUnder700 font12pxUnder500 secondary-gray"
+                        className="font16px font14pxUnder700 font12pxUnder500"
                         styleName="powered-by"
+                        style={{ opacity: 0.6 }}
                     >
                         Powered by Moonshot Insights
                     </div>
@@ -180,7 +181,7 @@ class Introduction extends Component {
                         <a
                             href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                             target="_blank"
-                            className="primary-cyan hover-primary-cyan"
+                            style={{ color: this.props.primaryColor }}
                         >
                             privacy policy
                         </a>
@@ -188,7 +189,7 @@ class Introduction extends Component {
                         <a
                             href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf"
                             target="_blank"
-                            className="primary-cyan hover-primary-cyan"
+                            style={{ color: this.props.primaryColor }}
                         >
                             terms of use
                         </a>.
@@ -228,7 +229,7 @@ class Introduction extends Component {
                         content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
-                <div className="center primary-white">{content}</div>
+                <div className="center">{content}</div>
             </div>
         );
     }
@@ -281,7 +282,9 @@ function mapStateToProps(state) {
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 
