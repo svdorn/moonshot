@@ -8,7 +8,10 @@ const initialState = {
     headerMessage: undefined,
     headerType: undefined,
     headerExpirationTime: undefined,
-    userPosted: false
+    userPosted: false,
+    backgroundColor: "#2e2e2e",
+    primaryColor: "#76defe",
+    textColor: "white"
 };
 export function usersReducers(state = initialState, action) {
     switch (action.type) {
@@ -519,89 +522,89 @@ export function usersReducers(state = initialState, action) {
                 positionCount: action.count
             };
             break;
-        case "CHANGE_AUTOMATE_INVITES": {
-            // get the automateInvites info up to this point
-            let automateInvites = state.automateInvites ? state.automateInvites : {};
-            // get the arguments we could receive
-            const {
-                page,
-                header,
-                goBack,
-                nextPage,
-                nextCallable,
-                lastSubStep,
-                extraNextFunction,
-                extraNextFunctionPage
-            } = action.args;
-            // if the header should be changed, do so
-            if (header !== undefined) {
-                automateInvites.header = header;
-            }
-            // if the next page to be navigated to should be changed, do so
-            if (nextPage !== undefined) {
-                automateInvites.nextPage = nextPage;
-            }
-            // if this should be marked as the last page in a sequence, mark it
-            // should always be able to move on to next STEP if on the last SUB STEP
-            if (typeof lastSubStep === "boolean") {
-                automateInvites.lastSubStep = lastSubStep;
-            }
-            // if the ability to move to the next step should be changed, change it
-            if (typeof nextCallable === "boolean") {
-                automateInvites.nextCallable = nextCallable;
-            }
-            // if there is a function to call when Next button pressed, add it
-            if (extraNextFunction !== undefined) {
-                automateInvites.extraNextFunction = extraNextFunction;
-            }
-            // if there is a page going along with the above function, add it
-            if (extraNextFunctionPage !== undefined) {
-                automateInvites.extraNextFunctionPage = extraNextFunctionPage;
-            }
-            // if there is a page to be navigated to
-            if (page !== undefined) {
-                // make sure there is a page stack
-                if (!automateInvites.pageStack) {
-                    // if not, create one
-                    automateInvites.pageStack = new Stack();
-                }
-                // if the requested page isn't the same as the one we're already on ...
-                if (automateInvites.pageStack.top() !== page) {
-                    // ... add the requested page to the stack
-                    automateInvites.pageStack.push(page);
-                }
-                // add the page as the current page
-                automateInvites.currentPage = page;
-                // if the page currently being added is listed as the next page
-                // AND new next page isn't being added, get rid of the page that
-                // says it should be up next, because it's now the current page
-                if (!nextPage && page === automateInvites.nextPage) {
-                    automateInvites.nextPage = undefined;
-                }
-            }
-            // if we should be navigating back to a previous page
-            else if (goBack !== undefined) {
-                // if the page stack exists ...
-                if (automateInvites.pageStack && automateInvites.pageStack.size() > 0) {
-                    // remove the top of the page stack
-                    automateInvites.pageStack.pop();
-                    // and set the current page to the one at the new top
-                    automateInvites.currentPage = automateInvites.pageStack.top();
-                }
-            }
-            return { ...state, automateInvites };
-            break;
-        }
-        case "POP_GO_BACK_STACK": {
-            let automateInvites = state.automateInvites ? state.automateInvites : {};
-            // if there is a stack of actions that allow you to go backwards
-            if (automateInvites.goBackStack) {
-                // remove the top action from the stack
-                automateInvites.goBackStack.pop();
-            }
-            // save the updated automateInvites object
-            return { ...state, automateInvites };
-        }
+        // case "CHANGE_AUTOMATE_INVITES": {
+        //     // get the automateInvites info up to this point
+        //     let automateInvites = state.automateInvites ? state.automateInvites : {};
+        //     // get the arguments we could receive
+        //     const {
+        //         page,
+        //         header,
+        //         goBack,
+        //         nextPage,
+        //         nextCallable,
+        //         lastSubStep,
+        //         extraNextFunction,
+        //         extraNextFunctionPage
+        //     } = action.args;
+        //     // if the header should be changed, do so
+        //     if (header !== undefined) {
+        //         automateInvites.header = header;
+        //     }
+        //     // if the next page to be navigated to should be changed, do so
+        //     if (nextPage !== undefined) {
+        //         automateInvites.nextPage = nextPage;
+        //     }
+        //     // if this should be marked as the last page in a sequence, mark it
+        //     // should always be able to move on to next STEP if on the last SUB STEP
+        //     if (typeof lastSubStep === "boolean") {
+        //         automateInvites.lastSubStep = lastSubStep;
+        //     }
+        //     // if the ability to move to the next step should be changed, change it
+        //     if (typeof nextCallable === "boolean") {
+        //         automateInvites.nextCallable = nextCallable;
+        //     }
+        //     // if there is a function to call when Next button pressed, add it
+        //     if (extraNextFunction !== undefined) {
+        //         automateInvites.extraNextFunction = extraNextFunction;
+        //     }
+        //     // if there is a page going along with the above function, add it
+        //     if (extraNextFunctionPage !== undefined) {
+        //         automateInvites.extraNextFunctionPage = extraNextFunctionPage;
+        //     }
+        //     // if there is a page to be navigated to
+        //     if (page !== undefined) {
+        //         // make sure there is a page stack
+        //         if (!automateInvites.pageStack) {
+        //             // if not, create one
+        //             automateInvites.pageStack = new Stack();
+        //         }
+        //         // if the requested page isn't the same as the one we're already on ...
+        //         if (automateInvites.pageStack.top() !== page) {
+        //             // ... add the requested page to the stack
+        //             automateInvites.pageStack.push(page);
+        //         }
+        //         // add the page as the current page
+        //         automateInvites.currentPage = page;
+        //         // if the page currently being added is listed as the next page
+        //         // AND new next page isn't being added, get rid of the page that
+        //         // says it should be up next, because it's now the current page
+        //         if (!nextPage && page === automateInvites.nextPage) {
+        //             automateInvites.nextPage = undefined;
+        //         }
+        //     }
+        //     // if we should be navigating back to a previous page
+        //     else if (goBack !== undefined) {
+        //         // if the page stack exists ...
+        //         if (automateInvites.pageStack && automateInvites.pageStack.size() > 0) {
+        //             // remove the top of the page stack
+        //             automateInvites.pageStack.pop();
+        //             // and set the current page to the one at the new top
+        //             automateInvites.currentPage = automateInvites.pageStack.top();
+        //         }
+        //     }
+        //     return { ...state, automateInvites };
+        //     break;
+        // }
+        // case "POP_GO_BACK_STACK": {
+        //     let automateInvites = state.automateInvites ? state.automateInvites : {};
+        //     // if there is a stack of actions that allow you to go backwards
+        //     if (automateInvites.goBackStack) {
+        //         // remove the top action from the stack
+        //         automateInvites.goBackStack.pop();
+        //     }
+        //     // save the updated automateInvites object
+        //     return { ...state, automateInvites };
+        // }
         // override ALL of evaluation state
         case "SET_EVALUATION_STATE": {
             return { ...state, evaluationState: action.evaluationState };

@@ -8,8 +8,10 @@ import Select from "react-select";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
-import { CircularProgress, Slider } from "material-ui";
-import { button } from "../../../classes";
+import { Slider } from "material-ui";
+import { CircularProgress } from "@material-ui/core";
+import { Button } from "../../miscComponents";
+import { darken } from "../../../miscFunctions";
 
 import "./evaluation.css";
 
@@ -41,30 +43,23 @@ class AdminQuestions extends Component {
         };
     }
 
-    goTo(route) {
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
     selectAnswer(selectedId, selectedText, otherInputSelected) {
         this.setState({ ...this.state, selectedId, selectedText, otherInputSelected });
     }
 
     // change response to an "Other" question
-    changeOtherInput(e) {
+    changeOtherInput = e => {
         // get the input the user entered
         const otherInput = e.target.value;
         // save it to state
         this.setState({ otherInput });
-    }
+    };
 
     handleSlider = (event, sliderValue) => {
         this.setState({ sliderValue });
     };
 
-    nextQuestion() {
+    nextQuestion = () => {
         const question = this.props.questionInfo;
         // can't submit if there is no question
         if (!question) {
@@ -123,7 +118,7 @@ class AdminQuestions extends Component {
         };
 
         this.setState(newState);
-    }
+    };
 
     makeSliderQuestion() {
         const question = this.props.questionInfo;
@@ -132,16 +127,20 @@ class AdminQuestions extends Component {
         const highRange = question.sliderMax;
         for (let number = lowRange; number <= highRange; number++) {
             sliderNumbers.push(
-                <div key={`sliderNumber${number}`} className="adminQuestions sliderNumber">
+                <div
+                    key={`sliderNumber${number}`}
+                    style={{ width: "12px" }}
+                    className="adminQuestions sliderNumber"
+                >
                     {number}
                 </div>
             );
         }
         return (
-            <div className="adminQuestionsContainer">
-                <div className="adminQuestions question">{question.text}</div>
+            <div styleName="adminQuestionsContainer">
+                <div styleName="admin-question">{question.text}</div>
                 <div className="center">
-                    <div className="center adminQuestions gradingSliderContainer">
+                    <div className="center" styleName="grading-slider-container">
                         <Slider
                             min={question.sliderMin}
                             max={question.sliderMax}
@@ -149,18 +148,17 @@ class AdminQuestions extends Component {
                             value={this.state.sliderValue}
                             onChange={this.handleSlider}
                         />
-                        <div className="adminQuestions sliderNumbers noselect">{sliderNumbers}</div>
+                        <div className="admin-questions slider-numbers noselect">
+                            {sliderNumbers}
+                        </div>
                     </div>
                 </div>
                 {this.props.loading ? (
-                    <CircularProgress color="ff582d" />
+                    <CircularProgress color="primary" />
                 ) : (
-                    <div
-                        className={`${button.orangeRed} marginBottom50px marginTop20px`}
-                        onClick={this.nextQuestion.bind(this)}
-                    >
+                    <Button style={{ margin: "20px auto 50px" }} onClick={this.nextQuestion}>
                         Next
-                    </div>
+                    </Button>
                 )}
             </div>
         );
@@ -170,21 +168,22 @@ class AdminQuestions extends Component {
         const self = this;
         const question = this.props.questionInfo;
 
-        if (!Array.isArray(question.options)) {
-            return null;
-        }
+        if (!Array.isArray(question.options)) return null;
 
         // add all the options to the question
         let options = question.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
-            const selectedClass = isSelected ? " selected" : "";
 
             const inputArea = !option.includeInputArea ? null : (
                 <input
                     type="text"
                     styleName="other-input"
+                    style={{
+                        background: darken(this.props.backgroundColor),
+                        color: this.props.textColor
+                    }}
                     placeholder="Please Specify"
-                    onChange={this.changeOtherInput.bind(this)}
+                    onChange={this.changeOtherInput}
                     value={this.state.otherInput}
                 />
             );
@@ -195,33 +194,41 @@ class AdminQuestions extends Component {
                     onClick={() =>
                         self.selectAnswer(option._id, option.body, option.includeInputArea)
                     }
-                    className={"skillMultipleChoiceAnswer" + selectedClass}
+                    styleName="multiple-choice-answer"
                 >
-                    <div className={"skillMultipleChoiceCircle" + selectedClass}>
-                        <div />
+                    <div
+                        styleName={"multiple-choice-circle"}
+                        style={{
+                            backgroundColor: this.props.primaryColor
+                        }}
+                    >
+                        <div
+                            style={{
+                                backgroundColor: this.props.backgroundColor,
+                                display: isSelected ? "none" : "inline-block"
+                            }}
+                        />
                     </div>
-                    <div className="skillMultipleChoiceOptionText">{option.body}</div>
+                    <div styleName="multiple-choice-option-text">{option.body}</div>
                     {inputArea}
                 </div>
             );
         });
 
-        const buttonClass =
-            this.state.selectedId === undefined ? button.disabled : button.orangeRed;
-
         return (
             <div>
-                <div className="adminQuestions question">{question.text}</div>
+                <div styleName="admin-question">{question.text}</div>
                 {options}
                 {this.props.loading ? (
-                    <CircularProgress color="#ff582d" />
+                    <CircularProgress color="primary" />
                 ) : (
-                    <div
-                        className={"marginBottom50px " + buttonClass}
-                        onClick={this.nextQuestion.bind(this)}
+                    <Button
+                        style={{ marginBottom: "50px" }}
+                        disabled={this.state.selectedId === undefined}
+                        onClick={this.nextQuestion}
                     >
                         Next
-                    </div>
+                    </Button>
                 )}
             </div>
         );
@@ -232,10 +239,7 @@ class AdminQuestions extends Component {
         // current question to answer
         const question = this.props.questionInfo;
         // if the user can go on to the next question, will look clickable
-        const buttonClass =
-            this.state.dropDownSelected.length > 0 && !!this.state.dropDownSelected[0]
-                ? button.orangeRed
-                : button.disabled;
+        const disabled = this.state.dropDownSelected.length < 1 || !this.state.dropDownSelected[0];
         // the list of drop downs to render
         const dropDowns = [];
         // the drop down we are currently dealing with
@@ -303,19 +307,20 @@ class AdminQuestions extends Component {
 
         return (
             <div>
-                <div className="adminQuestions question">{question.text}</div>
+                <div styleName="admin-question">{question.text}</div>
                 <div className="center" style={{ marginBottom: "40px" }}>
                     {dropDowns}
                 </div>
                 {this.props.loading ? (
-                    <CircularProgress color="#ff582d" />
+                    <CircularProgress color="primary" />
                 ) : (
-                    <div
-                        className={"marginBottom50px " + buttonClass}
-                        onClick={this.nextQuestion.bind(this)}
+                    <Button
+                        style={{ marginBottom: "50px" }}
+                        disabled={disabled}
+                        onClick={this.nextQuestion}
                     >
                         Next
-                    </div>
+                    </Button>
                 )}
             </div>
         );
@@ -338,7 +343,7 @@ class AdminQuestions extends Component {
 
     makeIntroPage() {
         return (
-            <div className="evalPortionIntro center">
+            <div className="center" styleName="eval-portion-intro">
                 <div />
                 <div>
                     <p>
@@ -361,16 +366,12 @@ class AdminQuestions extends Component {
                 </div>
                 <br />
                 {this.props.loading ? (
-                    <CircularProgress color="#ff582d" />
+                    <CircularProgress color="primary" />
                 ) : (
                     <div style={{ textAlign: "center" }}>
-                        <div
-                            style={{ width: "initial", margin: "10px" }}
-                            className={button.orangeRed}
-                            onClick={this.begin.bind(this)}
-                        >
+                        <Button style={{ width: "initial", margin: "10px" }} onClick={this.begin}>
                             Begin
-                        </div>
+                        </Button>
                         <br />
                         <div
                             className="inline-block underline font14px pointer"
@@ -386,9 +387,9 @@ class AdminQuestions extends Component {
     }
 
     // start the admin questions
-    begin() {
+    begin = () => {
         this.props.answerEvaluationQuestion("Admin", this.props.credentials);
-    }
+    };
 
     // skip all the admin questions
     skipAdminQuestions() {
@@ -406,7 +407,7 @@ class AdminQuestions extends Component {
 
         // if the question has not been loaded yet
         else if (!question) {
-            return <CircularProgress color="#ff582d" />;
+            return <CircularProgress color="primary" />;
         } else {
             switch (question.questionType) {
                 case "slider": {
@@ -440,7 +441,10 @@ function mapStateToProps(state) {
     return {
         questionInfo: state.users.evaluationState.componentInfo,
         showIntro: state.users.evaluationState.showIntro,
-        loading: state.users.loadingSomething
+        loading: state.users.loadingSomething,
+        primaryColor: state.users.primaryColor,
+        backgroundColor: state.users.backgroundColor,
+        textColor: state.users.textColor
     };
 }
 

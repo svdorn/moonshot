@@ -24,7 +24,7 @@ import "./main.css";
 
 // OLD MUI THEME
 
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import OldThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import {
     lightBlue500,
@@ -38,7 +38,7 @@ import {
 import { fade } from "material-ui/utils/colorManipulator";
 import spacing from "material-ui/styles/spacing";
 
-let theme = {
+let oldTheme = {
     // this messes with the slider colors
     // userAgent: 'all',
     userAgent: false,
@@ -62,35 +62,43 @@ let theme = {
     }
 };
 
-let muiTheme = getMuiTheme(theme);
+let muiTheme = getMuiTheme(oldTheme);
 
 // END OLD MUI THEME
 
 // NEW MUI THEME
 
-// import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-// const theme = createMuiTheme({
-//     palette: {
-//         primary: {
-//             main: "#2e2e2e",
-//             light: "#393939",
-//             dark: "#2e2e2e"
-//         },
-//         secondary: {
-//             main: "#76defe"
-//         }
-//     }
-// });
-
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 // END NEW MUI THEME
+
+const makeTheme = props => {
+    return createMuiTheme({
+        palette: {
+            primary: {
+                main: props.primaryColor ? props.primaryColor : "#ffffff"
+            },
+            secondary: {
+                main: props.secondaryColor
+                    ? props.secondaryColor
+                    : props.primaryColor
+                        ? props.primaryColor
+                        : "#76defe"
+            }
+        }
+    });
+};
 
 class Main extends Component {
     constructor(props) {
         super(props);
+
+        const theme = makeTheme(props);
+
         this.state = {
             loadedUser: false,
             agreedToTerms: false,
-            agreeingToTerms: false
+            agreeingToTerms: false,
+            theme
         };
     }
 
@@ -128,6 +136,32 @@ class Main extends Component {
         this.checkWebpFeature("lossy", (feature, result) => {
             this.props.setWebpSupport(result);
         });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (
+            prevProps.primaryColor !== this.props.primaryColor ||
+            prevProps.secondaryColor !== this.props.secondaryColor
+        ) {
+            const { primaryColor, secondaryColor } = this.props;
+
+            this.setState({
+                theme: createMuiTheme({
+                    palette: {
+                        primary: {
+                            main: primaryColor ? primaryColor : "#ffffff"
+                        },
+                        secondary: {
+                            main: secondaryColor
+                                ? secondaryColor
+                                : primaryColor
+                                    ? primaryColor
+                                    : "#76defe"
+                        }
+                    }
+                })
+            });
+        }
     }
 
     // check_webp_feature:
@@ -230,7 +264,15 @@ class Main extends Component {
             );
         }
 
-        return <MuiThemeProvider muiTheme={muiTheme}>{content}</MuiThemeProvider>;
+        return (
+            <OldThemeProvider muiTheme={muiTheme}>
+                <MuiThemeProvider theme={this.state.theme}>
+                    <div style={{ color: this.props.textColor ? this.props.textColor : "#ffffff" }}>
+                        {content}
+                    </div>
+                </MuiThemeProvider>
+            </OldThemeProvider>
+        );
     }
 }
 
@@ -250,7 +292,10 @@ function mapStateToProps(state) {
         isFetching: state.users.isFetching,
         notification: state.users.notification,
         webpSupportChecked: state.users.webpSupportChecked,
-        positionCount: state.users.positionCount
+        positionCount: state.users.positionCount,
+        primaryColor: state.users.primaryColor,
+        secondaryColor: state.users.secondaryColor,
+        textColor: state.users.textColor
     };
 }
 

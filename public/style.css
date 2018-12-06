@@ -8,6 +8,10 @@ body {
     min-width: var(--min-screen-width);
     background-color: var(--primary-black-dark);
     overflow-x: hidden;
+
+    /* -webkit-transition: background-color 0.5s ease;
+    -ms-transition: background-color 0.5s ease;
+    transition: background-color 0.5s ease; */
 }
 
 #app {
@@ -243,6 +247,8 @@ header {
     -webkit-box-shadow: 0px 8px 7px -5px var(--shadow-black);
     -moz-box-shadow: 0px 8px 7px -5px var(--shadow-black);
     box-shadow: 0px 8px 7px -5px var(--shadow-black);
+    -webkit-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
     transition: all 0.5s ease-in-out;
     background-color: var(--primary-black-dark);
     font-size: 12px;
@@ -385,90 +391,9 @@ form > h1 {
     cursor: pointer;
 }
 
-.evalPortionIntro {
-    text-align: center;
-}
-.evalPortionIntro > div {
-    text-align: left;
-    margin: auto;
-    width: 80%;
-    max-width: 1200px;
-    display: inline-block;
-}
 .skillsUserAgreement .checkbox {
     position: absolute;
     margin-top: 2px;
-}
-.evalPortionIntro span {
-    color: #e83c53;
-}
-
-.psychAnalysisQuestion {
-    margin: 0 100px;
-}
-
-.progressContainer {
-    color: white;
-    text-align: center;
-}
-.progressBar {
-    width: 60%;
-    margin-left: 20%;
-    margin-top: 30px;
-    margin-bottom: 40px;
-    height: 10px;
-    --stepCircleWidth: 24px;
-    position: relative;
-    background-color: #cbcbcb;
-}
-.progressStepBars {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-}
-.progressStepBar {
-    flex: 1;
-    height: 100%;
-}
-.progressStepBarDialog {
-    flex: 1;
-    height: 50%;
-}
-.progressStepCircles {
-    position: absolute;
-    width: calc(100% + var(--stepCircleWidth));
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    left: calc(var(--stepCircleWidth) / -2);
-    top: 50%;
-    transform: translateY(-50%);
-}
-.progressStepCircle {
-    width: var(--stepCircleWidth);
-    height: var(--stepCircleWidth);
-    border-radius: 100%;
-    position: relative;
-    display: inline-block;
-}
-.progressStepCircle > div {
-    width: 80%;
-    height: 80%;
-    border-radius: 100%;
-    background-color: #333333;
-    position: absolute;
-    top: 10%;
-    left: 10%;
-}
-.progressStepCircle > div > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-.progressStepBarInterior {
-    height: 100%;
 }
 
 .build-team {
@@ -813,44 +738,6 @@ form > h1 {
     -moz-box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.5);
     padding: 3px;
-}
-
-.skillMultipleChoiceAnswer {
-    cursor: pointer;
-    width: 60%;
-    margin-left: 20%;
-    margin-bottom: 20px;
-    position: relative;
-    text-align: left;
-}
-.skillMultipleChoiceCircle {
-    width: 14px;
-    height: 14px;
-    border-radius: 100%;
-    position: relative;
-    background: linear-gradient(to right, #fe256e, #ff5438);
-    position: absolute;
-    left: 0px;
-    display: inline-block;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.skillMultipleChoiceCircle > div {
-    background-color: var(--primary-black-dark);
-    border-radius: 100%;
-    width: 10px;
-    height: 10px;
-    position: absolute;
-    left: 2px;
-    top: 2px;
-    display: inline-block;
-}
-.skillMultipleChoiceCircle.selected > div {
-    display: none;
-}
-.skillMultipleChoiceOptionText {
-    display: inline-block;
-    margin-left: 30px;
 }
 
 .predictiveGraphTitle {
@@ -1343,31 +1230,23 @@ button.link {
     background: linear-gradient(to right, var(--primary-cyan), var(--primary-white));
     border: none !important;
 }
-.adminQuestionsContainer > div:nth-child(2) > div > div:first-child > div > div > div:first-child {
-    background: linear-gradient(to right, #fd0d8b, #ff5d27);
-}
-.adminQuestionsContainer > div:nth-child(2) > div > div:first-child > div > div > div:nth-child(3) {
-    background: linear-gradient(to right, #fd0d8b, #ff5d27);
-}
 
-.sliderNumbers {
+.slider-numbers {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-.myEmployees.sliderNumbers {
+.myEmployees.slider-numbers {
     width: 82%;
     margin-left: 9%;
     margin-top: -20px;
 }
-.adminQuestions.sliderNumbers {
+.admin-questions.slider-numbers {
     width: 104%;
     margin-left: -2%;
     margin-top: -30px;
 }
-.adminQuestions.sliderNumber {
-    width: 12px;
-}
+
 .myEmployeesWidth {
     max-width: 1200px;
     margin: auto;
@@ -1376,12 +1255,6 @@ button.link {
     position: absolute;
     width: 100%;
     bottom: 50px;
-}
-.adminQuestions.gradingSliderContainer {
-    position: relative;
-    width: 400px;
-    bottom: inherit;
-    display: inline-block;
 }
 .gradingMovementButtons {
     position: absolute;
@@ -2151,9 +2024,6 @@ button.link {
     background-color: white !important;
 }
 
-.adminQuestions.question {
-    margin: 0 20% 20px;
-}
 .aboutMeLiIconContainer {
     height: calc(100% - 40px);
     width: 70px;
@@ -2371,28 +2241,6 @@ button.link {
 /* doubled up so that it works for material-ui altering */
 .overflow-visible-1.overflow-visible-2 {
     overflow-y: visible;
-}
-
-.multipleChoiceAnswer {
-    overflow-x: hidden;
-    display: inline-block;
-}
-.multipleChoiceCircle {
-    width: 20px;
-    height: 20px;
-    background-color: white;
-    border-radius: 15px;
-    border: 2px solid var(--primary-cyan);
-    margin-top: 4px;
-}
-.multipleChoiceCircle {
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 20px;
-}
-.multipleChoiceCircle.selected {
-    background-color: var(--primary-cyan);
 }
 
 .candidateResults .interestArea {
@@ -2701,7 +2549,6 @@ button.link {
 
 .code {
     text-align: left;
-    background-color: #252525;
     font-family: monospace;
     white-space: pre-wrap;
     margin-top: 10px;
@@ -3218,10 +3065,6 @@ button.link {
         margin: 0 0 5px;
     }
 
-    .evalPortionIntro > div:not(:first-child) {
-        width: 400px;
-    }
-
     .myCandidates .candidateTable td {
         padding: 5px 0px;
     }
@@ -3383,10 +3226,6 @@ button.link {
         height: calc(100vh - 314px);
     }
 
-    .psychAnalysisQuestion {
-        margin: 0 50px;
-    }
-
     .results > .statsAndDescription > div {
         width: 450px;
     }
@@ -3525,10 +3364,6 @@ button.link {
         font-size: 25px;
     }
 
-    .multipleChoiceCircle {
-        margin-top: 2px;
-    }
-
     .font40pxUnder600 {
         font-size: 40px;
     }
@@ -3653,13 +3488,6 @@ button.link {
         left: -35px;
     }
 
-    .adminQuestions.gradingSliderContainer {
-        position: relative;
-        width: 220px;
-        bottom: inherit;
-        display: inline-block;
-    }
-
     .results > .statsAndDescription > div {
         width: 90%;
     }
@@ -3777,10 +3605,6 @@ button.link {
 }
 
 @media only screen and (max-width: 450px) {
-    .evalPortionIntro > div:not(:first-child) {
-        width: 250px;
-    }
-
     .font40pxUnder450 {
         font-size: 40px;
     }
@@ -3885,12 +3709,6 @@ button.link {
 
     .pointBox {
         width: 27px;
-    }
-
-    .multipleChoiceCircle {
-        margin-top: 0px;
-        width: 15px;
-        height: 15px;
     }
 
     .marginSides40pxUnder700 {

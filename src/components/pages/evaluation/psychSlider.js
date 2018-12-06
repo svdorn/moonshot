@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 
 class PsychSlider extends Component {
@@ -23,8 +23,12 @@ class PsychSlider extends Component {
                 height = 200;
             }
         }
-        if (typeof width === "string") { width = parseInt(width, 10) };
-        if (typeof height === "string") { height = parseInt(height, 10) };
+        if (typeof width === "string") {
+            width = parseInt(width, 10);
+        }
+        if (typeof height === "string") {
+            height = parseInt(height, 10);
+        }
 
         this.bound_onMouseUp = this.onMouseUp.bind(this);
         this.bound_onMouseMove = this.onMouseMove.bind(this);
@@ -35,14 +39,14 @@ class PsychSlider extends Component {
             // when it changes we will reset the score to 0
             questionId: props.questionId,
             // how far from the left the slider circle is (as an int); start in middle
-            fromLeft: width/2,
+            fromLeft: width / 2,
             // only move the circle if the mouse is clicked down
             mouseDown: false,
             // width and height of the slider
-            width, height
+            width,
+            height
         };
     }
-
 
     // user has to be able to unclick while outside the slider's div
     componentDidMount() {
@@ -58,7 +62,6 @@ class PsychSlider extends Component {
         window.removeEventListener("touchmove", this.bound_onTouchMove);
     }
 
-
     componentDidUpdate(prevProps, prevState) {
         let shouldUpdateState = false;
         let newState = {};
@@ -71,7 +74,7 @@ class PsychSlider extends Component {
             // record the question id so we know next time if we need to reset
             newState.questionId = this.props.questionId.toString();
             // reset the slider
-            newState.fromLeft = prevState.width/2;
+            newState.fromLeft = prevState.width / 2;
         }
 
         // if the slider dimensions need to be changed ...
@@ -91,7 +94,6 @@ class PsychSlider extends Component {
         }
     }
 
-
     // width and height correspond to the width and height of the whole slider
     makeVerticalLines(coverColor) {
         // make the 9 vertical lines separating the gradient things
@@ -100,38 +102,34 @@ class PsychSlider extends Component {
         const height = this.state.height;
 
         const extraLength = width / 120;
-        for (let lineIndex = 1; lineIndex <= 17; lineIndex+=2) {
+        for (let lineIndex = 1; lineIndex <= 17; lineIndex += 2) {
             let extraLeft = -extraLength;
             let extraMiddle = 0;
             if (lineIndex > 9) {
-                extraLeft = extraLength
-            };
+                extraLeft = extraLength;
+            }
             if (lineIndex === 9) {
                 extraMiddle = 2 * extraLength;
-            };
+            }
             const lineStyle = {
                 backgroundColor: coverColor,
                 position: "absolute",
                 height: "100%",
-                width: `${(width/19) + (2 * extraLength) + extraMiddle}px`,
-                left: `${(lineIndex*width/19) - extraLength + extraLeft}px`
-            }
+                width: `${width / 19 + 2 * extraLength + extraMiddle}px`,
+                left: `${(lineIndex * width) / 19 - extraLength + extraLeft}px`
+            };
 
-            verticalLines.push(
-                <div key={`line${lineIndex}`} style={lineStyle} />
-            );
+            verticalLines.push(<div key={`line${lineIndex}`} style={lineStyle} />);
         }
 
         return verticalLines;
     }
-
 
     // when finger pressed down
     onTouchStart(event) {
         // convert touch to normal mouse down, act like it's a normal mouse down
         this.onMouseDown(event.touches[0]);
     }
-
 
     onMouseDown(event) {
         let self = this;
@@ -142,22 +140,26 @@ class PsychSlider extends Component {
         let target = event.target;
 
         // need to be on the big psychSlider container element to find the right left offset
-        while(![...target.classList].includes("psychSlider")) {
+        while (![...target.classList].includes("psychSlider")) {
             target = target.parentElement;
             // no reason we should get farther than ten elements up
-            counter++
-            if (counter === 10) { break; }
+            counter++;
+            if (counter === 10) {
+                break;
+            }
         }
 
         let offsetLeft = 0;
         // if the target is legit, set the correct left offset
-        if (counter < 10 && target) { offsetLeft = target.getBoundingClientRect().left; };
+        if (counter < 10 && target) {
+            offsetLeft = target.getBoundingClientRect().left;
+        }
 
         // only persist if it was a click, not a touch
         if (typeof event.persist === "function") {
             event.persist();
         }
-        this.setState({...this.state, sliderOffsetLeft: offsetLeft}, setMouseDown);
+        this.setState({ ...this.state, sliderOffsetLeft: offsetLeft }, setMouseDown);
 
         function setMouseDown() {
             if (!self.state.mouseDown) {
@@ -167,21 +169,17 @@ class PsychSlider extends Component {
         }
     }
 
-
     onMouseUp(event) {
         document.body.className = document.body.className.replace("grabbing", "");
         if (this.state.mouseDown) {
-            this.setState({ ...this.state, mouseDown: false })
+            this.setState({ ...this.state, mouseDown: false });
         }
     }
-
-
 
     onTouchMove(event) {
         // convert touch to normal mouse move, act like it's a normal mouse move
         this.onMouseMove(event.touches[0]);
     }
-
 
     onMouseMove(event) {
         // only move the circle if the mouse button is pressed down and we know the slider offset
@@ -189,7 +187,6 @@ class PsychSlider extends Component {
             this.setFromLeft(event);
         }
     }
-
 
     // set how far left the circle slider should be
     setFromLeft(event, setMouseDown) {
@@ -200,22 +197,29 @@ class PsychSlider extends Component {
         // how far left in the slider they clicked
         let fromLeft;
         // if the click is farther left than the slider goes
-        if (xClick <= xOffset) { fromLeft = 0; }
+        if (xClick <= xOffset) {
+            fromLeft = 0;
+        }
         // if the click is farther right than the slider goes
-        else if (xClick >= xOffset + this.state.width) { fromLeft = this.state.width; }
+        else if (xClick >= xOffset + this.state.width) {
+            fromLeft = this.state.width;
+        }
         // if the click is within the slider
-        else { fromLeft = xClick - xOffset; }
+        else {
+            fromLeft = xClick - xOffset;
+        }
 
         let newState = { ...this.state, fromLeft };
-        if (setMouseDown) { newState.mouseDown = true };
+        if (setMouseDown) {
+            newState.mouseDown = true;
+        }
 
         // get new answer from -5 to 5
-        let newAnswer = (fromLeft*10 / this.state.width) - 5;
+        let newAnswer = (fromLeft * 10) / this.state.width - 5;
 
         // set the state for fromLeft and update answer
         this.setState(newState, () => this.props.updateAnswer(newAnswer));
     }
-
 
     // unfortunately you have to use px instead of % for width and height
     render() {
@@ -225,7 +229,9 @@ class PsychSlider extends Component {
         const height = this.state.height;
 
         let sliderClass = this.state.mouseDown ? "grabbing" : "grab";
-        if (this.props.className) { sliderClass += " " + this.props.className; }
+        if (this.props.className) {
+            sliderClass += " " + this.props.className;
+        }
         let sliderStyle = {
             ...this.props.style,
             position: "relative",
@@ -233,7 +239,7 @@ class PsychSlider extends Component {
             overflowX: "visible",
             width: `${width}px`,
             height: `${height}px`
-        }
+        };
 
         // the gradient color towards the middles of things
         const gradientNotSelected = this.props.color1 ? this.props.color1 : "#f25a2b";
@@ -245,7 +251,7 @@ class PsychSlider extends Component {
             position: "absolute",
             width: "50%",
             height: "100%"
-        }
+        };
         let gradientRectLeftStyle = Object.assign({}, gradientRectRightStyle);
         gradientRectRightStyle.right = "0";
         gradientRectLeftStyle.left = "0";
@@ -253,8 +259,9 @@ class PsychSlider extends Component {
         gradientRectLeftStyle.background = `linear-gradient(to left, ${gradientNotSelected}, ${gradientSelected})`;
 
         // makes the lines look gray when not being slid over
-        const rightCoverWidth = this.state.fromLeft < width/2 ? "50%" : `${width - this.state.fromLeft}px`;
-        const leftCoverWidth = this.state.fromLeft < width/2 ? this.state.fromLeft : "50%";
+        const rightCoverWidth =
+            this.state.fromLeft < width / 2 ? "50%" : `${width - this.state.fromLeft}px`;
+        const leftCoverWidth = this.state.fromLeft < width / 2 ? this.state.fromLeft : "50%";
         let rightBigCoverStyle = {
             position: "absolute",
             height: "100%",
@@ -285,13 +292,13 @@ class PsychSlider extends Component {
             position: "absolute",
             height: "0",
             width: "0",
-            borderLeft: `${width/2}px solid transparent`,
-            borderRight: `${width/2}px solid transparent`
+            borderLeft: `${width / 2}px solid transparent`,
+            borderRight: `${width / 2}px solid transparent`
         };
         let bottomTriangleCoverStyle = Object.assign({}, topTriangleCoverStyle);
-        topTriangleCoverStyle.borderTop = `${height/2.1}px solid ${coverColor}`;
+        topTriangleCoverStyle.borderTop = `${height / 2.1}px solid ${coverColor}`;
         topTriangleCoverStyle.top = "0";
-        bottomTriangleCoverStyle.borderBottom = `${height/2.1}px solid ${coverColor}`;
+        bottomTriangleCoverStyle.borderBottom = `${height / 2.1}px solid ${coverColor}`;
         bottomTriangleCoverStyle.bottom = "0";
 
         // the line that the circle sits on
@@ -301,7 +308,7 @@ class PsychSlider extends Component {
             position: "absolute",
             width: "50%",
             height: horizontalLineHeight,
-            top: horizontalLineTop,
+            top: horizontalLineTop
         };
         let horizontalLineLeftStyle = Object.assign({}, horizontalLineRightStyle);
         horizontalLineRightStyle.right = 0;
@@ -323,21 +330,22 @@ class PsychSlider extends Component {
         horizontalLineLeftCoverStyle.left = "0";
 
         // the circle that will be dragged around
-        const circleWidth = width/10;
-        const rotationDegrees = this.state.fromLeft - (width / 2);
+        const circleWidth = width / 10;
+        const rotationDegrees = this.state.fromLeft - width / 2;
         const circleStyle = {
             width: `${circleWidth}px`,
             height: `${circleWidth}px`,
             borderRadius: "100%",
             position: "absolute",
-            top: `${(height/2) - (circleWidth/2)}px`,
-            left: `${this.state.fromLeft - (circleWidth/2)}px`,
+            top: `${height / 2 - circleWidth / 2}px`,
+            left: `${this.state.fromLeft - circleWidth / 2}px`,
             background: `linear-gradient(to right, ${gradientNotSelected}, ${gradientSelected})`,
             transform: `rotate(${rotationDegrees}deg)`
         };
 
         return (
-            <div className={"psychSlider " + sliderClass}
+            <div
+                className={"psychSlider " + sliderClass}
                 style={sliderStyle}
                 onMouseDown={this.onMouseDown.bind(this)}
                 onTouchStart={this.onTouchStart.bind(this)}
@@ -359,6 +367,5 @@ class PsychSlider extends Component {
         );
     }
 }
-
 
 export default PsychSlider;

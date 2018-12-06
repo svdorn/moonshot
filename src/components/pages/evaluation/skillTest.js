@@ -9,9 +9,12 @@ import {
     addNotification
 } from "../../../actions/usersActions";
 import axios from "axios";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress } from "@material-ui/core";
 import StyledContent from "../../childComponents/styledContent";
 import { htmlDecode } from "../../../miscFunctions";
+import { Button, CheckBox } from "../../miscComponents";
+
+import "./evaluation.css";
 
 class SkillTest extends Component {
     constructor(props) {
@@ -51,14 +54,14 @@ class SkillTest extends Component {
     }
 
     // move on to the next question (or start/finish the test)
-    nextQuestion() {
+    nextQuestion = () => {
         if (typeof this.state.selectedId !== "undefined" && !this.props.loading) {
             this.props.answerEvaluationQuestion("Skill", {
                 ...this.props.credentials,
                 selectedId: this.state.selectedId
             });
         }
-    }
+    };
 
     // when new question is here, set the current answer as nonexistent
     componentDidUpdate(prevProps, prevState) {
@@ -71,22 +74,22 @@ class SkillTest extends Component {
         }
     }
 
-    startTest() {
+    startTest = () => {
         // can only start test if have agreed to skill terms now or in past
         const { currentUser } = this.props;
         if ((currentUser && currentUser.agreedToSkillTerms) || this.state.agreedToTerms) {
             this.props.answerEvaluationQuestion("Skill", this.props.credentials);
         }
-    }
+    };
 
-    handleCheckMarkClick() {
+    handleCheckMarkClick = () => {
         this.setState({ agreedToTerms: !this.state.agreedToTerms });
-    }
+    };
 
     // used if the user has been through a skill in the past but hasn't started this one yet
     introPage() {
         return (
-            <div className="center primary-white">
+            <div className="center">
                 <h4>Skill Test</h4>
                 <p>Ready for another skill test?</p>
                 <p>
@@ -97,15 +100,11 @@ class SkillTest extends Component {
                     Let{"'"}s see what you{"'"}ve got!
                 </p>
                 {this.props.loading ? (
-                    <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                    <CircularProgress color="primary" style={{ marginBottom: "40px" }} />
                 ) : (
-                    <div
-                        style={{ marginBottom: "40px", width: "initial" }}
-                        className="noselect skillContinueButton"
-                        onClick={this.startTest.bind(this)}
-                    >
+                    <Button style={{ marginBottom: "40px" }} onClick={this.startTest}>
                         Begin
-                    </div>
+                    </Button>
                 )}
             </div>
         );
@@ -113,13 +112,13 @@ class SkillTest extends Component {
 
     // rendered if the user is on the first skill test of an eval and hasn't agreed to the test terms
     userAgreementPage() {
-        const buttonClass =
-            "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
-
         return (
-            <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
+            <div
+                styleName="eval-portion-intro"
+                className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
+            >
                 <div className="font24px" style={{ marginBottom: "20px" }}>
-                    <span>Skills</span>
+                    <span style={{ color: this.props.primaryColor }}>Skills</span>
                 </div>
                 <div>
                     <p>
@@ -127,12 +126,14 @@ class SkillTest extends Component {
                         your aptitude in one or more skills.
                     </p>
                     <p>
-                        <span>TIME IS A FACTOR.</span> After 60 seconds for each question, your
-                        score for that question will decrease as time goes on.
+                        <span style={{ color: this.props.primaryColor }}>TIME IS A FACTOR.</span>{" "}
+                        After 60 seconds for each question, your score for that question will
+                        decrease as time goes on.
                     </p>
                     <p>
-                        <span>DO NOT</span> exit this tab, go to another tab, or leave this window.
-                        Each time you do, your overall score will decrease.
+                        <span style={{ color: this.props.primaryColor }}>DO NOT</span> exit this
+                        tab, go to another tab, or leave this window. Each time you do, your overall
+                        score will decrease.
                     </p>
                     <p>
                         The number of questions in the skills test will change as you go depending
@@ -142,16 +143,12 @@ class SkillTest extends Component {
                 </div>
                 <br />
                 <div>
-                    <div
-                        className="checkbox mediumCheckbox whiteCheckbox"
-                        onClick={this.handleCheckMarkClick.bind(this)}
-                    >
-                        <img
-                            alt=""
-                            className={"checkMark" + this.state.agreedToTerms}
-                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                        />
-                    </div>
+                    <CheckBox
+                        checked={this.state.agreedToTerms}
+                        onClick={this.handleCheckMarkClick}
+                        size="medium"
+                        style={{ position: "absolute", marginTop: "3px" }}
+                    />
                     <p style={{ padding: "0 40px" }}>
                         By checking this box, I agree that I will answer the questions without help
                         from anyone or any external resources and that if I were to be discovered
@@ -160,15 +157,15 @@ class SkillTest extends Component {
                 </div>
                 <br />
                 {this.props.loading ? (
-                    <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                    <CircularProgress color="primary" style={{ marginBottom: "40px" }} />
                 ) : (
-                    <div
-                        style={{ marginBottom: "40px", width: "initial" }}
-                        className={buttonClass}
-                        onClick={this.startTest.bind(this)}
+                    <Button
+                        style={{ marginBottom: "40px" }}
+                        onClick={this.startTest}
+                        disabled={!this.state.agreedToTerms}
                     >
                         Begin
-                    </div>
+                    </Button>
                 )}
             </div>
         );
@@ -182,35 +179,43 @@ class SkillTest extends Component {
 
         const answers = questionInfo.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
-            const selectedClass = isSelected ? " selected" : "";
+            // const selectedClass = isSelected ? " selected" : "";
             return (
                 <div
                     key={option.body}
                     onClick={() => self.selectAnswer(option._id)}
-                    className={"skillMultipleChoiceAnswer" + selectedClass}
+                    styleName="multiple-choice-answer"
                 >
-                    <div className={"skillMultipleChoiceCircle" + selectedClass}>
-                        <div />
+                    <div
+                        styleName={"multiple-choice-circle"}
+                        style={{ background: self.props.primaryColor }}
+                    >
+                        <div
+                            style={{
+                                background: self.props.backgroundColor,
+                                display: isSelected ? "none" : "inline-block"
+                            }}
+                        />
                     </div>
-                    <div className="skillMultipleChoiceOptionText">{htmlDecode(option.body)}</div>
+                    <div styleName="multiple-choice-option-text">{htmlDecode(option.body)}</div>
                 </div>
             );
         });
 
         const canContinue = typeof this.state.selectedId !== "undefined" && !this.props.loading;
-        const buttonClass = "skillContinueButton" + (canContinue ? "" : " disabled");
 
         // otherwise, good to go - show them the question
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
                 <StyledContent contentArray={questionInfo.body} style={{ marginBottom: "40px" }} />
                 {answers}
-                <div
-                    className={"marginBottom50px " + buttonClass}
-                    onClick={this.nextQuestion.bind(this)}
+                <Button
+                    disabled={!canContinue}
+                    onClick={this.nextQuestion}
+                    style={{ marginBottom: "50px" }}
                 >
                     Next
-                </div>
+                </Button>
             </div>
         );
     }
@@ -265,7 +270,8 @@ function mapStateToProps(state) {
         questionInfo: state.users.evaluationState.componentInfo,
         showIntro: state.users.evaluationState.showIntro,
         loading: state.users.loadingSomething,
-        png: state.users.png
+        primaryColor: state.users.primaryColor,
+        backgroundColor: state.users.backgroundColor
     };
 }
 

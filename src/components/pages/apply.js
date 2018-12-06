@@ -13,14 +13,13 @@ import {
 import { makePossessive } from "../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import { goTo } from "../../miscFunctions";
-import HoverTip from "../miscComponents/hoverTip";
+import { HoverTip, Button } from "../miscComponents";
 import ClaimPageModal from "./dashboard/dashboardItems/onboarding/childComponents/claimPageModal";
 import ModalSignup from "./dashboard/dashboardItems/onboarding/childComponents/modalSignup";
 import AddPositionDialog from "../childComponents/addPositionDialog";
 import InviteCandidatesModal from "./dashboard/inviteCandidatesModal";
 import axios from "axios";
 
-import { button } from "../../classes";
 import "./apply.css";
 
 class Apply extends Component {
@@ -130,12 +129,19 @@ class Apply extends Component {
             );
         });
 
+        const { textColor } = this.props;
+        const iconClass =
+            !textColor || textColor.toLowerCase() == "white" || textColor.toLowerCase() == "#ffffff"
+                ? "selectIconWhiteImportant"
+                : "";
+
         return (
             <Select
                 disableUnderline={true}
+                style={{ color: this.props.textColor }}
                 classes={{
-                    root: "select-no-focus-color selectRootWhite font20px font16pxUnder500",
-                    icon: "selectIconWhiteImportant selectIconMargin"
+                    root: "select-no-focus-color font20px font16pxUnder500",
+                    icon: "selectIconMargin " + iconClass
                 }}
                 value={position}
                 onChange={this.handleChangePosition(position)}
@@ -151,7 +157,7 @@ class Apply extends Component {
         this.setState({ position: event.target.value });
     };
 
-    handleSignUp() {
+    handleSignUp = () => {
         let URL = "/introduction?code=";
         const position = this.state.positions.findIndex(pos => {
             return pos.name.toString() === this.state.position.toString();
@@ -163,7 +169,7 @@ class Apply extends Component {
         URL += `&company=${this.state.company}`;
 
         goTo(URL);
-    }
+    };
 
     openClaimPageModal = () => {
         this.props.openClaimPageModal();
@@ -218,12 +224,9 @@ class Apply extends Component {
         return (
             <div>
                 <div>
-                    <button
-                        className="button noselect round-6px background-secondary-gray primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
-                        style={{ padding: "6px 20px", cursor: "initial" }}
-                    >
-                        <span>Next &#8594;</span>
-                    </button>
+                    <Button disabled={true} style={{ padding: "6px 20px" }}>
+                        Next
+                    </Button>
                     <HoverTip
                         className="font14px secondary-gray"
                         style={{ marginTop: "40px", marginLeft: "-6px" }}
@@ -232,13 +235,9 @@ class Apply extends Component {
                 </div>
                 <div styleName="employer-box">
                     {description}
-                    <div
-                        onClick={onClick}
-                        className={button.cyan}
-                        style={{ marginTop: "20px", color: "white" }}
-                    >
-                        {buttonText} <img src={`/icons/LineArrow${this.props.png}`} />
-                    </div>
+                    <Button onClick={onClick} style={{ marginTop: "20px" }}>
+                        {buttonText}
+                    </Button>
                 </div>
             </div>
         );
@@ -249,13 +248,9 @@ class Apply extends Component {
         return (
             <div>
                 <div>
-                    <button
-                        className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
-                        styleName="next-button"
-                        style={{ padding: "6px 20px" }}
-                    >
-                        <span>Next &#8594;</span>
-                    </button>
+                    <Button style={{ padding: "6px 20px" }} disabled={true}>
+                        Next
+                    </Button>
                     <HoverTip
                         className="font14px secondary-gray"
                         style={{ marginTop: "40px", marginLeft: "-6px" }}
@@ -280,14 +275,9 @@ class Apply extends Component {
     // returns a button that lets you sign up
     nextButton() {
         return (
-            <button
-                className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
-                styleName="next-button"
-                onClick={this.handleSignUp.bind(this)}
-                style={{ padding: "6px 20px" }}
-            >
-                <span>Next &#8594;</span>
-            </button>
+            <Button onClick={this.handleSignUp} style={{ padding: "6px 20px" }}>
+                Next
+            </Button>
         );
     }
 
@@ -336,19 +326,20 @@ class Apply extends Component {
             content = (
                 <div>
                     <div className="paddingTop50px marginBottom30px">
-                        <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">
+                        <div className="font38px font30pxUnder700 font24pxUnder500">
                             {this.state.company} Evaluation
                         </div>
                         <div
-                            className="font16px font14pxUnder700 font12pxUnder500 secondary-gray"
+                            className="font16px font14pxUnder700 font12pxUnder500"
                             styleName="powered-by"
+                            style={{ opacity: 0.6 }}
                         >
                             Powered by Moonshot Insights
                         </div>
                     </div>
                     <div
-                        className="font16px font14pxUnder500 primary-cyan"
-                        style={{ width: "88%", margin: "auto" }}
+                        className="font16px font14pxUnder500"
+                        style={{ width: "88%", margin: "auto", color: this.props.primaryColor }}
                     >
                         Select the position you would like to apply for.
                     </div>
@@ -416,7 +407,9 @@ function mapStateToProps(state) {
         claimPageModal: state.users.claimPageModal,
         inviteCandidatesModal: state.users.inviteCandidatesModalOpen,
         positionModal: state.users.positionModalOpen,
-        onboardingPositions: state.users.onboardingPositions
+        onboardingPositions: state.users.onboardingPositions,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 

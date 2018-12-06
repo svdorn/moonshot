@@ -327,7 +327,11 @@ class ModalSignup extends Component {
                 <div className="input-separator" />
 
                 <div styleName="agree-to-terms" className="font12px">
-                    <CheckBox checked={agreeingToTerms} onClick={this.handleCheckMarkClick} />
+                    <CheckBox
+                        checked={agreeingToTerms}
+                        onClick={this.handleCheckMarkClick}
+                        style={{ margin: "0 7px 2px 0" }}
+                    />
                     I have read and agree to the Moonshot Insights <br className="above500only" />
                     <a
                         href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"

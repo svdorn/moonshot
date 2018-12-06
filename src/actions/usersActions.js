@@ -12,6 +12,18 @@ export function getUserFromSession(callback) {
             errorMessage: undefined
         });
 
+        // TODO: DELETE THE dispatches AND MAKE NEW ONES PROBABLY
+        const backgroundColor = "#ffffff";
+        const textColor = "#000000";
+        const primaryColor = "#0000ff";
+
+        dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: primaryColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
+
+        document.body.style.backgroundColor = backgroundColor;
+        document.body.style.color = textColor;
+
         axios
             .get("/api/user/session")
             .then(function(response) {

@@ -1,0 +1,36 @@
+.checkbox {
+    display: inline-block;
+    cursor: pointer;
+    vertical-align: middle;
+    position: relative;
+    border: 2px solid;
+    height: var(--height);
+    width: var(--height);
+}
+.checkbox > img {
+    position: absolute;
+    height: var(--img-height);
+    width: var(--img-height);
+}
+.small {
+    --height: 12px;
+    --img-height: 12px;
+}
+.medium {
+    --height: 18px;
+    --img-height: 15px;
+}
+.small > img {
+    top: -5px;
+    left: 2px;
+}
+.medium > img {
+    left: 2px;
+    bottom: 2px;
+}
+/* .whiteCheckbox {
+    border: 2px solid white;
+}
+.whiteCheckbox.error {
+    border-color: var(--secondary-red);
+} */
