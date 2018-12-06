@@ -160,6 +160,8 @@ class Apply extends Component {
         const code = this.state.positions[position].code;
 
         URL += code;
+        URL += `&company=${this.state.company}`;
+
         goTo(URL);
     }
 

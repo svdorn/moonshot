@@ -17,6 +17,8 @@ import { renderTextField, renderPasswordField, isValidEmail, goTo } from "../../
 import { Button } from "../miscComponents";
 import axios from "axios";
 
+import "./introduction.css";
+
 const validate = values => {
     const errors = {};
     const requiredFields = ["name"];
@@ -37,19 +39,23 @@ class Introduction extends Component {
         this.bound_handleKeyPress = this.handleKeyPress.bind(this);
 
         this.state = {
-            agreeingToTerms: false
+            agreeingToTerms: false,
+            company: undefined
         };
     }
 
     componentDidMount() {
         // shouldn't be able to be on sign up page if logged in
-        const { currentUser } = this.props;
+        const { currentUser, location } = this.props;
         if (currentUser) {
             if (currentUser.userType === "accountAdmin") {
                 return goTo("/dashboard");
             } else {
                 return goTo("/myEvaluations");
             }
+        }
+        if (location.query && location.query.company) {
+            this.setState({ company: location.query.company })
         }
 
         // add listener for keyboard enter key
@@ -155,6 +161,25 @@ class Introduction extends Component {
 
         return (
             <div>
+                <div className="paddingTop50px marginBottom30px">
+                    <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">
+                        {this.state.company} Evaluation
+                    </div>
+                    <div
+                        className="font16px font14pxUnder700 font12pxUnder500 secondary-gray"
+                        styleName="powered-by"
+                    >
+                        Powered by Moonshot Insights
+                    </div>
+                </div>
+                <div styleName="text">
+                    <div>
+                        This evaluation consists of some quick administrative questions, a personality evaluation, and a pattern recognition test.
+                    </div>
+                    <div>
+                        Please enter your name below to begin the evaluation.
+                    </div>
+                </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
                     <div style={{ margin: "5px 20px 10px" }}>
@@ -187,7 +212,7 @@ class Introduction extends Component {
                         </a>.
                     </div>
                     <Button onClick={this.handleSubmit} color="secondary">
-                        Next
+                        Begin
                     </Button>
                 </div>
                 {this.props.loadingCreateUser ? (
