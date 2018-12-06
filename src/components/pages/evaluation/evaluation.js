@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress } from "@material-ui/core";
 import MetaTags from "react-meta-tags";
 import { addNotification, setEvaluationState } from "../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../miscFunctions";
@@ -349,7 +349,7 @@ class Evaluation extends Component {
         if (this.state.initialLoad) {
             content = (
                 <div className="center">
-                    <CircularProgress color="secondary" />
+                    <CircularProgress color="primary" />
                 </div>
             );
         }

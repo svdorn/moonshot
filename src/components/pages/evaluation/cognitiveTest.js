@@ -21,6 +21,13 @@ class CognitiveTest extends Component {
     constructor(props) {
         super(props);
 
+        const { textColor } = props;
+        const imgColor = !textColor
+            ? "White"
+            : textColor.toLowerCase() == "white" || props.textColor.toLowerCase() == "#ffffff"
+                ? "White"
+                : "Black";
+
         this.state = {
             selectedId: undefined,
             questionId: undefined,
@@ -31,7 +38,8 @@ class CognitiveTest extends Component {
             outOfTime: false,
             // the timeouts
             timeouts: [],
-            loading: false
+            loading: false,
+            imgColor
         };
     }
 
@@ -146,7 +154,9 @@ class CognitiveTest extends Component {
                         </p>
                     </div>
                     <img
-                        src={"/images/cognitiveTest/RPM-Example" + this.props.png}
+                        src={`/images/cognitiveTest/RPM-Example-2-${this.state.imgColor}${
+                            this.props.png
+                        }`}
                         styleName="test.example-rpm"
                     />
                     <br />
@@ -407,7 +417,8 @@ function mapStateToProps(state) {
         showIntro: state.users.evaluationState.showIntro,
         loading: state.users.loadingSomething,
         png: state.users.png,
-        primaryColor: state.users.primaryColor
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 

@@ -49,9 +49,10 @@
 }
 
 .example-rpm {
-    width: 100%;
-    max-width: 1200px;
+    width: 60%;
+    max-width: 550px;
     margin: auto;
+    display: block;
 }
 
 @media only screen and (max-width: 700px) {

@@ -68,7 +68,7 @@
     margin: auto;
     width: 80%;
     max-width: 1200px;
-    display: inline-block;
+    display: block;
 }
 
 .psych-question {
@@ -76,7 +76,10 @@
 }
 
 @media screen and (max-width: 800px) {
-    .eval-portion-intro > div:not(:first-child) {
+    /* .eval-portion-intro > div:not(:first-child) {
+        width: 400px;
+    } */
+    .eval-portion-intro > div {
         width: 400px;
     }
 }
@@ -97,7 +100,10 @@
 }
 
 @media screen and (max-width: 450px) {
-    .eval-portion-intro > div:not(:first-child) {
+    /* .eval-portion-intro > div:not(:first-child) {
+        width: 250px;
+    } */
+    .eval-portion-intro > div {
         width: 250px;
     }
 }
