@@ -17,7 +17,6 @@
     width: 14px;
     height: 14px;
     border-radius: 100%;
-    position: relative;
     position: absolute;
     left: 0px;
     display: inline-block;
@@ -33,9 +32,9 @@
     top: 2px;
     display: inline-block;
 }
-.multiple-choice-circle.selected > div {
+/* .multiple-choice-circle.selected > div {
     display: none;
-}
+} */
 
 .multiple-choice-option-text {
     display: inline-block;

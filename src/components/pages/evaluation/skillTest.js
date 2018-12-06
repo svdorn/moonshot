@@ -12,7 +12,7 @@ import axios from "axios";
 import { CircularProgress } from "@material-ui/core";
 import StyledContent from "../../childComponents/styledContent";
 import { htmlDecode } from "../../../miscFunctions";
-import { Button } from "../../miscComponents";
+import { Button, CheckBox } from "../../miscComponents";
 
 import "./evaluation.css";
 
@@ -82,14 +82,14 @@ class SkillTest extends Component {
         }
     };
 
-    handleCheckMarkClick() {
+    handleCheckMarkClick = () => {
         this.setState({ agreedToTerms: !this.state.agreedToTerms });
-    }
+    };
 
     // used if the user has been through a skill in the past but hasn't started this one yet
     introPage() {
         return (
-            <div className="center primary-white">
+            <div className="center">
                 <h4>Skill Test</h4>
                 <p>Ready for another skill test?</p>
                 <p>
@@ -143,16 +143,12 @@ class SkillTest extends Component {
                 </div>
                 <br />
                 <div>
-                    <div
-                        className="checkbox mediumCheckbox whiteCheckbox"
-                        onClick={this.handleCheckMarkClick.bind(this)}
-                    >
-                        <img
-                            alt=""
-                            className={"checkMark" + this.state.agreedToTerms}
-                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                        />
-                    </div>
+                    <CheckBox
+                        checked={this.state.agreedToTerms}
+                        onClick={this.handleCheckMarkClick}
+                        size="medium"
+                        style={{ position: "absolute", marginTop: "3px" }}
+                    />
                     <p style={{ padding: "0 40px" }}>
                         By checking this box, I agree that I will answer the questions without help
                         from anyone or any external resources and that if I were to be discovered
@@ -166,7 +162,7 @@ class SkillTest extends Component {
                     <Button
                         style={{ marginBottom: "40px" }}
                         onClick={this.startTest}
-                        disabled={this.state.agreedToTerms}
+                        disabled={!this.state.agreedToTerms}
                     >
                         Begin
                     </Button>
@@ -183,15 +179,23 @@ class SkillTest extends Component {
 
         const answers = questionInfo.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
-            const selectedClass = isSelected ? " selected" : "";
+            // const selectedClass = isSelected ? " selected" : "";
             return (
                 <div
                     key={option.body}
                     onClick={() => self.selectAnswer(option._id)}
                     styleName="multiple-choice-answer"
                 >
-                    <div styleName={"multiple-choice-circle" + selectedClass}>
-                        <div />
+                    <div
+                        styleName={"multiple-choice-circle"}
+                        style={{ background: self.props.primaryColor }}
+                    >
+                        <div
+                            style={{
+                                background: self.props.backgroundColor,
+                                display: isSelected ? "none" : "inline-block"
+                            }}
+                        />
                     </div>
                     <div styleName="multiple-choice-option-text">{htmlDecode(option.body)}</div>
                 </div>
@@ -266,8 +270,8 @@ function mapStateToProps(state) {
         questionInfo: state.users.evaluationState.componentInfo,
         showIntro: state.users.evaluationState.showIntro,
         loading: state.users.loadingSomething,
-        png: state.users.png,
-        primaryColor: state.users.primaryColor
+        primaryColor: state.users.primaryColor,
+        backgroundColor: state.users.backgroundColor
     };
 }
 
