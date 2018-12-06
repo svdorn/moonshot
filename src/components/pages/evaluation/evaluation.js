@@ -8,7 +8,7 @@ import MetaTags from "react-meta-tags";
 import { addNotification, setEvaluationState } from "../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../miscFunctions";
 import MiscError from "../../miscComponents/miscError";
-import { button } from "../../../classes";
+import { Button } from "../../miscComponents";
 
 import ProgressBar from "./progressBar";
 import AdminQuestions from "./adminQuestions";
@@ -180,20 +180,16 @@ class Evaluation extends Component {
         // if there is a user error
         if (this.state.errorMessage) {
             return (
-                <div className="center primary-white">
+                <div className="center">
                     <div className="font20px" style={{ margin: "20px" }}>
                         Something went wrong.
                     </div>
                     <div className="font14px">
                         {this.state.errorMessage} Try refreshing or contacting support.
                     </div>
-                    <div
-                        className="button medium round-4px background-primary-cyan"
-                        style={{ margin: "20px" }}
-                        onClick={() => goTo("/myEvaluations")}
-                    >
+                    <Button style={{ margin: "20px" }} onClick={() => goTo("/myEvaluations")}>
                         Take Me Home
-                    </div>
+                    </Button>
                 </div>
             );
         }
@@ -211,15 +207,14 @@ class Evaluation extends Component {
                     <p>You{"'"}ve already started this evaluation.</p>
                     <p>Ready to get back into it?</p>
                     {this.state.loading ? (
-                        <CircularProgress color="secondary" />
+                        <CircularProgress color="primary" />
                     ) : (
-                        <div className={button.purpleBlue} onClick={this.getEvalState}>
-                            Let{"'"}s Go!
-                        </div>
+                        <Button onClick={this.getEvalState}>Let{"'"}s Go!</Button>
                     )}
                 </div>
             );
         }
+
         // TODO: if the user is in the middle of a different eval already
         else if (this.state.evalInProgress) {
             return <div>Want to switch to your other eval?</div>;
@@ -251,12 +246,10 @@ class Evaluation extends Component {
                     carefully.
                 </p>
                 <p>Click the button to start once you are ready.</p>
-                {this.state.loadingNextPage ? (
-                    <CircularProgress color="secondary" />
+                {this.state.loading ? (
+                    <CircularProgress color="primary" />
                 ) : (
-                    <div className={button.purpleBlue} onClick={this.startEval}>
-                        Start
-                    </div>
+                    <Button onClick={this.startEval}>Start</Button>
                 )}
             </div>
         );
@@ -289,13 +282,11 @@ class Evaluation extends Component {
     // page to show if a user comes here after already having finished the eval
     finishedPage() {
         return (
-            <div className="primary-white">
+            <div>
                 <h3>Congratulations!</h3>
                 <p>You finished the evaluation!</p>
                 <p>You can safely exit this tab.</p>
-                <div className={button.purpleBlue} onClick={() => goTo("/myEvaluations")}>
-                    Take Me Home
-                </div>
+                <Button onClick={() => goTo("/myEvaluations")}>Take Me Home</Button>
             </div>
         );
     }
