@@ -390,66 +390,6 @@ form > h1 {
     margin-top: 2px;
 }
 
-.progressBar {
-    width: 60%;
-    margin-left: 20%;
-    margin-top: 30px;
-    margin-bottom: 40px;
-    height: 10px;
-    --stepCircleWidth: 24px;
-    position: relative;
-    background-color: #cbcbcb;
-}
-.progressStepBars {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-}
-.progressStepBar {
-    flex: 1;
-    height: 100%;
-}
-.progressStepBarDialog {
-    flex: 1;
-    height: 50%;
-}
-.progressStepCircles {
-    position: absolute;
-    width: calc(100% + var(--stepCircleWidth));
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    left: calc(var(--stepCircleWidth) / -2);
-    top: 50%;
-    transform: translateY(-50%);
-}
-.progressStepCircle {
-    width: var(--stepCircleWidth);
-    height: var(--stepCircleWidth);
-    border-radius: 100%;
-    position: relative;
-    display: inline-block;
-}
-.progressStepCircle > div {
-    width: 80%;
-    height: 80%;
-    border-radius: 100%;
-    /* background-color: #333333; */
-    position: absolute;
-    top: 10%;
-    left: 10%;
-}
-.progressStepCircle > div > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-.progressStepBarInterior {
-    height: 100%;
-}
-
 .build-team {
     position: relative;
     padding: 5px 10px;
@@ -2297,28 +2237,6 @@ button.link {
     overflow-y: visible;
 }
 
-.multipleChoiceAnswer {
-    overflow-x: hidden;
-    display: inline-block;
-}
-.multipleChoiceCircle {
-    width: 20px;
-    height: 20px;
-    background-color: white;
-    border-radius: 15px;
-    border: 2px solid var(--primary-cyan);
-    margin-top: 4px;
-}
-.multipleChoiceCircle {
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 20px;
-}
-.multipleChoiceCircle.selected {
-    background-color: var(--primary-cyan);
-}
-
 .candidateResults .interestArea {
     position: absolute;
     top: 50px;
@@ -3441,10 +3359,6 @@ button.link {
         font-size: 25px;
     }
 
-    .multipleChoiceCircle {
-        margin-top: 2px;
-    }
-
     .font40pxUnder600 {
         font-size: 40px;
     }
@@ -3790,12 +3704,6 @@ button.link {
 
     .pointBox {
         width: 27px;
-    }
-
-    .multipleChoiceCircle {
-        margin-top: 0px;
-        width: 15px;
-        height: 15px;
     }
 
     .marginSides40pxUnder700 {

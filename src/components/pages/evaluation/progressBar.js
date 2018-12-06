@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import "./progressBar.css";
+
 class ProgressBar extends Component {
     render() {
         const evaluationState = this.props.evaluationState;
@@ -54,7 +56,7 @@ class ProgressBar extends Component {
             stepCircles.push(
                 <div
                     key={"circle" + stepCounter}
-                    className="progressStepCircle"
+                    styleName="progress-step-circle"
                     style={{
                         // backgroundColor: `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`
                         backgroundColor: this.props.primaryColor
@@ -77,8 +79,8 @@ class ProgressBar extends Component {
                 background: this.props.primaryColor
             };
             stepBars.push(
-                <div key={"bar" + stepCounter} className="progressStepBar">
-                    <div className="progressStepBarInterior" style={interiorStyle} />
+                <div key={"bar" + stepCounter} styleName="progress-step-bar">
+                    <div styleName="progress-step-bar-interior" style={interiorStyle} />
                 </div>
             );
         }
@@ -86,7 +88,7 @@ class ProgressBar extends Component {
         stepCircles.push(
             <div
                 key="endCircle"
-                className="progressStepCircle"
+                styleName="progress-step-circle"
                 style={{
                     // backgroundColor: `rgb(${Math.round(rEnd)},${Math.round(gEnd)},${Math.round(
                     //     bEnd
@@ -100,14 +102,30 @@ class ProgressBar extends Component {
 
         return (
             <div style={{ textAlign: "center", color: this.props.primaryColor }}>
-                <div className="progressBar font14px">
-                    <div className="progressStepBars">{stepBars}</div>
-                    <div className="progressStepCircles">{stepCircles}</div>
+                <div className="font14px" style={styles.progressBar}>
+                    <div style={styles.progressStepBars}>{stepBars}</div>
+                    <div styleName="progress-step-circles">{stepCircles}</div>
                 </div>
             </div>
         );
     }
 }
+
+const styles = {
+    progressBar: {
+        width: "60%",
+        margin: "30px 0 40px 20%",
+        height: "10px",
+        position: "relative",
+        backgroundColor: "#cbcbcb"
+    },
+    progressStepBars: {
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        height: "100%"
+    }
+};
 
 function mapStateToProps(state) {
     return {

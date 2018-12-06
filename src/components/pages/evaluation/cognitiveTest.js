@@ -11,10 +11,10 @@ import {
 } from "../../../actions/usersActions";
 import axios from "axios";
 import { CircularProgress } from "@material-ui/core";
-import { htmlDecode } from "../../../miscFunctions";
+import { htmlDecode, darken } from "../../../miscFunctions";
 import { Button, CheckBox } from "../../miscComponents";
 
-import test from "./cognitiveTest.css";
+import gca from "./cognitiveTest.css";
 import evalCSS from "./evaluation.css";
 
 class CognitiveTest extends Component {
@@ -117,7 +117,7 @@ class CognitiveTest extends Component {
         if (this.state.showExample) {
             return (
                 <div
-                    styleName={"evalCSS.eval-portion-intro"}
+                    styleName="evalCSS.eval-portion-intro"
                     className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
                 >
                     <div className="font24px">
@@ -157,7 +157,7 @@ class CognitiveTest extends Component {
                         src={`/images/cognitiveTest/RPM-Example-2-${this.state.imgColor}${
                             this.props.png
                         }`}
-                        styleName="test.example-rpm"
+                        styleName="gca.example-rpm"
                     />
                     <br />
                     {this.props.loading ? (
@@ -291,23 +291,32 @@ class CognitiveTest extends Component {
     createContent() {
         let self = this;
 
-        const questionInfo = this.props.questionInfo;
+        const { questionInfo, primaryColor, backgroundColor } = this.props;
 
         const answers = questionInfo.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
-            const selectedClass = isSelected ? " selected" : "";
-            const outOfTimeClass = this.state.outOfTime ? " outOfTime" : "";
+            // const selectedClass = isSelected ? " gca.selected" : "";
+            // const outOfTimeClass = this.state.outOfTime ? " gca.outOfTime" : "";
             const imgSrc = option.src + this.props.png;
+
+            const color = this.state.outOfTime ? darken(primaryColor, 60) : primaryColor;
+
             return (
                 <div
                     key={option.src}
                     onClick={this.state.outOfTime ? null : () => self.selectAnswer(option._id)}
-                    styleName={"test.multipleChoiceAnswer" + selectedClass + outOfTimeClass}
+                    styleName={"gca.multiple-choice-answer"}
+                    style={this.state.outOfTime ? { cursor: "not-allowed" } : {}}
                 >
-                    <div styleName={"test.multipleChoiceCircle" + selectedClass + outOfTimeClass}>
-                        <div />
+                    <div styleName={"gca.multiple-choice-circle"} style={{ background: color }}>
+                        <div
+                            style={{
+                                display: isSelected ? "none" : "inline-block",
+                                backgroundColor
+                            }}
+                        />
                     </div>
-                    <div styleName="test.answersImg">
+                    <div styleName="gca.answersImg">
                         <img src={imgSrc} />
                     </div>
                 </div>
@@ -332,18 +341,18 @@ class CognitiveTest extends Component {
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
                 {this.state.loading ? (
-                    <div className="secondary-gray">Loading next question...</div>
+                    <div>Loading next question...</div>
                 ) : (
                     <div>
                         {this.state.outOfTime ? (
-                            <div styleName="test.error-red">
+                            <div styleName="gca.error-red">
                                 Out of time - please advance to the next question.
                             </div>
                         ) : (
-                            <div className="secondary-gray">0:{timer}</div>
+                            <div>0:{timer}</div>
                         )}
                         <div className="marginBottom40px">
-                            <img styleName="test.rpmImg" src={rpmSrc} />
+                            <img styleName="gca.rpmImg" src={rpmSrc} />
                         </div>
                         <div className="center" style={{ maxWidth: "1000px", margin: "auto" }}>
                             {answers}
@@ -418,6 +427,7 @@ function mapStateToProps(state) {
         loading: state.users.loadingSomething,
         png: state.users.png,
         primaryColor: state.users.primaryColor,
+        backgroundColor: state.users.backgroundColor,
         textColor: state.users.textColor
     };
 }
