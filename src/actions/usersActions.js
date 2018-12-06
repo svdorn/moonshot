@@ -13,12 +13,18 @@ export function getUserFromSession(callback) {
         });
 
         // TODO: DELETE THE dispatches AND MAKE NEW ONES PROBABLY
-        const backgroundColor = "#ffffff";
-        const textColor = "#000000";
-        const primaryColor = "#0000ff";
+        // const backgroundColor = "#ffffff";
+        // const textColor = "#000000";
+        // const primaryColor = "#0000ff";
+
+        const backgroundColor = "#2e2e2e";
+        const textColor = "#ffffff";
+        const primaryColor = "#ffffff";
+        const secondaryColor = "#76defe";
 
         dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
         dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: primaryColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "secondaryColor", value: secondaryColor });
         dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
 
         document.body.style.backgroundColor = backgroundColor;
@@ -329,9 +335,11 @@ export function addEmailToUser(userId, verificationToken, email) {
         axios
             .post("/api/user/addEmailToUser", { userId, verificationToken, email })
             .then(function(response) {
-                dispatch(signout(() => {
-                    goTo("/finished");
-                }))
+                dispatch(
+                    signout(() => {
+                        goTo("/finished");
+                    })
+                );
             })
             .catch(function(err) {
                 dispatch({
@@ -339,7 +347,7 @@ export function addEmailToUser(userId, verificationToken, email) {
                     ...notification(err, "error")
                 });
             });
-    }
+    };
 }
 
 // save an answer for ANY eval component (AdminQuestion, PsychQuestion, GCAQuestion, SkillQuestion)
@@ -755,7 +763,9 @@ export function postCandidate(user) {
                 if (returnedUser && returnedUser.positions) {
                     const position = returnedUser.positions[0];
                     if (position && position.businessId && position.positionId) {
-                        goTo(`/evaluation/${position.businessId}/${position.positionId}?start=true`);
+                        goTo(
+                            `/evaluation/${position.businessId}/${position.positionId}?start=true`
+                        );
                     } else {
                         goTo("/myEvaluations");
                     }

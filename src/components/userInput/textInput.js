@@ -1,23 +1,12 @@
 "use strict";
 import React, { Component } from "react";
 import { Field } from "redux-form";
+import { connect } from "react-redux";
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { TextField } from "@material-ui/core";
 
 import "./textInput.css";
-
-const styles = theme => ({});
-
-const theme = createMuiTheme({
-    palette: {
-        primary: { main: "#76defe", dark: "#76defe", light: "#76defe" },
-        secondary: { main: "#ff582d" },
-        error: { main: "#eb394f", dark: "#eb394f", light: "#eb394f" },
-        type: "dark"
-    },
-    typography: { fontFamily: "Muli,sans-serif" }
-});
 
 // default validation function - just makes the fields say This Field is Required
 const defaultValidate = value => (value ? undefined : "This field is required.");
@@ -50,9 +39,9 @@ const renderField = ({
         InputLabelProps={{
             classes: { root: "input-label" },
             FormLabelClasses: {
-                root: "root-cyan-label",
-                error: "error-input-label",
-                focused: "focused-input-label"
+                // root: "root-cyan-label",
+                // error: "error-input-label",
+                // focused: "focused-input-label"
             }
         }}
         {...input}
@@ -64,7 +53,31 @@ class TextInput extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { showPassword: false };
+        const { primaryColor, secondaryColor, textColor } = this.props;
+
+        let color = secondaryColor ? secondaryColor : primaryColor ? primaryColor : "#76defe";
+        let palette = {
+            primary: { main: color, dark: color, light: color },
+            secondary: { main: "#ff582d" },
+            error: { main: "#eb394f", dark: "#eb394f", light: "#eb394f" }
+        };
+
+        // if the text color should be white, make it so
+        if (
+            !textColor ||
+            textColor.toLowerCase() == "white" ||
+            textColor.toLowerCase() == "#ffffff"
+        ) {
+            palette.type = "dark";
+        }
+
+        this.state = {
+            showPassword: false,
+            theme: createMuiTheme({
+                palette,
+                typography: { fontFamily: "Muli,sans-serif" }
+            })
+        };
     }
 
     toggleShowPassword = () => {
@@ -101,7 +114,7 @@ class TextInput extends Component {
         return (
             <div>
                 <div className={className ? className : ""}>
-                    <MuiThemeProvider theme={theme}>
+                    <MuiThemeProvider theme={this.state.theme}>
                         <Field
                             name={name}
                             component={renderField}
@@ -130,4 +143,12 @@ class TextInput extends Component {
     }
 }
 
-export default TextInput;
+function mapStateToProps(state) {
+    return {
+        primaryColor: state.users.primaryColor,
+        secondaryColor: state.users.secondaryColor,
+        textColor: state.users.textColor
+    };
+}
+
+export default connect(mapStateToProps)(TextInput);

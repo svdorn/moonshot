@@ -451,14 +451,14 @@ form > h1 {
     background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
 }
 
-.root-cyan-label.input-label,
+/* .root-cyan-label.input-label,
 .root-cyan-label.input-label.focused-input-label {
     color: var(--primary-cyan);
 }
 .root-cyan-label.input-label.error-input-label,
 .root-cyan-label.input-label.focused-input-label.error-input-label {
     color: var(--secondary-red);
-}
+} */
 
 .input-separator {
     height: 10px;
