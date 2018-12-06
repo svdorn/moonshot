@@ -13,11 +13,12 @@ export function getUserFromSession(callback) {
         });
 
         // TODO: DELETE THE dispatches AND MAKE NEW ONES PROBABLY
-        const backgroundColor = "#2e2e2e";
-        const textColor = "#ffffff";
+        const backgroundColor = "#ffffff";
+        const textColor = "#000000";
+        const primaryColor = "#0000ff";
 
         dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
-        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: "#76defe" });
+        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: primaryColor });
         dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
 
         document.body.style.backgroundColor = backgroundColor;
