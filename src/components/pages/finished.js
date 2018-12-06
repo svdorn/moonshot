@@ -25,12 +25,13 @@ class Finished extends Component {
         return (
             <div>
                 <div className="paddingTop50px marginBottom30px">
-                    <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">
+                    <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
                         {this.state.company} Evaluation
                     </div>
                     <div
-                        className="font16px font14pxUnder700 font12pxUnder500 secondary-gray"
+                        className="font16px font14pxUnder700 font12pxUnder500"
                         styleName="powered-by"
+                        style={{ opacity: "0.6" }}
                     >
                         Powered by Moonshot Insights
                     </div>
@@ -57,7 +58,7 @@ class Finished extends Component {
                         content="Thank you for finishing your evaluation."
                     />
                 </MetaTags>
-                <div className="center primary-white">{content}</div>
+                <div className="center">{content}</div>
             </div>
         );
     }
@@ -75,7 +76,9 @@ function mapStateToProps(state) {
     return {
         loading: state.users.loadingSomething,
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 
