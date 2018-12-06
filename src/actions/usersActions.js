@@ -718,7 +718,7 @@ export function postCandidate(user) {
                 if (returnedUser && returnedUser.positions) {
                     const position = returnedUser.positions[0];
                     if (position && position.businessId && position.positionId) {
-                        goTo(`/evaluation/${position.businessId}/${position.positionId}`);
+                        goTo(`/evaluation/${position.businessId}/${position.positionId}?start=true`);
                     } else {
                         goTo("/myEvaluations");
                     }
