@@ -41,6 +41,7 @@ import Explore from "./components/pages/dashboard/leadDashboard";
 
 // position evaluation - contains all components (psych, gca, admin questions)
 import Evaluation from "./components/pages/evaluation/evaluation";
+import FinishEvaluation from "./components/pages/finishEvaluation";
 
 import AdminPages from "./components/pages/adminPages/adminPages";
 import BusinessEditor from "./components/pages/adminPages/businessEditor";
@@ -153,6 +154,11 @@ const routes = (
                     path="evaluation/:businessId/:positionId"
                     component={AuthenticatedComponent}
                     page={<Evaluation />}
+                />
+                <Route
+                    path="finishEvaluation"
+                    component={AuthenticatedComponent}
+                    page={<FinishEvaluation />}
                 />
 
                 <Route

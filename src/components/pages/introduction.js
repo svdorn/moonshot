@@ -13,7 +13,7 @@ import { Field, reduxForm } from "redux-form";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextInput from "../userInput/textInput";
 import MetaTags from "react-meta-tags";
-import { renderTextField, renderPasswordField, isValidEmail, goTo } from "../../miscFunctions";
+import { renderTextField, isValidEmail, goTo } from "../../miscFunctions";
 import { Button } from "../miscComponents";
 import axios from "axios";
 

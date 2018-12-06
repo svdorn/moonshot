@@ -357,13 +357,18 @@ function updateEvalState(dispatch, data) {
     }
     // if the user finished the eval
     if (data.evaluationState.component === "Finished") {
-        // go home
-        goTo("/myEvaluations");
-        // add a notification saying they finished the eval
-        dispatch({
-            type: "ADD_NOTIFICATION",
-            ...notification("Congratulations, you finished the evaluation!")
-        });
+        console.log("data: ", data);
+        if (data.user && !data.user.email) {
+            goTo("/finishEvaluation");
+        } else {
+            // go home
+            goTo("/myEvaluations");
+            // add a notification saying they finished the eval
+            dispatch({
+                type: "ADD_NOTIFICATION",
+                ...notification("Congratulations, you finished the evaluation!")
+            });
+        }
     }
     dispatch({
         type: "UPDATE_EVALUATION_STATE",
