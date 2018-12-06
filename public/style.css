@@ -8,6 +8,10 @@ body {
     min-width: var(--min-screen-width);
     background-color: var(--primary-black-dark);
     overflow-x: hidden;
+
+    /* -webkit-transition: background-color 0.5s ease;
+    -ms-transition: background-color 0.5s ease;
+    transition: background-color 0.5s ease; */
 }
 
 #app {
@@ -243,6 +247,8 @@ header {
     -webkit-box-shadow: 0px 8px 7px -5px var(--shadow-black);
     -moz-box-shadow: 0px 8px 7px -5px var(--shadow-black);
     box-shadow: 0px 8px 7px -5px var(--shadow-black);
+    -webkit-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
     transition: all 0.5s ease-in-out;
     background-color: var(--primary-black-dark);
     font-size: 12px;
