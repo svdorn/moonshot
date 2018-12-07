@@ -14,7 +14,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TextInput from "../userInput/textInput";
 import MetaTags from "react-meta-tags";
 import { renderTextField, isValidEmail, goTo } from "../../miscFunctions";
-import { Button, CheckBox } from "../miscComponents";
+import { Button } from "../miscComponents";
 import axios from "axios";
 
 import "./introduction.css";
@@ -55,7 +55,7 @@ class Introduction extends Component {
             }
         }
         if (location.query && location.query.company) {
-            this.setState({ company: location.query.company })
+            this.setState({ company: location.query.company });
         }
 
         // add listener for keyboard enter key
@@ -77,7 +77,7 @@ class Introduction extends Component {
         }
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = e => {
         if (e) {
             e.preventDefault();
         }
@@ -98,7 +98,8 @@ class Introduction extends Component {
                 notValid = true;
             }
         });
-        if (notValid) return this.props.addNotification("Must enter your name to continue.", "error");
+        if (notValid)
+            return this.props.addNotification("Must enter your name to continue.", "error");
 
         // get referral code from cookie, if it exists
         const signUpReferralCode = this.getCode();
@@ -123,9 +124,9 @@ class Introduction extends Component {
         }
 
         this.props.postCandidate(user);
-    }
+    };
 
-    handleCheckMarkClick = () => {
+    handleCheckMarkClick() {
         this.setState({
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
@@ -144,39 +145,42 @@ class Introduction extends Component {
         return (
             <div>
                 <div className="paddingTop50px marginBottom30px">
-                    <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
+                    <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">
                         {this.state.company} Evaluation
                     </div>
                     <div
-                        className="font16px font14pxUnder700 font12pxUnder500"
+                        className="font16px font14pxUnder700 font12pxUnder500 secondary-gray"
                         styleName="powered-by"
-                        style={{ opacity: 0.6 }}
                     >
                         Powered by Moonshot Insights
                     </div>
                 </div>
                 <div styleName="text">
                     <div>
-                        This evaluation consists of some quick administrative questions, a personality evaluation, and a pattern recognition test.
+                        This evaluation consists of some quick administrative questions, a
+                        personality evaluation, and a pattern recognition test.
                     </div>
-                    <div>
-                        Please enter your name below to begin the evaluation.
-                    </div>
+                    <div>Please enter your name below to begin the evaluation.</div>
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div className="marginBottom15px">
-                        <CheckBox
-                            checked={this.state.agreeingToTerms}
-                            onClick={this.handleCheckMarkClick}
-                            style={{ margin: "0 7px 2px 0" }}
-                        />
+                    <div style={{ margin: "5px 20px 10px" }}>
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={this.handleCheckMarkClick.bind(this)}
+                        >
+                            <img
+                                alt=""
+                                className={"checkMark" + this.state.agreeingToTerms}
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                            />
+                        </div>
                         I have read and agree to the Moonshot Insights
                         <br />
                         <a
                             href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                             target="_blank"
-                            style={{ color: this.props.primaryColor }}
+                            className="primary-cyan hover-primary-cyan"
                         >
                             privacy policy
                         </a>
@@ -184,7 +188,7 @@ class Introduction extends Component {
                         <a
                             href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf"
                             target="_blank"
-                            style={{ color: this.props.primaryColor }}
+                            className="primary-cyan hover-primary-cyan"
                         >
                             terms of use
                         </a>.
@@ -224,7 +228,7 @@ class Introduction extends Component {
                         content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
-                <div className="center">{content}</div>
+                <div className="center primary-white">{content}</div>
             </div>
         );
     }
@@ -277,9 +281,7 @@ function mapStateToProps(state) {
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
         currentUser: state.users.currentUser,
-        png: state.users.png,
-        primaryColor: state.users.primaryColor,
-        textColor: state.users.textColor
+        png: state.users.png
     };
 }
 

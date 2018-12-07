@@ -463,6 +463,11 @@ function darken(color, difference) {
     return "#" + r + g + b;
 }
 
+// return true if the value is white or undefined
+function isWhiteOrUndefined(color) {
+    return !color || color.toLowerCase() == "#ffffff" || color.toLowerCase() == "white";
+}
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -489,6 +494,7 @@ const miscFunctions = {
     randomInt,
     round,
     darken,
+    isWhiteOrUndefined,
 
     Queue,
     Stack
