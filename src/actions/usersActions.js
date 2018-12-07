@@ -10,7 +10,7 @@ const TEXT_BLACK = "#000000";
 const MOONSHOT_LOGO = "MoonshotWhite";
 
 // GET USER FROM SESSION
-export function getUserFromSession(callback, applyPage) {
+export function getUserFromSession(callback, wait) {
     return function(dispatch) {
         dispatch({
             type: "GET_USER_FROM_SESSION_REQUEST",
@@ -31,7 +31,7 @@ export function getUserFromSession(callback, applyPage) {
                 if (user && user.primaryColor && user.backgroundColor) {
                     dispatch(updateColors(user.primaryColor, user.backgroundColor, user.logo));
                 } else {
-                    if (!applyPage) {
+                    if (!wait) {
                         dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO, MOONSHOT_WHITE));
                     }
                 }

@@ -7,7 +7,8 @@ import {
     onSignUpPage,
     closeNotification,
     addNotification,
-    setUserPosted
+    setUserPosted,
+    getColorsFromBusiness
 } from "../../actions/usersActions";
 import { Field, reduxForm } from "redux-form";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -40,8 +41,21 @@ class Introduction extends Component {
 
         this.state = {
             agreeingToTerms: false,
-            company: undefined
+            company: undefined,
+            uniqueName: undefined
         };
+    }
+
+    componentWillMount() {
+        const { currentUser, location } = this.props;
+        // get the company name from the url
+        if (location.query && location.query.uniqueName) {
+            var uniqueName = location.query.uniqueName;
+        }
+
+        if (!currentUser && uniqueName) {
+            this.props.getColorsFromBusiness(uniqueName);
+        }
     }
 
     componentDidMount() {
@@ -54,8 +68,14 @@ class Introduction extends Component {
                 return goTo("/myEvaluations");
             }
         }
-        if (location.query && location.query.company) {
-            this.setState({ company: location.query.company });
+        if (location.query) {
+            if (location.query.company) {
+                var company = location.query.company;
+            }
+            if (location.query.uniqueName) {
+                var uniqueName = location.query.uniqueName;
+            }
+            this.setState({ company, uniqueName });
         }
 
         // add listener for keyboard enter key
@@ -144,7 +164,7 @@ class Introduction extends Component {
 
         return (
             <div>
-                <div className="paddingTop50px marginBottom30px">
+                <div className="paddingTop50px marginBottom15px">
                     <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
                         {this.state.company} Evaluation
                     </div>
@@ -159,18 +179,18 @@ class Introduction extends Component {
                 <div styleName="text">
                     <div>
                         This evaluation consists of some quick administrative questions, a
-                        personality evaluation, and a pattern recognition test.
+                        personality evaluation, and a pattern recognition test. Set aside at least 22 minutes to complete the evaluation.
                     </div>
                     <div>Please enter your name below to begin the evaluation.</div>
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div className="marginBottom20px">
+                    <div className="marginTop10px marginBottom20px font12px" style={{ marginLeft: "-20px" }}>
                         <CheckBox
                             checked={this.state.agreeingToTerms}
                             onClick={this.handleCheckMarkClick}
-                            size="medium"
-                            style={{ margin: "5px 20px 10px" }}
+                            size="small"
+                            style={{ margin: "0px 5px 0" }}
                         />
                         I have read and agree to the Moonshot Insights
                         <br />
@@ -256,7 +276,8 @@ function mapDispatchToProps(dispatch) {
             onSignUpPage,
             addNotification,
             closeNotification,
-            setUserPosted
+            setUserPosted,
+            getColorsFromBusiness
         },
         dispatch
     );
