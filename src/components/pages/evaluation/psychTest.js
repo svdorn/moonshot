@@ -9,7 +9,6 @@ import {
     answerEvaluationQuestion
 } from "../../../actions/usersActions";
 import axios from "axios";
-import MetaTags from "react-meta-tags";
 import PsychSlider from "./psychSlider";
 import { CircularProgress } from "@material-ui/core";
 import { Button } from "../../miscComponents";

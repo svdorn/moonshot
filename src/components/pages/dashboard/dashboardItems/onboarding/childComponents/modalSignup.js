@@ -10,7 +10,6 @@ import {
 import { TextField } from "material-ui";
 import { CircularProgress, Dialog } from "@material-ui/core";
 import { Field, reduxForm } from "redux-form";
-import MetaTags from "react-meta-tags";
 import ReactGA from "react-ga";
 import colors from "../../../../../../colors";
 import {

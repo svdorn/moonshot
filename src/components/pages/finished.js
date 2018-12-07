@@ -55,7 +55,7 @@ class Finished extends Component {
         return (
             <div className="fillScreen">
                 <MetaTags>
-                    <title>Finished Evaluation | Moonshot</title>
+                    <title>Finished Evaluation | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Thank you for finishing your evaluation."

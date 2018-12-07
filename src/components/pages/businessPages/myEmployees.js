@@ -559,7 +559,7 @@ class MyEmployees extends Component {
                     <AddUserDialog position={this.state.position} tab="Employee" />
                 ) : null}
                 <MetaTags>
-                    <title>My Employees | Moonshot</title>
+                    <title>My Employees | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Grade your employees and see their results."

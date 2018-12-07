@@ -148,7 +148,7 @@ class GuestDashboard extends Component {
                 }
             >
                 <MetaTags>
-                    <title>Dashboard | Moonshot</title>
+                    <title>Dashboard | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Your home base for checking in on your candidates, employees, evaluations, and more."

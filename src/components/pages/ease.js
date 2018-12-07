@@ -6,7 +6,6 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {  } from "../../actions/usersActions";
 import {  } from "../../miscFunctions";
-import MetaTags from 'react-meta-tags';
 import { goTo } from "../../miscFunctions";
 
 class Ease extends Component {

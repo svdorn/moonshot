@@ -11,7 +11,6 @@ import { TextField } from "material-ui";
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { reduxForm } from "redux-form";
-import MetaTags from "react-meta-tags";
 import ReactGA from "react-ga";
 import colors from "../../../../../../colors";
 import { button } from "../../../../../../classes.js";

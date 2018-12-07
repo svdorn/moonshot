@@ -1517,7 +1517,7 @@ class MyCandidates extends Component {
                     <InviteCandidatesModal />
                     <HireVerificationModal hiringStageChange={this.hiringStageChange.bind(this)} />
                     <MetaTags>
-                        <title>My Candidates | Moonshot</title>
+                        <title>My Candidates | Moonshot Insights</title>
                         <meta
                             name="description"
                             content="View analytical breakdowns and manage your candidates."

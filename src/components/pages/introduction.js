@@ -231,13 +231,14 @@ class Introduction extends Component {
 
         return (
             <div className="fillScreen">
-                <MetaTags>
-                    <title>Introduction | Moonshot</title>
-                    <meta
-                        name="description"
-                        content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
-                    />
-                </MetaTags>
+                {this.state.company ?
+                    <MetaTags>
+                        <title>Introduction | {this.state.company}</title>
+                        <meta name="description" content="Apply to a company by taking an evaluation." />
+                    </MetaTags>
+                    :
+                    null
+                }
                 <div className="center">{content}</div>
             </div>
         );

@@ -447,7 +447,7 @@ class Billing extends Component {
                 <AddUserDialog />
                 <CancelPlanModal />
                 <MetaTags>
-                    <title>Billing | Moonshot</title>
+                    <title>Billing | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Manage your current bills and enter credit card information to pay bills."

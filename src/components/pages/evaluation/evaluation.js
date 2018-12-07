@@ -351,6 +351,7 @@ class Evaluation extends Component {
     }
 
     render() {
+        const { currentUser } = this.props;
         // what will be shown to the user
         let content = null;
 
@@ -390,7 +391,7 @@ class Evaluation extends Component {
         return (
             <div className="fillScreen center" style={{ color: this.props.textColor }}>
                 <MetaTags>
-                    <title>Evaluation | Moonshot</title>
+                    <title>Evaluation | {currentUser.companyName ? currentUser.companyName : "Moonshot Insights"}</title>
                     <meta
                         name="description"
                         content="Take a position evaluation to see if you and the position make a good match."

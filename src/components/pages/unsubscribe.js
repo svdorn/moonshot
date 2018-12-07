@@ -96,7 +96,7 @@ class Unsubscribe extends Component {
         return (
             <div className="fillScreen formContainer">
                 <MetaTags>
-                    <title>Unsubscribe | Moonshot</title>
+                    <title>Unsubscribe | Moonshot Insights</title>
                     <meta name="description" content="Unsubscribe from all Moonshot emails. Sorry to see you go!" />
                 </MetaTags>
                 {/*<HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />*/}
