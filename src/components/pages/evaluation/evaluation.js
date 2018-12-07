@@ -229,7 +229,7 @@ class Evaluation extends Component {
         // to start it
         else if (this.state.readyToStart) {
             if (this.state.skipStartPage) {
-                return <div className="center"><CircularProgress color="secondary" /></div>;
+                return <div className="center marginTop20px"><CircularProgress color="primary" /></div>;
             }
             return this.startEvalPrompt();
         }
@@ -357,7 +357,7 @@ class Evaluation extends Component {
         // if loading the page, show loading spinner
         if (this.state.initialLoad) {
             content = (
-                <div className="center">
+                <div className="center marginTop20px">
                     <CircularProgress color="primary" />
                 </div>
             );
