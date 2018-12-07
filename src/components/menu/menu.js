@@ -303,6 +303,10 @@ class Menu extends Component {
         ];
     };
 
+    // whether this page is one that candidates will go to
+    isCandidatePage = pathname =>
+        ["/apply", "/finished", "/introduction"].some(path => pathname.startsWith(path));
+
     render() {
         let self = this;
         let currentUser = this.props.currentUser;
@@ -453,8 +457,10 @@ class Menu extends Component {
 
         // the options that will be shown in the menu
         let menuOptions = [];
-        // if the Moonshot logo should redirect to the homepage
-        let logoIsLink = true;
+        // don't have the moonshot logo redirect to homepage if user is/will be a candidate/employee
+        let logoIsLink =
+            (!!currentUser && currentUser.userType == "accountAdmin") ||
+            (!currentUser && !this.isCandidatePage(pathname));
         // used for menu divider
         let loggedInClass = " loggedIn";
 
@@ -464,7 +470,7 @@ class Menu extends Component {
 
             // if on an apply page, give the candidate options because it's
             // probably a candidate who hasn't signed up yet
-            if (pathname.startsWith("/apply") || pathname.startsWith("/finished")) {
+            if (this.isCandidatePage(pathname)) {
                 menuOptions = this.candidateOptions();
             } else {
                 menuOptions = this.loggedOutOptions(onHome);
