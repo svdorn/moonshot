@@ -165,7 +165,7 @@ class Introduction extends Component {
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div>
+                    <div className="marginBottom20px">
                         <CheckBox
                             checked={this.state.agreedToTerms}
                             onClick={this.handleCheckMarkClick}
@@ -177,7 +177,7 @@ class Introduction extends Component {
                         <a
                             href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                             target="_blank"
-                            className="primary-cyan hover-primary-cyan"
+                            style={{ color: this.props.primaryColor }}
                         >
                             privacy policy
                         </a>
@@ -185,7 +185,7 @@ class Introduction extends Component {
                         <a
                             href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf"
                             target="_blank"
-                            className="primary-cyan hover-primary-cyan"
+                            style={{ color: this.props.primaryColor }}
                         >
                             terms of use
                         </a>.
@@ -207,15 +207,6 @@ class Introduction extends Component {
     render() {
         let content = this.createContent();
 
-        // scroll to the top if user posted
-        if (this.state.email != "" && this.props.userPosted) {
-            window.scroll({
-                top: 0,
-                left: 0,
-                behavior: "smooth"
-            });
-        }
-
         return (
             <div className="fillScreen">
                 <MetaTags>
@@ -225,7 +216,7 @@ class Introduction extends Component {
                         content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
-                <div className="center primary-white">{content}</div>
+                <div className="center">{content}</div>
             </div>
         );
     }
