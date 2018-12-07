@@ -11,7 +11,7 @@ import {
 } from "../../../actions/usersActions";
 import axios from "axios";
 import { CircularProgress } from "@material-ui/core";
-import { htmlDecode, darken } from "../../../miscFunctions";
+import { htmlDecode, darken, isWhiteOrUndefined } from "../../../miscFunctions";
 import { Button, CheckBox } from "../../miscComponents";
 
 import gca from "./cognitiveTest.css";
@@ -21,12 +21,8 @@ class CognitiveTest extends Component {
     constructor(props) {
         super(props);
 
-        const { textColor } = props;
-        const imgColor = !textColor
-            ? "White"
-            : textColor.toLowerCase() == "white" || props.textColor.toLowerCase() == "#ffffff"
-                ? "White"
-                : "Black";
+        const imgColor = isWhiteOrUndefined(this.props.backgroundColor) ? "-Black" : "";
+        console.log("imgColor: ", imgColor);
 
         this.state = {
             selectedId: undefined,
@@ -154,7 +150,7 @@ class CognitiveTest extends Component {
                         </p>
                     </div>
                     <img
-                        src={`/images/cognitiveTest/RPM-Example-2-${this.state.imgColor}${
+                        src={`/images/cognitiveTest/RPM-Example-2${this.state.imgColor}${
                             this.props.png
                         }`}
                         styleName="gca.example-rpm"
@@ -297,7 +293,8 @@ class CognitiveTest extends Component {
             const isSelected = this.state.selectedId === option._id;
             // const selectedClass = isSelected ? " gca.selected" : "";
             // const outOfTimeClass = this.state.outOfTime ? " gca.outOfTime" : "";
-            const imgSrc = option.src + this.props.png;
+
+            const imgSrc = option.src + this.state.imgColor + this.props.png;
 
             const color = this.state.outOfTime ? darken(primaryColor, 60) : primaryColor;
 
@@ -326,7 +323,7 @@ class CognitiveTest extends Component {
         const canContinue =
             !this.props.loading && (!!this.state.selectedId || this.state.outOfTime);
 
-        const rpmSrc = questionInfo.rpm + this.props.png;
+        const rpmSrc = questionInfo.rpm + this.state.imgColor + this.props.png;
 
         let timer = "00";
         if (this.state.timer) {
@@ -427,8 +424,7 @@ function mapStateToProps(state) {
         loading: state.users.loadingSomething,
         png: state.users.png,
         primaryColor: state.users.primaryColor,
-        backgroundColor: state.users.backgroundColor,
-        textColor: state.users.textColor
+        backgroundColor: state.users.backgroundColor
     };
 }
 
