@@ -36,7 +36,9 @@ class Apply extends Component {
             // if the user is an accountAdmin of this company
             admin: false,
             // if the business has set up the page
-            pageSetUp: undefined
+            pageSetUp: undefined,
+            // unique name of the business
+            uniqueName: undefined
         };
     }
 
@@ -114,7 +116,8 @@ class Apply extends Component {
                         res.data.logo,
                         res.data.businessName,
                         res.data.admin,
-                        res.data.pageSetUp
+                        res.data.pageSetUp,
+                        company
                     );
                 })
                 .catch(function(err) {
@@ -125,14 +128,14 @@ class Apply extends Component {
     }
 
     // call this after positions are found from back end
-    positionsFound(positions, logo, company, admin, pageSetUp) {
+    positionsFound(positions, logo, company, admin, pageSetUp, uniqueName) {
         const addMoreLater = "Add more below";
         if (Array.isArray(positions) && positions.length > 0) {
             const position = positions[0].name;
             if (admin && !positions.some(p => p.name === addMoreLater)) {
                 positions.push({ name: addMoreLater });
             }
-            this.setState({ positions, position, logo, company, admin, pageSetUp });
+            this.setState({ positions, position, logo, company, admin, pageSetUp, uniqueName });
         } else {
             console.log("in here");
             this.setState({ noPositions: true });
@@ -186,7 +189,7 @@ class Apply extends Component {
         const code = this.state.positions[position].code;
 
         URL += code;
-        URL += `&company=${this.state.company}`;
+        URL += `&company=${this.state.company}&uniqueName=${this.state.uniqueName}`;
 
         goTo(URL);
     };

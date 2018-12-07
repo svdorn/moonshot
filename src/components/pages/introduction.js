@@ -7,7 +7,8 @@ import {
     onSignUpPage,
     closeNotification,
     addNotification,
-    setUserPosted
+    setUserPosted,
+    getColorsFromBusiness
 } from "../../actions/usersActions";
 import { Field, reduxForm } from "redux-form";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -40,8 +41,21 @@ class Introduction extends Component {
 
         this.state = {
             agreeingToTerms: false,
-            company: undefined
+            company: undefined,
+            uniqueName: undefined
         };
+    }
+
+    componentWillMount() {
+        const { currentUser, location } = this.props;
+        // get the company name from the url
+        if (location.query && location.query.uniqueName) {
+            var uniqueName = location.query.uniqueName;
+        }
+
+        if (!currentUser && uniqueName) {
+            this.props.getColorsFromBusiness(uniqueName);
+        }
     }
 
     componentDidMount() {
@@ -54,8 +68,14 @@ class Introduction extends Component {
                 return goTo("/myEvaluations");
             }
         }
-        if (location.query && location.query.company) {
-            this.setState({ company: location.query.company });
+        if (location.query) {
+            if (location.query.company) {
+                var company = location.query.company;
+            }
+            if (location.query.uniqueName) {
+                var uniqueName = location.query.uniqueName;
+            }
+            this.setState({ company, uniqueName });
         }
 
         // add listener for keyboard enter key
@@ -165,12 +185,12 @@ class Introduction extends Component {
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div className="marginTop10px marginBottom20px font12px">
+                    <div className="marginTop10px marginBottom20px font12px" style={{ marginLeft: "-20px" }}>
                         <CheckBox
                             checked={this.state.agreeingToTerms}
                             onClick={this.handleCheckMarkClick}
                             size="small"
-                            style={{ margin: "5px 10px 0" }}
+                            style={{ margin: "0px 5px 0" }}
                         />
                         I have read and agree to the Moonshot Insights
                         <br />
@@ -256,7 +276,8 @@ function mapDispatchToProps(dispatch) {
             onSignUpPage,
             addNotification,
             closeNotification,
-            setUserPosted
+            setUserPosted,
+            getColorsFromBusiness
         },
         dispatch
     );
