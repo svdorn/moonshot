@@ -332,7 +332,6 @@ export function addEmailToUser(userId, verificationToken, email) {
         axios
             .post("/api/user/addEmailToUser", { userId, verificationToken, email })
             .then(response => {
-                dispatch(signout());
                 goTo("/finished");
                 dispatch({ type: "STOP_LOADING" });
             })
