@@ -41,7 +41,8 @@ class Introduction extends Component {
 
         this.state = {
             agreeingToTerms: false,
-            company: undefined
+            company: undefined,
+            uniqueName: undefined
         };
     }
 
@@ -55,10 +56,7 @@ class Introduction extends Component {
         if (!currentUser && uniqueName) {
             this.props.getColorsFromBusiness(uniqueName);
         } else {
-            this.props.addNotification(
-                "Incorrect company data to begin evaluation. Please message us so we can fix the issue.",
-                "error"
-            );
+            this.props.addNotification("Incorrect company data to begin evaluation. Please message us so we can fix the issue.", "error");
             goTo("/");
         }
     }
@@ -73,8 +71,14 @@ class Introduction extends Component {
                 return goTo("/myEvaluations");
             }
         }
-        if (location.query && location.query.company) {
-            this.setState({ company: location.query.company });
+        if (location.query) {
+            if (location.query.company) {
+                var company = location.query.company;
+            }
+            if (location.query.uniqueName) {
+                var uniqueName = location.query.uniqueName;
+            }
+            this.setState({ company, uniqueName });
         }
 
         // add listener for keyboard enter key
@@ -150,7 +154,7 @@ class Introduction extends Component {
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
         });
-    };
+    }
 
     // create the main content of the page
     createContent() {
@@ -163,14 +167,14 @@ class Introduction extends Component {
 
         return (
             <div>
-                <div className="paddingTop50px marginBottom30px">
-                    <div className="font38px font30pxUnder700 font24pxUnder500">
+                <div className="paddingTop50px marginBottom15px">
+                    <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
                         {this.state.company} Evaluation
                     </div>
                     <div
                         className="font16px font14pxUnder700 font12pxUnder500"
                         styleName="powered-by"
-                        style={{ opacity: 0.6 }}
+                        style={{ opacity: "0.6" }}
                     >
                         Powered by Moonshot Insights
                     </div>
@@ -178,25 +182,25 @@ class Introduction extends Component {
                 <div styleName="text">
                     <div>
                         This evaluation consists of some quick administrative questions, a
-                        personality evaluation, and a pattern recognition test.
+                        personality evaluation, and a pattern recognition test. Set aside at least 22 minutes to complete the evaluation.
                     </div>
                     <div>Please enter your name below to begin the evaluation.</div>
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div style={{ margin: "5px 20px 10px" }}>
+                    <div className="marginTop10px marginBottom20px font12px" style={{ marginLeft: "-20px" }}>
                         <CheckBox
-                            onClick={this.handleCheckMarkClick}
                             checked={this.state.agreeingToTerms}
-                            size="medium"
-                            style={{ margin: "0 6px 2px 0" }}
+                            onClick={this.handleCheckMarkClick}
+                            size="small"
+                            style={{ margin: "0px 5px 0" }}
                         />
                         I have read and agree to the Moonshot Insights
                         <br />
                         <a
                             href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                             target="_blank"
-                            className="primary-cyan hover-primary-cyan"
+                            style={{ color: this.props.primaryColor }}
                         >
                             privacy policy
                         </a>
@@ -204,18 +208,19 @@ class Introduction extends Component {
                         <a
                             href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf"
                             target="_blank"
-                            className="primary-cyan hover-primary-cyan"
+                            style={{ color: this.props.primaryColor }}
                         >
                             terms of use
                         </a>.
                     </div>
-                    <Button onClick={this.handleSubmit}>Begin</Button>
+                    {this.props.loadingCreateUser ? (
+                        <CircularProgress />
+                    ) : (
+                        <Button onClick={this.handleSubmit} color="primary">
+                            Begin
+                        </Button>
+                    )}
                 </div>
-                {this.props.loadingCreateUser ? (
-                    <CircularProgress style={{ marginTop: "8px" }} />
-                ) : (
-                    ""
-                )}
             </div>
         );
     }
@@ -224,25 +229,15 @@ class Introduction extends Component {
     render() {
         let content = this.createContent();
 
-        // scroll to the top if user posted
-        if (this.state.email != "" && this.props.userPosted) {
-            window.scroll({
-                top: 0,
-                left: 0,
-                behavior: "smooth"
-            });
-        }
-
         return (
             <div className="fillScreen">
-                {this.state.company ?
-                    <MetaTags>
-                        <title>Introduction | {this.state.company}</title>
-                        <meta name="description" content="Apply to a company by taking an evaluation." />
-                    </MetaTags>
-                    :
-                    null
-                }
+                <MetaTags>
+                    <title>Introduction | Moonshot</title>
+                    <meta
+                        name="description"
+                        content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
+                    />
+                </MetaTags>
                 <div className="center">{content}</div>
             </div>
         );
@@ -297,7 +292,9 @@ function mapStateToProps(state) {
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 
