@@ -331,13 +331,10 @@ export function addEmailToUser(userId, verificationToken, email) {
 
         axios
             .post("/api/user/addEmailToUser", { userId, verificationToken, email })
-            .then(function(response) {
-                dispatch(
-                    signout(() => {
-                        goTo("/finished");
-                    })
-                );
-                dispatch("STOP_LOADING");
+            .then(response => {
+                dispatch(signout());
+                goTo("/finished");
+                dispatch({ type: "STOP_LOADING" });
             })
             .catch(function(err) {
                 dispatch({
@@ -395,7 +392,6 @@ function updateEvalState(dispatch, data) {
     }
     // if the user finished the eval
     if (data.evaluationState.component === "Finished") {
-        console.log("data: ", data);
         if (data.user && !data.user.email) {
             goTo("/finishEvaluation");
         } else {
@@ -1073,7 +1069,6 @@ function updateColors(primary, background, logo) {
             backgroundColor = MOONSHOT_BLACK;
             textColor = MOONSHOT_WHITE;
         }
-        console.log("logo: ", logo);
 
         if (primary) {
             primaryColor = primary;
