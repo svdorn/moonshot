@@ -536,7 +536,10 @@ function POST_candidate(req, res) {
         if (business.primaryColor) {
             user.primaryColor = business.primaryColor;
         }
-        
+        if (business.logo) {
+            user.logo = business.logo;
+        }
+
         // make the user db object
         try {
             user = await Users.create(user);
