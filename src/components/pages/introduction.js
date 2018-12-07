@@ -14,7 +14,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TextInput from "../userInput/textInput";
 import MetaTags from "react-meta-tags";
 import { renderTextField, isValidEmail, goTo } from "../../miscFunctions";
-import { Button } from "../miscComponents";
+import { Button, CheckBox } from "../miscComponents";
 import axios from "axios";
 
 import "./introduction.css";
@@ -125,7 +125,7 @@ class Introduction extends Component {
         this.props.postCandidate(user);
     }
 
-    handleCheckMarkClick() {
+    handleCheckMarkClick = () => {
         this.setState({
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
@@ -165,17 +165,12 @@ class Introduction extends Component {
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div style={{ margin: "5px 20px 10px" }}>
-                        <div
-                            className="checkbox smallCheckbox whiteCheckbox"
-                            onClick={this.handleCheckMarkClick.bind(this)}
-                        >
-                            <img
-                                alt=""
-                                className={"checkMark" + this.state.agreeingToTerms}
-                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            />
-                        </div>
+                    <div>
+                        <CheckBox
+                            checked={this.state.agreeingToTerms}
+                            onClick={this.handleCheckMarkClick}
+                            style={{ margin: "0 7px 2px 0" }}
+                        />
                         I have read and agree to the Moonshot Insights
                         <br />
                         <a
