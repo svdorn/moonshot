@@ -9,7 +9,7 @@ const MOONSHOT_CYAN = "#76defe";
 const TEXT_BLACK = "#000000";
 
 // GET USER FROM SESSION
-export function getUserFromSession(callback) {
+export function getUserFromSession(callback, applyPage) {
     return function(dispatch) {
         dispatch({
             type: "GET_USER_FROM_SESSION_REQUEST",
@@ -28,7 +28,11 @@ export function getUserFromSession(callback) {
                 // Get correct color scheme for the user
                 const user = response.data.user;
                 if (user && user.primaryColor && user.backgroundColor) {
-                    dispatch(updateColors(user.primaryColor, user.backgroundColor));
+                    dispatch(updateColors(user.primaryColor, user.backgroundColor, user.logo));
+                } else {
+                    if (!applyPage) {
+                        dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, "MoonshotWhite"));
+                    }
                 }
                 callback(true);
             })
@@ -489,7 +493,6 @@ export function getColorsFromBusiness(name) {
         axios
             .get("/api/business/colors", { params: { name } })
             .then(response => {
-                console.log("res: ",response);
                 dispatch(updateColors(response.data.primaryColor, response.data.backgroundColor, response.data.logo));
             })
             .catch(error => {
@@ -655,7 +658,7 @@ export function signout(callback) {
             .post("/api/user/signOut")
             .then(function(response) {
                 dispatch({ type: "SIGNOUT" });
-                dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK))
+                dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, "MoonshotWhite"))
                 if (typeof callback === "function") {
                     callback();
                 }

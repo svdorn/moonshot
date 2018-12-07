@@ -40,6 +40,25 @@ class Apply extends Component {
         };
     }
 
+    componentWillMount() {
+        const { currentUser } = this.props;
+        let self = this;
+        // get the company name from the url
+        try {
+            var company = this.props.params.company;
+        } catch (e) {
+            goTo("/");
+            self.props.addNotification(
+                "Couldn't get the company you're trying to apply for.",
+                "error"
+            );
+        }
+
+        if (!currentUser) {
+            this.props.getColorsFromBusiness(company);
+        }
+    }
+
     /* fetch the positions and codes and set the position field to be the first position in the array */
     componentDidMount() {
         let self = this;
@@ -79,9 +98,6 @@ class Apply extends Component {
                 currentUser.businessInfo
             ) {
                 var businessId = this.props.currentUser.businessInfo.businessId;
-            }
-            if (!currentUser) {
-                this.props.getColorsFromBusiness(company);
             }
 
             // get the positions from the database with the name and signup code
