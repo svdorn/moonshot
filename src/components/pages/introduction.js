@@ -144,7 +144,7 @@ class Introduction extends Component {
 
         return (
             <div>
-                <div className="paddingTop50px marginBottom30px">
+                <div className="paddingTop50px marginBottom15px">
                     <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
                         {this.state.company} Evaluation
                     </div>
@@ -159,18 +159,18 @@ class Introduction extends Component {
                 <div styleName="text">
                     <div>
                         This evaluation consists of some quick administrative questions, a
-                        personality evaluation, and a pattern recognition test.
+                        personality evaluation, and a pattern recognition test. Set aside at least 22 minutes to complete the evaluation.
                     </div>
                     <div>Please enter your name below to begin the evaluation.</div>
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div className="marginBottom20px">
+                    <div className="marginTop10px marginBottom20px font12px">
                         <CheckBox
                             checked={this.state.agreeingToTerms}
                             onClick={this.handleCheckMarkClick}
-                            size="medium"
-                            style={{ margin: "5px 20px 10px" }}
+                            size="small"
+                            style={{ margin: "5px 10px 0" }}
                         />
                         I have read and agree to the Moonshot Insights
                         <br />
