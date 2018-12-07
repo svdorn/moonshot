@@ -136,6 +136,8 @@ const businessesSchema = mongoose.Schema({
     uniqueNameLowerCase: String,
     // logo image name within /images/logos/
     logo: String,
+    // header logo within logos/x/
+    headerLogo: String,
     // the exact time the business object was created
     dateCreated: Date,
     // DEPRECIATED stripe billing customer id

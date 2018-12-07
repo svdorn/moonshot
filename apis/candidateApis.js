@@ -536,8 +536,8 @@ function POST_candidate(req, res) {
         if (business.primaryColor) {
             user.primaryColor = business.primaryColor;
         }
-        if (business.logo) {
-            user.logo = business.logo;
+        if (business.headerLogo) {
+            user.logo = business.headerLogo;
         }
 
         // make the user db object

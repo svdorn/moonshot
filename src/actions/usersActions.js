@@ -7,6 +7,7 @@ const MOONSHOT_BLACK = "#2a2a2a";
 const MOONSHOT_WHITE = "#ffffff";
 const MOONSHOT_CYAN = "#76defe";
 const TEXT_BLACK = "#000000";
+const MOONSHOT_LOGO = "MoonshotWhite";
 
 // GET USER FROM SESSION
 export function getUserFromSession(callback, applyPage) {
@@ -31,7 +32,7 @@ export function getUserFromSession(callback, applyPage) {
                     dispatch(updateColors(user.primaryColor, user.backgroundColor, user.logo));
                 } else {
                     if (!applyPage) {
-                        dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, "MoonshotWhite"));
+                        dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO));
                     }
                 }
                 callback(true);
@@ -493,7 +494,7 @@ export function getColorsFromBusiness(name) {
         axios
             .get("/api/business/colors", { params: { name } })
             .then(response => {
-                dispatch(updateColors(response.data.primaryColor, response.data.backgroundColor, response.data.logo));
+                dispatch(updateColors(response.data.primaryColor, response.data.backgroundColor, response.data.headerLogo));
             })
             .catch(error => {
                 console.log(error);
@@ -658,7 +659,7 @@ export function signout(callback) {
             .post("/api/user/signOut")
             .then(function(response) {
                 dispatch({ type: "SIGNOUT" });
-                dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, "MoonshotWhite"))
+                dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO))
                 if (typeof callback === "function") {
                     callback();
                 }
@@ -1059,14 +1060,20 @@ function updateColors(primary, background, logo) {
             backgroundColor = MOONSHOT_BLACK;
             textColor = MOONSHOT_WHITE;
         }
+        console.log("logo: ", logo)
 
         if (primary) {
             primaryColor = primary;
         }
+        if (!logo) {
+            logo = MOONSHOT_LOGO;
+        }
+
 
         dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
         dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: primaryColor });
         dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "logo", value: logo })
 
         document.body.style.backgroundColor = backgroundColor;
         document.body.style.color = textColor;
