@@ -18,7 +18,8 @@ import {
     closeNotification,
     openAddUserModal,
     openContactUsModal,
-    openIntroductionModal
+    openIntroductionModal,
+    openLogoutModal
 } from "../../actions/usersActions";
 import { isValidEmail, goTo } from "../../miscFunctions";
 import { axios } from "axios";
@@ -261,6 +262,13 @@ class Menu extends Component {
                 title: "Need help?",
                 url: "/",
                 action: this.props.openContactUsModal,
+                styleName: "hover-color"
+            },
+            {
+                optionType: "action",
+                title: "Logout",
+                url: "/",
+                action: this.props.openLogoutModal,
                 styleName: "hover-color"
             }
         ];
@@ -813,7 +821,8 @@ function mapDispatchToProps(dispatch) {
             closeNotification,
             openAddUserModal,
             openIntroductionModal,
-            openContactUsModal
+            openContactUsModal,
+            openLogoutModal
         },
         dispatch
     );

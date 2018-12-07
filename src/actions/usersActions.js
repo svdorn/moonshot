@@ -169,6 +169,18 @@ export function closeContactUsModal() {
     };
 }
 
+export function openLogoutModal() {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_LOGOUT_MODAL" });
+    };
+}
+
+export function closeLogoutModal() {
+    return function(dispatch) {
+        dispatch({ type: "CLOSE_LOGOUT_MODAL" });
+    };
+}
+
 // general action to just call a reducer that has no additional arguments
 export function generalAction(type) {
     return function(dispatch) {
