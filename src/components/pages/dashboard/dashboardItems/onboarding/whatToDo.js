@@ -13,19 +13,10 @@ import {
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists, updateStore } from "../../../../../miscFunctions";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Button from "@material-ui/core/Button";
-import {
-    TextField,
-    DropDownMenu,
-    MenuItem,
-    Divider,
-    Toolbar,
-    ToolbarGroup,
-    RaisedButton
-} from "material-ui";
+import { TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup } from "material-ui";
 import { primaryCyan } from "../../../../../colors";
 import axios from "axios";
-import ShiftArrow from "../../../../miscComponents/ShiftArrow";
+import { ShiftArrow, Button } from "../../../../miscComponents/ShiftArrow";
 
 import "../../dashboard.css";
 
@@ -173,14 +164,7 @@ class WhatToDo extends Component {
                             onClick={this.highlight}
                             value={`https://moonshotinsights.io/apply/${uniqueName}`}
                         />
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={this.copyLink}
-                            classes={{ root: "no-text-transform no-focus-outline" }}
-                        >
-                            Copy Link
-                        </Button>
+                        <Button onClick={this.copyLink}>Copy Link</Button>
                         <br styleName="small-mobile-only" />
                         <div
                             className="pointer transition-all"

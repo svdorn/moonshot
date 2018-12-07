@@ -11,7 +11,8 @@ const initialState = {
     userPosted: false,
     backgroundColor: "#2e2e2e",
     primaryColor: "#76defe",
-    textColor: "white"
+    secondaryColor: "#ffffff",
+    textColor: "#ffffff"
 };
 export function usersReducers(state = initialState, action) {
     switch (action.type) {

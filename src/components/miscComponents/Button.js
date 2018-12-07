@@ -6,7 +6,7 @@ class Button extends Component {
     render() {
         let props = {};
         if (!this.props.variant) props.variant = "contained";
-        if (!this.props.color) props.color = "primary";
+        if (!this.props.color) props.color = "secondary";
 
         return (
             <MaterialButton

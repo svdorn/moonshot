@@ -2,10 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-    addNotification,
-    addEmailToUser
-} from "../../actions/usersActions";
+import { addNotification, addEmailToUser } from "../../actions/usersActions";
 import { Field, reduxForm } from "redux-form";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextInput from "../userInput/textInput";
@@ -61,7 +58,7 @@ class FinishEvaluation extends Component {
         }
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = e => {
         if (e) {
             e.preventDefault();
         }
@@ -80,14 +77,18 @@ class FinishEvaluation extends Component {
         if (!isValidEmail(vals.email)) {
             return this.props.addNotification("Invalid email.", "error");
         }
-        if (notValid) return this.props.addNotification("Must enter your email to finish evaluation.", "error");
+        if (notValid)
+            return this.props.addNotification(
+                "Must enter your email to finish evaluation.",
+                "error"
+            );
 
         const values = this.props.formData.finishEvaluation.values;
         const email = values.email;
         const { _id, verificationToken } = this.props.currentUser;
         // add email to user
         this.props.addEmailToUser(_id, verificationToken, email);
-    }
+    };
 
     // create the main content of the page
     createContent() {
@@ -101,7 +102,10 @@ class FinishEvaluation extends Component {
         return (
             <div>
                 <div className="paddingTop50px marginBottom30px">
-                    <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
+                    <div
+                        className="font38px font30pxUnder700 font24pxUnder500"
+                        style={{ color: this.props.primaryColor }}
+                    >
                         {this.state.company} Evaluation
                     </div>
                     <div
@@ -114,17 +118,16 @@ class FinishEvaluation extends Component {
                 </div>
                 <div styleName="text">
                     <div>
-                        To finish your evaluation, please enter the email you would like the hiring manager to contact you at.
+                        To finish your evaluation, please enter the email you would like the hiring
+                        manager to contact you at.
                     </div>
                 </div>
                 <div>
                     <TextInput name="email" label="Email" style={inputStyle} />
                     {this.props.loading ? (
-                        <CircularProgress  />
+                        <CircularProgress />
                     ) : (
-                        <Button onClick={this.handleSubmit} color="primary">
-                            Finish
-                        </Button>
+                        <Button onClick={this.handleSubmit}>Finish</Button>
                     )}
                 </div>
             </div>

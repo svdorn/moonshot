@@ -7,15 +7,14 @@ import {
     onSignUpPage,
     closeNotification,
     addNotification,
-    setUserPosted,
-    getColorsFromBusiness
+    setUserPosted
 } from "../../actions/usersActions";
 import { Field, reduxForm } from "redux-form";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextInput from "../userInput/textInput";
 import MetaTags from "react-meta-tags";
 import { renderTextField, isValidEmail, goTo } from "../../miscFunctions";
-import { Button, CheckBox } from "../miscComponents";
+import { Button } from "../miscComponents";
 import axios from "axios";
 
 import "./introduction.css";
@@ -41,21 +40,8 @@ class Introduction extends Component {
 
         this.state = {
             agreeingToTerms: false,
-            company: undefined,
-            uniqueName: undefined
+            company: undefined
         };
-    }
-
-    componentWillMount() {
-        const { currentUser, location } = this.props;
-        // get the company name from the url
-        if (location.query && location.query.uniqueName) {
-            var uniqueName = location.query.uniqueName;
-        }
-
-        if (!currentUser && uniqueName) {
-            this.props.getColorsFromBusiness(uniqueName);
-        }
     }
 
     componentDidMount() {
@@ -68,14 +54,8 @@ class Introduction extends Component {
                 return goTo("/myEvaluations");
             }
         }
-        if (location.query) {
-            if (location.query.company) {
-                var company = location.query.company;
-            }
-            if (location.query.uniqueName) {
-                var uniqueName = location.query.uniqueName;
-            }
-            this.setState({ company, uniqueName });
+        if (location.query && location.query.company) {
+            this.setState({ company: location.query.company });
         }
 
         // add listener for keyboard enter key
@@ -146,7 +126,7 @@ class Introduction extends Component {
         this.props.postCandidate(user);
     };
 
-    handleCheckMarkClick = () => {
+    handleCheckMarkClick() {
         this.setState({
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
@@ -164,14 +144,13 @@ class Introduction extends Component {
 
         return (
             <div>
-                <div className="paddingTop50px marginBottom15px">
-                    <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
+                <div className="paddingTop50px marginBottom30px">
+                    <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">
                         {this.state.company} Evaluation
                     </div>
                     <div
-                        className="font16px font14pxUnder700 font12pxUnder500"
+                        className="font16px font14pxUnder700 font12pxUnder500 secondary-gray"
                         styleName="powered-by"
-                        style={{ opacity: "0.6" }}
                     >
                         Powered by Moonshot Insights
                     </div>
@@ -179,25 +158,29 @@ class Introduction extends Component {
                 <div styleName="text">
                     <div>
                         This evaluation consists of some quick administrative questions, a
-                        personality evaluation, and a pattern recognition test. Set aside at least 22 minutes to complete the evaluation.
+                        personality evaluation, and a pattern recognition test.
                     </div>
                     <div>Please enter your name below to begin the evaluation.</div>
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div className="marginTop10px marginBottom20px font12px" style={{ marginLeft: "-20px" }}>
-                        <CheckBox
-                            checked={this.state.agreeingToTerms}
-                            onClick={this.handleCheckMarkClick}
-                            size="small"
-                            style={{ margin: "0px 5px 0" }}
-                        />
+                    <div style={{ margin: "5px 20px 10px" }}>
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={this.handleCheckMarkClick.bind(this)}
+                        >
+                            <img
+                                alt=""
+                                className={"checkMark" + this.state.agreeingToTerms}
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                            />
+                        </div>
                         I have read and agree to the Moonshot Insights
                         <br />
                         <a
                             href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                             target="_blank"
-                            style={{ color: this.props.primaryColor }}
+                            className="primary-cyan hover-primary-cyan"
                         >
                             privacy policy
                         </a>
@@ -205,19 +188,18 @@ class Introduction extends Component {
                         <a
                             href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf"
                             target="_blank"
-                            style={{ color: this.props.primaryColor }}
+                            className="primary-cyan hover-primary-cyan"
                         >
                             terms of use
                         </a>.
                     </div>
-                    {this.props.loadingCreateUser ? (
-                        <CircularProgress />
-                    ) : (
-                        <Button onClick={this.handleSubmit} color="primary">
-                            Begin
-                        </Button>
-                    )}
+                    <Button onClick={this.handleSubmit}>Begin</Button>
                 </div>
+                {this.props.loadingCreateUser ? (
+                    <CircularProgress style={{ marginTop: "8px" }} />
+                ) : (
+                    ""
+                )}
             </div>
         );
     }
@@ -225,6 +207,15 @@ class Introduction extends Component {
     //name, email, password, confirm password, signup button
     render() {
         let content = this.createContent();
+
+        // scroll to the top if user posted
+        if (this.state.email != "" && this.props.userPosted) {
+            window.scroll({
+                top: 0,
+                left: 0,
+                behavior: "smooth"
+            });
+        }
 
         return (
             <div className="fillScreen">
@@ -235,7 +226,7 @@ class Introduction extends Component {
                         content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
-                <div className="center">{content}</div>
+                <div className="center primary-white">{content}</div>
             </div>
         );
     }
@@ -276,8 +267,7 @@ function mapDispatchToProps(dispatch) {
             onSignUpPage,
             addNotification,
             closeNotification,
-            setUserPosted,
-            getColorsFromBusiness
+            setUserPosted
         },
         dispatch
     );
@@ -289,9 +279,7 @@ function mapStateToProps(state) {
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
         currentUser: state.users.currentUser,
-        png: state.users.png,
-        primaryColor: state.users.primaryColor,
-        textColor: state.users.textColor
+        png: state.users.png
     };
 }
 
