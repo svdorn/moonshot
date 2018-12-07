@@ -100,7 +100,6 @@ class FinishEvaluation extends Component {
 
         return (
             <div>
-                <div>
                 <div className="paddingTop50px marginBottom30px">
                     <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
                         {this.state.company} Evaluation
@@ -120,16 +119,14 @@ class FinishEvaluation extends Component {
                 </div>
                 <div>
                     <TextInput name="email" label="Email" style={inputStyle} />
-                    <Button onClick={this.handleSubmit} color="primary">
-                        Finish
-                    </Button>
+                    {this.props.loading ? (
+                        <CircularProgress  />
+                    ) : (
+                        <Button onClick={this.handleSubmit} color="primary">
+                            Finish
+                        </Button>
+                    )}
                 </div>
-                </div>
-                {this.props.loading ? (
-                    <CircularProgress style={{ marginTop: "8px" }} />
-                ) : (
-                    ""
-                )}
             </div>
         );
     }

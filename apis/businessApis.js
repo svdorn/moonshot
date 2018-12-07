@@ -2090,7 +2090,7 @@ async function POST_interests(req, res) {
 }
 
 async function POST_contactUsEmail(req, res) {
-    const { phoneNumber, message, name, email, company } = sanitize(req.body);
+    const { message, name, email } = sanitize(req.body);
 
     // email to moonshot with the message the user entered
     let toMoonshotContent = `<div>
@@ -2099,10 +2099,6 @@ async function POST_contactUsEmail(req, res) {
             <p>${name}</p>
             <h3>Email</h3>
             <p>${email}</p>
-            <h3>Company</h3>
-            <p>${company}</p>
-            <h3>Phone Number</h3>
-            <p>${phoneNumber}</p>
             <h3>Message</h3>
             <p>${message}</p>
         </div>`;

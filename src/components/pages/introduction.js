@@ -190,15 +190,14 @@ class Introduction extends Component {
                             terms of use
                         </a>.
                     </div>
-                    <Button onClick={this.handleSubmit} color="primary">
-                        Begin
-                    </Button>
+                    {this.props.loadingCreateUser ? (
+                        <CircularProgress />
+                    ) : (
+                        <Button onClick={this.handleSubmit} color="primary">
+                            Begin
+                        </Button>
+                    )}
                 </div>
-                {this.props.loadingCreateUser ? (
-                    <CircularProgress style={{ marginTop: "8px" }} />
-                ) : (
-                    ""
-                )}
             </div>
         );
     }

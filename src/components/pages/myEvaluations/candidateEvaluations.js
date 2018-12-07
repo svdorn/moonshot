@@ -20,13 +20,14 @@ import {
     addNotification,
     startLoading,
     stopLoading,
-    updateUser
+    updateUser,
+    signout
 } from "../../../actions/usersActions";
 import MetaTags from "react-meta-tags";
 import axios from "axios";
 import MyEvaluationsPreview from "../../childComponents/myEvaluationsPreview";
+import { Button } from "../../miscComponents";
 import { goTo } from "../../../miscFunctions";
-import { button } from "../../../classes";
 
 import "./candidateEvaluations.css";
 
@@ -109,6 +110,12 @@ class MyEvaluations extends Component {
         }
     }
 
+    signOut = () => {
+        this.props.signout(() => {
+            goTo("/");
+        });
+    }
+
     render() {
         const style = {
             separator: {
@@ -152,14 +159,14 @@ class MyEvaluations extends Component {
         ];
 
         let evaluations = (
-            <div className="center" style={{ color: "rgba(255,255,255,.8)" }}>
+            <div className="center" style={{ color: this.props.primaryColor }}>
                 Loading evaluations...
             </div>
         );
 
         if (this.state.noPositions) {
             evaluations = (
-                <div className="center" style={{ color: "rgba(255,255,255,.8)" }}>
+                <div className="center" style={{ color: this.props.primaryColor }}>
                     No evaluations.
                 </div>
             );
@@ -254,7 +261,16 @@ class MyEvaluations extends Component {
 
                 {verifyBanner}
 
-                <div className="marginBottom60px">{evaluations}</div>
+                <div className="marginBottom20px">{evaluations}</div>
+
+                {this.state.positions.length > 0 ?
+                    <div className="myEvalsLogOut">
+                        <Button onClick={this.signOut}>
+                            Log Out
+                        </Button>
+                    </div>
+                    : null
+                }
             </div>
         );
     }
@@ -266,7 +282,8 @@ function mapDispatchToProps(dispatch) {
             addNotification,
             startLoading,
             stopLoading,
-            updateUser
+            updateUser,
+            signout
         },
         dispatch
     );

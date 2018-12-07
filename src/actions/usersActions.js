@@ -32,7 +32,7 @@ export function getUserFromSession(callback, applyPage) {
                     dispatch(updateColors(user.primaryColor, user.backgroundColor, user.logo));
                 } else {
                     if (!applyPage) {
-                        dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO));
+                        dispatch(updateColors(MOONSHOT_WHITE, MOONSHOT_BLACK, MOONSHOT_LOGO, MOONSHOT_CYAN));
                     }
                 }
                 callback(true);
@@ -331,13 +331,10 @@ export function addEmailToUser(userId, verificationToken, email) {
 
         axios
             .post("/api/user/addEmailToUser", { userId, verificationToken, email })
-            .then(function(response) {
-                dispatch(
-                    signout(() => {
-                        goTo("/finished");
-                    })
-                );
-                dispatch("STOP_LOADING");
+            .then(response => {
+                dispatch(signout());
+                goTo("/finished");
+                dispatch({ type: "STOP_LOADING" });
             })
             .catch(function(err) {
                 dispatch({
@@ -395,7 +392,6 @@ function updateEvalState(dispatch, data) {
     }
     // if the user finished the eval
     if (data.evaluationState.component === "Finished") {
-        console.log("data: ", data);
         if (data.user && !data.user.email) {
             goTo("/finishEvaluation");
         } else {
@@ -668,7 +664,7 @@ export function signout(callback) {
             .post("/api/user/signOut")
             .then(function(response) {
                 dispatch({ type: "SIGNOUT" });
-                dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO));
+                dispatch(updateColors(MOONSHOT_WHITE, MOONSHOT_BLACK, MOONSHOT_LOGO, MOONSHOT_CYAN));
                 if (typeof callback === "function") {
                     callback();
                 }
@@ -1059,11 +1055,12 @@ export function markFooterOnScreen(footerOnScreen) {
     };
 }
 
-function updateColors(primary, background, logo) {
+function updateColors(primary, background, logo, secondary) {
     return function(dispatch) {
         let backgroundColor;
         let textColor;
         let primaryColor;
+        let secondaryColor;
         if (background === "white") {
             // white backgroound
             backgroundColor = MOONSHOT_WHITE;
@@ -1073,7 +1070,6 @@ function updateColors(primary, background, logo) {
             backgroundColor = MOONSHOT_BLACK;
             textColor = MOONSHOT_WHITE;
         }
-        console.log("logo: ", logo);
 
         if (primary) {
             primaryColor = primary;
@@ -1081,11 +1077,17 @@ function updateColors(primary, background, logo) {
         if (!logo) {
             logo = MOONSHOT_LOGO;
         }
+        if (!secondary) {
+            secondaryColor = primaryColor;
+        } else {
+            secondaryColor = secondary;
+        }
 
         dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
         dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: primaryColor });
         dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
         dispatch({ type: "UPDATE_STORE", variableName: "logo", value: logo });
+        dispatch({ type: "UPDATE_STORE", variableName: "secondaryColor", value: secondaryColor });
 
         document.body.style.backgroundColor = backgroundColor;
         document.body.style.color = textColor;

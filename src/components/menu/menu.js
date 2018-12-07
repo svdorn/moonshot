@@ -361,7 +361,7 @@ class Menu extends Component {
         // color of the dropDown menu icon
         let iconMenuColor = "white";
         // source for the moonshot logo; will be black when onboarding
-        let moonshotLogo = `/logos/${this.props.logo}${this.props.png}`;
+        let moonshotLogo = this.props.logo ? `/logos/${this.props.logo}${this.props.png}` : null;
         // class of any dropdown menu
         let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
         // class of any menu item that is NOT currently selected
@@ -430,7 +430,7 @@ class Menu extends Component {
         }
 
         let { backgroundColor, textColor } = this.props;
-        backgroundColor = backgroundColor ? backgroundColor : "#2e2e2e";
+        backgroundColor = backgroundColor ? backgroundColor : "#ffffff";
         textColor = textColor ? textColor : "#ffffff";
 
         // show only the Moonshot logo if currently loading
@@ -735,7 +735,7 @@ class Menu extends Component {
             logoClassName = "clickable moonshotMenuLogo";
             logoClickAction = () => goTo("/");
         }
-        let moonshotLogoHtml = (
+        let moonshotLogoHtml = moonshotLogo ? (
             <img
                 width={136}
                 height={64}
@@ -745,7 +745,8 @@ class Menu extends Component {
                 src={moonshotLogo}
                 onClick={logoClickAction}
             />
-        );
+        )
+        : null;
         let easeLogoHtml = (
             <img
                 width={100}
