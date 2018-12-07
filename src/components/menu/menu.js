@@ -17,6 +17,7 @@ import {
     signout,
     closeNotification,
     openAddUserModal,
+    openContactUsModal,
     openIntroductionModal
 } from "../../actions/usersActions";
 import { isValidEmail, goTo } from "../../miscFunctions";
@@ -252,6 +253,60 @@ class Menu extends Component {
         this.props.openIntroductionModal();
     };
 
+    // options given to candidates and those who are on the apply page and not logged in
+    candidateOptions = () => {
+        return [
+            {
+                optionType: "action",
+                title: "Need help?",
+                url: "/",
+                action: this.props.openContactUsModal,
+                styleName: "hover-color"
+            }
+        ];
+    };
+
+    employeeOptions = () => {
+        return this.candidateOptions();
+        // menuOptions = [
+        //     { optionType: "url", title: "Evaluations", url: "/myEvaluations" },
+        //     { optionType: "separator" },
+        //     {
+        //         optionType: "dropDown",
+        //         components: [
+        //             { optionType: "url", title: "Account", url: "/" },
+        //             { optionType: "divider" },
+        //             { optionType: "url", title: "Settings", url: "/settings" },
+        //             { optionType: "signOut" }
+        //         ]
+        //     }
+        // ];
+    };
+
+    // options given to a lead (not candidates)
+    loggedOutOptions = onHome => {
+        return [
+            {
+                optionType: "url",
+                title: "Log In",
+                url: "/login",
+                styleName: onHome ? "hover-color" : ""
+            },
+            {
+                optionType: "url",
+                title: "Product Tour",
+                url: "/explore",
+                styleName: `product-tour hover-color ${this.state.hasScrolled ? "" : "hide"}`
+            },
+            { optionType: "separator", styleName: onHome ? "semi-transparent" : "" },
+            { optionType: "tryNow" }
+        ];
+    };
+
+    // whether this page is one that candidates will go to
+    isCandidatePage = pathname =>
+        ["/apply", "/finished", "/introduction"].some(path => pathname.startsWith(path));
+
     render() {
         let self = this;
         let currentUser = this.props.currentUser;
@@ -402,62 +457,32 @@ class Menu extends Component {
 
         // the options that will be shown in the menu
         let menuOptions = [];
-        // if the Moonshot logo should redirect to the homepage
-        let logoIsLink = true;
+        // don't have the moonshot logo redirect to homepage if user is/will be a candidate/employee
+        let logoIsLink =
+            (!!currentUser && currentUser.userType == "accountAdmin") ||
+            (!currentUser && !this.isCandidatePage(pathname));
         // used for menu divider
         let loggedInClass = " loggedIn";
 
         // if there is no user logged in
         if (!currentUser) {
             loggedInClass = " loggedOut";
-            menuOptions = [
-                {
-                    optionType: "url",
-                    title: "Log In",
-                    url: "/login",
-                    styleName: onHome ? "hover-color" : ""
-                },
-                {
-                    optionType: "url",
-                    title: "Product Tour",
-                    url: "/explore",
-                    styleName: `product-tour hover-color ${this.state.hasScrolled ? "" : "hide"}`
-                },
-                { optionType: "separator", styleName: onHome ? "semi-transparent" : "" },
-                { optionType: "tryNow" }
-            ];
+
+            // if on an apply page, give the candidate options because it's
+            // probably a candidate who hasn't signed up yet
+            if (this.isCandidatePage(pathname)) {
+                menuOptions = this.candidateOptions();
+            } else {
+                menuOptions = this.loggedOutOptions(onHome);
+            }
         }
         // if the current user is an employee for a business
         else if (currentUser.userType === "employee") {
-            menuOptions = [
-                { optionType: "url", title: "Evaluations", url: "/myEvaluations" },
-                { optionType: "separator" },
-                {
-                    optionType: "dropDown",
-                    components: [
-                        { optionType: "url", title: "Account", url: "/" },
-                        { optionType: "divider" },
-                        { optionType: "url", title: "Settings", url: "/settings" },
-                        { optionType: "signOut" }
-                    ]
-                }
-            ];
+            menuOptions = this.employeeOptions();
         }
         // if the current user is a candidate
         else if (currentUser.userType === "candidate") {
-            menuOptions = [
-                { optionType: "url", title: "Evaluations", url: "/myEvaluations" },
-                { optionType: "separator" },
-                {
-                    optionType: "dropDown",
-                    components: [
-                        { optionType: "url", title: "Account", url: "/" },
-                        { optionType: "divider" },
-                        { optionType: "url", title: "Settings", url: "/settings" },
-                        { optionType: "signOut" }
-                    ]
-                }
-            ];
+            menuOptions = this.candidateOptions();
         }
 
         // if the user is a site admin, give them the admin tab
@@ -551,6 +576,28 @@ class Menu extends Component {
                         />
                     );
                     break;
+                case "action": {
+                    // default to not underlined
+                    let optionClass = menuItemClass;
+                    desktopMenu.push(
+                        <p
+                            key={option.title + " desktop"}
+                            className={optionClass}
+                            styleName={option.styleName ? option.styleName : ""}
+                            onClick={option.action}
+                        >
+                            {option.title}
+                        </p>
+                    );
+                    mobileMenu.push(
+                        <MenuItem
+                            key={option.title + " mobile"}
+                            primaryText={option.title}
+                            onClick={option.action}
+                        />
+                    );
+                    break;
+                }
                 case "dropDown":
                     // the options that will be shown in the dropDown menu
                     let dropDownItems = [];
@@ -764,7 +811,8 @@ function mapDispatchToProps(dispatch) {
             signout,
             closeNotification,
             openAddUserModal,
-            openIntroductionModal
+            openIntroductionModal,
+            openContactUsModal
         },
         dispatch
     );
