@@ -1,39 +1,18 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Dialog, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
+import { CircularProgress, Dialog, DialogActions } from "@material-ui/core";
 import { closeContactUsModal, contactUsEmail } from "../../actions/usersActions";
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from "redux-form";
 import { isValidEmail } from "../../miscFunctions";
+import TextInput from "../userInput/textInput";
+import { Button } from "../miscComponents";
 
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        hintStyle={{color: 'white'}}
-        inputStyle={{color: '#72d6f5'}}
-        underlineStyle={{color: '#72d6f5'}}
-        errorText={touched && error}
-        {...input}
-        {...custom}
-    />
-);
+const emailValidate = value =>
+    value && !isValidEmail(value) ? "Invalid email address" : undefined;
 
-const renderBlueTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        hintStyle={{color: '#72d6f5'}}
-        inputStyle={{color: '#72d6f5'}}
-        underlineStyle={{color: '#72d6f5'}}
-        errorText={touched && error}
-        {...input}
-        {...custom}
-    />
-);
-
-const emailValidate = value => value && !isValidEmail(value) ? 'Invalid email address' : undefined;
-
-const required = value => (value ? undefined : 'This field is required.');
+const required = value => (value ? undefined : "This field is required.");
 
 class ContactUsDialog extends Component {
     constructor(props) {
@@ -47,7 +26,6 @@ class ContactUsDialog extends Component {
     componentDidMount() {
         this.resetValues();
     }
-
 
     resetValues() {
         const user = this.props.currentUser;
@@ -63,12 +41,11 @@ class ContactUsDialog extends Component {
         this.props.initialize(initialValues);
     }
 
-
     componentDidUpdate(prevProps, prevState) {
         // make sure the props defining whether the modal is open matches the state for that
         if (this.props.open != this.state.open && this.props.open != undefined) {
             const open = this.props.open;
-            this.setState({open});
+            this.setState({ open });
         }
 
         // if logged-in status changed
@@ -77,17 +54,13 @@ class ContactUsDialog extends Component {
         }
     }
 
-
     handleSubmitForm(e) {
         e.preventDefault();
         const vals = this.props.formData.contactUsModal.values;
 
         // Form validation before submit
         let notValid = false;
-        const requiredFields = [
-            'name',
-            'email'
-        ];
+        const requiredFields = ["name", "email"];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
                 this.props.touch(field);
@@ -109,100 +82,78 @@ class ContactUsDialog extends Component {
         this.props.contactUsEmail(user, this.resetValues.bind(this));
     }
 
-    handleClose() {
+    handleClose = () => {
         this.props.closeContactUsModal();
-    }
+    };
 
     render() {
         let dialogBody = (
             <form onSubmit={this.handleSubmitForm.bind(this)} className="center">
-                <div className="primary-white font18px font16pxUnder700 marginTop10px">
+                <div className="font18px font16pxUnder700 marginTop10px">
                     Our team will be in touch shortly
                 </div>
-                <Field
+                <TextInput
                     name="name"
-                    component={renderTextField}
                     label="Full Name*"
                     validate={[required]}
-                    style={{marginTop: "5px"}}
-                /><br/>
-                <Field
+                    style={{ marginTop: "5px" }}
+                />
+                <TextInput
                     name="email"
-                    component={renderTextField}
                     label="Email*"
                     validate={[required, emailValidate]}
-                    style={{marginTop: "5px"}}
-                /><br/>
-                <Field
+                    style={{ marginTop: "5px" }}
+                />
+                <TextInput
                     name="company"
-                    component={renderTextField}
                     label="Company"
-                    style={{marginTop: "5px"}}
-                /><br/>
-                <Field
+                    required={false}
+                    style={{ marginTop: "5px" }}
+                />
+                <TextInput
                     name="phoneNumber"
-                    component={renderTextField}
                     label="Phone Number"
-                    style={{marginTop: "5px"}}
-                /><br/>
-                <Field
+                    required={false}
+                    style={{ marginTop: "5px" }}
+                />
+                <TextInput
                     name="message"
-                    component={renderTextField}
                     label="Message"
-                    style={{marginTop: "5px"}}
-                /><br/>
-                <RaisedButton
-                    label="Submit"
-                    type="submit"
-                    className="raisedButtonBusinessHome marginTop15px"
-                    />
+                    required={false}
+                    style={{ marginTop: "5px" }}
+                />
+                <Button type="submit" style={{ marginTop: "15px" }}>
+                    SUBMIT
+                </Button>
                 <div>
-                    {this.props.loading ?
+                    {this.props.loading ? (
                         <div className="marginTop10px">
-                            <CircularProgress color="white"/>
+                            <CircularProgress color="primary" />
                         </div>
-                        : null}
+                    ) : null}
                 </div>
                 <div>
-                    {this.props.message ?
-                        <div className="marginTop10px primary-white font16px font14pxUnder700">
+                    {this.props.message ? (
+                        <div className="marginTop10px font16px font14pxUnder700">
                             {this.props.message}
                         </div>
-                        : null}
+                    ) : null}
                 </div>
-
             </form>
         );
 
-        const actions = [
-            <FlatButton
-                label="Close"
-                onClick={this.handleClose.bind(this)}
-                className="primary-white-important"
-            />,
-        ];
-
-        const dialog = (
-            <Dialog
-                actions={actions}
-                modal={false}
-                open={this.state.open}
-                onRequestClose={this.handleClose.bind(this)}
-                autoScrollBodyContent={true}
-                paperClassName="dialogForBiz"
-                contentClassName="center"
-            >
-                {dialogBody}
-            </Dialog>
-        );
         return (
-            <div>
-                {dialog}
-            </div>
+            <Dialog open={!!this.state.open} maxWith={false} onClose={this.handleClose}>
+                <div className="dialog-margins">{dialogBody}</div>
+                <DialogActions>
+                    <Button variant="text" onClick={this.handleClose}>
+                        CLOSE
+                    </Button>
+                </DialogActions>
+            </Dialog>
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -215,14 +166,20 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeContactUsModal,
-        contactUsEmail
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeContactUsModal,
+            contactUsEmail
+        },
+        dispatch
+    );
 }
 
 ContactUsDialog = reduxForm({
-    form: 'contactUsModal',
+    form: "contactUsModal"
 })(ContactUsDialog);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactUsDialog);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ContactUsDialog);

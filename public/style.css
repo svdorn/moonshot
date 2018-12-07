@@ -450,6 +450,10 @@ form > h1 {
     background: linear-gradient(to bottom right, var(--primary-cyan), var(--primary-purple-light));
 }
 
+.dialog-margins {
+    margin: 20px 120px;
+}
+
 /* .root-cyan-label.input-label,
 .root-cyan-label.input-label.focused-input-label {
     color: var(--primary-cyan);
@@ -3060,6 +3064,10 @@ button.link {
         display: none;
     }
 
+    .dialog-margins {
+        margin: 20px 80px;
+    }
+
     .my-employees .search-fields .add-employee {
         margin: 0 0 5px;
     }
@@ -3351,6 +3359,10 @@ button.link {
     .text-field {
         width: auto !important;
     }
+    .dialog-margins {
+        margin: 20px 60px;
+    }
+
     #discoverSearchBarMedScreen > div:nth-child(4) {
         display: inherit;
         margin-top: -30px;
@@ -3441,6 +3453,11 @@ button.link {
     .above500only {
         display: none;
     }
+
+    .dialog-margins {
+        margin: 20px 40px;
+    }
+
     .myCandidatesInfoBox {
         width: 280px;
     }
@@ -3679,6 +3696,11 @@ button.link {
     .above400only {
         display: none;
     }
+
+    .dialog-margins {
+        margin: 20px 20px;
+    }
+
     .form {
         max-width: 300px;
     }
@@ -3802,6 +3824,10 @@ button.link {
 @media only screen and (max-width: 350px) {
     .above350only {
         display: none;
+    }
+
+    .dialog-margins {
+        margin: 20px 10px;
     }
 
     .font40pxUnder350 {

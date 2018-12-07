@@ -79,7 +79,7 @@ class Footer extends Component {
                                 this.props.png
                             }
                         />
-                        <div className="primary-white font10px">
+                        <div className="font10px">
                             &copy; 2018 Moonshot Learning, Inc. All rights reserved.
                         </div>
                         <div styleName="social-icons">

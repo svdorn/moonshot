@@ -120,7 +120,13 @@ class TextInput extends Component {
                             component={renderField}
                             label={label}
                             required={required}
-                            validate={Array.isArray(validate) ? validate : [defaultValidate]}
+                            validate={
+                                required == false
+                                    ? []
+                                    : Array.isArray(validate)
+                                        ? validate
+                                        : [defaultValidate]
+                            }
                             placeholder={placeholder}
                             type={type}
                             style={style}
