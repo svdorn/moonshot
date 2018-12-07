@@ -14,7 +14,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TextInput from "../userInput/textInput";
 import MetaTags from "react-meta-tags";
 import { renderTextField, isValidEmail, goTo } from "../../miscFunctions";
-import { Button } from "../miscComponents";
+import { Button, CheckBox } from "../miscComponents";
 import axios from "axios";
 
 import "./introduction.css";
@@ -126,7 +126,7 @@ class Introduction extends Component {
         this.props.postCandidate(user);
     };
 
-    handleCheckMarkClick() {
+    handleCheckMarkClick = () => {
         this.setState({
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
@@ -145,12 +145,13 @@ class Introduction extends Component {
         return (
             <div>
                 <div className="paddingTop50px marginBottom30px">
-                    <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">
+                    <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
                         {this.state.company} Evaluation
                     </div>
                     <div
-                        className="font16px font14pxUnder700 font12pxUnder500 secondary-gray"
+                        className="font16px font14pxUnder700 font12pxUnder500"
                         styleName="powered-by"
+                        style={{ opacity: "0.6" }}
                     >
                         Powered by Moonshot Insights
                     </div>
@@ -164,17 +165,13 @@ class Introduction extends Component {
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div style={{ margin: "5px 20px 10px" }}>
-                        <div
-                            className="checkbox smallCheckbox whiteCheckbox"
-                            onClick={this.handleCheckMarkClick.bind(this)}
-                        >
-                            <img
-                                alt=""
-                                className={"checkMark" + this.state.agreeingToTerms}
-                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            />
-                        </div>
+                    <div>
+                        <CheckBox
+                            checked={this.state.agreedToTerms}
+                            onClick={this.handleCheckMarkClick}
+                            size="medium"
+                            style={{ margin: "5px 20px 10px" }}
+                        />
                         I have read and agree to the Moonshot Insights
                         <br />
                         <a
@@ -281,7 +278,9 @@ function mapStateToProps(state) {
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 
