@@ -308,6 +308,7 @@ function mapStateToProps(state) {
         positionCount: state.users.positionCount,
         primaryColor: state.users.primaryColor,
         secondaryColor: state.users.secondaryColor,
+        buttonTextColor: state.users.buttonTextColor,
         textColor: state.users.textColor
     };
 }

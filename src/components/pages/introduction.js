@@ -15,7 +15,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TextInput from "../userInput/textInput";
 import MetaTags from "react-meta-tags";
 import { renderTextField, isValidEmail, goTo } from "../../miscFunctions";
-import { Button } from "../miscComponents";
+import { Button, CheckBox } from "../miscComponents";
 import axios from "axios";
 
 import "./introduction.css";
@@ -145,12 +145,12 @@ class Introduction extends Component {
         this.props.postCandidate(user);
     };
 
-    handleCheckMarkClick() {
+    handleCheckMarkClick = () => {
         this.setState({
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
         });
-    }
+    };
 
     // create the main content of the page
     createContent() {
@@ -164,12 +164,13 @@ class Introduction extends Component {
         return (
             <div>
                 <div className="paddingTop50px marginBottom30px">
-                    <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">
+                    <div className="font38px font30pxUnder700 font24pxUnder500">
                         {this.state.company} Evaluation
                     </div>
                     <div
-                        className="font16px font14pxUnder700 font12pxUnder500 secondary-gray"
+                        className="font16px font14pxUnder700 font12pxUnder500"
                         styleName="powered-by"
+                        style={{ opacity: 0.6 }}
                     >
                         Powered by Moonshot Insights
                     </div>
@@ -184,16 +185,12 @@ class Introduction extends Component {
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
                     <div style={{ margin: "5px 20px 10px" }}>
-                        <div
-                            className="checkbox smallCheckbox whiteCheckbox"
-                            onClick={this.handleCheckMarkClick.bind(this)}
-                        >
-                            <img
-                                alt=""
-                                className={"checkMark" + this.state.agreeingToTerms}
-                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            />
-                        </div>
+                        <CheckBox
+                            onClick={this.handleCheckMarkClick}
+                            checked={this.state.agreeingToTerms}
+                            size="medium"
+                            style={{ margin: "0 6px 2px 0" }}
+                        />
                         I have read and agree to the Moonshot Insights
                         <br />
                         <a
@@ -245,7 +242,7 @@ class Introduction extends Component {
                         content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
-                <div className="center primary-white">{content}</div>
+                <div className="center">{content}</div>
             </div>
         );
     }

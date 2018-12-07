@@ -1120,7 +1120,8 @@ function updateColors(primary, background, logo, secondary, buttonTextColor) {
         dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
         dispatch({ type: "UPDATE_STORE", variableName: "logo", value: logo });
         dispatch({ type: "UPDATE_STORE", variableName: "secondaryColor", value: secondaryColor });
-        if (typeof buttonColor === "string")
+        console.log("buttonTextColor");
+        if (typeof buttonTextColor === "string")
             dispatch({
                 type: "UPDATE_STORE",
                 variableName: "buttonTextColor",
