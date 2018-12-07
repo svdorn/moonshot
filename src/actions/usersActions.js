@@ -335,6 +335,7 @@ export function addEmailToUser(userId, verificationToken, email) {
                 dispatch(signout(() => {
                     goTo("/finished");
                 }))
+                dispatch("STOP_LOADING");
             })
             .catch(function(err) {
                 dispatch({
