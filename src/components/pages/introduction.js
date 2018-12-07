@@ -216,7 +216,7 @@ class Introduction extends Component {
                     {this.props.loadingCreateUser ? (
                         <CircularProgress />
                     ) : (
-                        <Button onClick={this.handleSubmit} color="primary">
+                        <Button onClick={this.handleSubmit}>
                             Begin
                         </Button>
                     )}
