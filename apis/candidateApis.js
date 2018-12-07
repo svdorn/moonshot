@@ -520,7 +520,7 @@ function POST_candidate(req, res) {
         if (!positionFound || !madeProfileUrl || errored) { return; }
 
         // get the business that is offering the position
-        try { var business = await Businesses.findById(businessId).select("name uniqueName primaryColor backgroundColor"); }
+        try { var business = await Businesses.findById(businessId).select("name uniqueName primaryColor backgroundColor headerLogo"); }
         catch (findBusinessError) {
             console.log(findBusinessError);
             return res.status(500).send({ message: errors.SERVER_ERROR });
