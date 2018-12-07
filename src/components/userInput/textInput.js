@@ -73,6 +73,7 @@ class TextInput extends Component {
 
         this.state = {
             showPassword: false,
+            primaryColor,
             theme: createMuiTheme({
                 palette,
                 typography: { fontFamily: "Muli,sans-serif" }
