@@ -55,6 +55,9 @@ class Introduction extends Component {
 
         if (!currentUser && uniqueName) {
             this.props.getColorsFromBusiness(uniqueName);
+        } else {
+            this.props.addNotification("Incorrect company data to begin evaluation. Please message us so we can fix the issue.", "error");
+            goTo("/");
         }
     }
 
