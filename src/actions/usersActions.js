@@ -3,6 +3,11 @@ import axios from "axios";
 import { reset } from "redux-form";
 import { goTo, propertyExists, makeSingular } from "../miscFunctions";
 
+const MOONSHOT_BLACK = "#2e2e2e";
+const MOONSHOT_WHITE = "#ffffff";
+const MOONSHOT_CYAN = "#76defe";
+const TEXT_BLACK = "#000000";
+
 // GET USER FROM SESSION
 export function getUserFromSession(callback) {
     return function(dispatch) {
@@ -11,18 +16,6 @@ export function getUserFromSession(callback) {
             isFetching: true,
             errorMessage: undefined
         });
-
-        // TODO: DELETE THE dispatches AND MAKE NEW ONES PROBABLY
-        const backgroundColor = "#ffffff";
-        const textColor = "#000000";
-        const primaryColor = "#0000ff";
-
-        dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
-        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: primaryColor });
-        dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
-
-        document.body.style.backgroundColor = backgroundColor;
-        document.body.style.color = textColor;
 
         axios
             .get("/api/user/session")
@@ -662,6 +655,7 @@ export function signout(callback) {
             .post("/api/user/signOut")
             .then(function(response) {
                 dispatch({ type: "SIGNOUT" });
+                dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK))
                 if (typeof callback === "function") {
                     callback();
                 }
@@ -1052,18 +1046,15 @@ export function markFooterOnScreen(footerOnScreen) {
 
 function updateColors(primary, background, logo) {
     return function(dispatch) {
-        let backgroundColor = "#ffffff";
-        let textColor = "#000000";
-        let primaryColor = "#0000ff";
-        // TODO: DELETE THE dispatches AND MAKE NEW ONES PROBABLY
+        let backgroundColor; let textColor; let primaryColor;
         if (background === "white") {
             // white backgroound
-            backgroundColor = "#ffffff";
-            textColor = "#000000";
+            backgroundColor = MOONSHOT_WHITE;
+            textColor = TEXT_BLACK;
         } else {
             // black background
-            backgroundColor = "#2e2e2e";
-            textColor = "#ffffff";
+            backgroundColor = MOONSHOT_BLACK;
+            textColor = MOONSHOT_WHITE;
         }
 
         if (primary) {
