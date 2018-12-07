@@ -32,7 +32,14 @@ export function getUserFromSession(callback, wait) {
                     dispatch(updateColors(user.primaryColor, user.backgroundColor, user.logo));
                 } else {
                     if (!wait) {
-                        dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO, MOONSHOT_WHITE));
+                        dispatch(
+                            updateColors(
+                                MOONSHOT_CYAN,
+                                MOONSHOT_BLACK,
+                                MOONSHOT_LOGO,
+                                MOONSHOT_WHITE
+                            )
+                        );
                     }
                 }
                 callback(true);
@@ -675,7 +682,9 @@ export function signout(callback) {
             .post("/api/user/signOut")
             .then(function(response) {
                 dispatch({ type: "SIGNOUT" });
-                dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO, MOONSHOT_WHITE));
+                dispatch(
+                    updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO, MOONSHOT_WHITE)
+                );
                 if (typeof callback === "function") {
                     callback();
                 }

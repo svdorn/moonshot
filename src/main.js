@@ -72,19 +72,19 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 // END NEW MUI THEME
 
 const makeTheme = props => {
+    const primaryColor = props.primaryColor ? props.primaryColor : "#ffffff";
+    const secondaryColor = props.secondaryColor
+        ? props.secondaryColor
+        : props.primaryColor
+            ? props.primaryColor
+            : "#76defe";
+
+    const primary = { main: primaryColor };
+    let secondary = { main: secondaryColor };
+    if (props.buttonTextColor) secondary.contrastText = props.buttonTextColor;
+
     return createMuiTheme({
-        palette: {
-            primary: {
-                main: props.primaryColor ? props.primaryColor : "#ffffff"
-            },
-            secondary: {
-                main: props.secondaryColor
-                    ? props.secondaryColor
-                    : props.primaryColor
-                        ? props.primaryColor
-                        : "#76defe"
-            }
-        }
+        palette: { primary, secondary }
     });
 };
 
@@ -104,7 +104,12 @@ class Main extends Component {
 
     componentDidMount() {
         const self = this;
-        if (this.props.location && this.props.location.pathname && (this.props.location.pathname.toLowerCase().startsWith("/apply/") || this.props.location.pathname.toLowerCase().startsWith("/introduction"))) {
+        if (
+            this.props.location &&
+            this.props.location.pathname &&
+            (this.props.location.pathname.toLowerCase().startsWith("/apply/") ||
+                this.props.location.pathname.toLowerCase().startsWith("/introduction"))
+        ) {
             var wait = true;
         }
         // get the user from the session - if there is no user, just marks screen ready to display
