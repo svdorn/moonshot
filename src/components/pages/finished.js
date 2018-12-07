@@ -41,7 +41,7 @@ class Finished extends Component {
                 </div>
                 <div styleName="text">
                     <div>
-                        Thanks for taking the time to finish your evaluation! Your results have been saved and are being reviewed by {this.state.company}. You can now safely exit this tab.
+                        Thanks for taking the time to finish your evaluation! Your results have been saved and are being reviewed by {companyName}. You can now safely exit this tab.
                     </div>
                 </div>
             </div>
