@@ -209,7 +209,7 @@ class Evaluation extends Component {
     createPreTestContent() {
         if (this.state.alreadyInProgress) {
             return (
-                <div>
+                <div className="marginTop20px">
                     <p>You{"'"}ve already started this evaluation.</p>
                     <p>Ready to get back into it?</p>
                     {this.state.loading ? (
