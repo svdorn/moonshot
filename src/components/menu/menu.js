@@ -20,7 +20,7 @@ import {
     openContactUsModal,
     openIntroductionModal
 } from "../../actions/usersActions";
-import { isValidEmail, goTo } from "../../miscFunctions";
+import { isValidEmail, goTo, noop } from "../../miscFunctions";
 import { axios } from "axios";
 import { animateScroll } from "react-scroll";
 import AccountAdminMenu from "./accountAdminMenu";
@@ -232,6 +232,40 @@ class Menu extends Component {
     //         return 0;
     //     }
     // }
+
+    easeLogo = () => {
+        return (
+            <img
+                width={100}
+                height={30}
+                alt="Moonshot"
+                style={{ verticalAlign: "baseline" }}
+                className="easeLogo"
+                id="easeLogo"
+                src={"/logos/EaseLogo" + this.props.png}
+            />
+        );
+    };
+
+    makeMoonshotLogo = (moonshotLogo, pathname) => {
+        const { currentUser } = this.props;
+        // if the logo is a link, make clicking it go home and make it look clickable
+        // don't have the moonshot logo redirect to homepage if user is/will be a candidate/employee
+        const logoIsLink =
+            (!!currentUser && currentUser.userType == "accountAdmin") ||
+            (!currentUser && !this.isCandidatePage(pathname));
+        return moonshotLogo ? (
+            <img
+                width={136}
+                height={64}
+                alt="Moonshot"
+                className={"moonshotMenuLogo" + (logoIsLink ? " clickable" : "")}
+                id="moonshotLogo"
+                src={moonshotLogo}
+                onClick={logoIsLink ? () => goTo("/") : noop}
+            />
+        ) : null;
+    };
 
     checkForHeaderClassUpdate(event) {
         if (this.props.location.pathname === "/") {
@@ -457,10 +491,7 @@ class Menu extends Component {
 
         // the options that will be shown in the menu
         let menuOptions = [];
-        // don't have the moonshot logo redirect to homepage if user is/will be a candidate/employee
-        let logoIsLink =
-            (!!currentUser && currentUser.userType == "accountAdmin") ||
-            (!currentUser && !this.isCandidatePage(pathname));
+
         // used for menu divider
         let loggedInClass = " loggedIn";
 
@@ -726,39 +757,6 @@ class Menu extends Component {
             );
         }
 
-        // default logo class
-        let logoClassName = "moonshotMenuLogo";
-        // default to doing nothing on logo click
-        let logoClickAction = () => {};
-        // if the logo is a link, make clicking it go home and make it look clickable
-        if (logoIsLink) {
-            logoClassName = "clickable moonshotMenuLogo";
-            logoClickAction = () => goTo("/");
-        }
-        let moonshotLogoHtml = moonshotLogo ? (
-            <img
-                width={136}
-                height={64}
-                alt="Moonshot"
-                className={logoClassName}
-                id="moonshotLogo"
-                src={moonshotLogo}
-                onClick={logoClickAction}
-            />
-        )
-        : null;
-        let easeLogoHtml = (
-            <img
-                width={100}
-                height={30}
-                alt="Moonshot"
-                style={{ verticalAlign: "baseline" }}
-                className="easeLogo"
-                id="easeLogo"
-                src={"/logos/EaseLogo" + this.props.png}
-            />
-        );
-
         let menu = (
             <header
                 className={this.state.headerClass + additionalHeaderClass}
@@ -767,11 +765,11 @@ class Menu extends Component {
                 <div>
                     <Toolbar id="menu" style={{ height: "35px" }}>
                         <ToolbarGroup className="logoToolbarGroup" style={{ marginTop: "39px" }}>
-                            {moonshotLogoHtml}
+                            {this.makeMoonshotLogo(moonshotLogo, pathname)}
                             {this.props.location.pathname === "/influencer" ? (
                                 <div>
                                     <div className="easeDivider inlineBlock" />
-                                    <div className="inlineBlock">{easeLogoHtml}</div>
+                                    <div className="inlineBlock">{this.easeLogo()}</div>
                                 </div>
                             ) : null}
                         </ToolbarGroup>
