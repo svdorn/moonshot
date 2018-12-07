@@ -172,8 +172,10 @@ const usersSchema = mongoose.Schema({
     },
     // location to redirect to after signing up
     redirect: String,
-    // primary color (buttons and menu) shown in the eval
+    // primary color (most components) shown in the eval
     primaryColor: String,
+    // color of buttons in the eval
+    buttonTextColor: String,
     // background color shown to candidates
     backgroundColor: String,
     // the logo of the business they are signed up for

@@ -3458,7 +3458,7 @@ async function GET_colors(req, res) {
             ]
         };
         var business = await Businesses.findOne(query).select(
-            "headerLogo name backgroundColor primaryColor"
+            "headerLogo name backgroundColor primaryColor buttonTextColor"
         );
     } catch (findBizError) {
         console.log("Error finding business when getting colors: ", findBizError);

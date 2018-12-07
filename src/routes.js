@@ -161,11 +161,7 @@ const routes = (
                     component={AuthenticatedComponent}
                     page={<FinishEvaluation />}
                 />
-                <Route
-                    path="finished"
-                    component={AuthenticatedComponent}
-                    page={<Finished />}
-                />
+                <Route path="finished" component={AuthenticatedComponent} page={<Finished />} />
 
                 <Route
                     path="admin"

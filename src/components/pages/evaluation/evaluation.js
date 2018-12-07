@@ -16,8 +16,6 @@ import PsychTest from "./psychTest";
 import CognitiveTest from "./cognitiveTest";
 import SkillTest from "./skillTest";
 
-// import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-
 class Evaluation extends Component {
     constructor(props) {
         super(props);
@@ -43,15 +41,7 @@ class Evaluation extends Component {
         // general arguments for get api call
         const generalApiGetArgs = { params: generalApiPostArgs };
 
-        // const theme = createMuiTheme({
-        //     palette: {
-        //         primary: { main: this.props.primaryColor ? this.props.primaryColor : "#76defe" }
-        //     }
-        // });
-
         this.state = {
-            // the theme of the evaluation (everything for candidates)
-            // theme,
             // waiting for confirmation that user can be here
             initialLoad: true,
             // loading anything else
@@ -117,7 +107,11 @@ class Evaluation extends Component {
             // if the user has not started this and is not in the middle of
             // a different eval, ask if ready to start this
             else {
-                if (this.props.location && this.props.location.query && this.props.location.query.start === "true") {
+                if (
+                    this.props.location &&
+                    this.props.location.query &&
+                    this.props.location.query.start === "true"
+                ) {
                     this.startEval();
                     var skipStartPage = true;
                 }
@@ -229,7 +223,11 @@ class Evaluation extends Component {
         // to start it
         else if (this.state.readyToStart) {
             if (this.state.skipStartPage) {
-                return <div className="center marginTop20px"><CircularProgress color="primary" /></div>;
+                return (
+                    <div className="center marginTop20px">
+                        <CircularProgress color="primary" />
+                    </div>
+                );
             }
             return this.startEvalPrompt();
         }

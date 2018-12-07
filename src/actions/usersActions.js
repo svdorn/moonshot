@@ -29,7 +29,15 @@ export function getUserFromSession(callback, wait) {
                 // Get correct color scheme for the user
                 const user = response.data.user;
                 if (user && user.primaryColor && user.backgroundColor) {
-                    dispatch(updateColors(user.primaryColor, user.backgroundColor, user.logo));
+                    dispatch(
+                        updateColors(
+                            user.primaryColor,
+                            user.backgroundColor,
+                            user.logo,
+                            user.secondaryColor,
+                            user.buttonTextColor
+                        )
+                    );
                 } else {
                     if (!wait) {
                         dispatch(
@@ -37,7 +45,8 @@ export function getUserFromSession(callback, wait) {
                                 MOONSHOT_CYAN,
                                 MOONSHOT_BLACK,
                                 MOONSHOT_LOGO,
-                                MOONSHOT_WHITE
+                                MOONSHOT_WHITE,
+                                undefined
                             )
                         );
                     }
@@ -515,7 +524,9 @@ export function getColorsFromBusiness(name) {
                     updateColors(
                         response.data.primaryColor,
                         response.data.backgroundColor,
-                        response.data.headerLogo
+                        response.data.headerLogo,
+                        undefined,
+                        response.data.buttonTextColor
                     )
                 );
             })
@@ -1075,8 +1086,9 @@ export function markFooterOnScreen(footerOnScreen) {
     };
 }
 
-function updateColors(primary, background, logo, secondary) {
+function updateColors(primary, background, logo, secondary, buttonTextColor) {
     return function(dispatch) {
+        console.log("hyello, buttonTextColor: ", buttonTextColor);
         let backgroundColor;
         let textColor;
         let primaryColor;
@@ -1108,6 +1120,12 @@ function updateColors(primary, background, logo, secondary) {
         dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
         dispatch({ type: "UPDATE_STORE", variableName: "logo", value: logo });
         dispatch({ type: "UPDATE_STORE", variableName: "secondaryColor", value: secondaryColor });
+        if (typeof buttonColor === "string")
+            dispatch({
+                type: "UPDATE_STORE",
+                variableName: "buttonTextColor",
+                value: buttonTextColor
+            });
 
         document.body.style.backgroundColor = backgroundColor;
         document.body.style.color = textColor;

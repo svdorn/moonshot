@@ -163,6 +163,8 @@ const businessesSchema = mongoose.Schema({
     },
     // primary color (buttons and menu) shown in the eval
     primaryColor: String,
+    // color of buttons in the eval
+    buttonTextColor: String,
     // background color shown to candidates
     backgroundColor: String,
     // information about notifications that admins get when candidates finish evals
