@@ -1168,6 +1168,11 @@ button.link {
     border-radius: 25px;
 }
 
+.myEvalsLogOut {
+    width: 70%;
+    max-width: 1000px;
+    margin: 50px auto;
+}
 .myEvalsBox {
     position: relative;
     width: 70%;

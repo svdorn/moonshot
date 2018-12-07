@@ -225,11 +225,16 @@ class MyEvaluationsPreview extends Component {
         const style = typeof this.props.style === "object" ? this.props.style : {};
         const className = typeof this.props.className === "string" ? this.props.className : "";
 
+        let logo = this.props.logo;
+        if (this.props.textColor === "#000000") {
+            logo = "hr-Black.png";
+        }
+
         return (
             <div style={style} className={className}>
                 <div onClick={this.continueEval} className={`myEvalsBox aboutMeLi ${mainClass}`} style={{ backgroundColor: this.props.backgroundColor, color: this.props.textColor }}>
                     <div className="aboutMeLiIconContainer">
-                        <img alt="My Evals Company Logo" src={`/logos/${this.props.logo}`} />
+                        <img alt="My Evals Company Logo" src={`/logos/${logo}`} />
                     </div>
 
                     <div className="verticalDivider" />
