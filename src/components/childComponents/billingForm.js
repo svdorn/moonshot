@@ -10,7 +10,7 @@ import {
     addNotification,
     stopLoading
 } from "../../actions/usersActions";
-import { button } from "../../classes.js";
+import { Button } from "../miscComponents";
 import { injectStripe, CardElement } from "react-stripe-elements";
 import axios from "axios";
 
@@ -73,9 +73,9 @@ class BillingForm extends Component {
                     <div styleName="card-element">
                         <CardElement style={{ base: { fontSize: "16px", color: "white" } }} />
                     </div>
-                    <div className={button.white} onClick={this.handleSubmit} styleName="button">
+                    <Button onClick={this.handleSubmit} style={{ marginLeft: "10px", verticalAlign: "5px", marginTop: "-5px", display:"inlineBlock" }}>
                         {update ? <div>Update Card</div> : <div>Start Plan</div>}
-                    </div>
+                    </Button>
                     <br />
                     {loading ? <CircularProgress color="white" /> : null}
                 </form>
