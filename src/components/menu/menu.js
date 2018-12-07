@@ -25,6 +25,7 @@ import { isValidEmail, goTo, noop } from "../../miscFunctions";
 import { axios } from "axios";
 import { animateScroll } from "react-scroll";
 import AccountAdminMenu from "./accountAdminMenu";
+import { primaryBlackDark } from "../../colors";
 
 import "./menu.css";
 
@@ -289,38 +290,31 @@ class Menu extends Component {
     };
 
     // options given to candidates and those who are on the apply page and not logged in
-    candidateOptions = (pathname) => {
+    candidateOptions = pathname => {
+        let menuItems = [
+            {
+                optionType: "action",
+                title: "Need help?",
+                url: "/",
+                action: this.props.openContactUsModal,
+                styleName: "hover-color"
+            }
+        ];
+
         if (pathname.toLowerCase().startsWith("/myevaluations")) {
-            return [
-                {
-                    optionType: "action",
-                    title: "Need help?",
-                    url: "/",
-                    action: this.props.openContactUsModal,
-                    styleName: "hover-color"
-                },
-                {
-                    optionType: "action",
-                    title: "Logout",
-                    url: "/",
-                    action: this.props.openLogoutModal,
-                    styleName: "hover-color"
-                }
-            ];
-        } else {
-            return [
-                {
-                    optionType: "action",
-                    title: "Need help?",
-                    url: "/",
-                    action: this.props.openContactUsModal,
-                    styleName: "hover-color"
-                }
-            ];
+            menuItems.push({
+                optionType: "action",
+                title: "Logout",
+                url: "/",
+                action: this.props.openLogoutModal,
+                styleName: "hover-color"
+            });
         }
+
+        return menuItems;
     };
 
-    employeeOptions = (pathname) => {
+    employeeOptions = pathname => {
         return this.candidateOptions(pathname);
         // menuOptions = [
         //     { optionType: "url", title: "Evaluations", url: "/myEvaluations" },
@@ -427,23 +421,33 @@ class Menu extends Component {
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
         let underlineWidth = "53px";
-        // whether
+
         let additionalHeaderClass = "";
 
+        let { backgroundColor, textColor } = this.props;
+        backgroundColor = backgroundColor ? backgroundColor : primaryBlackDark;
+        textColor = textColor ? textColor : "#ffffff";
+
+        // whether we're on the homepage
         const onHome = pathname === "/";
 
+        // things that modify how the menu looks (shadow, background color, etc)
+        let headerStyle = { zIndex: "100", color: textColor, backgroundColor };
+        let extraDark = false;
+        let hideShadow = noShadowPages.includes(pathFirstPart);
+        let fixed = true;
         if (onHome) {
-            additionalHeaderClass += " extra-dark";
+            extraDark = true;
+            headerStyle.backgroundColor = undefined;
+            if (this.state.headerClass.includes("noShadow")) {
+                hideShadow = true;
+                headerStyle.backgroundColor = "initial";
+            }
+        } else if (nonFixedMenuPages.includes(pathFirstPart)) {
+            fixed = false;
         }
 
-        // add the class to get rid of the shadow if the current path is one of those
-        if (noShadowPages.includes(pathFirstPart)) {
-            additionalHeaderClass += " noShadow";
-        }
-
         if (onHome) {
-            // make the header transparent at if haven't scrolled at all
-            additionalHeaderClass += " transparent-if-no-shadow";
             // make sure there aren't already event listeners on scroll/resize ...
             window.removeEventListener("scroll", this.bound_checkForHeaderClassUpdate);
             window.removeEventListener("resize", this.bound_checkForHeaderClassUpdate);
@@ -478,14 +482,8 @@ class Menu extends Component {
             } else if (pathname === "/pricing") {
                 dropdownClass += " currentRoute";
                 underlineWidth = "50px";
-            } else if (nonFixedMenuPages.includes(pathFirstPart)) {
-                additionalHeaderClass += " notFixed";
             }
         }
-
-        let { backgroundColor, textColor } = this.props;
-        backgroundColor = backgroundColor ? backgroundColor : "#ffffff";
-        textColor = textColor ? textColor : "#ffffff";
 
         // show only the Moonshot logo if currently loading
         if (this.props.isFetching) {
@@ -779,8 +777,14 @@ class Menu extends Component {
 
         let menu = (
             <header
-                className={this.state.headerClass + additionalHeaderClass}
-                style={{ zIndex: "100", backgroundColor, color: textColor }}
+                className={
+                    this.state.headerClass +
+                    additionalHeaderClass +
+                    (extraDark ? " extra-dark" : "") +
+                    (hideShadow ? " noShadow" : "") +
+                    (fixed ? "" : " notFixed")
+                }
+                style={headerStyle}
             >
                 <div>
                     <Toolbar id="menu" style={{ height: "35px" }}>
