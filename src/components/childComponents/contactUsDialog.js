@@ -33,11 +33,9 @@ class ContactUsDialog extends Component {
         // set initial values
         const email = user ? user.email : "";
         const name = user ? user.name : "";
-        const phoneNumber = "";
-        const company = "";
         const message = "";
 
-        const initialValues = { email, name, phoneNumber, company, message };
+        const initialValues = { email, name, message };
         this.props.initialize(initialValues);
     }
 
@@ -66,8 +64,6 @@ class ContactUsDialog extends Component {
         const args = {
             name: vals.name,
             email: vals.email,
-            company: vals.company,
-            phoneNumber: vals.phoneNumber,
             message: vals.message
         };
 
@@ -94,18 +90,6 @@ class ContactUsDialog extends Component {
                     name="email"
                     label="Email*"
                     validate={[required, emailValidate]}
-                    style={{ marginTop: "5px" }}
-                />
-                <TextInput
-                    name="company"
-                    label="Company"
-                    required={false}
-                    style={{ marginTop: "5px" }}
-                />
-                <TextInput
-                    name="phoneNumber"
-                    label="Phone Number"
-                    required={false}
                     style={{ marginTop: "5px" }}
                 />
                 <TextInput
