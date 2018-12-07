@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { CircularProgress, Dialog, DialogActions } from "@material-ui/core";
 import { closeContactUsModal, contactUsEmail } from "../../actions/usersActions";
 import { reduxForm } from "redux-form";
-import { isValidEmail } from "../../miscFunctions";
+import { isValidEmail, fieldsAreEmpty, isWhiteOrUndefined } from "../../miscFunctions";
 import TextInput from "../userInput/textInput";
 import { Button } from "../miscComponents";
 
@@ -59,19 +59,11 @@ class ContactUsDialog extends Component {
         const vals = this.props.formData.contactUsModal.values;
 
         // Form validation before submit
-        let notValid = false;
-        const requiredFields = ["name", "email"];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return;
+        if (fieldsAreEmpty(vals, ["name", "email"], this.props.touch)) return;
 
         if (!isValidEmail(vals.email)) return;
 
-        const user = {
+        const args = {
             name: vals.name,
             email: vals.email,
             company: vals.company,
@@ -79,7 +71,7 @@ class ContactUsDialog extends Component {
             message: vals.message
         };
 
-        this.props.contactUsEmail(user, this.resetValues.bind(this));
+        this.props.contactUsEmail(args, this.resetValues.bind(this));
     }
 
     handleClose = () => {
@@ -143,7 +135,16 @@ class ContactUsDialog extends Component {
         );
 
         return (
-            <Dialog open={!!this.state.open} maxWith={false} onClose={this.handleClose}>
+            <Dialog
+                open={!!this.state.open}
+                maxWidth={false}
+                onClose={this.handleClose}
+                classes={{
+                    paper: isWhiteOrUndefined(this.props.textColor)
+                        ? "background-primary-black-dark-important"
+                        : ""
+                }}
+            >
                 <div className="dialog-margins">{dialogBody}</div>
                 <DialogActions>
                     <Button variant="text" onClick={this.handleClose}>
@@ -161,7 +162,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         open: state.users.contactUsModal,
         loading: state.users.loadingSomething,
-        message: state.users.message
+        message: state.users.message,
+        textColor: state.users.textColor
     };
 }
 
