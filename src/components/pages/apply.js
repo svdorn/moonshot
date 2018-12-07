@@ -386,7 +386,7 @@ class Apply extends Component {
         else {
             content = (
                 <div>
-                    <div className="font18px font16pxUnder700 font14pxUnder500 secondary-gray marginTop30px">
+                    <div className="font20px font18pxUnder700 font16pxUnder500 secondary-dark-gray marginTop30px">
                         Loading...
                     </div>
                 </div>

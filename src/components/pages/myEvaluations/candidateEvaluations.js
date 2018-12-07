@@ -111,7 +111,9 @@ class MyEvaluations extends Component {
     }
 
     signOut = () => {
-        this.props.signout();
+        this.props.signout(() => {
+            goTo("/");
+        });
     }
 
     render() {
