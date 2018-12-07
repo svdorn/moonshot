@@ -34,10 +34,6 @@ class FinishEvaluation extends Component {
         super(props);
 
         this.bound_handleKeyPress = this.handleKeyPress.bind(this);
-
-        this.state = {
-            company: "Moonshot Steve"
-        };
     }
 
     componentDidMount() {
@@ -92,11 +88,12 @@ class FinishEvaluation extends Component {
 
     // create the main content of the page
     createContent() {
-        let urlQuery = {};
-        try {
-            urlQuery = this.props.location.query;
-        } catch (e) {
-            /* no query */
+        const { currentUser } = this.props;
+        let companyName;
+        if (!currentUser || !currentUser.companyName) {
+            companyName = "Moonshot";
+        } else {
+            companyName = currentUser.companyName;
         }
 
         return (
@@ -106,7 +103,7 @@ class FinishEvaluation extends Component {
                         className="font38px font30pxUnder700 font24pxUnder500"
                         style={{ color: this.props.primaryColor }}
                     >
-                        {this.state.company} Evaluation
+                        {companyName} Evaluation
                     </div>
                     <div
                         className="font16px font14pxUnder700 font12pxUnder500"
@@ -137,6 +134,8 @@ class FinishEvaluation extends Component {
     //name, email, password, confirm password, signup button
     render() {
         let content = this.createContent();
+
+        console.log("user: ", this.props.currentUser);
 
         return (
             <div className="fillScreen">

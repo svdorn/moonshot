@@ -13,20 +13,23 @@ import "./finished.css";
 class Finished extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            company: "Moonshot Steve"
-        };
     }
 
     // create the main content of the page
     createContent() {
+        const { currentUser } = this.props;
+        let companyName;
+        if (!currentUser || !currentUser.companyName) {
+            companyName = "Moonshot";
+        } else {
+            companyName = currentUser.companyName
+        }
 
         return (
             <div>
                 <div className="paddingTop50px marginBottom30px">
                     <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
-                        {this.state.company} Evaluation
+                        {companyName} Evaluation
                     </div>
                     <div
                         className="font16px font14pxUnder700 font12pxUnder500"
@@ -38,7 +41,7 @@ class Finished extends Component {
                 </div>
                 <div styleName="text">
                     <div>
-                        Thanks for taking the time to finish your evaluation! Your results have been saved and are being reviewed by {this.state.company}. You can now safely exit this tab.
+                        Thanks for taking the time to finish your evaluation! Your results have been saved and are being reviewed by {companyName}. You can now safely exit this tab.
                     </div>
                 </div>
             </div>

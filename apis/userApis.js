@@ -536,6 +536,39 @@ async function POST_addEmailToUser(req, res) {
 
     user.email = email;
 
+    // create a user on intercom and add intercom information to the user
+    try {
+        var intercom = await client.users.create({
+            email: user.email,
+             name: user.name,
+             custom_attributes: {
+                 user_type: user.userType
+             }
+         });
+    }
+    catch (createIntercomError) {
+        console.log("error creating an intercom user: ", createIntercomError);
+        return res.status(500).send({message: errors.SERVER_ERROR});
+    }
+
+    // Add the intercom info to the user
+    if (intercom.body) {
+        user.intercom = {};
+        user.intercom.email = intercom.body.email;
+        user.intercom.id = intercom.body.id;
+    } else {
+        console.log("error creating an intercom user: ", createIntercomError);
+        return res.status(500).send({message: errors.SERVER_ERROR});
+    }
+
+    // generate an hmac for the user so intercom can verify identity
+    if (user.intercom && user.intercom.id) {
+        const hash = crypto.createHmac('sha256', credentials.hmacKey)
+                   .update(user.intercom.id)
+                   .digest('hex');
+        user.hmac = hash;
+    }
+
     // save the verified user
     try {
         var returnedUser = await user.save();

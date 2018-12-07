@@ -44,6 +44,24 @@ class Introduction extends Component {
         };
     }
 
+    componentWillMount() {
+        const { currentUser, location } = this.props;
+        // get the company name from the url
+        if (location.query && location.query.uniqueName) {
+            var uniqueName = location.query.uniqueName;
+        }
+
+        if (!currentUser && uniqueName) {
+            this.props.getColorsFromBusiness(uniqueName);
+        } else {
+            this.props.addNotification(
+                "Incorrect company data to begin evaluation. Please message us so we can fix the issue.",
+                "error"
+            );
+            goTo("/");
+        }
+    }
+
     componentDidMount() {
         // shouldn't be able to be on sign up page if logged in
         const { currentUser, location } = this.props;

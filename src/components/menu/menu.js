@@ -334,7 +334,7 @@ class Menu extends Component {
     // things that modify how the menu looks (shadow, background color, etc)
     getHeaderStyle = (onHome, noShadowPages, pathFirstPart, nonFixedMenuPages) => {
         let { backgroundColor, textColor } = this.props;
-        backgroundColor = backgroundColor ? backgroundColor : primaryBlackDark;
+        backgroundColor = backgroundColor ? backgroundColor : "#ffffff";
         textColor = textColor ? textColor : "#ffffff";
 
         let headerStyle = { zIndex: "100", color: textColor, backgroundColor };

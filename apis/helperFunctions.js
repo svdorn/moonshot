@@ -102,6 +102,7 @@ const FOR_USER = [
     "currentPosition",
     "backgroundColor",
     "logo",
+    "companyName",
     "confirmEmbedLink",
     "verificationToken",
     "firstBusinessUser",
