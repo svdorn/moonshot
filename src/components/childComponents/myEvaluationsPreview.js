@@ -17,6 +17,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { goTo } from "../../miscFunctions";
 import HoverTip from "../miscComponents/hoverTip";
+import { Button } from "../miscComponents";
 import { openAddUserModal, addNotification, updateUser } from "../../actions/usersActions";
 import axios from "axios";
 
@@ -161,7 +162,7 @@ class MyEvaluationsPreview extends Component {
         } else {
             if (this.props.completedDate) {
                 clickableArea = (
-                    <div className="secondary-gray font16px font14pxUnder800 marginTop15px">
+                    <div className="font16px font14pxUnder800 marginTop15px">
                         You{"'"}re done! Your results are being reviewed. You can now safely exit
                         this tab.
                     </div>
@@ -169,20 +170,17 @@ class MyEvaluationsPreview extends Component {
             } else {
                 clickableArea = (
                     <div style={{ marginTop: "20px" }}>
-                        <button
-                            className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white"
-                            style={{ padding: "5px 17px" }}
-                        >
+                        <Button>
                             {this.props.startDate ? "Continue" : "Start"}
-                        </button>
+                        </Button>
                     </div>
                 );
             }
 
             estimatedLength = this.props.completedDate ? null : (
-                <div className="primary-white font16px font14pxUnder800 font12pxUnder400 marginTop20px marginBottom10px">
+                <div className="font16px font14pxUnder800 font12pxUnder400 marginTop20px marginBottom10px">
                     Estimated Length:
-                    <div className="primary-cyan" style={{ display: "inline-block" }}>
+                    <div style={{ display: "inline-block", color: this.props.primaryColor }}>
                         &nbsp;{this.props.length ? (
                             <div className="inlineBlock">{this.props.length} mins</div>
                         ) : (
@@ -193,17 +191,17 @@ class MyEvaluationsPreview extends Component {
             );
 
             infoArea = (
-                <div className="primary-cyan font16px center myEvalsInfoRight">
+                <div className="font16px center myEvalsInfoRight" style={{ color: this.props.primaryColor }}>
                     Assigned
-                    <div className="primary-white marginBottom10px">
+                    <div className="marginBottom10px" style={{ color: this.props.textColor }}>
                         {this.makeDatePretty(this.props.assignedDate)}
                     </div>
                     Deadline
-                    <div className="primary-white marginBottom10px">
+                    <div className="marginBottom10px" style={{ color: this.props.textColor }}>
                         {this.makeDatePretty(this.props.deadline)}
                     </div>
                     Completed
-                    <div className="primary-white">
+                    <div style={{ color: this.props.textColor }}>
                         {this.makeDatePretty(this.props.completedDate)}
                     </div>
                 </div>
@@ -229,7 +227,7 @@ class MyEvaluationsPreview extends Component {
 
         return (
             <div style={style} className={className}>
-                <div onClick={this.continueEval} className={`myEvalsBox aboutMeLi ${mainClass}`}>
+                <div onClick={this.continueEval} className={`myEvalsBox aboutMeLi ${mainClass}`} style={{ backgroundColor: this.props.backgroundColor, color: this.props.textColor }}>
                     <div className="aboutMeLiIconContainer">
                         <img alt="My Evals Company Logo" src={`/logos/${this.props.logo}`} />
                     </div>
@@ -238,10 +236,10 @@ class MyEvaluationsPreview extends Component {
 
                     <div className="myEvalsInfo" style={{ display: "inline-block" }}>
                         {infoArea}
-                        <div className="font18px font16pxUnder800 primary-cyan">
+                        <div className="font18px font16pxUnder800" style={{ color: this.props.primaryColor }}>
                             {this.props.name}
                         </div>
-                        <div className="secondary-gray">
+                        <div style={{ opacity: "0.6" }}>
                             {this.props.company} Evaluation{" "}
                             {currentUser.userType === "accountAdmin" ? (
                                 <div className="inlineBlock">| 22 min</div>
@@ -251,6 +249,7 @@ class MyEvaluationsPreview extends Component {
                         {clickableArea}
                         {businessButton}
                     </div>
+                    <div className="myEvalsSide" style={{ backgroundColor: this.props.primaryColor }} />
                 </div>
             </div>
         );
@@ -270,7 +269,10 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor,
+        backgroundColor: state.users.backgroundColor
     };
 }
 
