@@ -165,7 +165,7 @@ class Introduction extends Component {
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div>
+                    <div className="marginBottom15px">
                         <CheckBox
                             checked={this.state.agreeingToTerms}
                             onClick={this.handleCheckMarkClick}
