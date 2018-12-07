@@ -209,11 +209,11 @@ class Evaluation extends Component {
     createPreTestContent() {
         if (this.state.alreadyInProgress) {
             return (
-                <div>
+                <div className="marginTop20px">
                     <p>You{"'"}ve already started this evaluation.</p>
                     <p>Ready to get back into it?</p>
                     {this.state.loading ? (
-                        <CircularProgress color="primary" />
+                        <CircularProgress className="marginTop20px" color="primary" />
                     ) : (
                         <Button onClick={this.getEvalState}>Let{"'"}s Go!</Button>
                     )}

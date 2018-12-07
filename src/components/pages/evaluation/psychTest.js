@@ -70,12 +70,15 @@ class PsychAnalysis extends Component {
         return (
             <div styleName="eval-portion-intro" className="center">
                 <div>
+                    <div className="font24px">
+                        <span style={{ color: this.props.primaryColor }}>Personality Test</span>
+                    </div>
                     <p>
                         This is the psychometrics portion of the evaluation. In essence, this is a
                         personality test.
                     </p>
                     <p>
-                        You'll be given two choices per question. Drag the slider according to the
+                        You{"'"}ll be given two choices per question. Drag the slider according to the
                         degree that you agree with a given choice.
                     </p>
                     <p>

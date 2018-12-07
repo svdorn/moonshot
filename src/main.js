@@ -104,6 +104,9 @@ class Main extends Component {
 
     componentDidMount() {
         const self = this;
+        if (this.props.location && this.props.location.pathname && this.props.location.pathname.toLowerCase().includes("/apply/")) {
+            var applyPage = true;
+        }
         // get the user from the session - if there is no user, just marks screen ready to display
         this.props.getUserFromSession(function(work) {
             if (work) {
@@ -131,7 +134,7 @@ class Main extends Component {
                     });
                 });
             }
-        });
+        }, applyPage);
 
         this.checkWebpFeature("lossy", (feature, result) => {
             this.props.setWebpSupport(result);

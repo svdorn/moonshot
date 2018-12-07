@@ -3,32 +3,20 @@ import axios from "axios";
 import { reset } from "redux-form";
 import { goTo, propertyExists, makeSingular } from "../miscFunctions";
 
+const MOONSHOT_BLACK = "#2a2a2a";
+const MOONSHOT_WHITE = "#ffffff";
+const MOONSHOT_CYAN = "#76defe";
+const TEXT_BLACK = "#000000";
+const MOONSHOT_LOGO = "MoonshotWhite";
+
 // GET USER FROM SESSION
-export function getUserFromSession(callback) {
+export function getUserFromSession(callback, applyPage) {
     return function(dispatch) {
         dispatch({
             type: "GET_USER_FROM_SESSION_REQUEST",
             isFetching: true,
             errorMessage: undefined
         });
-
-        // TODO: DELETE THE dispatches AND MAKE NEW ONES PROBABLY
-        // const backgroundColor = "#ffffff";
-        // const textColor = "#000000";
-        // const primaryColor = "#0000ff";
-
-        const backgroundColor = "#2e2e2e";
-        const textColor = "#ffffff";
-        const primaryColor = "#ffffff";
-        const secondaryColor = "#76defe";
-
-        dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
-        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: primaryColor });
-        dispatch({ type: "UPDATE_STORE", variableName: "secondaryColor", value: secondaryColor });
-        dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
-
-        document.body.style.backgroundColor = backgroundColor;
-        document.body.style.color = textColor;
 
         axios
             .get("/api/user/session")
@@ -38,6 +26,15 @@ export function getUserFromSession(callback) {
                     payload: response.data,
                     isFetching: false
                 });
+                // Get correct color scheme for the user
+                const user = response.data.user;
+                if (user && user.primaryColor && user.backgroundColor) {
+                    dispatch(updateColors(user.primaryColor, user.backgroundColor, user.logo));
+                } else {
+                    if (!applyPage) {
+                        dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO));
+                    }
+                }
                 callback(true);
             })
             .catch(function(err) {
@@ -340,6 +337,7 @@ export function addEmailToUser(userId, verificationToken, email) {
                         goTo("/finished");
                     })
                 );
+                dispatch("STOP_LOADING");
             })
             .catch(function(err) {
                 dispatch({
@@ -486,6 +484,26 @@ export function getBillingInfo(userId, verificationToken, businessId) {
                     type: "SUCCESS_BILLING_INFO",
                     billing: response.data
                 });
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
+export function getColorsFromBusiness(name) {
+    return function(dispatch) {
+        axios
+            .get("/api/business/colors", { params: { name } })
+            .then(response => {
+                dispatch(
+                    updateColors(
+                        response.data.primaryColor,
+                        response.data.backgroundColor,
+                        response.data.headerLogo
+                    )
+                );
             })
             .catch(error => {
                 console.log(error);
@@ -650,6 +668,7 @@ export function signout(callback) {
             .post("/api/user/signOut")
             .then(function(response) {
                 dispatch({ type: "SIGNOUT" });
+                dispatch(updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO));
                 if (typeof callback === "function") {
                     callback();
                 }
@@ -1037,6 +1056,39 @@ export function formError() {
 export function markFooterOnScreen(footerOnScreen) {
     return function(dispatch) {
         dispatch({ type: "MARK_FOOTER_ON_SCREEN", footerOnScreen });
+    };
+}
+
+function updateColors(primary, background, logo) {
+    return function(dispatch) {
+        let backgroundColor;
+        let textColor;
+        let primaryColor;
+        if (background === "white") {
+            // white backgroound
+            backgroundColor = MOONSHOT_WHITE;
+            textColor = TEXT_BLACK;
+        } else {
+            // black background
+            backgroundColor = MOONSHOT_BLACK;
+            textColor = MOONSHOT_WHITE;
+        }
+        console.log("logo: ", logo);
+
+        if (primary) {
+            primaryColor = primary;
+        }
+        if (!logo) {
+            logo = MOONSHOT_LOGO;
+        }
+
+        dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: primaryColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "logo", value: logo });
+
+        document.body.style.backgroundColor = backgroundColor;
+        document.body.style.color = textColor;
     };
 }
 

@@ -8,7 +8,8 @@ import {
     addNotification,
     openClaimPageModal,
     openAddPositionModal,
-    generalAction
+    generalAction,
+    getColorsFromBusiness
 } from "../../actions/usersActions";
 import { makePossessive } from "../../miscFunctions";
 import MetaTags from "react-meta-tags";
@@ -37,6 +38,25 @@ class Apply extends Component {
             // if the business has set up the page
             pageSetUp: undefined
         };
+    }
+
+    componentWillMount() {
+        const { currentUser } = this.props;
+        let self = this;
+        // get the company name from the url
+        try {
+            var company = this.props.params.company;
+        } catch (e) {
+            goTo("/");
+            self.props.addNotification(
+                "Couldn't get the company you're trying to apply for.",
+                "error"
+            );
+        }
+
+        if (!currentUser) {
+            this.props.getColorsFromBusiness(company);
+        }
     }
 
     /* fetch the positions and codes and set the position field to be the first position in the array */
@@ -326,7 +346,9 @@ class Apply extends Component {
             content = (
                 <div>
                     <div className="paddingTop50px marginBottom30px">
-                        <div className="font38px font30pxUnder700 font24pxUnder500">
+                        <div className="font38px font30pxUnder700 font24pxUnder500"
+                             style={{ color: this.props.primaryColor }}
+                            >
                             {this.state.company} Evaluation
                         </div>
                         <div
@@ -339,7 +361,7 @@ class Apply extends Component {
                     </div>
                     <div
                         className="font16px font14pxUnder500"
-                        style={{ width: "88%", margin: "auto", color: this.props.primaryColor }}
+                        style={{ width: "88%", margin: "auto" }}
                     >
                         Select the position you would like to apply for.
                     </div>
@@ -419,7 +441,8 @@ function mapDispatchToProps(dispatch) {
             addNotification,
             openClaimPageModal,
             openAddPositionModal,
-            generalAction
+            generalAction,
+            getColorsFromBusiness
         },
         dispatch
     );

@@ -306,7 +306,7 @@ class Menu extends Component {
         // color of the dropDown menu icon
         let iconMenuColor = "white";
         // source for the moonshot logo; will be black when onboarding
-        let moonshotLogo = "/logos/MoonshotWhite" + this.props.png;
+        let moonshotLogo = `/logos/${this.props.logo}${this.props.png}`;
         // class of any dropdown menu
         let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
         // class of any menu item that is NOT currently selected
@@ -767,6 +767,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         backgroundColor: state.users.backgroundColor,
+        logo: state.users.logo,
         isFetching: state.users.isFetching,
         png: state.users.png
     };

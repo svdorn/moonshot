@@ -362,8 +362,6 @@ async function getPosition(businessId, positionId) {
 }
 
 async function GET_session(req, res) {
-    console.log("req.session: ", req.session);
-
     const userId = sanitize(req.session.userId);
 
     // if there was no previous user logged in, don't return a user

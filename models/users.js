@@ -176,6 +176,8 @@ const usersSchema = mongoose.Schema({
     primaryColor: String,
     // background color shown to candidates
     backgroundColor: String,
+    // the logo of the business they are signed up for
+    logo: String,
     // skill tests the user has taken
     skillTests: [
         {

@@ -101,6 +101,7 @@ const FOR_USER = [
     "referredByCode",
     "currentPosition",
     "backgroundColor",
+    "logo",
     "confirmEmbedLink",
     "verificationToken",
     "firstBusinessUser",

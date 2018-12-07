@@ -346,6 +346,9 @@ class AdminQuestions extends Component {
             <div className="center" styleName="eval-portion-intro">
                 <div />
                 <div>
+                    <div className="font24px">
+                        <span style={{ color: this.props.primaryColor }}>Administrative Questions</span>
+                    </div>
                     <p>
                         The following is a series of questions administered by Moonshot Insights to
                         collect pertinent information for regulatory purposes. Your answers will
