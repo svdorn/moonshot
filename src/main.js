@@ -83,8 +83,6 @@ const makeTheme = props => {
     let secondary = { main: secondaryColor };
     if (props.buttonTextColor) secondary.contrastText = props.buttonTextColor;
 
-    console.log("secondary: ", secondary);
-
     return createMuiTheme({
         palette: { primary, secondary }
     });
@@ -157,23 +155,7 @@ class Main extends Component {
         ) {
             const { primaryColor, secondaryColor } = this.props;
 
-            this.setState({
-                theme: makeTheme(this.props)
-                // theme: createMuiTheme({
-                //     palette: {
-                //         primary: {
-                //             main: primaryColor ? primaryColor : "#ffffff"
-                //         },
-                //         secondary: {
-                //             main: secondaryColor
-                //                 ? secondaryColor
-                //                 : primaryColor
-                //                     ? primaryColor
-                //                     : "#76defe"
-                //         }
-                //     }
-                // })
-            });
+            this.setState({ theme: makeTheme(this.props) });
         }
     }
 

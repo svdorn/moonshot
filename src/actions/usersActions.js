@@ -1088,7 +1088,6 @@ export function markFooterOnScreen(footerOnScreen) {
 
 function updateColors(primary, background, logo, secondary, buttonTextColor) {
     return function(dispatch) {
-        console.log("hyello, buttonTextColor: ", buttonTextColor);
         let backgroundColor;
         let textColor;
         let primaryColor;
@@ -1120,7 +1119,6 @@ function updateColors(primary, background, logo, secondary, buttonTextColor) {
         dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
         dispatch({ type: "UPDATE_STORE", variableName: "logo", value: logo });
         dispatch({ type: "UPDATE_STORE", variableName: "secondaryColor", value: secondaryColor });
-        console.log("buttonTextColor");
         if (typeof buttonTextColor === "string")
             dispatch({
                 type: "UPDATE_STORE",

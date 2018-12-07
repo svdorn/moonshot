@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { Field } from "redux-form";
 import { connect } from "react-redux";
+import { isWhiteOrUndefined } from "../../miscFunctions";
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { TextField } from "@material-ui/core";
@@ -49,36 +50,50 @@ const renderField = ({
     />
 );
 
+const makeTheme = props => {
+    const { primaryColor, textColor } = props;
+
+    console.log("primaryColor: ", primaryColor);
+    let color = primaryColor ? primaryColor : "#76defe";
+    let palette = {
+        primary: { main: color, dark: color, light: color },
+        secondary: { main: color, dark: color, light: color },
+        error: { main: "#eb394f", dark: "#eb394f", light: "#eb394f" }
+    };
+
+    console.log("palette: ", palette);
+
+    // if the text color should be white, make it so
+    if (isWhiteOrUndefined(textColor)) {
+        palette.type = "dark";
+    }
+
+    return createMuiTheme({
+        palette,
+        typography: { fontFamily: "Muli,sans-serif" }
+    });
+};
+
 class TextInput extends Component {
     constructor(props) {
         super(props);
 
-        const { primaryColor, secondaryColor, textColor } = this.props;
-
-        let color = secondaryColor ? secondaryColor : primaryColor ? primaryColor : "#76defe";
-        let palette = {
-            primary: { main: color, dark: color, light: color },
-            secondary: { main: "#ff582d" },
-            error: { main: "#eb394f", dark: "#eb394f", light: "#eb394f" }
-        };
-
-        // if the text color should be white, make it so
-        if (
-            !textColor ||
-            textColor.toLowerCase() == "white" ||
-            textColor.toLowerCase() == "#ffffff"
-        ) {
-            palette.type = "dark";
-        }
-
         this.state = {
             showPassword: false,
-            primaryColor,
-            theme: createMuiTheme({
-                palette,
-                typography: { fontFamily: "Muli,sans-serif" }
-            })
+            theme: makeTheme(props)
         };
+    }
+
+    componentDidUpdate(prevProps) {
+        if (
+            prevProps.primaryColor !== this.props.primaryColor ||
+            prevProps.buttonTextColor !== this.props.buttonTextColor ||
+            prevProps.textColor !== this.props.textColor
+        ) {
+            const { primaryColor } = this.props;
+
+            this.setState({ theme: makeTheme(this.props) });
+        }
     }
 
     toggleShowPassword = () => {
@@ -153,7 +168,6 @@ class TextInput extends Component {
 function mapStateToProps(state) {
     return {
         primaryColor: state.users.primaryColor,
-        secondaryColor: state.users.secondaryColor,
         textColor: state.users.textColor
     };
 }
