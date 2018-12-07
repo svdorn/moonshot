@@ -331,6 +331,31 @@ class Menu extends Component {
         // ];
     };
 
+    // things that modify how the menu looks (shadow, background color, etc)
+    getHeaderStyle = (onHome, noShadowPages, pathFirstPart, nonFixedMenuPages) => {
+        let { backgroundColor, textColor } = this.props;
+        backgroundColor = backgroundColor ? backgroundColor : primaryBlackDark;
+        textColor = textColor ? textColor : "#ffffff";
+
+        let headerStyle = { zIndex: "100", color: textColor, backgroundColor };
+        let extraDark = false;
+        let hideShadow = noShadowPages.includes(pathFirstPart);
+        let fixed = true;
+        // if you're on home, make header darker and hide it if you're at the top of the screen
+        if (onHome) {
+            extraDark = true;
+            headerStyle.backgroundColor = undefined;
+            if (this.state.headerClass.includes("noShadow")) {
+                hideShadow = true;
+                headerStyle.backgroundColor = "initial";
+            }
+        } else if (nonFixedMenuPages.includes(pathFirstPart)) {
+            fixed = false;
+        }
+
+        return { headerStyle, extraDark, hideShadow, fixed };
+    };
+
     // options given to a lead (not candidates)
     loggedOutOptions = onHome => {
         return [
@@ -422,30 +447,10 @@ class Menu extends Component {
         // some element from the dropDown menu is selected
         let underlineWidth = "53px";
 
-        let additionalHeaderClass = "";
-
-        let { backgroundColor, textColor } = this.props;
-        backgroundColor = backgroundColor ? backgroundColor : primaryBlackDark;
-        textColor = textColor ? textColor : "#ffffff";
+        const textColor = this.props.textColor ? this.propstextColor : "#ffffff";
 
         // whether we're on the homepage
         const onHome = pathname === "/";
-
-        // things that modify how the menu looks (shadow, background color, etc)
-        let headerStyle = { zIndex: "100", color: textColor, backgroundColor };
-        let extraDark = false;
-        let hideShadow = noShadowPages.includes(pathFirstPart);
-        let fixed = true;
-        if (onHome) {
-            extraDark = true;
-            headerStyle.backgroundColor = undefined;
-            if (this.state.headerClass.includes("noShadow")) {
-                hideShadow = true;
-                headerStyle.backgroundColor = "initial";
-            }
-        } else if (nonFixedMenuPages.includes(pathFirstPart)) {
-            fixed = false;
-        }
 
         if (onHome) {
             // make sure there aren't already event listeners on scroll/resize ...
@@ -485,10 +490,18 @@ class Menu extends Component {
             }
         }
 
+        // get all the header styles
+        const { extraDark, hideShadow, fixed, headerStyle } = this.getHeaderStyle(
+            onHome,
+            noShadowPages,
+            pathFirstPart,
+            nonFixedMenuPages
+        );
+
         // show only the Moonshot logo if currently loading
         if (this.props.isFetching) {
             return (
-                <header style={{ zIndex: "100", backgroundColor }}>
+                <header style={headerStyle}>
                     <Toolbar id="menu" style={{ marginTop: "10px" }}>
                         <ToolbarGroup>
                             <img
@@ -779,7 +792,6 @@ class Menu extends Component {
             <header
                 className={
                     this.state.headerClass +
-                    additionalHeaderClass +
                     (extraDark ? " extra-dark" : "") +
                     (hideShadow ? " noShadow" : "") +
                     (fixed ? "" : " notFixed")
