@@ -22,7 +22,6 @@ class CognitiveTest extends Component {
         super(props);
 
         const imgColor = isWhiteOrUndefined(this.props.backgroundColor) ? "-Black" : "";
-        console.log("imgColor: ", imgColor);
 
         this.state = {
             selectedId: undefined,
@@ -296,14 +295,14 @@ class CognitiveTest extends Component {
 
             const imgSrc = option.src + this.state.imgColor + this.props.png;
 
-            const color = this.state.outOfTime ? darken(primaryColor, 60) : primaryColor;
+            const color = this.state.outOfTime || this.props.loading ? darken(primaryColor, 60) : primaryColor;
 
             return (
                 <div
                     key={option.src}
-                    onClick={this.state.outOfTime ? null : () => self.selectAnswer(option._id)}
+                    onClick={this.state.outOfTime || this.props.loading ? null : () => self.selectAnswer(option._id)}
                     styleName={"gca.multiple-choice-answer"}
-                    style={this.state.outOfTime ? { cursor: "not-allowed" } : {}}
+                    style={this.state.outOfTime || this.props.loading ? { cursor: "not-allowed" } : {}}
                 >
                     <div styleName={"gca.multiple-choice-circle"} style={{ background: color }}>
                         <div
@@ -337,9 +336,7 @@ class CognitiveTest extends Component {
 
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
-                {this.state.loading ? (
-                    <div>Loading next question...</div>
-                ) : (
+
                     <div>
                         {this.state.outOfTime ? (
                             <div styleName="gca.error-red">
@@ -354,15 +351,18 @@ class CognitiveTest extends Component {
                         <div className="center" style={{ maxWidth: "1000px", margin: "auto" }}>
                             {answers}
                         </div>
-                        <Button
-                            disabled={!canContinue}
-                            onClick={this.nextQuestion}
-                            style={{ margin: "30px 0 50px" }}
-                        >
-                            Next
-                        </Button>
+                        {this.state.loading ?
+                            <div style={{ margin: "30px 0 50px" }}><CircularProgress color="primary" /></div>
+                            :
+                            <Button
+                                disabled={!canContinue}
+                                onClick={this.nextQuestion}
+                                style={{ margin: "30px 0 50px" }}
+                            >
+                                Next
+                            </Button>
+                        }
                     </div>
-                )}
             </div>
         );
     }

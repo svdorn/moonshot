@@ -320,6 +320,8 @@ const usersSchema = mongoose.Schema({
         // their title at the company
         title: String
     },
+    // the company name that a user is taking the eval for
+    companyName: String,
     // if the user should be shown a prompt to verify their email
     showVerifyEmailBanner: Boolean,
 

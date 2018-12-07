@@ -529,6 +529,7 @@ function POST_candidate(req, res) {
             console.log("Error finding business.");
             return res.status(500).send({message: errors.SERVER_ERROR});
         }
+        user.companyName = business.name;
         // add color styles to user
         if (business.backgroundColor) {
             user.backgroundColor = business.backgroundColor;
