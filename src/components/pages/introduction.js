@@ -56,7 +56,10 @@ class Introduction extends Component {
         if (!currentUser && uniqueName) {
             this.props.getColorsFromBusiness(uniqueName);
         } else {
-            this.props.addNotification("Incorrect company data to begin evaluation. Please message us so we can fix the issue.", "error");
+            this.props.addNotification(
+                "Incorrect company data to begin evaluation. Please message us so we can fix the issue.",
+                "error"
+            );
             goTo("/");
         }
     }
@@ -154,7 +157,7 @@ class Introduction extends Component {
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
         });
-    }
+    };
 
     // create the main content of the page
     createContent() {
@@ -168,7 +171,10 @@ class Introduction extends Component {
         return (
             <div>
                 <div className="paddingTop50px marginBottom15px">
-                    <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
+                    <div
+                        className="font38px font30pxUnder700 font24pxUnder500"
+                        style={{ color: this.props.primaryColor }}
+                    >
                         {this.state.company} Evaluation
                     </div>
                     <div
@@ -182,13 +188,17 @@ class Introduction extends Component {
                 <div styleName="text">
                     <div>
                         This evaluation consists of some quick administrative questions, a
-                        personality evaluation, and a pattern recognition test. Set aside at least 22 minutes to complete the evaluation.
+                        personality evaluation, and a pattern recognition test. Set aside at least
+                        22 minutes to complete the evaluation.
                     </div>
                     <div>Please enter your name below to begin the evaluation.</div>
                 </div>
-                <div>
+                <div style={{ marginTop: "10px" }}>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div className="marginTop10px marginBottom20px font12px" style={{ marginLeft: "-20px" }}>
+                    <div
+                        className="marginTop10px marginBottom20px font12px"
+                        style={{ marginLeft: "-20px" }}
+                    >
                         <CheckBox
                             checked={this.state.agreeingToTerms}
                             onClick={this.handleCheckMarkClick}
@@ -216,9 +226,7 @@ class Introduction extends Component {
                     {this.props.loadingCreateUser ? (
                         <CircularProgress />
                     ) : (
-                        <Button onClick={this.handleSubmit}>
-                            Begin
-                        </Button>
+                        <Button onClick={this.handleSubmit}>Begin</Button>
                     )}
                 </div>
             </div>
