@@ -20,12 +20,12 @@ import {
     addNotification,
     startLoading,
     stopLoading,
-    updateUser,
-    signout
+    updateUser
 } from "../../../actions/usersActions";
 import MetaTags from "react-meta-tags";
 import axios from "axios";
 import MyEvaluationsPreview from "../../childComponents/myEvaluationsPreview";
+import LogoutModal from "../../childComponents/logoutModal";
 import { Button } from "../../miscComponents";
 import { goTo } from "../../../miscFunctions";
 
@@ -108,12 +108,6 @@ class MyEvaluations extends Component {
         } else {
             this.props.addNotification("You aren't logged in! Try refreshing the page.", "error");
         }
-    }
-
-    signOut = () => {
-        this.props.signout(() => {
-            goTo("/");
-        });
     }
 
     render() {
@@ -252,6 +246,8 @@ class MyEvaluations extends Component {
                     <meta name="description" content="See and take your active evaluations!" />
                 </MetaTags>
 
+                <LogoutModal />
+
                 <div style={style.separator}>
                     <div style={style.separatorLine} />
                 </div>
@@ -262,15 +258,6 @@ class MyEvaluations extends Component {
                 {verifyBanner}
 
                 <div className="marginBottom20px">{evaluations}</div>
-
-                {this.state.positions.length > 0 ?
-                    <div className="myEvalsLogOut">
-                        <Button onClick={this.signOut}>
-                            Log Out
-                        </Button>
-                    </div>
-                    : null
-                }
             </div>
         );
     }
@@ -282,8 +269,7 @@ function mapDispatchToProps(dispatch) {
             addNotification,
             startLoading,
             stopLoading,
-            updateUser,
-            signout
+            updateUser
         },
         dispatch
     );

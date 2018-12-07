@@ -83,7 +83,6 @@ const routes = (
                 <Route path="employerLogin" component={Login} />
                 <Route path="signup" component={Signup} />
                 <Route path="introduction" component={Introduction} />
-                <Route path="finished" component={Finished} />
                 <Route
                     path="myCandidates"
                     component={AuthenticatedComponent}
@@ -161,6 +160,11 @@ const routes = (
                     path="finishEvaluation"
                     component={AuthenticatedComponent}
                     page={<FinishEvaluation />}
+                />
+                <Route
+                    path="finished"
+                    component={AuthenticatedComponent}
+                    page={<Finished />}
                 />
 
                 <Route

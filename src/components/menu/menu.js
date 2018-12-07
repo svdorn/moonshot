@@ -18,7 +18,8 @@ import {
     closeNotification,
     openAddUserModal,
     openContactUsModal,
-    openIntroductionModal
+    openIntroductionModal,
+    openLogoutModal
 } from "../../actions/usersActions";
 import { isValidEmail, goTo, noop } from "../../miscFunctions";
 import { axios } from "axios";
@@ -288,20 +289,39 @@ class Menu extends Component {
     };
 
     // options given to candidates and those who are on the apply page and not logged in
-    candidateOptions = () => {
-        return [
-            {
-                optionType: "action",
-                title: "Need help?",
-                url: "/",
-                action: this.props.openContactUsModal,
-                styleName: "hover-color"
-            }
-        ];
+    candidateOptions = (pathname) => {
+        if (pathname.toLowerCase().startsWith("/myevaluations")) {
+            return [
+                {
+                    optionType: "action",
+                    title: "Need help?",
+                    url: "/",
+                    action: this.props.openContactUsModal,
+                    styleName: "hover-color"
+                },
+                {
+                    optionType: "action",
+                    title: "Logout",
+                    url: "/",
+                    action: this.props.openLogoutModal,
+                    styleName: "hover-color"
+                }
+            ];
+        } else {
+            return [
+                {
+                    optionType: "action",
+                    title: "Need help?",
+                    url: "/",
+                    action: this.props.openContactUsModal,
+                    styleName: "hover-color"
+                }
+            ];
+        }
     };
 
-    employeeOptions = () => {
-        return this.candidateOptions();
+    employeeOptions = (pathname) => {
+        return this.candidateOptions(pathname);
         // menuOptions = [
         //     { optionType: "url", title: "Evaluations", url: "/myEvaluations" },
         //     { optionType: "separator" },
@@ -502,18 +522,18 @@ class Menu extends Component {
             // if on an apply page, give the candidate options because it's
             // probably a candidate who hasn't signed up yet
             if (this.isCandidatePage(pathname)) {
-                menuOptions = this.candidateOptions();
+                menuOptions = this.candidateOptions(pathname);
             } else {
                 menuOptions = this.loggedOutOptions(onHome);
             }
         }
         // if the current user is an employee for a business
         else if (currentUser.userType === "employee") {
-            menuOptions = this.employeeOptions();
+            menuOptions = this.employeeOptions(pathname);
         }
         // if the current user is a candidate
         else if (currentUser.userType === "candidate") {
-            menuOptions = this.candidateOptions();
+            menuOptions = this.candidateOptions(pathname);
         }
 
         // if the user is a site admin, give them the admin tab
@@ -811,7 +831,8 @@ function mapDispatchToProps(dispatch) {
             closeNotification,
             openAddUserModal,
             openIntroductionModal,
-            openContactUsModal
+            openContactUsModal,
+            openLogoutModal
         },
         dispatch
     );
