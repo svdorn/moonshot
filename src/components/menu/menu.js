@@ -21,7 +21,7 @@ import {
     openIntroductionModal,
     openLogoutModal
 } from "../../actions/usersActions";
-import { isValidEmail, goTo, noop } from "../../miscFunctions";
+import { isValidEmail, goTo, noop, isWhiteOrUndefined } from "../../miscFunctions";
 import { axios } from "axios";
 import { animateScroll } from "react-scroll";
 import AccountAdminMenu from "./accountAdminMenu";
@@ -341,6 +341,7 @@ class Menu extends Component {
         let extraDark = false;
         let hideShadow = noShadowPages.includes(pathFirstPart);
         let fixed = true;
+        const lightShadow = isWhiteOrUndefined(backgroundColor);
         // if you're on home, make header darker and hide it if you're at the top of the screen
         if (onHome) {
             extraDark = true;
@@ -353,7 +354,7 @@ class Menu extends Component {
             fixed = false;
         }
 
-        return { headerStyle, extraDark, hideShadow, fixed };
+        return { headerStyle, extraDark, hideShadow, fixed, lightShadow };
     };
 
     // options given to a lead (not candidates)
@@ -491,7 +492,7 @@ class Menu extends Component {
         }
 
         // get all the header styles
-        const { extraDark, hideShadow, fixed, headerStyle } = this.getHeaderStyle(
+        const { extraDark, hideShadow, fixed, headerStyle, lightShadow } = this.getHeaderStyle(
             onHome,
             noShadowPages,
             pathFirstPart,
@@ -794,7 +795,8 @@ class Menu extends Component {
                     this.state.headerClass +
                     (extraDark ? " extra-dark" : "") +
                     (hideShadow ? " noShadow" : "") +
-                    (fixed ? "" : " notFixed")
+                    (fixed ? "" : " notFixed") +
+                    (lightShadow ? " light-shadow" : "")
                 }
                 style={headerStyle}
             >
