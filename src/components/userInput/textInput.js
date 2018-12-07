@@ -53,15 +53,12 @@ const renderField = ({
 const makeTheme = props => {
     const { primaryColor, textColor } = props;
 
-    console.log("primaryColor: ", primaryColor);
     let color = primaryColor ? primaryColor : "#76defe";
     let palette = {
         primary: { main: color, dark: color, light: color },
         secondary: { main: color, dark: color, light: color },
         error: { main: "#eb394f", dark: "#eb394f", light: "#eb394f" }
     };
-
-    console.log("palette: ", palette);
 
     // if the text color should be white, make it so
     if (isWhiteOrUndefined(textColor)) {

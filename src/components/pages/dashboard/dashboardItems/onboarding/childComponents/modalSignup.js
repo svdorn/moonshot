@@ -243,6 +243,9 @@ class ModalSignup extends Component {
             action: "Business Signup"
         });
 
+        // quora business signup tracking
+        qp('track', 'CompleteRegistration');
+
         // create the user
         this.props.createBusinessAndUser(args, this.onSignupError);
     }

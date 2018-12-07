@@ -144,6 +144,9 @@ class ClaimPageModal extends Component {
             action: "Business Signup"
         });
 
+        // make a business signup with quora
+        qp('track', 'CompleteRegistration');
+
         // create the user
         this.props.createBusinessAndUser(args, this.onSignupError);
     }
