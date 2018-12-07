@@ -310,8 +310,8 @@ class Menu extends Component {
         // class of any dropdown menu
         let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
         // class of any menu item that is NOT currently selected
-        let menuItemClass =
-            "menuItem font14px borderBottomClickable noWrap primary-white wideScreenMenuItem";
+        //primary-white
+        let menuItemClass = "menuItem font14px borderBottomClickable noWrap wideScreenMenuItem";
         // class of any menu item that IS currently selected
         const selectedMenuItemClass = menuItemClass + " currentRoute";
 
@@ -374,10 +374,14 @@ class Menu extends Component {
             }
         }
 
+        let { backgroundColor, textColor } = this.props;
+        backgroundColor = backgroundColor ? backgroundColor : "#2e2e2e";
+        textColor = textColor ? textColor : "#ffffff";
+
         // show only the Moonshot logo if currently loading
         if (this.props.isFetching) {
             return (
-                <header style={{ zIndex: "100", backgroundColor: this.props.backgroundColor }}>
+                <header style={{ zIndex: "100", backgroundColor }}>
                     <Toolbar id="menu" style={{ marginTop: "10px" }}>
                         <ToolbarGroup>
                             <img
@@ -478,6 +482,7 @@ class Menu extends Component {
                         <p
                             key={option.title + " desktop"}
                             className={optionClass}
+                            style={{ borderColor: textColor }}
                             styleName={option.styleName ? option.styleName : ""}
                             onClick={() => goTo(option.url)}
                         >
@@ -517,6 +522,7 @@ class Menu extends Component {
                             key={"separator"}
                             className={"menuDivider wideScreenMenuItem" + loggedInClass}
                             styleName={option.styleName ? option.styleName : ""}
+                            style={{ backgroundColor: textColor }}
                         />
                     );
                     break;
@@ -641,6 +647,7 @@ class Menu extends Component {
                         <p
                             key={"signOut desktop"}
                             className={menuItemClass}
+                            style={{ borderColor: textColor }}
                             onClick={() => self.signOut()}
                         >
                             "Sign Out"
@@ -707,7 +714,7 @@ class Menu extends Component {
         let menu = (
             <header
                 className={this.state.headerClass + additionalHeaderClass}
-                style={{ zIndex: "100", backgroundColor: this.props.backgroundColor }}
+                style={{ zIndex: "100", backgroundColor, color: textColor }}
             >
                 <div>
                     <Toolbar id="menu" style={{ height: "35px" }}>
@@ -769,7 +776,8 @@ function mapStateToProps(state) {
         backgroundColor: state.users.backgroundColor,
         logo: state.users.logo,
         isFetching: state.users.isFetching,
-        png: state.users.png
+        png: state.users.png,
+        textColor: state.users.textColor
     };
 }
 

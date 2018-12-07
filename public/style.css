@@ -1024,7 +1024,7 @@ form > h1 {
 .menuDivider {
     width: 2px;
     height: 21px;
-    background-color: white;
+    /* background-color: white; */
     margin: 30px 15px 0px 15px;
 }
 .menuDivider.loggedOut {
@@ -1054,10 +1054,10 @@ form > h1 {
     text-decoration: underline;
 }
 .borderBottomClickable:hover {
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid;
 }
 .currentRoute {
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid;
 }
 
 .fake-input {
