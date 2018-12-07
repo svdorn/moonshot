@@ -50,7 +50,7 @@ class ForgotPassword extends Component {
         return (
             <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
-                    <title>Forgot Password | Moonshot</title>
+                    <title>Forgot Password | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Reset your Moonshot password. It's okay - we all forget things sometimes."

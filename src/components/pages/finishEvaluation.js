@@ -133,14 +133,14 @@ class FinishEvaluation extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
-        let content = this.createContent();
+        const { currentUser } = this.props;
 
-        console.log("user: ", this.props.currentUser);
+        let content = this.createContent();
 
         return (
             <div className="fillScreen">
                 <MetaTags>
-                    <title>Evaluation | Moonshot</title>
+                    <title>Evaluation | {currentUser.companyName ? currentUser.companyName : "Moonshot Insights"}</title>
                     <meta
                         name="description"
                         content="Finish your evaluation by providing an email the hiring manager can contact you at."

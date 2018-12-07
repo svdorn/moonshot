@@ -121,7 +121,7 @@ class Dashboard extends Component {
         return (
             <div className="center full-height ">
                 <MetaTags>
-                    <title>Dashboard | Moonshot</title>
+                    <title>Dashboard | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Your home base for checking in on your candidates, employees, evaluations, and more."

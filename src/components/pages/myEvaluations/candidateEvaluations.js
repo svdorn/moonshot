@@ -242,7 +242,7 @@ class MyEvaluations extends Component {
                 ref="myEvaluations"
             >
                 <MetaTags>
-                    <title>My Evaluations | Moonshot</title>
+                    <title>My Evaluations | Moonshot Insights</title>
                     <meta name="description" content="See and take your active evaluations!" />
                 </MetaTags>
 

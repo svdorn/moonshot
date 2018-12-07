@@ -413,6 +413,15 @@ class Apply extends Component {
                     (this.props.blurLeadDashboard ? " blur" : "")
                 }
             >
+                {this.state.company ?
+                    <MetaTags>
+                        <title>Apply | {this.state.company}</title>
+                        <meta name="description" content="Apply to a company by taking an evaluation." />
+                    </MetaTags>
+                    :
+                    null
+                }
+
                 <ClaimPageModal company={this.state.company} />
                 <ModalSignup />
                 <AddPositionDialog addPositionToParentState={this.addPositionToParentState} />

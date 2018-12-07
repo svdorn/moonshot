@@ -20,8 +20,8 @@ class ApplyContainer extends Component {
         return (
             <div>
                 <MetaTags>
-                    <title>Apply | Moonshot</title>
-                    <meta name="description" content="Moonshot admin page." />
+                    <title>Apply | Moonshot Insights</title>
+                    <meta name="description" content="Moonshot apply page." />
                 </MetaTags>
                 <div>{this.props.children}</div>
             </div>

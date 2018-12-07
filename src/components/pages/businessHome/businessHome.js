@@ -514,7 +514,7 @@ class BusinessHome extends Component {
                     <AddUserDialog />
                 ) : null}
                 <MetaTags>
-                    <title>Moonshot</title>
+                    <title>Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions."

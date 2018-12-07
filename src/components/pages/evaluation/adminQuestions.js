@@ -6,7 +6,6 @@ import { bindActionCreators } from "redux";
 import { answerEvaluationQuestion, skipAdminQuestions } from "../../../actions/usersActions";
 import Select from "react-select";
 import axios from "axios";
-import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
 import { Slider } from "material-ui";
 import { CircularProgress } from "@material-ui/core";
