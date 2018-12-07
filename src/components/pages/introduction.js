@@ -7,7 +7,8 @@ import {
     onSignUpPage,
     closeNotification,
     addNotification,
-    setUserPosted
+    setUserPosted,
+    getColorsFromBusiness
 } from "../../actions/usersActions";
 import { Field, reduxForm } from "redux-form";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -285,7 +286,8 @@ function mapDispatchToProps(dispatch) {
             onSignUpPage,
             addNotification,
             closeNotification,
-            setUserPosted
+            setUserPosted,
+            getColorsFromBusiness
         },
         dispatch
     );

@@ -151,25 +151,28 @@ class Main extends Component {
     componentDidUpdate(prevProps) {
         if (
             prevProps.primaryColor !== this.props.primaryColor ||
-            prevProps.secondaryColor !== this.props.secondaryColor
+            prevProps.secondaryColor !== this.props.secondaryColor ||
+            prevProps.backgroundColor !== this.props.backgroundColor ||
+            prevProps.buttonTextColor !== this.props.buttonTextColor
         ) {
             const { primaryColor, secondaryColor } = this.props;
 
             this.setState({
-                theme: createMuiTheme({
-                    palette: {
-                        primary: {
-                            main: primaryColor ? primaryColor : "#ffffff"
-                        },
-                        secondary: {
-                            main: secondaryColor
-                                ? secondaryColor
-                                : primaryColor
-                                    ? primaryColor
-                                    : "#76defe"
-                        }
-                    }
-                })
+                theme: makeTheme(this.props)
+                // theme: createMuiTheme({
+                //     palette: {
+                //         primary: {
+                //             main: primaryColor ? primaryColor : "#ffffff"
+                //         },
+                //         secondary: {
+                //             main: secondaryColor
+                //                 ? secondaryColor
+                //                 : primaryColor
+                //                     ? primaryColor
+                //                     : "#76defe"
+                //         }
+                //     }
+                // })
             });
         }
     }
