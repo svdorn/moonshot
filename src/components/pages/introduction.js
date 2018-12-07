@@ -14,7 +14,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TextInput from "../userInput/textInput";
 import MetaTags from "react-meta-tags";
 import { renderTextField, isValidEmail, goTo } from "../../miscFunctions";
-import { Button } from "../miscComponents";
+import { Button, CheckBox } from "../miscComponents";
 import axios from "axios";
 
 import "./introduction.css";
@@ -126,7 +126,7 @@ class Introduction extends Component {
         this.props.postCandidate(user);
     };
 
-    handleCheckMarkClick() {
+    handleCheckMarkClick = () => {
         this.setState({
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
@@ -145,12 +145,13 @@ class Introduction extends Component {
         return (
             <div>
                 <div className="paddingTop50px marginBottom30px">
-                    <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">
+                    <div className="font38px font30pxUnder700 font24pxUnder500" style={{ color: this.props.primaryColor }}>
                         {this.state.company} Evaluation
                     </div>
                     <div
-                        className="font16px font14pxUnder700 font12pxUnder500 secondary-gray"
+                        className="font16px font14pxUnder700 font12pxUnder500"
                         styleName="powered-by"
+                        style={{ opacity: "0.6" }}
                     >
                         Powered by Moonshot Insights
                     </div>
@@ -164,23 +165,19 @@ class Introduction extends Component {
                 </div>
                 <div>
                     <TextInput name="name" label="Full Name" style={inputStyle} />
-                    <div style={{ margin: "5px 20px 10px" }}>
-                        <div
-                            className="checkbox smallCheckbox whiteCheckbox"
-                            onClick={this.handleCheckMarkClick.bind(this)}
-                        >
-                            <img
-                                alt=""
-                                className={"checkMark" + this.state.agreeingToTerms}
-                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            />
-                        </div>
+                    <div className="marginBottom20px">
+                        <CheckBox
+                            checked={this.state.agreeingToTerms}
+                            onClick={this.handleCheckMarkClick}
+                            size="medium"
+                            style={{ margin: "5px 20px 10px" }}
+                        />
                         I have read and agree to the Moonshot Insights
                         <br />
                         <a
                             href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                             target="_blank"
-                            className="primary-cyan hover-primary-cyan"
+                            style={{ color: this.props.primaryColor }}
                         >
                             privacy policy
                         </a>
@@ -188,7 +185,7 @@ class Introduction extends Component {
                         <a
                             href="https://www.docdroid.net/YJ5bhq5/terms-and-conditions.pdf"
                             target="_blank"
-                            className="primary-cyan hover-primary-cyan"
+                            style={{ color: this.props.primaryColor }}
                         >
                             terms of use
                         </a>.
@@ -210,15 +207,6 @@ class Introduction extends Component {
     render() {
         let content = this.createContent();
 
-        // scroll to the top if user posted
-        if (this.state.email != "" && this.props.userPosted) {
-            window.scroll({
-                top: 0,
-                left: 0,
-                behavior: "smooth"
-            });
-        }
-
         return (
             <div className="fillScreen">
                 <MetaTags>
@@ -228,7 +216,7 @@ class Introduction extends Component {
                         content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
-                <div className="center primary-white">{content}</div>
+                <div className="center">{content}</div>
             </div>
         );
     }
@@ -281,7 +269,9 @@ function mapStateToProps(state) {
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
         currentUser: state.users.currentUser,
-        png: state.users.png
+        png: state.users.png,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 

@@ -120,16 +120,16 @@ class MyEvaluations extends Component {
             },
             separatorText: {
                 padding: "0px 40px",
-                backgroundColor: "#2e2e2e",
+                backgroundColor: this.props.backgroundColor,
                 display: "inline-block",
                 position: "relative",
                 fontSize: "23px",
-                color: "white"
+                color: this.props.primaryColor
             },
             separatorLine: {
                 width: "100%",
                 height: "3px",
-                backgroundColor: "white",
+                backgroundColor: this.props.primaryColor,
                 position: "absolute",
                 top: "12px"
             },
@@ -139,7 +139,7 @@ class MyEvaluations extends Component {
             },
             menuLabelStyle: {
                 fontSize: "18px",
-                color: "white"
+                color: this.props.primaryColor
             }
         };
 
@@ -236,7 +236,7 @@ class MyEvaluations extends Component {
 
         return (
             <div
-                className="jsxWrapper blackBackground fillScreen"
+                className="jsxWrapper fillScreen"
                 style={{ paddingBottom: "20px" }}
                 ref="myEvaluations"
             >
@@ -277,7 +277,10 @@ function mapStateToProps(state) {
         updateUser,
         currentUser: state.users.currentUser,
         loading: state.users.loadingSomething,
-        png: state.users.png
+        png: state.users.png,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor,
+        backgroundColor: state.users.backgroundColor
     };
 }
 
