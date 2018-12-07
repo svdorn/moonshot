@@ -32,6 +32,11 @@ export function getUserFromSession(callback) {
                     payload: response.data,
                     isFetching: false
                 });
+                // Get correct color scheme for the user
+                const user = response.data.user;
+                if (user && user.primaryColor && user.backgroundColor) {
+                    dispatch(updateColors(user.primaryColor, user.backgroundColor));
+                }
                 callback(true);
             })
             .catch(function(err) {
