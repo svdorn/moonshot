@@ -70,13 +70,13 @@ class MyCandidates extends Component {
             // which position we should see candidates for
             position: "",
             // can sort by Name, Score, Hiring Stage, etc...
-            sortBy: "stage",
+            sortBy: "score",
             // the direction to sort in
-            sortAscending: false,
+            sortAscending: true,
             // hide candidates that have been dismissed?
-            hideDismissed: false,
+            hideDismissed: true,
             // hide candidates that have been hired?
-            hideHired: false,
+            hideHired: true,
             // unordered candidates list
             candidates: [],
             // the candidates ordered by the user
