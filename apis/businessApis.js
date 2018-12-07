@@ -69,6 +69,7 @@ const businessApis = {
     GET_billingInfo,
     GET_adminList,
     GET_candidateCount,
+    GET_colors,
 
     generateApiKey,
     createEmailInfo,
@@ -3430,6 +3431,49 @@ async function POST_uploadCandidateCSV(req, res) {
             console.log("Error sending email with candidates file: ", error);
             return res.status(500).send({ message: "Error uploading candidates file." });
         });
+}
+
+// get the colors of a business
+async function GET_colors(req, res) {
+    const { name } = req.query;
+
+    if (!name) {
+        return res.status(400).send({ message: "Bad request." });
+    }
+
+    // get the business the user works for
+    try {
+        const query = {
+            $or: [
+                { uniqueNameLowerCase: name.toLowerCase() },
+                {
+                    $and: [
+                        // if searching by name, company has to have been made
+                        // before searching by unique name was possible
+                        { name: name },
+                        {
+                            $or: [
+                                { dateCreated: { $lte: new Date("2018-09-27") } },
+                                { dateCreated: { $exists: false } }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+        var business = await Businesses.findOne(query).select(
+            "logo name backgroundColor primaryColor"
+        );
+    } catch (findBizError) {
+        console.log("Error finding business when getting colors: ", findBizError);
+        return res.status(500).send({ message: "Server error, couldn't get business colors." });
+    }
+
+    if (!business) {
+        return res.status(404).send({ message: "Invalid url" });
+    }
+
+    return res.json(business);
 }
 
 // creates a unique api key for a business

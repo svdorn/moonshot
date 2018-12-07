@@ -8,7 +8,8 @@ import {
     addNotification,
     openClaimPageModal,
     openAddPositionModal,
-    generalAction
+    generalAction,
+    getColorsFromBusiness
 } from "../../actions/usersActions";
 import { makePossessive } from "../../miscFunctions";
 import MetaTags from "react-meta-tags";
@@ -78,6 +79,9 @@ class Apply extends Component {
                 currentUser.businessInfo
             ) {
                 var businessId = this.props.currentUser.businessInfo.businessId;
+            }
+            if (!currentUser) {
+                this.props.getColorsFromBusiness(company);
             }
 
             // get the positions from the database with the name and signup code
@@ -421,7 +425,8 @@ function mapDispatchToProps(dispatch) {
             addNotification,
             openClaimPageModal,
             openAddPositionModal,
-            generalAction
+            generalAction,
+            getColorsFromBusiness
         },
         dispatch
     );

@@ -486,6 +486,21 @@ export function getBillingInfo(userId, verificationToken, businessId) {
     };
 }
 
+export function getColorsFromBusiness(name) {
+    return function(dispatch) {
+        axios
+            .get("/api/business/colors", { params: { name } })
+            .then(response => {
+                console.log("res: ",response);
+                dispatch(updateColors(response.data.primaryColor, response.data.backgroundColor, response.data.logo));
+            })
+            .catch(error => {
+                console.log(error);
+                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
 export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
     return function(dispatch) {
         axios
@@ -1027,6 +1042,35 @@ export function formError() {
 export function markFooterOnScreen(footerOnScreen) {
     return function(dispatch) {
         dispatch({ type: "MARK_FOOTER_ON_SCREEN", footerOnScreen });
+    };
+}
+
+function updateColors(primary, background, logo) {
+    return function(dispatch) {
+        let backgroundColor = "#ffffff";
+        let textColor = "#000000";
+        let primaryColor = "#0000ff";
+        // TODO: DELETE THE dispatches AND MAKE NEW ONES PROBABLY
+        if (background === "white") {
+            // white backgroound
+            backgroundColor = "#ffffff";
+            textColor = "#000000";
+        } else {
+            // black background
+            backgroundColor = "#2e2e2e";
+            textColor = "#ffffff";
+        }
+
+        if (primary) {
+            primaryColor = primary;
+        }
+
+        dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: primaryColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
+
+        document.body.style.backgroundColor = backgroundColor;
+        document.body.style.color = textColor;
     };
 }
 

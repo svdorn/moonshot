@@ -229,6 +229,7 @@ app.get("/business/billingIsSetUp", businessApis.GET_billingIsSetUp);
 app.get("/business/billingInfo", businessApis.GET_billingInfo);
 app.get("/business/adminList", businessApis.GET_adminList);
 app.get("/business/candidateCount", businessApis.GET_candidateCount);
+app.get("/business/colors", businessApis.GET_colors);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);
