@@ -661,117 +661,117 @@ class Menu extends Component {
                     );
                     break;
                 }
-                case "dropDown":
-                    // the options that will be shown in the dropDown menu
-                    let dropDownItems = [];
-                    option.components.forEach(function(dropDownOption) {
-                        switch (dropDownOption.optionType) {
-                            case "url":
-                                // add the menu item to the dropDown
-                                dropDownItems.push(
-                                    <MenuItem
-                                        key={dropDownOption.title + " desktop"}
-                                        value={dropDownOption.title}
-                                        primaryText={dropDownOption.title}
-                                    />
-                                );
-                                // no dropDowns on mobile menu
-                                mobileMenu.push(
-                                    <MenuItem
-                                        key={dropDownOption.title + " mobile"}
-                                        primaryText={dropDownOption.title}
-                                        onClick={() =>
-                                            self.selectAndGoTo(
-                                                dropDownOption.url,
-                                                dropDownOption.title
-                                            )
-                                        }
-                                    />
-                                );
-                                break;
-                            case "divider":
-                                // add divider, only for desktop dropDown
-                                dropDownItems.push(<Divider key={"divider"} />);
-                                break;
-                            case "signOut":
-                                // add sign out option to dropDown on desktop
-                                dropDownItems.push(
-                                    <MenuItem
-                                        key={"signOut desktop"}
-                                        value="Sign Out"
-                                        primaryText="Sign Out"
-                                    />
-                                );
-                                // add sign out option to regular menu on mobile
-                                mobileMenu.push(
-                                    <MenuItem
-                                        key={"signOut mobile"}
-                                        primaryText="Sign out"
-                                        onClick={() => self.signOut()}
-                                    />
-                                );
-                                break;
-                            case "text":
-                                // add text to desktop menu
-                                dropDownItems.push(
-                                    <MenuItem
-                                        value="Name"
-                                        disabled
-                                        primaryText={dropDownOption.title}
-                                    />
-                                );
-                                // add text to mobile menu
-                                mobileMenu.push(
-                                    <MenuItem
-                                        style={{ color: "#00c3ff" }}
-                                        disabled
-                                        primaryText={dropDownOption.title}
-                                    />
-                                );
-                                break;
-                            default:
-                                break;
-                        }
-                    });
-                    let desktopDropDown = (
-                        <DropDownMenu
-                            key={"desktop dropDown"}
-                            value={self.state.dropDownSelected}
-                            onChange={self.handleDropDownItemClick}
-                            underlineStyle={styles.underlineStyle}
-                            anchorOrigin={styles.anchorOrigin}
-                            style={{ fontSize: "14px", marginTop: "21px" }}
-                            className={dropdownClass}
-                            id="menuDropdown"
-                        >
-                            {dropDownItems}
-                        </DropDownMenu>
-                    );
-                    // add the dropDown to the menu - only needed on desktop
-                    // because the options have already been added on mobile
-                    desktopMenu.push(desktopDropDown);
-                    break;
-                case "signOut":
-                    // add sign out button to desktop menu
-                    desktopMenu.push(
-                        <p
-                            key={"signOut desktop"}
-                            className={menuItemClass}
-                            style={{ borderColor: textColor }}
-                            onClick={() => self.signOut()}
-                        >
-                            "Sign Out"
-                        </p>
-                    );
-                    // add sign out button to mobile menu
-                    mobileMenu.push(
-                        <MenuItem
-                            key={"signOut mobile"}
-                            primaryText="Sign out"
-                            onClick={() => self.signOut()}
-                        />
-                    );
-                    break;
+                // case "dropDown":
+                //     // the options that will be shown in the dropDown menu
+                //     let dropDownItems = [];
+                //     option.components.forEach(function(dropDownOption) {
+                //         switch (dropDownOption.optionType) {
+                //             case "url":
+                //                 // add the menu item to the dropDown
+                //                 dropDownItems.push(
+                //                     <MenuItem
+                //                         key={dropDownOption.title + " desktop"}
+                //                         value={dropDownOption.title}
+                //                         primaryText={dropDownOption.title}
+                //                     />
+                //                 );
+                //                 // no dropDowns on mobile menu
+                //                 mobileMenu.push(
+                //                     <MenuItem
+                //                         key={dropDownOption.title + " mobile"}
+                //                         primaryText={dropDownOption.title}
+                //                         onClick={() =>
+                //                             self.selectAndGoTo(
+                //                                 dropDownOption.url,
+                //                                 dropDownOption.title
+                //                             )
+                //                         }
+                //                     />
+                //                 );
+                //                 break;
+                //             case "divider":
+                //                 // add divider, only for desktop dropDown
+                //                 dropDownItems.push(<Divider key={"divider"} />);
+                //                 break;
+                //             case "signOut":
+                //                 // add sign out option to dropDown on desktop
+                //                 dropDownItems.push(
+                //                     <MenuItem
+                //                         key={"signOut desktop"}
+                //                         value="Sign Out"
+                //                         primaryText="Sign Out"
+                //                     />
+                //                 );
+                //                 // add sign out option to regular menu on mobile
+                //                 mobileMenu.push(
+                //                     <MenuItem
+                //                         key={"signOut mobile"}
+                //                         primaryText="Sign out"
+                //                         onClick={() => self.signOut()}
+                //                     />
+                //                 );
+                //                 break;
+                //             case "text":
+                //                 // add text to desktop menu
+                //                 dropDownItems.push(
+                //                     <MenuItem
+                //                         value="Name"
+                //                         disabled
+                //                         primaryText={dropDownOption.title}
+                //                     />
+                //                 );
+                //                 // add text to mobile menu
+                //                 mobileMenu.push(
+                //                     <MenuItem
+                //                         style={{ color: "#00c3ff" }}
+                //                         disabled
+                //                         primaryText={dropDownOption.title}
+                //                     />
+                //                 );
+                //                 break;
+                //             default:
+                //                 break;
+                //         }
+                //     });
+                //     let desktopDropDown = (
+                //         <DropDownMenu
+                //             key={"desktop dropDown"}
+                //             value={self.state.dropDownSelected}
+                //             onChange={self.handleDropDownItemClick}
+                //             underlineStyle={styles.underlineStyle}
+                //             anchorOrigin={styles.anchorOrigin}
+                //             style={{ fontSize: "14px", marginTop: "21px" }}
+                //             className={dropdownClass}
+                //             id="menuDropdown"
+                //         >
+                //             {dropDownItems}
+                //         </DropDownMenu>
+                //     );
+                //     // add the dropDown to the menu - only needed on desktop
+                //     // because the options have already been added on mobile
+                //     desktopMenu.push(desktopDropDown);
+                //     break;
+                // case "signOut":
+                //     // add sign out button to desktop menu
+                //     desktopMenu.push(
+                //         <p
+                //             key={"signOut desktop"}
+                //             className={menuItemClass}
+                //             style={{ borderColor: textColor }}
+                //             onClick={() => self.signOut()}
+                //         >
+                //             "Sign Out"
+                //         </p>
+                //     );
+                //     // add sign out button to mobile menu
+                //     mobileMenu.push(
+                //         <MenuItem
+                //             key={"signOut mobile"}
+                //             primaryText="Sign out"
+                //             onClick={() => self.signOut()}
+                //         />
+                //     );
+                //     break;
                 default:
                     break;
             }
@@ -779,15 +779,15 @@ class Menu extends Component {
 
         // dropDown menu only appears if there is a user logged in, so if one
         // is logged in, show the line that shows up when a dropDown item is selected
-        if (currentUser) {
-            desktopMenu.push(
-                <div
-                    key={"underline"}
-                    className="menuUnderline"
-                    style={{ width: underlineWidth }}
-                />
-            );
-        }
+        // if (currentUser) {
+        //     desktopMenu.push(
+        //         <div
+        //             key={"underline"}
+        //             className="menuUnderline"
+        //             style={{ width: underlineWidth }}
+        //         />
+        //     );
+        // }
 
         let menu = (
             <header
