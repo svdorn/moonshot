@@ -3,9 +3,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { CircularProgress, Dialog, DialogActions } from "@material-ui/core";
-import { closeLogoutModal } from "../../actions/usersActions";
-import { isWhiteOrUndefined } from "../../miscFunctions";
+import { closeLogoutModal, signout } from "../../actions/usersActions";
+import { isWhiteOrUndefined, goTo } from "../../miscFunctions";
 import { Button } from "../miscComponents";
+
+import "./logoutModal.css";
 
 class LogoutModal extends Component {
     constructor(props) {
@@ -24,13 +26,31 @@ class LogoutModal extends Component {
         }
     }
 
+    // sign out of user's account
+    signOut = () => {
+        let self = this;
+
+        this.props.signout(() => {
+            self.handleClose();
+            goTo("/");
+        });
+    };
+
     handleClose = () => {
         this.props.closeLogoutModal();
     };
 
     render() {
         let dialogBody = (
-
+            <div styleName="body">
+                <div style={{ color: this.props.primaryColor }} className="font22px font18pxUnder500">Log Out</div>
+                <div>Are you sure you want to log out? By doing so, you won{"'"}t be able to access your account again.</div>
+                <div styleName="yes-or-no" className="font18px font16pxUnder700 font14pxUnder500">
+                    <div onClick={this.signOut}>Yes</div>
+                    <div>|</div>
+                    <div onClick={this.handleClose}>No</div>
+                </div>
+            </div>
         );
 
         return (
@@ -60,14 +80,16 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         open: state.users.logoutModal,
         loading: state.users.loadingSomething,
-        textColor: state.users.textColor
+        textColor: state.users.textColor,
+        primaryColor: state.users.primaryColor
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            closeLogoutModal
+            closeLogoutModal,
+            signout
         },
         dispatch
     );

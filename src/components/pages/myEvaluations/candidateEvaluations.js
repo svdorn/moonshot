@@ -25,6 +25,7 @@ import {
 import MetaTags from "react-meta-tags";
 import axios from "axios";
 import MyEvaluationsPreview from "../../childComponents/myEvaluationsPreview";
+import LogoutModal from "../../childComponents/logoutModal";
 import { Button } from "../../miscComponents";
 import { goTo } from "../../../miscFunctions";
 
@@ -244,6 +245,8 @@ class MyEvaluations extends Component {
                     <title>My Evaluations | Moonshot</title>
                     <meta name="description" content="See and take your active evaluations!" />
                 </MetaTags>
+
+                <LogoutModal />
 
                 <div style={style.separator}>
                     <div style={style.separatorLine} />
