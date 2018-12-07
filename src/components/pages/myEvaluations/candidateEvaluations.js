@@ -20,8 +20,7 @@ import {
     addNotification,
     startLoading,
     stopLoading,
-    updateUser,
-    signout
+    updateUser
 } from "../../../actions/usersActions";
 import MetaTags from "react-meta-tags";
 import axios from "axios";
@@ -108,12 +107,6 @@ class MyEvaluations extends Component {
         } else {
             this.props.addNotification("You aren't logged in! Try refreshing the page.", "error");
         }
-    }
-
-    signOut = () => {
-        this.props.signout(() => {
-            goTo("/");
-        });
     }
 
     render() {
@@ -262,15 +255,6 @@ class MyEvaluations extends Component {
                 {verifyBanner}
 
                 <div className="marginBottom20px">{evaluations}</div>
-
-                {this.state.positions.length > 0 ?
-                    <div className="myEvalsLogOut">
-                        <Button onClick={this.signOut}>
-                            Log Out
-                        </Button>
-                    </div>
-                    : null
-                }
             </div>
         );
     }
@@ -282,8 +266,7 @@ function mapDispatchToProps(dispatch) {
             addNotification,
             startLoading,
             stopLoading,
-            updateUser,
-            signout
+            updateUser
         },
         dispatch
     );
