@@ -538,6 +538,20 @@ export function getColorsFromBusiness(name) {
     };
 }
 
+export function setDefaultColors() {
+    return function(dispatch) {
+        dispatch(
+            updateColors(
+                MOONSHOT_CYAN,
+                MOONSHOT_BLACK,
+                MOONSHOT_LOGO,
+                MOONSHOT_WHITE,
+                undefined
+            )
+        );
+    }
+}
+
 export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
     return function(dispatch) {
         axios

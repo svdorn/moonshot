@@ -9,7 +9,8 @@ import {
     openClaimPageModal,
     openAddPositionModal,
     generalAction,
-    getColorsFromBusiness
+    getColorsFromBusiness,
+    setDefaultColors
 } from "../../actions/usersActions";
 import { makePossessive } from "../../miscFunctions";
 import MetaTags from "react-meta-tags";
@@ -56,7 +57,7 @@ class Apply extends Component {
             );
         }
 
-        if (!currentUser && (!this.props.location.query || !this.props.location.query.onboarding)) {
+        if ((!this.props.location.query || !this.props.location.query.onboarding)) {
             this.props.getColorsFromBusiness(company);
         }
     }
@@ -124,6 +125,14 @@ class Apply extends Component {
                     goTo("/");
                     self.props.addNotification(err, "error");
                 });
+        }
+    }
+
+    componentWillUnmount() {
+        const { currentUser } = this.props;
+
+        if (currentUser && currentUser.userType === "accountAdmin") {
+            this.props.setDefaultColors();
         }
     }
 
@@ -459,7 +468,8 @@ function mapDispatchToProps(dispatch) {
             openClaimPageModal,
             openAddPositionModal,
             generalAction,
-            getColorsFromBusiness
+            getColorsFromBusiness,
+            setDefaultColors
         },
         dispatch
     );
