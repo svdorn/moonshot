@@ -1111,16 +1111,17 @@ function updateColors(primary, background, logo, secondary, buttonTextColor) {
 
         if (primary) {
             primaryColor = primary;
+            if (!secondary) {
+                secondaryColor = primaryColor;
+            } else {
+                secondaryColor = secondary;
+            }
         } else {
             primaryColor = MOONSHOT_CYAN;
+            secondaryColor = MOONSHOT_WHITE;
         }
         if (!logo) {
             logo = MOONSHOT_LOGO;
-        }
-        if (!secondary) {
-            secondaryColor = primaryColor;
-        } else {
-            secondaryColor = secondary;
         }
 
         dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
