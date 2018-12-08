@@ -16,7 +16,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup } from "material-ui";
 import { primaryCyan } from "../../../../../colors";
 import axios from "axios";
-import { ShiftArrow, Button } from "../../../../miscComponents/ShiftArrow";
+import { ShiftArrow, Button } from "../../../../miscComponents";
 
 import "../../dashboard.css";
 
