@@ -14,7 +14,7 @@ import {
 import { makePossessive } from "../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import { goTo } from "../../miscFunctions";
-import { HoverTip, Button } from "../miscComponents";
+import { HoverTip, Button, ShiftArrow } from "../miscComponents";
 import ClaimPageModal from "./dashboard/dashboardItems/onboarding/childComponents/claimPageModal";
 import ModalSignup from "./dashboard/dashboardItems/onboarding/childComponents/modalSignup";
 import AddPositionDialog from "../childComponents/addPositionDialog";
@@ -290,7 +290,7 @@ class Apply extends Component {
                         evaluation.
                     </div>
                     <div onClick={this.openClaimPageModal}>
-                        Claim This Page <img src={`/icons/ArrowBlue${this.props.png}`} />
+                        Claim This Page <ShiftArrow color="cyan" width="14px" />
                     </div>
                 </div>
             </div>
@@ -323,7 +323,7 @@ class Apply extends Component {
                         to activate this page. If you are the administrator:
                     </div>
                     <div onClick={() => goTo("/dashboard")}>
-                        Verify Your Email <img src={`/icons/ArrowBlue${this.props.png}`} />
+                        Verify Your Email <ShiftArrow color="cyan" width="14px" />
                     </div>
                 </div>
             </div>
