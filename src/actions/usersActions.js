@@ -29,6 +29,7 @@ export function getUserFromSession(callback, wait) {
                 // Get correct color scheme for the user
                 const user = response.data.user;
                 if (user && user.primaryColor && user.backgroundColor) {
+                    console.log("user.buttonTextColor: ", user.buttonTextColor);
                     dispatch(
                         updateColors(
                             user.primaryColor,
