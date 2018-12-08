@@ -248,13 +248,15 @@ class Apply extends Component {
         return (
             <div>
                 <div>
-                    <Button disabled={true} style={{ padding: "6px 20px" }}>
-                        Next
-                    </Button>
+                    <div style={{ display: "inline-block" }}>
+                        <Button disabled={true} style={{ padding: "6px 20px" }}>
+                            Next
+                        </Button>
+                    </div>
                     <HoverTip
                         className="font14px secondary-gray"
                         style={{ marginTop: "40px", marginLeft: "-6px" }}
-                        text="After candidates press next, they sign up to complete your evaluation."
+                        text="After candidates press next, they proceed to complete your evaluation."
                     />
                 </div>
                 <div styleName="employer-box">
@@ -267,34 +269,34 @@ class Apply extends Component {
         );
     }
 
-    // info for somebody about to create an account
-    claimPage() {
-        return (
-            <div>
-                <div>
-                    <Button style={{ padding: "6px 20px" }} disabled={true}>
-                        Next
-                    </Button>
-                    <HoverTip
-                        className="font14px secondary-gray"
-                        style={{ marginTop: "40px", marginLeft: "-6px" }}
-                        text="After candidates press next, they sign up to complete your evaluation."
-                    />
-                </div>
-                <div styleName="employer-box">
-                    <div>
-                        This is {makePossessive(this.state.company)} candidate invite page. New
-                        evaluations will automatically be added to your dropdown list above. All of
-                        your candidates can visit the link to this page to complete their
-                        evaluation.
-                    </div>
-                    <div onClick={this.openClaimPageModal}>
-                        Claim This Page <ShiftArrow color="cyan" width="14px" />
-                    </div>
-                </div>
-            </div>
-        );
-    }
+    // // info for somebody about to create an account
+    // claimPage() {
+    //     return (
+    //         <div>
+    //             <div>
+    //                 <Button style={{ padding: "6px 20px" }} disabled={true}>
+    //                     Next
+    //                 </Button>
+    //                 <HoverTip
+    //                     className="font14px secondary-gray"
+    //                     style={{ marginTop: "40px", marginLeft: "-6px" }}
+    //                     text="After candidates press next, they sign up to complete your evaluation."
+    //                 />
+    //             </div>
+    //             <div styleName="employer-box">
+    //                 <div>
+    //                     This is {makePossessive(this.state.company)} candidate invite page. New
+    //                     evaluations will automatically be added to your dropdown list above. All of
+    //                     your candidates can visit the link to this page to complete their
+    //                     evaluation.
+    //                 </div>
+    //                 <div onClick={this.openClaimPageModal}>
+    //                     Claim This Page <ShiftArrow color="cyan" width="14px" />
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     // returns a button that lets you sign up
     nextButton() {
