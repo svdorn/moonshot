@@ -1095,7 +1095,6 @@ export function markFooterOnScreen(footerOnScreen) {
 
 function updateColors(primary, background, logo, secondary, buttonTextColor) {
     return function(dispatch) {
-        console.log("updating colors");
         let backgroundColor;
         let textColor;
         let primaryColor;

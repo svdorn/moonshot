@@ -56,7 +56,6 @@ class Apply extends Component {
             );
         }
 
-        console.log("this.props.location: ", this.props.location);
         if (!currentUser && (!this.props.location.query || !this.props.location.query.onboarding)) {
             this.props.getColorsFromBusiness(company);
         }
