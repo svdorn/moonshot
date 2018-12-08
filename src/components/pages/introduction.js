@@ -203,7 +203,7 @@ class Introduction extends Component {
                             checked={this.state.agreeingToTerms}
                             onClick={this.handleCheckMarkClick}
                             size="small"
-                            style={{ margin: "0px 5px 0" }}
+                            style={{ margin: "0px 5px 2px" }}
                         />
                         I have read and agree to the Moonshot Insights
                         <br />
