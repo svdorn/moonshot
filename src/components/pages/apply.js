@@ -56,7 +56,8 @@ class Apply extends Component {
             );
         }
 
-        if (!currentUser) {
+        console.log("this.props.location: ", this.props.location);
+        if (!currentUser && (!this.props.location.query || !this.props.location.query.onboarding)) {
             this.props.getColorsFromBusiness(company);
         }
     }
@@ -154,7 +155,8 @@ class Apply extends Component {
 
         const { textColor } = this.props;
         const iconClass =
-            !textColor || textColor.toLowerCase() == "white" || textColor.toLowerCase() == "#ffffff"
+            textColor &&
+            (textColor.toLowerCase() == "white" || textColor.toLowerCase() == "#ffffff")
                 ? "selectIconWhiteImportant"
                 : "";
 
@@ -349,9 +351,10 @@ class Apply extends Component {
             content = (
                 <div>
                     <div className="paddingTop50px marginBottom30px">
-                        <div className="font38px font30pxUnder700 font24pxUnder500"
-                             style={{ color: this.props.primaryColor }}
-                            >
+                        <div
+                            className="font38px font30pxUnder700 font24pxUnder500"
+                            style={{ color: this.props.primaryColor }}
+                        >
                             {this.state.company} Evaluation
                         </div>
                         <div
@@ -413,14 +416,15 @@ class Apply extends Component {
                     (this.props.blurLeadDashboard ? " blur" : "")
                 }
             >
-                {this.state.company ?
+                {this.state.company ? (
                     <MetaTags>
                         <title>Apply | {this.state.company}</title>
-                        <meta name="description" content="Apply to a company by taking an evaluation." />
+                        <meta
+                            name="description"
+                            content="Apply to a company by taking an evaluation."
+                        />
                     </MetaTags>
-                    :
-                    null
-                }
+                ) : null}
 
                 <ClaimPageModal company={this.state.company} />
                 <ModalSignup />

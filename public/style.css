@@ -8,9 +8,9 @@ body {
     min-width: var(--min-screen-width);
     overflow-x: hidden;
 
-    /* -webkit-transition: background-color 0.5s ease;
+    -webkit-transition: background-color 0.5s ease;
     -ms-transition: background-color 0.5s ease;
-    transition: background-color 0.5s ease; */
+    transition: background-color 0.5s ease;
 }
 
 #app {

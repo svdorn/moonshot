@@ -28,8 +28,8 @@ export function getUserFromSession(callback, wait) {
                 });
                 // Get correct color scheme for the user
                 const user = response.data.user;
+                console.log("user: ", user);
                 if (user && user.primaryColor && user.backgroundColor) {
-                    console.log("user.buttonTextColor: ", user.buttonTextColor);
                     dispatch(
                         updateColors(
                             user.primaryColor,
@@ -533,7 +533,7 @@ export function getColorsFromBusiness(name) {
             })
             .catch(error => {
                 console.log(error);
-                dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+                // dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
             });
     };
 }
@@ -695,7 +695,13 @@ export function signout(callback) {
             .then(function(response) {
                 dispatch({ type: "SIGNOUT" });
                 dispatch(
-                    updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO, MOONSHOT_WHITE)
+                    updateColors(
+                        MOONSHOT_CYAN,
+                        MOONSHOT_BLACK,
+                        MOONSHOT_LOGO,
+                        MOONSHOT_WHITE,
+                        "#000000"
+                    )
                 );
                 if (typeof callback === "function") {
                     callback();
@@ -1089,6 +1095,7 @@ export function markFooterOnScreen(footerOnScreen) {
 
 function updateColors(primary, background, logo, secondary, buttonTextColor) {
     return function(dispatch) {
+        console.log("updating colors");
         let backgroundColor;
         let textColor;
         let primaryColor;

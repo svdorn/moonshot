@@ -606,11 +606,9 @@ function POST_candidate(req, res) {
         if (business.headerLogo) {
             user.logo = business.headerLogo;
         }
-        console.log("business.buttonTextColor: ", business.buttonTextColor);
         if (business.buttonTextColor) {
             user.buttonTextColor = business.buttonTextColor;
         }
-        console.log("user.buttonTextColor: ", user.buttonTextColor);
 
         // make the user db object
         try {

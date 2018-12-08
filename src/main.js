@@ -72,12 +72,12 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 // END NEW MUI THEME
 
 const makeTheme = props => {
-    const primaryColor = props.primaryColor ? props.primaryColor : "#ffffff";
+    const primaryColor = props.primaryColor ? props.primaryColor : "#76defe";
     const secondaryColor = props.secondaryColor
         ? props.secondaryColor
         : props.primaryColor
             ? props.primaryColor
-            : "#76defe";
+            : "#ffffff";
 
     const primary = { main: primaryColor };
     let secondary = { main: secondaryColor };
@@ -104,11 +104,13 @@ class Main extends Component {
 
     componentDidMount() {
         const self = this;
+        const { location } = this.props;
         if (
-            this.props.location &&
-            this.props.location.pathname &&
-            (this.props.location.pathname.toLowerCase().startsWith("/apply/") ||
-                this.props.location.pathname.toLowerCase().startsWith("/introduction"))
+            location &&
+            location.pathname &&
+            ((location.pathname.toLowerCase().startsWith("/apply/") &&
+                (!location.query || !location.query.onboarding)) ||
+                location.pathname.toLowerCase().startsWith("/introduction"))
         ) {
             var wait = true;
         }

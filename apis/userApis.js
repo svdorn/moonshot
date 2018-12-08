@@ -413,8 +413,6 @@ async function GET_session(req, res) {
                 }
             }
 
-            console.log("user.buttonTextColor", user.buttonTextColor);
-
             return res.json({ user: frontEndUser(user), fullAccess });
         }
     } catch (getUserError) {
@@ -508,12 +506,10 @@ async function POST_addEmailToUser(req, res) {
     Users.find({ email })
         .then(foundUsers => {
             if (foundUsers.length > 0) {
-                return res
-                    .status(400)
-                    .send({
-                        message:
-                            "An account with that email address already exists. Enter a different email."
-                    });
+                return res.status(400).send({
+                    message:
+                        "An account with that email address already exists. Enter a different email."
+                });
             }
         })
         .catch(findUserError => {
