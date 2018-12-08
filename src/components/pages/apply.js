@@ -300,7 +300,7 @@ class Apply extends Component {
     // returns a button that lets you sign up
     nextButton() {
         return (
-            <Button onClick={this.handleSignUp} color="secondary" style={{ padding: "6px 20px" }}>
+            <Button onClick={this.handleSignUp} style={{ padding: "6px 20px" }}>
                 Next
             </Button>
         );
