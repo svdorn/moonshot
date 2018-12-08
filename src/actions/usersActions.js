@@ -1112,6 +1112,8 @@ function updateColors(primary, background, logo, secondary, buttonTextColor) {
 
         if (primary) {
             primaryColor = primary;
+        } else {
+            primaryColor = MOONSHOT_CYAN;
         }
         if (!logo) {
             logo = MOONSHOT_LOGO;
