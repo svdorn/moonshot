@@ -1029,7 +1029,7 @@ form > h1 {
 .menuDivider {
     width: 2px;
     height: 21px;
-    /* background-color: white; */
+    background-color: white;
     margin: 30px 15px 0px 15px;
 }
 .menuDivider.loggedOut {
