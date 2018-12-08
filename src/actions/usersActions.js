@@ -3,8 +3,14 @@ import axios from "axios";
 import { reset } from "redux-form";
 import { goTo, propertyExists, makeSingular } from "../miscFunctions";
 
+const MOONSHOT_BLACK = "#2a2a2a";
+const MOONSHOT_WHITE = "#ffffff";
+const MOONSHOT_CYAN = "#76defe";
+const TEXT_BLACK = "#000000";
+const MOONSHOT_LOGO = "MoonshotWhite";
+
 // GET USER FROM SESSION
-export function getUserFromSession(callback) {
+export function getUserFromSession(callback, wait) {
     return function(dispatch) {
         dispatch({
             type: "GET_USER_FROM_SESSION_REQUEST",
@@ -20,6 +26,32 @@ export function getUserFromSession(callback) {
                     payload: response.data,
                     isFetching: false
                 });
+                // Get correct color scheme for the user
+                const user = response.data.user;
+                console.log("user: ", user);
+                if (user && user.primaryColor && user.backgroundColor) {
+                    dispatch(
+                        updateColors(
+                            user.primaryColor,
+                            user.backgroundColor,
+                            user.logo,
+                            user.secondaryColor,
+                            user.buttonTextColor
+                        )
+                    );
+                } else {
+                    if (!wait) {
+                        dispatch(
+                            updateColors(
+                                MOONSHOT_CYAN,
+                                MOONSHOT_BLACK,
+                                MOONSHOT_LOGO,
+                                MOONSHOT_WHITE,
+                                undefined
+                            )
+                        );
+                    }
+                }
                 callback(true);
             })
             .catch(function(err) {
@@ -54,6 +86,9 @@ export function openAddPositionModal() {
 
 export function closeAddPositionModal() {
     return function(dispatch) {
+        // reset the form
+        dispatch(reset("addPosition"));
+        // close the modal
         dispatch({ type: "CLOSE_ADD_POSITION_MODAL" });
     };
 }
@@ -151,6 +186,18 @@ export function closeContactUsModal() {
     };
 }
 
+export function openLogoutModal() {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_LOGOUT_MODAL" });
+    };
+}
+
+export function closeLogoutModal() {
+    return function(dispatch) {
+        dispatch({ type: "CLOSE_LOGOUT_MODAL" });
+    };
+}
+
 // general action to just call a reducer that has no additional arguments
 export function generalAction(type) {
     return function(dispatch) {
@@ -234,7 +281,7 @@ export function intercomEvent(eventName, userId, verificationToken, metadata) {
                 if (response.data.temp) {
                     dispatch({ type: "INTERCOM_EVENT_TEMP", user: response.data.user });
                 } else {
-                    dispatch({ type: "INTERCOM_EVENT" });
+                    dispatch({ type: "INTERCOM_EVENT", user: response.data.user });
                 }
             })
             .catch(function(err) {
@@ -307,6 +354,25 @@ export function updateUser(user) {
     };
 }
 
+export function addEmailToUser(userId, verificationToken, email) {
+    return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
+        axios
+            .post("/api/user/addEmailToUser", { userId, verificationToken, email })
+            .then(response => {
+                goTo("/finished");
+                dispatch({ type: "STOP_LOADING" });
+            })
+            .catch(function(err) {
+                dispatch({
+                    type: "ADD_EMAIL_TO_USER_REJECTED",
+                    ...notification(err, "error")
+                });
+            });
+    };
+}
+
 // save an answer for ANY eval component (AdminQuestion, PsychQuestion, GCAQuestion, SkillQuestion)
 export function answerEvaluationQuestion(evalComponent, options) {
     return function(dispatch) {
@@ -354,13 +420,17 @@ function updateEvalState(dispatch, data) {
     }
     // if the user finished the eval
     if (data.evaluationState.component === "Finished") {
-        // go home
-        goTo("/myEvaluations");
-        // add a notification saying they finished the eval
-        dispatch({
-            type: "ADD_NOTIFICATION",
-            ...notification("Congratulations, you finished the evaluation!")
-        });
+        if (data.user && !data.user.email) {
+            goTo("/finishEvaluation");
+        } else {
+            // go home
+            goTo("/myEvaluations");
+            // add a notification saying they finished the eval
+            dispatch({
+                type: "ADD_NOTIFICATION",
+                ...notification("Congratulations, you finished the evaluation!")
+            });
+        }
     }
     dispatch({
         type: "UPDATE_EVALUATION_STATE",
@@ -446,6 +516,42 @@ export function getBillingInfo(userId, verificationToken, businessId) {
     };
 }
 
+export function getColorsFromBusiness(name) {
+    return function(dispatch) {
+        axios
+            .get("/api/business/colors", { params: { name } })
+            .then(response => {
+                dispatch(
+                    updateColors(
+                        response.data.primaryColor,
+                        response.data.backgroundColor,
+                        response.data.headerLogo,
+                        undefined,
+                        response.data.buttonTextColor
+                    )
+                );
+            })
+            .catch(error => {
+                console.log(error);
+                // dispatch({ type: "FAILURE_BILLING_CUSTOMER", ...notification(error, "error") });
+            });
+    };
+}
+
+export function setDefaultColors() {
+    return function(dispatch) {
+        dispatch(
+            updateColors(
+                MOONSHOT_CYAN,
+                MOONSHOT_BLACK,
+                MOONSHOT_LOGO,
+                MOONSHOT_WHITE,
+                undefined
+            )
+        );
+    }
+}
+
 export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
     return function(dispatch) {
         axios
@@ -461,7 +567,9 @@ export function setupBillingCustomer(source, email, userId, verificationToken, s
                     type: "SUCCESS_BILLING_CUSTOMER",
                     billing: response.data.billing,
                     fullAccess: response.data.fullAccess,
-                    ...notification(`You have successfully added your ${makeSingular(subscriptionTerm)} plan`)
+                    ...notification(
+                        `You have successfully added your ${makeSingular(subscriptionTerm)} plan`
+                    )
                 });
             })
             .catch(error => {
@@ -600,6 +708,15 @@ export function signout(callback) {
             .post("/api/user/signOut")
             .then(function(response) {
                 dispatch({ type: "SIGNOUT" });
+                dispatch(
+                    updateColors(
+                        MOONSHOT_CYAN,
+                        MOONSHOT_BLACK,
+                        MOONSHOT_LOGO,
+                        MOONSHOT_WHITE,
+                        "#000000"
+                    )
+                );
                 if (typeof callback === "function") {
                     callback();
                 }
@@ -638,10 +755,15 @@ export function createBusinessAndUser(userInfo, customErrorAction) {
                     type: "LOGIN",
                     user: response.data.user,
                     fullAccess: response.data.fullAccess,
-                    ...notification("Your account has been activated! Thanks for signing up!")
+                    ...notification(
+                        `Your account has been activated! Continue to set things up for ${
+                            userInfo.company
+                        }.`
+                    )
                 });
                 dispatch({ type: "UPDATE_STORE", variableName: "blurLeadDashboard", value: false });
                 dispatch({ type: "UPDATE_STORE", variableName: "blurMenu", value: false });
+                dispatch({ type: "CLOSE_SIGNUP_MODAL" });
                 dispatch({ type: "CLOSE_CLAIM_PAGE_MODAL" });
                 goTo("/dashboard");
                 if (userInfo.verificationModal) {
@@ -690,20 +812,33 @@ export function setUserPosted() {
     };
 }
 
-// POST USER
-export function postUser(user) {
+// POST CANDIDATE
+export function postCandidate(user) {
     return function(dispatch) {
         dispatch({ type: "POST_USER_REQUESTED" });
 
         axios
             .post("/api/candidate/candidate", user)
             .then(response => {
+                const returnedUser = response.data.user;
                 dispatch({
                     type: "POST_USER",
-                    user: response.data.user,
+                    user: returnedUser,
                     fullAccess: response.data.fullAccess
                 });
-                goTo("/myEvaluations");
+
+                if (returnedUser && returnedUser.positions) {
+                    const position = returnedUser.positions[0];
+                    if (position && position.businessId && position.positionId) {
+                        goTo(
+                            `/evaluation/${position.businessId}/${position.positionId}?start=true`
+                        );
+                    } else {
+                        goTo("/myEvaluations");
+                    }
+                } else {
+                    goTo("/myEvaluations");
+                }
             })
             .catch(error => {
                 // standard error message
@@ -720,6 +855,37 @@ export function postUser(user) {
                     }
                     // if no user created, see if there is an error message
                     else if (typeof data.message === "string") {
+                        message = data.message;
+                    }
+                }
+                dispatch({ type: "POST_USER_REJECTED", ...notification(message, "error") });
+            });
+    };
+}
+
+// POST USER
+export function postUser(user) {
+    return function(dispatch) {
+        dispatch({ type: "POST_USER_REQUESTED" });
+
+        axios
+            .post("/api/candidate/user", user)
+            .then(response => {
+                dispatch({
+                    type: "POST_USER",
+                    user: response.data.user,
+                    fullAccess: response.data.fullAccess
+                });
+                goTo("/myEvaluations");
+            })
+            .catch(error => {
+                // standard error message
+                let message = "Could not create account. Refresh and try again.";
+                if (propertyExists(error, ["response", "data"], "object")) {
+                    const data = error.response.data;
+
+                    // if no user created, see if there is an error message
+                    if (typeof data.message === "string") {
                         message = data.message;
                     }
                 }
@@ -868,14 +1034,6 @@ export function changePasswordForgot(user) {
     };
 }
 
-// get rid of any old incomplete steps that would prevent the user from
-// completing a pathway
-export function resetIncompleteSteps() {
-    return function(dispatch) {
-        dispatch({ type: "RESET_INCOMPLETE_STEPS" });
-    };
-}
-
 // Send an email when form filled out on unsubscribe page
 export function unsubscribe(user, showNotification) {
     return function(dispatch) {
@@ -893,28 +1051,6 @@ export function unsubscribe(user, showNotification) {
             })
             .catch(function(err) {
                 dispatch({ type: "FOR_BUSINESS", ...notification(err, "error") });
-            });
-    };
-}
-
-// Send an email when form filled out on comingSoon page
-export function comingSoon(user, signedIn) {
-    return function(dispatch) {
-        dispatch({ type: "FOR_BUSINESS_REQUESTED" });
-
-        axios
-            .post("api/candidate/comingSoonEmail", user)
-            .then(function(response) {
-                if (!signedIn) {
-                    dispatch({ type: "FOR_BUSINESS", ...notification(response) });
-                    goTo("/login");
-                    dispatch({ type: "CHANGE_CURRENT_ROUTE", payload: "/login" });
-                } else {
-                    dispatch({ type: "FOR_BUSINESS", notification: undefined });
-                }
-            })
-            .catch(function(err) {
-                dispatch({ type: "FOR_BUSINESS", ...notification("Error sending email", "error") });
             });
     };
 }
@@ -968,6 +1104,54 @@ export function formError() {
 export function markFooterOnScreen(footerOnScreen) {
     return function(dispatch) {
         dispatch({ type: "MARK_FOOTER_ON_SCREEN", footerOnScreen });
+    };
+}
+
+function updateColors(primary, background, logo, secondary, buttonTextColor) {
+    return function(dispatch) {
+        let backgroundColor;
+        let textColor;
+        let primaryColor;
+        let secondaryColor;
+        if (background === "white") {
+            // white backgroound
+            backgroundColor = MOONSHOT_WHITE;
+            textColor = TEXT_BLACK;
+        } else {
+            // black background
+            backgroundColor = MOONSHOT_BLACK;
+            textColor = MOONSHOT_WHITE;
+        }
+
+        if (primary) {
+            primaryColor = primary;
+            if (!secondary) {
+                secondaryColor = primaryColor;
+            } else {
+                secondaryColor = secondary;
+            }
+        } else {
+            primaryColor = MOONSHOT_CYAN;
+            secondaryColor = MOONSHOT_WHITE;
+        }
+        if (!logo) {
+            logo = MOONSHOT_LOGO;
+        }
+
+        dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "primaryColor", value: primaryColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "textColor", value: textColor });
+        dispatch({ type: "UPDATE_STORE", variableName: "logo", value: logo });
+        dispatch({ type: "UPDATE_STORE", variableName: "secondaryColor", value: secondaryColor });
+        if (typeof buttonTextColor === "string")
+            dispatch({
+                type: "UPDATE_STORE",
+                variableName: "buttonTextColor",
+                value: buttonTextColor
+            });
+
+        document.body.style.backgroundColor = backgroundColor;
+        document.body.style.color = textColor;
     };
 }
 

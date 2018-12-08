@@ -60,6 +60,7 @@ module.exports = {
     POST_popups,
     POST_reSendVerificationEmail,
     POST_confirmEmbedLink,
+    POST_addEmailToUser,
 
     // not api endpoints
     sendVerificationEmail
@@ -361,8 +362,6 @@ async function getPosition(businessId, positionId) {
 }
 
 async function GET_session(req, res) {
-    console.log("req.session: ", req.session);
-
     const userId = sanitize(req.session.userId);
 
     // if there was no previous user logged in, don't return a user
@@ -496,6 +495,94 @@ async function POST_popups(req, res) {
     res.json(frontEndUser(returnedUser));
 }
 
+async function POST_addEmailToUser(req, res) {
+    const { userId, verificationToken, email } = req.body;
+
+    if (!email) {
+        console.log("Add email to user, email not provided.");
+        return res.status(500).send("Must provide email to continue.");
+    }
+
+    Users.find({ email })
+        .then(foundUsers => {
+            if (foundUsers.length > 0) {
+                return res.status(400).send({
+                    message:
+                        "An account with that email address already exists. Enter a different email."
+                });
+            }
+        })
+        .catch(findUserError => {
+            console.log("error finding user by email: ", findUserError);
+            return res.status(500).send({ message: errors.SERVER_ERROR });
+        });
+
+    // get the user who is asking for their evaluations page
+    try {
+        var user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user when trying update popup info: ", getUserError);
+        const status = getUserError.status ? getUserError.status : 500;
+        const message = getUserError.message ? getUserError.message : "Server error.";
+        return res.status(status).send(message);
+    }
+
+    // if no user found from token, can't verify
+    if (!user) {
+        return res.status(404).send("User not found");
+    }
+
+    // if the user already has an email, return without updating
+    if (user.email) {
+        res.json(frontEndUser(user));
+    }
+
+    user.email = email;
+
+    // create a user on intercom and add intercom information to the user
+    try {
+        var intercom = await client.users.create({
+            email: user.email,
+            name: user.name,
+            custom_attributes: {
+                user_type: user.userType
+            }
+        });
+    } catch (createIntercomError) {
+        console.log("error creating an intercom user: ", createIntercomError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // Add the intercom info to the user
+    if (intercom.body) {
+        user.intercom = {};
+        user.intercom.email = intercom.body.email;
+        user.intercom.id = intercom.body.id;
+    } else {
+        console.log("error creating an intercom user: ", createIntercomError);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // generate an hmac for the user so intercom can verify identity
+    if (user.intercom && user.intercom.id) {
+        const hash = crypto
+            .createHmac("sha256", credentials.hmacKey)
+            .update(user.intercom.id)
+            .digest("hex");
+        user.hmac = hash;
+    }
+
+    // save the verified user
+    try {
+        var returnedUser = await user.save();
+    } catch (saveUserError) {
+        console.log("Error saving user when adding an email to user: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    res.json(frontEndUser(returnedUser));
+}
+
 async function POST_confirmEmbedLink(req, res) {
     const { userId, verificationToken } = req.body;
 
@@ -529,10 +616,12 @@ async function POST_confirmEmbedLink(req, res) {
 }
 
 module.exports.POST_intercomEvent = async function(req, res) {
-    const event_name = sanitize(req.body.eventName);
-    const metadata = sanitize(req.body.metadata);
+    const { userId, verificationToken, metadata, eventName: event_name } = sanitize(req.body);
 
-    if (!req.body.userId || !req.body.verificationToken) {
+    // whether the person who triggered the event has an account
+    const userHasAccount = !!userId && !!verificationToken;
+
+    if (!userHasAccount) {
         var email = await generateNewUniqueEmail();
         var intercom = await client.users.create({
             email,
@@ -584,7 +673,24 @@ module.exports.POST_intercomEvent = async function(req, res) {
             email: user.intercom.email,
             metadata
         },
-        function(d) {
+        async function(d) {
+            // if user is real
+            if (userHasAccount) {
+                // if the triggered intercom events array does not exist, make it
+                if (!Array.isArray(user.triggeredIntercomEvents)) {
+                    user.triggeredIntercomEvents = [];
+                }
+                // if the user hasn't triggered this event in the past ...
+                if (!user.triggeredIntercomEvents.includes(event_name)) {
+                    // ... add it to the user's list of triggered events
+                    user.triggeredIntercomEvents.push(event_name);
+                    // then save the user
+                    await user.save();
+                    // make it safe for the front end
+                    user = frontEndUser(user);
+                }
+            }
+
             return res.status(200).send({ user, temp });
         }
     );
@@ -697,6 +803,8 @@ function POST_stayLoggedIn(req, res) {
             console.log("error saving 'keep me logged in' setting: ", saveSessionError);
             return res.status(500).send({ message: "Error saving 'keep me logged in' setting." });
         } else {
+            console.log("req.session is now: ", req.session);
+            console.log("req.session.id: ", req.session.id);
             return res.status(200).send({});
         }
     });
@@ -704,6 +812,8 @@ function POST_stayLoggedIn(req, res) {
 
 // get the setting to stay logged in or out
 function GET_stayLoggedIn(req, res) {
+    console.log("req.session is: ", req.session);
+    console.log("req.session.id is: ", req.session.id);
     // get the setting
     let stayLoggedIn = sanitize(req.session.stayLoggedIn);
     // if it's not of the right form, assume you shouldn't stay logged in

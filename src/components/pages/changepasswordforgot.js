@@ -90,7 +90,7 @@ class PasswordChange extends Component {
         return (
             <div className="fillScreen formContainer">
                 <MetaTags>
-                    <title>New Password | Moonshot</title>
+                    <title>New Password | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Reset your Moonshot password. It's okay - we all forget things sometimes."

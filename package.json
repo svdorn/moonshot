@@ -4,8 +4,12 @@
     "private": true,
     "scripts": {
         "dev": "webpack --config ./webpack/dev.config.js --watch",
+        "nodemon": "lsof -t -i tcp:3001 | xargs kill ; lsof -t -i tcp:8081 | xargs kill ; nodemon --delay 1500ms",
         "start": "node ./bin/www & node apiServer.js",
         "deploy": "webpack --config ./webpack/prod.config.js && eb deploy"
+    },
+    "events": {
+        "restart": "lsof -t -i tcp:3001 | xargs kill ; lsof -t -i tcp:8081 | xargs kill"
     },
     "directories": {
         "test": "test"
@@ -29,6 +33,7 @@
         "babel-preset-stage-1": "^6.24.1",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.18.3",
+        "chalk": "^2.4.1",
         "clipboard-polyfill": "^2.5.4",
         "connect-mongo": "^2.0.0",
         "cookie-parser": "~1.4.3",

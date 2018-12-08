@@ -1,9 +1,9 @@
-"use strict"
+"use strict";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { goTo } from "../../miscFunctions";
-
+import Button from "./Button";
 
 class MiscError extends Component {
     constructor(props) {
@@ -15,24 +15,21 @@ class MiscError extends Component {
     render() {
         // TODO: include a fun picture in here
         return (
-            <div className="center primary-white fillScreen">
-                <div className="font24px" style={{margin:"30px"}}>Whoops</div>
+            <div className="center fillScreen">
+                <div className="font24px" style={{ margin: "30px" }}>
+                    Whoops
+                </div>
                 <div>
-                    Yikes, something went wrong. Our bad!<br/>
+                    Yikes, something went wrong. Our bad!<br />
                     Try refreshing or email us at support@moonshotinsights.io
                 </div>
-                <div
-                    className="button medium round-4px background-primary-cyan"
-                    style={{margin: "20px"}}
-                    onClick={() => goTo("/myEvaluations")}
-                >
+                <Button style={{ margin: "20px" }} onClick={() => goTo("/myEvaluations")}>
                     Take Me Home
-                </div>
+                </Button>
             </div>
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -41,10 +38,10 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-
-    }, dispatch);
+    return bindActionCreators({}, dispatch);
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(MiscError);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MiscError);

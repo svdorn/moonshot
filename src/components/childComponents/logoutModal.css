@@ -1,0 +1,21 @@
+.body {
+    text-align: center;
+    max-width: 300px;
+    width: 95%;
+    margin: auto;
+}
+.body > div:first-child {
+    margin-top: 20px;
+}
+.body > div:nth-child(2) {
+    margin-top: 10px;
+}
+
+.yes-or-no {
+    margin-top: 20px;
+}
+.yes-or-no > div {
+    display: inline-block;
+    margin: 10px;
+    cursor: pointer;
+}

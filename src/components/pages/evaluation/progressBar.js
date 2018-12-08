@@ -3,13 +3,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import "./progressBar.css";
+
 class ProgressBar extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {};
-    }
-
     render() {
         const evaluationState = this.props.evaluationState;
 
@@ -21,11 +17,14 @@ class ProgressBar extends Component {
             numSteps++;
         }
 
-        const rAlways = 255;
-        const gStart = 37;
-        const gEnd = 84;
-        const bStart = 110;
-        const bEnd = 56;
+        const { primaryColor } = this.props;
+
+        // const rStart = 255;
+        // const rEnd = 255;
+        // const gStart = 37;
+        // const gEnd = 84;
+        // const bStart = 110;
+        // const bEnd = 56;
 
         let stepCircles = [];
         let stepBars = [];
@@ -44,39 +43,44 @@ class ProgressBar extends Component {
                 amountFinished = 0;
             }
 
-            let r = rAlways;
-            let g = gStart + ((gEnd - gStart) * stepCounter) / (numSteps + 1);
-            let b = bStart + ((bEnd - bStart) * stepCounter) / (numSteps + 1);
-            let gRight =
-                gStart + ((gEnd - gStart) * (stepCounter + amountFinished / 100)) / (numSteps + 1);
-            let bRight =
-                bStart + ((bEnd - bStart) * (stepCounter + amountFinished / 100)) / (numSteps + 1);
+            // let r = rStart + ((rEnd - rStart) * stepCounter) / (numSteps + 1);
+            // let g = gStart + ((gEnd - gStart) * stepCounter) / (numSteps + 1);
+            // let b = bStart + ((bEnd - bStart) * stepCounter) / (numSteps + 1);
+            // let rRight =
+            //     rStart + ((rEnd - rStart) * (stepCounter + amountFinished / 100)) / (numSteps + 1);
+            // let gRight =
+            //     gStart + ((gEnd - gStart) * (stepCounter + amountFinished / 100)) / (numSteps + 1);
+            // let bRight =
+            //     bStart + ((bEnd - bStart) * (stepCounter + amountFinished / 100)) / (numSteps + 1);
 
             stepCircles.push(
                 <div
                     key={"circle" + stepCounter}
-                    className="progressStepCircle"
+                    styleName="progress-step-circle"
                     style={{
-                        backgroundColor: `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`
+                        // backgroundColor: `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`
+                        backgroundColor: this.props.primaryColor
                     }}
                 >
-                    <div>
+                    <div style={{ backgroundColor: this.props.backgroundColor }}>
                         <div>{stepCounter}</div>
                     </div>
                 </div>
             );
 
+            // const color1 = `rgb(${Math.round(r)},${Math.round(g)}, ${Math.round(b)})`;
+            // const color2 = `rgb(${Math.round(rRight)},${Math.round(gRight)}, ${Math.round(
+            //     bRight
+            // )})`;
+
             const interiorStyle = {
                 width: `${amountFinished}%`,
-                background: `linear-gradient(to right, rgb(${Math.round(r)},${Math.round(
-                    g
-                )}, ${Math.round(b)}), rgb(${Math.round(r)},${Math.round(gRight)}, ${Math.round(
-                    bRight
-                )}))`
+                // background: `linear-gradient(to right, ${color1}, ${color2})`
+                background: this.props.primaryColor
             };
             stepBars.push(
-                <div key={"bar" + stepCounter} className="progressStepBar">
-                    <div className="progressStepBarInterior" style={interiorStyle} />
+                <div key={"bar" + stepCounter} styleName="progress-step-bar">
+                    <div styleName="progress-step-bar-interior" style={interiorStyle} />
                 </div>
             );
         }
@@ -84,39 +88,51 @@ class ProgressBar extends Component {
         stepCircles.push(
             <div
                 key="endCircle"
-                className="progressStepCircle"
+                styleName="progress-step-circle"
                 style={{
-                    backgroundColor: `rgb(${Math.round(rAlways)},${Math.round(gEnd)},${Math.round(
-                        bEnd
-                    )})`
+                    // backgroundColor: `rgb(${Math.round(rEnd)},${Math.round(gEnd)},${Math.round(
+                    //     bEnd
+                    // )})`
+                    backgroundColor: this.props.primaryColor
                 }}
             >
-                <div />
+                <div style={{ backgroundColor: this.props.backgroundColor }} />
             </div>
         );
 
         return (
-            <div className="progressContainer">
-                <div className="progressBar font14px">
-                    <div className="progressStepBars">{stepBars}</div>
-                    <div className="progressStepCircles">{stepCircles}</div>
+            <div style={{ textAlign: "center", color: this.props.primaryColor }}>
+                <div className="font14px" style={styles.progressBar}>
+                    <div style={styles.progressStepBars}>{stepBars}</div>
+                    <div styleName="progress-step-circles">{stepCircles}</div>
                 </div>
             </div>
         );
     }
 }
 
+const styles = {
+    progressBar: {
+        width: "60%",
+        margin: "30px 0 40px 20%",
+        height: "10px",
+        position: "relative",
+        backgroundColor: "#cbcbcb"
+    },
+    progressStepBars: {
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        height: "100%"
+    }
+};
+
 function mapStateToProps(state) {
     return {
-        evaluationState: state.users.evaluationState
+        evaluationState: state.users.evaluationState,
+        backgroundColor: state.users.backgroundColor,
+        primaryColor: state.users.primaryColor
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
-}
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ProgressBar);
+export default connect(mapStateToProps)(ProgressBar);

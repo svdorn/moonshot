@@ -19,7 +19,7 @@ class Error404 extends Component {
         return (
             <div className="fillScreen formContainer" style={{ textAlign: "center" }}>
                 <MetaTags>
-                    <title>404 | Moonshot</title>
+                    <title>404 | Moonshot Insights</title>
                     <meta name="description" content="You are lost but we can show you the way." />
                 </MetaTags>
 

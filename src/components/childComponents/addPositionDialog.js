@@ -62,7 +62,15 @@ class AddPositionDialog extends Component {
         }
     }
 
+    // reset the state and close the dialog
     handleClose = () => {
+        this.setState({
+            screen: 1,
+            addPositionError: undefined,
+            mustSelectTypeError: false,
+            positionType: this.state.positionTypes[0],
+            newPosIsManager: false
+        });
         this.props.closeAddPositionModal();
     };
 
@@ -129,7 +137,7 @@ class AddPositionDialog extends Component {
             this.props.startLoading();
 
             axios
-                .post("api/business/addEvaluation", {
+                .post("/api/business/addEvaluation", {
                     userId,
                     verificationToken,
                     businessId,
@@ -140,8 +148,14 @@ class AddPositionDialog extends Component {
                 .then(res => {
                     self.setState({ positionType: "Position Type", newPosIsManager: false });
                     self.handleNextScreen();
+                    // hide the circular progress bar
                     self.props.stopLoading();
+                    // reset the form
                     self.props.reset();
+                    // if there's a function to add the position to the parent local state, do it
+                    if (typeof self.props.addPositionToParentState === "function") {
+                        self.props.addPositionToParentState(positionName);
+                    }
                 })
                 .catch(error => {
                     self.props.stopLoading();
@@ -152,10 +166,6 @@ class AddPositionDialog extends Component {
             this.setState({ addPositionError: "Error adding position." });
             return;
         }
-    }
-
-    inviteCandidates() {
-        this.props.closeAddPositionModal();
     }
 
     render() {
@@ -174,13 +184,6 @@ class AddPositionDialog extends Component {
                 position: "relative",
                 fontSize: "23px",
                 color: "white"
-            },
-            separatorLine: {
-                width: "100%",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
             },
             anchorOrigin: {
                 vertical: "top",
@@ -260,7 +263,7 @@ class AddPositionDialog extends Component {
                                 src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             />
                         </div>
-                        {"Position is a manager role"}
+                        Position is a manager role
                     </div>
                     <RaisedButton
                         label="Continue"

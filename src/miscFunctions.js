@@ -88,24 +88,6 @@ const renderPasswordField = ({ input, label, meta: { touched, error }, ...custom
     />
 );
 
-const viewablePasswordField = ({ input, label, meta: { touched, error }, type, ...custom }) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        inputStyle={style.searchInputStyle}
-        hintStyle={style.searchHintStyle}
-        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
-        floatingLabelStyle={style.searchFloatingLabelStyle}
-        underlineFocusStyle={style.searchUnderlineFocusStyle}
-        {...input}
-        {...custom}
-        autofill="new-password"
-        className="text-field"
-        type={type}
-    />
-);
-
 // get the qualifier (e.g. "above average", "expert", etc) based on a score
 function qualifierFromScore(score) {
     // make sure the score is a number we can use
@@ -409,6 +391,29 @@ function getFormattedDate(date) {
     return month + " " + day + ", " + year;
 }
 
+// brings up message telling user to fill out empty fields if they're empty
+// returns true if a field was blank
+// you have to include the values, an array of the fields, and this.props.touch from redux-form
+function fieldsAreEmpty(vals, requiredFields, touch) {
+    // start with assumption that all fields are filled out
+    let fieldIsEmpty = false;
+
+    const touchIsFunction = typeof touch === "function";
+
+    // go through each required field
+    requiredFields.forEach(field => {
+        // if the field is empty ...
+        if (!vals || !vals[field]) {
+            // ... touch it to bring up the error message
+            if (touchIsFunction) touch(field);
+            // ... and mark that some field is not filled out
+            fieldIsEmpty = true;
+        }
+    });
+
+    return fieldIsEmpty;
+}
+
 function randomInt(lowBound, highBound) {
     const range = highBound - lowBound;
     return Math.floor(Math.random() * (range + 1)) + lowBound;
@@ -437,11 +442,36 @@ function round(number, places) {
     return rounded;
 }
 
+// decrease the shade of a color by a certain amount (default 20)
+function darken(color, difference) {
+    if (typeof color !== "string") return color;
+    if (color.length === 7) color = color.substring(1);
+    if (color.length !== 6) return color;
+    if (typeof difference !== "number") difference = 20;
+    let r = parseInt(color.substring(0, 2), 16) - difference;
+    let g = parseInt(color.substring(2, 4), 16) - difference;
+    let b = parseInt(color.substring(4, 6), 16) - difference;
+    if (r < 0) r = 0;
+    if (g < 0) g = 0;
+    if (b < 0) g = 0;
+    r = r.toString(16);
+    g = g.toString(16);
+    b = b.toString(16);
+    if (r.length === 1) r = "0" + r;
+    if (g.length === 1) g = "0" + g;
+    if (b.length === 1) b = "0" + b;
+    return "#" + r + g + b;
+}
+
+// return true if the value is white or undefined
+function isWhiteOrUndefined(color) {
+    return !color || color.toLowerCase() == "#ffffff" || color.toLowerCase() == "white";
+}
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
     renderPasswordField,
-    viewablePasswordField,
     getFirstName,
     isValidEmail,
     htmlDecode,
@@ -459,9 +489,12 @@ const miscFunctions = {
     copyCustomLink,
     copyFromPage,
     getFormattedDate,
+    fieldsAreEmpty,
     noop,
     randomInt,
     round,
+    darken,
+    isWhiteOrUndefined,
 
     Queue,
     Stack

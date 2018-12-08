@@ -8,19 +8,20 @@ import {
     addNotification,
     openClaimPageModal,
     openAddPositionModal,
-    generalAction
+    generalAction,
+    getColorsFromBusiness,
+    setDefaultColors
 } from "../../actions/usersActions";
 import { makePossessive } from "../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import { goTo } from "../../miscFunctions";
-import HoverTip from "../miscComponents/hoverTip";
+import { HoverTip, Button, ShiftArrow } from "../miscComponents";
 import ClaimPageModal from "./dashboard/dashboardItems/onboarding/childComponents/claimPageModal";
 import ModalSignup from "./dashboard/dashboardItems/onboarding/childComponents/modalSignup";
 import AddPositionDialog from "../childComponents/addPositionDialog";
 import InviteCandidatesModal from "./dashboard/inviteCandidatesModal";
 import axios from "axios";
 
-import { button } from "../../classes";
 import "./apply.css";
 
 class Apply extends Component {
@@ -36,8 +37,29 @@ class Apply extends Component {
             // if the user is an accountAdmin of this company
             admin: false,
             // if the business has set up the page
-            pageSetUp: undefined
+            pageSetUp: undefined,
+            // unique name of the business
+            uniqueName: undefined
         };
+    }
+
+    componentWillMount() {
+        const { currentUser } = this.props;
+        let self = this;
+        // get the company name from the url
+        try {
+            var company = this.props.params.company;
+        } catch (e) {
+            goTo("/");
+            self.props.addNotification(
+                "Couldn't get the company you're trying to apply for.",
+                "error"
+            );
+        }
+
+        if ((!this.props.location.query || !this.props.location.query.onboarding)) {
+            this.props.getColorsFromBusiness(company);
+        }
     }
 
     /* fetch the positions and codes and set the position field to be the first position in the array */
@@ -95,7 +117,8 @@ class Apply extends Component {
                         res.data.logo,
                         res.data.businessName,
                         res.data.admin,
-                        res.data.pageSetUp
+                        res.data.pageSetUp,
+                        company
                     );
                 })
                 .catch(function(err) {
@@ -105,15 +128,23 @@ class Apply extends Component {
         }
     }
 
+    componentWillUnmount() {
+        const { currentUser } = this.props;
+
+        if (currentUser && currentUser.userType === "accountAdmin") {
+            this.props.setDefaultColors();
+        }
+    }
+
     // call this after positions are found from back end
-    positionsFound(positions, logo, company, admin, pageSetUp) {
-        const addMoreLater = "Add more positions later";
+    positionsFound(positions, logo, company, admin, pageSetUp, uniqueName) {
+        const addMoreLater = "Add more below";
         if (Array.isArray(positions) && positions.length > 0) {
             const position = positions[0].name;
             if (admin && !positions.some(p => p.name === addMoreLater)) {
                 positions.push({ name: addMoreLater });
             }
-            this.setState({ positions, position, logo, company, admin, pageSetUp });
+            this.setState({ positions, position, logo, company, admin, pageSetUp, uniqueName });
         } else {
             console.log("in here");
             this.setState({ noPositions: true });
@@ -130,12 +161,20 @@ class Apply extends Component {
             );
         });
 
+        const { textColor } = this.props;
+        const iconClass =
+            textColor &&
+            (textColor.toLowerCase() == "white" || textColor.toLowerCase() == "#ffffff")
+                ? "selectIconWhiteImportant"
+                : "";
+
         return (
             <Select
                 disableUnderline={true}
+                style={{ color: this.props.textColor }}
                 classes={{
-                    root: "selectRootWhite font20px font16pxUnder500",
-                    icon: "selectIconWhiteImportant selectIconMargin"
+                    root: "select-no-focus-color font20px font16pxUnder500",
+                    icon: "selectIconMargin " + iconClass
                 }}
                 value={position}
                 onChange={this.handleChangePosition(position)}
@@ -151,8 +190,8 @@ class Apply extends Component {
         this.setState({ position: event.target.value });
     };
 
-    handleSignUp() {
-        let URL = "/signup?code=";
+    handleSignUp = () => {
+        let URL = "/introduction?code=";
         const position = this.state.positions.findIndex(pos => {
             return pos.name.toString() === this.state.position.toString();
         });
@@ -160,8 +199,10 @@ class Apply extends Component {
         const code = this.state.positions[position].code;
 
         URL += code;
+        URL += `&company=${this.state.company}&uniqueName=${this.state.uniqueName}`;
+
         goTo(URL);
-    }
+    };
 
     openClaimPageModal = () => {
         this.props.openClaimPageModal();
@@ -207,7 +248,7 @@ class Apply extends Component {
             var onClick = this.openClaimPageModal;
             var description = (
                 <div>
-                    Candidates will see the above when they click{" "}
+                    Candidates will see what{"'"}s above when they click{" "}
                     {makePossessive(this.state.company)} invite link.
                 </div>
             );
@@ -216,51 +257,35 @@ class Apply extends Component {
         return (
             <div>
                 <div>
-                    <button
-                        className="button noselect round-6px background-secondary-gray primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
-                        style={{ padding: "6px 20px", cursor: "initial" }}
-                    >
-                        <span>Next &#8594;</span>
-                    </button>
+                    <div style={{ display: "inline-block" }}>
+                        <Button disabled={true} style={{ padding: "6px 20px" }}>
+                            Next
+                        </Button>
+                    </div>
                     <HoverTip
                         className="font14px secondary-gray"
                         style={{ marginTop: "40px", marginLeft: "-6px" }}
-                        text="After candidates press next, they sign up to complete your evaluation."
+                        text="After candidates press next, they proceed to complete your evaluation."
                     />
                 </div>
                 <div styleName="employer-box">
                     {description}
-                    <div
-                        onClick={onClick}
-                        className={button.cyan}
-                        style={{ marginTop: "20px", color: "white" }}
-                    >
-                        {buttonText} <img src={`/icons/LineArrow${this.props.png}`} />
-                    </div>
+                    <Button onClick={onClick} style={{ marginTop: "20px" }}>
+                        {buttonText}
+                    </Button>
                 </div>
             </div>
         );
     }
 
-    // // info for an admin coming to preview this page
-    // adminInformation() {
-    //     if (!this.props.currentUser.confirmEmbedLink) {
-    //         var buttonText = "Continue To Invite Candidates ";
-    //         var onClick = () => this.dashboardAndModal();
-    //     } else {
-    //         var buttonText = "Invite Candidates ";
-    //         var onClick = () => this.openInviteCandidatesModal();
-    //     }
+    // // info for somebody about to create an account
+    // claimPage() {
     //     return (
     //         <div>
     //             <div>
-    //                 <button
-    //                     className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
-    //                     styleName="next-button"
-    //                     style={{ padding: "6px 20px" }}
-    //                 >
-    //                     <span>Next &#8594;</span>
-    //                 </button>
+    //                 <Button style={{ padding: "6px 20px" }} disabled={true}>
+    //                     Next
+    //                 </Button>
     //                 <HoverTip
     //                     className="font14px secondary-gray"
     //                     style={{ marginTop: "40px", marginLeft: "-6px" }}
@@ -269,71 +294,34 @@ class Apply extends Component {
     //             </div>
     //             <div styleName="employer-box">
     //                 <div>
-    //                     This is {makePossessive(this.state.company)} candidate invite page. When
-    //                     candidates click on your link, they will be taken here. New evaluations will
-    //                     automatically be added to your dropdown list above.{" "}
-    //                     <span
-    //                         className="primary-cyan clickable"
-    //                         onClick={this.openAddPositionModal}
-    //                     >
-    //                         Add evaluations
-    //                     </span>{" "}
-    //                     for other open positions.
+    //                     This is {makePossessive(this.state.company)} candidate invite page. New
+    //                     evaluations will automatically be added to your dropdown list above. All of
+    //                     your candidates can visit the link to this page to complete their
+    //                     evaluation.
     //                 </div>
-    //                 <div onClick={onClick}>
-    //                     {buttonText} <img src={`/icons/ArrowBlue${this.props.png}`} />
+    //                 <div onClick={this.openClaimPageModal}>
+    //                     Claim This Page <ShiftArrow color="cyan" width="14px" />
     //                 </div>
     //             </div>
     //         </div>
     //     );
     // }
 
-    // info for somebody about to create an account
-    claimPage() {
-        return (
-            <div>
-                <div>
-                    <button
-                        className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
-                        styleName="next-button"
-                        style={{ padding: "6px 20px" }}
-                    >
-                        <span>Next &#8594;</span>
-                    </button>
-                    <HoverTip
-                        className="font14px secondary-gray"
-                        style={{ marginTop: "40px", marginLeft: "-6px" }}
-                        text="After candidates press next, they sign up to complete your evaluation."
-                    />
-                </div>
-                <div styleName="employer-box">
-                    <div>
-                        This is {makePossessive(this.state.company)} candidate invite page. New
-                        evaluations will automatically be added to your dropdown list above. All of
-                        your candidates can visit the link to this page to complete their
-                        evaluation.
-                    </div>
-                    <div onClick={this.openClaimPageModal}>
-                        Claim This Page <img src={`/icons/ArrowBlue${this.props.png}`} />
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     // returns a button that lets you sign up
     nextButton() {
         return (
-            <button
-                className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700 font14pxUnder500"
-                styleName="next-button"
-                onClick={this.handleSignUp.bind(this)}
-                style={{ padding: "6px 20px" }}
-            >
-                <span>Next &#8594;</span>
-            </button>
+            <Button onClick={this.handleSignUp} style={{ padding: "6px 20px" }}>
+                Next
+            </Button>
         );
     }
+
+    // add a newly-added position to the list of positions
+    addPositionToParentState = newPosition => {
+        let { positions } = this.state;
+        positions.unshift({ name: newPosition });
+        this.setState({ positions });
+    };
 
     // for a candidate seeing this page before it has been set up
     pageNotSetUp() {
@@ -345,7 +333,7 @@ class Apply extends Component {
                         to activate this page. If you are the administrator:
                     </div>
                     <div onClick={() => goTo("/dashboard")}>
-                        Verify Your Email <img src={`/icons/ArrowBlue${this.props.png}`} />
+                        Verify Your Email <ShiftArrow color="cyan" width="14px" />
                     </div>
                 </div>
             </div>
@@ -373,18 +361,22 @@ class Apply extends Component {
             content = (
                 <div>
                     <div className="paddingTop50px marginBottom30px">
-                        <div className="font38px font30pxUnder700 font24pxUnder500 primary-white">
+                        <div
+                            className="font38px font30pxUnder700 font24pxUnder500"
+                            style={{ color: this.props.primaryColor }}
+                        >
                             {this.state.company} Evaluation
                         </div>
                         <div
-                            className="font16px font14pxUnder700 font12pxUnder500 secondary-gray"
+                            className="font16px font14pxUnder700 font12pxUnder500"
                             styleName="powered-by"
+                            style={{ opacity: 0.6 }}
                         >
                             Powered by Moonshot Insights
                         </div>
                     </div>
                     <div
-                        className="font16px font14pxUnder500 primary-cyan"
+                        className="font16px font14pxUnder500"
                         style={{ width: "88%", margin: "auto" }}
                     >
                         Select the position you would like to apply for.
@@ -410,7 +402,7 @@ class Apply extends Component {
         else {
             content = (
                 <div>
-                    <div className="font18px font16pxUnder700 font14pxUnder500 secondary-gray marginTop30px">
+                    <div className="font20px font18pxUnder700 font16pxUnder500 secondary-dark-gray marginTop30px">
                         Loading...
                     </div>
                 </div>
@@ -434,9 +426,19 @@ class Apply extends Component {
                     (this.props.blurLeadDashboard ? " blur" : "")
                 }
             >
+                {this.state.company ? (
+                    <MetaTags>
+                        <title>Apply | {this.state.company}</title>
+                        <meta
+                            name="description"
+                            content="Apply to a company by taking an evaluation."
+                        />
+                    </MetaTags>
+                ) : null}
+
                 <ClaimPageModal company={this.state.company} />
                 <ModalSignup />
-                <AddPositionDialog />
+                <AddPositionDialog addPositionToParentState={this.addPositionToParentState} />
                 <InviteCandidatesModal />
                 {content}
             </div>
@@ -453,7 +455,9 @@ function mapStateToProps(state) {
         claimPageModal: state.users.claimPageModal,
         inviteCandidatesModal: state.users.inviteCandidatesModalOpen,
         positionModal: state.users.positionModalOpen,
-        onboardingPositions: state.users.onboardingPositions
+        onboardingPositions: state.users.onboardingPositions,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 
@@ -463,7 +467,9 @@ function mapDispatchToProps(dispatch) {
             addNotification,
             openClaimPageModal,
             openAddPositionModal,
-            generalAction
+            generalAction,
+            getColorsFromBusiness,
+            setDefaultColors
         },
         dispatch
     );

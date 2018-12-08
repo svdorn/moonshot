@@ -4,7 +4,8 @@ import { browserHistory, withRouter } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { openContactUsModal, markFooterOnScreen } from "../actions/usersActions";
-import { goTo } from "../miscFunctions";
+import { goTo, darken, isWhiteOrUndefined } from "../miscFunctions";
+import { primaryBlackDark } from "../colors";
 import EmailIcon from "./jsIcons/emailIcon";
 import "./footer.css";
 
@@ -49,20 +50,34 @@ class Footer extends Component {
         // check if the current path is one of the above paths
         const hidden = hideFooterLocations.includes(this.props.location.pathname.toLowerCase());
 
+        // the background color should be a slightly darker version of the regular background
+        let backgroundColor = this.props.backgroundColor
+            ? this.props.backgroundColor
+            : primaryBlackDark;
+        backgroundColor = darken(backgroundColor, 8);
+
+        const textColor = this.props.textColor ? this.props.textColor : "#ffffff";
+
+        const iconColor = isWhiteOrUndefined(textColor) ? "White" : "Black";
+
         return (
             <div styleName="footer-container" style={hidden ? { display: "none" } : {}}>
                 <div className="top-shadow" style={{ position: "absolute", zIndex: "100" }}>
                     <div />
                 </div>
-                <footer styleName="footer" id="footer">
+                <footer
+                    styleName="footer"
+                    id="footer"
+                    style={{ backgroundColor, color: textColor }}
+                >
                     <div className="center">
                         <img
                             styleName="footer-moonshot-logo"
                             alt="Moonshot Logo"
                             title="Moonshot Logo"
-                            src={"/logos/MoonshotWhite" + this.props.png}
+                            src={"/logos/Moonshot" + iconColor + this.props.png}
                         />
-                        <div className="primary-white font10px">
+                        <div className="font10px">
                             &copy; 2018 Moonshot Learning, Inc. All rights reserved.
                         </div>
                         <div styleName="social-icons">
@@ -71,27 +86,27 @@ class Footer extends Component {
                                 className="pointer"
                                 onClick={() => this.props.openContactUsModal()}
                                 style={{ height: "12px" }}
-                                src={"/icons/Mail" + this.props.png}
+                                src={"/icons/Mail-" + iconColor + this.props.png}
                             />
                             <a href="https://www.facebook.com/MoonshotInsights/" target="_blank">
                                 <img
                                     alt="Facebook Logo"
                                     style={{ height: "16px" }}
-                                    src={"/logos/Facebook" + this.props.png}
+                                    src={"/logos/Facebook-" + iconColor + this.props.png}
                                 />
                             </a>
                             <a href="https://twitter.com/Moonshotinsight" target="_blank">
                                 <img
                                     alt="Twitter Logo"
                                     style={{ height: "16px" }}
-                                    src={"/logos/Twitter" + this.props.png}
+                                    src={"/logos/Twitter-" + iconColor + this.props.png}
                                 />
                             </a>
                             <a href="https://www.linkedin.com/company/18233111/" target="_blank">
                                 <img
                                     alt="LinkedIn Logo"
                                     style={{ height: "16px" }}
-                                    src={"/logos/LinkedIn" + this.props.png}
+                                    src={"/logos/LinkedIn-" + iconColor + this.props.png}
                                 />
                             </a>
                         </div>
@@ -115,7 +130,9 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         png: state.users.png,
-        footerOnScreen: state.users.footerOnScreen
+        footerOnScreen: state.users.footerOnScreen,
+        backgroundColor: state.users.backgroundColor,
+        textColor: state.users.textColor
     };
 }
 

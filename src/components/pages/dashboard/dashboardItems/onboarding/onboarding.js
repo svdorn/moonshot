@@ -7,7 +7,6 @@ import {} from "../../../../../miscFunctions";
 
 import CandidateView from "./candidateView";
 import AdminView from "./adminView";
-import WhyItWorks from "./whyItWorks";
 import WhatToDo from "./whatToDo";
 
 import "../../dashboard.css";

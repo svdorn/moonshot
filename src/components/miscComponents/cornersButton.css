@@ -1,14 +1,8 @@
 .button {
-    --top-padding: 15px;
-    --side-padding: 50px;
     display: inline-block;
 
     cursor: pointer;
     position: relative;
-}
-.button.small-padding {
-    --top-padding: 7px;
-    --side-padding: 30px;
 }
 
 .border {
@@ -45,8 +39,7 @@
 .button:hover .border-bottom {
     width: 100%;
 }
-.button:hover .border-right
-.button:hover .border-left {
+.button:hover .border-right .button:hover .border-left {
     height: 100%;
 }
 
@@ -106,7 +99,7 @@
     -ms-transition: right 300ms 200ms;
     transition: right 300ms 200ms;
 }
-.button.active .hover-content ,
+.button.active .hover-content,
 .button:hover .hover-content {
     opacity: 1;
 
@@ -162,6 +155,164 @@
     -webkit-transition: opacity 5ms 210ms, left 200ms;
     -ms-transition: opacity 5ms 210ms, left 200ms;
     transition: opacity 5ms 210ms, left 200ms;
+}
+
+.top-padding-0px {
+    --top-padding: 0px;
+}
+.top-padding-2px {
+    --top-padding: 2px;
+}
+.top-padding-4px {
+    --top-padding: 4px;
+}
+.top-padding-6px {
+    --top-padding: 6px;
+}
+.top-padding-8px {
+    --top-padding: 8px;
+}
+.top-padding-10px {
+    --top-padding: 10px;
+}
+.top-padding-12px {
+    --top-padding: 12px;
+}
+.top-padding-14px {
+    --top-padding: 14px;
+}
+.top-padding-16px {
+    --top-padding: 16px;
+}
+.top-padding-18px {
+    --top-padding: 18px;
+}
+.top-padding-20px {
+    --top-padding: 20px;
+}
+.top-padding-22px {
+    --top-padding: 22px;
+}
+.top-padding-24px {
+    --top-padding: 24px;
+}
+.top-padding-26px {
+    --top-padding: 26px;
+}
+.top-padding-28px {
+    --top-padding: 28px;
+}
+.top-padding-30px {
+    --top-padding: 30px;
+}
+.top-padding-32px {
+    --top-padding: 32px;
+}
+.top-padding-34px {
+    --top-padding: 34px;
+}
+.top-padding-36px {
+    --top-padding: 36px;
+}
+.top-padding-38px {
+    --top-padding: 38px;
+}
+.top-padding-40px {
+    --top-padding: 40px;
+}
+.top-padding-42px {
+    --top-padding: 42px;
+}
+.top-padding-44px {
+    --top-padding: 44px;
+}
+.top-padding-46px {
+    --top-padding: 46px;
+}
+.top-padding-48px {
+    --top-padding: 48px;
+}
+.top-padding-50px {
+    --top-padding: 50px;
+}
+
+.side-padding-0px {
+    --side-padding: 0px;
+}
+.side-padding-2px {
+    --side-padding: 2px;
+}
+.side-padding-4px {
+    --side-padding: 4px;
+}
+.side-padding-6px {
+    --side-padding: 6px;
+}
+.side-padding-8px {
+    --side-padding: 8px;
+}
+.side-padding-10px {
+    --side-padding: 10px;
+}
+.side-padding-12px {
+    --side-padding: 12px;
+}
+.side-padding-14px {
+    --side-padding: 14px;
+}
+.side-padding-16px {
+    --side-padding: 16px;
+}
+.side-padding-18px {
+    --side-padding: 18px;
+}
+.side-padding-20px {
+    --side-padding: 20px;
+}
+.side-padding-22px {
+    --side-padding: 22px;
+}
+.side-padding-24px {
+    --side-padding: 24px;
+}
+.side-padding-26px {
+    --side-padding: 26px;
+}
+.side-padding-28px {
+    --side-padding: 28px;
+}
+.side-padding-30px {
+    --side-padding: 30px;
+}
+.side-padding-32px {
+    --side-padding: 32px;
+}
+.side-padding-34px {
+    --side-padding: 34px;
+}
+.side-padding-36px {
+    --side-padding: 36px;
+}
+.side-padding-38px {
+    --side-padding: 38px;
+}
+.side-padding-40px {
+    --side-padding: 40px;
+}
+.side-padding-42px {
+    --side-padding: 42px;
+}
+.side-padding-44px {
+    --side-padding: 44px;
+}
+.side-padding-46px {
+    --side-padding: 46px;
+}
+.side-padding-48px {
+    --side-padding: 48px;
+}
+.side-padding-50px {
+    --side-padding: 50px;
 }
 
 @keyframes sway {

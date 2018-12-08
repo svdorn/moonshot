@@ -10,14 +10,18 @@ import {
     addNotification
 } from "../../../actions/usersActions";
 import axios from "axios";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { htmlDecode } from "../../../miscFunctions";
+import { CircularProgress } from "@material-ui/core";
+import { htmlDecode, darken, isWhiteOrUndefined } from "../../../miscFunctions";
+import { Button, CheckBox } from "../../miscComponents";
 
-import "./cognitiveTest.css";
+import gca from "./cognitiveTest.css";
+import evalCSS from "./evaluation.css";
 
 class CognitiveTest extends Component {
     constructor(props) {
         super(props);
+
+        const imgColor = isWhiteOrUndefined(this.props.backgroundColor) ? "-Black" : "";
 
         this.state = {
             selectedId: undefined,
@@ -29,7 +33,8 @@ class CognitiveTest extends Component {
             outOfTime: false,
             // the timeouts
             timeouts: [],
-            loading: false
+            loading: false,
+            imgColor
         };
     }
 
@@ -63,7 +68,7 @@ class CognitiveTest extends Component {
     }
 
     // move on to the next question (or start/finish the test)
-    nextQuestion() {
+    nextQuestion = () => {
         if (
             (typeof this.state.selectedId !== "undefined" || this.state.outOfTime) &&
             !this.props.loading
@@ -76,25 +81,25 @@ class CognitiveTest extends Component {
                 });
             });
         }
-    }
+    };
 
-    startTest() {
+    startTest = () => {
         // can only start test if have agreed to cognitive terms
         if (this.state.agreedToTerms) {
             this.props.answerEvaluationQuestion("Cognitive", this.props.credentials);
         }
-    }
+    };
 
     // agree to the terms to taking the test
-    agreeToTerms() {
+    agreeToTerms = () => {
         if (this.state.agreedToTerms) {
             this.setState({ showExample: true });
         }
-    }
+    };
 
-    handleCheckMarkClick() {
+    handleCheckMarkClick = () => {
         this.setState({ agreedToTerms: !this.state.agreedToTerms });
-    }
+    };
 
     // generic error
     errorPage() {
@@ -106,9 +111,12 @@ class CognitiveTest extends Component {
         // if the user agreed to the terms and is seeing an example now
         if (this.state.showExample) {
             return (
-                <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
+                <div
+                    styleName="evalCSS.eval-portion-intro"
+                    className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
+                >
                     <div className="font24px">
-                        <span>Pattern Recognition</span>
+                        <span style={{ color: this.props.primaryColor }}>Pattern Recognition</span>
                     </div>
                     <div>
                         <p>
@@ -141,33 +149,31 @@ class CognitiveTest extends Component {
                         </p>
                     </div>
                     <img
-                        src={"/images/cognitiveTest/RPM-Example" + this.props.png}
-                        styleName="example-rpm"
+                        src={`/images/cognitiveTest/RPM-Example-2${this.state.imgColor}${
+                            this.props.png
+                        }`}
+                        styleName="gca.example-rpm"
                     />
                     <br />
                     {this.props.loading ? (
-                        <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                        <CircularProgress color="primary" style={{ marginBottom: "40px" }} />
                     ) : (
-                        <div
-                            style={{ marginBottom: "40px", width: "initial" }}
-                            className="noselect skillContinueButton"
-                            onClick={this.startTest.bind(this)}
-                        >
+                        <Button onClick={this.startTest} style={{ marginBottom: "40px" }}>
                             Start
-                        </div>
+                        </Button>
                     )}
                 </div>
             );
         }
         // if the user needs to agree to the user agreement first
         else {
-            const buttonClass =
-                "noselect skillContinueButton" + (this.state.agreedToTerms ? "" : " disabled");
-
             return (
-                <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
+                <div
+                    styleName="evalCSS.eval-portion-intro"
+                    className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
+                >
                     <div className="font24px">
-                        <span>Pattern Recognition</span>
+                        <span style={{ color: this.props.primaryColor }}>Pattern Recognition</span>
                     </div>
                     <div>
                         <p>
@@ -175,28 +181,28 @@ class CognitiveTest extends Component {
                             be tested on your aptitude in problem solving.
                         </p>
                         <p>
-                            <span>TIME IS A FACTOR.</span> You have 60 seconds to complete each
-                            question. After this, whatever answer you have will be saved. If you
-                            have no answer, the question will be marked wrong.
+                            <span style={{ color: this.props.primaryColor }}>
+                                TIME IS A FACTOR.
+                            </span>{" "}
+                            You have 60 seconds to complete each question. After this, whatever
+                            answer you have will be saved. If you have no answer, the question will
+                            be marked wrong.
                         </p>
                         <p>
-                            <span>DO NOT</span> exit this tab, go to another tab, or leave this
-                            window. Each time you do, your overall score will decrease.
+                            <span style={{ color: this.props.primaryColor }}>DO NOT</span> exit this
+                            tab, go to another tab, or leave this window. Each time you do, your
+                            overall score will decrease.
                         </p>
                         <p>The test will take no more than 12 minutes.</p>
                     </div>
                     <br />
                     <div>
-                        <div
-                            className="checkbox mediumCheckbox whiteCheckbox"
-                            onClick={this.handleCheckMarkClick.bind(this)}
-                        >
-                            <img
-                                alt=""
-                                className={"checkMark" + this.state.agreedToTerms}
-                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            />
-                        </div>
+                        <CheckBox
+                            checked={this.state.agreedToTerms}
+                            onClick={this.handleCheckMarkClick}
+                            size="medium"
+                            style={{ position: "absolute", marginTop: "3px" }}
+                        />
                         <p style={{ padding: "0 40px" }}>
                             By checking this box, I agree that I will answer the questions without
                             help from anyone or any external resources and that if I were to be
@@ -205,15 +211,15 @@ class CognitiveTest extends Component {
                     </div>
                     <br />
                     {this.props.loading ? (
-                        <CircularProgress color="secondary" style={{ marginBottom: "40px" }} />
+                        <CircularProgress color="primary" style={{ marginBottom: "40px" }} />
                     ) : (
-                        <div
-                            style={{ marginBottom: "40px", width: "initial" }}
-                            className={buttonClass}
-                            onClick={this.agreeToTerms.bind(this)}
+                        <Button
+                            disabled={!this.state.agreedToTerms}
+                            style={{ marginBottom: "40px" }}
+                            onClick={this.agreeToTerms}
                         >
                             Continue
-                        </div>
+                        </Button>
                     )}
                 </div>
             );
@@ -280,23 +286,33 @@ class CognitiveTest extends Component {
     createContent() {
         let self = this;
 
-        const questionInfo = this.props.questionInfo;
+        const { questionInfo, primaryColor, backgroundColor } = this.props;
 
         const answers = questionInfo.options.map(option => {
             const isSelected = this.state.selectedId === option._id;
-            const selectedClass = isSelected ? " selected" : "";
-            const outOfTimeClass = this.state.outOfTime ? " outOfTime" : "";
-            const imgSrc = option.src + this.props.png;
+            // const selectedClass = isSelected ? " gca.selected" : "";
+            // const outOfTimeClass = this.state.outOfTime ? " gca.outOfTime" : "";
+
+            const imgSrc = option.src + this.state.imgColor + this.props.png;
+
+            const color = this.state.outOfTime || this.props.loading ? darken(primaryColor, 60) : primaryColor;
+
             return (
                 <div
                     key={option.src}
-                    onClick={this.state.outOfTime ? null : () => self.selectAnswer(option._id)}
-                    styleName={"multipleChoiceAnswer" + selectedClass + outOfTimeClass}
+                    onClick={this.state.outOfTime || this.props.loading ? null : () => self.selectAnswer(option._id)}
+                    styleName={"gca.multiple-choice-answer"}
+                    style={this.state.outOfTime || this.props.loading ? { cursor: "not-allowed" } : {}}
                 >
-                    <div styleName={"multipleChoiceCircle" + selectedClass + outOfTimeClass}>
-                        <div />
+                    <div styleName={"gca.multiple-choice-circle"} style={{ background: color }}>
+                        <div
+                            style={{
+                                display: isSelected ? "none" : "inline-block",
+                                backgroundColor
+                            }}
+                        />
                     </div>
-                    <div styleName="answersImg">
+                    <div styleName="gca.answersImg">
                         <img src={imgSrc} />
                     </div>
                 </div>
@@ -305,9 +321,8 @@ class CognitiveTest extends Component {
 
         const canContinue =
             !this.props.loading && (!!this.state.selectedId || this.state.outOfTime);
-        const buttonClass = "skillContinueButton" + (!canContinue ? " disabled" : "");
 
-        const rpmSrc = questionInfo.rpm + this.props.png;
+        const rpmSrc = questionInfo.rpm + this.state.imgColor + this.props.png;
 
         let timer = "00";
         if (this.state.timer) {
@@ -321,31 +336,33 @@ class CognitiveTest extends Component {
 
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
-                {this.state.loading ? (
-                    <div className="secondary-gray">Loading next question...</div>
-                ) : (
+
                     <div>
                         {this.state.outOfTime ? (
-                            <div styleName="error-red">
+                            <div styleName="gca.error-red">
                                 Out of time - please advance to the next question.
                             </div>
                         ) : (
-                            <div className="secondary-gray">0:{timer}</div>
+                            <div>0:{timer}</div>
                         )}
                         <div className="marginBottom40px">
-                            <img styleName="rpmImg" src={rpmSrc} />
+                            <img styleName="gca.rpmImg" src={rpmSrc} />
                         </div>
                         <div className="center" style={{ maxWidth: "1000px", margin: "auto" }}>
                             {answers}
                         </div>
-                        <div
-                            className={"marginBottom50px marginTop30px " + buttonClass}
-                            onClick={this.nextQuestion.bind(this)}
-                        >
-                            Next
-                        </div>
+                        {this.state.loading ?
+                            <div style={{ margin: "30px 0 50px" }}><CircularProgress color="primary" /></div>
+                            :
+                            <Button
+                                disabled={!canContinue}
+                                onClick={this.nextQuestion}
+                                style={{ margin: "30px 0 50px" }}
+                            >
+                                Next
+                            </Button>
+                        }
                     </div>
-                )}
             </div>
         );
     }
@@ -371,7 +388,7 @@ class CognitiveTest extends Component {
 
         // if the question has not been loaded yet
         else if (!questionInfo) {
-            return <CircularProgress color="secondary" />;
+            return <CircularProgress color="primary" />;
         }
 
         // the typical interface with the slider
@@ -405,7 +422,9 @@ function mapStateToProps(state) {
         questionInfo: state.users.evaluationState.componentInfo,
         showIntro: state.users.evaluationState.showIntro,
         loading: state.users.loadingSomething,
-        png: state.users.png
+        png: state.users.png,
+        primaryColor: state.users.primaryColor,
+        backgroundColor: state.users.backgroundColor
     };
 }
 

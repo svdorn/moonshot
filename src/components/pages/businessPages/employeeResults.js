@@ -291,7 +291,7 @@ class EmployeeResults extends Component {
             <div>
                 {user.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
-                    <title>{candidate.name} | Moonshot</title>
+                    <title>{candidate.name} | Moonshot Insights</title>
                     <meta name="description" content="Results user view." />
                 </MetaTags>
                 <div>
@@ -413,10 +413,6 @@ const style = {
     },
     characteristicsTitle: {
         color: "#96ADFC"
-    },
-    characteristicsListRow: {
-        display: "flex",
-        justifyContent: "center"
     },
     descriptionBox: {
         paddingTop: "40px"

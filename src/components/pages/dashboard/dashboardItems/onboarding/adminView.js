@@ -10,6 +10,7 @@ import {
 import {} from "../../../../../miscFunctions";
 
 import PsychSlider from "../../../evaluation/psychSlider";
+import HoverTip from "../../../../miscComponents/hoverTip";
 
 import "../../dashboard.css";
 import { button } from "../../../../../classes";
@@ -66,34 +67,48 @@ class AdminView extends Component {
     };
 
     makeAdminView() {
+        const user = this.props.currentUser;
+        const showMoreInfoButton =
+            !user ||
+            !user.triggeredIntercomEvents ||
+            !user.triggeredIntercomEvents.includes("onboarding-step-2");
+
         return (
             <div className="inline-block" styleName="onboarding-info admin-view">
                 <div>
-                    <div
-                        className="primary-cyan"
-                        styleName="small-title mobile-center title-margin"
-                    >
-                        A Predictive View of Candidates
+                    <div styleName="predictive-view-info">
+                        <div
+                            className="primary-cyan"
+                            styleName="small-title mobile-center title-margin"
+                        >
+                            A Predictive View of Candidates
+                        </div>
+                        <div>
+                            <div style={{ marginBottom: "10px" }}>
+                                We predict the job performance, growth potential,{" "}
+                                <span>culture fit, and longevity</span> of each candidate.
+                            </div>
+                            <div>
+                                You can also see an overall Candidate Score and a breakdown of each
+                                candidate’s results.
+                            </div>
+                        </div>
                     </div>
-                    <div styleName="desktop-only">
-                        {
-                            "Job Performance and Growth Potential predictions for each candidate along with a Candidate Score and results from their evaluation. We generate Longevity/tenure and Culture Fit predictions after at least 16 of your employees have been evaluated."
-                        }
-                    </div>
-                    <div styleName="mobile-only">
-                        {
-                            "Job Performance and Growth Potential predictions for each candidate along with a Candidate Score and evaluation results. We generate Longevity and Culture Fit predictions after 16+ employees have been evaluated."
-                        }
-                    </div>
+                    <HoverTip
+                        style={{ width: "216px", marginLeft: "12px" }}
+                        text="Culture fit and longevity predictions are enabled after at least 16 of your employees have been evaluated because these predictions are company-specific."
+                    />
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>
                             <img src={`/icons/emojis/ThumbsUp${this.props.png}`} />
-                            <div>Got it</div>
+                            <div>Got it!</div>
                         </div>
-                        <div onClick={this.intercomMsg}>
-                            <img src={`/icons/emojis/Face${this.props.png}`} />
-                            <div>More info</div>
-                        </div>
+                        {showMoreInfoButton ? (
+                            <div onClick={this.intercomMsg}>
+                                <img src={`/icons/emojis/Face${this.props.png}`} />
+                                <div>More info</div>
+                            </div>
+                        ) : null}
                     </div>
                 </div>
                 <div>
@@ -104,6 +119,12 @@ class AdminView extends Component {
     }
 
     makeMLView() {
+        const user = this.props.currentUser;
+        const showMoreInfoButton =
+            !user ||
+            !user.triggeredIntercomEvents ||
+            !user.triggeredIntercomEvents.includes("onboarding-step-3");
+
         return (
             <div className="inline-block" styleName="onboarding-info ml-step">
                 <div>
@@ -111,23 +132,22 @@ class AdminView extends Component {
                         {"We Are Your Data Scientists"}
                     </div>
                     <div styleName="why-it-works-desc">
-                        Education and experience provide 1% and 1.1% predictive ability compared to
-                        your evaluations with us, which provide more than 50%. We then layer on
-                        machine learning to<span styleName="desktop-only">
-                            {" "}
-                            improve your predictive model and
-                        </span>{" "}
-                        identify insights on your company to drive hyperintelligent hiring.
+                        Education and experience are 1% and 1.1% predictive of job performance,
+                        whereas your evaluations with us are more than 50% predictive. We layer on
+                        machine learning to identify insights on your company to drive
+                        hyperintelligent hiring.
                     </div>
                     <div styleName="emoji-buttons">
                         <div onClick={this.next}>
                             <img src={`/icons/emojis/Sunglass${this.props.png}`} />
                             <div>Got it!</div>
                         </div>
-                        <div onClick={this.intercomMsgPart3}>
-                            <img src={`/icons/emojis/Face${this.props.png}`} />
-                            <div>More info</div>
-                        </div>
+                        {showMoreInfoButton ? (
+                            <div onClick={this.intercomMsgPart3}>
+                                <img src={`/icons/emojis/Face${this.props.png}`} />
+                                <div>More info</div>
+                            </div>
+                        ) : null}
                     </div>
                 </div>
                 <div>

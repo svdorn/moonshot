@@ -9,6 +9,7 @@ import {
 } from "../../../../../actions/usersActions";
 import { CircularProgress } from "material-ui";
 import { button } from "../../../../../classes";
+import ShiftArrow from "../../../../miscComponents/ShiftArrow";
 
 import "../../dashboard.css";
 
@@ -110,27 +111,25 @@ class BuildTeam extends Component {
             <div styleName="item-padding">
                 <div styleName="build-team-container">
                     <div className="center">
-                        Which of these is most interesting to you?
                         <div className="primary-cyan">
-                            Your choice(s) help us know where to focus
+                            Which of these is most interesting to you?
+                        </div>
+                        <div className="primary-white">
+                            Your choice(s) help us know where to focus.
                         </div>
                     </div>
                     <div className="build-team">
                         <div>{this.makeChoices()}</div>
                     </div>
-                    {this.props.loading ? (
-                        <div className="center">
+                    <div styleName="got-it-area">
+                        {this.props.loading ? (
                             <CircularProgress color="#76defe" />
-                        </div>
-                    ) : (
-                        <div
-                            className={button.cyan}
-                            styleName="got-it-button"
-                            onClick={this.handleClick}
-                        >
-                            See What{"'"}s Next &#8594;
-                        </div>
-                    )}
+                        ) : (
+                            <div className={button.cyan} onClick={this.handleClick}>
+                                See What{"'"}s Next <ShiftArrow />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         );

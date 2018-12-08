@@ -343,7 +343,7 @@ class MyEvaluations extends Component {
             >
                 {currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
-                    <title>My Evaluations | Moonshot</title>
+                    <title>My Evaluations | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="View the evaluations your company is running."

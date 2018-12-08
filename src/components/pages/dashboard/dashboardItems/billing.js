@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import { generalAction, getBillingInfo } from "../../../../actions/usersActions";
+import { generalAction, getBillingInfo, addNotification } from "../../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -27,7 +27,12 @@ class Billing extends Component {
     // load graph data for the candidate completions over last week
     componentDidMount() {
         const self = this;
-        const { currentUser, billing, fullAccess, getBillingInfo } = this.props;
+        const { currentUser, billing, fullAccess, getBillingInfo, demo } = this.props;
+
+        // if on the faux dashboard
+        if (demo) {
+            return this.getState();
+        }
 
         if (!currentUser) {
             return this.props.addNotification(
@@ -159,11 +164,11 @@ class Billing extends Component {
     };
 
     render() {
-        const { billing } = this.props;
+        const { billing, demo } = this.props;
         const { currentPlan, html, CTA } = this.state;
 
         // return progress bar if not ready yet
-        if (!billing) {
+        if (!billing && !demo) {
             return (
                 <div className="fully-center">
                     <CircularProgress style={{ color: primaryCyan }} />
@@ -217,7 +222,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             generalAction,
-            getBillingInfo
+            getBillingInfo,
+            addNotification
         },
         dispatch
     );

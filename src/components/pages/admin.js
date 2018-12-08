@@ -43,7 +43,7 @@ class Admin extends Component {
         return (
             <div>
                 <MetaTags>
-                    <title>Admin | Moonshot</title>
+                    <title>Admin | Moonshot Insights</title>
                     <meta name="description" content="Moonshot admin page." />
                 </MetaTags>
 

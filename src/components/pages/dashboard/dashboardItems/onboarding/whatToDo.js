@@ -8,24 +8,15 @@ import {
     addNotification,
     generalAction,
     updateUser,
-    openAddPositionModal,
     intercomEvent
 } from "../../../../../actions/usersActions";
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists, updateStore } from "../../../../../miscFunctions";
-import AddPosition from "./childComponents/addPosition";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import {
-    TextField,
-    DropDownMenu,
-    MenuItem,
-    Divider,
-    Toolbar,
-    ToolbarGroup,
-    RaisedButton
-} from "material-ui";
+import { TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup } from "material-ui";
 import { primaryCyan } from "../../../../../colors";
 import axios from "axios";
+import { ShiftArrow, Button } from "../../../../miscComponents/ShiftArrow";
 
 import "../../dashboard.css";
 
@@ -128,11 +119,16 @@ class WhatToDo extends Component {
             }
         }
 
+        const showMoreInfoButton =
+            !currentUser ||
+            !currentUser.triggeredIntercomEvents ||
+            !currentUser.triggeredIntercomEvents.includes("onboarding-step-4");
+
         return (
             <div styleName="full-step-container">
                 <div styleName="copy-link-view">
                     <div styleName="onboarding-title title-margin">
-                        {"A Candidate Invite Page Just For You"}
+                        A Candidate Invite Page Just For You
                     </div>
                     <div>
                         <span styleName="desktop-only">
@@ -142,7 +138,7 @@ class WhatToDo extends Component {
                         companies invite all applicants to complete an evaluation,
                         as their highest performers are often screened out based on
                         non-predictive data in resumes. Copy and embed your link in
-                        emails you send to candidates after they apply. Here's an `}
+                        emails you already send to new applicants. Here's an `}
                         </span>
                         <span styleName="mobile-only">
                             {`Your invite link is
@@ -151,7 +147,7 @@ class WhatToDo extends Component {
                             companies invite all applicants to complete an evaluation,
                             as high performers are often screened out based on
                             non-predictive data in resumes. Copy and embed your link in
-                            emails you send to candidates after they apply. Here's an `}
+                            emails you send to new applicants. Here's an `}
                         </span>
                         <span
                             onClick={() => this.props.generalAction("OPEN_INVITE_CANDIDATES_MODAL")}
@@ -168,32 +164,30 @@ class WhatToDo extends Component {
                             onClick={this.highlight}
                             value={`https://moonshotinsights.io/apply/${uniqueName}`}
                         />
-                        <button
-                            className="button noselect round-6px background-primary-cyan primary-white learn-more-texts"
-                            onClick={this.copyLink}
-                            style={{ padding: "3px 10px" }}
-                        >
-                            <span>Copy Link</span>
-                        </button>
+                        <Button onClick={this.copyLink}>Copy Link</Button>
                         <br styleName="small-mobile-only" />
                         <div
-                            className="pointer underline"
+                            className="pointer transition-all"
                             styleName="link-to-custom-page"
                             onClick={this.handleCustomPage}
                         >
-                            {"See Your Page"}
+                            See Your Page
+                            <div className="inline-block" style={{ width: "2px" }} />
+                            <ShiftArrow style={{ marginLeft: "5px" }} />
                         </div>
                     </div>
                     {!this.props.loading ? (
-                        <div styleName="emoji-buttons-full">
+                        <div styleName="emoji-buttons">
                             <div onClick={this.next}>
                                 <img src={`/icons/emojis/PartyPopper${this.props.png}`} />
                                 <div style={{ paddingTop: "5px" }}>All set!</div>
                             </div>
-                            <div onClick={this.intercomMsg}>
-                                <img src={`/icons/emojis/Face${this.props.png}`} />
-                                <div style={{ paddingTop: "5px" }}>More info</div>
-                            </div>
+                            {showMoreInfoButton ? (
+                                <div onClick={this.intercomMsg}>
+                                    <img src={`/icons/emojis/Face${this.props.png}`} />
+                                    <div style={{ paddingTop: "5px" }}>More info</div>
+                                </div>
+                            ) : null}
                         </div>
                     ) : (
                         <div styleName="circular-progress">
@@ -206,7 +200,7 @@ class WhatToDo extends Component {
     }
 
     render() {
-        return <div>{this.copyLinkView()}</div>;
+        return <div style={{ height: "100%" }}>{this.copyLinkView()}</div>;
     }
 }
 
@@ -226,7 +220,6 @@ function mapDispatchToProps(dispatch) {
             addNotification,
             generalAction,
             updateUser,
-            openAddPositionModal,
             intercomEvent,
             updateStore
         },

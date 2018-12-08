@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { generalAction, updatePositionCount } from "../../../actions/usersActions";
+import { generalAction, updatePositionCount, addNotification } from "../../../actions/usersActions";
 import {} from "../../../miscFunctions";
 import MetaTags from "react-meta-tags";
 import DashboardItem from "./dashboardItem";
@@ -25,10 +25,7 @@ class Dashboard extends Component {
     componentDidMount() {
         const { currentUser, positionCount, location } = this.props;
         if (!currentUser) {
-            return this.props.addNotification(
-                "You aren't logged in! Try refreshing the page.",
-                "error"
-            );
+            return;
         }
 
         if (location && location.query && location.query.inviteCandidates === "open") {
@@ -65,10 +62,7 @@ class Dashboard extends Component {
         const { positionCount, currentUser } = this.props;
         if (!positionCount || positionCount < 1) {
             if (!currentUser) {
-                return this.props.addNotification(
-                    "You aren't logged in! Try refreshing the page.",
-                    "error"
-                );
+                return;
             }
 
             // get all the positions they're evaluating for
@@ -127,7 +121,7 @@ class Dashboard extends Component {
         return (
             <div className="center full-height ">
                 <MetaTags>
-                    <title>Dashboard | Moonshot</title>
+                    <title>Dashboard | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Your home base for checking in on your candidates, employees, evaluations, and more."
@@ -165,7 +159,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             generalAction,
-            updatePositionCount
+            updatePositionCount,
+            addNotification
         },
         dispatch
     );

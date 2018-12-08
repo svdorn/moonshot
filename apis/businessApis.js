@@ -69,6 +69,7 @@ const businessApis = {
     GET_billingInfo,
     GET_adminList,
     GET_candidateCount,
+    GET_colors,
 
     generateApiKey,
     createEmailInfo,
@@ -76,7 +77,6 @@ const businessApis = {
 };
 
 const { sendIntercomPlanUpdate } = require("./evaluationApis");
-
 
 // ----->> START APIS <<----- //
 
@@ -320,27 +320,25 @@ async function POST_createBusinessAndUser(req, res) {
         user.hmac = hash;
     }
 
+    // save the user
     try {
         user = await user.save();
     } catch (saveUserError) {
-        console.log(
-            "Error saving user with biz info while signing up from business signup: ",
-            saveUserError
-        );
+        console.log("Error saving new account admin: ", saveUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // save the user's session - assume they want to stay logged in
+    try {
+        saveSession(req.session, user);
+    } catch (e) {
+        console.log("Error saving new account admin's session: ", e);
+    }
+
+    console.log("req.session: ", req.session);
+
     // return successfully to user
     res.status(200).send({ user: frontEndUser(user), fullAccess: true });
-
-    // save the session so that the user stays logged in
-    req.session.userId = user._id;
-    req.session.verificationToken = user.verificationToken;
-    req.session.save(function(err) {
-        if (err) {
-            console.log("ERROR SAVING SESSION OF NEW ACCOUNT ADMIN: ", err);
-        }
-    });
 
     // send email to everyone if there's a new sign up
     // do this after sending success message to user just in case this fails
@@ -374,6 +372,40 @@ async function POST_createBusinessAndUser(req, res) {
     } catch (alertEmailError) {
         console.log("Error sending alert email about new user: ", alertEmailError);
     }
+}
+
+// save the user's id and verification token in the session to keep them logged in
+async function saveSession(session, user, token) {
+    return new Promise(function(resolve, reject) {
+        if (!session) {
+            return reject(new Error("No session object provided to saveSession."));
+        }
+
+        // get userId and verificationToken
+        if (typeof user === "object") {
+            var { _id: userId, verificationToken } = user;
+        } else {
+            var userId = user;
+            var verificationToken = token;
+        }
+
+        if (!userId || !verificationToken) {
+            return reject(
+                new Error(`Invalid userId: ${userId} or verificationToken: ${verificationToken}`)
+            );
+        }
+
+        // save the session so that the user stays logged in
+        session.userId = userId;
+        session.verificationToken = verificationToken;
+        session.save(function(err) {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve();
+            }
+        });
+    });
 }
 
 // creates a new ACCOUNT ADMIN user
@@ -1744,31 +1776,40 @@ async function POST_changeHiringStage(req, res) {
         if (
             business &&
             business.fullAccess &&
-            (!business.billing || (business.billing && !business.billing.subscription && !business.billing.customPlan)) &&
+            (!business.billing ||
+                (business.billing &&
+                    !business.billing.subscription &&
+                    !business.billing.customPlan)) &&
             (business.candidateCount && business.candidateCount < 20)
         ) {
             business.fullAccess = false;
 
             // get all account admins for this business
-            try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
-            catch(getUsersError) {
-                console.log("error getting admins when trying to send them free trial ending message");
+            try {
+                var admins = await Users.find({
+                    userType: "accountAdmin",
+                    "businessInfo.businessId": mongoose.Types.ObjectId(business._id)
+                }).select("intercom");
+            } catch (getUsersError) {
+                console.log(
+                    "error getting admins when trying to send them free trial ending message"
+                );
             }
             // will contain all the promises for sending emails
             let intercomPromises = [];
 
             // add a promise to create a code and send an email for each given address
             admins.forEach(admin => {
-                intercomPromises.push(
-                    sendIntercomPlanUpdate(admin.intercom, "ended")
-                );
+                intercomPromises.push(sendIntercomPlanUpdate(admin.intercom, "ended"));
             });
 
             // wait for all the emails to send
             try {
                 await Promise.all(intercomPromises);
             } catch (sendEmailsError) {
-                console.log("error getting admins when trying to send them free trial ending message");
+                console.log(
+                    "error getting admins when trying to send them free trial ending message"
+                );
             }
         }
 
@@ -2049,7 +2090,7 @@ async function POST_interests(req, res) {
 }
 
 async function POST_contactUsEmail(req, res) {
-    const { phoneNumber, message, name, email, company } = sanitize(req.body);
+    const { message, name, email } = sanitize(req.body);
 
     // email to moonshot with the message the user entered
     let toMoonshotContent = `<div>
@@ -2058,10 +2099,6 @@ async function POST_contactUsEmail(req, res) {
             <p>${name}</p>
             <h3>Email</h3>
             <p>${email}</p>
-            <h3>Company</h3>
-            <p>${company}</p>
-            <h3>Phone Number</h3>
-            <p>${phoneNumber}</p>
             <h3>Message</h3>
             <p>${message}</p>
         </div>`;
@@ -3390,6 +3427,49 @@ async function POST_uploadCandidateCSV(req, res) {
             console.log("Error sending email with candidates file: ", error);
             return res.status(500).send({ message: "Error uploading candidates file." });
         });
+}
+
+// get the colors of a business
+async function GET_colors(req, res) {
+    const { name } = req.query;
+
+    if (!name) {
+        return res.status(400).send({ message: "Bad request." });
+    }
+
+    // get the business the user works for
+    try {
+        const query = {
+            $or: [
+                { uniqueNameLowerCase: name.toLowerCase() },
+                {
+                    $and: [
+                        // if searching by name, company has to have been made
+                        // before searching by unique name was possible
+                        { name: name },
+                        {
+                            $or: [
+                                { dateCreated: { $lte: new Date("2018-09-27") } },
+                                { dateCreated: { $exists: false } }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+        var business = await Businesses.findOne(query).select(
+            "headerLogo name backgroundColor primaryColor buttonTextColor"
+        );
+    } catch (findBizError) {
+        console.log("Error finding business when getting colors: ", findBizError);
+        return res.status(500).send({ message: "Server error, couldn't get business colors." });
+    }
+
+    if (!business) {
+        return res.status(404).send({ message: "Invalid url" });
+    }
+
+    return res.json(business);
 }
 
 // creates a unique api key for a business

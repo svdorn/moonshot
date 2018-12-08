@@ -98,13 +98,17 @@ class DashboardItem extends Component {
         const { currentUser, positionCount } = this.props;
 
         if (currentUser && this.props.positionCount == undefined) {
-            content = <div className="fully-center"><CircularProgress style={{ color: primaryCyan }} /></div>;
+            content = (
+                <div className="fully-center">
+                    <CircularProgress style={{ color: primaryCyan }} />
+                </div>
+            );
         }
 
         return (
             <div
                 styleName={`dashboard-item-container width-${width} ` + mobileWidth}
-                className={this.props.blurred ? "slightly-blurred" : ""}
+                className={this.props.blurred ? "slightly-blurred noselect" : ""}
             >
                 {content}
             </div>

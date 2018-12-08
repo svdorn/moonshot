@@ -15,6 +15,7 @@ import { goTo } from "../../../../../../miscFunctions";
 import { button } from "../../../../../../classes.js";
 import axios from "axios";
 import AddPositionModal from "./addPositionModal";
+import ShiftArrow from "../../../../../miscComponents/ShiftArrow";
 
 import "../../../dashboard.css";
 
@@ -59,11 +60,12 @@ class IntroductionModal extends Component {
                 <div className="font16px font14pxUnder700 font12pxUnder500 marginTop10px">
                     We created a 22-minute evaluation that you can share with your candidates to
                     understand their personality, ability to learn, adapt and problem solve. This
-                    data enables us to predict each candidate{"'"}s job performance, growth
-                    potential, longevity or tenure, and culture fit at your company.
+                    data enables us to predict each candidate’s job performance, growth potential,
+                    culture fit, and longevity at your company.
                 </div>
-                <div styleName="blue-arrow" onClick={this.welcomeFrameClick}>
-                    Continue <img src={`/icons/ArrowBlue${this.props.png}`} />
+                <div styleName="welcome-text" onClick={this.welcomeFrameClick}>
+                    Continue{" "}
+                    <ShiftArrow width="17px" color="cyan" style={{ marginBottom: "4px" }} />
                 </div>
             </div>
         );
@@ -73,19 +75,21 @@ class IntroductionModal extends Component {
         let frame = null;
         if (this.state.frame === "addPosition") {
             frame = (
-                <AddPositionModal
-                    close={this.close}
-                    title={this.state.title}
-                    role={this.state.role}
-                />
+                <div styleName="modal-position-info">
+                    <AddPositionModal
+                        close={this.close}
+                        title={this.state.title}
+                        role={this.state.role}
+                    />
+                </div>
             );
         } else {
-            frame = this.makeWelcomeFrame();
+            frame = <div className="modal-signup">{this.makeWelcomeFrame()}</div>;
         }
 
         return (
             <Dialog open={!!this.props.open} maxWidth={false} onClose={this.close}>
-                <div styleName="modal-signup">{frame}</div>
+                {frame}
             </Dialog>
         );
     }
