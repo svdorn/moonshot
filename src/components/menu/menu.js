@@ -257,7 +257,11 @@ class Menu extends Component {
             (!!currentUser && currentUser.userType == "accountAdmin") ||
             (!currentUser && !this.isCandidatePage(pathname));
         const poweredBy =
-            (logo !== "MoonshotWhite");
+            (logo !== "MoonshotWhite") &&
+            !(pathname.startsWith("/apply/") ||
+            pathname.startsWith("/introduction") ||
+            pathname.startsWith("/finishevaluation") ||
+            pathname.startsWith("/finished"));
         return moonshotLogo ? (
             <div>
                 <img
@@ -271,7 +275,7 @@ class Menu extends Component {
                 />
                 {poweredBy ?
                     <div styleName="powered-by">
-                        Powered By <b>Moonshot Insights</b>
+                        Powered by <b>Moonshot Insights</b>
                     </div>
                     : null
                 }

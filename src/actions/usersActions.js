@@ -28,7 +28,6 @@ export function getUserFromSession(callback, wait) {
                 });
                 // Get correct color scheme for the user
                 const user = response.data.user;
-                console.log("user: ", user);
                 if (user && user.primaryColor && user.backgroundColor) {
                     dispatch(
                         updateColors(

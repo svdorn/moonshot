@@ -18,6 +18,8 @@
     display: inline-block;
     vertical-align: bottom;
     padding-bottom: 5px;
+    padding-left: 3px;
+    opacity: 0.6;
 }
 
 .product-tour {
