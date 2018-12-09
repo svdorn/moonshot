@@ -116,13 +116,13 @@ class CognitiveTest extends Component {
                     className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
                 >
                     <div className="font24px">
-                        <span style={{ color: this.props.primaryColor }}>Pattern Recognition</span>
+                        <span style={{ color: this.props.primaryColor }}>Instructions</span>
                     </div>
                     <div>
                         <p>
                             You will be given a series of problems. Each will contain 8 images
                             arranged in a 3 x 3 grid. These shapes make up some pattern. The grid is
-                            missing an the image in the bottom right.
+                            missing an image in the bottom right.
                         </p>
                         <p>
                             Your goal is to find the image that matches the pattern. In the example
