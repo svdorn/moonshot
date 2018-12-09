@@ -24,6 +24,7 @@ import Pricing from "./components/pages/pricing";
 import ApplyContainer from "./components/pages/applyContainer";
 import GeneralApply from "./components/pages/generalApply";
 import Apply from "./components/pages/apply";
+import Employee from "./components/pages/employee";
 import VerifyEmail from "./components/pages/verifyEmail";
 import ForgotPassword from "./components/pages/forgotpassword";
 import ChangePassword from "./components/pages/changepasswordforgot";
@@ -148,6 +149,11 @@ const routes = (
             <Route path="apply" page={<ApplyContainer />}>
                 <IndexRoute component={GeneralApply} />
                 <Route path=":company" component={Apply} />
+            </Route>
+
+            <Route path="employee" page={<ApplyContainer />}>
+                <IndexRoute component={GeneralApply} />
+                <Route path=":company" component={Employee} />
             </Route>
 
             <Route

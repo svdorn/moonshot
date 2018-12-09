@@ -419,7 +419,7 @@ function updateEvalState(dispatch, data) {
     }
     // if the user finished the eval
     if (data.evaluationState.component === "Finished") {
-        if (data.user && !data.user.email) {
+        if (data.user && !data.user.email && data.user.userType !== "employee") {
             goTo("/finishEvaluation");
         } else {
             // go home
