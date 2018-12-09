@@ -117,17 +117,17 @@ class CandidateResults extends Component {
             hiringStage: data.hiringStage,
             isDismissed: data.isDismissed
         };
-        if (data.skillScores) {
-            var hardSkillPoints = data.skillScores.map(skill => {
-                return {
-                    x: skill.name,
-                    y: this.round(skill.mostRecentScore),
-                    confidenceInterval: 16
-                };
-            });
-        } else {
-            var hardSkillPoints = [];
-        }
+        // if (data.skillScores) {
+        //     var hardSkillPoints = data.skillScores.map(skill => {
+        //         return {
+        //             x: skill.name,
+        //             y: this.round(skill.mostRecentScore),
+        //             confidenceInterval: 16
+        //         };
+        //     });
+        // } else {
+        var hardSkillPoints = [];
+        // }
 
         let scores = data.performanceScores;
         if (!data.performanceScores) {
