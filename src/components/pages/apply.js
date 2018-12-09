@@ -144,7 +144,6 @@ class Apply extends Component {
             if (admin && !positions.some(p => p.name === addMoreLater)) {
                 positions.push({ name: addMoreLater });
             }
-            console.log(positions)
             this.setState({ positions, position, logo, company, admin, pageSetUp, uniqueName });
         } else {
             console.log("in here");
