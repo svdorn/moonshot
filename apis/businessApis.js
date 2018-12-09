@@ -1183,15 +1183,26 @@ async function createPosition(name, type, businessId, isManager) {
 
         bizPos._id = _id;
 
-        let code;
         try {
-            code = await createLink(businessId, _id, "candidate");
+            var code = await createLink(businessId, _id, "candidate");
         } catch (createLinkError) {
-            console.log("error creating link: ", createLinkError);
+            console.log("error creating link for candidates: ", createLinkError);
+            return res.status(500).send(errors.SERVER_ERROR);
+        }
+        try {
+            var employeeCode = await createLink(businessId, _id, "employee");
+        } catch (createLinkError) {
+            console.log("error creating link for employees: ", createLinkError);
             return res.status(500).send(errors.SERVER_ERROR);
         }
 
-        bizPos.code = code.code;
+        if (code && employeeCode) {
+            bizPos.code = code.code;
+            bizPos.employeeCode = employeeCode.code;
+        } else {
+            console.log("error creating link for employees or candidates.");
+            return res.status(500).send(errors.SERVER_ERROR);
+        }
 
         return resolve(bizPos);
     });
