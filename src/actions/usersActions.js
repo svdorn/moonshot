@@ -862,7 +862,7 @@ export function postCandidate(user) {
     };
 }
 
-// POST USER
+// POST USER - posting account admin user
 export function postUser(user) {
     return function(dispatch) {
         dispatch({ type: "POST_USER_REQUESTED" });
@@ -875,7 +875,11 @@ export function postUser(user) {
                     user: response.data.user,
                     fullAccess: response.data.fullAccess
                 });
-                goTo("/myEvaluations");
+                if (response.data && response.data.user && response.data.user.userType === "accountAdmin") {
+                    goTo("/dashboard");
+                } else {
+                    goTo("/myEvaluations");
+                }
             })
             .catch(error => {
                 // standard error message
