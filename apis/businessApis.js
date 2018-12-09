@@ -2990,7 +2990,7 @@ async function GET_positionsForApply(req, res) {
             ]
         };
         var business = await Businesses.findOne(query).select(
-            "logo name positions positions.name positions.code positions.employeeCode"
+            "logo name positions positions.name positions.code positions.employeeCode positions.positionType"
         );
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);

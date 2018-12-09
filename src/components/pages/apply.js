@@ -144,6 +144,7 @@ class Apply extends Component {
             if (admin && !positions.some(p => p.name === addMoreLater)) {
                 positions.push({ name: addMoreLater });
             }
+            console.log(positions)
             this.setState({ positions, position, logo, company, admin, pageSetUp, uniqueName });
         } else {
             console.log("in here");
@@ -197,7 +198,7 @@ class Apply extends Component {
         });
 
         const code = this.state.positions[position].code;
-        const type = this.state.positions[position].length === 30 ? true : false;
+        const type = this.state.positions[position].positionType === "Developer" ? true : false;
 
         URL += code;
         URL += `&company=${this.state.company}&uniqueName=${this.state.uniqueName}&developer=${type}`;
