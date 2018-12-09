@@ -271,7 +271,7 @@ class Apply extends Component {
                 <div styleName="employer-box">
                     {description}
                     <Button onClick={onClick} style={{ marginTop: "20px" }}>
-                        {buttonText} <ShiftArrow inButton={true} />
+                        {buttonText} <ShiftArrow inButton={true} style={{ marginLeft: "4px" }} />
                     </Button>
                 </div>
             </div>
