@@ -42,7 +42,9 @@ class Introduction extends Component {
         this.state = {
             agreeingToTerms: false,
             company: undefined,
-            uniqueName: undefined
+            uniqueName: undefined,
+            // whether this role is a developer role
+            developer: false
         };
     }
 
@@ -81,7 +83,10 @@ class Introduction extends Component {
             if (location.query.uniqueName) {
                 var uniqueName = location.query.uniqueName;
             }
-            this.setState({ company, uniqueName });
+            if (location.query.developer) {
+                var developer = location.query.developer;
+            }
+            this.setState({ company, uniqueName, developer });
         }
 
         // add listener for keyboard enter key
@@ -186,11 +191,19 @@ class Introduction extends Component {
                     </div>
                 </div>
                 <div styleName="text">
-                    <div>
-                        This evaluation consists of some quick administrative questions, a
-                        personality evaluation, and a pattern recognition test. Set aside at least
-                        22 minutes to complete the evaluation.
-                    </div>
+                    {this.state.developer ?
+                        <div>
+                            This evaluation consists of some quick administrative questions, a
+                            personality evaluation, a pattern recognition test, and a short programming quiz. Set aside at least
+                            30 minutes to complete the evaluation.
+                        </div>
+                    :
+                        <div>
+                            This evaluation consists of some quick administrative questions, a
+                            personality evaluation, and a pattern recognition test. Set aside at least
+                            22 minutes to complete the evaluation.
+                        </div>
+                    }
                     <div>Please enter your name below to begin the evaluation.</div>
                 </div>
                 <div style={{ marginTop: "10px" }}>

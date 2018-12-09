@@ -884,7 +884,7 @@ async function createPosition(name, type, businessId, isManager) {
             name: name,
             positionType: type,
             isManager,
-            length: type === "Developer" ? 40 : 22,
+            length: type === "Developer" ? 30 : 22,
             dateCreated: Date.now(),
             timeAllotted: 60
         };
@@ -1297,6 +1297,7 @@ function createEmailInfo(businessId, positionId, userType, email) {
                     }
                     if (userType === "candidate") {
                         var code = position.code;
+                        var developer = position.length === 30;
                     } else {
                         var code = position.employeeCode;
                     }
@@ -1314,7 +1315,7 @@ function createEmailInfo(businessId, positionId, userType, email) {
                     "Could not find correct codes to send emails, please contact us for assistance."
                 );
             }
-            resolve({ code, companyName, uniqueName, email, userType });
+            resolve({ code, developer, companyName, uniqueName, email, userType });
         } catch (error) {
             // catch whatever random error comes up
             reject(error);
@@ -1330,6 +1331,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
         const companyName = emailInfo.companyName;
         const email = emailInfo.email;
         const userType = emailInfo.userType;
+        const developer = emailInfo.developer;
 
         // recipient of the email
         const recipient = [email];
@@ -1370,6 +1372,8 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                     companyName +
                     "&uniqueName=" +
                     uniqueName +
+                    "&developer=" +
+                    developer ? developer : false +
                     '">Begin Evaluation</a>';
                 subject = businessName + " invited you to the next round";
                 content =

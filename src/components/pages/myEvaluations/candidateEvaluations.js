@@ -190,7 +190,6 @@ class MyEvaluations extends Component {
                         attributes.name = position.positionName;
                         attributes.length = position.length;
                         attributes.company = position.businessName;
-                        attributes.length = position.length;
                         attributes.assignedDate = position.assignedDate;
                         attributes.startDate = position.startDate;
                         attributes.completedDate = position.completedDate;
