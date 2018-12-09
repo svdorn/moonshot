@@ -1272,15 +1272,30 @@ function createLink(businessId, positionId, userType) {
 function createEmailInfo(businessId, positionId, userType, email) {
     return new Promise(async function(resolve, reject) {
         try {
-            console.log("userType: ", userType);
-            if (userType == "candidate" || userType == "employee") {
+            if (userType === "candidate" || userType === "employee") {
                 try {
                     var business = await Businesses.findById(businessId).select(
-                        "uniqueName"
+                        "uniqueName name positions"
                     );
-                    console.log("business: ", business)
-                    console.log("uniqueName: ", business.uniqueName);
+
                     var uniqueName = business.uniqueName;
+                    var companyName = business.name;
+                    // find the position within the business
+                    const positionIndex = business.positions.findIndex(currPosition => {
+                        return currPosition._id.toString() === positionId.toString();
+                    });
+                    if (typeof positionIndex !== "number" || positionIndex < 0) {
+                        return reject("Could not find correct codes to send emails, please contact us for assistance.");
+                    }
+                    const position = business.positions[positionIndex];
+                    if (!position) {
+                        return reject("Could not find correct codes to send emails, please contact us for assistance.");
+                    }
+                    if (userType === "candidate") {
+                        var code = position.code;
+                    } else {
+                        var code = position.employeeCode;
+                    }
                 }
                 catch(error) {
                     console.log("Cannot get business uniqueName for apply page.")
@@ -1292,7 +1307,7 @@ function createEmailInfo(businessId, positionId, userType, email) {
             } else {
                 return reject("Could not find correct codes to send emails, please contact us for assistance.");
             }
-            resolve({ code, uniqueName, email, userType });
+            resolve({ code, companyName, uniqueName, email, userType });
         } catch (error) {
             // catch whatever random error comes up
             reject(error);
@@ -1305,7 +1320,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
     return new Promise(async function(resolve, reject) {
         const code = emailInfo.code;
         const uniqueName = emailInfo.uniqueName;
-        console.log("emailInfo: ", emailInfo);
+        const companyName = emailInfo.companyName;
         const email = emailInfo.email;
         const userType = emailInfo.userType;
 
@@ -1342,7 +1357,11 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                 createAccountButton =
                     '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' +
                     moonshotUrl +
-                    "apply/" +
+                    "introduction?code=" +
+                    code +
+                    "&company=" +
+                    companyName +
+                    "&uniqueName=" +
                     uniqueName +
                     '">Begin Evaluation</a>';
                 subject = businessName + " invited you to the next round";
@@ -1369,7 +1388,11 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                 createAccountButton =
                     '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' +
                     moonshotUrl +
-                    "employee/" +
+                    "introduction?code=" +
+                    code +
+                    "&company=" +
+                    companyName +
+                    "&uniqueName=" +
                     uniqueName +
                     '">Begin Evaluation</a>';
                 subject = businessName + " invited you to take the " + positionName + " evaluation";
