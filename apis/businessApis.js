@@ -1331,7 +1331,9 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
         const companyName = emailInfo.companyName;
         const email = emailInfo.email;
         const userType = emailInfo.userType;
-        const developer = emailInfo.developer;
+        let developer = emailInfo.developer;
+
+        developer = developer ? true : false;
 
         // recipient of the email
         const recipient = [email];
@@ -1373,7 +1375,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                     "&uniqueName=" +
                     uniqueName +
                     "&developer=" +
-                    developer ? developer : false +
+                    developer +
                     '">Begin Evaluation</a>';
                 subject = businessName + " invited you to the next round";
                 content =

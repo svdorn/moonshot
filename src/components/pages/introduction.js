@@ -191,13 +191,13 @@ class Introduction extends Component {
                     </div>
                 </div>
                 <div styleName="text">
-                    {this.state.developer ?
+                    {this.state.developer == "true" ?
                         <div>
                             This evaluation consists of some quick administrative questions, a
                             personality evaluation, a pattern recognition test, and a short programming quiz. Set aside at least
                             30 minutes to complete the evaluation.
                         </div>
-                    :
+                        :
                         <div>
                             This evaluation consists of some quick administrative questions, a
                             personality evaluation, and a pattern recognition test. Set aside at least
