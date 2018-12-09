@@ -3,7 +3,7 @@ import axios from "axios";
 import { reset } from "redux-form";
 import { goTo, propertyExists, makeSingular } from "../miscFunctions";
 
-const MOONSHOT_BLACK = "#2a2a2a";
+const MOONSHOT_BLACK = "#2e2e2e";
 const MOONSHOT_WHITE = "#ffffff";
 const MOONSHOT_CYAN = "#76defe";
 const TEXT_BLACK = "#000000";
@@ -28,7 +28,6 @@ export function getUserFromSession(callback, wait) {
                 });
                 // Get correct color scheme for the user
                 const user = response.data.user;
-                console.log("user: ", user);
                 if (user && user.primaryColor && user.backgroundColor) {
                     dispatch(
                         updateColors(
@@ -420,7 +419,7 @@ function updateEvalState(dispatch, data) {
     }
     // if the user finished the eval
     if (data.evaluationState.component === "Finished") {
-        if (data.user && !data.user.email) {
+        if (data.user && !data.user.email && data.user.userType !== "employee") {
             goTo("/finishEvaluation");
         } else {
             // go home
@@ -863,7 +862,7 @@ export function postCandidate(user) {
     };
 }
 
-// POST USER
+// POST USER - posting account admin user
 export function postUser(user) {
     return function(dispatch) {
         dispatch({ type: "POST_USER_REQUESTED" });
@@ -876,7 +875,11 @@ export function postUser(user) {
                     user: response.data.user,
                     fullAccess: response.data.fullAccess
                 });
-                goTo("/myEvaluations");
+                if (response.data && response.data.user && response.data.user.userType === "accountAdmin") {
+                    goTo("/dashboard");
+                } else {
+                    goTo("/myEvaluations");
+                }
             })
             .catch(error => {
                 // standard error message

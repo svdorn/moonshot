@@ -379,7 +379,7 @@ class Apply extends Component {
                         className="font16px font14pxUnder500"
                         style={{ width: "88%", margin: "auto" }}
                     >
-                        Select the position you would like to apply for.
+                        Select the position you are applying for.
                     </div>
                     <div className="font30px font16pxUnder400 marginBottom30px">
                         {this.makeDropdown(position)}

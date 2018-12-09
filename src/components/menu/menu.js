@@ -250,22 +250,37 @@ class Menu extends Component {
     };
 
     makeMoonshotLogo = (moonshotLogo, pathname) => {
-        const { currentUser } = this.props;
+        const { currentUser, logo } = this.props;
         // if the logo is a link, make clicking it go home and make it look clickable
         // don't have the moonshot logo redirect to homepage if user is/will be a candidate/employee
         const logoIsLink =
             (!!currentUser && currentUser.userType == "accountAdmin") ||
             (!currentUser && !this.isCandidatePage(pathname));
+        const poweredBy =
+            (logo !== "MoonshotWhite") &&
+            !(pathname.startsWith("/apply/") ||
+            pathname.startsWith("/introduction") ||
+            pathname.startsWith("/finishevaluation") ||
+            pathname.startsWith("/finished") ||
+            pathname.startsWith("/employee/"));
         return moonshotLogo ? (
-            <img
-                width={136}
-                height={64}
-                alt="Moonshot"
-                className={"moonshotMenuLogo" + (logoIsLink ? " clickable" : "")}
-                id="moonshotLogo"
-                src={moonshotLogo}
-                onClick={logoIsLink ? () => goTo("/") : noop}
-            />
+            <div>
+                <img
+                    width={136}
+                    height={64}
+                    alt="Moonshot"
+                    className={"inlineBlock moonshotMenuLogo" + (logoIsLink ? " clickable" : "")}
+                    id="moonshotLogo"
+                    src={moonshotLogo}
+                    onClick={logoIsLink ? () => goTo("/") : noop}
+                />
+                {poweredBy ?
+                    <div styleName="powered-by">
+                        Powered by <b>Moonshot Insights</b>
+                    </div>
+                    : null
+                }
+            </div>
         ) : null;
     };
 

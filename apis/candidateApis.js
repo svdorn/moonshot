@@ -736,8 +736,6 @@ function POST_candidate(req, res) {
                 });
             }
 
-            console.log("user: ", user);
-
             // code is legit and all properties using it are set; resolve
             resolve(true);
         });

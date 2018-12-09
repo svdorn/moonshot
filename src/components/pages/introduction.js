@@ -240,10 +240,10 @@ class Introduction extends Component {
         return (
             <div className="fillScreen">
                 <MetaTags>
-                    <title>Introduction | Moonshot</title>
+                    <title>Introduction | {this.state.company ? this.state.company : "Moonshot Insights"}</title>
                     <meta
                         name="description"
-                        content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
+                        content="Enter name to begin evaluation. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
                 <div className="center">{content}</div>

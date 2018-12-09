@@ -11,6 +11,8 @@ const positionSchema = mongoose.Schema({
     open: Boolean,
     // the open signup code for signing up for this position
     code: String,
+    // the open signup code for employees signing up for this position
+    employeeCode: String,
     // if the position should be listed as one that candidates can apply for
     currentlyHiring: Boolean,
     // which of the 5 functions the position falls under

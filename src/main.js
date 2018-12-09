@@ -110,7 +110,8 @@ class Main extends Component {
             location.pathname &&
             ((location.pathname.toLowerCase().startsWith("/apply/") &&
                 (!location.query || !location.query.onboarding)) ||
-                location.pathname.toLowerCase().startsWith("/introduction"))
+                location.pathname.toLowerCase().startsWith("/introduction") ||
+                location.pathname.toLowerCase().startsWith("/employee/"))
         ) {
             var wait = true;
         }

@@ -14,6 +14,14 @@
     opacity: 0.7;
 }
 
+.powered-by {
+    display: inline-block;
+    vertical-align: bottom;
+    padding-bottom: 5px;
+    padding-left: 3px;
+    opacity: 0.6;
+}
+
 .product-tour {
     display: inline-block;
     overflow-x: hidden;
@@ -28,4 +36,10 @@
     width: 0px;
     margin-left: 0;
     margin-right: 0;
+}
+
+@media screen and (max-width: 450px) {
+    .powered-by {
+        display: none;
+    }
 }

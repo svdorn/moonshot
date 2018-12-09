@@ -1091,6 +1091,7 @@ class MyCandidates extends Component {
     }
 
     hideMessage() {
+        let self = this;
         const { currentUser } = this.props;
         if (!currentUser) {
             return this.props.addNotification(
@@ -1111,7 +1112,9 @@ class MyCandidates extends Component {
         const verificationToken = currentUser.verificationToken;
 
         this.props.hidePopups(userId, verificationToken, popups);
-        this.props.intercomEvent("candidates_page_first_time", userId, verificationToken, null);
+        setTimeout(function() {
+            self.props.intercomEvent("candidates_page_first_time", userId, verificationToken, null);
+        }, 2000);
     }
 
     // the tabs at the top that say All, Favorites, etc...
