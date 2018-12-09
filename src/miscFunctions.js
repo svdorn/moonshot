@@ -467,6 +467,10 @@ function darken(color, difference) {
 function isWhiteOrUndefined(color) {
     return !color || color.toLowerCase() == "#ffffff" || color.toLowerCase() == "white";
 }
+// return true if the color is white
+function isWhite(color) {
+    return color.toLowerCase() == "#ffffff" || color.toLowerCase() == "white";
+}
 
 const miscFunctions = {
     qualifierFromScore,
