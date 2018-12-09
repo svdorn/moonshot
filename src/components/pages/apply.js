@@ -57,7 +57,7 @@ class Apply extends Component {
             );
         }
 
-        if ((!this.props.location.query || !this.props.location.query.onboarding)) {
+        if (!this.props.location.query || !this.props.location.query.onboarding) {
             this.props.getColorsFromBusiness(company);
         }
     }
@@ -271,7 +271,7 @@ class Apply extends Component {
                 <div styleName="employer-box">
                     {description}
                     <Button onClick={onClick} style={{ marginTop: "20px" }}>
-                        {buttonText}
+                        {buttonText} <ShiftArrow inButton={true} />
                     </Button>
                 </div>
             </div>

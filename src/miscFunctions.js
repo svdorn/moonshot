@@ -499,6 +499,7 @@ const miscFunctions = {
     round,
     darken,
     isWhiteOrUndefined,
+    isWhite,
 
     Queue,
     Stack

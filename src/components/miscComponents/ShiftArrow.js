@@ -2,12 +2,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { isWhite } from "../../miscFunctions";
-import { getContrastText } from "@material-ui/core/styles";
+import { withTheme } from "@material-ui/core/styles";
 import "./ShiftArrow.css";
 
 class ShiftArrow extends Component {
     getImageName = () => {
-        const { color, buttonTextColor, primaryColor, secondaryColor } = this.props;
+        const { color, buttonTextColor, primaryColor, secondaryColor, inButton } = this.props;
 
         if (["cyan", "blue"].includes(color)) {
             return "ArrowBlue";
@@ -17,19 +17,19 @@ class ShiftArrow extends Component {
             return "LineArrow-Black";
         } else if (buttonTextColor) {
             if (isWhite(this.props.buttonTextColor)) {
-                return "LineArrow";
+                return inButton ? "LineArrow" : "LineArrow-Black";
             } else {
-                return "LineArrow-Black";
+                return inButton ? "LineArrow-Black" : "LineArrow";
             }
         } else if (primaryColor || secondaryColor) {
             const buttonColor = secondaryColor || primaryColor;
-            if (isWhite(getContrastText(buttonColor))) {
-                return "LineArrow";
+            if (isWhite(this.props.theme.palette.getContrastText(buttonColor))) {
+                return inButton ? "LineArrow" : "LineArrow-Black";
             } else {
-                return "LineArrow-Black";
+                return inButton ? "LineArrow-Black" : "LineArrow";
             }
         } else {
-            return "LineArrow-Black";
+            return inButton ? "LineArrow-Black" : "LineArrow";
         }
     };
 
@@ -58,4 +58,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(ShiftArrow);
+export default connect(mapStateToProps)(withTheme()(ShiftArrow));

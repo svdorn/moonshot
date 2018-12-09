@@ -10,7 +10,8 @@
 }
 
 div:hover > .shift-arrow:not(.disabled),
-button:hover > .shift-arrow:not(.disabled) {
+button:hover > .shift-arrow:not(.disabled),
+button:hover > span > .shift-arrow:not(.disabled) {
     transform: translateX(50%);
 }
 
