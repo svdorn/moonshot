@@ -1174,8 +1174,8 @@ async function createPosition(name, type, businessId, isManager) {
 
         // include Data Structures and Algorithms skill tests if Dev position
         if (type === "Developer") {
-            bizPos.skills = ["5b4d7497fb6fc07d5ad278df", "5b4d7468fb6fc07d5ad278cc"];
-            bizPos.skillNames = ["Data Structures", "Algorithms"];
+            bizPos.skills = ["5c0d8edce7179a2e27054c3a"];
+            bizPos.skillNames = ["Programming"];
         }
 
         // initialize position id string
@@ -1285,27 +1285,34 @@ function createEmailInfo(businessId, positionId, userType, email) {
                         return currPosition._id.toString() === positionId.toString();
                     });
                     if (typeof positionIndex !== "number" || positionIndex < 0) {
-                        return reject("Could not find correct codes to send emails, please contact us for assistance.");
+                        return reject(
+                            "Could not find correct codes to send emails, please contact us for assistance."
+                        );
                     }
                     const position = business.positions[positionIndex];
                     if (!position) {
-                        return reject("Could not find correct codes to send emails, please contact us for assistance.");
+                        return reject(
+                            "Could not find correct codes to send emails, please contact us for assistance."
+                        );
                     }
                     if (userType === "candidate") {
                         var code = position.code;
                     } else {
                         var code = position.employeeCode;
                     }
-                }
-                catch(error) {
-                    console.log("Cannot get business uniqueName for apply page.")
-                    return reject("Could not find correct codes to send emails, please contact us for assistance.");
+                } catch (error) {
+                    console.log("Cannot get business uniqueName for apply page.");
+                    return reject(
+                        "Could not find correct codes to send emails, please contact us for assistance."
+                    );
                 }
             } else if (userType === "accountAdmin") {
                 const codeObj = await createCode(businessId, positionId, userType, email, false);
                 var code = codeObj.code;
             } else {
-                return reject("Could not find correct codes to send emails, please contact us for assistance.");
+                return reject(
+                    "Could not find correct codes to send emails, please contact us for assistance."
+                );
             }
             resolve({ code, companyName, uniqueName, email, userType });
         } catch (error) {
