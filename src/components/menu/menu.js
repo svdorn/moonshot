@@ -261,7 +261,8 @@ class Menu extends Component {
             !(pathname.startsWith("/apply/") ||
             pathname.startsWith("/introduction") ||
             pathname.startsWith("/finishevaluation") ||
-            pathname.startsWith("/finished"));
+            pathname.startsWith("/finished") ||
+            pathname.startsWith("/employee/"));
         return moonshotLogo ? (
             <div>
                 <img
