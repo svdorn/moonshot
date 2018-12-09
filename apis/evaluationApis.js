@@ -1563,14 +1563,11 @@ async function advance(user, businessId, positionId) {
                 try {
                     // update the business candidate count
                     var business = await Businesses.findOneAndUpdate(
-                        {_id: mongoose.Types.ObjectId(businessId) },
+                        { _id: mongoose.Types.ObjectId(businessId) },
                         { $inc: { candidateCount: 1 } }
                     );
                 } catch (updateBusinessError) {
-                    console.log(
-                        "error updating a business candidateCount: ",
-                        updateBusinessError
-                    );
+                    console.log("error updating a business candidateCount: ", updateBusinessError);
                 }
 
                 // update candidate count in intercom
@@ -1581,7 +1578,9 @@ async function advance(user, businessId, positionId) {
                             var intercom = await client.companies.update({
                                 company_id: business.intercomId,
                                 custom_attributes: {
-                                    candidates: business.candidateCount ? business.candidateCount : 1
+                                    candidates: business.candidateCount
+                                        ? business.candidateCount
+                                        : 1
                                 }
                             });
                         } catch (createIntercomError) {
@@ -1599,35 +1598,49 @@ async function advance(user, businessId, positionId) {
                 }
 
                 // if trial has ended and need to restrict access, restrict access
-                if (business && business.candidateCount && business.candidateCount > 18 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription && !business.billing.customPlan))) {
+                if (
+                    business &&
+                    business.candidateCount &&
+                    business.candidateCount > 18 &&
+                    business.fullAccess &&
+                    (!business.billing ||
+                        (business.billing &&
+                            !business.billing.subscription &&
+                            !business.billing.customPlan))
+                ) {
                     // get all account admins for this business
-                    try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
-                    catch(getUsersError) {
-                        console.log("error getting admins when trying to send them free trial ending message");
+                    try {
+                        var admins = await Users.find({
+                            userType: "accountAdmin",
+                            "businessInfo.businessId": mongoose.Types.ObjectId(business._id)
+                        }).select("intercom");
+                    } catch (getUsersError) {
+                        console.log(
+                            "error getting admins when trying to send them free trial ending message"
+                        );
                     }
                     // will contain all the promises for sending emails
                     let intercomPromises = [];
 
                     // add a promise to create a code and send an email for each given address
                     admins.forEach(admin => {
-                        intercomPromises.push(
-                            sendIntercomPlanUpdate(admin.intercom, "ended")
-                        );
+                        intercomPromises.push(sendIntercomPlanUpdate(admin.intercom, "ended"));
                     });
 
                     // wait for all the emails to send
                     try {
                         await Promise.all(intercomPromises);
                     } catch (sendEmailsError) {
-                        console.log("error getting admins when trying to send them free trial ending message");
+                        console.log(
+                            "error getting admins when trying to send them free trial ending message"
+                        );
                     }
                     // restrict the fullAccess of the business
                     business.fullAccess = false;
 
                     try {
                         await business.save();
-                    }
-                    catch (updateBusinessError) {
+                    } catch (updateBusinessError) {
                         console.log(
                             "error updating a business to have full access: ",
                             updateBusinessError
@@ -1635,27 +1648,42 @@ async function advance(user, businessId, positionId) {
                     }
                 }
                 // if trial is coming to an end, send email
-                else if (business && business.candidateCount && business.candidateCount === 12 && business.fullAccess && (!business.billing || (business.billing && !business.billing.subscription && !business.billing.customPlan))) {
+                else if (
+                    business &&
+                    business.candidateCount &&
+                    business.candidateCount === 12 &&
+                    business.fullAccess &&
+                    (!business.billing ||
+                        (business.billing &&
+                            !business.billing.subscription &&
+                            !business.billing.customPlan))
+                ) {
                     // get all account admins for this business
-                    try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
-                    catch(getUsersError) {
-                        console.log("error getting admins when trying to send them free trial ending message");
+                    try {
+                        var admins = await Users.find({
+                            userType: "accountAdmin",
+                            "businessInfo.businessId": mongoose.Types.ObjectId(business._id)
+                        }).select("intercom");
+                    } catch (getUsersError) {
+                        console.log(
+                            "error getting admins when trying to send them free trial ending message"
+                        );
                     }
                     // will contain all the promises for sending emails
                     let intercomPromises = [];
 
                     // add a promise to create a code and send an email for each given address
                     admins.forEach(admin => {
-                        intercomPromises.push(
-                            sendIntercomPlanUpdate(admin.intercom, "ending")
-                        );
+                        intercomPromises.push(sendIntercomPlanUpdate(admin.intercom, "ending"));
                     });
 
                     // wait for all the emails to send
                     try {
                         await Promise.all(intercomPromises);
                     } catch (sendEmailsError) {
-                        console.log("error getting admins when trying to send them free trial ending message");
+                        console.log(
+                            "error getting admins when trying to send them free trial ending message"
+                        );
                     }
                 }
 
@@ -1680,7 +1708,7 @@ async function sendIntercomPlanUpdate(intercom, update) {
     return new Promise(async function(resolve, reject) {
         if (typeof update !== "string") {
             console.log("error in send intercom plan update, insufficient arguments");
-            console.log("update not a string")
+            console.log("update not a string");
             return resolve();
         }
         if (!intercom || !intercom.id) {
@@ -1701,13 +1729,16 @@ async function sendIntercomPlanUpdate(intercom, update) {
         // create event
         try {
             await client.events.create({ event_name, created_at, user_id: intercom.id });
-        } catch(createIntercomEventError) {
-            console.log("error creating intercom event for sending plan update emails: ", createIntercomEventError);
+        } catch (createIntercomEventError) {
+            console.log(
+                "error creating intercom event for sending plan update emails: ",
+                createIntercomEventError
+            );
             return resolve();
         }
 
         return resolve();
-    })
+    });
 }
 
 // get the current state of an evaluation, including the current stage, what
@@ -2294,14 +2325,19 @@ async function addSkillInfo(user, evaluationState, position) {
                         // get this skill from the db
                         try {
                             var skill = await Skills.findById(userSkill.skillId).select(
-                                "levels.questions.body levels.questions._id levels.questions.options.body levels.questions.options._id"
+                                "levels.questions.body levels.questions._id levels.questions.shuffle levels.questions.options.body levels.questions.options._id"
                             );
 
                             // get the question from the skill
                             const questions = skill.levels[0].questions;
-                            const question = questions.find(
+                            let question = questions.find(
                                 q => q._id.toString() === currQ.questionId.toString()
                             );
+
+                            // shuffle the options in the question
+                            if (question.shuffle !== false) {
+                                question.options = shuffle(question.options);
+                            }
 
                             // give this question to eval state so user can see it
                             evaluationState.componentInfo = question;
@@ -2533,13 +2569,19 @@ async function getNewSkillQuestion(userSkill) {
         };
 
         // create the question object for the eval component
-        const componentQuestion = {
+        let componentQuestion = {
             _id: question._id,
             body: question.body,
+            // only give the body and id of each option
             options: question.options.map(opt => {
                 return { body: opt.body, _id: opt._id };
             })
         };
+
+        // shuffle the options in the question
+        if (question.shuffle !== false) {
+            componentQuestion.options = shuffle(componentQuestion.options);
+        }
 
         // return the new user's skill object and question
         return resolve({ userSkill, componentQuestion, stepProgress });
