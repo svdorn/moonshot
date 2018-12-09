@@ -1272,8 +1272,27 @@ function createLink(businessId, positionId, userType) {
 function createEmailInfo(businessId, positionId, userType, email) {
     return new Promise(async function(resolve, reject) {
         try {
-            const codeObj = await createCode(businessId, positionId, userType, email, false);
-            resolve({ code: codeObj.code, email, userType });
+            console.log("userType: ", userType);
+            if (userType == "candidate" || userType == "employee") {
+                try {
+                    var business = await Businesses.findById(businessId).select(
+                        "uniqueName"
+                    );
+                    console.log("business: ", business)
+                    console.log("uniqueName: ", business.uniqueName);
+                    var uniqueName = business.uniqueName;
+                }
+                catch(error) {
+                    console.log("Cannot get business uniqueName for apply page.")
+                    return reject("Could not find correct codes to send emails, please contact us for assistance.");
+                }
+            } else if (userType === "accountAdmin") {
+                const codeObj = await createCode(businessId, positionId, userType, email, false);
+                var code = codeObj.code;
+            } else {
+                return reject("Could not find correct codes to send emails, please contact us for assistance.");
+            }
+            resolve({ code, uniqueName, email, userType });
         } catch (error) {
             // catch whatever random error comes up
             reject(error);
@@ -1285,6 +1304,8 @@ function createEmailInfo(businessId, positionId, userType, email) {
 async function sendEmailInvite(emailInfo, positionName, businessName, userName) {
     return new Promise(async function(resolve, reject) {
         const code = emailInfo.code;
+        const uniqueName = emailInfo.uniqueName;
+        console.log("emailInfo: ", emailInfo);
         const email = emailInfo.email;
         const userType = emailInfo.userType;
 
@@ -1296,12 +1317,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
         let subject = "";
 
         // the button linking to the signup page with the signup code in the url
-        const createAccountButton =
-            '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' +
-            moonshotUrl +
-            "signup?code=" +
-            code +
-            '">Create Account</a>';
+        let createAccountButton = "";
 
         // at the end of every user's email
         const emailFooter =
@@ -1323,6 +1339,12 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
 
         switch (userType) {
             case "candidate":
+                createAccountButton =
+                    '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' +
+                    moonshotUrl +
+                    "apply/" +
+                    uniqueName +
+                    '">Begin Evaluation</a>';
                 subject = businessName + " invited you to the next round";
                 content =
                     '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">' +
@@ -1334,7 +1356,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                     " position. The next step is completing " +
                     businessName +
                     "&#39;s evaluation on Moonshot." +
-                    " Please click the button below to create your account. Once you&#39;ve created your account, you can begin your evaluation." +
+                    " Please click the button below to take your evaluation." +
                     "</p>" +
                     '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot and congrats on advancing to the next step for the ' +
                     positionName +
@@ -1344,6 +1366,12 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                     "</div>";
                 break;
             case "employee":
+                createAccountButton =
+                    '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' +
+                    moonshotUrl +
+                    "employee/" +
+                    uniqueName +
+                    '">Begin Evaluation</a>';
                 subject = businessName + " invited you to take the " + positionName + " evaluation";
                 content =
                     '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">' +
@@ -1358,13 +1386,19 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                     " Your participation will help create a baseline for " +
                     businessName +
                     "&#39;s predictive candidate evaluations for incoming applicants." +
-                    " Please click the button below to create an account. Once you&#39;ve created your account you can begin your evaluation.</p>" +
+                    " Please click the button below to take your evaluation.</p>" +
                     '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>' +
                     createAccountButton +
                     emailFooter +
                     "</div>";
                 break;
             case "accountAdmin":
+                createAccountButton =
+                    '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' +
+                    moonshotUrl +
+                    "signup?code=" +
+                    code +
+                    '">Create Account</a>';
                 subject = businessName + " invited you to be an admin on Moonshot";
                 content =
                     '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">' +
