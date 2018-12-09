@@ -1114,7 +1114,7 @@ class MyCandidates extends Component {
         this.props.hidePopups(userId, verificationToken, popups);
         setTimeout(function() {
             self.props.intercomEvent("candidates_page_first_time", userId, verificationToken, null);
-        }, 3000);
+        }, 2000);
     }
 
     // the tabs at the top that say All, Favorites, etc...
