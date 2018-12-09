@@ -3,7 +3,7 @@ import axios from "axios";
 import { reset } from "redux-form";
 import { goTo, propertyExists, makeSingular } from "../miscFunctions";
 
-const MOONSHOT_BLACK = "#2a2a2a";
+const MOONSHOT_BLACK = "#2e2e2e";
 const MOONSHOT_WHITE = "#ffffff";
 const MOONSHOT_CYAN = "#76defe";
 const TEXT_BLACK = "#000000";
