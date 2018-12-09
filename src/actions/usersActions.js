@@ -538,6 +538,20 @@ export function getColorsFromBusiness(name) {
     };
 }
 
+export function setDefaultColors() {
+    return function(dispatch) {
+        dispatch(
+            updateColors(
+                MOONSHOT_CYAN,
+                MOONSHOT_BLACK,
+                MOONSHOT_LOGO,
+                MOONSHOT_WHITE,
+                undefined
+            )
+        );
+    }
+}
+
 export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
     return function(dispatch) {
         axios
@@ -1111,16 +1125,17 @@ function updateColors(primary, background, logo, secondary, buttonTextColor) {
 
         if (primary) {
             primaryColor = primary;
+            if (!secondary) {
+                secondaryColor = primaryColor;
+            } else {
+                secondaryColor = secondary;
+            }
         } else {
             primaryColor = MOONSHOT_CYAN;
+            secondaryColor = MOONSHOT_WHITE;
         }
         if (!logo) {
             logo = MOONSHOT_LOGO;
-        }
-        if (!secondary) {
-            secondaryColor = primaryColor;
-        } else {
-            secondaryColor = secondary;
         }
 
         dispatch({ type: "UPDATE_STORE", variableName: "backgroundColor", value: backgroundColor });
