@@ -191,14 +191,10 @@ class MyEvaluationsPreview extends Component {
             );
 
             infoArea = (
-                <div className="font16px center myEvalsInfoRight" style={{ color: this.props.primaryColor }}>
+                <div className="font16px center myEvalsInfoRight marginTop20px" style={{ color: this.props.primaryColor }}>
                     Assigned
                     <div className="marginBottom10px" style={{ color: this.props.textColor }}>
                         {this.makeDatePretty(this.props.assignedDate)}
-                    </div>
-                    Deadline
-                    <div className="marginBottom10px" style={{ color: this.props.textColor }}>
-                        {this.makeDatePretty(this.props.deadline)}
                     </div>
                     Completed
                     <div style={{ color: this.props.textColor }}>
