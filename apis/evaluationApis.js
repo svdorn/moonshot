@@ -2284,6 +2284,9 @@ async function addPsychInfo(user, evaluationState) {
 // add in info about the current state of skills
 async function addSkillInfo(user, evaluationState, position) {
     return new Promise(async function(resolve, reject) {
+        if (user.userType === "employee") {
+            return resolve(evaluationState);
+        }
         // see if there even are skills in the position
         if (Array.isArray(position.skills) && position.skills.length > 0) {
             // grab the user's skill tests that they already have
