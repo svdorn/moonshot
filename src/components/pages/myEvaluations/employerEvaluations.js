@@ -27,12 +27,12 @@ import {
 import { Field, reduxForm } from "redux-form";
 import MetaTags from "react-meta-tags";
 import axios from "axios";
-import MyEvaluationsPreview from "../../childComponents/myEvaluationsPreview";
+import MyEvaluationsAdminPreview from "../../childComponents/myEvaluationsAdminPreview";
 import AddUserDialog from "../../childComponents/addUserDialog";
 import AddPositionDialog from "../../childComponents/addPositionDialog";
 import clipboard from "clipboard-polyfill";
 import { goTo, makePossessive, propertyExists } from "../../../miscFunctions";
-import { button } from "../../../classes.js";
+import { Button } from "../../miscComponents";
 
 const required = value => (value ? undefined : "This field is required.");
 
@@ -266,7 +266,7 @@ class MyEvaluations extends Component {
 
                     return (
                         <li style={{ marginTop: "35px", listStyleType: "none" }} key={key}>
-                            <MyEvaluationsPreview {...attributes} />
+                            <MyEvaluationsAdminPreview {...attributes} />
                         </li>
                     );
                 }
@@ -284,13 +284,9 @@ class MyEvaluations extends Component {
                     style={{ width: "95%", margin: "20px auto 20px" }}
                 >
                     {makePossessive(businessName)} candidate invite page&nbsp;
-                    <button
-                        className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder900 font12pxUnder500 primary-white"
-                        onClick={this.copyLink}
-                        style={{ padding: "2px 4px" }}
-                    >
-                        {"Get Link"}
-                    </button>
+                    <Button onClick={this.copyLink} style={{ marginLeft: "5px" }}>
+                        Get Link
+                    </Button>
                 </div>
             );
             let attributes = {};
@@ -309,7 +305,7 @@ class MyEvaluations extends Component {
             evaluations.push(
                 <li style={{ marginTop: "35px", listStyleType: "none" }} key={key}>
                     <div style={{ filter: "blur(5px)" }}>
-                        <MyEvaluationsPreview
+                        <MyEvaluationsAdminPreview
                             {...attributes}
                             style={{ pointerEvents: "none" }}
                             className="noselect"
@@ -319,12 +315,9 @@ class MyEvaluations extends Component {
                         className="font24px font22pxUnder700 font18pxUnder500 center addEval"
                         onClick={this.openAddPositionModal}
                     >
-                        <button
-                            className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px primary-white"
-                            style={{ padding: "2px 4Spx" }}
-                        >
-                            {"Add Evaluation"}
-                        </button>
+                        <Button size="large">
+                            Add Evaluation
+                        </Button>
                         <div className="font16px font14pxUnder700 font12pxUnder500 secondary-gray">
                             There{"'"}s no cost for adding evaluations
                         </div>
