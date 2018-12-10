@@ -33,9 +33,7 @@ class MyEvaluationsAdminPreview extends Component {
             // name of the position
             name: props.name,
             // whether the position is active or not
-            active: true
-            // TODO: change to have props pass active down
-            // active: props.active
+            inactive: props.inactive
         };
     }
 
@@ -64,7 +62,7 @@ class MyEvaluationsAdminPreview extends Component {
     }
 
     updateActive = () => {
-        this.setState({ active: !this.state.active })
+        this.setState({ inactive: !this.state.inactive })
     }
 
     nameChange = (event) => {
@@ -191,7 +189,7 @@ class MyEvaluationsAdminPreview extends Component {
         }
 
         const edit = this.state.edit ? "edit" : "";
-        const eyeImg = this.state.active ? "Show" : "Hide";
+        const eyeImg = !this.state.inactive ? "Show" : "Hide";
 
         return (
             <div style={style} className={className}>

@@ -257,6 +257,7 @@ class MyEvaluations extends Component {
                     attributes.name = position.name;
                     attributes.logo = self.state.logo;
                     attributes.length = position.length;
+                    attributes.inactive = position.inactive;
                     attributes.positionKey = position._id;
                     attributes.skills = position.skillNames;
                     attributes.company = businessName;
@@ -294,6 +295,7 @@ class MyEvaluations extends Component {
             attributes.name = "Web Developer";
             attributes.logo = this.state.logo;
             attributes.length = 25;
+            attributes.inactive = true;
             attributes.skills = ["HTML", "Javascript"];
             attributes.company = businessName;
             attributes.completions = 0;

@@ -10,7 +10,7 @@ const positionSchema = mongoose.Schema({
     // one time code
     open: Boolean,
     // if the position is active or not
-    active: Boolean,
+    inactive: Boolean,
     // if the position has been deleted
     deleted: Boolean,
     // the open signup code for signing up for this position
