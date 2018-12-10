@@ -31,18 +31,45 @@ class MyEvaluationsAdminPreview extends Component {
             // whether the user is editing or not
             edit: false,
             // name of the position
-            name: props.name
+            name: props.name,
+            // whether the position is active or not
+            active: true
+            // TODO: change to have props pass active down
+            // active: props.active
         };
     }
 
     edit = () => {
-        this.setState({ edit: !this.state.edit })
+        if (this.state.edit) {
+            // changing back to original name
+            name = this.props.name;
+            this.setState({ edit: false, name: this.props.name })
+        } else {
+            this.setState({ edit: true })
+        }
+    }
+
+    saveChanges = () => {
+        // save the new name to db
+
+        // close edit
+        this.setState({ edit: false })
+    }
+
+    deleteEval = () => {
+        // delete the eval in db
+
+        // load and delete eval from page
+
+    }
+
+    updateActive = () => {
+        this.setState({ active: !this.state.active })
     }
 
     nameChange = (event) => {
         const name = event.target.value;
 
-        console.log("updating name: ", name);
         this.setState({ name });
     }
 
@@ -130,10 +157,10 @@ class MyEvaluationsAdminPreview extends Component {
         if (this.state.edit) {
             businessButton = (
                 <div style={{ marginTop: "20px" }}>
-                    <Button onClick={businessButtonOnClick} style={{ display: "inlineBlock" }}>
+                    <Button onClick={this.saveChanges} style={{ display: "inlineBlock" }}>
                         Save Changes
                     </Button>
-                    <div className="marginLeft20px inlineBlock clickable underline font16px font14pxUnder700" style={{ color: "#fd3a57" }}>
+                    <div onClick={this.deleteEval} className="marginLeft20px inlineBlock clickable underline font16px font14pxUnder700" style={{ color: "#fd3a57" }}>
                         Delete Evaluation
                     </div>
                 </div>
@@ -164,6 +191,7 @@ class MyEvaluationsAdminPreview extends Component {
         }
 
         const edit = this.state.edit ? "edit" : "";
+        const eyeImg = this.state.active ? "Show" : "Hide";
 
         return (
             <div style={style} className={className}>
@@ -188,7 +216,7 @@ class MyEvaluationsAdminPreview extends Component {
                             }
 
                             <img onClick={this.edit} style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} />
-                            <img style={{ marginLeft: "6px" }} height={15} src={`/icons/Hide${this.props.png}`} />
+                            <img onClick={this.updateActive} style={{ marginLeft: "8px" }} height={15} src={`/icons/${eyeImg}${this.props.png}`} />
                         </div>
                         <div style={{ opacity: "0.6" }}>
                             {this.props.company} Evaluation{" "}
