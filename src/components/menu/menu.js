@@ -394,7 +394,7 @@ class Menu extends Component {
 
     // whether this page is one that candidates will go to
     isCandidatePage = pathname =>
-        ["/apply", "/finished", "/introduction"].some(path => pathname.startsWith(path));
+        ["/apply", "/finished", "/introduction", "/employee"].some(path => pathname.startsWith(path));
 
     render() {
         let self = this;
