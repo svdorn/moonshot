@@ -18,7 +18,7 @@ import { bindActionCreators } from "redux";
 import { goTo } from "../../miscFunctions";
 import HoverTip from "../miscComponents/hoverTip";
 import { Button } from "../miscComponents";
-import { openAddUserModal, addNotification, updateUser } from "../../actions/usersActions";
+import { openAddUserModal, addNotification, updateUser, updateEvaluationActive } from "../../actions/usersActions";
 import axios from "axios";
 
 import "./myEvaluationsAdminPreview.css";
@@ -62,6 +62,10 @@ class MyEvaluationsAdminPreview extends Component {
     }
 
     updateActive = () => {
+        const { currentUser } = this.props;
+
+        this.props.updateEvaluationActive(currentUser._id, currentUser.verificationToken, currentUser.businessInfo.businessId, this.props.id);
+
         this.setState({ inactive: !this.state.inactive })
     }
 
@@ -236,7 +240,8 @@ function mapDispatchToProps(dispatch) {
         {
             openAddUserModal,
             addNotification,
-            updateUser
+            updateUser,
+            updateEvaluationActive
         },
         dispatch
     );

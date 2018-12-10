@@ -2228,6 +2228,8 @@ async function POST_updateEvaluationActive(req, res) {
         position.inactive = true;
     }
 
+    console.log("position: ", position)
+
     try {
         await business.save();
     } catch (saveBizError) {
@@ -3028,7 +3030,7 @@ async function GET_positions(req, res) {
     const businessId = user.businessInfo.businessId;
     try {
         var business = await Businesses.findById(businessId).select(
-            "logo positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated"
+            "logo positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated positions.inactive"
         );
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);

@@ -252,7 +252,9 @@ class MyEvaluations extends Component {
                 key++;
                 // make sure position is the right type
                 if (position && typeof position === "object") {
+                    console.log("position: ", position);
                     let attributes = {};
+                    attributes.id = position._id;
                     attributes.variation = "edit";
                     attributes.name = position.name;
                     attributes.logo = self.state.logo;

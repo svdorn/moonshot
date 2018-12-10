@@ -346,6 +346,24 @@ export function postBusinessInterests(userId, verificationToken, businessId, int
     };
 }
 
+export function updateEvaluationActive(userId, verificationToken, businessId, positionId) {
+    return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
+        axios
+            .post("/api/business/updateEvaluationActive", { userId, verificationToken, businessId, positionId })
+            .then(function(response) {
+                dispatch({type: "UPDATE_POSITIONS", payload: response.data});
+            })
+            .catch(function(err) {
+                dispatch({
+                    type: "POST_BUSINESS_INTERESTS_REJECTED",
+                    ...notification(err, "error")
+                });
+            });
+    };
+}
+
 // update user object in redux store
 export function updateUser(user) {
     return function(dispatch) {

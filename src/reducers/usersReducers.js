@@ -237,6 +237,10 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         }
+        case "UPDATE_POSITIONS": {
+            return { ...state, loadingSomething: false };
+            break;
+        }
         case "CREATED_NO_VERIFY_EMAIL_SENT": {
             return {
                 ...state,
