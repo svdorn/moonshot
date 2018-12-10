@@ -21,7 +21,30 @@ import { Button } from "../miscComponents";
 import { openAddUserModal, addNotification, updateUser } from "../../actions/usersActions";
 import axios from "axios";
 
+import "./myEvaluationsAdminPreview";
+
 class MyEvaluationsAdminPreview extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            // whether the user is editing or not
+            edit: false,
+            // name of the position
+            name: props.name
+        };
+    }
+
+    edit = () => {
+        this.setState({ edit: !this.state.edit })
+    }
+
+    nameChange = (e) => {
+        const name = event.target.value;
+
+        console.log("updating name: ", name);
+        this.setState({ name });
+    }
 
     makeDatePretty(dateObjString) {
         if (typeof dateObjString === "string" && dateObjString.length >= 10) {
@@ -50,10 +73,6 @@ class MyEvaluationsAdminPreview extends Component {
         if (!currentUser) {
             return null;
         }
-
-        // variations can be edit or take
-        // user is a manager or account admin
-        const editing = this.props.variation === "edit";
 
         let infoArea = null;
         let estimatedLength = null;
@@ -130,7 +149,7 @@ class MyEvaluationsAdminPreview extends Component {
 
         return (
             <div style={style} className={className}>
-                <div onClick={this.continueEval} className={`myEvalsBox aboutMeLi`} style={{ backgroundColor: this.props.backgroundColor, color: this.props.textColor }}>
+                <div className={`myEvalsBox aboutMeLi`} style={{ backgroundColor: this.props.backgroundColor, color: this.props.textColor }}>
                     <div className="aboutMeLiIconContainer">
                         <img alt="My Evals Company Logo" src={`/logos/${logo}`} />
                     </div>
@@ -140,8 +159,17 @@ class MyEvaluationsAdminPreview extends Component {
                     <div className="myEvalsInfo" style={{ display: "inline-block" }}>
                         {infoArea}
                         <div className="font18px font16pxUnder800" style={{ color: this.props.primaryColor }}>
-                            {this.props.name}
-                            <img className="inlineBlock clickable" style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} />
+                            {this.state.edit ?
+                                <textarea
+                                placeholder={"Enter a name"}
+                                value={this.state.name}
+                                onChange={e => this.nameChange(e)}
+                                    />
+                                :
+                                <div className="inlineBlock">{this.state.name}</div>
+                            }
+
+                            <img onClick={this.edit} className="inlineBlock clickable" style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} />
                             <img className="inlineBlock clickable" style={{ marginLeft: "6px" }} height={15} src={`/icons/Hide${this.props.png}`} />
                         </div>
                         <div style={{ opacity: "0.6" }}>
