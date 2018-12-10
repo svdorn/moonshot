@@ -21,7 +21,7 @@ import { Button } from "../miscComponents";
 import { openAddUserModal, addNotification, updateUser } from "../../actions/usersActions";
 import axios from "axios";
 
-import "./myEvaluationsAdminPreview";
+import "./myEvaluationsAdminPreview.css";
 
 class MyEvaluationsAdminPreview extends Component {
     constructor(props) {
@@ -39,7 +39,7 @@ class MyEvaluationsAdminPreview extends Component {
         this.setState({ edit: !this.state.edit })
     }
 
-    nameChange = (e) => {
+    nameChange = (event) => {
         const name = event.target.value;
 
         console.log("updating name: ", name);
@@ -147,6 +147,8 @@ class MyEvaluationsAdminPreview extends Component {
             logo = "hr-Black.png";
         }
 
+        const edit = this.state.edit ? "edit" : "";
+
         return (
             <div style={style} className={className}>
                 <div className={`myEvalsBox aboutMeLi`} style={{ backgroundColor: this.props.backgroundColor, color: this.props.textColor }}>
@@ -158,7 +160,7 @@ class MyEvaluationsAdminPreview extends Component {
 
                     <div className="myEvalsInfo" style={{ display: "inline-block" }}>
                         {infoArea}
-                        <div className="font18px font16pxUnder800" style={{ color: this.props.primaryColor }}>
+                        <div styleName={"header " + edit} className="font18px font16pxUnder800" style={{ color: this.props.primaryColor }}>
                             {this.state.edit ?
                                 <textarea
                                 placeholder={"Enter a name"}
@@ -166,11 +168,11 @@ class MyEvaluationsAdminPreview extends Component {
                                 onChange={e => this.nameChange(e)}
                                     />
                                 :
-                                <div className="inlineBlock">{this.state.name}</div>
+                                <div>{this.state.name}</div>
                             }
 
-                            <img onClick={this.edit} className="inlineBlock clickable" style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} />
-                            <img className="inlineBlock clickable" style={{ marginLeft: "6px" }} height={15} src={`/icons/Hide${this.props.png}`} />
+                            <img onClick={this.edit} style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} />
+                            <img style={{ marginLeft: "6px" }} height={15} src={`/icons/Hide${this.props.png}`} />
                         </div>
                         <div style={{ opacity: "0.6" }}>
                             {this.props.company} Evaluation{" "}
