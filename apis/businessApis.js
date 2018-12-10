@@ -53,6 +53,7 @@ const businessApis = {
     POST_createBusinessAndUser,
     POST_interests,
     POST_deleteEvaluation,
+    POST_updateEvaluationActive,
     GET_candidateSearch,
     GET_business,
     GET_employeeSearch,
@@ -2178,6 +2179,54 @@ async function POST_deleteEvaluation(req, res) {
     // set the position to deleted
     position.deleted = true;
     position.active = false;
+
+    try {
+        await business.save();
+    } catch (saveBizError) {
+        console.log("Error saving business when adding new eval: ", saveBizError);
+        return res.status(500).send("Error adding position. Contact support or try again.");
+    }
+
+    return res.json(business.positions);
+}
+
+// delete an evaluation from the business on request
+async function POST_updateEvaluationActive(req, res) {
+    const {
+        userId,
+        verificationToken,
+        businessId,
+        positionId
+    } = sanitize(req.body);
+
+    try {
+        var business = await verifyAccountAdminAndReturnBusiness(
+            userId,
+            verificationToken,
+            businessId
+        );
+    } catch (verifyAccountAdminError) {
+        console.log("Error verifying business account admin: ", verifyAccountAdminError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    const positionIndex = business.positions.findIndex(currPosition => {
+        return currPosition._id.toString() === positionId.toString();
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    const position = business.positions[positionIndex];
+    if (!position) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // update the active status of the position
+    if (position.active != undefined) {
+        position.active = !position.active;
+    } else {
+        position.active = true;
+    }
 
     try {
         await business.save();

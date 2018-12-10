@@ -213,6 +213,7 @@ app.post("/business/uploadCandidateCSV", businessApis.POST_uploadCandidateCSV);
 app.post("/business/createBusinessAndUser", businessApis.POST_createBusinessAndUser);
 app.post("/business/interests", businessApis.POST_interests);
 app.post("/business/deleteEvaluation", businessApis.POST_deleteEvaluation);
+app.post("/business/updateEvaludationActive", businessApis.POST_updateEvaluationActive);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/business", businessApis.GET_business);
