@@ -30,6 +30,10 @@ class Account extends Component {
     componentDidMount() {
         const self = this;
 
+        if (this.props.demo) {
+            return this.setState({ adminList: [] });
+        }
+
         const { currentUser } = this.props;
         if (!currentUser) {
             return this.props.addNotification(

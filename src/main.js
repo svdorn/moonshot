@@ -24,7 +24,7 @@ import "./main.css";
 
 // OLD MUI THEME
 
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import OldThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import {
     lightBlue500,
@@ -38,7 +38,7 @@ import {
 import { fade } from "material-ui/utils/colorManipulator";
 import spacing from "material-ui/styles/spacing";
 
-let theme = {
+let oldTheme = {
     // this messes with the slider colors
     // userAgent: 'all',
     userAgent: false,
@@ -62,40 +62,59 @@ let theme = {
     }
 };
 
-let muiTheme = getMuiTheme(theme);
+let muiTheme = getMuiTheme(oldTheme);
 
 // END OLD MUI THEME
 
 // NEW MUI THEME
 
-// import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-// const theme = createMuiTheme({
-//     palette: {
-//         primary: {
-//             main: "#2e2e2e",
-//             light: "#393939",
-//             dark: "#2e2e2e"
-//         },
-//         secondary: {
-//             main: "#76defe"
-//         }
-//     }
-// });
-
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 // END NEW MUI THEME
+
+const makeTheme = props => {
+    const primaryColor = props.primaryColor ? props.primaryColor : "#76defe";
+    const secondaryColor = props.secondaryColor
+        ? props.secondaryColor
+        : props.primaryColor
+            ? props.primaryColor
+            : "#ffffff";
+
+    const primary = { main: primaryColor };
+    let secondary = { main: secondaryColor };
+    if (props.buttonTextColor) secondary.contrastText = props.buttonTextColor;
+
+    return createMuiTheme({
+        palette: { primary, secondary }
+    });
+};
 
 class Main extends Component {
     constructor(props) {
         super(props);
+
+        const theme = makeTheme(props);
+
         this.state = {
             loadedUser: false,
             agreedToTerms: false,
-            agreeingToTerms: false
+            agreeingToTerms: false,
+            theme
         };
     }
 
     componentDidMount() {
         const self = this;
+        const { location } = this.props;
+        if (
+            location &&
+            location.pathname &&
+            ((location.pathname.toLowerCase().startsWith("/apply/") &&
+                (!location.query || !location.query.onboarding)) ||
+                location.pathname.toLowerCase().startsWith("/introduction") ||
+                location.pathname.toLowerCase().startsWith("/employee/"))
+        ) {
+            var wait = true;
+        }
         // get the user from the session - if there is no user, just marks screen ready to display
         this.props.getUserFromSession(function(work) {
             if (work) {
@@ -123,11 +142,24 @@ class Main extends Component {
                     });
                 });
             }
-        });
+        }, wait);
 
         this.checkWebpFeature("lossy", (feature, result) => {
             this.props.setWebpSupport(result);
         });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (
+            prevProps.primaryColor !== this.props.primaryColor ||
+            prevProps.secondaryColor !== this.props.secondaryColor ||
+            prevProps.backgroundColor !== this.props.backgroundColor ||
+            prevProps.buttonTextColor !== this.props.buttonTextColor
+        ) {
+            const { primaryColor, secondaryColor } = this.props;
+
+            this.setState({ theme: makeTheme(this.props) });
+        }
     }
 
     // check_webp_feature:
@@ -230,7 +262,15 @@ class Main extends Component {
             );
         }
 
-        return <MuiThemeProvider muiTheme={muiTheme}>{content}</MuiThemeProvider>;
+        return (
+            <OldThemeProvider muiTheme={muiTheme}>
+                <MuiThemeProvider theme={this.state.theme}>
+                    <div style={{ color: this.props.textColor ? this.props.textColor : "#ffffff" }}>
+                        {content}
+                    </div>
+                </MuiThemeProvider>
+            </OldThemeProvider>
+        );
     }
 }
 
@@ -250,7 +290,11 @@ function mapStateToProps(state) {
         isFetching: state.users.isFetching,
         notification: state.users.notification,
         webpSupportChecked: state.users.webpSupportChecked,
-        positionCount: state.users.positionCount
+        positionCount: state.users.positionCount,
+        primaryColor: state.users.primaryColor,
+        secondaryColor: state.users.secondaryColor,
+        buttonTextColor: state.users.buttonTextColor,
+        textColor: state.users.textColor
     };
 }
 

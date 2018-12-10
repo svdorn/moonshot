@@ -4,8 +4,8 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addNotification } from "../../../../actions/usersActions";
-import { randomInt } from "../../../../miscFunctions";
-import { Tabs, Tab, Dialog } from "@material-ui/core";
+import { round } from "../../../../miscFunctions";
+import { Tabs, Tab, Dialog, CircularProgress } from "@material-ui/core";
 import {
     BarChart,
     Bar,
@@ -28,32 +28,6 @@ import "./dataDisplay.css";
 const sites = ["All", "Insights", "Learning"];
 const categories = ["Factors", "Facets", "Questions", "Outputs"];
 
-const nums = [
-    "-4.75",
-    "-4.25",
-    "-3.75",
-    "-3.25",
-    "-2.75",
-    "-2.25",
-    "-1.75",
-    "-1.25",
-    "-0.75",
-    "-0.25",
-    "0.25",
-    "0.75",
-    "1.25",
-    "1.75",
-    "2.25",
-    "2.75",
-    "3.25",
-    "3.75",
-    "4.25",
-    "4.75"
-];
-
-const randomData = [0, 1, 2, 3, 4, 5, 6].map(n =>
-    nums.map(num => ({ name: num, quantity: randomInt(0, 400) }))
-);
 const makePercent = num => {
     if (typeof num !== "number") {
         return "";
@@ -77,6 +51,7 @@ class Psych extends Component {
         }
 
         this.state = {
+            loading: false,
             site: sites[0],
             factors: [],
             facets: [],
@@ -102,6 +77,9 @@ class Psych extends Component {
             prevState.categoryIdx !== this.state.categoryIdx ||
             prevState.site !== this.state.site
         ) {
+            // show the loading circle
+            this.setState({ loading: true });
+            // retrieve new data
             this.updateData();
         }
     }
@@ -125,64 +103,31 @@ class Psych extends Component {
             .get("/api/admin/dataDisplay/factors", {
                 params: { ...this.state.GETparams, site: this.state.site }
             })
-            .then(result => {
-                self.setState({ factors: result.data.factors });
-            })
-            .catch(error => {
-                console.log("error getting factor data: ", error);
-            });
+            .then(result => self.setState({ factors: result.data.factors, loading: false }))
+            .catch(error => console.log("error getting factor data: ", error));
     };
 
     // get data about every facet
     getFacetData = () => {
-        const facets = [
-            {
-                name: "Ambiguity",
-                dataPoints: randomData[3],
-                average: 2.3,
-                interRel: 0.87,
-                stdDev: 0.41
-            },
-            {
-                name: "Your Mom",
-                dataPoints: randomData[4],
-                average: 2.3,
-                interRel: 0.87,
-                stdDev: 0.41
-            },
-            { name: "Hope", dataPoints: randomData[5], average: -1.6, interRel: 0.82, stdDev: 0.53 }
-        ];
-
-        this.setState({ facets });
+        const self = this;
+        axios
+            .get("/api/admin/dataDisplay/facets", {
+                params: { ...this.state.GETparams, site: this.state.site }
+            })
+            .then(result => self.setState({ facets: result.data.facets, loading: false }))
+            .catch(error => console.log("error getting facet data: ", error));
     };
 
     // get data about the questions that are asked in the test
     getQuestionData = () => {
-        const questions = [
-            {
-                question: "What's yo poison?",
-                rightOption: "moydah",
-                leftOption: "luv",
-                interRel: 0.3,
-                average: 1.3,
-                stdDev: 2,
-                factor: "Honesty-Humility",
-                facet: "Shamefulness"
-            },
-            {
-                question:
-                    "aa pa paweiflnj asdp asfkajsdlfj anjwodfipa 8sijahowpf9 adisfjlahsof awefpi auhwef lasjdf a?",
-                rightOption: "auhsd98fpuia nawf awef pawe",
-                leftOption: "aweoifhuawe falsdawef awefasdw awef wef wef",
-                interRel: 0.5,
-                average: -0.8,
-                stdDev: 1.69,
-                factor: "Emotionality",
-                facet: "Crybabiness"
-            }
-        ];
+        const self = this;
 
-        this.setState({ questions });
+        axios
+            .get("/api/admin/dataDisplay/questions", {
+                params: { ...this.state.GETparams, site: this.state.site }
+            })
+            .then(response => self.setState({ questions: response.data.questions, loading: false }))
+            .catch(error => console.log("Error getting data: ", error));
     };
 
     // get data about the outputs that are given to people who take the test for fun
@@ -192,12 +137,8 @@ class Psych extends Component {
             .get("/api/admin/dataDisplay/outputs", {
                 params: { ...this.state.GETparams, site: this.state.site }
             })
-            .then(result => {
-                self.setState({ outputs: result.data.outputs });
-            })
-            .catch(error => {
-                console.log("error getting factor data: ", error);
-            });
+            .then(result => self.setState({ outputs: result.data.outputs, loading: false }))
+            .catch(error => console.log("error getting factor data: ", error));
     };
 
     // change the site we're getting data from (All, Insights, Learning)
@@ -214,21 +155,25 @@ class Psych extends Component {
     handleCheckMarkClick = fac => {
         let { categoryIdx } = this.state;
         // find out if we're using factors or facets
-        const facType = categoryIdx === 0 ? "comparableFactors" : "comparableFacets";
-        let facArray = this.state[facType];
-        console.log("facArray: ", facArray);
-        // go through each factor/facet that's already clicked
-        for (let cfIdx = 0; cfIdx < facArray.length; cfIdx++) {
-            // if it's the same as the one that was clicked ...
-            if (facArray[cfIdx].name === fac.name) {
-                // ... remove it, then set the state to reflect the change
-                facArray = facArray.slice(0, cfIdx).concat(facArray.slice(cfIdx + 1));
-                return this.setState({ [facType]: facArray });
-            }
+        const facName = categoryIdx === 0 ? "factors" : "facets";
+        const comparableType = categoryIdx === 0 ? "comparableFactors" : "comparableFacets";
+        let compareArray = this.state[comparableType];
+        let facArray = this.state[facName];
+
+        // get the index of this fac in its array
+        const facIndex = facArray.findIndex(f => f.name === fac.name);
+
+        // if the "facs to compare" array has that index ...
+        const idx = compareArray.indexOf(facIndex);
+        if (idx > -1) {
+            // ... remove the index
+            compareArray = compareArray.slice(0, idx).concat(compareArray.slice(idx + 1));
+        } else {
+            // ... otherwise add the index
+            compareArray.push(facIndex);
         }
-        // if the factor didn't exists within the array, add it, then set state
-        facArray.push(fac);
-        this.setState({ [facType]: facArray });
+
+        this.setState({ [comparableType]: compareArray });
     };
 
     // pop up a modal comparing two factors/facets
@@ -247,6 +192,19 @@ class Psych extends Component {
     // close the comparison dialog
     closeCompare = () => {
         this.setState({ compareOpen: false });
+    };
+
+    // get a list of factors/facets for the CompareFactors component
+    getComparableFacs = () => {
+        let { categoryIdx, compareOpen } = this.state;
+
+        // find out if we're using factors or facets
+        const facName = categoryIdx === 0 ? "factors" : "facets";
+        const comparableType = categoryIdx === 0 ? "comparableFactors" : "comparableFacets";
+        let facArray = this.state[facName];
+        let compareArray = this.state[comparableType];
+
+        return compareArray.map(idx => facArray[idx]);
     };
 
     // change whether we see a line chart or a bar chart
@@ -294,7 +252,7 @@ class Psych extends Component {
     factors = () => {
         const self = this;
 
-        const factorGraphs = this.state.factors.map(factor => {
+        const factorGraphs = this.state.factors.map((factor, idx) => {
             // the parts of the chart that are common to Bar and Line Charts
             const chartParts = [
                 <CartesianGrid strokeDasharray="3 3" />,
@@ -335,8 +293,8 @@ class Psych extends Component {
                         {chart}
                     </div>
                     <div>
-                        <div>Average: {factor.average}</div>
-                        <div>Std. dev.: {factor.stdDev}</div>
+                        <div>Average: {round(factor.average, 2)}</div>
+                        <div>Std. dev.: {round(factor.stdDev, 2)}</div>
                     </div>
                     <div
                         className="checkbox smallCheckbox whiteCheckbox"
@@ -344,10 +302,7 @@ class Psych extends Component {
                     >
                         <img
                             alt=""
-                            className={
-                                "checkMark" +
-                                self.state.comparableFactors.some(cf => cf.name === factor.name)
-                            }
+                            className={"checkMark" + self.state.comparableFactors.includes(idx)}
                             src={"/icons/CheckMarkRoundedWhite" + self.props.png}
                         />
                     </div>
@@ -426,9 +381,9 @@ class Psych extends Component {
                         {chart}
                     </div>
                     <div>
-                        <div>Average: {facet.average}</div>
-                        <div>Interreliability: {facet.interRel}</div>
-                        <div>Std. dev.: {facet.stdDev}</div>
+                        <div>Average: {round(facet.average, 2)}</div>
+                        <div>Chronbach's Alpha: {round(facet.interRel, 2)}</div>
+                        <div>Std. dev.: {round(facet.stdDev, 2)}</div>
                     </div>
                     <div
                         className="checkbox smallCheckbox whiteCheckbox"
@@ -436,10 +391,7 @@ class Psych extends Component {
                     >
                         <img
                             alt=""
-                            className={
-                                "checkMark" +
-                                self.state.comparableFacets.some(cf => cf.name === facet.name)
-                            }
+                            className={"checkMark" + self.state.comparableFacets.includes(fIdx)}
                             src={"/icons/CheckMarkRoundedWhite" + self.props.png}
                         />
                     </div>
@@ -501,9 +453,10 @@ class Psych extends Component {
                         </div>
                     </div>
                     <div>
-                        <div>Average: {q.average}</div>
-                        <div>Interreliability: {q.interRel}</div>
-                        <div>Std. dev.: {q.stdDev}</div>
+                        <div>Average: {round(q.average, 2)}</div>
+                        <div>Facet Alpha: {round(q.facetAlpha, 2)}</div>
+                        <div>Alpha Without This: {round(q.cAlphaWithoutQuestion, 2)}</div>
+                        <div>Std. dev.: {round(q.stdDev, 2)}</div>
                     </div>
                 </div>,
                 <br key={`facet ${qIdx} br`} />
@@ -566,14 +519,13 @@ class Psych extends Component {
             <div style={{ textAlign: "center" }}>
                 {this.siteSelector()}
                 {this.categorySelector()}
+                {this.state.loading ? <CircularProgress /> : null}
                 {categoryDisplays[categoryIdx]()}
                 <Dialog open={compareOpen} onClose={this.closeCompare}>
                     <CompareFactors
-                        factors={
-                            categoryIdx === 0
-                                ? this.state.comparableFactors
-                                : this.state.comparableFacets
-                        }
+                        facs={this.getComparableFacs()}
+                        facType={categoryIdx === 0 ? "factors" : "facets"}
+                        site={this.state.site}
                     />
                 </Dialog>
             </div>

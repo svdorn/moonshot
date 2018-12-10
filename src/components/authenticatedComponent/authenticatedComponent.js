@@ -1,7 +1,7 @@
 "use strict";
 import React, { Component } from "react";
 import Notification from "../notification";
-import { getUserFromSession, generalAction, updateStore } from "../../actions/usersActions";
+import { generalAction, updateStore } from "../../actions/usersActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
@@ -283,7 +283,6 @@ class AuthenticatedComponent extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            getUserFromSession,
             generalAction,
             updateStore
         },

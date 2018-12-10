@@ -1,0 +1,107 @@
+.shift-arrow {
+    width: var(--arrow-width);
+    height: calc(var(--arrow-width) * 0.7);
+    margin: 0 5px 2px 2px;
+    transform: translateX(0%);
+
+    -webkit-transition: transform 0.5s ease;
+    -ms-transition: transform 0.5s ease;
+    transition: transform 0.5s ease;
+}
+
+div:hover > .shift-arrow:not(.disabled),
+button:hover > .shift-arrow:not(.disabled),
+button:hover > span > .shift-arrow:not(.disabled) {
+    transform: translateX(50%);
+}
+
+.width-1px {
+    --arrow-width: 1px;
+}
+.width-2px {
+    --arrow-width: 2px;
+}
+.width-3px {
+    --arrow-width: 3px;
+}
+.width-4px {
+    --arrow-width: 4px;
+}
+.width-5px {
+    --arrow-width: 5px;
+}
+.width-6px {
+    --arrow-width: 6px;
+}
+.width-7px {
+    --arrow-width: 7px;
+}
+.width-8px {
+    --arrow-width: 8px;
+}
+.width-9px {
+    --arrow-width: 9px;
+}
+.width-10px {
+    --arrow-width: 10px;
+}
+.width-11px {
+    --arrow-width: 11px;
+}
+.width-12px {
+    --arrow-width: 12px;
+}
+.width-13px {
+    --arrow-width: 13px;
+}
+.width-14px {
+    --arrow-width: 14px;
+}
+.width-15px {
+    --arrow-width: 15px;
+}
+.width-16px {
+    --arrow-width: 16px;
+}
+.width-17px {
+    --arrow-width: 17px;
+}
+.width-18px {
+    --arrow-width: 18px;
+}
+.width-19px {
+    --arrow-width: 19px;
+}
+.width-20px {
+    --arrow-width: 20px;
+}
+.width-21px {
+    --arrow-width: 21px;
+}
+.width-22px {
+    --arrow-width: 22px;
+}
+.width-23px {
+    --arrow-width: 23px;
+}
+.width-24px {
+    --arrow-width: 24px;
+}
+.width-25px {
+    --arrow-width: 25px;
+}
+.width-26px {
+    --arrow-width: 26px;
+}
+.width-27px {
+    --arrow-width: 27px;
+}
+.width-28px {
+    --arrow-width: 28px;
+}
+.width-29px {
+    --arrow-width: 29px;
+}
+.width-30px {
+    --arrow-width: 30px;
+}

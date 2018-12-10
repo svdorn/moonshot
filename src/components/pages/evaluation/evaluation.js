@@ -3,12 +3,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress } from "@material-ui/core";
 import MetaTags from "react-meta-tags";
 import { addNotification, setEvaluationState } from "../../../actions/usersActions";
 import { propertyExists, goTo } from "../../../miscFunctions";
 import MiscError from "../../miscComponents/miscError";
-import { button } from "../../../classes";
+import { Button } from "../../miscComponents";
 
 import ProgressBar from "./progressBar";
 import AdminQuestions from "./adminQuestions";
@@ -20,11 +20,13 @@ class Evaluation extends Component {
     constructor(props) {
         super(props);
 
+        const { currentUser } = props;
+
         // get position and business ids from url
         const { businessId, positionId } = props.params;
         // get user credentials
-        if (props.currentUser) {
-            var { _id, verificationToken } = props.currentUser;
+        if (currentUser) {
+            var { _id, verificationToken } = currentUser;
         } else {
             var _id = undefined;
             var verificationToken = undefined;
@@ -65,7 +67,9 @@ class Evaluation extends Component {
             evalInProgress: undefined,
             // if the user has no other eval in progress and has not started
             // this one already
-            readyToStart: false
+            readyToStart: false,
+            // if should skip the start page
+            skipStartPage: false
             /* END PRE-EVAL */
         };
     }
@@ -103,7 +107,15 @@ class Evaluation extends Component {
             // if the user has not started this and is not in the middle of
             // a different eval, ask if ready to start this
             else {
-                this.setState({ readyToStart: true, initialLoad: false });
+                if (
+                    this.props.location &&
+                    this.props.location.query &&
+                    this.props.location.query.start === "true"
+                ) {
+                    this.startEval();
+                    var skipStartPage = true;
+                }
+                this.setState({ readyToStart: true, initialLoad: false, skipStartPage });
             }
         }
         // no information was returned, show that something went wrong
@@ -168,20 +180,16 @@ class Evaluation extends Component {
         // if there is a user error
         if (this.state.errorMessage) {
             return (
-                <div className="center primary-white">
+                <div className="center">
                     <div className="font20px" style={{ margin: "20px" }}>
                         Something went wrong.
                     </div>
                     <div className="font14px">
                         {this.state.errorMessage} Try refreshing or contacting support.
                     </div>
-                    <div
-                        className="button medium round-4px background-primary-cyan"
-                        style={{ margin: "20px" }}
-                        onClick={() => goTo("/myEvaluations")}
-                    >
+                    <Button style={{ margin: "20px" }} onClick={() => goTo("/myEvaluations")}>
                         Take Me Home
-                    </div>
+                    </Button>
                 </div>
             );
         }
@@ -195,19 +203,18 @@ class Evaluation extends Component {
     createPreTestContent() {
         if (this.state.alreadyInProgress) {
             return (
-                <div>
+                <div className="marginTop20px">
                     <p>You{"'"}ve already started this evaluation.</p>
                     <p>Ready to get back into it?</p>
                     {this.state.loading ? (
-                        <CircularProgress color="secondary" />
+                        <CircularProgress className="marginTop20px" color="primary" />
                     ) : (
-                        <div className={button.purpleBlue} onClick={this.getEvalState}>
-                            Let{"'"}s Go!
-                        </div>
+                        <Button onClick={this.getEvalState}>Let{"'"}s Go!</Button>
                     )}
                 </div>
             );
         }
+
         // TODO: if the user is in the middle of a different eval already
         else if (this.state.evalInProgress) {
             return <div>Want to switch to your other eval?</div>;
@@ -215,6 +222,13 @@ class Evaluation extends Component {
         // TODO: if the user is ready to start the eval, ask them if they want
         // to start it
         else if (this.state.readyToStart) {
+            if (this.state.skipStartPage) {
+                return (
+                    <div className="center marginTop20px">
+                        <CircularProgress color="primary" />
+                    </div>
+                );
+            }
             return this.startEvalPrompt();
         }
         // shouldn't be able to get here
@@ -239,12 +253,10 @@ class Evaluation extends Component {
                     carefully.
                 </p>
                 <p>Click the button to start once you are ready.</p>
-                {this.state.loadingNextPage ? (
-                    <CircularProgress color="secondary" />
+                {this.state.loading ? (
+                    <CircularProgress color="primary" />
                 ) : (
-                    <div className={button.purpleBlue} onClick={this.startEval}>
-                        Start
-                    </div>
+                    <Button onClick={this.startEval}>Start</Button>
                 )}
             </div>
         );
@@ -277,13 +289,11 @@ class Evaluation extends Component {
     // page to show if a user comes here after already having finished the eval
     finishedPage() {
         return (
-            <div className="primary-white">
+            <div>
                 <h3>Congratulations!</h3>
                 <p>You finished the evaluation!</p>
                 <p>You can safely exit this tab.</p>
-                <div className={button.purpleBlue} onClick={() => goTo("/myEvaluations")}>
-                    Take Me Home
-                </div>
+                <Button onClick={() => goTo("/myEvaluations")}>Take Me Home</Button>
             </div>
         );
     }
@@ -339,14 +349,15 @@ class Evaluation extends Component {
     }
 
     render() {
+        const { currentUser } = this.props;
         // what will be shown to the user
         let content = null;
 
         // if loading the page, show loading spinner
         if (this.state.initialLoad) {
             content = (
-                <div className="center">
-                    <CircularProgress color="secondary" />
+                <div className="center marginTop20px">
+                    <CircularProgress color="primary" />
                 </div>
             );
         }
@@ -376,9 +387,9 @@ class Evaluation extends Component {
         }
 
         return (
-            <div className="fillScreen primary-white center">
+            <div className="fillScreen center" style={{ color: this.props.textColor }}>
                 <MetaTags>
-                    <title>Evaluation | Moonshot</title>
+                    <title>Evaluation | {currentUser.companyName ? currentUser.companyName : "Moonshot Insights"}</title>
                     <meta
                         name="description"
                         content="Take a position evaluation to see if you and the position make a good match."
@@ -394,7 +405,9 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         evaluationState: state.users.evaluationState,
-        png: state.users.png
+        png: state.users.png,
+        primaryColor: state.users.primaryColor,
+        textColor: state.users.textColor
     };
 }
 

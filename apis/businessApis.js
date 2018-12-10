@@ -69,6 +69,7 @@ const businessApis = {
     GET_billingInfo,
     GET_adminList,
     GET_candidateCount,
+    GET_colors,
 
     generateApiKey,
     createEmailInfo,
@@ -76,7 +77,6 @@ const businessApis = {
 };
 
 const { sendIntercomPlanUpdate } = require("./evaluationApis");
-
 
 // ----->> START APIS <<----- //
 
@@ -320,27 +320,25 @@ async function POST_createBusinessAndUser(req, res) {
         user.hmac = hash;
     }
 
+    // save the user
     try {
         user = await user.save();
     } catch (saveUserError) {
-        console.log(
-            "Error saving user with biz info while signing up from business signup: ",
-            saveUserError
-        );
+        console.log("Error saving new account admin: ", saveUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // save the user's session - assume they want to stay logged in
+    try {
+        saveSession(req.session, user);
+    } catch (e) {
+        console.log("Error saving new account admin's session: ", e);
+    }
+
+    console.log("req.session: ", req.session);
+
     // return successfully to user
     res.status(200).send({ user: frontEndUser(user), fullAccess: true });
-
-    // save the session so that the user stays logged in
-    req.session.userId = user._id;
-    req.session.verificationToken = user.verificationToken;
-    req.session.save(function(err) {
-        if (err) {
-            console.log("ERROR SAVING SESSION OF NEW ACCOUNT ADMIN: ", err);
-        }
-    });
 
     // send email to everyone if there's a new sign up
     // do this after sending success message to user just in case this fails
@@ -374,6 +372,40 @@ async function POST_createBusinessAndUser(req, res) {
     } catch (alertEmailError) {
         console.log("Error sending alert email about new user: ", alertEmailError);
     }
+}
+
+// save the user's id and verification token in the session to keep them logged in
+async function saveSession(session, user, token) {
+    return new Promise(function(resolve, reject) {
+        if (!session) {
+            return reject(new Error("No session object provided to saveSession."));
+        }
+
+        // get userId and verificationToken
+        if (typeof user === "object") {
+            var { _id: userId, verificationToken } = user;
+        } else {
+            var userId = user;
+            var verificationToken = token;
+        }
+
+        if (!userId || !verificationToken) {
+            return reject(
+                new Error(`Invalid userId: ${userId} or verificationToken: ${verificationToken}`)
+            );
+        }
+
+        // save the session so that the user stays logged in
+        session.userId = userId;
+        session.verificationToken = verificationToken;
+        session.save(function(err) {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve();
+            }
+        });
+    });
 }
 
 // creates a new ACCOUNT ADMIN user
@@ -852,7 +884,7 @@ async function createPosition(name, type, businessId, isManager) {
             name: name,
             positionType: type,
             isManager,
-            length: type === "Developer" ? 40 : 22,
+            length: type === "Developer" ? 30 : 22,
             dateCreated: Date.now(),
             timeAllotted: 60
         };
@@ -1142,8 +1174,8 @@ async function createPosition(name, type, businessId, isManager) {
 
         // include Data Structures and Algorithms skill tests if Dev position
         if (type === "Developer") {
-            bizPos.skills = ["5b4d7497fb6fc07d5ad278df", "5b4d7468fb6fc07d5ad278cc"];
-            bizPos.skillNames = ["Data Structures", "Algorithms"];
+            bizPos.skills = ["5c0d8edce7179a2e27054c3a"];
+            bizPos.skillNames = ["Programming"];
         }
 
         // initialize position id string
@@ -1151,15 +1183,26 @@ async function createPosition(name, type, businessId, isManager) {
 
         bizPos._id = _id;
 
-        let code;
         try {
-            code = await createLink(businessId, _id, "candidate");
+            var code = await createLink(businessId, _id, "candidate");
         } catch (createLinkError) {
-            console.log("error creating link: ", createLinkError);
+            console.log("error creating link for candidates: ", createLinkError);
+            return res.status(500).send(errors.SERVER_ERROR);
+        }
+        try {
+            var employeeCode = await createLink(businessId, _id, "employee");
+        } catch (createLinkError) {
+            console.log("error creating link for employees: ", createLinkError);
             return res.status(500).send(errors.SERVER_ERROR);
         }
 
-        bizPos.code = code.code;
+        if (code && employeeCode) {
+            bizPos.code = code.code;
+            bizPos.employeeCode = employeeCode.code;
+        } else {
+            console.log("error creating link for employees or candidates.");
+            return res.status(500).send(errors.SERVER_ERROR);
+        }
 
         return resolve(bizPos);
     });
@@ -1229,8 +1272,50 @@ function createLink(businessId, positionId, userType) {
 function createEmailInfo(businessId, positionId, userType, email) {
     return new Promise(async function(resolve, reject) {
         try {
-            const codeObj = await createCode(businessId, positionId, userType, email, false);
-            resolve({ code: codeObj.code, email, userType });
+            if (userType === "candidate" || userType === "employee") {
+                try {
+                    var business = await Businesses.findById(businessId).select(
+                        "uniqueName name positions"
+                    );
+
+                    var uniqueName = business.uniqueName;
+                    var companyName = business.name;
+                    // find the position within the business
+                    const positionIndex = business.positions.findIndex(currPosition => {
+                        return currPosition._id.toString() === positionId.toString();
+                    });
+                    if (typeof positionIndex !== "number" || positionIndex < 0) {
+                        return reject(
+                            "Could not find correct codes to send emails, please contact us for assistance."
+                        );
+                    }
+                    const position = business.positions[positionIndex];
+                    if (!position) {
+                        return reject(
+                            "Could not find correct codes to send emails, please contact us for assistance."
+                        );
+                    }
+                    if (userType === "candidate") {
+                        var code = position.code;
+                        var developer = position.length === 30;
+                    } else {
+                        var code = position.employeeCode;
+                    }
+                } catch (error) {
+                    console.log("Cannot get business uniqueName for apply page.");
+                    return reject(
+                        "Could not find correct codes to send emails, please contact us for assistance."
+                    );
+                }
+            } else if (userType === "accountAdmin") {
+                const codeObj = await createCode(businessId, positionId, userType, email, false);
+                var code = codeObj.code;
+            } else {
+                return reject(
+                    "Could not find correct codes to send emails, please contact us for assistance."
+                );
+            }
+            resolve({ code, developer, companyName, uniqueName, email, userType });
         } catch (error) {
             // catch whatever random error comes up
             reject(error);
@@ -1242,8 +1327,13 @@ function createEmailInfo(businessId, positionId, userType, email) {
 async function sendEmailInvite(emailInfo, positionName, businessName, userName) {
     return new Promise(async function(resolve, reject) {
         const code = emailInfo.code;
+        const uniqueName = emailInfo.uniqueName;
+        const companyName = emailInfo.companyName;
         const email = emailInfo.email;
         const userType = emailInfo.userType;
+        let developer = emailInfo.developer;
+
+        developer = developer ? true : false;
 
         // recipient of the email
         const recipient = [email];
@@ -1253,12 +1343,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
         let subject = "";
 
         // the button linking to the signup page with the signup code in the url
-        const createAccountButton =
-            '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' +
-            moonshotUrl +
-            "signup?code=" +
-            code +
-            '">Create Account</a>';
+        let createAccountButton = "";
 
         // at the end of every user's email
         const emailFooter =
@@ -1280,6 +1365,18 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
 
         switch (userType) {
             case "candidate":
+                createAccountButton =
+                    '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' +
+                    moonshotUrl +
+                    "introduction?code=" +
+                    code +
+                    "&company=" +
+                    companyName +
+                    "&uniqueName=" +
+                    uniqueName +
+                    "&developer=" +
+                    developer +
+                    '">Begin Evaluation</a>';
                 subject = businessName + " invited you to the next round";
                 content =
                     '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">' +
@@ -1291,7 +1388,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                     " position. The next step is completing " +
                     businessName +
                     "&#39;s evaluation on Moonshot." +
-                    " Please click the button below to create your account. Once you&#39;ve created your account, you can begin your evaluation." +
+                    " Please click the button below to take your evaluation." +
                     "</p>" +
                     '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot and congrats on advancing to the next step for the ' +
                     positionName +
@@ -1301,6 +1398,16 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                     "</div>";
                 break;
             case "employee":
+                createAccountButton =
+                    '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' +
+                    moonshotUrl +
+                    "introduction?code=" +
+                    code +
+                    "&company=" +
+                    companyName +
+                    "&uniqueName=" +
+                    uniqueName +
+                    '">Begin Evaluation</a>';
                 subject = businessName + " invited you to take the " + positionName + " evaluation";
                 content =
                     '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">' +
@@ -1315,13 +1422,19 @@ async function sendEmailInvite(emailInfo, positionName, businessName, userName) 
                     " Your participation will help create a baseline for " +
                     businessName +
                     "&#39;s predictive candidate evaluations for incoming applicants." +
-                    " Please click the button below to create an account. Once you&#39;ve created your account you can begin your evaluation.</p>" +
+                    " Please click the button below to take your evaluation.</p>" +
                     '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>' +
                     createAccountButton +
                     emailFooter +
                     "</div>";
                 break;
             case "accountAdmin":
+                createAccountButton =
+                    '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:3px 5px 1px;text-decoration:none;margin:20px;background:#494b4d;" href="' +
+                    moonshotUrl +
+                    "signup?code=" +
+                    code +
+                    '">Create Account</a>';
                 subject = businessName + " invited you to be an admin on Moonshot";
                 content =
                     '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">' +
@@ -1744,31 +1857,40 @@ async function POST_changeHiringStage(req, res) {
         if (
             business &&
             business.fullAccess &&
-            (!business.billing || (business.billing && !business.billing.subscription && !business.billing.customPlan)) &&
+            (!business.billing ||
+                (business.billing &&
+                    !business.billing.subscription &&
+                    !business.billing.customPlan)) &&
             (business.candidateCount && business.candidateCount < 20)
         ) {
             business.fullAccess = false;
 
             // get all account admins for this business
-            try { var admins = await Users.find({ "userType": "accountAdmin", "businessInfo.businessId": mongoose.Types.ObjectId(business._id) }).select("intercom"); }
-            catch(getUsersError) {
-                console.log("error getting admins when trying to send them free trial ending message");
+            try {
+                var admins = await Users.find({
+                    userType: "accountAdmin",
+                    "businessInfo.businessId": mongoose.Types.ObjectId(business._id)
+                }).select("intercom");
+            } catch (getUsersError) {
+                console.log(
+                    "error getting admins when trying to send them free trial ending message"
+                );
             }
             // will contain all the promises for sending emails
             let intercomPromises = [];
 
             // add a promise to create a code and send an email for each given address
             admins.forEach(admin => {
-                intercomPromises.push(
-                    sendIntercomPlanUpdate(admin.intercom, "ended")
-                );
+                intercomPromises.push(sendIntercomPlanUpdate(admin.intercom, "ended"));
             });
 
             // wait for all the emails to send
             try {
                 await Promise.all(intercomPromises);
             } catch (sendEmailsError) {
-                console.log("error getting admins when trying to send them free trial ending message");
+                console.log(
+                    "error getting admins when trying to send them free trial ending message"
+                );
             }
         }
 
@@ -2049,7 +2171,7 @@ async function POST_interests(req, res) {
 }
 
 async function POST_contactUsEmail(req, res) {
-    const { phoneNumber, message, name, email, company } = sanitize(req.body);
+    const { message, name, email } = sanitize(req.body);
 
     // email to moonshot with the message the user entered
     let toMoonshotContent = `<div>
@@ -2058,10 +2180,6 @@ async function POST_contactUsEmail(req, res) {
             <p>${name}</p>
             <h3>Email</h3>
             <p>${email}</p>
-            <h3>Company</h3>
-            <p>${company}</p>
-            <h3>Phone Number</h3>
-            <p>${phoneNumber}</p>
             <h3>Message</h3>
             <p>${message}</p>
         </div>`;
@@ -2872,7 +2990,7 @@ async function GET_positionsForApply(req, res) {
             ]
         };
         var business = await Businesses.findOne(query).select(
-            "logo name positions positions.name positions.code"
+            "logo name positions positions.name positions.code positions.employeeCode positions.positionType"
         );
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
@@ -3390,6 +3508,49 @@ async function POST_uploadCandidateCSV(req, res) {
             console.log("Error sending email with candidates file: ", error);
             return res.status(500).send({ message: "Error uploading candidates file." });
         });
+}
+
+// get the colors of a business
+async function GET_colors(req, res) {
+    const { name } = req.query;
+
+    if (!name) {
+        return res.status(400).send({ message: "Bad request." });
+    }
+
+    // get the business the user works for
+    try {
+        const query = {
+            $or: [
+                { uniqueNameLowerCase: name.toLowerCase() },
+                {
+                    $and: [
+                        // if searching by name, company has to have been made
+                        // before searching by unique name was possible
+                        { name: name },
+                        {
+                            $or: [
+                                { dateCreated: { $lte: new Date("2018-09-27") } },
+                                { dateCreated: { $exists: false } }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+        var business = await Businesses.findOne(query).select(
+            "headerLogo name backgroundColor primaryColor buttonTextColor"
+        );
+    } catch (findBizError) {
+        console.log("Error finding business when getting colors: ", findBizError);
+        return res.status(500).send({ message: "Server error, couldn't get business colors." });
+    }
+
+    if (!business) {
+        return res.status(404).send({ message: "Invalid url" });
+    }
+
+    return res.json(business);
 }
 
 // creates a unique api key for a business

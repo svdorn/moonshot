@@ -292,7 +292,7 @@ class EmployeePreview extends Component {
                                 value={this.state.questionAnswer}
                                 onChange={(e, value) => this.changeQuestionAnswer(e, value)}
                             />
-                            <div className="myEmployees sliderNumbers">{sliderNumbers}</div>
+                            <div className="myEmployees slider-numbers">{sliderNumbers}</div>
                         </div>
                         <div className="marginTop10px gradingMovementButtons">
                             {questionIndexDisplay === this.props.questions.length ? (

@@ -1,5 +1,5 @@
 const express = require("express");
-const cookieParser = require("cookie-parser");
+// const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
 const session = require("express-session");
@@ -9,6 +9,9 @@ const fileUpload = require("express-fileupload");
 const mongoose = require("mongoose");
 const prerenderNode = require("prerender-node");
 const helmet = require("helmet");
+const chalk = require("chalk");
+const success = chalk.cyan;
+const error = chalk.red;
 
 var app = express();
 
@@ -23,7 +26,7 @@ if (process.env.NODE_ENV !== "test") {
 app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
 var prerender = prerenderNode.set("prerenderToken", "LYjJ7i8UHyhooHVMA3bB");
 prerender.crawlerUserAgents.push("googlebot");
 prerender.crawlerUserAgents.push("bingbot");
@@ -58,7 +61,8 @@ mongoose.connect(
 );
 
 var db = mongoose.connection;
-db.on("error", console.error.bind(console, "# MongoDB - connection error: "));
+db.on("connected", () => console.log(success("Connected to MongoDB.")));
+db.on("error", e => console.log(error("MongoDB connection error: "), e));
 
 // import all the api functions
 const userApis = require("./apis/userApis");
@@ -81,45 +85,23 @@ const helperFunctions = require("./apis/helperFunctions");
 require("./apis/selfActivatingFunctions");
 
 // set up the session
-// app.use(
-//     session({
-//         secret: credentials.secretString,
-//         unset: "destroy", // delete the session when set to null or req.session.destroy() used
-//         saveUninitialized: false, // doesn't save a session if it is new but not modified
-//         rolling: true, // resets maxAge on session when user uses site again
-//         proxy: true, // must be true since we are using a reverse proxy
-//         resave: true, // saves session even if un-modified
-//         name: "sessionId",
-//         cookie: {
-//             maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
-//             // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
-//             secure: process.env.NODE_ENV !== "development", // only make the cookie if accessing via https
-//             httpOnly: true, // cookie can only be sent over http(s), not client js
-//             domain: process.env.SITE_NAME, // moonshotinsights.io or frizzkitten.com or localhost:8081
-//             path: "/" // only allow access to cookie if it's on the right domain and path
-//         },
-//         store: new MongoStore({ mongooseConnection: db, ttl: 7 * 24 * 60 * 60 })
-//         // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
-//     })
-// );
+const sevenDaysInSeconds = 7 * 24 * 60 * 60;
 app.use(
     session({
         secret: credentials.secretString,
-        unset: "destroy", // delete the session when set to null or req.session.destroy() used
+        resave: true, // saves session even if un-modified
         saveUninitialized: false, // doesn't save a session if it is new but not modified
+        unset: "destroy", // delete the session when set to null or req.session.destroy() used
         rolling: true, // resets maxAge on session when user uses site again
         proxy: true, // must be true since we are using a reverse proxy
-        resave: true, // saves session even if un-modified
         cookie: {
-            maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
-            // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
-            secure: process.env.NODE_ENV !== "development", // only make the cookie if accessing via https
+            maxAge: 1000 * sevenDaysInSeconds, // 7 days in milliseconds
+            secure: !helperFunctions.devMode, // only make the cookie if accessing via https
             httpOnly: true, // cookie can only be sent over http(s), not client js
             domain: process.env.SITE_NAME, // moonshotinsights.io or frizzkitten.com or localhost:8081
             path: "/" // only allow access to cookie if it's on the right domain and path
         },
-        store: new MongoStore({ mongooseConnection: db, ttl: 7 * 24 * 60 * 60 })
-        // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
+        store: new MongoStore({ mongooseConnection: db, ttl: sevenDaysInSeconds })
     })
 );
 
@@ -209,7 +191,9 @@ app.post("/user/popups", userApis.POST_popups);
 app.post("/user/intercomEvent", userApis.POST_intercomEvent);
 app.post("/user/reSendVerificationEmail", userApis.POST_reSendVerificationEmail);
 app.post("/user/confirmEmbedLink", userApis.POST_confirmEmbedLink);
+app.post("/user/addEmailToUser", userApis.POST_addEmailToUser);
 
+app.post("/candidate/user", candidateApis.POST_user);
 app.post("/candidate/candidate", candidateApis.POST_candidate);
 
 app.post("/accountAdmin/sendVerificationEmail", accountAdminApis.POST_sendVerificationEmail);
@@ -245,6 +229,7 @@ app.get("/business/billingIsSetUp", businessApis.GET_billingIsSetUp);
 app.get("/business/billingInfo", businessApis.GET_billingInfo);
 app.get("/business/adminList", businessApis.GET_adminList);
 app.get("/business/candidateCount", businessApis.GET_candidateCount);
+app.get("/business/colors", businessApis.GET_colors);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);

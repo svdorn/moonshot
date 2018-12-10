@@ -8,23 +8,24 @@ import {
     closeSignupModal
 } from "../../../../../../actions/usersActions";
 import { TextField } from "material-ui";
-import Dialog from "@material-ui/core/Dialog";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress, Dialog } from "@material-ui/core";
 import { Field, reduxForm } from "redux-form";
-import MetaTags from "react-meta-tags";
 import ReactGA from "react-ga";
 import colors from "../../../../../../colors";
 import {
     renderTextField,
-    viewablePasswordField,
     isValidEmail,
     goTo,
     isValidPassword,
-    propertyExists
+    propertyExists,
+    fieldsAreEmpty
 } from "../../../../../../miscFunctions";
-import ViewablePassword from "../../../../../miscComponents/viewablePassword";
+import TextInput from "../../../../../userInput/textInput";
+import ShiftArrow from "../../../../../miscComponents/ShiftArrow";
+import { Button, CheckBox } from "../../../../../miscComponents";
+import NavCircles from "../../../../../miscComponents/NavCircles";
 
-import "../../../dashboard.css";
+import "./modalSignup.css";
 
 const validate = values => {
     const errors = {};
@@ -48,9 +49,9 @@ const defaultInfo = {
     header1: null,
     body1: null,
     header2: "Add Your Info",
-    body2: "We need this to setup your account.",
+    body2: "We need this to set up your account.",
     header3: "Set Up Your Login",
-    body3: "Fill this out so you can log back in."
+    body3: "Fill this out so you can log back in and freely access your page."
 };
 
 class ModalSignup extends Component {
@@ -87,9 +88,7 @@ class ModalSignup extends Component {
             }
             const info = this.props.info;
 
-            if (!info) {
-                return;
-            }
+            if (!info) return;
 
             if (info.type === "menu") {
                 switch (info.name) {
@@ -183,22 +182,16 @@ class ModalSignup extends Component {
         if (e) e.preventDefault();
         if (!this.state.agreeingToTerms) {
             return this.setState({
-                error: "Must agree to Terms and Conditions and Privacy Policy."
+                error: "Must agree to Terms of Service and Privacy Policy."
             });
         }
 
         const vals = this.props.formData.businessSignup.values;
 
         // Form validation before submit
-        let notValid = false;
-        const requiredFields = ["email", "password", "name", "company"];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return this.setState({ error: "Must fill out all fields." });
+        if (fieldsAreEmpty(vals, ["email", "password", "name", "company"], this.props.touch)) {
+            return this.setState({ error: "Must fill out all fields." });
+        }
 
         // grab values we need from the form
         const { name, company, password, email } = vals;
@@ -250,13 +243,15 @@ class ModalSignup extends Component {
             action: "Business Signup"
         });
 
+        // quora business signup tracking
+        qp('track', 'CompleteRegistration');
+
         // create the user
         this.props.createBusinessAndUser(args, this.onSignupError);
     }
 
     onSignupError = errorObject => {
         let errorMessage = "Error signing up, try refreshing.";
-        console.log("errorObject: ", errorObject);
         if (propertyExists(errorObject, ["response", "data"])) {
             const errData = errorObject.response.data;
             if (typeof errData === "object" && errData.message === "string") {
@@ -268,12 +263,8 @@ class ModalSignup extends Component {
         this.setState({ error: errorMessage });
     };
 
-    handleCheckMarkClick() {
-        this.setState({
-            ...this.state,
-            agreeingToTerms: !this.state.agreeingToTerms
-        });
-    }
+    // when a user clicks the checkbox
+    handleCheckMarkClick = agreeingToTerms => this.setState({ agreeingToTerms });
 
     handleFrameChange(e) {
         if (e) e.preventDefault();
@@ -282,17 +273,9 @@ class ModalSignup extends Component {
             return;
         }
         const vals = this.props.formData.businessSignup.values;
-        let notValid = false;
-        const requiredFields = ["name", "company"];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) {
-            this.setState({ error: "Must fill out all fields to continue." });
-            return;
+
+        if (fieldsAreEmpty(vals, ["name", "company"], this.props.touch)) {
+            return this.setState({ error: "Please fill out all the fields." });
         } else this.setState({ frame: 3, error: undefined });
     }
 
@@ -301,24 +284,17 @@ class ModalSignup extends Component {
 
         return (
             <div className="center">
-                <div className="primary-cyan font22px font20pxUnder500">{info.header2}</div>
-                <div className="font14px">{info.body2}</div>
-                {error ? <div className="secondary-red font16px">{error}</div> : null}
-                <div className="inputContainer signup-fields">
-                    <Field name="name" component={renderTextField} label="Full Name" />
-                    <br />
+                <div className="primary-cyan font22px font20pxUnder500" styleName="header">
+                    {info.header2}
                 </div>
-                <div className="inputContainer signup-fields">
-                    <Field name="company" component={renderTextField} label="Company" />
-                    <br />
-                </div>
-                <button
-                    className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white marginTop20px"
-                    onClick={this.handleFrameChange}
-                    style={{ padding: "2px 4px" }}
-                >
-                    Onward &#8594;
-                </button>
+                <div className="font14px font12pxUnder600">{info.body2}</div>
+                {error ? <div styleName="error">{error}</div> : null}
+
+                <div style={{ height: "20px" }} />
+                <TextInput name="name" label="Full Name" />
+                <div className="input-separator" />
+                <TextInput name="company" label="Company" />
+                <div className="input-separator" />
             </div>
         );
     }
@@ -334,35 +310,31 @@ class ModalSignup extends Component {
 
         return (
             <div className="center">
-                <div className="primary-cyan font22px font20pxUnder500">{info.header3}</div>
-                <div className="font14px" style={{ marginTop: "-7px" }}>
-                    {info.body3}
+                <div className="primary-cyan font22px font20pxUnder500" styleName="header">
+                    {info.header3}
                 </div>
-                {error ? <div className="font14px marginTop10px secondary-red">{error}</div> : null}
-                <div className="inputContainer signup-fields">
-                    <Field name="email" component={renderTextField} label="Email" />
-                    <br />
-                </div>
+                <div className="font14px font12pxUnder600">{info.body3}</div>
+                {error ? <div styleName="error">{error}</div> : null}
 
-                <ViewablePassword
+                <div className="input-separator" />
+                <TextInput name="email" label="Work Email" />
+                <div className="input-separator" />
+                <TextInput
                     name="password"
                     label="Password"
                     value={value}
-                    className="signup-fields"
+                    viewablePassword={true}
+                    buttonColor="#b5b5b5"
                 />
+                <div className="input-separator" />
 
-                <div style={{ margin: "20px 20px 0px" }} className="font12px">
-                    <div
-                        className="checkbox smallCheckbox whiteCheckbox"
-                        onClick={this.handleCheckMarkClick.bind(this)}
-                    >
-                        <img
-                            alt=""
-                            className={"checkMark" + agreeingToTerms}
-                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                        />
-                    </div>
-                    I have read and agree to the Moonshot Insights<br />
+                <div styleName="agree-to-terms" className="font12px">
+                    <CheckBox
+                        checked={agreeingToTerms}
+                        onClick={this.handleCheckMarkClick}
+                        style={{ margin: "0 7px 2px 0" }}
+                    />
+                    I have read and agree to the Moonshot Insights <br className="above500only" />
                     <a
                         href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                         target="_blank"
@@ -379,53 +351,68 @@ class ModalSignup extends Component {
                         terms of service
                     </a>.
                 </div>
-                {this.props.loadingCreateBusiness ? (
-                    <CircularProgress color="#72d6f5" />
-                ) : (
-                    <button
-                        className="button gradient-transition inlineBlock gradient-1-cyan gradient-2-purple-light round-4px font16px primary-white"
-                        onClick={this.handleSubmit}
-                        style={{ padding: "2px 4px" }}
-                    >
-                        Enter &#8594;
-                    </button>
-                )}
             </div>
         );
     }
 
     // navigate around by using the bottom nav circles
-    circleNav = wantedFrame => () => {
-        if (wantedFrame < this.state.frame) {
-            this.setState({ frame: wantedFrame });
-        }
+    circleNav = frame => {
+        if (frame == 2) this.setState({ frame: parseInt(frame, 10) });
+        else this.handleFrameChange();
+    };
+
+    // whether frame 2 (the first frame) has been filled out
+    frame2finished = () => {
+        const vals = this.props.formData.businessSignup
+            ? this.props.formData.businessSignup.values
+            : undefined;
+        return vals && vals.name && vals.company;
+    };
+
+    // whether frame 3 (the second frame) has been filled out
+    frame3finished = () => {
+        const vals = this.props.formData.businessSignup
+            ? this.props.formData.businessSignup.values
+            : {};
+        return (
+            vals &&
+            this.state.agreeingToTerms &&
+            isValidEmail(vals.email) &&
+            isValidPassword(vals.password)
+        );
     };
 
     //name, email, password, confirm password, signup button
     render() {
         const { frame, info } = this.state;
 
-        let navArea = [];
-        const selectedStyle = {
-            background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
-        };
-        // add the circles you can navigate with
-        for (let navCircleIdx = 0; navCircleIdx < 2; navCircleIdx++) {
-            navArea.push(
-                <div
-                    styleName="signup-circle"
-                    style={frame - 2 === navCircleIdx ? selectedStyle : {}}
-                    className={frame - 2 >= navCircleIdx ? "pointer" : ""}
-                    key={`signup modal ${navCircleIdx}`}
-                    onClick={this.circleNav(navCircleIdx + 2)}
-                />
+        // make the button (or loading circle)
+        let buttonArea = undefined;
+        if (frame == 3) {
+            if (this.props.loadingCreateBusiness)
+                buttonArea = <CircularProgress color="secondary" />;
+            else
+                buttonArea = (
+                    <Button onClick={this.handleSubmit} disabled={!this.frame3finished()}>
+                        Enter
+                    </Button>
+                );
+        } else
+            buttonArea = (
+                <Button onClick={this.handleFrameChange} disabled={!this.frame2finished()}>
+                    Next
+                </Button>
             );
-        }
 
         return (
-            <Dialog open={!!this.props.open} maxWidth={false} onClose={this.closeSignupModal}>
+            <Dialog
+                open={!!this.props.open}
+                maxWidth={false}
+                onClose={this.closeSignupModal}
+                classes={{ paper: "background-primary-black-dark-important" }}
+            >
                 {frame === 1 && info.header1 ? (
-                    <div styleName="modal-signup">
+                    <div className="modal-signup">
                         <div className="primary-cyan font22px font20pxUnder500">{info.header1}</div>
                         <div
                             className="font16px"
@@ -435,17 +422,13 @@ class ModalSignup extends Component {
                         </div>
                         <div
                             key={"continue signup modal"}
-                            className="menuItem pointer font16px noWrap primary-cyan wideScreenMenuItem"
+                            className="pointer font20px primary-cyan"
                             onClick={this.handleFrameChange}
                         >
                             <span className="primary-cyan" style={{ marginRight: "7px" }}>
                                 Continue
                             </span>{" "}
-                            <img
-                                className="hover-move-arrow"
-                                style={{ height: "8px" }}
-                                src={`/icons/ArrowBlue${this.props.png}`}
-                            />
+                            <ShiftArrow color="cyan" width="14px" />
                         </div>
                     </div>
                 ) : (
@@ -455,7 +438,16 @@ class ModalSignup extends Component {
                         ) : (
                             <div>{this.makeFrame3()}</div>
                         )}
-                        <div className="center">{navArea}</div>
+                        <div className="center" styleName="button-and-nav">
+                            {buttonArea}
+                            <div style={{ height: "5px" }} />
+                            <NavCircles
+                                values={[2, 3]}
+                                value={frame}
+                                onNavigate={this.circleNav}
+                                inactive={this.frame2finished() ? [] : [3]}
+                            />
+                        </div>
                     </form>
                 )}
             </Dialog>

@@ -30,6 +30,76 @@ const {
 
 const { gradeEval, getCognitiveScore } = require("./evaluationApis");
 
+// get a new dev skill
+async function giveNewDevSkill() {
+    try {
+        let businesses = await Businesses.find({});
+        for (let bizIdx = 0; bizIdx < businesses.length; bizIdx++) {
+            let business = businesses[bizIdx];
+            if (Array.isArray(business.positions)) {
+                for (let posIdx = 0; posIdx < business.positions.length; posIdx++) {
+                    if (business.positions[posIdx].positionType === "Developer") {
+                        business.positions[posIdx].skills = ["5c0d8edce7179a2e27054c3a"];
+                        business.positions[posIdx].length = 30;
+                        business.positions[posIdx].skillNames = ["Programming"];
+                        console.log(
+                            "Changed " + business.name + " dev skill: ",
+                            business.positions[posIdx].name
+                        );
+                    }
+                }
+                await business.save();
+            }
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+// udate employee codes for all positions
+async function employeeCodeUpdate() {
+    try {
+        var businesses = await Businesses.find({});
+    } catch (e) {
+        console.log("Error getting all the businesses: ", e);
+        return;
+    }
+
+    for (let bizIdx = 0; bizIdx < businesses.length; bizIdx++) {
+        let business = businesses[bizIdx];
+
+        if (business.positions && business.positions.length > 0) {
+            console.log("adding code to business: ", business.name);
+            for (let posIdx = 0; posIdx < business.positions.length; posIdx++) {
+                let position = business.positions[posIdx];
+                try {
+                    // TODO: uncomment and run this in businessAPIs file so can use createLink function
+                    //var employeeCode = await createLink(business._id, position._id, "employee");
+                } catch (error) {
+                    console.log(`Error creating link ${business.name} with id ${business._id}: `, e);
+                    return;
+                }
+
+                if (employeeCode && employeeCode.code) {
+                    position.employeeCode = employeeCode.code;
+                } else {
+                    console.log(`Error creating link ${business.name} with id ${business._id}: `, e);
+                    return;
+                }
+            }
+        }
+        try {
+            await business.save();
+        } catch (e) {
+            console.log(`Error saving business ${business.name} with id ${business._id}: `, e);
+            return;
+        }
+    }
+
+    console.log("DONE ADDING EMPLOYEE CODES");
+
+    return true;
+}
 // give all businesses fullAccess and the right candidateCount
 async function billingUpdate() {
     try {

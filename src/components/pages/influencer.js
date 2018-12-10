@@ -475,7 +475,7 @@ class Influencer extends Component {
         return (
             <div key="results">
                 <MetaTags>
-                    <title>Influencer Results | Moonshot</title>
+                    <title>Influencer Results | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="See how your results compare to influencers in the field."
@@ -658,10 +658,6 @@ const style = {
     },
     characteristicsTitle: {
         color: "#96ADFC"
-    },
-    characteristicsListRow: {
-        display: "flex",
-        justifyContent: "center"
     },
     descriptionBox: {
         paddingTop: "40px"

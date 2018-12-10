@@ -9,15 +9,16 @@ import {
     updateStore,
     updatePositionCount
 } from "../../../../../../actions/usersActions";
-import { renderTextField } from "../../../../../../miscFunctions";
+import { fieldsAreEmpty } from "../../../../../../miscFunctions";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextInput from "../../../../../userInput/textInput";
+import NavCircles from "../../../../../miscComponents/NavCircles";
+import ShiftArrow from "../../../../../miscComponents/ShiftArrow";
+import HoverTip from "../../../../../miscComponents/hoverTip";
 import axios from "axios";
 
 import "../../../dashboard.css";
-
-const required = value => (value ? undefined : "This field is required.");
 
 class AddPosition extends Component {
     constructor(props) {
@@ -40,7 +41,9 @@ class AddPosition extends Component {
             // if user didn't select a position type when making a new position
             mustSelectTypeError: false,
             // error adding a position
-            addPositionError: undefined
+            addPositionError: undefined,
+            // which frame you're on ("name" or "type")
+            frame: "name"
         };
     }
 
@@ -63,7 +66,7 @@ class AddPosition extends Component {
             <Select
                 disableUnderline={true}
                 classes={{
-                    root: "selectRootWhite font16px font14pxUnder500",
+                    root: "select-no-focus-color selectRootWhite font16px font14pxUnder500",
                     icon: "selectIconWhiteImportant selectIconMarginSmallText"
                 }}
                 value={position}
@@ -90,18 +93,16 @@ class AddPosition extends Component {
             // TODO: need to be able to add multiple positions
             let self = this;
             e.preventDefault();
+
             const vals = this.props.formData.addPos.values;
 
-            // Form validation before submit
-            let notValid = false;
-            const requiredFields = ["position"];
-            requiredFields.forEach(field => {
-                if (!vals || !vals[field]) {
-                    this.props.touch(field);
-                    notValid = true;
-                }
-            });
-            if (notValid) return;
+            // validate that fields are all filled out
+            if (fieldsAreEmpty(vals, ["position"], this.props.touch)) return;
+
+            // if on the name frame, go to the type frame
+            if (this.state.frame !== "type") {
+                return this.setState({ frame: "type" });
+            }
 
             // if the user didn't select a position type, don't let them move on
             if (this.state.positionType === "Position Type") {
@@ -124,7 +125,7 @@ class AddPosition extends Component {
                 this.props.startLoading();
 
                 axios
-                    .post("api/business/addEvaluation", {
+                    .post("/api/business/addEvaluation", {
                         userId,
                         verificationToken,
                         businessId,
@@ -158,51 +159,109 @@ class AddPosition extends Component {
         }
     };
 
-    render() {
+    // get the name of the position
+    getNameInfo = () => {
         return (
             <div>
-                <form className="center" style={{ marginTop: "-10px" }}>
-                    {this.state.mustSelectTypeError ? (
-                        <div className="secondary-red font10px">Must select a position type.</div>
-                    ) : null}
-                    <TextInput
-                        name="position"
-                        label="Position Name"
-                        validate={[required]}
-                        required={true}
-                        placeholder="iOS Developer"
+                <TextInput name="position" label="Position Name" placeholder="iOS Developer" />
+            </div>
+        );
+    };
+
+    // get the type of the position
+    getTypeInfo = () => {
+        return (
+            <div style={{ paddingTop: "10px" }}>
+                <div styleName="add-position-select-type">
+                    <div>Select a position type:</div>
+                    <div>{this.makeDropdown(this.state.positionType)}</div>
+                </div>
+                <div styleName="add-position-ismgr">
+                    <div
+                        className="checkbox smallCheckbox whiteCheckbox"
+                        onClick={this.handleClickIsManager.bind(this)}
+                    >
+                        <img
+                            alt=""
+                            className={"checkMark" + this.state.newPosIsManager}
+                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                        />
+                    </div>
+                    {"Position is a manager role"}
+                    <div className="info-hoverable">i</div>
+                    <HoverTip
+                        className="font10px secondary-gray"
+                        sourceTriangle={false}
+                        style={{ margin: "25px 10px 0 -48px" }}
+                        text="Three or more people will report to this person."
                     />
-                    <br />
-                    <div styleName="add-position-select-type">
-                        <div>Select a position type:</div>
-                        <div>{this.makeDropdown(this.state.positionType)}</div>
-                    </div>
-                    <br />
-                    <div styleName="add-position-ismgr">
+                </div>
+            </div>
+        );
+    };
+
+    // navigate to a new frame using the nav circles
+    handleNav = (frame, event) => this.setState({ frame });
+
+    render() {
+        const { frame, addPositionError, mustSelectTypeError, positionType } = this.state;
+
+        // the values that have been entered into the form
+        const formValues = this.props.formData.addPos
+            ? this.props.formData.addPos.values
+            : undefined;
+        // if the position name has been entered
+        const hasPositionName = !!formValues && !!formValues.position;
+
+        // if the current step is complete
+        const canAdvance =
+            (frame === "name" && hasPositionName) || positionType !== "Position Type";
+        // button should be disabled if current step is not complete
+        const buttonClass = canAdvance
+            ? "background-primary-cyan"
+            : "disabled background-secondary-gray";
+
+        return (
+            <div>
+                <form className="center">
+                    {mustSelectTypeError ? (
                         <div
-                            className="checkbox smallCheckbox whiteCheckbox"
-                            onClick={this.handleClickIsManager.bind(this)}
+                            style={{
+                                position: "absolute",
+                                left: "50%",
+                                transform: "translate(-50%, -10px)"
+                            }}
+                            className="secondary-red font14px"
                         >
-                            <img
-                                alt=""
-                                className={"checkMark" + this.state.newPosIsManager}
-                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                            />
+                            Please select a position type.
                         </div>
-                        {"Position is a manager role"}
-                    </div>
-                    {this.state.addPositionError ? (
+                    ) : null}
+                    {frame === "name" ? this.getNameInfo() : this.getTypeInfo()}
+                    <br />
+                    {addPositionError ? (
                         <div className="secondary-red font10px">{this.state.addPositionError}</div>
                     ) : null}
-                    <button
-                        onClick={this.handleSubmit}
-                        className="button noselect round-6px background-primary-cyan primary-white learn-more-text font18px font16pxUnder700"
-                        styleName="onboarding-button"
-                        style={{ padding: "5px 17px" }}
-                    >
-                        <span>Enter &#8594;</span>
-                    </button>
+                    <div styleName="add-position-button-container">
+                        <button
+                            onClick={this.handleSubmit}
+                            className={
+                                "button noselect round-6px primary-white font16px " + buttonClass
+                            }
+                            styleName="add-position-button"
+                        >
+                            {frame === "type" ? "Enter" : "Next"}{" "}
+                            <ShiftArrow disabled={!canAdvance} />
+                        </button>
+                    </div>
                 </form>
+                <div styleName="add-position-nav">
+                    <NavCircles
+                        value={this.state.frame}
+                        values={["name", "type"]}
+                        onNavigate={this.handleNav}
+                        disabled={!hasPositionName}
+                    />
+                </div>
             </div>
         );
     }

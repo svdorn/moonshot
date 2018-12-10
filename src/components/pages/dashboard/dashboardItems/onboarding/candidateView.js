@@ -105,16 +105,24 @@ class CandidateView extends Component {
     };
 
     emojiButtons(instance) {
+        const user = this.props.currentUser;
+        const showMoreInfoButton =
+            !user ||
+            !user.triggeredIntercomEvents ||
+            !user.triggeredIntercomEvents.includes(`onboarding-step-1${instance}`);
+
         return (
             <div styleName="emoji-buttons">
                 <div onClick={this.next}>
                     <img src={`/icons/emojis/ThumbsUp${this.props.png}`} />
-                    <div>Got it</div>
+                    <div>Got it!</div>
                 </div>
-                <div onClick={() => this.intercomMsg(instance)}>
-                    <img src={`/icons/emojis/Face${this.props.png}`} />
-                    <div>More info</div>
-                </div>
+                {showMoreInfoButton ? (
+                    <div onClick={() => this.intercomMsg(instance)}>
+                        <img src={`/icons/emojis/Face${this.props.png}`} />
+                        <div>More info</div>
+                    </div>
+                ) : null}
             </div>
         );
     }
@@ -197,7 +205,7 @@ class CandidateView extends Component {
                     </div>
                     <div styleName="text-padding">
                         {
-                            "Candidates complete a series of questions so we can form archetypes and predict how they'll behave and fit in your work environment."
+                            "Candidates complete a series of situational questions so we can better understand their personality and predict how they'll behave and fit in your work environment."
                         }
                     </div>
                     {this.emojiButtons("a")}
@@ -220,11 +228,11 @@ class CandidateView extends Component {
                         className="primary-cyan font18px"
                         styleName="mobile-center title-margin text-padding"
                     >
-                        Evaluate Intellect
+                        Candidate Experience
                     </div>
-                    <div styleName="text-padding">
+                    <div style={{ paddingLeft: "5px" }}>
                         Candidates then complete a short quiz highly predictive of job performance
-                        and growth potential that demonstates their ability to
+                        and growth potential that demonstrates their ability to
                         <span styleName="desktop-only">:</span>
                         <span styleName="mobile-only">
                             {
@@ -233,7 +241,7 @@ class CandidateView extends Component {
                             }
                         </span>
                     </div>
-                    <ul styleName="desktop-only">
+                    <ul styleName="desktop-only" style={{ lineHeight: "1.45" }}>
                         <li>Solve Problems</li>
                         <li>Learn Quickly</li>
                         <li>Adapt to Complex Situations</li>

@@ -54,7 +54,7 @@ const boxTexts = [
     {
         title: "Scale Your Culture",
         body:
-            "Hire candidates that not only fit your company culture, but also offer new and diverse perspectives."
+            "Hire candidates who not only fit your company culture, but also offer new and diverse perspectives."
     },
     {
         title: "Keep Turnover Low",
@@ -319,7 +319,7 @@ class BusinessHome extends Component {
                                 <textarea
                                     id="get-started-input"
                                     styleName="get-started-input"
-                                    className="font26px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
+                                    className="font24px font22pxUnder900 font20pxUnder600 font18pxUnder500 font16pxUnder400"
                                     type="text"
                                     name="position"
                                     placeholder="Who do you need to hire?"
@@ -379,7 +379,7 @@ class BusinessHome extends Component {
                         styleName="no-credit-card"
                         className="font16px font14pxUnder900 font12pxUnder400"
                     >
-                        See everything immediately. <br className="under550only" />
+                        It's free until you make your first hire. <br className="under550only" />
                         No credit card required.
                     </div>
                 </div>
@@ -400,7 +400,7 @@ class BusinessHome extends Component {
                 title: "How We Do It",
                 position: "right",
                 body:
-                    "Candidates take a ~20-minute assessment comprised of a revolutionary personality test and an abstract problem-solving quiz."
+                    "Candidates take a 22-minute evaluation comprised of our personality test and abstract-problem solving quiz."
             }
         ];
 
@@ -514,7 +514,7 @@ class BusinessHome extends Component {
                     <AddUserDialog />
                 ) : null}
                 <MetaTags>
-                    <title>Moonshot</title>
+                    <title>Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions."

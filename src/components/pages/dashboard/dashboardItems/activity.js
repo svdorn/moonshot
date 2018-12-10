@@ -458,7 +458,7 @@ class Activity extends Component {
                                 Congratulations, we would like to invite you to the next round of
                                 evaluations! We are excited to learn more about you and see how well
                                 you could fit with our team. The next step is completing a 22-minute
-                                evaluation, which you can sign up and take{" "}
+                                evaluation, which you can take{" "}
                                 <a
                                     style={{ color: "#76defe", textDecoration: "underline" }}
                                     href={`https://moonshotinsights.io/apply/${uniqueName}`}

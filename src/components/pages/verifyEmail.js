@@ -81,7 +81,7 @@ class VerifyEmail extends Component {
         return (
             <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
-                    <title>Verify Email | Moonshot</title>
+                    <title>Verify Email | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Verify your email to get started on your path to finding the perfect job."

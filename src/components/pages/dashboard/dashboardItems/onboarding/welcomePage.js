@@ -2,15 +2,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-    addNotification,
-    updateStore,
-    hidePopups
-} from "../../../../../actions/usersActions";
-import {
-    goTo
-} from "../../../../../miscFunctions";
+import { addNotification, updateStore, hidePopups } from "../../../../../actions/usersActions";
+import { goTo } from "../../../../../miscFunctions";
 import { button } from "../../../../../classes";
+import ShiftArrow from "../../../../miscComponents/ShiftArrow";
 
 import "../../dashboard.css";
 
@@ -37,7 +32,7 @@ class WelcomePage extends Component {
         } else {
             this.props.updateStore("welcomeToMoonshot", true);
         }
-    }
+    };
 
     makeWelcomeFrame() {
         return (
@@ -46,12 +41,14 @@ class WelcomePage extends Component {
                     Welcome to Moonshot Insights!
                 </div>
                 <div className="font16px font14pxUnder700 font12pxUnder500 marginTop10px">
-                    We created a 22-minute evaluation that you can share with your candidates to understand their personality,
-                    ability to learn, adapt and problem solve. This data enables us to predict each candidate{"'"}s job performance,
-                    growth potential, longevity or tenure, and culture fit at your company.
+                    We created a 22-minute evaluation that you can share with your candidates to
+                    understand their personality, ability to learn, adapt and problem solve. This
+                    data enables us to predict each candidate’s job performance, growth potential,
+                    culture fit, and longevity at your company.
                 </div>
-                <div styleName="blue-arrow" onClick={this.welcomeFrameClick}>
-                    Start Here <img src={`/icons/ArrowBlue${this.props.png}`} />
+                <div styleName="welcome-text" onClick={this.welcomeFrameClick}>
+                    Start Here{" "}
+                    <ShiftArrow width="17px" color="cyan" style={{ marginBottom: "4px" }} />
                 </div>
             </div>
         );
@@ -62,7 +59,7 @@ class WelcomePage extends Component {
             <div styleName="item-padding">
                 <div styleName="build-team-container">
                     <div className="center" style={{ height: "100%" }}>
-                        { this.makeWelcomeFrame() }
+                        {this.makeWelcomeFrame()}
                     </div>
                 </div>
             </div>

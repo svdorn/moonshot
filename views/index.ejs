@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Moonshot</title>
+    <title>Moonshot Insights</title>
+
+    <meta name="description" content="Moonshot Insights predicts the job performance, growth potential, culture fit and longevity of job applicants.">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
     <link rel="stylesheet" href="/style.css" type="text/css" />
@@ -15,6 +17,7 @@
     <meta id="meta" name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://js.stripe.com/v3/"></script>
     <script type="text/javascript" src="/config.js"></script>
+    <!-- DO NOT MODIFY -->
     <!-- Intercom Tracking Code-->
     <script type="text/javascript">
         var APP_ID = "xki3jtkg";
@@ -23,6 +26,8 @@
         s.src='https://widget.intercom.io/widget/' + APP_ID;
         var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
     </script>
+    <!-- End of Intercom tracking code -->
+    <!-- DO NOT MODIFY -->
     <!-- Hotjar Tracking Code for https://moonshotinsights.io, only run in production -->
     <script>
         if (window.location.hostname !== "localhost") {
@@ -36,11 +41,20 @@
             })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
         }
     </script>
+    <!-- End of Hotjar tracking code -->
+    <!-- DO NOT MODIFY -->
+    <!-- Quora Pixel Code (JS Helper) -->
+    <script>
+    !function(q,e,v,n,t,s){if(q.qp) return; n=q.qp=function(){n.qp?n.qp.apply(n,arguments):n.queue.push(arguments);}; n.queue=[];t=document.createElement(e);t.async=!0;t.src=v; s=document.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t,s);}(window, 'script', 'https://a.quora.com/qevents.js');
+    qp('init', 'c76d409b18db4d3db2ae0d771f8a3557');
+    qp('track', 'ViewContent');
+    </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://q.quora.com/_/ad/c76d409b18db4d3db2ae0d771f8a3557/pixel?tag=ViewContent&noscript=1"/></noscript>
+    <!-- End of Quora Pixel Code -->
 </head>
 <body>
     <div id='app'><%- reactComponent-%></div>
     <script>window.INITIAL_STATE=<%- initialState -%></script>
     <script src='/bundle.js'></script>
-
 </body>
 </html>

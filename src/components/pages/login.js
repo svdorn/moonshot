@@ -141,12 +141,8 @@ class Login extends Component {
     render() {
         // the query that will be passed to "sign up" if that is clicked
         let location = this.props.location;
-        const pathway = location.query.pathway;
         const redirect = location.query.redirect;
         let signUpQuery = {};
-        if (pathway) {
-            signUpQuery.pathway = pathway;
-        }
         if (redirect) {
             signUpQuery.redirect = redirect;
         }
@@ -154,10 +150,10 @@ class Login extends Component {
         return (
             <div className="fillScreen formContainer">
                 <MetaTags>
-                    <title>Log In | Moonshot</title>
+                    <title>Log In | Moonshot Insights</title>
                     <meta
                         name="description"
-                        content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion."
+                        content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
                     />
                 </MetaTags>
                 {/*<HomepageTriangles className="slightly-blurred" style={{pointerEvents:"none"}} variation="1" />*/}
@@ -193,7 +189,7 @@ class Login extends Component {
                         <br />
                         <div
                             className="clickable underline"
-                            onClick={() => goTo({ pathname: "/signup", query: signUpQuery })}
+                            onClick={() => goTo({ pathname: "/explore", query: { signup: true } })}
                             style={{ display: "inline-block" }}
                         >
                             Create Account

@@ -70,13 +70,13 @@ class MyCandidates extends Component {
             // which position we should see candidates for
             position: "",
             // can sort by Name, Score, Hiring Stage, etc...
-            sortBy: "stage",
+            sortBy: "score",
             // the direction to sort in
-            sortAscending: false,
+            sortAscending: true,
             // hide candidates that have been dismissed?
-            hideDismissed: false,
+            hideDismissed: true,
             // hide candidates that have been hired?
-            hideHired: false,
+            hideHired: true,
             // unordered candidates list
             candidates: [],
             // the candidates ordered by the user
@@ -1091,6 +1091,7 @@ class MyCandidates extends Component {
     }
 
     hideMessage() {
+        let self = this;
         const { currentUser } = this.props;
         if (!currentUser) {
             return this.props.addNotification(
@@ -1111,7 +1112,9 @@ class MyCandidates extends Component {
         const verificationToken = currentUser.verificationToken;
 
         this.props.hidePopups(userId, verificationToken, popups);
-        this.props.intercomEvent("candidates_page_first_time", userId, verificationToken, null);
+        setTimeout(function() {
+            self.props.intercomEvent("candidates_page_first_time", userId, verificationToken, null);
+        }, 2000);
     }
 
     // the tabs at the top that say All, Favorites, etc...
@@ -1517,7 +1520,7 @@ class MyCandidates extends Component {
                     <InviteCandidatesModal />
                     <HireVerificationModal hiringStageChange={this.hiringStageChange.bind(this)} />
                     <MetaTags>
-                        <title>My Candidates | Moonshot</title>
+                        <title>My Candidates | Moonshot Insights</title>
                         <meta
                             name="description"
                             content="View analytical breakdowns and manage your candidates."

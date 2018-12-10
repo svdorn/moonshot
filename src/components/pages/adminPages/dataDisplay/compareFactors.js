@@ -2,10 +2,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import axios from "axios";
 import {} from "../../../../actions/usersActions";
 import {} from "../../../../miscFunctions";
 import { button } from "../../../../classes";
 import { Tabs, Tab } from "@material-ui/core";
+import { round } from "../../../../miscFunctions";
 
 import "./dataDisplay.css";
 
@@ -39,9 +41,17 @@ class CompareFactors extends Component {
     constructor(props) {
         super(props);
 
+        const { currentUser } = props;
+        if (currentUser) {
+            var { _id: userId, verificationToken } = currentUser;
+        } else {
+            var userId = undefined;
+            var verificationToken = undefined;
+        }
+
         this.state = {
             dot: false,
-            chartType: "line",
+            chartType: "scatter",
             scatter: {
                 points: [],
                 bflPoints: [],
@@ -60,7 +70,8 @@ class CompareFactors extends Component {
                     intercept: 0,
                     correlation: 0
                 }
-            ]
+            ],
+            GETparams: { userId, verificationToken }
         };
     }
 
@@ -78,26 +89,19 @@ class CompareFactors extends Component {
     getScatterData() {
         console.log("getting scatter data");
 
-        const points = [
-            { x: 1, y: 3 },
-            { x: 4, y: -2 },
-            { x: -3, y: 1 },
-            { x: 1, y: 5 },
-            { x: 2.4, y: -3 },
-            { x: -4.6, y: 5 }
-        ];
-        const bflPoints = [{ x: -6, y: -4 }, { x: 6, y: 4 }];
+        const self = this;
 
-        const x = "Agreeableness";
-        const y = "Honesty-Humility";
-
-        const slope = 2.3;
-        const intercept = 1.9;
-        const correlation = 0.55;
-
-        const scatter = { points, bflPoints, x, y, slope, intercept, correlation };
-
-        this.setState({ scatter });
+        axios
+            .get("/api/admin/dataDisplay/scatter", {
+                params: {
+                    ...this.state.GETparams,
+                    facType: this.props.facType,
+                    facNames: this.props.facs.map(fac => fac.name),
+                    site: this.props.site
+                }
+            })
+            .then(response => self.setState({ scatter: response.data.scatter }))
+            .catch(error => console.log("error getting scatter data: ", error));
     }
 
     // get data for the GCA scatter plot
@@ -138,25 +142,25 @@ class CompareFactors extends Component {
         this.setState({ gcaScatterFacs });
     }
 
-    // return a line chart comparison between the factors
+    // return a line chart comparison between the factors/facets
     lineChart = () => {
-        const { factors } = this.props;
+        const { facs } = this.props;
 
         // create a list of the combined data points
-        const data = factors[0].dataPoints.map((point, pointIdx) => {
+        const data = facs[0].dataPoints.map((point, pointIdx) => {
             let combinedPoint = {
                 // "3.75" or "-2.25" etc
                 name: point.name
             };
-            // add the quantity for each factor
-            factors.forEach(factor => {
-                combinedPoint[factor.name] = factor.dataPoints[pointIdx].quantity;
+            // add the quantity for each factor/facet
+            facs.forEach(fac => {
+                combinedPoint[fac.name] = fac.dataPoints[pointIdx].quantity;
             });
             return combinedPoint;
         });
 
         // create the Lines for the chart
-        const lines = factors.map((f, idx) => (
+        const lines = facs.map((f, idx) => (
             <Line
                 key={`${f.name} Line`}
                 type="monotone"
@@ -199,13 +203,25 @@ class CompareFactors extends Component {
         ];
     };
 
-    // return a scatter plot comparison between two factors (if there are exactly 2)
+    // return a scatter plot comparison between two factors/facets (if there are exactly 2)
     scatterPlot = () => {
-        if (this.props.factors.length !== 2) {
-            return null;
+        if (this.props.facs.length !== 2) {
+            return (
+                <div style={{ textAlign: "center", margin: "200px auto" }}>
+                    Need two factors/facets for a scatter plot.
+                </div>
+            );
         }
 
         const { scatter } = this.state;
+
+        let intercept = round(scatter.intercept, 2);
+        let absIntercept = intercept;
+        let plusMinus = "+";
+        if (intercept < 0) {
+            absIntercept = intercept * -1;
+            plusMinus = "-";
+        }
 
         return [
             <ScatterChart
@@ -238,25 +254,27 @@ class CompareFactors extends Component {
                 <div>
                     Best Fit Line:
                     <span style={{ marginLeft: "10px" }}>
-                        {scatter.y} = {scatter.slope}
-                        {scatter.x} + {scatter.intercept}
+                        {scatter.y} = {round(scatter.slope, 2)}
+                        {scatter.x} {plusMinus} {absIntercept}
                     </span>
                 </div>
                 <div>
-                    Slope: <span>{scatter.slope}</span>
+                    Slope: <span>{round(scatter.slope, 2)}</span>
                 </div>
                 <div>
-                    Intercept: <span>{scatter.intercept}</span>
+                    Intercept: <span>{intercept}</span>
                 </div>
                 <div>
-                    Correlation: <span>{scatter.correlation}</span>
+                    Correlation: <span>{round(scatter.correlation, 2)}</span>
                 </div>
             </div>
         ];
     };
 
-    // compare the 1+ factors to GCA
+    // compare the 1+ factors/facets to GCA
     compareToGCA = () => {
+        return <div style={{ margin: "200px auto", textAlign: "center" }}>Not yet implemented</div>;
+
         let stats = [];
         const scatters = this.state.gcaScatterFacs.map((fac, idx) => {
             stats.push(
@@ -321,7 +339,7 @@ class CompareFactors extends Component {
     };
 
     render() {
-        if (this.props.factors.length < 1) {
+        if (this.props.facs.length < 1) {
             return "Need at least one factor/facet to show.";
         }
 
@@ -330,12 +348,12 @@ class CompareFactors extends Component {
         return (
             <div className="background-primary-black-dark primary-white">
                 <Tabs value={chartType} onChange={this.handleChartChange} centered>
-                    <Tab label="Line" value="line" style={{ color: "white" }} />
                     <Tab label="Scatter" value="scatter" style={{ color: "white" }} />
+                    <Tab label="Line" value="line" style={{ color: "white" }} />
                     <Tab label="GCA" value="gca" style={{ color: "white" }} />
                 </Tabs>
-                {chartType === "line" ? this.lineChart() : null}
                 {chartType === "scatter" ? this.scatterPlot() : null}
+                {chartType === "line" ? this.lineChart() : null}
                 {chartType === "gca" ? this.compareToGCA() : null}
             </div>
         );

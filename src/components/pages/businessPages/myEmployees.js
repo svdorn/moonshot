@@ -285,13 +285,6 @@ class MyEmployees extends Component {
                 fontSize: "23px",
                 color: "white"
             },
-            separatorLine: {
-                width: "100%",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
-            },
             searchBar: {
                 width: "80%",
                 margin: "auto",
@@ -566,7 +559,7 @@ class MyEmployees extends Component {
                     <AddUserDialog position={this.state.position} tab="Employee" />
                 ) : null}
                 <MetaTags>
-                    <title>My Employees | Moonshot</title>
+                    <title>My Employees | Moonshot Insights</title>
                     <meta
                         name="description"
                         content="Grade your employees and see their results."

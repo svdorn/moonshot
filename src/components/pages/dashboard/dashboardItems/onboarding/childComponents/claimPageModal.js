@@ -10,22 +10,22 @@ import {
 import { TextField } from "material-ui";
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { Field, reduxForm } from "redux-form";
-import MetaTags from "react-meta-tags";
+import { reduxForm } from "redux-form";
 import ReactGA from "react-ga";
 import colors from "../../../../../../colors";
 import { button } from "../../../../../../classes.js";
 import {
-    renderTextField,
-    viewablePasswordField,
     isValidEmail,
     goTo,
     isValidPassword,
-    propertyExists
+    propertyExists,
+    fieldsAreEmpty
 } from "../../../../../../miscFunctions";
-import ViewablePassword from "../../../../../miscComponents/viewablePassword";
+import TextInput from "../../../../../userInput/textInput";
+import NavCircles from "../../../../../miscComponents/NavCircles";
+import Button from "../../../../../miscComponents/Button";
 
-import "../../../dashboard.css";
+import "./modalSignup.css";
 
 const validate = values => {
     const errors = {};
@@ -53,7 +53,7 @@ class ClaimPageModal extends Component {
 
         this.state = {
             agreeingToTerms: false,
-            frame: 1,
+            frame: 0,
             error: undefined
         };
 
@@ -85,7 +85,7 @@ class ClaimPageModal extends Component {
             e.preventDefault();
             if (frame === 3) {
                 this.handleSubmit(e);
-            } else if (frame === 1 || frame === 2) {
+            } else if (frame === 0 || frame === 1) {
                 this.navFrames("next");
             }
         }
@@ -94,7 +94,7 @@ class ClaimPageModal extends Component {
     handleSubmit(e) {
         if (!this.state.agreeingToTerms) {
             return this.setState({
-                error: "Must agree to Terms and Conditions and Privacy Policy."
+                error: "Must agree to Terms of Service and Privacy Policy."
             });
         }
 
@@ -104,16 +104,11 @@ class ClaimPageModal extends Component {
             vals.company = this.props.company;
         }
 
-        // Form validation before submit
-        let notValid = false;
+        // form validation before submission
         const requiredFields = ["email", "password", "name", "company"];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return this.setState({ error: "Must fill out all fields." });
+        if (fieldsAreEmpty(vals, requiredFields, this.props.touch)) {
+            return this.setState({ error: "Please fill out all fields." });
+        }
 
         // grab values we need from the form
         const { name, company, password, email } = vals;
@@ -148,6 +143,9 @@ class ClaimPageModal extends Component {
             category: "Signup",
             action: "Business Signup"
         });
+
+        // make a business signup with quora
+        qp('track', 'CompleteRegistration');
 
         // create the user
         this.props.createBusinessAndUser(args, this.onSignupError);
@@ -186,9 +184,9 @@ class ClaimPageModal extends Component {
             let requiredFields = [];
             const vals = this.props.formData.businessSignup.values;
             let checkEmail = false;
-            if (newIndex === 1) {
+            if (newIndex === 0) {
                 requiredFields.push("name");
-            } else if (newIndex === 2) {
+            } else if (newIndex === 1) {
                 requiredFields.push("email");
                 checkEmail = true;
             }
@@ -200,9 +198,8 @@ class ClaimPageModal extends Component {
                     notValid = true;
                 }
             });
-            if (notValid) {
-                return;
-            }
+            if (notValid) return;
+
             if (checkEmail && !isValidEmail(vals.email)) {
                 return this.setState({ error: "Invalid email." });
             }
@@ -213,65 +210,53 @@ class ClaimPageModal extends Component {
     };
 
     // navigate around by using the bottom nav circles
-    circleNav = wantedFrame => () => {
-        if (wantedFrame < this.state.frame) {
-            this.setState({ frame: wantedFrame });
+    circleNav = wantedFrame => {
+        if (wantedFrame == 0) {
+            return this.setState({ frame: 0 });
+        } else if (wantedFrame == 1) {
+            if (this.frame0finished()) {
+                return this.setState({ frame: 1 });
+            } else return;
+        } else if (wantedFrame == 2) {
+            if (this.frame0finished() && this.frame1finished()) {
+                return this.setState({ frame: 2 });
+            } else return;
         }
     };
 
+    makeFrame0() {
+        return (
+            <div className="center" style={{ marginTop: "15px" }}>
+                <TextInput name="name" label="Full Name" />
+            </div>
+        );
+    }
+
     makeFrame1() {
         return (
-            <div className="center">
-                <div className="inputContainer">
-                    <Field name="name" component={renderTextField} label="Full Name" />
-                    <br />
-                </div>
-                <div
-                    className={
-                        "primary-white font18px font16pxUnder700 marginTop10px " + button.cyan
-                    }
-                    onClick={this.navFrames.bind(this, "next")}
-                >
-                    Next
-                </div>
+            <div className="center" style={{ marginTop: "15px" }}>
+                <TextInput name="email" label="Work Email" />
             </div>
         );
     }
 
     makeFrame2() {
-        return (
-            <div className="center">
-                <div className="inputContainer">
-                    <Field name="email" component={renderTextField} label="Email" />
-                    <br />
-                </div>
-                <div
-                    className={
-                        "primary-white font18px font16pxUnder700 marginTop10px " + button.cyan
-                    }
-                    onClick={this.navFrames.bind(this, "next")}
-                >
-                    Next
-                </div>
-            </div>
-        );
-    }
-
-    makeFrame3() {
         let value = undefined;
         if (propertyExists(this, ["props", "formData", "businessSignup", "values", "password"])) {
             value = this.props.formData.businessSignup.values.password;
         }
 
         return (
-            <div className="center">
-                <ViewablePassword
+            <div className="center" styleName="password-agree-area">
+                <TextInput
+                    viewablePassword={true}
                     name="password"
                     label="Password"
                     value={value}
-                    className="signup-fields"
+                    buttonColor="#b5b5b5"
+                    textFieldClassName="text-field width280"
                 />
-                <div style={{ margin: "20px 20px 0px" }} className="font12px">
+                <div styleName="agree-to-terms" className="font12px">
                     <div
                         className="checkbox smallCheckbox whiteCheckbox"
                         onClick={this.handleCheckMarkClick.bind(this)}
@@ -282,7 +267,7 @@ class ClaimPageModal extends Component {
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                         />
                     </div>
-                    I have read and agree to the Moonshot Insights<br />
+                    I have read and agree to the Moonshot Insights <br className="above500only" />
                     <a
                         href="https://www.docdroid.net/X06Dj4O/privacy-policy.pdf"
                         target="_blank"
@@ -299,74 +284,116 @@ class ClaimPageModal extends Component {
                         terms of service
                     </a>.
                 </div>
-                {this.props.loadingCreateBusiness ? (
-                    <CircularProgress color="#72d6f5" />
-                ) : (
-                    <div
-                        className={
-                            "primary-white font18px font16pxUnder700 marginTop10px " + button.cyan
-                        }
-                        onClick={this.handleSubmit}
-                    >
-                        Start
-                    </div>
-                )}
             </div>
         );
     }
 
+    // true if input for frame 0 is valid
+    frame0finished = () => {
+        // values of input fields
+        const vals = this.props.formData.businessSignup
+            ? this.props.formData.businessSignup.values
+            : undefined;
+
+        return !!vals && !!vals.name;
+    };
+
+    // true if input for frame 1 is valid
+    frame1finished = () => {
+        // values of input fields
+        const vals = this.props.formData.businessSignup
+            ? this.props.formData.businessSignup.values
+            : undefined;
+
+        return !!vals.email && !!isValidEmail(vals.email);
+    };
+
+    frame2finished = () => {
+        // values of input fields
+        const vals = this.props.formData.businessSignup
+            ? this.props.formData.businessSignup.values
+            : undefined;
+
+        return !!vals.password && isValidPassword(vals.password) && this.state.agreeingToTerms;
+    };
+
+    // returns a list of which circles can be clicked
+    inactiveFrames = () => {
+        if (!this.frame0finished()) {
+            // if there are no inputs or frame 0 hasn't been finished, 1 and 2 inactive
+            return [1, 2];
+        } else if (!this.frame1finished()) {
+            // frame 0 and 1 active but if no valid email, 2 is not
+            return [2];
+        }
+
+        return [];
+    };
+
     //name, email, password, confirm password, signup button
     render() {
-        let navArea = [];
-        const selectedStyle = {
-            background: `linear-gradient(to bottom, ${colors.primaryWhite}, ${colors.primaryCyan})`
-        };
-        // add the circles you can navigate with
-        for (let navCircleIdx = 0; navCircleIdx < 3; navCircleIdx++) {
-            navArea.push(
-                <div
-                    styleName="signup-circle"
-                    style={this.state.frame - 1 === navCircleIdx ? selectedStyle : {}}
-                    key={`signup question ${navCircleIdx}`}
-                    className={this.state.frame > navCircleIdx ? "pointer" : ""}
-                    onClick={this.circleNav(navCircleIdx + 1)}
-                />
-            );
-        }
+        const { frame, error } = this.state;
+        const { loadingCreateBusiness, open } = this.props;
 
-        let frame = null;
-        switch (this.state.frame) {
-            case 1:
-                frame = this.makeFrame1();
-                break;
-            case 2:
-                frame = this.makeFrame2();
-                break;
-            case 3:
-                frame = this.makeFrame3();
-                break;
-            default:
-                frame = this.makeFrame1();
-                break;
-        }
+        const canAdvance =
+            (frame === 0 && this.frame0finished()) ||
+            (frame === 1 && this.frame1finished()) ||
+            (frame === 2 && this.frame2finished());
+
+        const buttonClass = canAdvance
+            ? "background-primary-cyan"
+            : "background-secondary-gray not-allowed";
 
         return (
-            <Dialog open={!!this.props.open} maxWidth={false} onClose={this.close}>
-                <form styleName="modal-signup" className="inline-block center">
+            <Dialog
+                open={!!open}
+                maxWidth={false}
+                onClose={this.close}
+                classes={{ paper: "background-primary-black-dark-important" }}
+            >
+                <form className="modal-signup inline-block center" styleName="claim-page-modal">
                     <div>
-                        <div className="primary-cyan font22px font20pxUnder500">
+                        <div
+                            className="primary-cyan font22px font20pxUnder500"
+                            style={{ marginBottom: "5px" }}
+                        >
                             Claim Your Page
                         </div>
                         <div className="font14px">Fill this out so you can manage your page.</div>
-                        {this.state.error ? (
-                            <div className="font14px marginTop10px secondary-red">
-                                {this.state.error}
-                            </div>
-                        ) : null}
+                        {this.state.error ? <div styleName="error">{error}</div> : null}
                     </div>
                     <div>
-                        <div>{frame}</div>
-                        {navArea}
+                        <div>
+                            {frame === 0 ? this.makeFrame0() : null}
+                            {frame === 1 ? this.makeFrame1() : null}
+                            {frame === 2 ? this.makeFrame2() : null}
+                        </div>
+
+                        <div styleName="button-and-nav">
+                            {this.props.loadingCreateBusiness ? (
+                                <CircularProgress color="secondary" />
+                            ) : (
+                                <Button
+                                    style={{ marginBottom: "5px" }}
+                                    onClick={
+                                        frame === 2
+                                            ? this.handleSubmit
+                                            : this.navFrames.bind(this, "next")
+                                    }
+                                    disabled={!canAdvance}
+                                >
+                                    {frame === 0 || frame === 1 ? "Next" : "Start"}
+                                </Button>
+                            )}
+
+                            <NavCircles
+                                value={this.state.frame}
+                                values={[0, 1, 2]}
+                                onNavigate={this.circleNav}
+                                inactive={this.inactiveFrames()}
+                                dotStyle={{ width: "10px", height: "10px" }}
+                            />
+                        </div>
                     </div>
                 </form>
             </Dialog>

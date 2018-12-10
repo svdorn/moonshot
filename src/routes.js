@@ -1,13 +1,13 @@
 "use strict";
 import React from "react";
 import { render } from "react-dom";
-//import credentials from '../credentials.js';
 
 //REACT_ROUTER
 import { Router, Route, IndexRoute, browserHistory, Redirect } from "react-router";
 
 import Login from "./components/pages/login";
 import Signup from "./components/pages/signup";
+import Introduction from "./components/pages/introduction";
 import MyCandidates from "./components/pages/businessPages/myCandidates";
 import MyEmployees from "./components/pages/businessPages/myEmployees";
 import MyEvaluations from "./components/pages/myEvaluations/myEvaluations";
@@ -24,6 +24,7 @@ import Pricing from "./components/pages/pricing";
 import ApplyContainer from "./components/pages/applyContainer";
 import GeneralApply from "./components/pages/generalApply";
 import Apply from "./components/pages/apply";
+import Employee from "./components/pages/employee";
 import VerifyEmail from "./components/pages/verifyEmail";
 import ForgotPassword from "./components/pages/forgotpassword";
 import ChangePassword from "./components/pages/changepasswordforgot";
@@ -41,6 +42,8 @@ import Explore from "./components/pages/dashboard/leadDashboard";
 
 // position evaluation - contains all components (psych, gca, admin questions)
 import Evaluation from "./components/pages/evaluation/evaluation";
+import FinishEvaluation from "./components/pages/finishEvaluation";
+import Finished from "./components/pages/finished";
 
 import AdminPages from "./components/pages/adminPages/adminPages";
 import BusinessEditor from "./components/pages/adminPages/businessEditor";
@@ -50,6 +53,18 @@ import SkillPicker from "./components/pages/adminPages/skillPicker";
 import DataDisplay from "./components/pages/adminPages/dataDisplay/dataDisplay";
 import PsychDataDisplay from "./components/pages/adminPages/dataDisplay/psych";
 import GCADataDisplay from "./components/pages/adminPages/dataDisplay/gca";
+
+// import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+// const theme = createMuiTheme({
+//     palette: {
+//         primary: {
+//             main: "#FFFFFF"
+//         },
+//         secondary: {
+//             main: "#76defe"
+//         }
+//     }
+// });
 
 import ReactGA from "react-ga";
 ReactGA.initialize("UA-105560654-1");
@@ -67,6 +82,7 @@ const routes = (
             <Route path="login" component={Login} />
             <Route path="employerLogin" component={Login} />
             <Route path="signup" component={Signup} />
+            <Route path="introduction" component={Introduction} />
             <Route
                 path="myCandidates"
                 component={AuthenticatedComponent}
@@ -135,11 +151,22 @@ const routes = (
                 <Route path=":company" component={Apply} />
             </Route>
 
+            <Route path="employee" page={<ApplyContainer />}>
+                <IndexRoute component={GeneralApply} />
+                <Route path=":company" component={Employee} />
+            </Route>
+
             <Route
                 path="evaluation/:businessId/:positionId"
                 component={AuthenticatedComponent}
                 page={<Evaluation />}
             />
+            <Route
+                path="finishEvaluation"
+                component={AuthenticatedComponent}
+                page={<FinishEvaluation />}
+            />
+            <Route path="finished" component={AuthenticatedComponent} page={<Finished />} />
 
             <Route
                 path="admin"

@@ -78,7 +78,7 @@ class Settings extends Component {
             <div className={"fillScreen " + blurredClass}>
                 {currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
-                    <title>Settings | Moonshot</title>
+                    <title>Settings | Moonshot Insights</title>
                     <meta name="description" content="Change your Moonshot account settings." />
                 </MetaTags>
                 <div className="formContainer center">

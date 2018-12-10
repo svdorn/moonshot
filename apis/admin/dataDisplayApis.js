@@ -1,15 +1,34 @@
-const app = require("../../apiServer");
 const Users = require("../../models/users");
 const PsychUsers = require("../../models/psychUsers");
-const { getAndVerifyUser, sanitize } = require("../helperFunctions");
+const PsychQuestions = require("../../models/psychquestions");
+const { getAndVerifyUser, sanitize, randomInt } = require("../helperFunctions");
 const errors = require("../errors");
 
-// functions/constants that clean up queries
+// FUNCTIONS/CONSTANTS THAT CLEAN UP QUERIES
 unwind = str => ({ $unwind: str });
 project = obj => ({ $project: obj });
 match = obj => ({ $match: obj });
 group = obj => ({ $group: obj });
 const psychExists = match({ "psychometricTest.endDate": { $exists: true } });
+
+// RANDOM HELPFUL FUNCTIONS
+// adds two numbers
+add = (a, b) => a + b;
+// gets the sum of a list
+sum = values => values.reduce(add, 0);
+// gets the average value of a list
+mean = values => sum(values) / values.length;
+// calculate the variance of a list of values
+variance = values => {
+    // get the average value of the list
+    const average = mean(values);
+    // number of values
+    const n = values.length;
+    // return the sum of the squared deviations from the average
+    return values.reduce((sum, value) => sum + Math.pow(value - average, 2), 0) / (n - 1);
+};
+// return the standard distribution from a list of numbers
+standardDeviation = values => Math.sqrt(variance(values));
 
 const outputDescriptions = {
     Sincerity: {
@@ -201,14 +220,14 @@ async function GET_factors(req, res, next) {
     // an array that will contain the factors that will be returned to the front end
     let newFactorObjs = [];
 
-    // go through each factor
+    // go through each factor to make the returnable factor array
     Object.keys(factorArraysObj).forEach(factorName => {
         // get the number of candidates who have this factor
         const n = factorArraysObj[factorName].length;
         // calculate the average score for the factor
         const average = mean(factorArraysObj[factorName]);
         // calculate the standard deviation for the factor
-        const stdDev = standardDeviation(factorArraysObj[factorName], average);
+        const stdDev = standardDeviation(factorArraysObj[factorName]);
 
         // make the data points of the ranges - [ { name: "-4.75", quantity: 80 }, ... ]
         const dataPoints = makeRanges(factorArraysObj[factorName], -5, 5, 0.5);
@@ -217,10 +236,16 @@ async function GET_factors(req, res, next) {
         newFactorObjs.push({ name: factorName, n, average, stdDev, dataPoints });
     });
 
+    // sort the factors by name
+    newFactorObjs = newFactorObjs.sort((f1, f2) => {
+        if (f1.name > f2.name) return 1;
+        else if (f1.name < f2.name) return -1;
+        else return 0;
+    });
+
     return res.status(200).send({ factors: newFactorObjs });
 }
 
-// TODO
 // get distribution and stats for each facet
 async function GET_facets(req, res, next) {
     const { site, userId, verificationToken } = sanitize(req.query);
@@ -235,51 +260,273 @@ async function GET_facets(req, res, next) {
         return res.status(403).send({ message: errors.PERMISSIONS_ERROR });
     }
 
-    // TODO
+    // gets a list of facets that each have a list of instances of that facet's responses
     const facetsAggregation = [
         // only want the users who have completed the psych test
-        psychExists
+        psychExists,
+        // make every user object into { factors: [factor] }
+        project({ _id: 0, factors: "$psychometricTest.factors" }),
+        // make every factor its own object with its name and score
+        unwind("$factors"),
+        // only need the facets of each factor
+        project({ facet: "$factors.facets" }),
+        // make every facet its own object
+        unwind("$facet"),
+        // group these facets by name and make an array of { score, responses } objects
+        group({
+            _id: { name: "$facet.name" },
+            users: { $push: { score: "$facet.score", responses: "$facet.responses" } }
+        })
     ];
 
-    // get all the facets
+    // gets all the questions that could be answered and all the facets
     try {
+        var questions = await PsychQuestions.find({});
+
         let insightsFacets = ["All", "Insights"].includes(site)
-            ? await Users.aggregate(factorsAggregation)
+            ? await Users.aggregate(facetsAggregation)
             : [];
 
         let learningFacets = ["All", "Learning"].includes(site)
-            ? await PsychUsers.aggregate(factorsAggregation)
+            ? await PsychUsers.aggregate(facetsAggregation)
             : [];
 
-        var allFacets = insightsFacets.concat(learningFacets);
+        var facets = [];
+
+        // if getting data from both sites, have to combine the facets
+        if (site === "All") {
+            // make an object that will store "facetName": usersArray
+            let facetsTable = {};
+            // add the usersArrays for insights facets and learning facets
+            insightsFacets.forEach(iFacet => {
+                facetsTable[iFacet._id.name] = iFacet.users;
+            });
+            learningFacets.forEach(lFacet => {
+                if (!facetsTable[lFacet._id.name]) {
+                    facetsTable[lFacet._id.name] = [];
+                }
+                facetsTable[lFacet._id.name] = facetsTable[lFacet._id.name].concat(lFacet.users);
+            });
+            // make the object an array with same format as initial return values from Promises
+            Object.keys(facetsTable).forEach(facetName => {
+                facets.push({ _id: { name: facetName }, users: facetsTable[facetName] });
+            });
+        }
+        // otherwise just return whichever array has values
+        else {
+            facets = insightsFacets.concat(learningFacets);
+        }
     } catch (e) {
-        console.log("Error getting factor data: ", e);
+        console.log("Error getting question data: ", e);
         return res.status(500).send({ message: "Error getting data :(" });
     }
 
-    // go through each factor, group facets by facet name
-    let facetArraysObj = makeFactorArraysObj(allFacets);
+    // make an object out of the questions for easy access
+    let questionsObj = {};
+    questions.forEach(q => (questionsObj[q._id.toString()] = q));
 
-    // an array that will contain the factors that will be returned to the front end
-    let newFacetObjs = [];
+    // the facet objects that will be returned to the front end
+    let facetObjs = [];
 
-    // go through each factor
-    Object.keys(facetArraysObj).forEach(facetName => {
-        // get the number of candidates who have this factor
-        const n = facetArraysObj[facetName].length;
-        // calculate the average score for the factor
-        const average = mean(facetArraysObj[facetName]);
-        // calculate the standard deviation for the factor
-        const stdDev = standardDeviation(facetArraysObj[facetName], average);
+    // go through each facet so we can measure its question's stats and chronbach's alpha
+    facets.forEach(facet => {
+        // remove users who don't have scores for this factor
+        const users = facet.users.filter(user => typeof user.score === "number");
+        // a list of all users' scores on this facet
+        const facetScores = users.map(user => user.score);
+        // so we can make a list of lists of question scores
+        let qScoresObj = {};
+        // go through each user that had a score in this facet
+        users.forEach(user => {
+            // go through the user's responses to each question from the facet
+            user.responses.forEach(response => {
+                if (qScoresObj[response.answeredId] === undefined) {
+                    qScoresObj[response.answeredId] = [];
+                }
+                // add the user's responses
+                qScoresObj[response.answeredId].push(response.answer);
+            });
+        });
+        // convert the questions scores object into an array
+        const qScores = Object.keys(qScoresObj).map(qId => qScoresObj[qId]);
+
+        // measure chronbach's alpha (inter reliability) of the facet
+        const cAlpha = chronbachsAlpha(facetScores, qScores, true);
+
+        // get the number of candidates who have this facet
+        const n = facetScores.length;
+        // calculate the average score for the facet
+        const average = mean(facetScores);
+        // calculate the standard deviation for the facet
+        const stdDev = standardDeviation(facetScores);
 
         // make the data points of the ranges - [ { name: "-4.75", quantity: 80 }, ... ]
-        const dataPoints = makeRanges(facetArraysObj[facetName], -5, 5, 0.5);
+        const dataPoints = makeRanges(facetScores, -5, 5, 0.5);
 
         // add the new info to the list of objects to return
-        newFacetObjs.push({ name: facetName, n, average, stdDev, dataPoints });
+        facetObjs.push({ name: facet._id.name, n, interRel: cAlpha, average, stdDev, dataPoints });
     });
 
-    return res.status(200).send({ factors: newFacetObjs });
+    return res.status(200).send({ facets: facetObjs });
+}
+
+// get stats for the questions pertaining to each facet
+async function GET_questions(req, res, next) {
+    const { site, userId, verificationToken } = sanitize(req.query);
+
+    // get the user requesting the info
+    try {
+        var user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+    if (!user.admin) {
+        return res.status(403).send({ message: errors.PERMISSIONS_ERROR });
+    }
+
+    // gets a list of facets that each have a list of instances of that facet's responses
+    const facetsAggregation = [
+        // only want the users who have completed the psych test
+        psychExists,
+        // make every user object into { factors: [factor] }
+        project({ _id: 0, factors: "$psychometricTest.factors" }),
+        // make every factor its own object with its name and score
+        unwind("$factors"),
+        // only need the facets of each factor
+        project({ facet: "$factors.facets", factorName: "$factors.name" }),
+        // make every facet its own object
+        unwind("$facet"),
+        // group these facets by name and make an array of { score, responses } objects
+        group({
+            _id: { name: "$facet.name", factorName: "$factorName" },
+            users: { $push: { score: "$facet.score", responses: "$facet.responses" } }
+        })
+    ];
+
+    // gets all the questions that could be answered and all the facets
+    try {
+        var questions = await PsychQuestions.find({});
+
+        let insightsFacets = ["All", "Insights"].includes(site)
+            ? await Users.aggregate(facetsAggregation)
+            : [];
+
+        let learningFacets = ["All", "Learning"].includes(site)
+            ? await PsychUsers.aggregate(facetsAggregation)
+            : [];
+
+        var facets = [];
+
+        // if getting data from both sites, have to combine the facets
+        if (site === "All") {
+            // make an object that will store "facetName": usersArray
+            let facetsObj = {};
+            // add the usersArrays for insights facets and learning facets
+            insightsFacets.forEach(iFacet => {
+                facetsObj[iFacet._id.name] = { _id: iFacet._id, users: iFacet.users };
+                facetsObj[iFacet._id.name].users = iFacet.users;
+            });
+            learningFacets.forEach(lFacet => {
+                if (!facetsObj[lFacet._id.name]) {
+                    facetsObj[lFacet._id.name] = { _id: lFacet._id, users: [] };
+                }
+                facetsObj[lFacet._id.name].users = facetsObj[lFacet._id.name].users.concat(
+                    lFacet.users
+                );
+            });
+            // make the object an array with same format as initial return values from Promises
+            Object.keys(facetsObj).forEach(facetName => {
+                facets.push({ _id: facetsObj[facetName]._id, users: facetsObj[facetName].users });
+            });
+        }
+        // otherwise just return whichever array has values
+        else {
+            facets = insightsFacets.concat(learningFacets);
+        }
+    } catch (e) {
+        console.log("Error getting question data: ", e);
+        return res.status(500).send({ message: "Error getting data :(" });
+    }
+
+    // make an object out of the questions for easy access
+    let questionsObj = {};
+    questions.forEach(q => (questionsObj[q._id.toString()] = q));
+
+    // the array to store the objects that will be returned
+    let questionsToReturn = [];
+
+    // go through each facet so we can measure its question's stats and chronbach's alpha
+    facets.forEach(facet => {
+        // remove users who don't have scores for this factor
+        const users = facet.users.filter(user => typeof user.score === "number");
+        // a list of all users' scores on this facet multiplied by k (for chronbach's alpha)
+        const facetScores = users.map(user => user.score);
+        // so we can make a list of lists of question scores
+        let qScoresObj = {};
+        // go through each user that had a score in this facet
+        users.forEach(user => {
+            // go through the user's responses to each question from the facet
+            user.responses.forEach(response => {
+                if (qScoresObj[response.answeredId] === undefined) {
+                    qScoresObj[response.answeredId] = {
+                        questionAnswers: [],
+                        facetScoresWithoutQuestion: []
+                    };
+                }
+                const numQuestions = user.responses.length;
+                // add the user's response
+                qScoresObj[response.answeredId].questionAnswers.push(response.answer);
+
+                // if the score is inverted, treat it as its inverse (*-1)
+                const multiplier = response.invertScore ? -1 : 1;
+                // figure out what the facet score would be without this question
+                qScoresObj[response.answeredId].facetScoresWithoutQuestion.push(
+                    (user.score * numQuestions - multiplier * response.answer) / (numQuestions - 1)
+                );
+            });
+        });
+        // convert the questions scores object into a 2d array
+        const qScores = Object.keys(qScoresObj).map(qId => qScoresObj[qId].questionAnswers);
+
+        // measure chronbach's alpha (inter reliability) of the facet
+        const cAlpha = chronbachsAlpha(facetScores, qScores, true);
+
+        Object.keys(qScoresObj).forEach(qId => {
+            // measure the chronbach's alpha of the facet without the question
+            // make a 2d array of question answers that doesn't include this question
+            const questionScoresWithoutQuestion = Object.keys(qScoresObj)
+                // filter out this question
+                .filter(otherQId => otherQId !== qId)
+                // just get the value of the answer to the question
+                .map(otherQId => qScoresObj[otherQId].questionAnswers);
+
+            const shouldLog = qId.toString() === "5aff0b612689cb00e45ce2fb";
+            // calculate the modified facet's chronbach's alpha
+            const cAlphaWithoutQuestion = chronbachsAlpha(
+                qScoresObj[qId].facetScoresWithoutQuestion,
+                questionScoresWithoutQuestion,
+                true
+            );
+
+            // info about the question (body of the question, right option, left option)
+            const questionInfo = questionsObj[qId];
+
+            // this is what will be received by the front end
+            questionsToReturn.push({
+                question: questionInfo.body,
+                rightOption: questionInfo.rightOption,
+                leftOption: questionInfo.leftOption,
+                facetAlpha: cAlpha,
+                cAlphaWithoutQuestion,
+                average: mean(qScoresObj[qId].questionAnswers),
+                stdDev: standardDeviation(qScoresObj[qId].questionAnswers),
+                factor: facet._id.factorName,
+                facet: facet._id.name
+            });
+        });
+    });
+
+    return res.status(200).send({ questions: questionsToReturn });
 }
 
 // get stats for each output (Learning only)
@@ -421,6 +668,188 @@ async function GET_outputs(req, res, next) {
     return res.status(200).send({ outputs });
 }
 
+// get data on individual users for a scatter plot comparing to factors/facets
+async function GET_scatter(req, res, next) {
+    const { site, facNames, facType, userId, verificationToken } = sanitize(req.query);
+
+    // get the user requesting the info
+    try {
+        var currentUser = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+    if (!currentUser.admin) {
+        return res.status(403).send({ message: errors.PERMISSIONS_ERROR });
+    }
+
+    // check for invalid arguments
+    if (facNames.length !== 2) {
+        return res.status(400).send({ message: "Can only compare 2 factors/facets." });
+    }
+
+    // get all the users
+    try {
+        const query = { "psychometricTest.endDate": { $exists: true } };
+        const select =
+            "psychometricTest.factors.score psychometricTest.factors.name \
+            psychometricTest.factors.facets.name psychometricTest.factors.facets.score";
+
+        let insightsUsers = ["All", "Insights"].includes(site)
+            ? await Users.find(query).select(select)
+            : [];
+
+        let learningUsers = ["All", "Learning"].includes(site)
+            ? await PsychUsers.find(query).select(select)
+            : [];
+
+        var users = insightsUsers.concat(learningUsers);
+    } catch (e) {
+        console.log("Error getting scatter data: ", e);
+        return res.status(500).send({ message: errors.SERVER_ERROR });
+    }
+
+    // get a data point from each user
+    let points = users.map(user => {
+        // if using factors, make the facs array be all the factors
+        if (facType === "factors") {
+            var userFacs = user.psychometricTest.factors;
+        }
+        // if using facets, make it all be facets
+        else {
+            var userFacs = [];
+            user.psychometricTest.factors.forEach(factor => {
+                factor.facets.forEach(facet => userFacs.push(facet));
+            });
+        }
+
+        const fac1 = userFacs.find(f => f.name === facNames[0]);
+        const fac2 = userFacs.find(f => f.name === facNames[1]);
+
+        return {
+            x: fac1 ? fac1.score : null,
+            y: fac2 ? fac2.score : null
+        };
+    });
+
+    // filter out any null data points
+    points = points.filter(p => typeof p.x === "number" && typeof p.y === "number");
+
+    // find the correlation coefficient
+    const correlation = correlationCoefficient(points);
+
+    // find the best fit line
+    const { slope, intercept } = bestFitLine(points);
+
+    // const points = [{ x: 1, y: 5 }, { x: 2.4, y: -3 }, { x: -4.6, y: 5 }];
+    const bflPoints = lineBoundaryPoints(slope, intercept, -6, 6, -6, 6);
+
+    // make sure the x and y names are correct
+    const x = facNames[0];
+    const y = facNames[1];
+
+    const scatter = { points, bflPoints, x, y, slope, intercept, correlation };
+
+    return res.status(200).send({ scatter });
+}
+
+// find the correlation between two variables
+// points = [ {x: NUMBER, y: NUMBER}, ... ]
+function correlationCoefficient(points) {
+    const n = points.length;
+    const sumX = sum(points.map(p => p.x));
+    const sumY = sum(points.map(p => p.y));
+    const sumXY = sum(points.map(p => p.x * p.y));
+    const sumXSquared = sum(points.map(p => p.x * p.x));
+    const sumYSquared = sum(points.map(p => p.y * p.y));
+
+    const numerator = n * sumXY - sumX * sumY;
+    const denominator = Math.sqrt(
+        (n * sumXSquared - sumX * sumX) * (n * sumYSquared - sumY * sumY)
+    );
+
+    return numerator / denominator;
+}
+
+// find the slope and intercept of the best fit line of two variables
+// points = [ {x: NUMBER, y: NUMBER}, ... ]
+function bestFitLine(points) {
+    const meanX = mean(points.map(p => p.x));
+    const meanY = mean(points.map(p => p.y));
+
+    const rise = sum(points.map(p => (p.x - meanX) * (p.y - meanY)));
+    const run = sum(points.map(p => Math.pow(p.x - meanX, 2)));
+    const slope = rise / run;
+    const intercept = meanY - slope * meanX;
+
+    return { slope, intercept };
+}
+
+// get bounding points within an x and y range for any y-intercept form function
+function lineBoundaryPoints(slope, intercept, xLeft, xRight, yBottom, yTop) {
+    // the function using the given slope and intercept
+    f = x => slope * x + intercept;
+    fInv = y => (y - intercept) / slope;
+
+    const fxLeft = f(xLeft);
+    const fxRight = f(xRight);
+    const fInvyBottom = fInv(yBottom);
+    const fInvyTop = fInv(yTop);
+
+    // if f(minimum x wanted) is within y range
+    if (fxLeft >= yBottom && fxLeft <= yTop) {
+        var xMin = xLeft;
+        var yMin = fxLeft;
+    }
+    // if f(minimum x wanted) is outside of the y range, base x on y instead
+    else {
+        var xMin = fInv(yBottom);
+        var yMin = yBottom;
+    }
+
+    // if f(maximum x wanted) is within y range
+    if (fxRight >= yBottom && fxRight <= yTop) {
+        var xMax = xRight;
+        var yMax = fxRight;
+    }
+    // if f(minimum x wanted) is outside of the y range, base x on y instead
+    else {
+        var xMax = fInv(yTop);
+        var yMax = yTop;
+    }
+
+    return [{ x: xMin, y: yMin }, { x: xMax, y: yMax }];
+}
+
+// calculate chronbach's alpha (inter reliability)
+// scores = [ totalScore ] (array of scores received for this facet)
+// items = [ [ itemScore ] ] (array of scores for each question)
+// multiplyScoresByK = Boolean, true if your scores are the average of the item responses
+function chronbachsAlpha(scores, items, multiplyScoresByK) {
+    // number of items
+    const k = items.length;
+    // number of items / (number of items - 1)
+    const kScalar = k / (k - 1);
+
+    // get a list of the variances between users on each question
+    // (variance within the question across the sample)
+    let itemsVariances = items.map(itemAnswers => variance(itemAnswers));
+    // sum of those variances
+    const itemsVarianceSum = sum(itemsVariances);
+
+    // multiply scores by k if wanted
+    if (multiplyScoresByK) {
+        scores = scores.map(score => score * k);
+    }
+
+    // variance between scores different test takers got for the facet
+    let scoresVariance = variance(scores);
+    // sum of variances within questions / variances in facet scores
+    const varianceFraction = itemsVarianceSum / scoresVariance;
+
+    // final chronbach's alpha
+    return kScalar * (1 - varianceFraction);
+}
+
 // make the data points of the ranges - [ { name: "-4.75", quantity: 80 }, ... ]
 function makeRanges(values, low, high, step) {
     // create the groups - { name: "-3", quantity: 20 }
@@ -451,23 +880,6 @@ function rangeGroupFunction(value, low, high, step) {
     }
 
     return groupValue;
-}
-
-// return the average of a list of numbers
-function mean(values) {
-    return values.reduce((sum, value) => sum + value, 0) / values.length;
-}
-
-// return the standard distribution from the average and a list of numbers
-function standardDeviation(values, average) {
-    // if the average was not given, calculate it
-    if (typeof average !== "number") {
-        average = mean(values);
-    }
-    // add up all the squared deviations from the average
-    const total = values.reduce((sum, value) => sum + Math.pow(value - average, 2), 0);
-    // return the square root of (that sum divided by the number of values)
-    return Math.sqrt(total / values.length);
 }
 
 // returns an object like this:
@@ -531,12 +943,18 @@ function groupCountsBy(arr, groupFunc, ...groupFuncArgs) {
     }));
 }
 
+const app = require("../../apiServer");
+
 app.get("/admin/dataDisplay/factors", GET_factors);
 app.get("/admin/dataDisplay/facets", GET_facets);
+app.get("/admin/dataDisplay/questions", GET_questions);
 app.get("/admin/dataDisplay/outputs", GET_outputs);
+app.get("/admin/dataDisplay/scatter", GET_scatter);
 
 module.exports = {
     GET_factors,
     GET_facets,
-    GET_outputs
+    GET_questions,
+    GET_outputs,
+    GET_scatter
 };

@@ -9,9 +9,11 @@ import {
     answerEvaluationQuestion
 } from "../../../actions/usersActions";
 import axios from "axios";
-import MetaTags from "react-meta-tags";
 import PsychSlider from "./psychSlider";
-import { CircularProgress } from "material-ui";
+import { CircularProgress } from "@material-ui/core";
+import { Button } from "../../miscComponents";
+
+import "./evaluation.css";
 
 class PsychAnalysis extends Component {
     constructor(props) {
@@ -39,19 +41,17 @@ class PsychAnalysis extends Component {
     }
 
     // move on to the next psych question
-    nextQuestion() {
+    nextQuestion = () => {
         if (!this.props.loading) {
             this.props.answerEvaluationQuestion("Psych", {
                 ...this.props.credentials,
                 answer: this.state.answer
             });
         }
-    }
+    };
 
     // start the eval for the first time
-    startTest() {
-        this.props.answerEvaluationQuestion("Psych", this.props.credentials);
-    }
+    startTest = () => this.props.answerEvaluationQuestion("Psych", this.props.credentials);
 
     // when slider is moved
     updateAnswer(newAnswer) {
@@ -67,26 +67,27 @@ class PsychAnalysis extends Component {
         const isAdmin = !!currentUser && currentUser.userType === "accountAdmin";
 
         return (
-            <div className="evalPortionIntro skillsUserAgreement center">
+            <div styleName="eval-portion-intro" className="center">
                 <div>
+                    <div className="font24px">
+                        <span style={{ color: this.props.primaryColor }}>Personality Test</span>
+                    </div>
                     <p>
-                        {
-                            "This is the psychometrics portion of the evaluation. In essence, this is a personality test."
-                        }
+                        This is the psychometrics portion of the evaluation. In essence, this is a
+                        personality test.
                     </p>
                     <p>
-                        {
-                            "You'll be given two choices per question. Drag the slider according to the degree that you agree with a given choice."
-                        }
+                        You{"'"}ll be given two choices per question. Drag the slider according to the
+                        degree that you agree with a given choice.
                     </p>
                     <p>
-                        <span>{"DON'T OVERTHINK."}</span>
+                        <span style={{ color: this.props.primaryColor }}>{"DON'T OVERTHINK."}</span>
                         {
                             " Each question is meant to be taken at a surface level. Don't overthink it! If you don't understand a question, take your best guess and move on."
                         }
                     </p>
                     <p>
-                        <span>{"YOU CAN"}</span>
+                        <span style={{ color: this.props.primaryColor }}>{"YOU CAN"}</span>
                         {
                             " go to other tabs and windows. So if you don't understand something, feel free to look it up. The test should take around ten minutes."
                         }
@@ -94,15 +95,11 @@ class PsychAnalysis extends Component {
                 </div>
                 <br />
                 {this.props.loading ? (
-                    <CircularProgress color="#ff582d" />
+                    <CircularProgress color="primary" />
                 ) : (
-                    <div
-                        style={{ marginBottom: "40px", width: "initial" }}
-                        className={"skillContinueButton"}
-                        onClick={this.startTest.bind(this)}
-                    >
+                    <Button style={{ marginBottom: "40px" }} onClick={this.startTest}>
                         Begin
-                    </div>
+                    </Button>
                 )}
             </div>
         );
@@ -170,11 +167,11 @@ class PsychAnalysis extends Component {
             marginTop: `${topMargin}px`
         };
 
-        const nextButtonClass = this.props.loading ? " disabled" : "";
-
         return (
             <div className="noselect font16px font14pxUnder600 font12pxUnder450">
-                <div className="center psychAnalysisQuestion">{question}</div>
+                <div styleName="psych-question" className="center">
+                    {question}
+                </div>
 
                 <div style={sliderAndAnswerContainerStyle}>
                     <div style={leftOptionStyle}>
@@ -191,16 +188,19 @@ class PsychAnalysis extends Component {
                         style={sliderStyle}
                         updateAnswer={this.updateAnswer.bind(this)}
                         questionId={questionId}
+                        backgroundColor={this.props.backgroundColor}
+                        color1={this.props.primaryColor}
+                        color2={this.props.primaryColor}
                     />
                 </div>
                 <br />
-                <div
-                    className={"psychAnalysisButton marginBottom50px" + nextButtonClass}
-                    onClick={this.nextQuestion.bind(this)}
-                    style={{ marginTop: "20px" }}
+                <Button
+                    onClick={this.nextQuestion}
+                    disabled={this.props.loading}
+                    style={{ margin: "50px auto 20px" }}
                 >
                     Next
-                </div>
+                </Button>
             </div>
         );
     }
@@ -221,7 +221,7 @@ class PsychAnalysis extends Component {
 
         // if the question has not been loaded yet
         else if (!questionInfo) {
-            return <CircularProgress color="#76defe" />;
+            return <CircularProgress color="primary" />;
         }
 
         // the typical interface with the slider
@@ -250,9 +250,12 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        backgroundColor: state.users.backgroundColor,
+        primaryColor: state.users.primaryColor,
         questionInfo: state.users.evaluationState.componentInfo,
         showIntro: state.users.evaluationState.showIntro,
-        loading: state.users.loadingSomething
+        loading: state.users.loadingSomething,
+        primaryColor: state.users.primaryColor
     };
 }
 

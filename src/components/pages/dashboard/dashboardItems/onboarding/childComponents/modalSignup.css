@@ -1,0 +1,92 @@
+.modal-signup {
+    padding: 30px 50px;
+    background-color: var(--primary-black-dark);
+    color: var(--secondary-gray);
+    min-width: 505px;
+    min-height: 410px;
+}
+
+.button-and-nav {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 20px;
+}
+
+.agree-to-terms {
+    margin: 15px -5px 0px;
+}
+
+.password-agree-area {
+    margin: 5px 10px;
+    position: absolute;
+    width: calc(100% - 20px);
+    left: 0;
+    text-align: center;
+}
+
+.error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 10px;
+    color: var(--secondary-red);
+}
+
+.header {
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 600px) {
+    .modal-signup {
+        padding: 30px 25px;
+        min-width: calc(100vw - 96px);
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .agree-to-terms {
+        margin: 20px 20px 0px;
+    }
+
+    .error {
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .modal-signup {
+        padding: 20px;
+    }
+
+    .header {
+        margin-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .agree-to-terms {
+        margin: 10px 0px 0px;
+    }
+
+    .modal-signup {
+        padding: 20px 10px;
+        min-height: 430px;
+    }
+
+    .claim-page-modal {
+        min-height: 325px;
+    }
+
+    .error {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .error {
+        font-size: 9px;
+    }
+}

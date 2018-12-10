@@ -1,16 +1,18 @@
-const sanitizeHtml = require('sanitize-html');
-const nodemailer = require('nodemailer');
-const credentials = require('../credentials');
+const sanitizeHtml = require("sanitize-html");
+const nodemailer = require("nodemailer");
+const credentials = require("../credentials");
 
-const Users = require('../models/users.js');
+const Users = require("../models/users.js");
 const UnsubscribedEmails = require("../models/unsubscribedEmails.js");
 const UniqueEmails = require("../models/uniqueEmails.js");
-const Businesses = require('../models/businesses.js');
-const Skills = require('../models/skills.js');
-const stripe = require("stripe")(process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk);
+const Businesses = require("../models/businesses.js");
+const Skills = require("../models/skills.js");
+const stripe = require("stripe")(
+    process.env.NODE_ENV === "production" ? credentials.stripeSk : credentials.stripeTestSk
+);
 
 const errors = require("./errors");
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 // info for sending out emails through mailgun
 const mailDomain = "mail.moonshotinsights.io";
@@ -20,12 +22,11 @@ const mailgun = require("mailgun-js")({
     domain: mailDomain
 });
 
-
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
-    allowedTags: ['b', 'i', 'em', 'strong'],
+    allowedTags: ["b", "i", "em", "strong"],
     allowedAttributes: []
-}
+};
 
 // constants to export
 const devMode = !!(process.env.NODE_ENV === "development");
@@ -33,57 +34,84 @@ const devEmail = process.env.DEV_EMAIL;
 const moonshotUrl = devMode ? "http://localhost:8081/" : "https://moonshotinsights.io/";
 const liveSite = !!process.env.SITE_NAME && process.env.SITE_NAME === "moonshotinsights.io";
 
-
 // Queue implementation
-function Queue() { this.data = []; }
-Queue.prototype.enqueue = function(record) { this.data.unshift(record); }
-Queue.prototype.dequeue = function() { return this.data.pop(); }
-Queue.prototype.first = function() { return this.data[0]; }
-Queue.prototype.last = function() { return this.data[this.data.length - 1]; }
-Queue.prototype.size = function() { return this.data.length; }
-
+function Queue() {
+    this.data = [];
+}
+Queue.prototype.enqueue = function(record) {
+    this.data.unshift(record);
+};
+Queue.prototype.dequeue = function() {
+    return this.data.pop();
+};
+Queue.prototype.first = function() {
+    return this.data[0];
+};
+Queue.prototype.last = function() {
+    return this.data[this.data.length - 1];
+};
+Queue.prototype.size = function() {
+    return this.data.length;
+};
 
 // Stack implementation
-function Stack() { this.data = []; }
-Stack.prototype.push = function(record) { this.data.push(record); }
-Stack.prototype.pop = function() { return this.data.pop(); }
-Stack.prototype.bottom = function() { return this.data[0]; }
-Stack.prototype.top = function() { return this.data[this.data.length - 1]; }
-Stack.prototype.size = function() { return this.data.length; }
-
+function Stack() {
+    this.data = [];
+}
+Stack.prototype.push = function(record) {
+    this.data.push(record);
+};
+Stack.prototype.pop = function() {
+    return this.data.pop();
+};
+Stack.prototype.bottom = function() {
+    return this.data[0];
+};
+Stack.prototype.top = function() {
+    return this.data[this.data.length - 1];
+};
+Stack.prototype.size = function() {
+    return this.data.length;
+};
 
 const FOR_USER = [
     "_id",
     "info",
     "name",
+    "logo",
+    "hmac",
     "email",
     "admin",
     "skills",
+    "popups",
+    "onboard",
     "redirect",
     "verified",
     "userType",
+    "intercom",
     "positions",
     "profileUrl",
     "skillTests",
-    "onboard",
+    "companyName",
     "phoneNumber",
     "hideProfile",
+    "primaryColor",
     "dateSignedUp",
     "businessInfo",
     "emailToContact",
-    "hmac",
     "adminQuestions",
     "referredByCode",
     "currentPosition",
+    "backgroundColor",
+    "buttonTextColor",
+    "confirmEmbedLink",
     "verificationToken",
     "firstBusinessUser",
     "agreedToSkillTerms",
     "termsAndConditions",
     "hasFinishedOnboarding",
     "showVerifyEmailBanner",
-    "intercom",
-    "popups",
-    "confirmEmbedLink"
+    "triggeredIntercomEvents"
 ];
 
 // removes information from a db user object so that it can be passed for that
@@ -99,10 +127,14 @@ function frontEndUser(dbUser, fieldsToInclude) {
         userProperties = dbUser.toObject();
     }
     // otherwise it is already a normal object
-    else { userProperties = dbUser; }
+    else {
+        userProperties = dbUser;
+    }
 
     // if no fields are included, assume it's for the user
-    if (!Array.isArray(fieldsToInclude)) { fieldsToInclude = FOR_USER; }
+    if (!Array.isArray(fieldsToInclude)) {
+        fieldsToInclude = FOR_USER;
+    }
 
     // go through every property that should be included; if it has any special
     // requirements, deal with them, otherwise just take the wanted property
@@ -125,11 +157,18 @@ function frontEndUser(dbUser, fieldsToInclude) {
                         cleanPsychTest.factors = psychTest.factors;
 
                         // find out how many questions there are total for the progress bar
-                        if (typeof psychTest.questionsPerFacet === "number" && Array.isArray(psychTest.factors)) {
+                        if (
+                            typeof psychTest.questionsPerFacet === "number" &&
+                            Array.isArray(psychTest.factors)
+                        ) {
                             // count the number of questions - questions/facet * number of facets
                             let numFacets = 0;
                             psychTest.factors.forEach(factor => {
-                                if (factor && typeof factor === "object" && Array.isArray(factor.facets)) {
+                                if (
+                                    factor &&
+                                    typeof factor === "object" &&
+                                    Array.isArray(factor.facets)
+                                ) {
                                     numFacets += factor.facets.length;
                                 }
                             });
@@ -144,7 +183,7 @@ function frontEndUser(dbUser, fieldsToInclude) {
                                 leftOption: currentQuestion.leftOption,
                                 rightOption: currentQuestion.rightOption,
                                 questionId: currentQuestion.questionId
-                            }
+                            };
                         }
 
                         // save the psych test to the front-end user
@@ -171,7 +210,7 @@ function frontEndUser(dbUser, fieldsToInclude) {
                             skillTests: position.skillTestIds,
                             testIndex: position.testIndex,
                             freeResponseQuestions: position.freeResponseQuestions
-                        }
+                        };
                     }
                     break;
                 default:
@@ -180,8 +219,7 @@ function frontEndUser(dbUser, fieldsToInclude) {
                     break;
             }
         }
-
-    })
+    });
 
     // return the updated user, ready for front-end use
     return newUser;
@@ -209,33 +247,31 @@ function shuffle(arr) {
     return array;
 }
 
-
 function randomInt(lowBound, highBound) {
     const range = highBound - lowBound;
     return Math.floor(Math.random() * (range + 1)) + lowBound;
 }
 
-
 function getFirstName(name) {
     // return empty string on invalid input
-    if (typeof name !== "string" || name.length === 0) { return ""; }
+    if (typeof name !== "string" || name.length === 0) {
+        return "";
+    }
 
     // split by spaces, get array of non-spaced names, return the first one
     let firstName = "";
     try {
-        firstName = name.split(' ')[0];
+        firstName = name.split(" ")[0];
     } catch (e) {
         firstName = "";
     }
     return firstName;
 }
 
-
 // find out if a variable potentially has emails to use
 function hasNoEmails(recipients) {
-    return (!recipients || (Array.isArray(recipients) && recipients.length === 0));
+    return !recipients || (Array.isArray(recipients) && recipients.length === 0);
 }
-
 
 // send an email and return a promise
 // fields:
@@ -245,13 +281,19 @@ async function sendEmail(args) {
     return new Promise(async function(resolve, reject) {
         // if arguments are not provided
         if (!args || typeof args !== "object") {
-            return reject("Invalid arguments. Usage: sendEmail({recipients: ['austin@gmail.com'], subject: 'New Stuff', ...})");
+            return reject(
+                "Invalid arguments. Usage: sendEmail({recipients: ['austin@gmail.com'], subject: 'New Stuff', ...})"
+            );
         }
 
         // addresses that will receive the email
         let recipients = args.recipients;
-        if (hasNoEmails(recipients)) { recipients = args.recipient; }
-        if (hasNoEmails(recipients)) { return reject(new Error("No recipients given.")); }
+        if (hasNoEmails(recipients)) {
+            recipients = args.recipient;
+        }
+        if (hasNoEmails(recipients)) {
+            return reject(new Error("No recipients given."));
+        }
         // subject of the email
         const subject = args.subject;
         // body of the email
@@ -281,7 +323,9 @@ async function sendEmail(args) {
             recipientArray = recipients;
         }
         // otherwise return unsuccessfully
-        else { return reject("Recipients should be a list of strings."); }
+        else {
+            return reject("Recipients should be a list of strings.");
+        }
 
         // if no recipients are given
         if (recipientArray.length === 0) {
@@ -289,9 +333,10 @@ async function sendEmail(args) {
         }
 
         // query to find all email addresses of people who have unsubscribed
-        const findUnsubscribed = { email: { "$in": recipientArray } };
-        try { var optedOutObjects = await UnsubscribedEmails.find(findUnsubscribed); }
-        catch (findOptOutError) {
+        const findUnsubscribed = { email: { $in: recipientArray } };
+        try {
+            var optedOutObjects = await UnsubscribedEmails.find(findUnsubscribed);
+        } catch (findOptOutError) {
             console.log("Error finding email addresses of those who have opted out.");
             return reject(findOptOutError);
         }
@@ -303,7 +348,9 @@ async function sendEmail(args) {
 
         // don't send an email if it's not going to be sent to anyone
         if (recipientList === "") {
-            return reject("Couldn't send email. Recipients are on the opt-out list or no valid emails were given.");
+            return reject(
+                "Couldn't send email. Recipients are on the opt-out list or no valid emails were given."
+            );
         }
 
         // create mailgun-compatible attachments
@@ -315,8 +362,9 @@ async function sendEmail(args) {
                     return new mailgun.Attachment({ data: att.data, filename: att.filename });
                 });
             }
+        } catch (makeAttachmentsError) {
+            console.log("error making attachments: ", makeAttachmentsError);
         }
-        catch (makeAttachmentsError) { console.log("error making attachments: ", makeAttachmentsError); }
 
         let data = {
             from: `${senderName} <${senderAddress}@mail.moonshotinsights.io>`,
@@ -327,12 +375,14 @@ async function sendEmail(args) {
         };
 
         mailgun.messages().send(data, function(error, body) {
-            if (error) { return reject(error); }
-            else { return resolve(); }
+            if (error) {
+                return reject(error);
+            } else {
+                return resolve();
+            }
         });
     });
 }
-
 
 // remove emails that have opted out, create a string like "ameyer24@wisc.edu, svdorn9@gmail.com"
 function createRecipientList(recipientArray, optedOutEmailsArray) {
@@ -352,9 +402,13 @@ function createRecipientList(recipientArray, optedOutEmailsArray) {
             // make sure the email isn't on the opted-out list
             if (!optedOutEmailsObject[recipient.toLowerCase()]) {
                 // add the email to the list of recipients
-                if (recipientList === "") { recipientList = recipient; }
+                if (recipientList === "") {
+                    recipientList = recipient;
+                }
                 // if this isn't the first recipient, add a comma beforehand
-                else { recipientList = recipientList + ", " + recipient; }
+                else {
+                    recipientList = recipientList + ", " + recipient;
+                }
             }
         }
     });
@@ -362,10 +416,9 @@ function createRecipientList(recipientArray, optedOutEmailsArray) {
     return recipientList;
 }
 
-
 // remove html tags from a variable (any type) to prevent code injection
 function sanitize(something) {
-    const somethingType = (typeof something);
+    const somethingType = typeof something;
     switch (somethingType) {
         case "object":
             return sanitizeObject(something);
@@ -384,7 +437,6 @@ function sanitize(something) {
             return undefined;
     }
 }
-
 
 function sanitizeObject(obj) {
     if (!obj) {
@@ -433,14 +485,13 @@ function sanitizeObject(obj) {
     return newObj;
 }
 
-
 function sanitizeArray(arr) {
     if (!arr) {
         return undefined;
     }
 
-    const sanitizedArr = arr.map(function (value) {
-        let valueType = (typeof value);
+    const sanitizedArr = arr.map(function(value) {
+        let valueType = typeof value;
 
         switch (valueType) {
             case "object":
@@ -467,7 +518,6 @@ function sanitizeArray(arr) {
     return sanitizedArr;
 }
 
-
 // remove any empty pieces from an object or array all the way down
 function removeEmptyFields(something) {
     if (typeof something !== "object") {
@@ -480,7 +530,6 @@ function removeEmptyFields(something) {
         }
     }
 }
-
 
 // remove any empty pieces from an object
 function removeEmptyObjectFields(obj) {
@@ -515,7 +564,7 @@ function removeEmptyObjectFields(obj) {
 function removeEmptyArrayFields(arr) {
     let newArr = [];
 
-    newArr = arr.map(function(item){
+    newArr = arr.map(function(item) {
         return removeEmptyFields(item);
     });
 
@@ -526,7 +575,6 @@ function removeEmptyArrayFields(arr) {
     return newArr;
 }
 
-
 // returns true if the thing is equal to some non-emptyish thing
 function valueIsEmpty(thing) {
     if (typeof thing === "object") {
@@ -536,28 +584,27 @@ function valueIsEmpty(thing) {
             return objectIsEmpty(thing);
         }
     } else {
-        return (thing === undefined || thing === null || thing === "");
+        return thing === undefined || thing === null || thing === "";
     }
 }
 
-
 // returns true if the object is {}
 function objectIsEmpty(obj) {
-    if (obj === null || obj === undefined) { return true; }
+    if (obj === null || obj === undefined) {
+        return true;
+    }
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
-
 
 function verifyUser(user, verificationToken) {
     return user.verificationToken && user.verificationToken == verificationToken;
 }
 
-
 // test a function for how long it takes
 async function speedTest(trials, functionToTest) {
     let total = 0;
     for (let i = 1; i <= trials; i++) {
-        const millisStart = (new Date()).getTime();
+        const millisStart = new Date().getTime();
 
         const returnValue = functionToTest();
 
@@ -565,15 +612,14 @@ async function speedTest(trials, functionToTest) {
             await returnValue;
         }
 
-        const millisEnd = (new Date()).getTime();
-        console.log(`${(millisEnd - millisStart)} milliseconds`);
-        total += (millisEnd - millisStart);
+        const millisEnd = new Date().getTime();
+        console.log(`${millisEnd - millisStart} milliseconds`);
+        total += millisEnd - millisStart;
     }
     const average = total / trials;
 
     console.log(`\nAverage time: ${average} milliseconds`);
 }
-
 
 // DOES NOT WORK FOR REMOVING DUPLICATE OBJECTS, ONLY STRINGS/INTS
 function removeDuplicates(a) {
@@ -586,11 +632,11 @@ function removeDuplicates(a) {
     // position in array to be returned
     let j = 0;
     // go through each element in the given array
-    for(let i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) {
         // the item in the given array
         const item = a[i];
         // if seen[item] === 1, we have seen it before
-        if(seen[item] !== 1) {
+        if (seen[item] !== 1) {
             // we haven't seen the item before, so mark it seen...
             seen[item] = 1;
             // ...and add it to the list to be returned
@@ -634,7 +680,7 @@ async function generateNewUniqueEmail() {
         // create the code
         let uniqueEmail = {
             email: randomEmail,
-            created: NOW,
+            created: NOW
         };
         // make the code in the db
         try {
@@ -644,9 +690,8 @@ async function generateNewUniqueEmail() {
         }
         // return the code
         return resolve(uniqueEmail.email);
-    })
+    });
 }
-
 
 // DANGEROUS, returns user with all fields
 async function getAndVerifyUser(userId, verificationToken) {
@@ -657,52 +702,84 @@ async function getAndVerifyUser(userId, verificationToken) {
             user = await Users.findById(userId);
         } catch (getUserError) {
             console.log("Error getting user from the database: ", getUserError);
-            return reject({status: 500, message: "Server error, try again later", error: getUserError});
+            return reject({
+                status: 500,
+                message: "Server error, try again later",
+                error: getUserError
+            });
         }
 
         if (!user) {
             console.log("User not found from id: ", userId);
-            return reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
+            return reject({
+                status: 404,
+                message: "User not found. Contact Moonshot.",
+                error: `No user with id ${userId}.`
+            });
         }
 
         // verify user's identity
         if (!verificationToken && user.verificationToken !== verificationToken) {
-            console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
-            return reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
+            console.log(
+                `Mismatched verification token. Given: ${verificationToken}, should be: ${
+                    user.verificationToken
+                }`
+            );
+            return reject({
+                status: 500,
+                message: "Invalid credentials.",
+                error: `Mismatched verification token. Given: ${verificationToken}, should be: ${
+                    user.verificationToken
+                }`
+            });
         }
 
         return resolve(user);
-    })
+    });
 }
 
 // get and verify user from express request
 async function getUserFromReq(req, requestType) {
     return new Promise(async function(resolve, reject) {
         // for GET requests, req.params will contain userId and verification token
-        if (requestType === "GET") { argContainer = "query"; }
+        if (requestType === "GET") {
+            argContainer = "query";
+        }
         // for POST requests, req.body will contain them
-        else { argContainer = "body"; }
+        else {
+            argContainer = "body";
+        }
 
         // make sure req and req.body are objects
         if (typeof req !== "object" || typeof req[argContainer] !== "object") {
-            return reject({status: 400, message: errors.BAD_REQUEST, error: `Req.${argContainer} must be an object.`});
+            return reject({
+                status: 400,
+                message: errors.BAD_REQUEST,
+                error: `Req.${argContainer} must be an object.`
+            });
         }
 
         // get and verify valitidy of necessary arguments
         const { userId, verificationToken } = sanitize(req[argContainer]);
-        const stringArgs = [ userId, verificationToken ];
+        const stringArgs = [userId, verificationToken];
         if (!validArgs({ stringArgs })) {
-            return reject({status: 400, message: errors.BAD_REQUEST, error: "userId and/or verificationToken not a string"});
+            return reject({
+                status: 400,
+                message: errors.BAD_REQUEST,
+                error: "userId and/or verificationToken not a string"
+            });
         }
 
         // get user that made this call
-        try { var user = await getAndVerifyUser(userId, verificationToken); }
-        catch (getUserError) {
+        try {
+            var user = await getAndVerifyUser(userId, verificationToken);
+        } catch (getUserError) {
             // if the error is nicely formatted, just return it as is
             if (getUserError.message && getUserError.status && getUserError.error) {
                 return reject(getUserError);
-            } else { // otherwise return a nicely formatted error
-                return reject({status: 500, message: errors.SERVER_ERROR, error: getUserError});
+            } else {
+                // otherwise return a nicely formatted error
+                return reject({ status: 500, message: errors.SERVER_ERROR, error: getUserError });
             }
         }
 
@@ -710,35 +787,45 @@ async function getUserFromReq(req, requestType) {
     });
 }
 
-
 // DANGEROUS, returns user with all fields
 async function getUserAndBusiness(userId, verificationToken) {
     return new Promise(async function(resolve, reject) {
         // get the user
-        try { var user = await getAndVerifyUser(userId, verificationToken); }
-        // just throw any caught error for the caller to deal with
-        catch (error) { return reject(error); }
+        try {
+            var user = await getAndVerifyUser(userId, verificationToken);
+        } catch (error) {
+            // just throw any caught error for the caller to deal with
+            return reject(error);
+        }
 
         // have to work for a company
         if (!user.businessInfo || !user.businessInfo.businessId) {
-            return reject({status: 403, message: errors.PERMISSIONS_ERROR, error: "Business id not provided within user object."});
+            return reject({
+                status: 403,
+                message: errors.PERMISSIONS_ERROR,
+                error: "Business id not provided within user object."
+            });
         }
 
         // get the business the user works for
-        try { var business = await Businesses.findById(user.businessInfo.businessId); }
-        catch (getBusinessError) {
-            return reject({status: 500, message: errors.SERVER_ERROR, error: getBusinessError})
+        try {
+            var business = await Businesses.findById(user.businessInfo.businessId);
+        } catch (getBusinessError) {
+            return reject({ status: 500, message: errors.SERVER_ERROR, error: getBusinessError });
         }
 
         // if no business was found, return unsuccessfully
         if (!business) {
-            return reject({status: 500, message: errors.SERVER_ERROR, error: "No business found from business id."});
+            return reject({
+                status: 500,
+                message: errors.SERVER_ERROR,
+                error: "No business found from business id."
+            });
         }
 
-        return resolve({user, business});
-    })
+        return resolve({ user, business });
+    });
 }
-
 
 // always sets the due date to be 11:59pm
 function lastPossibleSecond(date, daysToAdd) {
@@ -748,7 +835,7 @@ function lastPossibleSecond(date, daysToAdd) {
     const hour = 23;
     const minute = 59;
     const second = 59;
-    return (new Date(year, month, day, hour, minute, second));
+    return new Date(year, month, day, hour, minute, second);
 }
 
 // get the end date of a subscription and return it
@@ -756,7 +843,7 @@ function getBillingEndDate(startDate, subscriptionTerm) {
     // number of months the subscription lasts
     let subscriptionLength = 0;
 
-    switch(subscriptionTerm) {
+    switch (subscriptionTerm) {
         case "1 year":
             subscriptionLength = 12;
             break;
@@ -789,39 +876,52 @@ async function addSubscription(customerId, subscriptionTerm) {
             return plan.period.toString() === subscriptionTerm.toString();
         });
 
-
         try {
             var subscription = await stripe.subscriptions.create({
                 customer: customerId,
-                items: [{plan: process.env.NODE_ENV === "production" ? credentials.plans[index].id : credentials.plans[index].test_id}]
+                items: [
+                    {
+                        plan:
+                            process.env.NODE_ENV === "production"
+                                ? credentials.plans[index].id
+                                : credentials.plans[index].test_id
+                    }
+                ]
             });
-        } catch(error) {
+        } catch (error) {
             console.log("Error adding subscription: ", error);
             return reject("Error adding subscription.");
         }
 
         return resolve(subscription);
-    })
+    });
 }
-
 
 // find the value of a certain attribute within an object
 function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
     // can't find anything if object is undefined
-    if (!obj) { return undefined; }
+    if (!obj) {
+        return undefined;
+    }
     // wanted attribute is necessary for this to function
-    if (typeof wantedAttribute !== "string") { throw ("wantedAttribute must be a string - wantedAttribute: " + wantedAttribute); }
+    if (typeof wantedAttribute !== "string") {
+        throw "wantedAttribute must be a string - wantedAttribute: " + wantedAttribute;
+    }
     // if no nested levels value given, nest 4 times
-    if (typeof nestedLevels !== "number") { nestedLevels = 4; }
+    if (typeof nestedLevels !== "number") {
+        nestedLevels = 4;
+    }
     // assume we shouldn't go through arrays if the option isn't given
-    if (typeof traverseArrays !== "boolean") { traverseArrays = false; }
+    if (typeof traverseArrays !== "boolean") {
+        traverseArrays = false;
+    }
 
     // create a queue of objects to dig through
     let q = new Queue();
     // the current object to look through
     let currentObj = obj;
     // add the top-level object to the queue
-    q.enqueue({object: obj, level: 0});
+    q.enqueue({ object: obj, level: 0 });
     // go through the queue until the attribute is found or the queue is empty
     do {
         currentObj = q.dequeue();
@@ -829,10 +929,13 @@ function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
         // the properties of this object to the queue
         const foundValue = addValuesToQueue(currentObj);
         // return the value if it was found
-        if (foundValue) { return foundValue; }
-    }
-    // keep checking until the queue is empty
-    while (q.size() > 0);
+        if (foundValue) {
+            return foundValue;
+        }
+    } while (
+        // keep checking until the queue is empty
+        q.size() > 0
+    );
 
     // property never found
     return undefined;
@@ -841,7 +944,9 @@ function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
         const o = currentObject.object;
         const level = currentObject.level;
         // if o is not an object, can't check its values, so move on
-        if (typeof o !== "object") { return; }
+        if (typeof o !== "object") {
+            return;
+        }
 
         // if the object is an array ...
         else if (Array.isArray(o)) {
@@ -851,7 +956,7 @@ function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
                 // go through every element of the array
                 o.forEach(value => {
                     // add the element to the queue
-                    q.enqueue({object: value, level: level + 1});
+                    q.enqueue({ object: value, level: level + 1 });
                 });
             }
         }
@@ -861,15 +966,19 @@ function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
             // go through every property the object has
             for (const prop in o) {
                 // don't check the property if it's a default object property
-                if (!o.hasOwnProperty(prop)) { continue; }
+                if (!o.hasOwnProperty(prop)) {
+                    continue;
+                }
                 // get the value of the current property
                 const value = o[prop];
                 // return value if found
-                if (prop === wantedAttribute) { return value; }
+                if (prop === wantedAttribute) {
+                    return value;
+                }
                 // otherwise, if the value is an object ...
                 else if (typeof value === "object" && level < nestedLevels) {
                     // ... add it to the queue
-                    q.enqueue({object: value, level: level + 1});
+                    q.enqueue({ object: value, level: level + 1 });
                 }
             }
         }
@@ -878,33 +987,37 @@ function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
     }
 }
 
-
 // checks if an email is of the correct form (i.e. name@something.blah )
 function isValidEmail(email) {
     return typeof email === "string" && /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 }
 
-
 // checks if a file has the correct type based on the extension
 function isValidFileType(fileName, allowedFileTypes) {
     // make sure arguments are valid
     if (typeof fileName !== "string") {
-        console.log("Invalid usage of isValidFileType()! First argument must be the name of the file (e.g. 'dingus.png')");
+        console.log(
+            "Invalid usage of isValidFileType()! First argument must be the name of the file (e.g. 'dingus.png')"
+        );
         return false;
     }
     if (!Array.isArray(allowedFileTypes)) {
-        console.log("Invalid usage of isValidFileType()! Second argument must be an array of extensions (e.g. ['csv', 'pdf'])");
+        console.log(
+            "Invalid usage of isValidFileType()! Second argument must be an array of extensions (e.g. ['csv', 'pdf'])"
+        );
         return false;
     }
 
     // get the file extension from the end of the file name
-    let extension = fileName.split('.').pop().toLowerCase();
+    let extension = fileName
+        .split(".")
+        .pop()
+        .toLowerCase();
     // look through the list of allowed file types, if any matches, success
     const isValid = allowedFileTypes.includes(extension);
 
     return isValid;
 }
-
 
 // determine if arguments to a function are valid
 // options = {
@@ -918,17 +1031,36 @@ function validArgs(options) {
     // all the types of arguments we have to check as well as what each of their
     // checks for validity are
     toCheck = [
-        { argType: "numberArgs", check: (n) => { return typeof n === "number"; } },
-        { argType: "objectArgs", check: (o) => { return o && typeof o === "object"; } },
-        { argType: "arrayArgs", check: (a) => { return Array.isArray(a); } }
+        {
+            argType: "numberArgs",
+            check: n => {
+                return typeof n === "number";
+            }
+        },
+        {
+            argType: "objectArgs",
+            check: o => {
+                return o && typeof o === "object";
+            }
+        },
+        {
+            argType: "arrayArgs",
+            check: a => {
+                return Array.isArray(a);
+            }
+        }
     ];
 
     // by default, strings are not valid if they are empty
-    let stringCheck = (s) => { return s && typeof s === "string" };
+    let stringCheck = s => {
+        return s && typeof s === "string";
+    };
     // if option to allow empty strings is true ...
     if (options.allowEmptyStrings) {
         // ... change the string check to not check truthiness
-        stringCheck = (s) => { return typeof s === "string" };
+        stringCheck = s => {
+            return typeof s === "string";
+        };
     }
     // add strings to list of things to check
     toCheck.push({ argType: "stringArgs", check: stringCheck });
@@ -956,25 +1088,26 @@ function validArgs(options) {
     return allValid;
 }
 
-
 // logs the arguments provided
 // example: logArgs(req.body, ["businessId", "positionId"]);
 function logArgs(parent, args) {
     console.log("Arguments: ");
-    args.forEach(arg => { console.log(arg, ": ", parent[arg]); });
+    args.forEach(arg => {
+        console.log(arg, ": ", parent[arg]);
+    });
 }
-
 
 // logs an error with line numbers and such
 function logError(...args) {
     console.log("ERROR");
-    args.forEach(arg => { console.log(arg); });
-    let stack = (new Error).stack;
+    args.forEach(arg => {
+        console.log(arg);
+    });
+    let stack = new Error().stack;
     stack = stack.substring(stack.indexOf(")") + 1);
     //stack.shift();
     console.log("Stacktrace: ", stack);
 }
-
 
 // checks if a password is secure enough to be stored
 function isValidPassword(password) {
@@ -982,10 +1115,10 @@ function isValidPassword(password) {
     return typeof password === "string" && password.length >= MIN_PASSWORD_LENGTH;
 }
 
-
 // checks if a value is truthy (not null or undefined or empty string)
-function truthy(thing) { return !!thing; }
-
+function truthy(thing) {
+    return !!thing;
+}
 
 // check if a child property exists on an object, and optionally checks if the
 // EX: if we have an object named user like this:
@@ -997,20 +1130,28 @@ function truthy(thing) { return !!thing; }
 function propertyExists(object, propertyTree, type) {
     let parent = object;
     // if the parent does not exist, property can't exist
-    if (!parent) { return false; }
+    if (!parent) {
+        return false;
+    }
     // if no properties given, property can't exist
-    if (!Array.isArray(propertyTree) || propertyTree.length === 0) { return false; }
+    if (!Array.isArray(propertyTree) || propertyTree.length === 0) {
+        return false;
+    }
 
     // start with the first property in the tree
     let treePropIndex = 0;
     // go through each property in the tree
     while (treePropIndex < propertyTree.length) {
         // make sure the parent is an object so it can have given properties
-        if (typeof parent !== "object") { return false; }
+        if (typeof parent !== "object") {
+            return false;
+        }
         // name of the object property
         const propName = propertyTree[treePropIndex];
         // if the property is not truthy (does not exist), fail
-        if (!parent[propName]) { return false; }
+        if (!parent[propName]) {
+            return false;
+        }
         // the property is legit, so set the parent to be the value of the child prop
         parent = parent[propName];
         // move to the next property
@@ -1018,20 +1159,29 @@ function propertyExists(object, propertyTree, type) {
     }
     // at this point, parent is the value we wanted to check
     // if there is a defined wanted type, check for it
-    if (truthy(type)) { return typeof parent === type; }
+    if (truthy(type)) {
+        return typeof parent === type;
+    }
     // otherwise return that the property is valid
-    else { return true; }
+    else {
+        return true;
+    }
 }
 
-
 // email addresses of all the founders
-const founderEmails = process.env.NODE_ENV === "production" ? ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"] : [process.env.DEV_EMAIL];
-
+const founderEmails =
+    process.env.NODE_ENV === "production"
+        ? [
+              "kyle@moonshotinsights.io",
+              "justin@moonshotinsights.io",
+              "stevedorn9@gmail.com",
+              "ameyer24@wisc.edu"
+          ]
+        : [process.env.DEV_EMAIL];
 
 // standard email footer
 function emailFooter(userEmail, extraInfo) {
-    return (
-        `<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>
+    return `<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>
         <div style="text-align:center"><a href="${moonshotUrl}" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px; "src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a></div>
         <div style="text-align:left;width:100%;display:inline-block;">
             <div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">
@@ -1039,8 +1189,7 @@ function emailFooter(userEmail, extraInfo) {
                 <a style="color:#C8C8C8; margin-top:20px;" href="${moonshotUrl}unsubscribe?email=${userEmail}">Opt-out of future messages.</a></i><br/>
                 ${extraInfo ? extraInfo : ""}
             </div>
-        </div>`
-    );
+        </div>`;
 }
 
 function makePossessive(name) {
@@ -1067,7 +1216,7 @@ function makeSingular(string) {
 }
 
 function getMonthText(month) {
-    switch(month) {
+    switch (month) {
         case 0:
             return "January";
             break;
@@ -1119,14 +1268,12 @@ function getFormattedDate(date) {
     return month + " " + day + ", " + year;
 }
 
-
 // create a new object from the properties of another
 // e.g. const cat = { weight: 26, name: "Mitsy", height: 8 }
 // const slimCat = newObjectFromProps(cat, "name", "height")
 function newObjectFromProps(o, ...props) {
-    return Object.assign({}, ...props.map(prop => ({[prop]: o[prop]})));
+    return Object.assign({}, ...props.map(prop => ({ [prop]: o[prop] })));
 }
-
 
 const helperFunctions = {
     sanitize,
@@ -1169,8 +1316,7 @@ const helperFunctions = {
     devMode,
     devEmail,
     liveSite,
-    moonshotUrl,
-}
-
+    moonshotUrl
+};
 
 module.exports = helperFunctions;
