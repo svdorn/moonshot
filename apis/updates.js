@@ -30,6 +30,31 @@ const {
 
 const { gradeEval, getCognitiveScore } = require("./evaluationApis");
 
+// get a new dev skill
+async function giveNewDevSkill() {
+    try {
+        let businesses = await Businesses.find({});
+        for (let bizIdx = 0; bizIdx < businesses.length; bizIdx++) {
+            let business = businesses[bizIdx];
+            if (Array.isArray(business.positions)) {
+                for (let posIdx = 0; posIdx < business.positions.length; posIdx++) {
+                    if (business.positions[posIdx].positionType === "Developer") {
+                        business.positions[posIdx].skills = ["5c0d8edce7179a2e27054c3a"];
+                        business.positions[posIdx].length = 30;
+                        business.positions[posIdx].skillNames = ["Programming"];
+                        console.log(
+                            "Changed " + business.name + " dev skill: ",
+                            business.positions[posIdx].name
+                        );
+                    }
+                }
+                await business.save();
+            }
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 // udate employee codes for all positions
 async function employeeCodeUpdate() {
