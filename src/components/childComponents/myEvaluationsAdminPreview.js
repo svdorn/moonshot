@@ -141,6 +141,8 @@ class MyEvaluationsAdminPreview extends Component {
                         {infoArea}
                         <div className="font18px font16pxUnder800" style={{ color: this.props.primaryColor }}>
                             {this.props.name}
+                            <img className="inlineBlock clickable" style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} />
+                            <img className="inlineBlock clickable" style={{ marginLeft: "6px" }} height={15} src={`/icons/Hide${this.props.png}`} />
                         </div>
                         <div style={{ opacity: "0.6" }}>
                             {this.props.company} Evaluation{" "}
@@ -173,7 +175,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         primaryColor: state.users.primaryColor,
         textColor: state.users.textColor,
-        backgroundColor: state.users.backgroundColor
+        backgroundColor: state.users.backgroundColor,
+        png: state.users.png,
     };
 }
 
