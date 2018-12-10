@@ -2178,7 +2178,7 @@ async function POST_deleteEvaluation(req, res) {
 
     // set the position to deleted
     position.deleted = true;
-    position.active = false;
+    position.inactive = true;
 
     try {
         await business.save();
@@ -2222,10 +2222,10 @@ async function POST_updateEvaluationActive(req, res) {
     }
 
     // update the active status of the position
-    if (position.active != undefined) {
-        position.active = !position.active;
+    if (position.inactive != undefined) {
+        position.inactive = !position.inactive;
     } else {
-        position.active = true;
+        position.inactive = true;
     }
 
     try {
