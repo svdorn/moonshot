@@ -185,7 +185,6 @@ class MyEvaluations extends Component {
                         attributes.company = position.businessName;
                         attributes.variation = "take";
                         attributes.skills = position.skills;
-                        attributes.deadline = position.deadline;
                         attributes.logo = position.businessLogo;
                         attributes.name = position.positionName;
                         attributes.length = position.length;
