@@ -145,7 +145,7 @@ class CognitiveTest extends Component {
                         <p style={{ marginBottom: "0" }}>
                             (P.S. The process of elimination doesn{"'"}t usually work out so great.
                             It{"'"}s generally better to figure out what you think the answer should
-                            be before looking at the solutions.)
+                            be before looking at the solutions. There is an easy example below.)
                         </p>
                     </div>
                     <img
