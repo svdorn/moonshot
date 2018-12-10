@@ -20,3 +20,7 @@
 .header.edit > img {
     margin-top: -12px;
 }
+
+.blurClickableArea {
+    filter: blur(3px);
+}

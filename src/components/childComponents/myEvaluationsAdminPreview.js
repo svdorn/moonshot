@@ -78,17 +78,19 @@ class MyEvaluationsAdminPreview extends Component {
         let estimatedLength = null;
         let clickableArea = null;
         let businessButton = null;
+        let blurClickableArea = "";
 
         let candidateResultsOnClick = () => goTo(`/myCandidates?position=${this.props.name}`);
         let businessButtonOnClick = this.openAddUserModal.bind(this);
         let inviteEmployeesOnClick = this.openAddUserModal.bind(this);
-        if (this.props.buttonsNotClickable) {
+        if (this.props.buttonsNotClickable || this.state.edit) {
             candidateResultsOnClick = null;
             businessButtonOnClick = null;
             inviteEmployeesOnClick = null;
+            blurClickableArea = "blurClickableArea";
         }
         clickableArea = (
-            <div className="secondary-gray font16px font14pxUnder800 marginTop10px">
+            <div className="secondary-gray font16px font14pxUnder800 marginTop10px" styleName={blurClickableArea}>
                 <div>
                     <div
                         onClick={candidateResultsOnClick}
@@ -124,11 +126,25 @@ class MyEvaluationsAdminPreview extends Component {
                 <div className="primary-white">{this.props.usersInProgress} Users</div>
             </div>
         );
-        businessButton = (
-            <Button onClick={businessButtonOnClick} style={{ marginTop: "20px" }}>
-                Invite Candidates
-            </Button>
-        );
+
+        if (this.state.edit) {
+            businessButton = (
+                <div style={{ marginTop: "20px" }}>
+                    <Button onClick={businessButtonOnClick} style={{ display: "inlineBlock" }}>
+                        Save Changes
+                    </Button>
+                    <div className="marginLeft20px inlineBlock clickable underline font16px font14pxUnder700" style={{ color: "#fd3a57" }}>
+                        Delete Evaluation
+                    </div>
+                </div>
+            );
+        } else {
+            businessButton = (
+                <Button onClick={businessButtonOnClick} style={{ marginTop: "20px" }}>
+                    Invite Candidates
+                </Button>
+            );
+        }
 
         let positionKeyArea = null;
         if (this.props.positionKey) {
