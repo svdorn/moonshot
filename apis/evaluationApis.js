@@ -50,7 +50,8 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
         sliderAnswer,
         selectedId,
         selectedText,
-        dropDownResponses
+        dropDownResponses,
+        skipped
     } = sanitize(req.body);
 
     try {
@@ -85,7 +86,8 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
             sliderAnswer,
             selectedId,
             selectedText,
-            dropDownResponses
+            dropDownResponses,
+            skipped
         };
         // add the response to the array of answered questions
         user.adminQuestions.questions.push(newAnswer);
