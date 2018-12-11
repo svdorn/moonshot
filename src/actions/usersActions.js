@@ -540,15 +540,9 @@ export function getColorsFromBusiness(name) {
 export function setDefaultColors() {
     return function(dispatch) {
         dispatch(
-            updateColors(
-                MOONSHOT_CYAN,
-                MOONSHOT_BLACK,
-                MOONSHOT_LOGO,
-                MOONSHOT_WHITE,
-                undefined
-            )
+            updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO, MOONSHOT_WHITE, undefined)
         );
-    }
+    };
 }
 
 export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
@@ -875,7 +869,11 @@ export function postUser(user) {
                     user: response.data.user,
                     fullAccess: response.data.fullAccess
                 });
-                if (response.data && response.data.user && response.data.user.userType === "accountAdmin") {
+                if (
+                    response.data &&
+                    response.data.user &&
+                    response.data.user.userType === "accountAdmin"
+                ) {
                     goTo("/dashboard");
                 } else {
                     goTo("/myEvaluations");

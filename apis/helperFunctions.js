@@ -213,6 +213,15 @@ function frontEndUser(dbUser, fieldsToInclude) {
                         };
                     }
                     break;
+                // only return the business id and position id for positions
+                case "positions": {
+                    newUser.positions = Array.isArray(userProperties.positions)
+                        ? userProperties.positions.map(p => ({
+                              businessId: p.businessId,
+                              positionId: p.positionId
+                          }))
+                        : undefined;
+                }
                 default:
                     // by default just include the field
                     newUser[field] = userProperties[field];

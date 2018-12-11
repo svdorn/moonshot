@@ -418,27 +418,21 @@ class AdminQuestions extends Component {
             <div className="center" styleName="eval-portion-intro">
                 <div />
                 <div>
-                    <div className="font24px">
+                    <div className="font24px" styleName="intro-header">
                         <span style={{ color: this.props.primaryColor }}>
                             Administrative Questions
                         </span>
                     </div>
                     <p>
-                        The following is a series of questions administered by Moonshot Insights to
-                        collect pertinent information for regulatory purposes. Your answers will
-                        only be used for government reporting purposes and will only be presented in
-                        de-identified form to maintain confidentiality. Answers you provide will not
-                        affect your candidacy or employment status.
+                        The following is a series of completely optional questions administered by
+                        Moonshot Insights. These questions are not a part of your application and
+                        are not administered by the company you are applying for. The answers are
+                        only collected for regulatory purposes; any data collected will be
+                        de-identified to maintain your privacy.
                     </p>
                     <p>
-                        The following questions are not part of your application or administered by
-                        the employer you are applying to work for. You can voluntarily answer the
-                        questions and refusal to provide them will not subject you to any adverse
-                        treatment.
-                    </p>
-                    <p>
-                        Once again, your answers are collected for government reporting purposes
-                        only and you can choose not to answer any or all of the questions.
+                        Feel free to skip any of all of these questions. Your answers will not
+                        affect your candidacy in any way.
                     </p>
                 </div>
                 <br />
