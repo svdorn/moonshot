@@ -11,13 +11,13 @@
     display: inline-block;
 }
 
-.header > img {
+.header > div > img {
     display: inline-block;
     height: 15px;
     cursor: pointer;
 }
 
-.header.edit > img {
+.header.edit > div > img {
     margin-top: -12px;
 }
 

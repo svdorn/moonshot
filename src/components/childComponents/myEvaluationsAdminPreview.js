@@ -217,8 +217,8 @@ class MyEvaluationsAdminPreview extends Component {
                                 <div>{this.state.name}</div>
                             }
 
-                            <img onClick={this.edit} style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} />
-                            <img onClick={this.updateActive} style={{ marginLeft: "8px" }} height={15} src={`/icons/${eyeImg}${this.props.png}`} />
+                            <div><img onClick={this.edit} style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} /></div>
+                            <div><img onClick={this.updateActive} style={{ marginLeft: "8px" }} height={15} src={`/icons/${eyeImg}${this.props.png}`} /></div>
                         </div>
                         <div style={{ opacity: "0.6" }}>
                             {this.props.company} Evaluation{" "}
