@@ -3122,7 +3122,7 @@ async function GET_positionsForApply(req, res) {
     if (business.positions) {
         for (let i = 0; i < business.positions.length; i++) {
             let position = business.positions[i];
-            if (!position.inactive) {
+            if (!position.inactive && !position.deleted) {
                 positions.push(position);
             }
         }
