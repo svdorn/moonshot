@@ -60,6 +60,18 @@ export function usersReducers(state = initialState, action) {
                 logoutModal: false
             };
             break;
+        case "OPEN_DELETE_EVAL_MODAL":
+            return {
+                ...state,
+                deleteEvalModal: true
+            };
+            break;
+        case "CLOSE_DELETE_EVAL_MODAL":
+            return {
+                ...state,
+                deleteEvalModal: false
+            };
+            break;
         case "OPEN_LOCKED_ACCOUNT_MODAL":
             return {
                 ...state,

@@ -28,6 +28,7 @@ import { Field, reduxForm } from "redux-form";
 import MetaTags from "react-meta-tags";
 import axios from "axios";
 import MyEvaluationsAdminPreview from "../../childComponents/myEvaluationsAdminPreview";
+import DeleteEvalModal from "../../childComponents/deleteEvalModal";
 import AddUserDialog from "../../childComponents/addUserDialog";
 import AddPositionDialog from "../../childComponents/addPositionDialog";
 import clipboard from "clipboard-polyfill";
@@ -348,6 +349,7 @@ class MyEvaluations extends Component {
                 </MetaTags>
 
                 <AddPositionDialog />
+                <DeleteEvalModal />
 
                 <div className="page-line-header">
                     <div />

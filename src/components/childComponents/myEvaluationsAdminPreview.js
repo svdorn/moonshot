@@ -18,7 +18,7 @@ import { bindActionCreators } from "redux";
 import { goTo } from "../../miscFunctions";
 import HoverTip from "../miscComponents/hoverTip";
 import { Button } from "../miscComponents";
-import { openAddUserModal, addNotification, updateUser, updateEvaluationActive } from "../../actions/usersActions";
+import { openAddUserModal, generalAction, addNotification, updateStore, updateUser, updateEvaluationActive } from "../../actions/usersActions";
 import axios from "axios";
 
 import "./myEvaluationsAdminPreview.css";
@@ -55,10 +55,8 @@ class MyEvaluationsAdminPreview extends Component {
     }
 
     deleteEval = () => {
-        // delete the eval in db
-
-        // load and delete eval from page
-
+        this.props.generalAction("OPEN_DELETE_EVAL_MODAL");
+        this.props.updateStore("blurMenu", false);
     }
 
     updateActive = () => {
@@ -239,6 +237,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             openAddUserModal,
+            generalAction,
             addNotification,
             updateUser,
             updateEvaluationActive
