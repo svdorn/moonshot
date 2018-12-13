@@ -33,11 +33,32 @@ class DeleteEvalModal extends Component {
     };
 
     deleteEval = () => {
+        let self = this;
+        console.log("deleting eval: ", this.props.name);
+        console.log("deleting eval with id: ", this.props.positionId);
+
+        const { currentUser, positionId } = this.props;
+
+        const credentials = {
+            userId: currentUser._id,
+            verificationToken: currentUser.verificationToken,
+            businessId: currentUser.businessInfo.businessId,
+            positionId: positionId
+        };
         // delete in backend
-
-        // update the page it was on
-
-        this.setState({ frame: "Second" });
+        axios
+            .post("/api/business/deleteEvaluation", credentials)
+            .then(res => {
+                // update the page that it was on to have the deleted position
+                self.props.positionsFound(res.data.positions, null);
+                self.setState({ frame: "Second" });
+            })
+            .catch(err => {
+                console.log("error getting positions: ", err);
+                if (err.response && err.response.data) {
+                    console.log(err.response.data);
+                }
+            });
     };
 
     firstFrame() {
@@ -117,7 +138,9 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         png: state.users.png,
-        open: state.users.deleteEvalModal
+        open: state.users.deleteEvalModal,
+        name: state.users.deleteEvalName,
+        positionId: state.users.deleteEvalId
     };
 }
 

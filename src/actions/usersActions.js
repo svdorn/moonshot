@@ -173,6 +173,12 @@ export function closeAddUserModal() {
     };
 }
 
+export function openDeleteEvalModal(name, id) {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_DELETE_EVAL_MODAL", name, id });
+    };
+}
+
 export function openContactUsModal() {
     return function(dispatch) {
         dispatch({ type: "OPEN_CONTACT_US_MODAL" });

@@ -63,13 +63,15 @@ export function usersReducers(state = initialState, action) {
         case "OPEN_DELETE_EVAL_MODAL":
             return {
                 ...state,
-                deleteEvalModal: true
+                deleteEvalModal: true,
+                deleteEvalName: action.name,
+                deleteEvalId: action.id
             };
             break;
         case "CLOSE_DELETE_EVAL_MODAL":
             return {
                 ...state,
-                deleteEvalModal: false
+                deleteEvalModal: false,
             };
             break;
         case "OPEN_LOCKED_ACCOUNT_MODAL":

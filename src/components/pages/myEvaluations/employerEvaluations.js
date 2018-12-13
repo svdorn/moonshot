@@ -92,6 +92,7 @@ class MyEvaluations extends Component {
 
     // call this after positions are found from back end
     positionsFound(positions, logo) {
+        console.log("positions found: ", positions);
         if (Array.isArray(positions) && positions.length > 0) {
             this.setState({ positions, logo });
         } else {
@@ -349,7 +350,7 @@ class MyEvaluations extends Component {
                 </MetaTags>
 
                 <AddPositionDialog />
-                <DeleteEvalModal />
+                <DeleteEvalModal positionsFound={this.positionsFound} />
 
                 <div className="page-line-header">
                     <div />
