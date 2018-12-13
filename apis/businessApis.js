@@ -3030,7 +3030,7 @@ async function GET_positions(req, res) {
     const businessId = user.businessInfo.businessId;
     try {
         var business = await Businesses.findById(businessId).select(
-            "logo positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated positions.inactive"
+            "logo positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated positions.inactive positions.deleted"
         );
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
@@ -3044,6 +3044,7 @@ async function GET_positions(req, res) {
     let positions = [];
     if (Array.isArray(business.positions)) {
         let positionPromises = business.positions.map(position => {
+            // don't return the position if it has been deleted
             return addCompletionsAndInProgress(position, businessId);
         });
 
@@ -3052,6 +3053,13 @@ async function GET_positions(req, res) {
         } catch (awaitPositionError) {
             console.log("Error getting completions and inProgress: ", awaitPositionError);
             res.status(500).send(errors.SERVER_ERROR);
+        }
+    }
+    if (Array.isArray(positions)) {
+        for (let i = 0; i < positions.length; i++){
+            if (positions[i].deleted) {
+                positions.splice(i, 1);
+            }
         }
     }
 
@@ -3087,7 +3095,7 @@ async function GET_positionsForApply(req, res) {
             ]
         };
         var business = await Businesses.findOne(query).select(
-            "logo name positions positions.name positions.code positions.employeeCode positions.positionType"
+            "logo name positions positions.name positions.code positions.employeeCode positions.positionType positions.inactive positions.deleted"
         );
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
@@ -3119,7 +3127,7 @@ async function GET_positionsForApply(req, res) {
 
     let positions = [];
     // get active positions
-    if (business.positions) {
+    if (Array.isArray(business.positions)) {
         for (let i = 0; i < business.positions.length; i++) {
             let position = business.positions[i];
             if (!position.inactive && !position.deleted) {
