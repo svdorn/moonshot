@@ -3117,10 +3117,21 @@ async function GET_positionsForApply(req, res) {
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
+    let positions = [];
+    // get active positions
+    if (business.positions) {
+        for (let i = 0; i < business.positions.length; i++) {
+            let position = business.positions[i];
+            if (!position.inactive) {
+                positions.push(position);
+            }
+        }
+    }
+
     return res.json({
         logo: business.logo,
         businessName: business.name,
-        positions: business.positions,
+        positions,
         admin,
         pageSetUp: verified
     });
