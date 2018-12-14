@@ -2651,7 +2651,7 @@ async function GET_employeesAwaitingReview(req, res) {
     }
 
     // count all the users with this position
-    const positionIds = business.positions.map(p => p._id);
+    const positionIds = business.positions.filter(p => !p.deleted).map(p => p._id);
     try {
         var newEmployees = await unReviewedEmployeeCount(business._id, positionIds);
     } catch (countError) {
@@ -2735,7 +2735,7 @@ async function GET_candidatesAwaitingReview(req, res) {
     }
 
     // count all the users with this position
-    const positionIds = business.positions.map(p => p._id);
+    const positionIds = business.positions.filter(p => !p.deleted).map(p => p._id);
     try {
         var newCandidates = await unReviewedCandidateCount(business._id, positionIds);
     } catch (countError) {
