@@ -9,15 +9,15 @@
 
 .header > div {
     display: inline-block;
+    cursor: pointer;
 }
 
 .header > div > img {
     display: inline-block;
     height: 15px;
-    cursor: pointer;
 }
 
-.header.edit > div > img {
+.header.edit > div > div > img {
     margin-top: -12px;
 }
 
