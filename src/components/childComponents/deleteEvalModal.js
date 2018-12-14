@@ -29,14 +29,12 @@ class DeleteEvalModal extends Component {
 
     close = () => {
         this.props.generalAction("CLOSE_DELETE_EVAL_MODAL");
-        this.props.updateStore("blurMenu", false);
+        this.props.setDeletedEvaluation(null);
         this.setState({ frame: "First" });
     };
 
     deleteEval = () => {
         let self = this;
-        console.log("deleting eval: ", this.props.name);
-        console.log("deleting eval with id: ", this.props.positionId);
 
         const { currentUser, positionId } = this.props;
 
@@ -50,7 +48,8 @@ class DeleteEvalModal extends Component {
         axios
             .post("/api/business/deleteEvaluation", credentials)
             .then(res => {
-                self.props.setDeletedEvaluation(res.data.positions);
+                console.log("data: ", res.data)
+                self.props.setDeletedEvaluation(res.data);
                 // update the page that it was on to have the deleted position
                 self.setState({ frame: "Second" });
             })

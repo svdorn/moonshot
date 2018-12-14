@@ -86,6 +86,13 @@ export function usersReducers(state = initialState, action) {
                 lockedAccountModal: false
             };
             break;
+        case "SET_DELETED_EVALUATION":
+            console.log("action: ", action);
+            return {
+                ...state,
+                deleteEvaluationsPositions: action.response
+            };
+            break;
         case "OPEN_HIRE_VERIFICATION_MODAL":
             return {
                 ...state,

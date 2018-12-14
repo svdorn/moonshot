@@ -90,6 +90,13 @@ class MyEvaluations extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log("next props: ", nextProps.deleteEvaluationsPositions);
+        if (nextProps.deleteEvaluationsPositions) {
+            this.positionsFound(nextProps.deleteEvaluationsPositions.positions, nextProps.deleteEvaluationsPositions.logo);
+        }
+    }
+
     // call this after positions are found from back end
     positionsFound(positions, logo) {
         console.log("positions found: ", positions);
@@ -222,17 +229,14 @@ class MyEvaluations extends Component {
 
         if (this.state.noPositions) {
             evaluations = (
-                <div className="center" style={{ color: "rgba(255,255,255,.8)" }}>
+                <div className="center marginTop20px" style={{ color: "rgba(255,255,255,.8)" }}>
                     <div>No evaluations. Add your first evaluation below.</div>
-                    <div
-                        className={
-                            "primary-white font18px font16pxUnder900 font14pxUnder600 marginTop20px " +
-                            button.cyanRound
-                        }
+                    <Button
+                        style={{ marginTop: "20px" }}
                         onClick={this.openAddPositionModal}
                     >
                         + Add Evaluation
-                    </div>
+                    </Button>
                 </div>
             );
         }
@@ -386,7 +390,8 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         loading: state.users.loadingSomething,
         png: state.users.png,
-        blurModal: state.users.lockedAccountModal
+        blurModal: state.users.lockedAccountModal,
+        deleteEvaluationsPositions: state.users.deleteEvaluationsPositions
     };
 }
 

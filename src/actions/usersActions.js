@@ -387,9 +387,9 @@ export function updateEvaluationName(userId, verificationToken, businessId, posi
             });
     };
 }
-export function setDeletedEvaluation(positions) {
+export function setDeletedEvaluation(response) {
     return function(dispatch) {
-        dispatch({ type: "SET_DELETED_EVALUATION", positions });
+        dispatch({ type: "SET_DELETED_EVALUATION", response });
     };
 }
 

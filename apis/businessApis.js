@@ -2190,14 +2190,29 @@ async function POST_deleteEvaluation(req, res) {
 
     let positions = [];
     if (Array.isArray(business.positions)) {
-        for (let i = 0; i < business.positions.length; i++) {
-            if (!business.positions[i].deleted) {
-                positions.push(business.positions[i]);
+        let positionPromises = business.positions.map(position => {
+            // don't return the position if it has been deleted
+            return addCompletionsAndInProgress(position, businessId);
+        });
+
+        try {
+            positions = await Promise.all(positionPromises);
+        } catch (awaitPositionError) {
+            console.log("Error getting completions and inProgress: ", awaitPositionError);
+            res.status(500).send(errors.SERVER_ERROR);
+        }
+    }
+
+    let livePositions = [];
+    if (Array.isArray(positions)) {
+        for (let i = 0; i < positions.length; i++){
+            if (!positions[i].deleted) {
+                livePositions.push(positions[i]);
             }
         }
     }
 
-    return res.json(positions);
+    return res.status(200).send({ logo: business.logo, positions: livePositions });
 }
 
 // delete an evaluation from the business on request
