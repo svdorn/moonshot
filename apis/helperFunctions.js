@@ -1120,17 +1120,10 @@ function truthy(thing) {
     return !!thing;
 }
 
+// remove from an array any position that has been marked as deleted
 function removeDeletedPositions(positions) {
-    let livePositions = [];
-    if (Array.isArray(positions)) {
-        for (let i = 0; i < positions.length; i++) {
-            if (!positions[i].deleted) {
-                livePositions.push(positions[i]);
-            }
-        }
-    }
-
-    return livePositions;
+    if (!Array.isArray(positions)) return positions;
+    return positions.filter(p => !p.deleted);
 }
 
 // check if a child property exists on an object, and optionally checks if the
