@@ -91,19 +91,36 @@ class MyEvaluations extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("next props: ", nextProps.deleteEvaluationsPositions);
         if (nextProps.deleteEvaluationsPositions) {
-            this.positionsFound(nextProps.deleteEvaluationsPositions.positions, nextProps.deleteEvaluationsPositions.logo);
+            this.deletePosition(nextProps.deleteEvaluationsPositions.positions);
         }
     }
 
     // call this after positions are found from back end
     positionsFound(positions, logo) {
-        console.log("positions found: ", positions);
         if (Array.isArray(positions) && positions.length > 0) {
             this.setState({ positions, logo });
         } else {
             this.setState({ noPositions: true });
+        }
+    }
+
+    deletePosition(positions) {
+        if (!Array.isArray(positions) || positions.length === 0) {
+            return this.setState({ noPositions: true });
+        } else {
+            let ids = [];
+            for (let i = 0; i < positions.length; i++) {
+                ids.push(positions[i]._id);
+            }
+
+            let newPositions = this.state.positions;
+            for (let i = 0; i < newPositions.length; i++) {
+                if (!ids.includes(newPositions[i]._id.toString())) {
+                    newPositions.splice(i, 1);
+                }
+            }
+            return this.setState({ positions: newPositions })
         }
     }
 
@@ -258,7 +275,6 @@ class MyEvaluations extends Component {
                 key++;
                 // make sure position is the right type
                 if (position && typeof position === "object") {
-                    console.log("position: ", position);
                     let attributes = {};
                     attributes.id = position._id;
                     attributes.variation = "edit";
