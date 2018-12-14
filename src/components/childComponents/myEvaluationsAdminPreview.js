@@ -37,6 +37,12 @@ class MyEvaluationsAdminPreview extends Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.deleteEvaluationsPositions) {
+            this.setState({ edit: false, name: this.props.name })
+        }
+    }
+
     edit = () => {
         if (this.state.edit) {
             // changing back to original name
@@ -257,6 +263,7 @@ function mapStateToProps(state) {
         textColor: state.users.textColor,
         backgroundColor: state.users.backgroundColor,
         png: state.users.png,
+        deleteEvaluationsPositions: state.users.deleteEvaluationsPositions
     };
 }
 
