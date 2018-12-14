@@ -46,11 +46,11 @@ class MyEvaluationsAdminPreview extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.deleteEvaluationsPositions) {
-            this.setState({ edit: false, name: this.props.name });
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.deleteEvaluationsPositions) {
+    //         this.setState({ edit: false, name: this.props.name });
+    //     }
+    // }
 
     edit = () => {
         if (this.state.edit) {
@@ -328,8 +328,8 @@ function mapStateToProps(state) {
         primaryColor: state.users.primaryColor,
         textColor: state.users.textColor,
         backgroundColor: state.users.backgroundColor,
-        png: state.users.png,
-        deleteEvaluationsPositions: state.users.deleteEvaluationsPositions
+        png: state.users.png
+        // deleteEvaluationsPositions: state.users.deleteEvaluationsPositions
     };
 }
 

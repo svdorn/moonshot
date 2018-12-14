@@ -2148,12 +2148,7 @@ async function POST_addEvaluation(req, res) {
 
 // delete an evaluation from the business on request
 async function POST_deleteEvaluation(req, res) {
-    const {
-        userId,
-        verificationToken,
-        businessId,
-        positionId
-    } = sanitize(req.body);
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
 
     try {
         var business = await verifyAccountAdminAndReturnBusiness(
@@ -2205,24 +2200,20 @@ async function POST_deleteEvaluation(req, res) {
 
     let livePositions = [];
     if (Array.isArray(positions)) {
-        for (let i = 0; i < positions.length; i++){
+        for (let i = 0; i < positions.length; i++) {
             if (!positions[i].deleted) {
                 livePositions.push(positions[i]);
             }
         }
     }
 
-    return res.status(200).send({ logo: business.logo, positions: livePositions });
+    return res.status(200).send({ deletedId: positionId });
+    // return res.status(200).send({ logo: business.logo, positions: livePositions });
 }
 
 // delete an evaluation from the business on request
 async function POST_updateEvaluationActive(req, res) {
-    const {
-        userId,
-        verificationToken,
-        businessId,
-        positionId
-    } = sanitize(req.body);
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
 
     try {
         var business = await verifyAccountAdminAndReturnBusiness(
@@ -2253,7 +2244,7 @@ async function POST_updateEvaluationActive(req, res) {
         position.inactive = true;
     }
 
-    console.log("position: ", position)
+    console.log("position: ", position);
 
     try {
         await business.save();
@@ -2267,13 +2258,7 @@ async function POST_updateEvaluationActive(req, res) {
 
 // delete an evaluation from the business on request
 async function POST_updateEvaluationName(req, res) {
-    const {
-        userId,
-        verificationToken,
-        businessId,
-        positionId,
-        positionName
-    } = sanitize(req.body);
+    const { userId, verificationToken, businessId, positionId, positionName } = sanitize(req.body);
 
     try {
         var business = await verifyAccountAdminAndReturnBusiness(
@@ -2303,10 +2288,7 @@ async function POST_updateEvaluationName(req, res) {
     // TODO: update the position name for all candidates and employees who have gone through this position
 
     let query = {
-        $or: [
-            { userType: "candidate" },
-            { userType: "employee" }
-        ],
+        $or: [{ userType: "candidate" }, { userType: "employee" }],
         positions: {
             $elemMatch: {
                 businessId: mongoose.Types.ObjectId(businessId),
@@ -2333,7 +2315,9 @@ async function POST_updateEvaluationName(req, res) {
                     await user.save();
                 } catch (saveUserError) {
                     console.log("Error saving user when updating eval name: ", saveUserError);
-                    return res.status(500).send("Error saving position name. Contact support or try again.");
+                    return res
+                        .status(500)
+                        .send("Error saving position name. Contact support or try again.");
                 }
             }
         }
@@ -3168,7 +3152,7 @@ async function GET_positions(req, res) {
 
     let livePositions = [];
     if (Array.isArray(positions)) {
-        for (let i = 0; i < positions.length; i++){
+        for (let i = 0; i < positions.length; i++) {
             if (!positions[i].deleted) {
                 livePositions.push(positions[i]);
             }

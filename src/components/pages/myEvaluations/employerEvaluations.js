@@ -90,11 +90,11 @@ class MyEvaluations extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.deleteEvaluationsPositions) {
-            this.deletePosition(nextProps.deleteEvaluationsPositions.positions);
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.deleteEvaluationsPositions) {
+    //         this.deletePosition(nextProps.deleteEvaluationsPositions.positions);
+    //     }
+    // }
 
     // call this after positions are found from back end
     positionsFound(positions, logo) {
@@ -106,7 +106,7 @@ class MyEvaluations extends Component {
     }
 
     deletePosition(positions) {
-        console.log("positions: ", positions)
+        console.log("positions: ", positions);
         if (!Array.isArray(positions) || positions.length === 0) {
             return this.setState({ noPositions: true, positions: [] });
         } else {
@@ -121,11 +121,11 @@ class MyEvaluations extends Component {
             for (let i = 0; i < this.state.positions.length; i++) {
                 console.log("id: ", this.state.positions._id);
                 if (ids.includes(this.state.positions[i]._id.toString())) {
-                    console.log("in new positions")
+                    console.log("in new positions");
                     newPositions.push(this.state.positions[i]);
                 }
             }
-            return this.setState({ positions: newPositions })
+            return this.setState({ positions: newPositions });
         }
     }
 
@@ -253,10 +253,7 @@ class MyEvaluations extends Component {
             evaluations = (
                 <div className="center marginTop20px" style={{ color: "rgba(255,255,255,.8)" }}>
                     <div>No evaluations. Add your first evaluation below.</div>
-                    <Button
-                        style={{ marginTop: "20px" }}
-                        onClick={this.openAddPositionModal}
-                    >
+                    <Button style={{ marginTop: "20px" }} onClick={this.openAddPositionModal}>
                         + Add Evaluation
                     </Button>
                 </div>
@@ -275,9 +272,17 @@ class MyEvaluations extends Component {
 
         if (currentUser && this.state.positions.length !== 0) {
             const userType = currentUser.userType;
+            const { deletedPositionIds } = this.props;
+            console.log("deletedPositionIds: ", deletedPositionIds);
 
             evaluations = this.state.positions.map(position => {
                 key++;
+                if (
+                    Array.isArray(deletedPositionIds) &&
+                    deletedPositionIds.includes(position._id)
+                ) {
+                    return null;
+                }
                 // make sure position is the right type
                 if (position && typeof position === "object") {
                     let attributes = {};
@@ -346,9 +351,7 @@ class MyEvaluations extends Component {
                         className="font24px font22pxUnder700 font18pxUnder500 center addEval"
                         onClick={this.openAddPositionModal}
                     >
-                        <Button size="large">
-                            Add Evaluation
-                        </Button>
+                        <Button size="large">Add Evaluation</Button>
                         <div className="font16px font14pxUnder700 font12pxUnder500 secondary-gray">
                             There{"'"}s no cost for adding evaluations
                         </div>
@@ -412,7 +415,7 @@ function mapStateToProps(state) {
         loading: state.users.loadingSomething,
         png: state.users.png,
         blurModal: state.users.lockedAccountModal,
-        deleteEvaluationsPositions: state.users.deleteEvaluationsPositions
+        deletedPositionIds: state.users.deletedPositionIds
     };
 }
 

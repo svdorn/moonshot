@@ -357,9 +357,14 @@ export function updateEvaluationActive(userId, verificationToken, businessId, po
         dispatch({ type: "START_LOADING" });
 
         axios
-            .post("/api/business/updateEvaluationActive", { userId, verificationToken, businessId, positionId })
+            .post("/api/business/updateEvaluationActive", {
+                userId,
+                verificationToken,
+                businessId,
+                positionId
+            })
             .then(function(response) {
-                dispatch({type: "STOP_LOADING"});
+                dispatch({ type: "STOP_LOADING" });
             })
             .catch(function(err) {
                 dispatch({
@@ -370,14 +375,26 @@ export function updateEvaluationActive(userId, verificationToken, businessId, po
     };
 }
 
-export function updateEvaluationName(userId, verificationToken, businessId, positionId, positionName) {
+export function updateEvaluationName(
+    userId,
+    verificationToken,
+    businessId,
+    positionId,
+    positionName
+) {
     return function(dispatch) {
         dispatch({ type: "START_LOADING" });
 
         axios
-            .post("/api/business/updateEvaluationName", { userId, verificationToken, businessId, positionId, positionName })
+            .post("/api/business/updateEvaluationName", {
+                userId,
+                verificationToken,
+                businessId,
+                positionId,
+                positionName
+            })
             .then(function(response) {
-                dispatch({type: "STOP_LOADING"});
+                dispatch({ type: "STOP_LOADING" });
             })
             .catch(function(err) {
                 dispatch({
@@ -387,9 +404,9 @@ export function updateEvaluationName(userId, verificationToken, businessId, posi
             });
     };
 }
-export function setDeletedEvaluation(response) {
+export function setDeletedEvaluation(deletedId) {
     return function(dispatch) {
-        dispatch({ type: "SET_DELETED_EVALUATION", response });
+        dispatch({ type: "SET_DELETED_EVALUATION", deletedId });
     };
 }
 
@@ -587,15 +604,9 @@ export function getColorsFromBusiness(name) {
 export function setDefaultColors() {
     return function(dispatch) {
         dispatch(
-            updateColors(
-                MOONSHOT_CYAN,
-                MOONSHOT_BLACK,
-                MOONSHOT_LOGO,
-                MOONSHOT_WHITE,
-                undefined
-            )
+            updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO, MOONSHOT_WHITE, undefined)
         );
-    }
+    };
 }
 
 export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
@@ -922,7 +933,11 @@ export function postUser(user) {
                     user: response.data.user,
                     fullAccess: response.data.fullAccess
                 });
-                if (response.data && response.data.user && response.data.user.userType === "accountAdmin") {
+                if (
+                    response.data &&
+                    response.data.user &&
+                    response.data.user.userType === "accountAdmin"
+                ) {
                     goTo("/dashboard");
                 } else {
                     goTo("/myEvaluations");

@@ -29,7 +29,7 @@ class DeleteEvalModal extends Component {
 
     close = () => {
         this.props.generalAction("CLOSE_DELETE_EVAL_MODAL");
-        this.props.setDeletedEvaluation(null);
+        // this.props.setDeletedEvaluation(null);
         this.setState({ frame: "First" });
     };
 
@@ -48,8 +48,8 @@ class DeleteEvalModal extends Component {
         axios
             .post("/api/business/deleteEvaluation", credentials)
             .then(res => {
-                console.log("data: ", res.data)
-                self.props.setDeletedEvaluation(res.data);
+                console.log("data: ", res.data.deletedId);
+                self.props.setDeletedEvaluation(res.data.deletedId);
                 // update the page that it was on to have the deleted position
                 self.setState({ frame: "Second" });
             })
@@ -67,8 +67,8 @@ class DeleteEvalModal extends Component {
                 <div className="font22px font20pxUnder700 font16pxUnder500">Delete Position</div>
                 <div styleName="header-seperator" />
                 <div className="font16px font14pxUnder700">
-                    All of the data you{"'"}ve collected on this position will still be
-                    saved for you. Do you wish to continue and delete the {this.props.name} position?
+                    All of the data you{"'"}ve collected on this position will still be saved for
+                    you. Do you wish to continue and delete the {this.props.name} position?
                 </div>
                 <div className="font18px font16pxUnder700 font14pxUnder500">
                     <div onClick={this.deleteEval}>Yes</div>
@@ -82,16 +82,14 @@ class DeleteEvalModal extends Component {
     positionDeletedFrame() {
         return (
             <div styleName="position-deleted">
+                <div>Position Deleted</div>
                 <div>
-                    Position Deleted
+                    {
+                        "Position has been successfully deleted. Contact us if you'd like to get your data back or activate the position again."
+                    }
                 </div>
                 <div>
-                    {"Position has been successfully deleted. Contact us if you'd like to get your data back or activate the position again."}
-                </div>
-                <div>
-                    <Button onClick={this.close}>
-                        Close
-                    </Button>
+                    <Button onClick={this.close}>Close</Button>
                 </div>
             </div>
         );

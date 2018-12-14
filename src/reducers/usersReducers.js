@@ -71,7 +71,7 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_DELETE_EVAL_MODAL":
             return {
                 ...state,
-                deleteEvalModal: false,
+                deleteEvalModal: false
             };
             break;
         case "OPEN_LOCKED_ACCOUNT_MODAL":
@@ -87,9 +87,12 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "SET_DELETED_EVALUATION":
+            // action.response
             return {
                 ...state,
-                deleteEvaluationsPositions: action.response
+                deletedPositionIds: Array.isArray(state.deletedPositionIds)
+                    ? Array.concat(state.deletedPositionIds, action.deletedId)
+                    : [action.deletedId]
             };
             break;
         case "OPEN_HIRE_VERIFICATION_MODAL":
