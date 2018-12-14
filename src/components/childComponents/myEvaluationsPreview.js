@@ -190,8 +190,13 @@ class MyEvaluationsPreview extends Component {
                 </div>
             );
 
+            let additionalInfoClass = "marginTop20px";
+            if (this.props.completedDate) {
+                additionalInfoClass= "";
+            }
+
             infoArea = (
-                <div className="font16px center myEvalsInfoRight marginTop20px" style={{ color: this.props.primaryColor }}>
+                <div className={"font16px center myEvalsInfoRight " + additionalInfoClass} style={{ color: this.props.primaryColor }}>
                     Assigned
                     <div className="marginBottom10px" style={{ color: this.props.textColor }}>
                         {this.makeDatePretty(this.props.assignedDate)}

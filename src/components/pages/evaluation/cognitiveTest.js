@@ -353,21 +353,21 @@ class CognitiveTest extends Component {
                     ) : (
                         <div>0:{timer}</div>
                     )}
-                    <div className="marginBottom40px">
+                    <div className="marginBottom30px">
                         <img styleName="gca.rpmImg" src={rpmSrc} />
                     </div>
                     <div className="center" style={{ maxWidth: "1000px", margin: "auto" }}>
                         {answers}
                     </div>
                     {this.state.loading ? (
-                        <div style={{ margin: "30px 0 50px" }}>
+                        <div style={{ margin: "20px 0 50px" }}>
                             <CircularProgress color="primary" />
                         </div>
                     ) : (
                         <Button
                             disabled={!canContinue}
                             onClick={this.nextQuestion}
-                            style={{ margin: "30px 0 50px" }}
+                            style={{ margin: "20px 0 50px" }}
                         >
                             Next
                         </Button>
