@@ -87,7 +87,6 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "SET_DELETED_EVALUATION":
-            console.log("action: ", action);
             return {
                 ...state,
                 deleteEvaluationsPositions: action.response

@@ -106,18 +106,23 @@ class MyEvaluations extends Component {
     }
 
     deletePosition(positions) {
+        console.log("positions: ", positions)
         if (!Array.isArray(positions) || positions.length === 0) {
-            return this.setState({ noPositions: true });
+            return this.setState({ noPositions: true, positions: [] });
         } else {
             let ids = [];
             for (let i = 0; i < positions.length; i++) {
                 ids.push(positions[i]._id);
             }
 
-            let newPositions = this.state.positions;
-            for (let i = 0; i < newPositions.length; i++) {
-                if (!ids.includes(newPositions[i]._id.toString())) {
-                    newPositions.splice(i, 1);
+            console.log("ids: ", ids);
+
+            let newPositions = [];
+            for (let i = 0; i < this.state.positions.length; i++) {
+                console.log("id: ", this.state.positions._id);
+                if (ids.includes(this.state.positions[i]._id.toString())) {
+                    console.log("in new positions")
+                    newPositions.push(this.state.positions[i]);
                 }
             }
             return this.setState({ positions: newPositions })
