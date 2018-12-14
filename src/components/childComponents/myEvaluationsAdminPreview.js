@@ -222,8 +222,16 @@ class MyEvaluationsAdminPreview extends Component {
                                 <div>{this.state.name}</div>
                             }
 
-                            <div><img onClick={this.edit} style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} /></div>
-                            <div><img onClick={this.updateActive} style={{ marginLeft: "8px" }} height={15} src={`/icons/${eyeImg}${this.props.png}`} /></div>
+                            <div><img onClick={this.edit} style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} /></div><HoverTip
+                                className="font12px secondary-gray"
+                                style={{ marginTop: "18px", marginLeft: "-6px" }}
+                                text="Edit this evaluation."
+                            />
+                            <div><img onClick={this.updateActive} style={{ marginLeft: "8px" }} height={15} src={`/icons/${eyeImg}${this.props.png}`} /></div><HoverTip
+                                className="font12px secondary-gray"
+                                style={{ marginTop: "18px", marginLeft: "-6px" }}
+                                text="Hide this evaluation on your candidate invite page."
+                            />
                         </div>
                         <div style={{ opacity: "0.6" }}>
                             {this.props.company} Evaluation{" "}
