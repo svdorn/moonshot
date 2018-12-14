@@ -2645,7 +2645,7 @@ async function GET_employeesAwaitingReview(req, res) {
     }
 
     // count all the users with this position
-    const positionIds = business.positions.map(p => p._id);
+    const positionIds = business.positions.filter(p => !p.deleted).map(p => p._id);
     try {
         var newEmployees = await unReviewedEmployeeCount(business._id, positionIds);
     } catch (countError) {
@@ -2729,7 +2729,7 @@ async function GET_candidatesAwaitingReview(req, res) {
     }
 
     // count all the users with this position
-    const positionIds = business.positions.map(p => p._id);
+    const positionIds = business.positions.filter(p => !p.deleted).map(p => p._id);
     try {
         var newCandidates = await unReviewedCandidateCount(business._id, positionIds);
     } catch (countError) {
@@ -2907,8 +2907,10 @@ async function GET_newCandidateGraphData(req, res) {
 
     console.log("interval: ", interval);
 
-    // count all the users with this position
-    const positionIds = business.positions.map(p => mongoose.Types.ObjectId(p._id));
+    // count all the users with these positions
+    const positionIds = business.positions
+        .filter(p => !p.deleted)
+        .map(p => mongoose.Types.ObjectId(p._id));
     try {
         var counts = await newCandidateCountByDate(
             business._id,
@@ -2947,7 +2949,9 @@ async function GET_evaluationsGraphData(req, res) {
     }
 
     // count all the users with this position
-    const positionIds = business.positions.map(p => mongoose.Types.ObjectId(p._id));
+    const positionIds = business.positions
+        .filter(p => !p.deleted)
+        .map(p => mongoose.Types.ObjectId(p._id));
     // get only completions within wanted time range
     const now = new Date();
     let month = now.getMonth();
