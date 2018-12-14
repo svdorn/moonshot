@@ -31,6 +31,7 @@ const {
     emailFooter,
     devMode,
     devEmail,
+    removeDeletedPositions,
 
     moonshotUrl
 } = require("./helperFunctions.js");
@@ -2198,14 +2199,7 @@ async function POST_deleteEvaluation(req, res) {
         }
     }
 
-    let livePositions = [];
-    if (Array.isArray(positions)) {
-        for (let i = 0; i < positions.length; i++) {
-            if (!positions[i].deleted) {
-                livePositions.push(positions[i]);
-            }
-        }
-    }
+    let livePositions = removeDeletedPositions(positions);
 
     return res.status(200).send({ deletedId: positionId });
     // return res.status(200).send({ logo: business.logo, positions: livePositions });
@@ -3154,14 +3148,7 @@ async function GET_positions(req, res) {
         }
     }
 
-    let livePositions = [];
-    if (Array.isArray(positions)) {
-        for (let i = 0; i < positions.length; i++) {
-            if (!positions[i].deleted) {
-                livePositions.push(positions[i]);
-            }
-        }
-    }
+    let livePositions = removeDeletedPositions(positions);
 
     return res.status(200).send({ logo: business.logo, positions: livePositions });
 }

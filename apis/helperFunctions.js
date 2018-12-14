@@ -1120,6 +1120,19 @@ function truthy(thing) {
     return !!thing;
 }
 
+function removeDeletedPositions(positions) {
+    let livePositions = [];
+    if (Array.isArray(positions)) {
+        for (let i = 0; i < positions.length; i++) {
+            if (!positions[i].deleted) {
+                livePositions.push(positions[i]);
+            }
+        }
+    }
+
+    return livePositions;
+}
+
 // check if a child property exists on an object, and optionally checks if the
 // EX: if we have an object named user like this:
 // { info: { name: "Austin" } }
@@ -1304,6 +1317,7 @@ const helperFunctions = {
     newObjectFromProps,
     getBillingEndDate,
     addSubscription,
+    removeDeletedPositions,
     makePossessive,
     makeSingular,
     getFormattedDate,
