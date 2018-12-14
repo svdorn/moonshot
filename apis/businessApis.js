@@ -2144,7 +2144,9 @@ async function POST_addEvaluation(req, res) {
         return res.status(500).send("Error adding position. Contact support or try again.");
     }
 
-    return res.json(business.positions);
+    let positions = removeDeletedPositions(business.positions);
+
+    return res.json(positions);
 }
 
 // delete an evaluation from the business on request
@@ -2238,8 +2240,6 @@ async function POST_updateEvaluationActive(req, res) {
         position.inactive = true;
     }
 
-    console.log("position: ", position);
-
     try {
         await business.save();
     } catch (saveBizError) {
@@ -2247,7 +2247,9 @@ async function POST_updateEvaluationActive(req, res) {
         return res.status(500).send("Error adding position. Contact support or try again.");
     }
 
-    return res.json(business.positions);
+    let positions = removeDeletedPositions(business.positions);
+
+    return res.json(positions);
 }
 
 // delete an evaluation from the business on request
@@ -2570,7 +2572,8 @@ async function GET_business(req, res) {
         return res.status(500).send("Server error.");
     }
 
-    console.log("business, ", business);
+    // remove the deleted positions from the business
+    business.positions = removeDeletedPositions(business.positions);
 
     return res.json(business);
 }
