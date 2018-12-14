@@ -18,7 +18,16 @@ import { bindActionCreators } from "redux";
 import { goTo } from "../../miscFunctions";
 import HoverTip from "../miscComponents/hoverTip";
 import { Button } from "../miscComponents";
-import { openAddUserModal, generalAction, addNotification, updateStore, updateUser, updateEvaluationActive, openDeleteEvalModal, updateEvaluationName } from "../../actions/usersActions";
+import {
+    openAddUserModal,
+    generalAction,
+    addNotification,
+    updateStore,
+    updateUser,
+    updateEvaluationActive,
+    openDeleteEvalModal,
+    updateEvaluationName
+} from "../../actions/usersActions";
 import axios from "axios";
 
 import "./myEvaluationsAdminPreview.css";
@@ -39,7 +48,7 @@ class MyEvaluationsAdminPreview extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.deleteEvaluationsPositions) {
-            this.setState({ edit: false, name: this.props.name })
+            this.setState({ edit: false, name: this.props.name });
         }
     }
 
@@ -47,38 +56,49 @@ class MyEvaluationsAdminPreview extends Component {
         if (this.state.edit) {
             // changing back to original name
             name = this.props.name;
-            this.setState({ edit: false, name: this.props.name })
+            this.setState({ edit: false, name: this.props.name });
         } else {
-            this.setState({ edit: true })
+            this.setState({ edit: true });
         }
-    }
+    };
 
     saveChanges = () => {
         const { currentUser } = this.props;
         // save the new name to db
-        this.props.updateEvaluationName(currentUser._id, currentUser.verificationToken, currentUser.businessInfo.businessId, this.props.id, this.state.name);
+        this.props.updateEvaluationName(
+            currentUser._id,
+            currentUser.verificationToken,
+            currentUser.businessInfo.businessId,
+            this.props.id,
+            this.state.name
+        );
         // close edit
-        this.setState({ edit: false })
-    }
+        this.setState({ edit: false });
+    };
 
     deleteEval = () => {
         this.props.openDeleteEvalModal(this.state.name, this.props.id);
         this.props.updateStore("blurMenu", false);
-    }
+    };
 
     updateActive = () => {
         const { currentUser } = this.props;
 
-        this.props.updateEvaluationActive(currentUser._id, currentUser.verificationToken, currentUser.businessInfo.businessId, this.props.id);
+        this.props.updateEvaluationActive(
+            currentUser._id,
+            currentUser.verificationToken,
+            currentUser.businessInfo.businessId,
+            this.props.id
+        );
 
-        this.setState({ inactive: !this.state.inactive })
-    }
+        this.setState({ inactive: !this.state.inactive });
+    };
 
-    nameChange = (event) => {
+    nameChange = event => {
         const name = event.target.value;
 
         this.setState({ name });
-    }
+    };
 
     makeDatePretty(dateObjString) {
         if (typeof dateObjString === "string" && dateObjString.length >= 10) {
@@ -124,7 +144,10 @@ class MyEvaluationsAdminPreview extends Component {
             blurClickableArea = "blurClickableArea";
         }
         clickableArea = (
-            <div className="secondary-gray font16px font14pxUnder800 marginTop10px" styleName={blurClickableArea}>
+            <div
+                className="secondary-gray font16px font14pxUnder800 marginTop10px"
+                styleName={blurClickableArea}
+            >
                 <div>
                     <div
                         onClick={candidateResultsOnClick}
@@ -153,9 +176,7 @@ class MyEvaluationsAdminPreview extends Component {
         infoArea = (
             <div className="primary-cyan font16px center myEvalsInfoRight marginTop15px">
                 Completions
-                <div className="primary-white marginBottom10px">
-                    {this.props.completions} Users
-                </div>
+                <div className="primary-white marginBottom10px">{this.props.completions} Users</div>
                 In Progress
                 <div className="primary-white">{this.props.usersInProgress} Users</div>
             </div>
@@ -167,7 +188,11 @@ class MyEvaluationsAdminPreview extends Component {
                     <Button onClick={this.saveChanges} style={{ display: "inlineBlock" }}>
                         Save Changes
                     </Button>
-                    <div onClick={this.deleteEval} className="marginLeft20px inlineBlock clickable underline font16px font14pxUnder700" style={{ color: "#fd3a57" }}>
+                    <div
+                        onClick={this.deleteEval}
+                        className="marginLeft20px inlineBlock clickable underline font16px font14pxUnder700"
+                        style={{ color: "#fd3a57" }}
+                    >
                         Delete Evaluation
                     </div>
                 </div>
@@ -202,7 +227,13 @@ class MyEvaluationsAdminPreview extends Component {
 
         return (
             <div style={style} className={className}>
-                <div className={`myEvalsBox aboutMeLi`} style={{ backgroundColor: this.props.backgroundColor, color: this.props.textColor }}>
+                <div
+                    className={`myEvalsBox aboutMeLi`}
+                    style={{
+                        backgroundColor: this.props.backgroundColor,
+                        color: this.props.textColor
+                    }}
+                >
                     <div className="aboutMeLiIconContainer">
                         <img alt="My Evals Company Logo" src={`/logos/${logo}`} />
                     </div>
@@ -211,27 +242,51 @@ class MyEvaluationsAdminPreview extends Component {
 
                     <div className="myEvalsInfo" style={{ display: "inline-block" }}>
                         {infoArea}
-                        <div styleName={"header " + edit} className="font18px font16pxUnder800" style={{ color: this.props.primaryColor }}>
-                            {this.state.edit ?
+                        <div
+                            styleName={"header " + edit}
+                            className="font18px font16pxUnder800"
+                            style={{ color: this.props.primaryColor }}
+                        >
+                            {this.state.edit ? (
                                 <textarea
-                                placeholder={"Enter a name"}
-                                value={this.state.name}
-                                onChange={e => this.nameChange(e)}
-                                    />
-                                :
+                                    placeholder={"Enter a name"}
+                                    value={this.state.name}
+                                    onChange={e => this.nameChange(e)}
+                                />
+                            ) : (
                                 <div>{this.state.name}</div>
-                            }
+                            )}
 
-                            <div><img onClick={this.edit} style={{ marginLeft: "8px" }} height={15} src={`/icons/Pencil-White${this.props.png}`} /></div><HoverTip
-                                className="font12px secondary-gray"
-                                style={{ marginTop: "18px", marginLeft: "-6px" }}
-                                text="Edit this evaluation."
-                            />
-                            <div><img onClick={this.updateActive} style={{ marginLeft: "8px" }} height={15} src={`/icons/${eyeImg}${this.props.png}`} /></div><HoverTip
-                                className="font12px secondary-gray"
-                                style={{ marginTop: "18px", marginLeft: "-6px" }}
-                                text="Hide this evaluation on your candidate invite page."
-                            />
+                            <div>
+                                <div>
+                                    <img
+                                        onClick={this.edit}
+                                        style={{ marginLeft: "8px" }}
+                                        height={15}
+                                        src={`/icons/Pencil-White${this.props.png}`}
+                                    />
+                                </div>
+                                <HoverTip
+                                    className="font12px secondary-gray"
+                                    style={{ marginTop: "5px", marginLeft: "14px" }}
+                                    text="Edit this evaluation."
+                                />
+                            </div>
+                            <div>
+                                <div>
+                                    <img
+                                        onClick={this.updateActive}
+                                        style={{ marginLeft: "8px" }}
+                                        height={15}
+                                        src={`/icons/${eyeImg}${this.props.png}`}
+                                    />
+                                </div>
+                                <HoverTip
+                                    className="font12px secondary-gray"
+                                    style={{ marginTop: "5px", marginLeft: "18px" }}
+                                    text="Hide this evaluation on your candidate invite page."
+                                />
+                            </div>
                         </div>
                         <div style={{ opacity: "0.6" }}>
                             {this.props.company} Evaluation{" "}
@@ -241,7 +296,10 @@ class MyEvaluationsAdminPreview extends Component {
                         {clickableArea}
                         {businessButton}
                     </div>
-                    <div className="myEvalsSide" style={{ backgroundColor: this.props.primaryColor }} />
+                    <div
+                        className="myEvalsSide"
+                        style={{ backgroundColor: this.props.primaryColor }}
+                    />
                 </div>
             </div>
         );
