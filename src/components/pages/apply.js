@@ -46,6 +46,10 @@ class Apply extends Component {
     componentWillMount() {
         const { currentUser } = this.props;
         let self = this;
+
+        if (currentUser && (currentUser.userType === "employee" || currentUser.userType === "candidate")) {
+            goTo("/myEvaluations");
+        }
         // get the company name from the url
         try {
             var company = this.props.params.company;

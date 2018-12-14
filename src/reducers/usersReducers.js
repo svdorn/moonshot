@@ -60,6 +60,20 @@ export function usersReducers(state = initialState, action) {
                 logoutModal: false
             };
             break;
+        case "OPEN_DELETE_EVAL_MODAL":
+            return {
+                ...state,
+                deleteEvalModal: true,
+                deleteEvalName: action.name,
+                deleteEvalId: action.id
+            };
+            break;
+        case "CLOSE_DELETE_EVAL_MODAL":
+            return {
+                ...state,
+                deleteEvalModal: false
+            };
+            break;
         case "OPEN_LOCKED_ACCOUNT_MODAL":
             return {
                 ...state,
@@ -70,6 +84,14 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 lockedAccountModal: false
+            };
+            break;
+        case "SET_DELETED_EVALUATION":
+            return {
+                ...state,
+                deletedPositionIds: Array.isArray(state.deletedPositionIds)
+                    ? state.deletedPositionIds.concat(action.deletedId)
+                    : [action.deletedId]
             };
             break;
         case "OPEN_HIRE_VERIFICATION_MODAL":
@@ -235,6 +257,10 @@ export function usersReducers(state = initialState, action) {
             } else {
                 return { ...state, guestOnboard: onboard };
             }
+            break;
+        }
+        case "UPDATE_POSITIONS": {
+            return { ...state, loadingSomething: false };
             break;
         }
         case "CREATED_NO_VERIFY_EMAIL_SENT": {

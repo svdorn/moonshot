@@ -31,6 +31,7 @@ const {
     emailFooter,
     devMode,
     devEmail,
+    removeDeletedPositions,
 
     moonshotUrl
 } = require("./helperFunctions.js");
@@ -52,6 +53,9 @@ const businessApis = {
     POST_uploadCandidateCSV,
     POST_createBusinessAndUser,
     POST_interests,
+    POST_deleteEvaluation,
+    POST_updateEvaluationActive,
+    POST_updateEvaluationName,
     GET_candidateSearch,
     GET_business,
     GET_employeeSearch,
@@ -2140,7 +2144,190 @@ async function POST_addEvaluation(req, res) {
         return res.status(500).send("Error adding position. Contact support or try again.");
     }
 
-    return res.json(business.positions);
+    let positions = removeDeletedPositions(business.positions);
+
+    return res.json(positions);
+}
+
+// delete an evaluation from the business on request
+async function POST_deleteEvaluation(req, res) {
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
+
+    try {
+        var business = await verifyAccountAdminAndReturnBusiness(
+            userId,
+            verificationToken,
+            businessId
+        );
+    } catch (verifyAccountAdminError) {
+        console.log("Error verifying business account admin: ", verifyAccountAdminError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    const positionIndex = business.positions.findIndex(currPosition => {
+        return currPosition._id.toString() === positionId.toString();
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    const position = business.positions[positionIndex];
+    if (!position) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // set the position to deleted
+    position.deleted = true;
+    position.inactive = true;
+
+    try {
+        await business.save();
+    } catch (saveBizError) {
+        console.log("Error saving business when adding new eval: ", saveBizError);
+        return res.status(500).send("Error adding position. Contact support or try again.");
+    }
+
+    let positions = [];
+    if (Array.isArray(business.positions)) {
+        let positionPromises = business.positions.map(position => {
+            // don't return the position if it has been deleted
+            return addCompletionsAndInProgress(position, businessId);
+        });
+
+        try {
+            positions = await Promise.all(positionPromises);
+        } catch (awaitPositionError) {
+            console.log("Error getting completions and inProgress: ", awaitPositionError);
+            res.status(500).send(errors.SERVER_ERROR);
+        }
+    }
+
+    let livePositions = removeDeletedPositions(positions);
+
+    return res.status(200).send({ deletedId: positionId });
+    // return res.status(200).send({ logo: business.logo, positions: livePositions });
+}
+
+// delete an evaluation from the business on request
+async function POST_updateEvaluationActive(req, res) {
+    const { userId, verificationToken, businessId, positionId } = sanitize(req.body);
+
+    try {
+        var business = await verifyAccountAdminAndReturnBusiness(
+            userId,
+            verificationToken,
+            businessId
+        );
+    } catch (verifyAccountAdminError) {
+        console.log("Error verifying business account admin: ", verifyAccountAdminError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    const positionIndex = business.positions.findIndex(currPosition => {
+        return currPosition._id.toString() === positionId.toString();
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    const position = business.positions[positionIndex];
+    if (!position) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // update the active status of the position
+    if (position.inactive != undefined) {
+        position.inactive = !position.inactive;
+    } else {
+        position.inactive = true;
+    }
+
+    try {
+        await business.save();
+    } catch (saveBizError) {
+        console.log("Error saving business when adding new eval: ", saveBizError);
+        return res.status(500).send("Error adding position. Contact support or try again.");
+    }
+
+    let positions = removeDeletedPositions(business.positions);
+
+    return res.json(positions);
+}
+
+// delete an evaluation from the business on request
+async function POST_updateEvaluationName(req, res) {
+    const { userId, verificationToken, businessId, positionId, positionName } = sanitize(req.body);
+
+    try {
+        var business = await verifyAccountAdminAndReturnBusiness(
+            userId,
+            verificationToken,
+            businessId
+        );
+    } catch (verifyAccountAdminError) {
+        console.log("Error verifying business account admin: ", verifyAccountAdminError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    const positionIndex = business.positions.findIndex(currPosition => {
+        return currPosition._id.toString() === positionId.toString();
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    const position = business.positions[positionIndex];
+    if (!position) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // update the position name for the business
+    position.name = positionName;
+
+    // TODO: update the position name for all candidates and employees who have gone through this position
+
+    let query = {
+        $or: [{ userType: "candidate" }, { userType: "employee" }],
+        positions: {
+            $elemMatch: {
+                businessId: mongoose.Types.ObjectId(businessId),
+                positionId: mongoose.Types.ObjectId(positionId)
+            }
+        }
+    };
+
+    try {
+        var users = await Users.find(query);
+    } catch (error) {
+        console.log("Error saving business when adding new eval: ", error);
+        return res.status(500).send("Error saving position name. Contact support or try again.");
+    }
+
+    if (users) {
+        for (let i = 0; i < users.length; i++) {
+            let user = users[i];
+            if (user.positions && user.positions[0] && user.positions[0].name !== positionName) {
+                // set new position name for user
+                user.positions[0].name = positionName;
+                // save user
+                try {
+                    await user.save();
+                } catch (saveUserError) {
+                    console.log("Error saving user when updating eval name: ", saveUserError);
+                    return res
+                        .status(500)
+                        .send("Error saving position name. Contact support or try again.");
+                }
+            }
+        }
+    }
+
+    try {
+        await business.save();
+    } catch (saveBizError) {
+        console.log("Error saving business when updating eval name: ", saveBizError);
+        return res.status(500).send("Error saving position name. Contact support or try again.");
+    }
+
+    // return success
+    return res.json(true);
 }
 
 // add an evaluation to the business on request
@@ -2385,7 +2572,8 @@ async function GET_business(req, res) {
         return res.status(500).send("Server error.");
     }
 
-    console.log("business, ", business);
+    // remove the deleted positions from the business
+    business.positions = removeDeletedPositions(business.positions);
 
     return res.json(business);
 }
@@ -2460,7 +2648,7 @@ async function GET_employeesAwaitingReview(req, res) {
     }
 
     // count all the users with this position
-    const positionIds = business.positions.map(p => p._id);
+    const positionIds = business.positions.filter(p => !p.deleted).map(p => p._id);
     try {
         var newEmployees = await unReviewedEmployeeCount(business._id, positionIds);
     } catch (countError) {
@@ -2544,7 +2732,7 @@ async function GET_candidatesAwaitingReview(req, res) {
     }
 
     // count all the users with this position
-    const positionIds = business.positions.map(p => p._id);
+    const positionIds = business.positions.filter(p => !p.deleted).map(p => p._id);
     try {
         var newCandidates = await unReviewedCandidateCount(business._id, positionIds);
     } catch (countError) {
@@ -2722,8 +2910,10 @@ async function GET_newCandidateGraphData(req, res) {
 
     console.log("interval: ", interval);
 
-    // count all the users with this position
-    const positionIds = business.positions.map(p => mongoose.Types.ObjectId(p._id));
+    // count all the users with these positions
+    const positionIds = business.positions
+        .filter(p => !p.deleted)
+        .map(p => mongoose.Types.ObjectId(p._id));
     try {
         var counts = await newCandidateCountByDate(
             business._id,
@@ -2762,7 +2952,9 @@ async function GET_evaluationsGraphData(req, res) {
     }
 
     // count all the users with this position
-    const positionIds = business.positions.map(p => mongoose.Types.ObjectId(p._id));
+    const positionIds = business.positions
+        .filter(p => !p.deleted)
+        .map(p => mongoose.Types.ObjectId(p._id));
     // get only completions within wanted time range
     const now = new Date();
     let month = now.getMonth();
@@ -2933,7 +3125,7 @@ async function GET_positions(req, res) {
     const businessId = user.businessInfo.businessId;
     try {
         var business = await Businesses.findById(businessId).select(
-            "logo positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated"
+            "logo positions._id positions.name positions.skillNames positions.timeAllotted positions.length positions.dateCreated positions.inactive positions.deleted"
         );
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
@@ -2947,6 +3139,7 @@ async function GET_positions(req, res) {
     let positions = [];
     if (Array.isArray(business.positions)) {
         let positionPromises = business.positions.map(position => {
+            // don't return the position if it has been deleted
             return addCompletionsAndInProgress(position, businessId);
         });
 
@@ -2958,7 +3151,9 @@ async function GET_positions(req, res) {
         }
     }
 
-    return res.status(200).send({ logo: business.logo, positions });
+    let livePositions = removeDeletedPositions(positions);
+
+    return res.status(200).send({ logo: business.logo, positions: livePositions });
 }
 
 // get all positions for a business
@@ -2990,7 +3185,7 @@ async function GET_positionsForApply(req, res) {
             ]
         };
         var business = await Businesses.findOne(query).select(
-            "logo name positions positions.name positions.code positions.employeeCode positions.positionType"
+            "logo name positions positions.name positions.code positions.employeeCode positions.positionType positions.inactive positions.deleted"
         );
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
@@ -3020,10 +3215,21 @@ async function GET_positionsForApply(req, res) {
         return res.status(500).send({ message: errors.SERVER_ERROR });
     }
 
+    let positions = [];
+    // get active positions
+    if (Array.isArray(business.positions)) {
+        for (let i = 0; i < business.positions.length; i++) {
+            let position = business.positions[i];
+            if (!position.inactive && !position.deleted) {
+                positions.push(position);
+            }
+        }
+    }
+
     return res.json({
         logo: business.logo,
         businessName: business.name,
-        positions: business.positions,
+        positions,
         admin,
         pageSetUp: verified
     });
