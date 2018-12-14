@@ -3150,15 +3150,17 @@ async function GET_positions(req, res) {
             res.status(500).send(errors.SERVER_ERROR);
         }
     }
+
+    let livePositions = [];
     if (Array.isArray(positions)) {
         for (let i = 0; i < positions.length; i++){
-            if (positions[i].deleted) {
-                positions.splice(i, 1);
+            if (!positions[i].deleted) {
+                livePositions.push(positions[i]);
             }
         }
     }
 
-    return res.status(200).send({ logo: business.logo, positions });
+    return res.status(200).send({ logo: business.logo, positions: livePositions });
 }
 
 // get all positions for a business

@@ -49,8 +49,8 @@ class DeleteEvalModal extends Component {
         axios
             .post("/api/business/deleteEvaluation", credentials)
             .then(res => {
+                console.log("called it")
                 // update the page that it was on to have the deleted position
-                self.props.positionsFound(res.data.positions, null);
                 self.setState({ frame: "Second" });
             })
             .catch(err => {

@@ -350,7 +350,7 @@ class MyEvaluations extends Component {
                 </MetaTags>
 
                 <AddPositionDialog />
-                <DeleteEvalModal positionsFound={this.positionsFound} />
+                <DeleteEvalModal positionsFound={this.positionsFound.bind(this)} />
 
                 <div className="page-line-header">
                     <div />
