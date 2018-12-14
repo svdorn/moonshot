@@ -90,42 +90,12 @@ class MyEvaluations extends Component {
         }
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.deleteEvaluationsPositions) {
-    //         this.deletePosition(nextProps.deleteEvaluationsPositions.positions);
-    //     }
-    // }
-
     // call this after positions are found from back end
     positionsFound(positions, logo) {
         if (Array.isArray(positions) && positions.length > 0) {
             this.setState({ positions, logo });
         } else {
             this.setState({ noPositions: true });
-        }
-    }
-
-    deletePosition(positions) {
-        console.log("positions: ", positions);
-        if (!Array.isArray(positions) || positions.length === 0) {
-            return this.setState({ noPositions: true, positions: [] });
-        } else {
-            let ids = [];
-            for (let i = 0; i < positions.length; i++) {
-                ids.push(positions[i]._id);
-            }
-
-            console.log("ids: ", ids);
-
-            let newPositions = [];
-            for (let i = 0; i < this.state.positions.length; i++) {
-                console.log("id: ", this.state.positions._id);
-                if (ids.includes(this.state.positions[i]._id.toString())) {
-                    console.log("in new positions");
-                    newPositions.push(this.state.positions[i]);
-                }
-            }
-            return this.setState({ positions: newPositions });
         }
     }
 
@@ -273,7 +243,6 @@ class MyEvaluations extends Component {
         if (currentUser && this.state.positions.length !== 0) {
             const userType = currentUser.userType;
             const { deletedPositionIds } = this.props;
-            console.log("deletedPositionIds: ", deletedPositionIds);
 
             evaluations = this.state.positions.map(position => {
                 key++;

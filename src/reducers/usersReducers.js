@@ -87,7 +87,6 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "SET_DELETED_EVALUATION":
-            // action.response
             return {
                 ...state,
                 deletedPositionIds: Array.isArray(state.deletedPositionIds)
