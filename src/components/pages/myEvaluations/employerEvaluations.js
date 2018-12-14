@@ -215,7 +215,7 @@ class MyEvaluations extends Component {
         ];
 
         let evaluations = (
-            <div className="center" style={{ color: "rgba(255,255,255,.8)" }}>
+            <div className="center marginTop20px" style={{ color: "rgba(255,255,255,.8)" }}>
                 Loading evaluations...
             </div>
         );

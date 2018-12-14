@@ -18,7 +18,7 @@ import { bindActionCreators } from "redux";
 import { goTo } from "../../miscFunctions";
 import HoverTip from "../miscComponents/hoverTip";
 import { Button } from "../miscComponents";
-import { openAddUserModal, generalAction, addNotification, updateStore, updateUser, updateEvaluationActive, openDeleteEvalModal } from "../../actions/usersActions";
+import { openAddUserModal, generalAction, addNotification, updateStore, updateUser, updateEvaluationActive, openDeleteEvalModal, updateEvaluationName } from "../../actions/usersActions";
 import axios from "axios";
 
 import "./myEvaluationsAdminPreview.css";
@@ -48,8 +48,9 @@ class MyEvaluationsAdminPreview extends Component {
     }
 
     saveChanges = () => {
+        const { currentUser } = this.props;
         // save the new name to db
-
+        this.props.updateEvaluationName(currentUser._id, currentUser.verificationToken, currentUser.businessInfo.businessId, this.props.id, this.state.name);
         // close edit
         this.setState({ edit: false })
     }
@@ -242,7 +243,8 @@ function mapDispatchToProps(dispatch) {
             updateUser,
             updateEvaluationActive,
             openDeleteEvalModal,
-            updateStore
+            updateStore,
+            updateEvaluationName
         },
         dispatch
     );

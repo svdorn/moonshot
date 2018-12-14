@@ -214,6 +214,7 @@ app.post("/business/createBusinessAndUser", businessApis.POST_createBusinessAndU
 app.post("/business/interests", businessApis.POST_interests);
 app.post("/business/deleteEvaluation", businessApis.POST_deleteEvaluation);
 app.post("/business/updateEvaluationActive", businessApis.POST_updateEvaluationActive);
+app.post("/business/updateEvaluationName", businessApis.POST_updateEvaluationName);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/business", businessApis.GET_business);

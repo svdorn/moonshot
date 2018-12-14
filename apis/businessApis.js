@@ -54,6 +54,7 @@ const businessApis = {
     POST_interests,
     POST_deleteEvaluation,
     POST_updateEvaluationActive,
+    POST_updateEvaluationName,
     GET_candidateSearch,
     GET_business,
     GET_employeeSearch,
@@ -2187,7 +2188,16 @@ async function POST_deleteEvaluation(req, res) {
         return res.status(500).send("Error adding position. Contact support or try again.");
     }
 
-    return res.json(business.positions);
+    let positions = [];
+    if (Array.isArray(business.positions)) {
+        for (let i = 0; i < business.positions.length; i++) {
+            if (!business.positions[i].deleted) {
+                positions.push(business.positions[i]);
+            }
+        }
+    }
+
+    return res.json(positions);
 }
 
 // delete an evaluation from the business on request
@@ -2238,6 +2248,91 @@ async function POST_updateEvaluationActive(req, res) {
     }
 
     return res.json(business.positions);
+}
+
+// delete an evaluation from the business on request
+async function POST_updateEvaluationName(req, res) {
+    const {
+        userId,
+        verificationToken,
+        businessId,
+        positionId,
+        positionName
+    } = sanitize(req.body);
+
+    try {
+        var business = await verifyAccountAdminAndReturnBusiness(
+            userId,
+            verificationToken,
+            businessId
+        );
+    } catch (verifyAccountAdminError) {
+        console.log("Error verifying business account admin: ", verifyAccountAdminError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    const positionIndex = business.positions.findIndex(currPosition => {
+        return currPosition._id.toString() === positionId.toString();
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+    const position = business.positions[positionIndex];
+    if (!position) {
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // update the position name for the business
+    position.name = positionName;
+
+    // TODO: update the position name for all candidates and employees who have gone through this position
+
+    let query = {
+        $or: [
+            { userType: "candidate" },
+            { userType: "employee" }
+        ],
+        positions: {
+            $elemMatch: {
+                businessId: mongoose.Types.ObjectId(businessId),
+                positionId: mongoose.Types.ObjectId(positionId)
+            }
+        }
+    };
+
+    try {
+        var users = await Users.find(query);
+    } catch (error) {
+        console.log("Error saving business when adding new eval: ", error);
+        return res.status(500).send("Error saving position name. Contact support or try again.");
+    }
+
+    if (users) {
+        for (let i = 0; i < users.length; i++) {
+            let user = users[i];
+            if (user.positions && user.positions[0] && user.positions[0].name !== positionName) {
+                // set new position name for user
+                user.positions[0].name = positionName;
+                // save user
+                try {
+                    await user.save();
+                } catch (saveUserError) {
+                    console.log("Error saving user when updating eval name: ", saveUserError);
+                    return res.status(500).send("Error saving position name. Contact support or try again.");
+                }
+            }
+        }
+    }
+
+    try {
+        await business.save();
+    } catch (saveBizError) {
+        console.log("Error saving business when updating eval name: ", saveBizError);
+        return res.status(500).send("Error saving position name. Contact support or try again.");
+    }
+
+    // return success
+    return res.json(true);
 }
 
 // add an evaluation to the business on request

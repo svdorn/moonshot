@@ -359,7 +359,25 @@ export function updateEvaluationActive(userId, verificationToken, businessId, po
         axios
             .post("/api/business/updateEvaluationActive", { userId, verificationToken, businessId, positionId })
             .then(function(response) {
-                dispatch({type: "UPDATE_POSITIONS", payload: response.data});
+                dispatch({type: "STOP_LOADING"});
+            })
+            .catch(function(err) {
+                dispatch({
+                    type: "POST_BUSINESS_INTERESTS_REJECTED",
+                    ...notification(err, "error")
+                });
+            });
+    };
+}
+
+export function updateEvaluationName(userId, verificationToken, businessId, positionId, positionName) {
+    return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
+        axios
+            .post("/api/business/updateEvaluationName", { userId, verificationToken, businessId, positionId, positionName })
+            .then(function(response) {
+                dispatch({type: "STOP_LOADING"});
             })
             .catch(function(err) {
                 dispatch({
