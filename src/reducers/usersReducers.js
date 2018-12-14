@@ -91,7 +91,7 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 deletedPositionIds: Array.isArray(state.deletedPositionIds)
-                    ? Array.concat(state.deletedPositionIds, action.deletedId)
+                    ? state.deletedPositionIds.concat(action.deletedId)
                     : [action.deletedId]
             };
             break;
