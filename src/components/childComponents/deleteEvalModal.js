@@ -5,7 +5,8 @@ import { bindActionCreators } from "redux";
 import {
     addNotification,
     generalAction,
-    updateStore
+    updateStore,
+    setDeletedEvaluation
 } from "../../actions/usersActions";
 import { Button } from "../miscComponents";
 import Dialog from "@material-ui/core/Dialog";
@@ -49,7 +50,7 @@ class DeleteEvalModal extends Component {
         axios
             .post("/api/business/deleteEvaluation", credentials)
             .then(res => {
-                console.log("called it")
+                self.props.setDeletedEvaluation(res.data.positions);
                 // update the page that it was on to have the deleted position
                 self.setState({ frame: "Second" });
             })
@@ -128,7 +129,8 @@ function mapDispatchToProps(dispatch) {
         {
             addNotification,
             generalAction,
-            updateStore
+            updateStore,
+            setDeletedEvaluation
         },
         dispatch
     );

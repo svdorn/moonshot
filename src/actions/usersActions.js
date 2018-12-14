@@ -387,6 +387,11 @@ export function updateEvaluationName(userId, verificationToken, businessId, posi
             });
     };
 }
+export function setDeletedEvaluation(positions) {
+    return function(dispatch) {
+        dispatch({ type: "SET_DELETED_EVALUATION", positions });
+    };
+}
 
 // update user object in redux store
 export function updateUser(user) {
