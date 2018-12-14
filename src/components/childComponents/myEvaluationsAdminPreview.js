@@ -217,7 +217,8 @@ class MyEvaluationsAdminPreview extends Component {
         }
 
         const edit = this.state.edit ? "edit" : "";
-        const eyeImg = !this.state.inactive ? "Show" : "Hide";
+        const { inactive } = this.state;
+        const eyeImg = !inactive ? "Show" : "Hide";
 
         return (
             <div style={style} className={className}>
@@ -278,7 +279,9 @@ class MyEvaluationsAdminPreview extends Component {
                                 <HoverTip
                                     className="font12px secondary-gray"
                                     style={{ marginTop: "5px", marginLeft: "18px" }}
-                                    text="Hide this evaluation on your candidate invite page."
+                                    text={`Candidates can ${
+                                        inactive ? "NOT " : ""
+                                    }currently apply for this position.`}
                                 />
                             </div>
                         </div>
