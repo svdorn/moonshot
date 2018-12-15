@@ -115,7 +115,7 @@ class CognitiveTest extends Component {
                     styleName="evalCSS.eval-portion-intro"
                     className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
                 >
-                    <div className="font24px">
+                    <div className="font24px" styleName="evalCSS.intro-header">
                         <span style={{ color: this.props.primaryColor }}>Instructions</span>
                     </div>
                     <div>
@@ -172,7 +172,7 @@ class CognitiveTest extends Component {
                     styleName="evalCSS.eval-portion-intro"
                     className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
                 >
-                    <div className="font24px">
+                    <div className="font24px" styleName="evalCSS.intro-header">
                         <span style={{ color: this.props.primaryColor }}>Pattern Recognition</span>
                     </div>
                     <div>
@@ -295,14 +295,23 @@ class CognitiveTest extends Component {
 
             const imgSrc = option.src + this.state.imgColor + this.props.png;
 
-            const color = this.state.outOfTime || this.props.loading ? darken(primaryColor, 60) : primaryColor;
+            const color =
+                this.state.outOfTime || this.props.loading
+                    ? darken(primaryColor, 60)
+                    : primaryColor;
 
             return (
                 <div
                     key={option.src}
-                    onClick={this.state.outOfTime || this.props.loading ? null : () => self.selectAnswer(option._id)}
+                    onClick={
+                        this.state.outOfTime || this.props.loading
+                            ? null
+                            : () => self.selectAnswer(option._id)
+                    }
                     styleName={"gca.multiple-choice-answer"}
-                    style={this.state.outOfTime || this.props.loading ? { cursor: "not-allowed" } : {}}
+                    style={
+                        this.state.outOfTime || this.props.loading ? { cursor: "not-allowed" } : {}
+                    }
                 >
                     <div styleName={"gca.multiple-choice-circle"} style={{ background: color }}>
                         <div
@@ -336,33 +345,34 @@ class CognitiveTest extends Component {
 
         return (
             <div className="font16px font14pxUnder600 font12pxUnder450">
-
-                    <div>
-                        {this.state.outOfTime ? (
-                            <div styleName="gca.error-red">
-                                Out of time - please advance to the next question.
-                            </div>
-                        ) : (
-                            <div>0:{timer}</div>
-                        )}
-                        <div className="marginBottom40px">
-                            <img styleName="gca.rpmImg" src={rpmSrc} />
+                <div>
+                    {this.state.outOfTime ? (
+                        <div styleName="gca.error-red">
+                            Out of time - please advance to the next question.
                         </div>
-                        <div className="center" style={{ maxWidth: "1000px", margin: "auto" }}>
-                            {answers}
-                        </div>
-                        {this.state.loading ?
-                            <div style={{ margin: "30px 0 50px" }}><CircularProgress color="primary" /></div>
-                            :
-                            <Button
-                                disabled={!canContinue}
-                                onClick={this.nextQuestion}
-                                style={{ margin: "30px 0 50px" }}
-                            >
-                                Next
-                            </Button>
-                        }
+                    ) : (
+                        <div>0:{timer}</div>
+                    )}
+                    <div className="marginBottom30px">
+                        <img styleName="gca.rpmImg" src={rpmSrc} />
                     </div>
+                    <div className="center" style={{ maxWidth: "1000px", margin: "auto" }}>
+                        {answers}
+                    </div>
+                    {this.state.loading ? (
+                        <div style={{ margin: "20px 0 50px" }}>
+                            <CircularProgress color="primary" />
+                        </div>
+                    ) : (
+                        <Button
+                            disabled={!canContinue}
+                            onClick={this.nextQuestion}
+                            style={{ margin: "20px 0 50px" }}
+                        >
+                            Next
+                        </Button>
+                    )}
+                </div>
             </div>
         );
     }

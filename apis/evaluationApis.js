@@ -50,7 +50,8 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
         sliderAnswer,
         selectedId,
         selectedText,
-        dropDownResponses
+        dropDownResponses,
+        skipped
     } = sanitize(req.body);
 
     try {
@@ -85,7 +86,8 @@ module.exports.POST_answerAdminQuestion = async function(req, res) {
             sliderAnswer,
             selectedId,
             selectedText,
-            dropDownResponses
+            dropDownResponses,
+            skipped
         };
         // add the response to the array of answered questions
         user.adminQuestions.questions.push(newAnswer);
@@ -1789,9 +1791,6 @@ async function getEvaluationState(options) {
 
         // add all the info about the current state of
         try {
-            /* ADMIN QUESTIONS - ALL EVALS */
-            evaluationState = await addAdminQuestionsInfo(user, evaluationState);
-
             /* PSYCH - ALL EVALS*/
             evaluationState = await addPsychInfo(user, evaluationState);
 
@@ -1800,6 +1799,9 @@ async function getEvaluationState(options) {
 
             /* SKILLS - SOME EVALS */
             evaluationState = await addSkillInfo(user, evaluationState, position);
+
+            /* ADMIN QUESTIONS - ALL EVALS */
+            evaluationState = await addAdminQuestionsInfo(user, evaluationState);
         } catch (getStateError) {
             reject(getStateError);
         }
@@ -2190,16 +2192,28 @@ async function addAdminQuestionsInfo(user, evaluationState) {
         const started = typeof adminQs === "object" && adminQs.startDate;
         const finished = started && adminQs.endDate;
 
+        // if the user has finished the admin questions, add it to the finished pile
+        if (finished) {
+            evaluationState.completedSteps.push({ stage: "Admin Questions" });
+        }
+
+        // if there is already a current component, throw admin questions in the incomplete pile
+        else if (evaluationState.component) {
+            evaluationState.incompleteSteps.push({ stage: "Psychometrics" });
+        }
+
+        /* ADMIN QUESTIONS WILL BE CURRENT COMPONENT */
+
         // if user has not started OR for some reason don't have a current question and aren't done
-        if (!started || (!finished && !adminQs.currentQuestion)) {
+        else if (!started || (!finished && !adminQs.currentQuestion)) {
             // user is on admin question stage but needs to be shown instructions
             evaluationState.component = "Admin Questions";
             evaluationState.showIntro = true;
             evaluationState.stepProgress = 0;
         }
 
-        // if user has not finished admin questions
-        else if (!finished) {
+        // user has not finished admin questions
+        else {
             // mark Admin Questions as what the user is currently doing
             evaluationState.component = "Admin Questions";
 
@@ -2222,11 +2236,6 @@ async function addAdminQuestionsInfo(user, evaluationState) {
             evaluationState.componentInfo = question;
             // add the current progress
             evaluationState.stepProgress = (adminQs.questions.length / totalAdminQuestions) * 100;
-        }
-
-        // if user has finished admin questions, add it as a finished stage
-        else {
-            evaluationState.completedSteps.push({ stage: "Admin Questions" });
         }
 
         resolve(evaluationState);

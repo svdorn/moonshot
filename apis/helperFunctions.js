@@ -213,6 +213,15 @@ function frontEndUser(dbUser, fieldsToInclude) {
                         };
                     }
                     break;
+                // only return the business id and position id for positions
+                case "positions": {
+                    newUser.positions = Array.isArray(userProperties.positions)
+                        ? userProperties.positions.map(p => ({
+                              businessId: p.businessId,
+                              positionId: p.positionId
+                          }))
+                        : undefined;
+                }
                 default:
                     // by default just include the field
                     newUser[field] = userProperties[field];
@@ -1120,6 +1129,12 @@ function truthy(thing) {
     return !!thing;
 }
 
+// remove from an array any position that has been marked as deleted
+function removeDeletedPositions(positions) {
+    if (!Array.isArray(positions)) return positions;
+    return positions.filter(p => !p.deleted);
+}
+
 // check if a child property exists on an object, and optionally checks if the
 // EX: if we have an object named user like this:
 // { info: { name: "Austin" } }
@@ -1304,6 +1319,7 @@ const helperFunctions = {
     newObjectFromProps,
     getBillingEndDate,
     addSubscription,
+    removeDeletedPositions,
     makePossessive,
     makeSingular,
     getFormattedDate,

@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const adminQuestionSchema = mongoose.Schema({
     // of the question the user answered
     questionId: mongoose.Schema.Types.ObjectId,
+    // if the question was skipped
+    skipped: Boolean,
     // only applies to slider questions
     sliderAnswer: Number,
     // only apply to multiple choice questions - the id of the answer chosen

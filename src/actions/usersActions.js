@@ -173,6 +173,12 @@ export function closeAddUserModal() {
     };
 }
 
+export function openDeleteEvalModal(name, id) {
+    return function(dispatch) {
+        dispatch({ type: "OPEN_DELETE_EVAL_MODAL", name, id });
+    };
+}
+
 export function openContactUsModal() {
     return function(dispatch) {
         dispatch({ type: "OPEN_CONTACT_US_MODAL" });
@@ -343,6 +349,64 @@ export function postBusinessInterests(userId, verificationToken, businessId, int
                     ...notification(err, "error")
                 });
             });
+    };
+}
+
+export function updateEvaluationActive(userId, verificationToken, businessId, positionId) {
+    return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
+        axios
+            .post("/api/business/updateEvaluationActive", {
+                userId,
+                verificationToken,
+                businessId,
+                positionId
+            })
+            .then(function(response) {
+                dispatch({ type: "STOP_LOADING" });
+            })
+            .catch(function(err) {
+                dispatch({
+                    type: "POST_BUSINESS_INTERESTS_REJECTED",
+                    ...notification(err, "error")
+                });
+            });
+    };
+}
+
+export function updateEvaluationName(
+    userId,
+    verificationToken,
+    businessId,
+    positionId,
+    positionName
+) {
+    return function(dispatch) {
+        dispatch({ type: "START_LOADING" });
+
+        axios
+            .post("/api/business/updateEvaluationName", {
+                userId,
+                verificationToken,
+                businessId,
+                positionId,
+                positionName
+            })
+            .then(function(response) {
+                dispatch({ type: "STOP_LOADING" });
+            })
+            .catch(function(err) {
+                dispatch({
+                    type: "POST_BUSINESS_INTERESTS_REJECTED",
+                    ...notification(err, "error")
+                });
+            });
+    };
+}
+export function setDeletedEvaluation(deletedId) {
+    return function(dispatch) {
+        dispatch({ type: "SET_DELETED_EVALUATION", deletedId });
     };
 }
 
@@ -540,15 +604,9 @@ export function getColorsFromBusiness(name) {
 export function setDefaultColors() {
     return function(dispatch) {
         dispatch(
-            updateColors(
-                MOONSHOT_CYAN,
-                MOONSHOT_BLACK,
-                MOONSHOT_LOGO,
-                MOONSHOT_WHITE,
-                undefined
-            )
+            updateColors(MOONSHOT_CYAN, MOONSHOT_BLACK, MOONSHOT_LOGO, MOONSHOT_WHITE, undefined)
         );
-    }
+    };
 }
 
 export function setupBillingCustomer(source, email, userId, verificationToken, subscriptionTerm) {
@@ -875,7 +933,11 @@ export function postUser(user) {
                     user: response.data.user,
                     fullAccess: response.data.fullAccess
                 });
-                if (response.data && response.data.user && response.data.user.userType === "accountAdmin") {
+                if (
+                    response.data &&
+                    response.data.user &&
+                    response.data.user.userType === "accountAdmin"
+                ) {
                     goTo("/dashboard");
                 } else {
                     goTo("/myEvaluations");

@@ -58,12 +58,70 @@ class AdminQuestions extends Component {
         this.setState({ sliderValue });
     };
 
+    skipQuestion = () => {
+        const question = this.props.questionInfo;
+        // can't submit if there is no question
+        if (!question) return;
+
+        // args that will be sent with POST method
+        let apiArgs = { ...this.props.credentials };
+        apiArgs.skipped = true;
+
+        // // don't submit if no answer is provided
+        // switch (question.questionType) {
+        //     case "multipleChoice": {
+        //         // if no value chosen, can't submit
+        //         if (this.state.selectedId === undefined) {
+        //             return;
+        //         }
+        //         // add values to save to backend
+        //         apiArgs.selectedId = this.state.selectedId;
+        //         // take the input value if Other selected
+        //         apiArgs.selectedText = this.state.otherInputSelected
+        //             ? this.state.otherInput
+        //             : this.state.selectedText;
+        //         break;
+        //     }
+        //     case "dropDown": {
+        //         // if no value is selected in the first drop down, can't submit
+        //         if (!this.state.dropDownSelected[0]) {
+        //             return;
+        //         }
+        //         apiArgs.dropDownResponses = this.state.dropDownSelected;
+        //     }
+        //     // sliders can't have an invalid value
+        //     case "slider": {
+        //         apiArgs.sliderValue = this.state.sliderValue;
+        //         break;
+        //     }
+        //     // if you get here, something has gone terribly wrong
+        //     default: {
+        //         return this.props.addNotification(
+        //             "Whoops, something went wrong. Try refreshing.",
+        //             "errorHeader"
+        //         );
+        //     }
+        // }
+
+        // send answer to the backend
+        this.props.answerEvaluationQuestion("Admin", apiArgs);
+
+        const newState = {
+            ...this.state,
+            selectedId: undefined,
+            selectedText: undefined,
+            sliderValue: 1,
+            otherInput: "",
+            dropDownSelected: []
+        };
+
+        this.setState(newState);
+    };
+
     nextQuestion = () => {
         const question = this.props.questionInfo;
         // can't submit if there is no question
-        if (!question) {
-            return;
-        }
+        if (!question) return;
 
         // args that will be sent with POST method
         let apiArgs = { ...this.props.credentials };
@@ -153,11 +211,16 @@ class AdminQuestions extends Component {
                     </div>
                 </div>
                 {this.props.loading ? (
-                    <CircularProgress color="primary" />
+                    <CircularProgress />
                 ) : (
-                    <Button style={{ margin: "20px auto 50px" }} onClick={this.nextQuestion}>
-                        Next
-                    </Button>
+                    <div style={{ margin: "20px auto 50px" }}>
+                        <Button style={{ margin: "0 10px" }} onClick={this.skipQuestion}>
+                            Skip
+                        </Button>
+                        <Button style={{ margin: "0 10px" }} onClick={this.nextQuestion}>
+                            Next
+                        </Button>
+                    </div>
                 )}
             </div>
         );
@@ -221,13 +284,18 @@ class AdminQuestions extends Component {
                 {this.props.loading ? (
                     <CircularProgress color="primary" />
                 ) : (
-                    <Button
-                        style={{ marginBottom: "50px" }}
-                        disabled={this.state.selectedId === undefined}
-                        onClick={this.nextQuestion}
-                    >
-                        Next
-                    </Button>
+                    <div style={{ marginBottom: "50px" }}>
+                        <Button style={{ margin: "0 10px" }} onClick={this.skipQuestion}>
+                            Skip
+                        </Button>
+                        <Button
+                            disabled={this.state.selectedId === undefined}
+                            onClick={this.nextQuestion}
+                            style={{ margin: "0 10px" }}
+                        >
+                            Next
+                        </Button>
+                    </div>
                 )}
             </div>
         );
@@ -313,13 +381,18 @@ class AdminQuestions extends Component {
                 {this.props.loading ? (
                     <CircularProgress color="primary" />
                 ) : (
-                    <Button
-                        style={{ marginBottom: "50px" }}
-                        disabled={disabled}
-                        onClick={this.nextQuestion}
-                    >
-                        Next
-                    </Button>
+                    <div style={{ marginBottom: "50px" }}>
+                        <Button style={{ margin: "0 10px" }} onClick={this.skipQuestion}>
+                            Skip
+                        </Button>
+                        <Button
+                            style={{ margin: "0 10px" }}
+                            disabled={disabled}
+                            onClick={this.nextQuestion}
+                        >
+                            Next
+                        </Button>
+                    </div>
                 )}
             </div>
         );
@@ -345,25 +418,21 @@ class AdminQuestions extends Component {
             <div className="center" styleName="eval-portion-intro">
                 <div />
                 <div>
-                    <div className="font24px">
-                        <span style={{ color: this.props.primaryColor }}>Administrative Questions</span>
+                    <div className="font24px" styleName="intro-header">
+                        <span style={{ color: this.props.primaryColor }}>
+                            Administrative Questions
+                        </span>
                     </div>
                     <p>
-                        The following is a series of questions administered by Moonshot Insights to
-                        collect pertinent information for regulatory purposes. Your answers will
-                        only be used for government reporting purposes and will only be presented in
-                        de-identified form to maintain confidentiality. Answers you provide will not
-                        affect your candidacy or employment status.
+                        The following is a series of completely optional questions administered by
+                        Moonshot Insights. These questions are not a part of your application and
+                        are not administered by the company you are applying for. The answers are
+                        only collected for regulatory purposes; any data collected will be
+                        de-identified to maintain your privacy.
                     </p>
                     <p>
-                        The following questions are not part of your application or administered by
-                        the employer you are applying to work for. You can voluntarily answer the
-                        questions and refusal to provide them will not subject you to any adverse
-                        treatment.
-                    </p>
-                    <p>
-                        Once again, your answers are collected for government reporting purposes
-                        only and you can choose not to answer any or all of the questions.
+                        Feel free to skip any of all of these questions. Your answers will not
+                        affect your candidacy in any way.
                     </p>
                 </div>
                 <br />
@@ -409,7 +478,7 @@ class AdminQuestions extends Component {
 
         // if the question has not been loaded yet
         else if (!question) {
-            return <CircularProgress color="primary" />;
+            return <CircularProgress />;
         } else {
             switch (question.questionType) {
                 case "slider": {

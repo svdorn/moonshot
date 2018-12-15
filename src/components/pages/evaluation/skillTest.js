@@ -117,13 +117,14 @@ class SkillTest extends Component {
                 styleName="eval-portion-intro"
                 className="skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450"
             >
-                <div className="font24px">
+                <div className="font24px" styleName="intro-header">
                     <span style={{ color: this.props.primaryColor }}>Programming Quiz</span>
                 </div>
                 <div>
                     <p>
-                        This is the programming quiz portion of the evaluation. Here you will be tested on
-                        your aptitude in programming by answering short multiple choice questions.
+                        This is the programming quiz portion of the evaluation. Here you will be
+                        tested on your aptitude in programming by answering short multiple choice
+                        questions.
                     </p>
                     <p>
                         <span style={{ color: this.props.primaryColor }}>TIME IS A FACTOR.</span>{" "}
@@ -135,9 +136,7 @@ class SkillTest extends Component {
                         tab, go to another tab, or leave this window. Each time you do, your overall
                         score will decrease.
                     </p>
-                    <p>
-                        The test should take no more than 10 minutes.
-                    </p>
+                    <p>The test should take no more than 10 minutes.</p>
                 </div>
                 <br />
                 <div>

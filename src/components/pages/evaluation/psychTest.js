@@ -69,7 +69,7 @@ class PsychAnalysis extends Component {
         return (
             <div styleName="eval-portion-intro" className="center">
                 <div>
-                    <div className="font24px">
+                    <div className="font24px" styleName="intro-header">
                         <span style={{ color: this.props.primaryColor }}>Personality Test</span>
                     </div>
                     <p>
@@ -77,8 +77,8 @@ class PsychAnalysis extends Component {
                         personality test.
                     </p>
                     <p>
-                        You{"'"}ll be given two choices per question. Drag the slider according to the
-                        degree that you agree with a given choice.
+                        You{"'"}ll be given two choices per question. Drag the slider according to
+                        the degree that you agree with a given choice.
                     </p>
                     <p>
                         <span style={{ color: this.props.primaryColor }}>{"DON'T OVERTHINK."}</span>

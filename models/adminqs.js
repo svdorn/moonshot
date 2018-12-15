@@ -1,5 +1,5 @@
-"use strict"
-var mongoose = require('mongoose');
+"use strict";
+var mongoose = require("mongoose");
 
 // option that only applies to drop down questions
 let DropDownOption = mongoose.Schema({
@@ -14,14 +14,14 @@ let DropDown = mongoose.Schema({
     // the thing we're asking the user to pick a dropdown for (e.g. "Country")
     title: String,
     // the options to pick from
-    options: [ DropDownOption ]
+    options: [DropDownOption]
 });
 
 // make options recursive
 DropDownOption.add({
     // if more specific info is needed (e.g. "State/Province")
     subDropDown: DropDown
-})
+});
 
 var adminqsSchema = mongoose.Schema({
     // can be multipleChoice or slider or multipleChoiceAndCustom or originCountry
@@ -34,19 +34,21 @@ var adminqsSchema = mongoose.Schema({
     sliderMax: Number,
     // only applies to multiple choice questions - answer value options
     // needs to be an object array so the objects will have ids
-    options: [{
-        // the text of the option
-        body: String,
-        // whether a text box should be included that can be typed into
-        includeInputArea: Boolean,
-        // the id of the question - the user stores this when they answer a question
-        _id: mongoose.Schema.ObjectId
-    }],
+    options: [
+        {
+            // the text of the option
+            body: String,
+            // whether a text box should be included that can be typed into
+            includeInputArea: Boolean,
+            // the id of the question - the user stores this when they answer a question
+            _id: mongoose.Schema.ObjectId
+        }
+    ],
     // the drop down options to include - only applies to dropdown questions
     dropDown: DropDown,
     // which candidate types have to answer this question
-    requiredFor: [ String ]
+    requiredFor: [String]
 });
 
-const Adminqs = mongoose.model('Adminqs', adminqsSchema);
+const Adminqs = mongoose.model("Adminqs", adminqsSchema);
 module.exports = Adminqs;

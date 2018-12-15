@@ -1,0 +1,26 @@
+.header > textarea {
+    display: inline-block;
+    line-height: 6px;
+    padding-top: 8px;
+    color: var(--primary-cyan);
+    background-color: var(--black-deep-dark);
+    resize: none;
+}
+
+.header > div {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.header > div > img {
+    display: inline-block;
+    height: 15px;
+}
+
+.header.edit > div > div > img {
+    margin-top: -12px;
+}
+
+.blurClickableArea {
+    filter: blur(3px);
+}
