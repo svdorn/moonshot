@@ -1,0 +1,11 @@
+.container {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.card-element {
+    max-width: 500px;
+    width: 90%;
+    display: inline-block;
+}

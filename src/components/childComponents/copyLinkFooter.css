@@ -1,0 +1,80 @@
+.footer-container {
+    width: calc(100% - var(--admin-menu-width));
+    height: 85px;
+    bottom: 0;
+    position: fixed;
+    background: var(--primary-black-light);
+    vertical-align: top;
+    text-align: center;
+    display: initial;
+    z-index: 100;
+    -webkit-box-shadow: 0 0 3px 0px #212121;
+       -moz-box-shadow: 0 0 3px 0px #212121;
+            box-shadow: 0 0 3px 0px #212121;
+    -webkit-animation: fadein .2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein .2s; /* Firefox < 16 */
+        -ms-animation: fadein .2s; /* Internet Explorer */
+         -o-animation: fadein .2s; /* Opera < 12.1 */
+            animation: fadein .2s;
+}
+.footer-container.absolute {
+    position: absolute;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    align-items: center;
+    width: 100%;
+    padding: 0 10%;
+}
+.astrobot-img {
+    height: 50px;
+}
+.buttons {
+    display: inline-block;
+    vertical-align: top;
+}
+.button {
+    font-size: 16px;
+}
+.invite-template {
+    font-size: 12px;
+}
+
+.text {
+    vertical-align: top;
+    display: inline-block;
+    text-align: left;
+}
+.desktop-text {
+    display: block;
+}
+
+@media only screen and (min-width: 1201px) {
+    .non-big-desktop { display: none; }
+}
+
+@media only screen and (max-width: 1200px) {
+    .big-desktop { display: none; }
+}
+
+@media only screen and (max-width: 1000px) {
+    .footer { padding: 0 15% 0 10%; }
+}
+
+@media only screen and (max-width: 900px) {
+    .desktop-text { font-size: 14px; }
+    .button { font-size: 14px; }
+    .invite-template { display: none; }
+    .footer { padding: 0 15% 0 5%; }
+}
+
+@media only screen and (max-width: 800px) {
+    .astrobot-img { display: none; }
+}
+
+@media only screen and (max-width: 700px) {
+    .footer-container { display: none }
+}

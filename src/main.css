@@ -1,0 +1,12 @@
+.admin-content {
+    width: calc(100% - 140px);
+    margin-left: 140px;
+    display: inline-block;
+}
+
+@media screen and (max-width: 1000px) {
+    .admin-content {
+        width: 100%;
+        margin-left: 0;
+    }
+}

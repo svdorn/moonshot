@@ -1,124 +1,96 @@
-"use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {postUser, onSignUpPage, closeNotification, addNotification} from '../../actions/usersActions';
-import {TextField, CircularProgress, FlatButton, Dialog, RaisedButton} from 'material-ui';
-import {Field, reduxForm} from 'redux-form';
-import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import {browserHistory} from 'react-router';
-import TermsOfUse from '../policies/termsOfUse';
-import PrivacyPolicy from '../policies/privacyPolicy';
-import MetaTags from 'react-meta-tags';
-
-const style = {
-    // the hint that shows up when search bar is in focus
-    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
-    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
-
-    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
-    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
-    searchUnderlineFocusStyle: { color: "green" }
-};
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        inputStyle={style.searchInputStyle}
-        hintStyle={style.searchHintStyle}
-        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
-        floatingLabelStyle={style.searchFloatingLabelStyle}
-        underlineFocusStyle = {style.searchUnderlineFocusStyle}
-        {...input}
-        {...custom}
-    />
-);
-
-const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        inputStyle={style.searchInputStyle}
-        hintStyle={style.searchHintStyle}
-        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
-        floatingLabelStyle={style.searchFloatingLabelStyle}
-        underlineFocusStyle = {style.searchUnderlineFocusStyle}
-        {...input}
-        {...custom}
-        type="password"
-    />
-);
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+    postUser,
+    onSignUpPage,
+    closeNotification,
+    addNotification,
+    setUserPosted
+} from "../../actions/usersActions";
+import { TextField, CircularProgress, FlatButton, Dialog, RaisedButton } from "material-ui";
+import { Field, reduxForm } from "redux-form";
+import TextInput from "../userInput/textInput";
+import HomepageTriangles from "../miscComponents/HomepageTriangles";
+import { browserHistory } from "react-router";
+import TermsOfUse from "../policies/termsOfUse";
+import PrivacyPolicy from "../policies/privacyPolicy";
+import MetaTags from "react-meta-tags";
+import { renderTextField, renderPasswordField, isValidEmail, goTo } from "../../miscFunctions";
+import { button } from "../../classes";
+import axios from "axios";
 
 const validate = values => {
     const errors = {};
-    const requiredFields = [
-        'name',
-        'email',
-        'password',
-        'password2'
-    ];
+    const requiredFields = ["name", "email", "password", "password2"];
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'This field is required'
+            errors[field] = "This field is required";
         }
     });
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address';
+    if (values.email && !isValidEmail(values.email)) {
+        errors.email = "Invalid email address";
     }
-    if (values.password && values.password2 && (values.password != values.password2)) {
-        errors.password2 = 'Passwords must match';
+    if (values.password && values.password2 && values.password != values.password2) {
+        errors.password2 = "Passwords must match";
     }
-    return errors
+    return errors;
 };
+
+const inputStyle = { marginBottom: "10px" };
 
 class Signup extends Component {
     constructor(props) {
         super(props);
 
+        this.bound_handleKeyPress = this.handleKeyPress.bind(this);
+
         this.state = {
             email: "",
             agreeingToTerms: false,
             openPP: false,
-            openTOU:false,
-        }
-    }
-
-    componentWillMount() {
-        // shouldn't be able to be on sign up page if logged in
-        if (this.props.currentUser && this.props.currentUser != "no user") {
-            this.goTo("/myEvaluations");
-        }
+            openTOU: false,
+            sendingVerificationEmail: false,
+            contactSupport: false,
+            keepMeLoggedIn: true
+        };
     }
 
     componentDidMount() {
+        // shouldn't be able to be on sign up page if logged in
+        const { currentUser } = this.props;
+        if (currentUser) {
+            if (currentUser.userType === "accountAdmin") {
+                return goTo("/dashboard");
+            } else {
+                return goTo("/myEvaluations");
+            }
+        }
+
         // add listener for keyboard enter key
-        const self = this;
-        document.addEventListener('keypress', self.handleKeyPress.bind(self));
+        document.addEventListener("keypress", this.bound_handleKeyPress);
 
         this.props.onSignUpPage();
     }
 
-
     componentWillUnmount() {
         // remove listener for keyboard enter key
-        const self = this;
-        document.removeEventListener('keypress', self.handleKeyPress.bind(self));
+        document.removeEventListener("keypress", this.bound_handleKeyPress);
     }
-
 
     handleKeyPress(e) {
         var key = e.which || e.keyCode;
-        if (key === 13) { // 13 is enter
+        if (key === 13) {
+            // 13 is enter
             this.handleSubmit();
         }
     }
 
-
     handleSubmit(e) {
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
 
         if (!this.state.agreeingToTerms) {
             this.props.addNotification("Must agree to Terms of Use and Privacy Policy.", "error");
@@ -129,12 +101,7 @@ class Signup extends Component {
 
         // Form validation before submit
         let notValid = false;
-        const requiredFields = [
-            'name',
-            'email',
-            'password',
-            'password2'
-        ];
+        const requiredFields = ["name", "email", "password", "password2"];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
                 this.props.touch(field);
@@ -143,7 +110,7 @@ class Signup extends Component {
         });
         if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
 
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
+        if (!isValidEmail(vals.email)) {
             return this.props.addNotification("Invalid email.", "error");
         }
         if (vals.password != vals.password2) {
@@ -156,19 +123,26 @@ class Signup extends Component {
         const name = values.name;
         const password = values.password;
         const email = values.email;
+        const { keepMeLoggedIn } = this.state;
         let user = {
-            name, password, email, signUpReferralCode
+            name,
+            password,
+            email,
+            signUpReferralCode,
+            keepMeLoggedIn
         };
 
         // if the user got here from a link, add those links
         let location = this.props.location;
         if (location.query) {
             user.code = location.query.code;
-            user.userCode = location.query.userCode;
         }
 
-        if (!user || !user.code || !user.userCode) {
-            return this.props.addNotification("Must have a unique employer provided link to sign up.", "error");;
+        if (!user.code) {
+            return this.props.addNotification(
+                "Must have a unique employer-provided link to sign up.",
+                "error"
+            );
         }
 
         this.props.postUser(user);
@@ -176,67 +150,139 @@ class Signup extends Component {
         this.setState({
             ...this.state,
             email
-        })
+        });
     }
-
-    goTo(route) {
-        // closes any notification
-        this.props.closeNotification();
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
 
     handleCheckMarkClick() {
         this.setState({
             ...this.state,
             agreeingToTerms: !this.state.agreeingToTerms
-        })
+        });
+    }
+
+    keepMeLoggedInClick() {
+        this.setState({
+            ...this.state,
+            keepMeLoggedIn: !this.state.keepMeLoggedIn
+        });
     }
 
     handleOpenPP = () => {
-        this.setState({openPP: true});
+        this.setState({ openPP: true });
     };
 
     handleClosePP = () => {
-        this.setState({openPP: false});
+        this.setState({ openPP: false });
     };
     handleOpenTOU = () => {
-        this.setState({openTOU: true});
+        this.setState({ openTOU: true });
     };
 
     handleCloseTOU = () => {
-        this.setState({openTOU: false});
+        this.setState({ openTOU: false });
     };
 
-
-    //name, email, password, confirm password, signup button
-    render() {
+    // create the main content of the page
+    createContent() {
         let urlQuery = {};
         try {
             urlQuery = this.props.location.query;
-        } catch (e) { /* no query */
+        } catch (e) {
+            /* no query */
         }
 
+        return (
+            <div>
+                <form onSubmit={this.handleSubmit.bind(this)}>
+                    <h1 style={{ margin: "15px auto 20px" }}>Sign Up</h1>
+
+                    <TextInput name="name" label="Full Name" style={inputStyle} />
+                    <TextInput name="email" label="Email" style={inputStyle} />
+                    <TextInput
+                        name="password"
+                        label="Password"
+                        type="password"
+                        style={inputStyle}
+                    />
+                    <TextInput
+                        name="password2"
+                        label="Confirm Password"
+                        type="password"
+                        style={inputStyle}
+                    />
+
+                    <div style={{ margin: "20px 20px 0" }}>
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={this.keepMeLoggedInClick.bind(this)}
+                        >
+                            <img
+                                alt=""
+                                className={"checkMark" + this.state.keepMeLoggedIn}
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                            />
+                        </div>
+                        Keep me logged in
+                    </div>
+                    <div style={{ margin: "5px 20px 10px" }}>
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={this.handleCheckMarkClick.bind(this)}
+                        >
+                            <img
+                                alt=""
+                                className={"checkMark" + this.state.agreeingToTerms}
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                            />
+                        </div>
+                        I have read and agree to the Moonshot Insights
+                        <br />
+                        <span className="clickable primary-cyan" onClick={this.handleOpenPP}>
+                            Privacy Policy
+                        </span>
+                        {" and "}
+                        <span className="clickable primary-cyan" onClick={this.handleOpenTOU}>
+                            Terms of Use
+                        </span>.
+                    </div>
+                    <br />
+                    <RaisedButton
+                        label="Sign Up"
+                        type="submit"
+                        className="raisedButtonBusinessHome"
+                        style={{ margin: "-10px 0 10px" }}
+                    />
+                    <br />
+                    <div
+                        className="clickable"
+                        onClick={() => goTo({ pathname: "/login", query: urlQuery })}
+                        style={{ display: "inline-block" }}
+                    >
+                        Already have an account?
+                    </div>
+                </form>
+                {this.props.loadingCreateUser ? (
+                    <CircularProgress color="#72d6f5" style={{ marginTop: "8px" }} />
+                ) : (
+                    ""
+                )}
+            </div>
+        );
+    }
+
+    //name, email, password, confirm password, signup button
+    render() {
+        let content = this.createContent();
+
         const actionsPP = [
-            <FlatButton
-                label="Close"
-                primary={true}
-                onClick={this.handleClosePP}
-            />,
+            <FlatButton label="Close" primary={true} onClick={this.handleClosePP} />
         ];
         const actionsTOU = [
-            <FlatButton
-                label="Close"
-                primary={true}
-                onClick={this.handleCloseTOU}
-            />,
+            <FlatButton label="Close" primary={true} onClick={this.handleCloseTOU} />
         ];
-        let blurredClass = '';
+        let blurredClass = "";
         if (this.state.openTOU || this.state.openPP) {
-            blurredClass = 'dialogForBizOverlay';
+            blurredClass = "dialogForBizOverlay";
         }
 
         // scroll to the top if user posted
@@ -244,15 +290,18 @@ class Signup extends Component {
             window.scroll({
                 top: 0,
                 left: 0,
-                behavior: 'smooth'
+                behavior: "smooth"
             });
         }
 
         return (
-            <div className="fillScreen blackBackground formContainer">
+            <div className="fillScreen formContainer">
                 <MetaTags>
-                    <title>Sign Up | Moonshot</title>
-                    <meta name="description" content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
+                    <title>Sign Up | Moonshot Insights</title>
+                    <meta
+                        name="description"
+                        content="Log in or create account. Moonshot Insights helps candidates and employers find their perfect matches."
+                    />
                 </MetaTags>
                 <div className={blurredClass}>
                     <Dialog
@@ -264,7 +313,7 @@ class Signup extends Component {
                         paperClassName="dialogForSignup"
                         overlayClassName="dialogOverlay"
                     >
-                        <PrivacyPolicy/>
+                        <PrivacyPolicy />
                     </Dialog>
                     <Dialog
                         actions={actionsTOU}
@@ -275,84 +324,14 @@ class Signup extends Component {
                         paperClassName="dialogForSignup"
                         overlayClassName="dialogOverlay"
                     >
-                        <TermsOfUse/>
+                        <TermsOfUse />
                     </Dialog>
-                    <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>
-                    <div className="form lightBlackForm">
-                        {this.state.email != "" && this.props.userPosted ?
-                            <div className="center">
-                                <h1>Verify your email address</h1>
-                                <p>We sent {this.state.email} a verification link. Check your junk folder if you
-                                    can{"'"}t find our email.</p>
-                            </div>
-                            :
-                            <div>
-                                <form onSubmit={this.handleSubmit.bind(this)}>
-                                    <h1 style={{marginTop: "15px"}}>Sign Up</h1>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="name"
-                                            component={renderTextField}
-                                            label="Full Name*"
-                                        /><br/>
-                                    </div>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="email"
-                                            component={renderTextField}
-                                            label="Email*"
-                                        /><br/>
-                                    </div>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="password"
-                                            component={renderPasswordField}
-                                            label="Password*"
-                                        /><br/>
-                                    </div>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="password2"
-                                            component={renderPasswordField}
-                                            label="Confirm Password*"
-                                        /><br/>
-                                    </div>
-
-                                    <div style={{margin: "20px 20px 10px"}}>
-                                        <div className="checkbox smallCheckbox whiteCheckbox"
-                                             onClick={this.handleCheckMarkClick.bind(this)}>
-                                            <img
-                                                alt=""
-                                                className={"checkMark" + this.state.agreeingToTerms}
-                                                src="/icons/CheckMarkRoundedWhite.png"
-                                            />
-                                        </div>
-
-                                        I have read and agree to the Moonshot Insights <bdi className="clickable blueTextHome" onClick={this.handleOpenPP}>Privacy
-                                        Policy</bdi> and <bdi className="clickable blueTextHome" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
-                                    </div>
-                                    <br/>
-                                    <RaisedButton
-                                        label="Sign Up"
-                                        type="submit"
-                                        className="raisedButtonBusinessHome"
-                                        style={{margin: '-10px 0 10px'}}
-                                    />
-                                    <br/>
-                                    <div className="clickable"
-                                         onClick={() => this.goTo({pathname: '/login', query: urlQuery})}
-                                         style={{display: "inline-block"}}>Already have an account?
-                                    </div>
-                                </form>
-                                {this.props.loadingCreateUser ? <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/> : ""}
-                            </div>
-                        }
-                    </div>
+                    {/*<HomepageTriangles className="slightly-blurred" style={{pointerEvents: "none"}} variation="5"/>*/}
+                    <div className="form lightBlackForm">{content}</div>
                 </div>
             </div>
         );
     }
-
 
     /************************ REFERRAL COOKIE FUNCTIONS *******************************/
     //this is the name of the cookie on the users machine
@@ -369,10 +348,10 @@ class Signup extends Component {
 
     readCookie(name) {
         let nameEQ = name + "=";
-        let ca = document.cookie.split(';');
+        let ca = document.cookie.split(";");
         for (var i = 0; i < ca.length; i++) {
             let c = ca[i];
-            while (c.charAt(0) == ' ') {
+            while (c.charAt(0) == " ") {
                 c = c.substring(1, c.length);
             }
             if (c.indexOf(nameEQ) == 0) {
@@ -384,12 +363,16 @@ class Signup extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        postUser,
-        onSignUpPage,
-        addNotification,
-        closeNotification
-    }, dispatch);
+    return bindActionCreators(
+        {
+            postUser,
+            onSignUpPage,
+            addNotification,
+            closeNotification,
+            setUserPosted
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -397,13 +380,18 @@ function mapStateToProps(state) {
         formData: state.form,
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png,
+        sendVerifyEmailTo: state.users.sendVerifyEmailTo
     };
 }
 
 Signup = reduxForm({
-    form: 'signup',
-    validate,
+    form: "signup",
+    validate
 })(Signup);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Signup);
