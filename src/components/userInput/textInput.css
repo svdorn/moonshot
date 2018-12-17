@@ -1,0 +1,29 @@
+.password-toggle-visibility {
+    display: inline-block;
+    position: absolute;
+    top: 22px;
+    cursor: pointer;
+    color: var(--primary-cyan);
+    font-size: 14px;
+}
+
+.outside {
+    left: calc(100% + 2px);
+}
+.inside {
+    right: 0;
+}
+
+@media screen and (max-width: 600px) {
+    .inside,
+    .outside {
+        left: calc(100% + 2px);
+        right: auto;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .password-toggle-visibility {
+        display: none;
+    }
+}

@@ -1,106 +1,192 @@
-'use strict'
-import React from 'react';
-import { render } from 'react-dom';
-//import credentials from '../credentials.js';
+"use strict";
+import React from "react";
+import { render } from "react-dom";
 
 //REACT_ROUTER
-import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory, Redirect } from "react-router";
 
+import Login from "./components/pages/login";
+import Signup from "./components/pages/signup";
+import Introduction from "./components/pages/introduction";
+import MyCandidates from "./components/pages/businessPages/myCandidates";
+import MyEmployees from "./components/pages/businessPages/myEmployees";
+import MyEvaluations from "./components/pages/myEvaluations/myEvaluations";
+import EmployeeResults from "./components/pages/businessPages/employeeResults";
+import Billing from "./components/pages/businessPages/billing";
 
-import Login from './components/pages/login';
-import EmployerLogin from "./components/pages/employerLogin";
-import Signup from './components/pages/signup';
-import MyCandidates from './components/pages/businessPages/myCandidates';
-import MyEmployees from './components/pages/businessPages/myEmployees';
-import MyEvaluations from './components/pages/businessPages/myEvaluations';
-import Results from './components/pages/businessPages/results';
-import EmployeeResults from './components/pages/businessPages/employeeResults';
-import BusinessHome from './components/pages/businessHome';
-import Main from './main';
-import AuthenticatedComponent from './components/AuthenticatedComponent';
-import Settings from './components/pages/settings';
-import VerifyEmail from './components/pages/verifyEmail';
-import ForgotPassword from './components/pages/forgotpassword';
-import ChangePassword from './components/pages/changepasswordforgot';
-import ChangeTempPassword from './components/pages/changeTempPassword';
-import ResumeAnalysis from './components/pages/resumeAnalysis';
-import ContactUs from './components/pages/contactUs';
-import Error404 from './components/pages/error404';
-import Unsubscribe from './components/pages/unsubscribe';
-import ReferralCode from './components/pages/referralCode';
-import Admin from './components/pages/admin';
-import PrivacyPolicy from './components/policies/privacyPolicy';
-import TermsOfUse from './components/policies/termsOfUse';
-import ServiceLevelAgreement from './components/policies/serviceLevelAgreement';
-import AffiliateAgreement from './components/policies/affiliateAgreement';
+import BusinessHome from "./components/pages/businessHome/businessHome";
+import Influencer from "./components/pages/influencer";
+import Main from "./main";
+import AuthenticatedComponent from "./components/authenticatedComponent/authenticatedComponent";
+import Settings from "./components/pages/settings/settings";
+import Ease from "./components/pages/ease";
+import Pricing from "./components/pages/pricing";
+import ApplyContainer from "./components/pages/applyContainer";
+import GeneralApply from "./components/pages/generalApply";
+import Apply from "./components/pages/apply";
+import Employee from "./components/pages/employee";
+import VerifyEmail from "./components/pages/verifyEmail";
+import ForgotPassword from "./components/pages/forgotpassword";
+import ChangePassword from "./components/pages/changepasswordforgot";
+import Error404 from "./components/pages/errors/error404";
+import Unsubscribe from "./components/pages/unsubscribe";
+import Admin from "./components/pages/admin";
+import PrivacyPolicy from "./components/policies/privacyPolicy";
+import TermsOfUse from "./components/policies/termsOfUse";
+import ServiceLevelAgreement from "./components/policies/serviceLevelAgreement";
+import AffiliateAgreement from "./components/policies/affiliateAgreement";
+import Listing from "./components/pages/listing";
 
-import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
+import Dashboard from "./components/pages/dashboard/dashboard";
+import Explore from "./components/pages/dashboard/leadDashboard";
 
-import SkillTest from './components/pages/skillTest/skillTest';
-import AdminQuestions from './components/pages/adminQuestions/adminQuestions';
-import PositionSignup from './components/pages/positionSignup';
-import FreeResponse from "./components/pages/freeResponse";
-import EvaluationIntro from "./components/pages/evaluationIntro";
+// position evaluation - contains all components (psych, gca, admin questions)
+import Evaluation from "./components/pages/evaluation/evaluation";
+import FinishEvaluation from "./components/pages/finishEvaluation";
+import Finished from "./components/pages/finished";
 
-import AdminPages from './components/pages/adminPages/adminPages'
-import ViewUser from './components/pages/adminPages/viewUser';
-import UserResponses from './components/pages/adminPages/userResponses';
-import CreateBusinessAccount from './components/pages/adminPages/createBusinessAccount';
-import EditBusiness from './components/pages/adminPages/editBusiness';
+import AdminPages from "./components/pages/adminPages/adminPages";
+import BusinessEditor from "./components/pages/adminPages/businessEditor";
+import BusinessPicker from "./components/pages/adminPages/businessPicker";
+import SkillEditor from "./components/pages/adminPages/skillEditor";
+import SkillPicker from "./components/pages/adminPages/skillPicker";
+import DataDisplay from "./components/pages/adminPages/dataDisplay/dataDisplay";
+import PsychDataDisplay from "./components/pages/adminPages/dataDisplay/psych";
+import GCADataDisplay from "./components/pages/adminPages/dataDisplay/gca";
 
-import ReactGA from 'react-ga';
-ReactGA.initialize('UA-105560654-1');
+// import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+// const theme = createMuiTheme({
+//     palette: {
+//         primary: {
+//             main: "#FFFFFF"
+//         },
+//         secondary: {
+//             main: "#76defe"
+//         }
+//     }
+// });
+
+import ReactGA from "react-ga";
+ReactGA.initialize("UA-105560654-1");
 
 function fireTracking() {
     ReactGA.pageview(window.location.pathname + window.location.search);
 }
 
-const businessAdminUserTypes = ["accountAdmin"];
-const adminUserTypes = ["admin", "candidate"];
+const accountAdmin = ["accountAdmin"];
 
 const routes = (
     <Router onUpdate={fireTracking} history={browserHistory}>
         <Route path="/" component={Main}>
             <IndexRoute component={BusinessHome} />
-            <Route path='login' component={Login} />
+            <Route path="login" component={Login} />
+            <Route path="employerLogin" component={Login} />
             <Route path="signup" component={Signup} />
-            <Route path='employerLogin' component={EmployerLogin} />
-            <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType={businessAdminUserTypes} />
-            <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessAdminUserTypes} />
-            <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} />
-            <Route path="results/:profileUrl/:positionId" component={AuthenticatedComponent} page={<Results />} userType={businessAdminUserTypes} />
-            <Route path="employeeResults" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
-            <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
+            <Route path="introduction" component={Introduction} />
+            <Route
+                path="myCandidates"
+                component={AuthenticatedComponent}
+                page={<MyCandidates />}
+                userType={accountAdmin}
+            />
+            <Route
+                path="myEmployees"
+                component={AuthenticatedComponent}
+                page={<MyEmployees />}
+                userType={accountAdmin}
+            />
+            <Route
+                path="myEvaluations"
+                component={AuthenticatedComponent}
+                page={<MyEvaluations />}
+            />
+            <Route
+                path="dashboard"
+                component={AuthenticatedComponent}
+                page={<Dashboard />}
+                userType={accountAdmin}
+            />
+            <Route
+                path="explore"
+                component={AuthenticatedComponent}
+                page={<Explore />}
+                userType={"lead"}
+                show403={false}
+                accountAdminRedirect="/dashboard"
+                candidateRedirect="/myEvaluations"
+                employeeRedirect="/myEvaluations"
+            />
+            <Route
+                path="employeeResults/:employeeId/:positionId"
+                component={AuthenticatedComponent}
+                page={<EmployeeResults />}
+                userType={accountAdmin}
+            />
+            <Route
+                path="billing"
+                component={AuthenticatedComponent}
+                page={<Billing />}
+                userType={accountAdmin}
+            />
+            <Route path="pricing" component={Pricing} />
+            <Route path="ease" component={Ease} />
+            <Route path="settings" component={AuthenticatedComponent} page={<Settings />} />
+            <Route path="listing" component={Listing} />
+            <Route path="influencer" component={Influencer} />
             <Route path="verifyEmail" component={VerifyEmail} />
             <Route path="forgotPassword" component={ForgotPassword} />
             <Route path="changePassword" component={ChangePassword} />
-            <Route path="changeTempPassword" component={ChangeTempPassword} />
-            <Route path="contactUs" component={ContactUs} />
-            <Route path="resumeAnalysis" component={ResumeAnalysis} />
             <Route path="unsubscribe" component={Unsubscribe} />
-            <Route path="referral" component={ReferralCode} />
             <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
             <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
             <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
-            <Route path="serviceLevelAgreement" component={ServiceLevelAgreement} standalone={true} />
+            <Route
+                path="serviceLevelAgreement"
+                component={ServiceLevelAgreement}
+                standalone={true}
+            />
 
-            <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
-
-            <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
-            <Route path="adminQuestions" component={AuthenticatedComponent} page={<AdminQuestions/>} />
-            <Route path="positionSignup" component={PositionSignup} />
-            <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
-            <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
-
-            <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} userType={adminUserTypes}>
-                <IndexRoute component={AdminPages} />
-                <Route path="createBusinessAccount" component={CreateBusinessAccount} />
-                <Route path="editBusiness" component={EditBusiness} />
-                <Route path="userResponses" component={UserResponses} />
-                <Route path="viewUser" component={ViewUser} />
+            <Route path="apply" page={<ApplyContainer />}>
+                <IndexRoute component={GeneralApply} />
+                <Route path=":company" component={Apply} />
             </Route>
 
-            <Route path='*' component={Error404} />
+            <Route path="employee" page={<ApplyContainer />}>
+                <IndexRoute component={GeneralApply} />
+                <Route path=":company" component={Employee} />
+            </Route>
+
+            <Route
+                path="evaluation/:businessId/:positionId"
+                component={AuthenticatedComponent}
+                page={<Evaluation />}
+            />
+            <Route
+                path="finishEvaluation"
+                component={AuthenticatedComponent}
+                page={<FinishEvaluation />}
+            />
+            <Route path="finished" component={AuthenticatedComponent} page={<Finished />} />
+
+            <Route
+                path="admin"
+                component={AuthenticatedComponent}
+                page={<Admin />}
+                userType={["admin", "candidate"]}
+            >
+                <IndexRoute component={AdminPages} />
+                <Route path="businessPicker" component={BusinessPicker} />
+                <Route path="businessEditor/:businessId" component={BusinessEditor} />
+                <Route path="skillPicker" component={SkillPicker} />
+                <Route path="skillEditor/:skillId" component={SkillEditor} />
+                <Route path="dataDisplay" component={DataDisplay}>
+                    <IndexRoute component={PsychDataDisplay} />
+                    <Route path="psych" component={PsychDataDisplay} />
+                    <Route path="gca" component={GCADataDisplay} />
+                </Route>
+            </Route>
+
+            <Route path="*" component={Error404} />
         </Route>
     </Router>
 );

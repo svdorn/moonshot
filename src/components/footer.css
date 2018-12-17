@@ -1,0 +1,23 @@
+.social-icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 140px;
+    margin: 10px auto 0;
+}
+
+.social-icons img {
+    vertical-align: top;
+    margin-bottom: 6px;
+}
+
+.footer-moonshot-logo {
+    width: 130px;
+}
+.footer {
+    padding-top: 16px;
+}
+.footer-container {
+    z-index: 1000;
+    position: relative;
+}

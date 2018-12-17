@@ -16,6 +16,13 @@ class PsychBreakdown extends Component {
     }
 
 
+    mouseEnter(title) {
+        if (window.innerWidth > 900) {
+            this.selectTitle(title);
+        }
+    }
+
+
     round(number, decimalPlaces) {
         // get the number version if it's a string
         let rounded = typeof number === "number" ? number : parseInt(number);
@@ -64,8 +71,8 @@ class PsychBreakdown extends Component {
         const middle80indicatorStyle = { background: `linear-gradient(to right, ${leftColor}, ${rightColor})` };
 
         // the numbers that show above the actual data
-        const numbers = [5,4,3,2,1,0,1,2,3,4,5].map(number => {
-            return <div className="number" style={{color:"white"}}>{number}</div>
+        const numbers = [-5,-4,-3,-2,-1,0,1,2,3,4,5].map(number => {
+            return <div className="number font12px" style={{color:"white"}} key={`number${number}`}>{Math.abs(number)}</div>
         })
         const topNumbers = (
             <div className="topNumbers">{numbers}</div>
@@ -122,8 +129,14 @@ class PsychBreakdown extends Component {
                 width: "8px"
             }
             return (
-                <div className="areaData center" style={{cursor: "pointer"}} onMouseEnter={() => this.selectTitle(area.name)} >
-                    <div className="title" onClick={() => this.selectTitle(area.name)}>
+                <div
+                    className="areaData center"
+                    style={{cursor: "pointer"}}
+                    onMouseEnter={() => this.mouseEnter(area.name)}
+                    onClick={() => this.selectTitle(area.name)}
+                    key={area.name}
+                >
+                    <div className="title font12px">
                         {area.name}
                     </div>
                     <div className="middle80indicator" style={{...middle80style, ...middle80indicatorStyle}} />
@@ -139,29 +152,31 @@ class PsychBreakdown extends Component {
         }
 
         const description = !this.state.areaSelected ?
-            <div className="center font14px font12pxUnder500" style={{color:"#d0d0d0"}}>{"Select an area to see its description"}</div>
+            <div className="center font12px" style={{color:"#d0d0d0"}}>{"Select an area to see its description"}</div>
             :
-            <div className="font16px font12pxUnder500">
-                <div className="name font26px center" style={coloredText}>{this.state.areaSelected}</div>
+            <div className="font12px">
+                <div className="name font20px center" style={coloredText}>{this.state.areaSelected}</div>
                 <div className="descriptionParts" style={{color:"#d0d0d0"}}>
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.left}</div>
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.right}</div>
+                    <div>{areaSelectedDescription.left}</div>
+                    <div>{areaSelectedDescription.right}</div>
                 </div>
                 <div className="youMedianMiddle" style={{color:"white", marginBottom: "0px"}}>
                     <div>{forCandidate ? "Your" : "Their"} Score: {this.makeLRversion(selectedArea.score)}</div>
                     <div>Median: {this.makeLRversion(selectedArea.stats.median)}</div>
-                    <div>Middle 80%: {this.makeLRversion(selectedArea.stats.middle80.minimum)} - {this.makeLRversion(selectedArea.stats.middle80.maximum)}</div>
+                    <div>Middle 80%: {this.makeLRversion(selectedArea.stats.middle80.minimum)}&nbsp;-&nbsp;{this.makeLRversion(selectedArea.stats.middle80.maximum)}</div>
                 </div>
             </div>
 
+        const extraClass = this.props.className ? " " + this.props.className : "";
+
         return (
-            <div className="results psychSection blackBackground whiteText">
-                <div className="whiteText center font24px font20pxUnder700 font16pxUnder500 marginBottom30px">
-                    Psychometric Analysis
+            <div className={"results psychSection blackBackground primary-white" + extraClass}>
+                <div className="title primary-white center font24px font20pxUnder700 font16pxUnder500">
+                    Personality Analysis
                 </div>
                 <div className="statsAndDescription" style={coloredText}>
                     <div className="stats lightBlackBackground">
-                        <div className="legend font16px font14pxUnder1100 font12pxUnder500 font10pxUnder400">
+                        <div className="legend font12px">
                             <div className="middle80">
                                 <div
                                     className="middle80indicator"
@@ -170,6 +185,7 @@ class PsychBreakdown extends Component {
                                         ...middle80indicatorStyle
                                     }}
                                 />
+                                <br/>
                                 <div className="description">{"Middle 80%"}</div>
                                 <InfoBubble
                                     iconColor={standardColor}
@@ -177,7 +193,7 @@ class PsychBreakdown extends Component {
                                     infoTextColor={"white"}
                                     bubbleColor={"#252525"}
                                     iconFontClasses={"font10px"}
-                                    bubbleFontClasses={"font14px"}
+                                    bubbleFontClasses={"font12px"}
                                     iconHeight={"12px"}
                                     bubbleText={"80% of people score within these ranges"}
                                     style={{marginLeft: "5px"}}
@@ -187,10 +203,12 @@ class PsychBreakdown extends Component {
                                 <div className="youIndicator" style={{
                                     width: "8px", height: "8px"
                                 }} />
+                                <br/>
                                 <div className="description">{forCandidate ? "You" : "Candidate"}</div>
                             </div>
                             <div className="median">
-                                <div className="medianIndicator" style={{position: "absolute"}} />
+                                <div className="medianIndicator" />
+                                <br/>
                                 <div className="description medianTitle">{"Median Score"}</div>
                             </div>
                         </div>
@@ -218,7 +236,7 @@ const descriptions = {
     },
     Temperament: {
         left: `Those who score further to the left on this scale (L) are the type that would run into a burning building to save someone without hesitation. They thrive in high stress environments, remaining cool, calm and collected. They deal with obstacles on their own, rarely feeling the need to burden others with their problems.`,
-        right: `Those who score further to the right on this scale (R) are very concerned with their overall well being. They are always thinking about the little things, a trait that makes mistakes hard to slip by them. They work best with people at their side and have a deep emotional bond with those people.`,
+        right: `Those who score further to the right on this scale (R) are very concerned with their overall well-being. They are always thinking about the little things, a trait that makes mistakes hard to slip by them. They work best with people at their side and have a deep emotional bond with those people.`,
     },
     Viewpoint: {
         left: `Those who score further to the left (L) are often seen as hard-hearted or callous. But they too understand others’ plights, even if they sometimes choose not to express it. They are able to make the hard decisions that others cannot bring themselves to make.`,
@@ -238,7 +256,7 @@ const descriptions = {
     },
     Belief: {
         left: `Those who score further to the left (L) love to play games. They will do what needs to be done to maintain an edge over others. They are adept at playing people, winning conversations without the other person even realizing they lost. They play chess while others play checkers; they’re the most cunning people.`,
-        right: `Those who score further to the right (R) are often seen as brutally honesty. They will say what needs to be said, even if others don’t want to hear it. They are real will with people and will always follow the rules. They dislike individuals who are fake and those who take advantage of others.`,
+        right: `Those who score further to the right (R) are often seen as brutally honest. They will say what needs to be said, even if others don’t want to hear it. They are real will with people and will always follow the rules. They dislike individuals who are fake and those who take advantage of others.`,
     }
 }
 

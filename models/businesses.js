@@ -1,187 +1,218 @@
-"use strict"
-var mongoose = require('mongoose');
+"use strict";
+const mongoose = require("mongoose");
 
-var businessesSchema = mongoose.Schema({
-    // company name
+const positionSchema = mongoose.Schema({
+    // name of the position (such as "Machine Learning Developer")
     name: String,
-    // logo image name within /images/logos/
-    logo: String,
-
-    // ---->>> POST-PIVOT <<<---- //
-
-    // unique company code, added to position code for user sign up
+    // the date the position was created
+    dateCreated: Date,
+    // whether the position can be applied to by anyone or if they need a unique
+    // one time code
+    open: Boolean,
+    // if the position is active or not
+    inactive: Boolean,
+    // if the position has been deleted
+    deleted: Boolean,
+    // the open signup code for signing up for this position
     code: String,
-
-    // the questions that managers have to answer about each employee
-    employeeQuestions: [{
-        // the text of the question
-        questionBody: String,
-        // could be 'multipleChoice' OR 'range'
-        questionType: String,
-        range: {
-            // low end of the scale
-            lowRange: Number,
-            // high end of the scale
-            highRange: Number,
-        },
-        multipleChoice: {
-            options: [{
-                // the text of the option
-                body: String
-            }],
-        }
-    }],
-
-    // the positions that the company is (or was) hiring for
-    positions: [{
-        // name of the position (such as "Machine Learning Developer")
-        name: String,
-        // whether the position can be applied to by anyone or if they need a unique
-        // one time code
-        open: Boolean,
-        // these two characters are position differentiators - they are added
-        // to the business' code; the code candidates will use the full code when
-        // they sign up to be automatically signed up for this position
-        code: String,
-        // if the position should be listed as one that candidates can apply for
-        currentlyHiring: Boolean,
-        // the skill tests a candidate must complete in order to apply
-        skills: [ mongoose.Schema.Types.ObjectId ],
-        // the names of the skills the candidates must complete in order to apply
-        skillNames: [ String ],
-        // company- and position-specific questions, shown on responses page
-        freeResponseQuestions: [{
+    // the open signup code for employees signing up for this position
+    employeeCode: String,
+    // if the position should be listed as one that candidates can apply for
+    currentlyHiring: Boolean,
+    // which of the 5 functions the position falls under
+    positionType: String,
+    // if the position involves management
+    isManager: Boolean,
+    // the skill tests a candidate must complete in order to apply
+    skills: [mongoose.Schema.Types.ObjectId],
+    // the names of the skills the candidates must complete in order to apply
+    skillNames: [String],
+    // company- and position-specific questions, shown on responses page
+    freeResponseQuestions: [
+        {
             // the text of the question (e.g. "Why do you want to work here?")
             body: String,
             // if you have to answer this question to finish applying
             required: Boolean
-        }],
-        // how long the position test is projected to take
-        length: Number,
-        // the number of days that the position is designated to be open
-        timeAllotted: Number,
-        // the number of people who have completed the test for this position
-        completions: Number,
-        // the number of people who are currently in the middle of taking the test
-        usersInProgress: Number,
-        // candidates who have applied for this position
-        candidates: [{
-            // name of the candidate
-            name: String,
-            // id of the candidate
-            candidateId: mongoose.Schema.Types.ObjectId,
-            // the url to get to the user's results page
-            profileUrl: String,
-            // the hiring stage of the candidate, which the company has determined
-            // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
-            hiringStage: String,
-            // if the candidate is no longer being considered for the role
-            isDismissed: Boolean,
-            // dates/times the hiring stage of the candidate was changed for this position
-            hiringStageChanges: [{
-                // what the hiring stage was changed to
-                hiringStage: String,
-                // the date/time the hiring stage was changed
-                dateChanged: Date
-            }],
-            // user's archetype, found from the psychometric test
-            archetype: String,
-            // the scores the user got for the position; if this is not undefined,
-            // the user has completed the evaluation
-            scores: {
-                // combination of all the scores
-                overall: Number,
-                // average of skill iqs for all relevant skills
-                skill: Number,
-                // how good of a culture fit the candidate has
-                culture: Number,
-                // how much the candidate could grow in the position
-                growth: Number,
-                // if the candidate would stay at the company for a long time
-                longevity: Number,
-                // how well the candidate would do at that specific position
-                performance: Number,
-                // ideal facet scores minus actual facet scores
-                predicted: Number
-            },
-        }],
-        // Employees related to this position
-        employees: [{
-            employeeId: mongoose.Schema.Types.ObjectId,
-            // id of the manager that rated this employee
-            managerId: mongoose.Schema.Types.ObjectId,
-            // employee's name
-            name: String,
-            // whether someone has graded this employee
-            gradingComplete: Boolean,
-            // the questions that will be asked of the
-            answers: [{
-                // question has been answered
-                complete: Boolean,
-                // what the mangager rated the employee (if this was a range question)
-                score: Number,
-                // the index within the option array of the option that was chosen
-                // (if this was a multiple choice question)
-                selectedIndex: Number,
-                // index of the question within employeeQuestions
-                questionIndex: Number
-            }],
-            // the url to get to the user's results page
-            profileUrl: String,
-            // user's archetype, found from the psychometric test
-            archetype: String,
-            // the scores the user got for the position; if this is not undefined,
-            // the user has completed the evaluation
-            scores: {
-                // combination of all the scores
-                overall: Number,
-                // how good of a culture fit the candidate has
-                culture: Number,
-                // how much the candidate could grow in the position
-                growth: Number,
-                // if the candidate would stay at the company for a long time
-                longevity: Number,
-                // how well the candidate would do at that specific position
-                performance: Number
-            },
-        }],
-        // One-time use codes for candidates
-        candidateCodes: [{
-            // the actual code
-            code: String,
-            // the date that will be shown for this user's evaluation start date
-            startDate: Date
-        }],
-        // One-time use codes for employees
-        employeeCodes: [{
-            // the actual code
-            code: String,
-            // the date that will be shown for this user's evaluation start date
-            startDate: Date
-        }],
-        // One-time use codes for admins
-        adminCodes: [{
-            // the actual code
-            code: String,
-            // the date that will be shown for this user's evaluation start date
-            startDate: Date
-        }],
-        // the ideal scores for each facet within each factor to get the maximum pq
-        idealFactors: [{
+        }
+    ],
+    // whether employees should be asked the above free response questions
+    employeesGetFrqs: Boolean,
+    // how long the position test is projected to take
+    length: Number,
+    // the number of days that the position is designated to be open
+    timeAllotted: Number,
+    // the ideal scores for each facet within each factor to get the maximum pq
+    idealFactors: [
+        {
             // the id of the factor
             factorId: mongoose.Schema.Types.ObjectId,
+            // the weight of the factor
+            weight: Number,
             // all ideal facet scores
-            idealFacets: [{
-                // id of the facet
-                facetId: mongoose.Schema.Types.ObjectId,
-                // the optimal facet score for this position
-                score: Number
-            }]
-        }]
-    }],
+            idealFacets: [
+                {
+                    // id of the facet
+                    facetId: mongoose.Schema.Types.ObjectId,
+                    // the optimal facet score for this position
+                    score: Number,
+                    // the weight of the facet
+                    weight: Number
+                }
+            ]
+        }
+    ],
+    // maximum growth score allowed (default is 190)
+    maxGrowth: Number,
+    // the factors and facets that contribute to the growth prediction
+    growthFactors: [
+        {
+            // id of the factor involved in growth
+            factorId: mongoose.Schema.Types.ObjectId,
+            // the weight of the factor
+            weight: Number,
+            // ideal facet scores for growth
+            idealFacets: [
+                {
+                    // id of the facet to score
+                    facetId: mongoose.Schema.Types.ObjectId,
+                    // best score for growth for this facet in this position
+                    score: Number,
+                    // the weight of the facet
+                    weight: Number
+                }
+            ]
+        }
+    ],
+    // if the position is calculating for longevity
+    longevityActive: Boolean,
+    // the factors and facets that contribute to the longevity prediction
+    longevityFactors: [
+        {
+            // id of the factor involved in longevity
+            factorId: mongoose.Schema.Types.ObjectId,
+            // ideal facet scores for longevity
+            idealFacets: [
+                {
+                    // id of the facet to score
+                    facetId: mongoose.Schema.Types.ObjectId,
+                    // best score for longevity for this facet in this position
+                    score: Number
+                }
+            ]
+        }
+    ],
+    // weights of each score in determining overall score
+    weights: {
+        // how comparatively important performance is
+        performance: Number,
+        // etc
+        growth: Number,
+        longevity: Number,
+        culture: Number,
+        gca: Number
+    }
 });
 
-// 'Users' means we will use the 'users' collection. if 'Books' was in there
-// it would be using the books collection from the db
-var Businesses = mongoose.model('Businesses', businessesSchema);
+const subscriptionSchema = mongoose.Schema({
+    // the id of the subscription on stripe
+    id: String,
+    // name of the subscription
+    name: String,
+    // date the subscription is set to start, for newSubscriptions
+    dateStarting: Date,
+    // date the subscription was created
+    dateCreated: Date,
+    // date the subscription is ending
+    dateEnding: Date,
+    // if the subscription is set to be cancelled but hasn't been in stripe yet
+    toCancel: Boolean,
+    // if the subscription has been cancelled
+    cancelled: Boolean,
+    // the number of reminder emails sent telling them their plan is about to expire
+    reminderEmails: Number
+});
+
+const businessesSchema = mongoose.Schema({
+    // company name
+    name: String,
+    // unique identifier for their custom application page (/apply/[uniqueName])
+    uniqueName: String,
+    // lower case version of the unique name for more efficient search
+    uniqueNameLowerCase: String,
+    // logo image name within /images/logos/
+    logo: String,
+    // header logo within logos/x/
+    headerLogo: String,
+    // the exact time the business object was created
+    dateCreated: Date,
+    // DEPRECIATED stripe billing customer id
+    billingCustomerId: String,
+    // whether the user has full access to the site with a trial or paid subscription
+    fullAccess: Boolean,
+    // the number of candidates that have completed an eval
+    candidateCount: Number,
+    // billing info for the business and their subscription plans
+    billing: {
+        // the stripe customer ID for the business
+        customerId: String,
+        // whether the not the user has a valid card on file
+        cardOnFile: Boolean,
+        // if the customer has a custom plan with us
+        customPlan: Boolean,
+        // the subscription the business currently has
+        subscription: subscriptionSchema,
+        // the subscription the business has signed up for after the current one ends
+        newSubscription: subscriptionSchema,
+        // the old subscriptions the business has had
+        oldSubscriptions: [subscriptionSchema]
+    },
+    // primary color (buttons and menu) shown in the eval
+    primaryColor: String,
+    // color of buttons in the eval
+    buttonTextColor: String,
+    // background color shown to candidates
+    backgroundColor: String,
+    // information about notifications that admins get when candidates finish evals
+    emailNotifications: {
+        time: String,
+        numCandidates: Number,
+        lastSent: Date
+    },
+    // the key the business will use to post to moonshot webhooks - must be kept
+    // a secret by the business
+    API_Key: String,
+    // the id on Intercom
+    intercomId: String,
+    // the positions that the company is (or was) hiring for
+    positions: [positionSchema],
+    // the interests a business has, their reason for using our product
+    interests: [String],
+
+    // the questions that managers have to answer about each employee
+    employeeQuestions: [
+        {
+            // the text of the question
+            questionBody: String,
+            // could be 'multipleChoice' OR 'range'
+            questionType: String,
+            range: {
+                // low end of the scale
+                lowRange: Number,
+                // high end of the scale
+                highRange: Number
+            },
+            multipleChoice: {
+                options: [
+                    {
+                        // the text of the option
+                        body: String
+                    }
+                ]
+            }
+        }
+    ]
+});
+
+var Businesses = mongoose.model("Businesses", businessesSchema);
 module.exports = Businesses;

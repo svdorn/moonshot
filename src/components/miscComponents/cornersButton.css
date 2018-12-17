@@ -1,0 +1,334 @@
+.button {
+    display: inline-block;
+
+    cursor: pointer;
+    position: relative;
+}
+
+.border {
+    position: absolute;
+    z-index: 2;
+}
+.border-top,
+.border-bottom {
+    height: 1px;
+    width: calc(100% - (2 * var(--top-padding)));
+}
+.border-right,
+.border-left {
+    width: 1px;
+    height: calc(100% - (2 * var(--top-padding)));
+}
+.border-top {
+    top: 0;
+    left: 0;
+}
+.border-right {
+    right: 0;
+    bottom: 0;
+}
+.border-bottom {
+    bottom: 0;
+    right: 0;
+}
+.border-left {
+    left: 0;
+    top: 0;
+}
+.button:hover .border-top,
+.button:hover .border-bottom {
+    width: 100%;
+}
+.button:hover .border-right .button:hover .border-left {
+    height: 100%;
+}
+
+.content {
+    margin: var(--top-padding) var(--side-padding);
+    z-index: 2;
+}
+
+.under-hover-content {
+    position: absolute;
+    left: 0;
+    right: 100%;
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+}
+
+.hover-content {
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(100% - (2 * var(--side-padding)));
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 4;
+}
+.arrow {
+    opacity: 0;
+    position: absolute;
+    width: calc(var(--side-padding) / 3);
+    top: 50%;
+    right: calc(var(--side-padding) / 2.5);
+    transform: translateX(-100%) translateY(calc(1px - 50%));
+    z-index: 5;
+}
+.above-hover-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    z-index: 6;
+}
+
+/* HOVER ANIMATION */
+.button.active .border,
+.button:hover .border {
+    -webkit-transition: 200ms;
+    -ms-transition: 200ms;
+    transition: 200ms;
+}
+.button.active .under-hover-content,
+.button:hover .under-hover-content {
+    right: 0;
+    -webkit-transition: right 300ms 200ms;
+    -ms-transition: right 300ms 200ms;
+    transition: right 300ms 200ms;
+}
+.button.active .hover-content,
+.button:hover .hover-content {
+    opacity: 1;
+
+    -webkit-transition: 5ms 510ms;
+    -ms-transition: 5ms 510ms;
+    transition: 5ms 510ms;
+}
+.button.active .arrow {
+    display: none;
+}
+.button:hover .arrow {
+    opacity: 1;
+    transform: translateX(0%) translateY(calc(1px - 50%));
+
+    -webkit-transition: opacity 5ms 510ms, transform 100ms 620ms;
+    -ms-transition: opacity 5ms 510ms, transform 100ms 620ms;
+    transition: opacity 5ms 510ms, transform 100ms 620ms;
+
+    animation: sway 1.5s infinite 720ms linear;
+}
+.button.active .above-hover-content,
+.button:hover .above-hover-content {
+    opacity: 1;
+    left: 100%;
+
+    -webkit-transition: opacity 5ms 500ms, left 200ms 520ms;
+    -ms-transition: opacity 5ms 500ms, left 200ms 520ms;
+    transition: opacity 5ms 500ms, left 200ms 520ms;
+}
+
+/* DE-HOVER ANIMATION */
+.border {
+    -webkit-transition: 200ms 420ms;
+    -ms-transition: 200ms 420ms;
+    transition: 200ms 420ms;
+}
+.under-hover-content {
+    -webkit-transition: right 200ms 220ms;
+    -ms-transition: right 200ms 220ms;
+    transition: right 200ms 220ms;
+}
+.hover-content {
+    -webkit-transition: 5ms 200ms;
+    -ms-transition: 5ms 200ms;
+    transition: 5ms 200ms;
+}
+.arrow {
+    -webkit-transition: opacity 5ms 200ms, transform 100ms;
+    -ms-transition: opacity 5ms 200ms, transform 100ms;
+    transition: opacity 5ms 200ms, transform 100ms;
+}
+.above-hover-content {
+    -webkit-transition: opacity 5ms 210ms, left 200ms;
+    -ms-transition: opacity 5ms 210ms, left 200ms;
+    transition: opacity 5ms 210ms, left 200ms;
+}
+
+.top-padding-0px {
+    --top-padding: 0px;
+}
+.top-padding-2px {
+    --top-padding: 2px;
+}
+.top-padding-4px {
+    --top-padding: 4px;
+}
+.top-padding-6px {
+    --top-padding: 6px;
+}
+.top-padding-8px {
+    --top-padding: 8px;
+}
+.top-padding-10px {
+    --top-padding: 10px;
+}
+.top-padding-12px {
+    --top-padding: 12px;
+}
+.top-padding-14px {
+    --top-padding: 14px;
+}
+.top-padding-16px {
+    --top-padding: 16px;
+}
+.top-padding-18px {
+    --top-padding: 18px;
+}
+.top-padding-20px {
+    --top-padding: 20px;
+}
+.top-padding-22px {
+    --top-padding: 22px;
+}
+.top-padding-24px {
+    --top-padding: 24px;
+}
+.top-padding-26px {
+    --top-padding: 26px;
+}
+.top-padding-28px {
+    --top-padding: 28px;
+}
+.top-padding-30px {
+    --top-padding: 30px;
+}
+.top-padding-32px {
+    --top-padding: 32px;
+}
+.top-padding-34px {
+    --top-padding: 34px;
+}
+.top-padding-36px {
+    --top-padding: 36px;
+}
+.top-padding-38px {
+    --top-padding: 38px;
+}
+.top-padding-40px {
+    --top-padding: 40px;
+}
+.top-padding-42px {
+    --top-padding: 42px;
+}
+.top-padding-44px {
+    --top-padding: 44px;
+}
+.top-padding-46px {
+    --top-padding: 46px;
+}
+.top-padding-48px {
+    --top-padding: 48px;
+}
+.top-padding-50px {
+    --top-padding: 50px;
+}
+
+.side-padding-0px {
+    --side-padding: 0px;
+}
+.side-padding-2px {
+    --side-padding: 2px;
+}
+.side-padding-4px {
+    --side-padding: 4px;
+}
+.side-padding-6px {
+    --side-padding: 6px;
+}
+.side-padding-8px {
+    --side-padding: 8px;
+}
+.side-padding-10px {
+    --side-padding: 10px;
+}
+.side-padding-12px {
+    --side-padding: 12px;
+}
+.side-padding-14px {
+    --side-padding: 14px;
+}
+.side-padding-16px {
+    --side-padding: 16px;
+}
+.side-padding-18px {
+    --side-padding: 18px;
+}
+.side-padding-20px {
+    --side-padding: 20px;
+}
+.side-padding-22px {
+    --side-padding: 22px;
+}
+.side-padding-24px {
+    --side-padding: 24px;
+}
+.side-padding-26px {
+    --side-padding: 26px;
+}
+.side-padding-28px {
+    --side-padding: 28px;
+}
+.side-padding-30px {
+    --side-padding: 30px;
+}
+.side-padding-32px {
+    --side-padding: 32px;
+}
+.side-padding-34px {
+    --side-padding: 34px;
+}
+.side-padding-36px {
+    --side-padding: 36px;
+}
+.side-padding-38px {
+    --side-padding: 38px;
+}
+.side-padding-40px {
+    --side-padding: 40px;
+}
+.side-padding-42px {
+    --side-padding: 42px;
+}
+.side-padding-44px {
+    --side-padding: 44px;
+}
+.side-padding-46px {
+    --side-padding: 46px;
+}
+.side-padding-48px {
+    --side-padding: 48px;
+}
+.side-padding-50px {
+    --side-padding: 50px;
+}
+
+@keyframes sway {
+    0% {
+        transform: translateX(0%) translateY(calc(1px - 50%));
+    }
+    25% {
+        transform: translateX(10%) translateY(calc(1px - 50%));
+    }
+    50% {
+        transform: translateX(0%) translateY(calc(1px - 50%));
+    }
+    75% {
+        transform: translateX(-10%) translateY(calc(1px - 50%));
+    }
+    100% {
+        transform: translateX(0%) translateY(calc(1px - 50%));
+    }
+}

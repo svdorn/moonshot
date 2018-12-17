@@ -1,0 +1,172 @@
+.box {
+    --box-width: 300px;
+    --height-scalar: 0.6;
+    --box-height: calc(var(--box-width) * var(--height-scalar));
+    --unhovered-scalar: 0.9;
+
+    position: relative;
+    width: var(--box-width);
+    height: var(--box-height);
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 16px;
+}
+.hoverable {
+    width: calc(var(--box-width) * var(--unhovered-scalar));
+    height: calc(var(--box-height) * var(--unhovered-scalar));
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    cursor: pointer;
+
+    -webkit-box-shadow: 0 0 8px 3px #151515;
+    -moz-box-shadow: 0 0 8px 3px #151515;
+    box-shadow: 0 0 8px 3px #151515;
+    background: linear-gradient(
+        to right,
+        var(--primary-cyan),
+        var(--primary-white),
+        var(--primary-cyan)
+    );
+    background-position-x: 108%;
+    background-size: 188%;
+    -webkit-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+.hoverable > .background {
+    --border-width: 2px;
+    background-color: var(--primary-black-dark);
+    height: calc(100% - (2 * var(--border-width)));
+    margin: var(--border-width);
+}
+
+/* hover animation */
+.hoverable:hover {
+    width: var(--box-width);
+    height: var(--box-height);
+    -webkit-box-shadow: 0 0 22px 5px #151515;
+    -moz-box-shadow: 0 0 22px 5px #151515;
+    box-shadow: 0 0 22px 5px #151515;
+    background-position-x: 0px;
+}
+.hoverable:hover > .background {
+    background-color: var(--black-deep-dark);
+}
+
+.foreground {
+    pointer-events: none;
+    width: calc(var(--box-width) * var(--unhovered-scalar));
+    height: calc(var(--box-height) * var(--unhovered-scalar));
+    overflow: hidden;
+    position: relative;
+    margin: calc((var(--box-height) * (1 - var(--unhovered-scalar))) / 2) auto;
+}
+
+.title {
+    font-weight: bold;
+    color: var(--primary-white);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+.hoverable:hover + .foreground .title {
+    opacity: 0;
+    top: 0;
+}
+
+.body {
+    position: absolute;
+    width: calc(var(--box-width) - 60px);
+    top: 50%;
+    opacity: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    color: var(--secondary-gray);
+    text-align: left;
+    margin-left: 20px;
+    padding-right: 10px;
+}
+.foreground > div {
+    -webkit-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+.body > div:nth-child(2) {
+    display: inline-block;
+    color: var(--primary-cyan);
+    margin: 20px 8px 0 0;
+}
+.hoverable:hover + .foreground .body {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+}
+
+/* outlier, has a lot of text */
+.box:nth-child(3) .foreground .body > div:nth-child(2) {
+    margin-top: 10px;
+}
+
+@media only screen and (max-width: 950px) {
+    .box {
+        margin-bottom: 30px;
+        font-size: 14px;
+        --box-width: 260px;
+    }
+
+    .body {
+        margin-left: 2px;
+        padding-right: 0px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .box {
+        --box-width: 200px;
+        --height-scalar: 0.9;
+    }
+
+    .body {
+        width: calc(var(--box-width) - 20px);
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .box {
+        --box-width: 270px;
+        --height-scalar: 0.7;
+    }
+
+    .body {
+        width: calc(var(--box-width) - 20px);
+        margin-left: 4px;
+        padding-right: 7px;
+    }
+
+    .hoverable {
+        width: var(--box-width);
+        height: var(--box-height);
+        -webkit-box-shadow: 0 0 22px 5px #151515;
+        -moz-box-shadow: 0 0 22px 5px #151515;
+        box-shadow: 0 0 22px 5px #151515;
+        background-position-x: 0px;
+    }
+    .hoverable > .background {
+        background-color: var(--black-deep-dark);
+    }
+
+    .hoverable + .foreground .title,
+    .hoverable:hover + .foreground .title {
+        opacity: 1;
+        top: 10%;
+    }
+    .hoverable + .foreground .body {
+        opacity: 1;
+        top: 60%;
+        transform: translate(-50%, -50%);
+    }
+}

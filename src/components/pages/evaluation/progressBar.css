@@ -1,0 +1,44 @@
+:root {
+    --stepCircleWidth: 24px;
+}
+
+.progress-step-circles {
+    position: absolute;
+    width: calc(100% + var(--stepCircleWidth));
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    left: calc(var(--stepCircleWidth) / -2);
+    top: 50%;
+    transform: translateY(-50%);
+}
+.progress-step-circle {
+    width: var(--stepCircleWidth);
+    height: var(--stepCircleWidth);
+    border-radius: 100%;
+    position: relative;
+    display: inline-block;
+}
+.progress-step-circle > div {
+    width: 75%;
+    height: 75%;
+    border-radius: 100%;
+    position: absolute;
+    top: 12.5%;
+    left: 12.5%;
+}
+.progress-step-circle > div > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.progress-step-bar {
+    flex: 1;
+    height: 100%;
+}
+
+.progress-step-bar-interior {
+    height: 100%;
+}

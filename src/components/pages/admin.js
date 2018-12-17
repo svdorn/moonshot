@@ -1,11 +1,11 @@
-"use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
-import {closeNotification} from "../../actions/usersActions";
-import {bindActionCreators} from 'redux';
-import axios from 'axios';
-import MetaTags from 'react-meta-tags';
+"use strict";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { browserHistory } from "react-router";
+import { closeNotification } from "../../actions/usersActions";
+import { bindActionCreators } from "redux";
+import axios from "axios";
+import MetaTags from "react-meta-tags";
 
 class Admin extends Component {
     constructor(props) {
@@ -16,16 +16,14 @@ class Admin extends Component {
         };
     }
 
-
     componentDidMount() {
         const user = this.props.currentUser;
 
-        if (user.admin !== true) {
+        if (!user || user.admin !== true) {
             this.goTo("/");
             return;
         }
     }
-
 
     goTo(route) {
         // closes any notification
@@ -36,34 +34,32 @@ class Admin extends Component {
         window.scrollTo(0, 0);
     }
 
-
     render() {
+        const { currentUser } = this.props;
+        if (!currentUser) {
+            return null;
+        }
+
         return (
             <div>
                 <MetaTags>
-                    <title>Admin | Moonshot</title>
+                    <title>Admin | Moonshot Insights</title>
                     <meta name="description" content="Moonshot admin page." />
                 </MetaTags>
 
-                {this.props.currentUser.admin === true ?
-                    <div>
-                        <div className="headerDiv greenToBlue" />
-
-                        {this.props.children}
-                    </div>
-
-                    : null
-                }
+                {currentUser.admin === true ? <div>{this.props.children}</div> : null}
             </div>
         );
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        closeNotification,
-    }, dispatch);
+    return bindActionCreators(
+        {
+            closeNotification
+        },
+        dispatch
+    );
 }
 
 function mapStateToProps(state) {
@@ -72,4 +68,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Admin);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Admin);

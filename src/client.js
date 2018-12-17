@@ -19,6 +19,7 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 //import logger from 'redux-logger';
 import thunk from 'redux-thunk';
+import {StripeProvider} from 'react-stripe-elements';
 
 
 // import combined reducers
@@ -27,6 +28,11 @@ import reducers from './reducers/index';
 import routes from './routes'
 
 if (!shouldRedirectToHttps) {
+    let stripe_pk = "pk_test_7AHdmETWVxOeyDARcZfeWuZl";
+    // if in production, use the live key 
+    if (window.location.hostname !== "localhost") {
+        stripe_pk = "pk_live_UC72NJ4kPiHRmMM5c7cc7U63";
+    }
     // STEP 1 create the store
     const middleware = applyMiddleware(thunk);
     // WE WILL PASS INITIAL STATE FROM SERVER STORE
@@ -40,6 +46,6 @@ if (!shouldRedirectToHttps) {
     )
 
     hydrate(
-      Routes, document.getElementById('app')
+      <StripeProvider apiKey={stripe_pk}>{Routes}</StripeProvider>, document.getElementById('app')
     );
 }

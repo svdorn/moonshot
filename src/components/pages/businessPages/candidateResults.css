@@ -1,0 +1,43 @@
+.candidate-score {
+    margin-bottom: 10px;
+    margin-top: 25px;
+    display: inline-block;
+}
+
+.results-slider-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    position: relative;
+}
+.results-slider-container > div {
+    width: 200px;
+    height: 100px;
+    position: relative;
+}
+.results-slider > div > div > div {
+    background: linear-gradient(to right, #ae7efc, #75dcfc) !important;
+}
+/* make the results slider have normal cursor */
+.results-slider > div > div > div:nth-child(3) {
+    cursor: default !important;
+}
+
+
+@media only and screen (max-width: 700px) {
+    .candidate-score {
+        margin-bottom: 15px;
+        margin-top: 15px;
+    }
+
+    .results-slider {
+        width: 150px;
+    }
+}
+
+
+@media only and screen (max-width: 700px) {
+    .results-slider {
+        width: 110px;
+    }
+}
